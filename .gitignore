@@ -6,6 +6,7 @@ dist/*
 !dist/img/
 !dist/main.css*
 !dist/main.js*
+node_modules/
 
 *.iml
 .idea/*
