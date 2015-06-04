@@ -52,6 +52,20 @@ If you want to add a new npm package to 'node_modules':
 
 3. Commit to repository
 
+#### Testing approach
+
+Use the [BDD style](http://guide.agilealliance.org/guide/bdd.html) of testing.
+Tests should be organised around scenarios rather than rigidly around class
+structure and method names, for example "Creating an application" rather than
+"Application#initialize". Test for correct error handling as well as correct
+behaviour. Mock where necessary, but not as a matter of course.
+
+Keep tests short, clean, and descriptive. Aim for high code coverage, but don't
+worry about achieving 100% coverage. Try to keep tests flexible. Test the
+interface, not the implementation.
+
+Aim to ensure that tests run quickly to keep the feedback loop tight.
+
 #### Development Setup (Sublime Text)
 
 1. Add the following to your Sublime Text User Settings:
