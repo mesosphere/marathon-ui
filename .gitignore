@@ -6,3 +6,6 @@ dist/*
 !dist/img/
 !dist/main.css*
 !dist/main.js*
+
+*.iml
+.idea/*
