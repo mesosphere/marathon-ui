@@ -27,8 +27,8 @@
     "broccoli-concat": "0.0.12",
     "broccoli-env": "0.0.1",
     "broccoli-export-tree": "^0.3.2",
-    "broccoli-jscs": "0.0.13",
-    "broccoli-jshint": "^0.5.3",
+    "broccoli-funnel": "^0.2.3",
+    "broccoli-lint-eslint": "^1.0.1",
     "broccoli-less": "^2.0.0",
     "broccoli-merge-trees": "^0.2.1",
     "broccoli-react": "^0.7.0",
@@ -38,8 +38,13 @@
     "broccoli-webpack": "^0.1.1",
     "chalk": "^0.5.1",
     "cheerio": "^0.18.0",
+    "envify": "^3.4.0",
+    "eslint": "^0.18.0",
+    "eslint-plugin-react": "^2.1.0",
+    "jsx-loader": "^0.12.2",
     "mocha": "^2.1.0",
-    "sinon": "^1.12.2"
+    "sinon": "^1.12.2",
+    "transform-loader": "^0.2.2"
   },
   "scripts": {
     "build": "broccoli build dist",
