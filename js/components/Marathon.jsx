@@ -59,7 +59,9 @@ var Marathon = React.createClass({
     // input elements so the new app modal can be closed via "esc".
     var mousetrapOriginalStopCallback = Mousetrap.stopCallback;
     Mousetrap.stopCallback = function (e, element, combo) {
-      if (combo === "esc" || combo === "escape") { return false; }
+      if (combo === "esc" || combo === "escape") {
+        return false;
+      }
       return mousetrapOriginalStopCallback.apply(null, arguments);
     };
 
@@ -267,12 +269,12 @@ var Marathon = React.createClass({
 
     var forceStop = options.forceStop;
     var confirmMessage = !forceStop ?
-      "Destroy deployment of apps: '" + deployment.affectedAppsString() +
-        "'?\nDestroying this deployment will create and start a new " +
-        "deployment to revert the affected app to its previous version." :
-      "Stop deployment of apps: '" + deployment.affectedAppsString() +
-        "'?\nThis will stop the deployment immediately and leave it in the " +
-        "current state.";
+    "Destroy deployment of apps: '" + deployment.affectedAppsString() +
+    "'?\nDestroying this deployment will create and start a new " +
+    "deployment to revert the affected app to its previous version." :
+    "Stop deployment of apps: '" + deployment.affectedAppsString() +
+    "'?\nThis will stop the deployment immediately and leave it in the " +
+    "current state.";
 
     if (confirm(confirmMessage)) {
       setTimeout(function () {
@@ -476,8 +478,8 @@ var Marathon = React.createClass({
             router={this.props.router} />
         </TabPaneComponent>
         <TabPaneComponent
-            id="deployments"
-            onActivate={this.props.fetchAppVersions} >
+          id="deployments"
+          onActivate={this.props.fetchAppVersions} >
           <DeploymentsListComponent
             deployments={this.state.deployments}
             destroyDeployment={this.destroyDeployment}

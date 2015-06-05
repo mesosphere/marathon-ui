@@ -34,10 +34,10 @@ var DeploymentComponent = React.createClass({
     if (this.state.loading) {
       return (
         <div className="progress progress-striped active pull-right"
-            style={{"width": "140px"}}>
+          style={{"width": "140px"}}>
           <span className="progress-bar progress-bar-info" role="progressbar"
-              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-              style={{"width": "100%"}}>
+            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+            style={{"width": "100%"}}>
             <span className="sr-only">Rolling back deployment</span>
           </span>
         </div>
@@ -47,15 +47,15 @@ var DeploymentComponent = React.createClass({
         <ul className="list-inline">
           <li>
             <button
-                onClick={this.handleDestroyDeployment.bind(this, true)}
-                className="btn btn-xs btn-default">
+              onClick={this.handleDestroyDeployment.bind(this, true)}
+              className="btn btn-xs btn-default">
               Stop
             </button>
           </li>
           <li>
             <button
-                onClick={this.handleDestroyDeployment.bind(this, false)}
-                className="btn btn-xs btn-default">
+              onClick={this.handleDestroyDeployment.bind(this, false)}
+              className="btn btn-xs btn-default">
               Rollback
             </button>
           </li>
@@ -101,7 +101,8 @@ var DeploymentComponent = React.createClass({
         <td className="text-right">
           <span className={isDeployingClassSet}>
             {progressStep}
-          </span> / {model.get("totalSteps")}
+          </span>
+          / {model.get("totalSteps")}
         </td>
         <td className="text-right">
           {this.getButtons()}

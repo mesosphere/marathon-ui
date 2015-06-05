@@ -46,7 +46,9 @@ var Task = Backbone.Model.extend({
     // Parse all known date attributes as real Date objects.
     DATE_ATTRIBUTES.forEach(function (attr) {
       var parsedAttr = Date.parse(response[attr]);
-      if (!isNaN(parsedAttr)) { response[attr] = new Date(parsedAttr); }
+      if (!isNaN(parsedAttr)) {
+        response[attr] = new Date(parsedAttr);
+      }
     });
 
     if (response.startedAt != null) {
@@ -68,7 +70,7 @@ var Task = Backbone.Model.extend({
       // parameters. Construct the param string and append it to the normal
       // URL.
       _options.url = this.collection.url() + "/tasks/" + model.id +
-        "?" + $.param({scale: _options.scale});
+      "?" + $.param({scale: _options.scale});
     }
 
     return Backbone.sync.call(this, method, model, _options);

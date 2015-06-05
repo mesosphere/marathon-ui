@@ -62,7 +62,9 @@ var TaskViewComponent = React.createClass({
       modelTasks.length;
 
     if (!allTasksSelected) {
-      modelTasks.map(function (task) { newSelectedTasks[task.id] = true; });
+      modelTasks.map(function (task) {
+        newSelectedTasks[task.id] = true;
+      });
     }
 
     this.setState({selectedTasks: newSelectedTasks});
@@ -105,19 +107,19 @@ var TaskViewComponent = React.createClass({
     return (
       <div className="btn-group">
         <button
-            className={refreshButtonClassSet}
-            onClick={this.props.fetchTasks}>
+          className={refreshButtonClassSet}
+          onClick={this.props.fetchTasks}>
           ↻ Refresh
         </button>
         <button
-            className={killButtonClassSet}
-            onClick={this.killSelectedTasks}>
+          className={killButtonClassSet}
+          onClick={this.killSelectedTasks}>
           Kill
         </button>
         <button
-            className={killButtonClassSet}
-            disabled={selectedTasksLength > 1}
-            onClick={this.killSelectedTasksAndScale}>
+          className={killButtonClassSet}
+          disabled={selectedTasksLength > 1}
+          onClick={this.killSelectedTasksAndScale}>
           Kill &amp; Scale
         </button>
       </div>

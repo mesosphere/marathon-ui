@@ -109,8 +109,8 @@ var AppPageComponent = React.createClass({
     return (
       <div className="header-btn">
         <button className="btn btn-sm btn-default"
-            onClick={this.props.suspendApp}
-            disabled={this.props.model.get("instances") < 1}>
+          onClick={this.props.suspendApp}
+          disabled={this.props.model.get("instances") < 1}>
           Suspend
         </button>
         <button className="btn btn-sm btn-default" onClick={this.scaleApp}>
@@ -153,9 +153,9 @@ var AppPageComponent = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
-          activeTabId={this.state.activeTabId}
-          onTabClick={this.onTabClick}
-          tabs={this.state.tabs} >
+        activeTabId={this.state.activeTabId}
+        onTabClick={this.onTabClick}
+        tabs={this.state.tabs} >
         <TabPaneComponent
           id={"apps/" + encodeURIComponent(model.get("id"))}>
           <TaskViewComponent
@@ -190,7 +190,7 @@ var AppPageComponent = React.createClass({
 
     if (this.state.activeViewIndex === 0) {
       content = this.getAppDetails();
-    } else if (this.state.activeViewIndex === 1)  {
+    } else if (this.state.activeViewIndex === 1) {
       content = this.getTaskDetailComponent();
     }
 

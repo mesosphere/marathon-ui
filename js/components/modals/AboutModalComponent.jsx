@@ -44,9 +44,9 @@ var AboutModalComponent = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ModalComponent
-          onDestroy={this.props.onDestroy}
-          ref="modalComponent"
-          size="lg">
+        onDestroy={this.props.onDestroy}
+        ref="modalComponent"
+        size="lg">
         <div className="modal-header modal-header-blend">
           <button type="button" className="close"
             aria-hidden="true" onClick={this.destroy}>&times;</button>

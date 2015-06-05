@@ -35,7 +35,7 @@ function findHealthCheckMsg(healthCheckResults, context) {
         (this.get("host") ? this.get("host") : "") +
         (failedCheck.path ? failedCheck.path : "") + "'" +
         (hc.lastFailureCause ?
-          " returned with status: '" + hc.lastFailureCause + "'" :
+        " returned with status: '" + hc.lastFailureCause + "'" :
           " failed") +
         ".";
     }
@@ -141,7 +141,9 @@ var App = Backbone.Model.extend({
     // parsed.
     if (data != null) {
       var parsedVersion = Date.parse(data.version);
-      if (!isNaN(parsedVersion)) { data.version = new Date(parsedVersion); }
+      if (!isNaN(parsedVersion)) {
+        data.version = new Date(parsedVersion);
+      }
     }
 
     return data;
@@ -167,9 +169,7 @@ var App = Backbone.Model.extend({
    * changed.
    */
   save: function (attrs, options) {
-    /* jshint -W030 */
-    options || (options = {});
-    /* jshint +W030 */
+    options = options || {};
 
     var allAttrs;
     if (options.patch === true) {
@@ -229,9 +229,7 @@ var App = Backbone.Model.extend({
   },
 
   restart: function (options) {
-    /* jshint -W030 */
-    options || (options = {});
-    /* jshint +W030 */
+    options = options || {};
 
     if (options.force == null) {
       options.force = false;
@@ -277,7 +275,7 @@ var App = Backbone.Model.extend({
     }
 
     if (_.isNaN(attrs.instances) || !_.isNumber(attrs.instances) ||
-        attrs.instances < 0) {
+      attrs.instances < 0) {
       errors.push(
         new ValidationError(
           "instances",
@@ -290,8 +288,7 @@ var App = Backbone.Model.extend({
       errors.push(new ValidationError("id", "ID must not be empty"));
     }
 
-    if (_.isString(attrs.executor) &&
-        !VALID_EXECUTOR_REGEX.test(attrs.executor)) {
+    if (_.isString(attrs.executor) && !VALID_EXECUTOR_REGEX.test(attrs.executor)) {
       errors.push(
         new ValidationError(
           "executor",
@@ -301,7 +298,9 @@ var App = Backbone.Model.extend({
       );
     }
 
-    if (!_.every(attrs.ports, function (p) { return _.isNumber(p); })) {
+    if (!_.every(attrs.ports, function (p) {
+        return _.isNumber(p);
+      })) {
       errors.push(
         new ValidationError("ports", "Ports must be a list of Numbers"));
     }
@@ -318,10 +317,12 @@ var App = Backbone.Model.extend({
       );
     }
 
-    if (errors.length > 0) { return errors; }
+    if (errors.length > 0) {
+      return errors;
+    }
   },
 
-  url : function () {
+  url: function () {
     return config.apiURL + (this.isNew() ? "v2/apps" : "v2/apps/" + this.id);
   }
 }, {

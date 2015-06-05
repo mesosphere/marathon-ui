@@ -31,8 +31,8 @@ var PagedNavComponent = React.createClass({
   handlePageChange: function (pageNum) {
     var noPages = Math.ceil(this.props.noItems / this.props.itemsPerPage);
     if (pageNum >= 0 &&
-        pageNum < noPages &&
-        pageNum !== this.props.currentPage) {
+      pageNum < noPages &&
+      pageNum !== this.props.currentPage) {
       this.props.onPageChange(pageNum);
     } else {
       return false;
@@ -82,7 +82,7 @@ var PagedNavComponent = React.createClass({
           if (pageNumber >= pageLBound && pageNumber <= pageUBound) {
             pagination.push(
               <li className={pageNumber === currentPage ? "success disabled" : ""}
-                  key={pageNumber + 1}>
+                key={pageNumber + 1}>
                 <button
                   onClick={this.handlePageChange.bind(this, pageNumber)}>
                   {pageNumber + 1}

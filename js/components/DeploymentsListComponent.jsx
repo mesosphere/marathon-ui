@@ -25,7 +25,7 @@ var DeploymentListComponent = React.createClass({
     comparator =
       deployments.sortKey === comparator && !deployments.sortReverse ?
       "-" + comparator :
-      comparator;
+        comparator;
     deployments.setComparator(comparator);
     deployments.sort();
   },

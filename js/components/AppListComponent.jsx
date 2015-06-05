@@ -24,7 +24,7 @@ var AppListComponent = React.createClass({
     comparator =
       collection.sortKey === comparator && !collection.sortReverse ?
       "-" + comparator :
-      comparator;
+        comparator;
     collection.setComparator(comparator);
     collection.sort();
   },
@@ -68,9 +68,8 @@ var AppListComponent = React.createClass({
 
     var tableClassSet = React.addons.classSet({
       "table table-fixed": true,
-      "table-hover table-selectable":
-        this.props.collection.length !== 0 &&
-        this.props.fetchState !== States.STATE_LOADING
+      "table-hover table-selectable": this.props.collection.length !== 0 &&
+      this.props.fetchState !== States.STATE_LOADING
     });
 
     /* jshint trailing:false, quotmark:false, newcap:false */

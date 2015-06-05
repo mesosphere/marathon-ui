@@ -6,13 +6,13 @@ var BackboneMixin = {
   // An object that uses this mixin must implement `getResource` and return an
   // object that extends `Backbone.Events`. Common use cases are
   // `Backbone.Model` and `Backbone.Collection`.
-    componentDidMount: function () {
-      this._boundForceUpdate = this.forceUpdate.bind(this, null);
-      this.getResource().on("all", this._boundForceUpdate, this);
-    },
-    componentWillUnmount: function () {
-      this.getResource().off("all", this._boundForceUpdate);
-    }
-  };
+  componentDidMount: function () {
+    this._boundForceUpdate = this.forceUpdate.bind(this, null);
+    this.getResource().on("all", this._boundForceUpdate, this);
+  },
+  componentWillUnmount: function () {
+    this.getResource().off("all", this._boundForceUpdate);
+  }
+};
 
 module.exports = BackboneMixin;

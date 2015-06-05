@@ -95,7 +95,7 @@ var AppVersionListComponent = React.createClass({
     var errorClassSet = React.addons.classSet({
       "text-danger text-center": true,
       "hidden": this.props.fetchState === States.STATE_LOADING ||
-        this.props.fetchState === States.STATE_SUCCESS
+      this.props.fetchState === States.STATE_SUCCESS
     });
 
     // at least one older version
@@ -111,8 +111,8 @@ var AppVersionListComponent = React.createClass({
             </div>
           </div>
           <PagedContentComponent
-              currentPage={this.state.currentPage}
-              itemsPerPage={this.state.itemsPerPage}>
+            currentPage={this.state.currentPage}
+            itemsPerPage={this.state.itemsPerPage}>
             <p className={loadingClassSet}>Loading versions...</p>
             <p className={errorClassSet}>Error fetching app versions</p>
             {this.getAppVersionList(appVersions)}
@@ -134,14 +134,14 @@ var AppVersionListComponent = React.createClass({
         <h5>
           Current Version
           <button className="btn btn-sm btn-info pull-right"
-              onClick={this.handleRefresh}>
+            onClick={this.handleRefresh}>
             ↻ Refresh
           </button>
         </h5>
         <AppVersionComponent
-            app={this.props.app}
-            appVersion={this.props.app.getCurrentVersion()}
-            currentVersion={true} />
+          app={this.props.app}
+          appVersion={this.props.app.getCurrentVersion()}
+          currentVersion={true} />
           {this.getAppVersionTable()}
       </div>
     );
