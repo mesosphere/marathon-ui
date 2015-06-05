@@ -21,7 +21,7 @@
     "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "broccoli": "^0.13.2",
+    "broccoli": "^0.16.3",
     "broccoli-asset-rev": "^2.0.0",
     "broccoli-clean-css": "^0.3.0",
     "broccoli-concat": "0.0.12",
