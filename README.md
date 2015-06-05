@@ -89,3 +89,18 @@ Aim to ensure that tests run quickly to keep the feedback loop tight.
   3. SublimeLinter-jsxhint needs a global jsxhint in your system, as well as JavaScript (JSX) bundle inside Packages/JavaScript, see [instructions](https://github.com/SublimeLinter/SublimeLinter-jsxhint#linter-installation)
 
   4. ~~SublimeLinter-csslint needs a global csslint in your system, see [instructions](https://github.com/SublimeLinter/SublimeLinter-csslint#linter-installation)~~
+
+
+#### Demo Marathon Tests
+
+1. For this tests you should have running  marathon, mesos and zookeeper. First 4 steps in this tutorial is enough - http://docs.mesosphere.com/intro-course/ex1.html
+
+2. Config and Dependencies
+
+  1. In marathon.ini set hostname and port for Marathon
+  
+  2. In folder tests run command "make req" to install dep
+
+3. Run tests:
+
+  1. In folder tests in folder tests run command "make" to run all demo tests
