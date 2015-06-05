@@ -1,3 +1,4 @@
+var config = require("../config/config");
 var Backbone = require("backbone");
 
 var AppVersion = Backbone.Model.extend({
@@ -12,7 +13,7 @@ var AppVersion = Backbone.Model.extend({
   },
 
   url: function () {
-    return "v2/apps/" + this.options.appId +
+    return config.apiURL + "v2/apps/" + this.options.appId +
       "/versions/" + this.get("version");
   }
 });

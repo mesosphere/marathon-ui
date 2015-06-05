@@ -1,8 +1,9 @@
+var config = require("../config/config");
 var Backbone = require("backbone");
 
 var Info = Backbone.Model.extend({
   url: function () {
-    return "v2/info";
+    return config.apiURL + "v2/info";
   }
 });
 

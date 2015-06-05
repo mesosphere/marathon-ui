@@ -1,3 +1,4 @@
+var config = require("../config/config");
 var AppVersion = require("../models/AppVersion");
 var SortableCollection = require("../models/SortableCollection");
 
@@ -19,7 +20,7 @@ var AppVersionCollection = SortableCollection.extend({
   },
 
   url: function () {
-    return "v2/apps/" + this.options.appId + "/versions";
+    return config.apiURL + "v2/apps/" + this.options.appId + "/versions";
   }
 });
 

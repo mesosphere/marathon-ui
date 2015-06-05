@@ -1,3 +1,4 @@
+var config = require("../config/config");
 var App = require("../models/App");
 var SortableCollection = require("../models/SortableCollection");
 
@@ -14,7 +15,7 @@ var AppCollection = SortableCollection.extend({
     return response.apps;
   },
 
-  url: "v2/apps"
+  url: config.apiURL + "v2/apps"
 });
 
 module.exports = AppCollection;

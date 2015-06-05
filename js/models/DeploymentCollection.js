@@ -1,3 +1,4 @@
+var config = require("../config/config");
 var Deployment = require("../models/Deployment");
 var SortableCollection = require("../models/SortableCollection");
 
@@ -11,7 +12,7 @@ var DeploymentCollection = SortableCollection.extend({
   },
 
   url: function () {
-    return "v2/deployments";
+    return config.apiURL + "v2/deployments";
   }
 });
 
