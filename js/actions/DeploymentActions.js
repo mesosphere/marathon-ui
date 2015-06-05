@@ -20,6 +20,22 @@ var DeploymentActions = {
       });
     });
   },
+  revertDeployment: function (deploymentID) {
+    this.request({
+      method: "DELETE",
+      url: config.apiURL + "v2/deployments/" + deploymentID
+    }).done(function (deployment) {
+      AppDispatcher.dispatch({
+        actionType: DeploymentEvents.REVERT,
+        data: deployment
+      });
+    }).fail(function (error) {
+      AppDispatcher.dispatch({
+        actionType: DeploymentEvents.REVERT_ERROR,
+        data: error
+      });
+    });
+  },
   request: oboe
 };
 

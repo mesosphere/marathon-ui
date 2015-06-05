@@ -17,6 +17,13 @@ AppDispatcher.register(function (action) {
     case DeploymentEvents.REQUEST_ERROR:
       DeploymentStore.emit(DeploymentEvents.REQUEST_ERROR);
       break;
+    case DeploymentEvents.REVERT:
+      DeploymentStore.deployments = action.data;
+      DeploymentStore.emit(DeploymentEvents.CHANGE);
+      break;
+    case DeploymentEvents.REVERT_ERROR:
+      DeploymentStore.emit(DeploymentEvents.REVERT_ERROR);
+      break;
   }
 });
 

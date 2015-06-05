@@ -37,4 +37,17 @@ describe("A request to the deployments endpoint", function () {
     DeploymentActions.requestDeployments();
   });
 
+  it("reverts (rollback) a deployment", function (done) {
+    mockOboe.respondWithDone({
+      "deploymentId": "52c51d0a-27eb-4971-a0bb-b0fa47528e33",
+      "version": "2014-07-09T11:14:58.232Z"
+    });
+    DeploymentStore.on(DeploymentEvents.CHANGE, function () {
+      expectAsync(function () {
+        expect(DeploymentStore.deployments).to.have.length(1);
+      }, done);
+    });
+    DeploymentActions.revertDeployment("2e72dbf1-2b2a-4204-b628-e8bd160945dd");
+  });
+
 });
