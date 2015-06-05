@@ -1,5 +1,6 @@
 var Backbone = require("backbone");
 var _ = require("underscore");
+var config = require("../config/config");
 var AppVersion = require("../models/AppVersion");
 var AppVersionCollection = require("../models/AppVersionCollection");
 var Task = require("../models/Task");
@@ -321,7 +322,7 @@ var App = Backbone.Model.extend({
   },
 
   url : function () {
-    return this.isNew() ? "v2/apps" : "v2/apps/" + this.id;
+    return config.apiURL + (this.isNew() ? "v2/apps" : "v2/apps/" + this.id);
   }
 }, {
   VALID_EXECUTOR_PATTERN: VALID_EXECUTOR_PATTERN

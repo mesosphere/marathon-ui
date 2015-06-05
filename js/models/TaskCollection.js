@@ -1,3 +1,4 @@
+var config = require("../config/config");
 var SortableCollection = require("../models/SortableCollection");
 var Task = require("../models/Task");
 
@@ -15,7 +16,7 @@ var TaskCollection = SortableCollection.extend({
   },
 
   url: function () {
-    return "v2/apps/" + this.options.appId;
+    return config.apiURL + "v2/apps/" + this.options.appId;
   }
 });
 

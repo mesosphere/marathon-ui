@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var config = require("../config/config");
 var Mousetrap = require("mousetrap");
 var React = require("react/addons");
 var States = require("../constants/States");
@@ -15,8 +16,6 @@ var NewAppModalComponent = require("../components/NewAppModalComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
-
-var UPDATE_INTERVAL = 5000;
 
 var tabs = [
   {id: "apps", text: "Apps"},
@@ -375,7 +374,7 @@ var Marathon = React.createClass({
   startPolling: function () {
     if (this._interval == null) {
       this.poll();
-      this._interval = setInterval(this.poll, UPDATE_INTERVAL);
+      this._interval = setInterval(this.poll, config.updateInterval);
     }
   },
 
