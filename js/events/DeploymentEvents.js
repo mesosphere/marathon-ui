@@ -1,0 +1,7 @@
+var DeploymentEvents = {
+  CHANGE: "DEPLOYMENT_EVENTS_CHANGE",
+  REQUEST: "DEPLOYMENT_EVENTS_REQUEST",
+  REQUEST_ERROR: "DEPLOYMENT_EVENTS_REQUEST_ERROR"
+};
+
+module.exports = DeploymentEvents;
