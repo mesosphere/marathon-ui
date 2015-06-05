@@ -22,6 +22,7 @@ var dirs = {
   js: "js",
   jsDist: ".", // use . for root
   styles: "css",
+  stylesVendor: "vendor",
   stylesDist: ".", // use . for root
   img: "img",
   imgDist: "img"
@@ -118,8 +119,7 @@ var tasks = {
     // concatenate css
     cssTree = concatCSS(cssTree, {
       inputFiles: [
-        "**/*.css",
-        "!" + dirs.stylesDist + "/" + fileNames.mainStyles + ".css",
+        dirs.stylesVendor + "/*.css",
         dirs.stylesDist + "/" + fileNames.mainStyles + ".css"
       ],
       outputFile: "/" + dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css",
