@@ -15,6 +15,10 @@ var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
+var DeploymentActions = require("../actions/DeploymentActions");
+var DeploymentEvents = require("../events/DeploymentEvents");
+var DeploymentStore = require("../stores/DeploymentStore");
+
 var tabs = [
   {id: "apps", text: "Apps"},
   {id: "deployments", text: "Deployments"}
@@ -35,12 +39,17 @@ var Marathon = React.createClass({
       activeTabId: tabs[0].id,
       appVersionsFetchState: States.STATE_LOADING,
       collection: new AppCollection(),
-      deployments: new DeploymentCollection(),
-      deploymentsFetchState: States.STATE_LOADING,
       fetchState: States.STATE_LOADING,
       modalClass: null,
       tasksFetchState: States.STATE_LOADING
     };
+  },
+
+  componentWillMount: function () {
+    DeploymentStore.on(DeploymentEvents.CHANGE, function () {
+      tabs[1].badge = DeploymentStore.deployments.length;
+      this.forceUpdate();
+    }.bind(this));
   },
 
   componentDidMount: function () {
@@ -163,15 +172,7 @@ var Marathon = React.createClass({
   },
 
   fetchDeployments: function () {
-    this.state.deployments.fetch({
-      error: function () {
-        this.setState({deploymentsFetchState: States.STATE_ERROR});
-      }.bind(this),
-      success: function (response) {
-        tabs[1].badge = response.models.length;
-        this.setState({deploymentsFetchState: States.STATE_SUCCESS});
-      }.bind(this)
-    });
+    DeploymentActions.requestDeployments();
   },
 
   fetchTasks: function () {
@@ -462,9 +463,7 @@ var Marathon = React.createClass({
             id="deployments"
             onActivate={this.props.fetchAppVersions} >
           <DeploymentsListComponent
-            deployments={this.state.deployments}
-            destroyDeployment={this.destroyDeployment}
-            fetchState={this.state.deploymentsFetchState} />
+            destroyDeployment={this.destroyDeployment} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );

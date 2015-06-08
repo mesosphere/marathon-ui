@@ -3,25 +3,55 @@ var React = require("react/addons");
 
 var States = require("../constants/States");
 var DeploymentComponent = require("../components/DeploymentComponent");
-var BackboneMixin = require("../mixins/BackboneMixin");
+
+var DeploymentStore = require("../stores/DeploymentStore");
+var DeploymentEvents = require("../events/DeploymentEvents");
+
+var lazy = require("lazy.js");
 
 var DeploymentListComponent = React.createClass({
   displayName: "DeploymentListComponent",
 
-  mixins: [BackboneMixin],
-
   propTypes: {
-    deployments: React.PropTypes.object.isRequired,
-    destroyDeployment: React.PropTypes.func.isRequired,
-    fetchState: React.PropTypes.number.isRequired
+    destroyDeployment: React.PropTypes.func.isRequired
+  },
+
+  getInitialState: function () {
+    return {
+      deployments: [],
+      fetchState: States.STATE_LOADING
+    };
+  },
+
+  componentWillMount: function () {
+    DeploymentStore.on(DeploymentEvents.CHANGE, function () {
+      this.setState({
+        deployments: DeploymentStore.deployments,
+        fetchState: States.STATE_SUCCESS
+      });
+    }.bind(this));
+
+    DeploymentStore.on(DeploymentEvents.REQUEST_ERROR, function () {
+      this.setState({
+        deployments: DeploymentStore.deployments,
+        fetchState: States.STATE_ERROR
+      });
+    }.bind(this));
+  },
+
+  componentWillUnmount: function () {
+    /*
+    DeploymentStore.removeAllListeners(DeploymentEvents.CHANGE);
+    DeploymentStore.removeAllListeners(DeploymentEvents.REQUEST_ERROR);
+    */
   },
 
   getResource: function () {
-    return this.props.deployments;
+    return this.state.deployments;
   },
 
   sortCollectionBy: function (comparator) {
-    var deployments = this.props.deployments;
+    var deployments = this.state.deployments;
     comparator =
       deployments.sortKey === comparator && !deployments.sortReverse ?
       "-" + comparator :
@@ -31,34 +61,35 @@ var DeploymentListComponent = React.createClass({
   },
 
   getDeploymentNodes: function () {
-    return this.props.deployments.map(function (model) {
+    return lazy(this.state.deployments).map(function (model) {
       return (
         <DeploymentComponent
           key={model.id}
           destroyDeployment={this.props.destroyDeployment}
           model={model} />
       );
-    }, this);
+    }.bind(this)).value();
   },
 
   render: function () {
-    var sortKey = this.props.deployments.sortKey;
+    var state = this.state;
+    var sortKey = state.deployments.sortKey;
 
     var headerClassSet = classNames({
       "clickable": true,
-      "dropup": this.props.deployments.sortReverse
+      "dropup": state.deployments.sortReverse
     });
 
     var loadingClassSet = classNames({
-      "hidden": this.props.fetchState !== States.STATE_LOADING
+      "hidden": state.fetchState !== States.STATE_LOADING
     });
 
     var errorClassSet = classNames({
-      "hidden": this.props.fetchState !== States.STATE_ERROR
+      "hidden": state.fetchState !== States.STATE_ERROR
     });
 
     var noDeploymentsClassSet = classNames({
-      "hidden": this.props.deployments.length !== 0
+      "hidden": state.deployments.length !== 0
     });
 
     return (

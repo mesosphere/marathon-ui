@@ -1,4 +1,6 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
+
 var React = require("react/addons");
 
 var DeploymentComponent = React.createClass({
@@ -65,36 +67,36 @@ var DeploymentComponent = React.createClass({
     var model = this.props.model;
 
     var isDeployingClassSet = classNames({
-      "text-warning": model.get("currentStep") < model.get("totalSteps")
+      "text-warning": model.currentStep < model.totalSteps
     });
 
-    var progressStep = Math.max(0, model.get("currentStep") - 1);
+    var progressStep = Math.max(0, model.currentStep - 1);
 
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
       <tr>
-        <td className="overflow-ellipsis" title={model.get("id")}>
-          {model.get("id")}
+        <td className="overflow-ellipsis" title={model.id}>
+          {model.id}
         </td>
         <td>
           <ul className="list-unstyled">
-            {model.get("currentActions").map(function (action) {
+            {lazy(model.currentActions).map(function (action) {
               return <li key={action.app}>{action.app}</li>;
-            })}
+            }).value()}
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            {model.get("currentActions").map(function (action) {
+            {lazy(model.currentActions).map(function (action) {
               return <li key={action.app}>{action.action}</li>;
-            })}
+            }).value()}
           </ul>
         </td>
         <td className="text-right">
           <span className={isDeployingClassSet}>
             {progressStep}
-          </span> / {model.get("totalSteps")}
+          </span> / {model.totalSteps}
         </td>
         <td className="text-right">
           {this.getButtons()}
