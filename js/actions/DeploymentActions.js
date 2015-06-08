@@ -43,7 +43,8 @@ var DeploymentActions = {
     }).done(function (deployment) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.STOP,
-        data: deployment
+        data: deployment,
+        deploymentId: deploymentID
       });
     }).fail(function (error) {
       AppDispatcher.dispatch({

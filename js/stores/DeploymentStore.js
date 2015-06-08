@@ -25,6 +25,9 @@ AppDispatcher.register(function (action) {
       DeploymentStore.emit(DeploymentEvents.REVERT_ERROR);
       break;
     case DeploymentEvents.STOP:
+      DeploymentStore.deployments = lazy(DeploymentStore.deployments).reject({
+        deploymentId: action.deploymentId
+      }).value();
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.STOP_ERROR:

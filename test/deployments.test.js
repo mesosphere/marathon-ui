@@ -70,7 +70,7 @@ describe("A request to the deployments endpoint", function () {
     DeploymentActions.revertDeployment("2e72dbf1-2b2a-4204-b628-e8bd160945dd");
   });
 
-  it("recieves a revert error", function () {
+  it("recieves a revert error", function (done) {
     this.server.setup({
       data: null,
       resCode: 404
@@ -93,26 +93,26 @@ describe("A request to the deployments endpoint", function () {
 
     DeploymentStore.once(DeploymentEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(DeploymentStore.deployments).to.have.length(4);
+        expect(DeploymentStore.deployments).to.have.length(3);
       }, done);
     });
 
-    DeploymentActions.stopDeployment("2e72dbf1-2b2a-4204-b628-e8bd160945dd");
+    DeploymentActions.stopDeployment("52c51d0a-27eb-4971-a0bb-b0fa47528e33");
   });
 
-  it("recieves a stop error", function () {
+  it("recieves a stop error", function (done) {
     this.server.setup({
       data: null,
       resCode: 404
     });
 
-    DeploymentStore.once(DeploymentEvents.REVERT_ERROR, function () {
+    DeploymentStore.once(DeploymentEvents.STOP_ERROR, function () {
       expectAsync(function () {
-        expect(DeploymentStore.deployments).to.have.length(4);
+        expect(DeploymentStore.deployments).to.have.length(3);
       }, done);
     });
 
-    DeploymentActions.stopDeployment("2e72dbf1-2b2a-4204-b628-e8bd160945dd");
+    DeploymentActions.stopDeployment();
   });
 
 });
