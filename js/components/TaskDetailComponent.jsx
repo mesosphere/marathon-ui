@@ -67,9 +67,7 @@ var TaskDetailComponent = React.createClass({
         {hasError ?
           <p className="text-center text-danger">
             Error fetching task details.
-            Go to
-            <a href={appUri}>Task List</a>
-            to see the full list.
+            Go to <a href={appUri}>Task List</a> to see the full list.
           </p> :
           null}
         {<div>

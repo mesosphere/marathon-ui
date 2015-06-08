@@ -60,7 +60,7 @@ var AppVersionListItemComponent = React.createClass({
 
   getAppVersionComponent: function () {
     if (this.state.fetchState !== States.STATE_LOADING &&
-      this.state.fetchState !== States.STATE_ERROR) {
+        this.state.fetchState !== States.STATE_ERROR) {
       return (
         /* jshint trailing:false, quotmark:false, newcap:false */
         /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -123,11 +123,11 @@ var AppVersionListItemComponent = React.createClass({
     return (
       <div className="panel panel-inverse">
         <div className="panel-heading clickable"
-          onClick={this.handleDetailsClick}>
+            onClick={this.handleDetailsClick}>
           <div className="row">
             <div className="col-xs-10">
               <time dateTime={versionDateISOString}
-                title={versionDateISOString}>
+                  title={versionDateISOString}>
                 {versionDate.toLocaleString()}
               </time>
             </div>

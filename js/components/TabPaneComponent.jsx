@@ -19,8 +19,7 @@ var TabPaneComponent = React.createClass({
   getDefaultProps: function () {
     return {
       isActive: false,
-      onActivate: function () {
-      }
+      onActivate: function () {}
     };
   },
 

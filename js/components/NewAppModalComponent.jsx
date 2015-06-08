@@ -53,7 +53,7 @@ var NewAppModalComponent = React.createClass({
     var errors;
 
     if (response.status === 422 && response.responseJSON != null &&
-      _.isArray(response.responseJSON.errors)) {
+        _.isArray(response.responseJSON.errors)) {
       errors = response.responseJSON.errors.map(function (e) {
         return new ValidationError(
           // Errors that affect multiple attributes provide a blank string. In
@@ -164,15 +164,13 @@ var NewAppModalComponent = React.createClass({
     var errors = this.state.errors;
 
     var generalErrors = errors.filter(function (e) {
-      return (e.attribute === "general");
-    });
+        return (e.attribute === "general");
+      });
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     var errorBlock = generalErrors.map(function (error, i) {
-      return <p key={i} className="text-danger">
-        <strong>{error.message}</strong>
-      </p>;
+      return <p key={i} className="text-danger"><strong>{error.message}</strong></p>;
     });
 
     return (
@@ -185,86 +183,85 @@ var NewAppModalComponent = React.createClass({
           </div>
           <div className="modal-body">
             <FormGroupComponent
-              attribute="id"
-              label="ID"
-              model={model}
-              errors={errors}>
+                attribute="id"
+                label="ID"
+                model={model}
+                errors={errors}>
               <input autoFocus required />
             </FormGroupComponent>
             <FormGroupComponent
-              attribute="cpus"
-              label="CPUs"
-              model={model}
-              errors={errors}>
+                attribute="cpus"
+                label="CPUs"
+                model={model}
+                errors={errors}>
               <input min="0" step="any" type="number" required />
             </FormGroupComponent>
             <FormGroupComponent
-              attribute="mem"
-              label="Memory (MB)"
-              model={model}
-              errors={errors}>
+                attribute="mem"
+                label="Memory (MB)"
+                model={model}
+                errors={errors}>
               <input min="0" step="any" type="number" required />
             </FormGroupComponent>
             <FormGroupComponent
-              attribute="disk"
-              label="Disk Space (MB)"
-              model={model}
-              errors={errors}>
+                attribute="disk"
+                label="Disk Space (MB)"
+                model={model}
+                errors={errors}>
               <input min="0" step="any" type="number" required />
             </FormGroupComponent>
             <FormGroupComponent
-              attribute="instances"
-              label="Instances"
-              model={model}
-              errors={errors}>
+                attribute="instances"
+                label="Instances"
+                model={model}
+                errors={errors}>
               <input min="1" step="1" type="number" required />
             </FormGroupComponent>
             <hr />
             <h4>Optional Settings</h4>
             <FormGroupComponent
-              attribute="cmd"
-              label="Command"
-              model={model}
-              errors={errors}>
+                attribute="cmd"
+                label="Command"
+                model={model}
+                errors={errors}>
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
             <FormGroupComponent
-              attribute="executor"
-              label="Executor"
-              model={model}
-              errors={errors}>
+                attribute="executor"
+                label="Executor"
+                model={model}
+                errors={errors}>
               <input
                 pattern={App.VALID_EXECUTOR_PATTERN}
                 title="Executor must be the string '//cmd', a string containing only single slashes ('/'), or blank." />
             </FormGroupComponent>
             <FormGroupComponent
-              attribute="ports"
-              help="Comma-separated list of numbers. 0's (zeros) assign random ports. (Default: one random port)"
-              label="Ports"
-              model={model}
-              errors={errors}>
+                attribute="ports"
+                help="Comma-separated list of numbers. 0's (zeros) assign random ports. (Default: one random port)"
+                label="Ports"
+                model={model}
+                errors={errors}>
               <input />
             </FormGroupComponent>
             <FormGroupComponent
-              attribute="uris"
-              help="Comma-separated list of valid URIs."
-              label="URIs"
-              model={model}
-              errors={errors}>
+                attribute="uris"
+                help="Comma-separated list of valid URIs."
+                label="URIs"
+                model={model}
+                errors={errors}>
               <input />
             </FormGroupComponent>
             <FormGroupComponent
-              attribute="constraints"
-              help='Comma-separated list of valid constraints. Valid constraint format is "field:operator[:value]".'
-              label="Constraints"
-              model={model}
-              errors={errors}>
+                attribute="constraints"
+                help='Comma-separated list of valid constraints. Valid constraint format is "field:operator[:value]".'
+                label="Constraints"
+                model={model}
+                errors={errors}>
               <input />
             </FormGroupComponent>
             <div>
               {errorBlock}
-              <input type="submit" className="btn btn-success" value="+ Create" />
-              <button className="btn btn-default" type="button" onClick={this.destroy}>
+              <input type="submit" className="btn btn-success" value="+ Create" /> <button className="btn btn-default" type="button" onClick={this.destroy}>
                 Cancel
               </button>
             </div>

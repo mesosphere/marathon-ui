@@ -41,8 +41,7 @@ var AppComponent = React.createClass({
         <td className="text-right">
           <span className={runningTasksClassSet}>
             {model.formatTasksRunning()}
-          </span>
-          / {model.get("instances")}
+          </span> / {model.get("instances")}
         </td>
         <td className="text-right health-bar-column">
           <AppHealthComponent model={model} />

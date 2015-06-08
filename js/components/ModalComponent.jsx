@@ -66,10 +66,10 @@ var ModalComponent = React.createClass({
     return (
       <div>
         <div className={modalClassName}
-          onClick={this.onClick}
-          role="dialog"
-          aria-hidden="true"
-          tabIndex="-1">
+            onClick={this.onClick}
+            role="dialog"
+            aria-hidden="true"
+            tabIndex="-1">
           <div className={modalDialogClassName}>
             <div className="modal-content">
               {this.props.children}

@@ -27,7 +27,7 @@ var AppVersionComponent = React.createClass({
   },
 
   handleSubmit: function (event) {
-    if (_.isFunction(this.props.onRollback)) {
+    if (_.isFunction (this.props.onRollback)) {
       event.preventDefault();
       this.props.onRollback(this.props.appVersion, event);
     }
@@ -54,17 +54,13 @@ var AppVersionComponent = React.createClass({
         // trailing colon.
         return (
           <dd key={c}>
-            {c.filter(function (s) {
-              return s !== "";
-            }).join(":")}
+            {c.filter(function (s) { return s !== ""; }).join(":")}
           </dd>
         );
       });
     var containerNode = (appVersion.get("container") == null) ?
       <UNSPECIFIED_NODE /> :
-      <dd>
-        <pre>{JSON.stringify(appVersion.get("container"), null, 2)}</pre>
-      </dd>;
+      <dd><pre>{JSON.stringify(appVersion.get("container"), null, 2)}</pre></dd>;
     var envNode = (Object.keys(appVersion.get("env")).length === 0) ?
       <UNSPECIFIED_NODE /> :
 
@@ -134,14 +130,14 @@ var AppVersionComponent = React.createClass({
             null :
             <div className="text-right">
               <form action={this.props.app.url()} method="post" onSubmit={this.handleSubmit}>
-                <input type="hidden" name="_method" value="put" />
-                <input type="hidden" name="version" value={appVersion.get("version")} />
-                <button type="submit" className="btn btn-sm btn-default">
-                  Apply these settings
-                </button>
+                  <input type="hidden" name="_method" value="put" />
+                  <input type="hidden" name="version" value={appVersion.get("version")} />
+                  <button type="submit" className="btn btn-sm btn-default">
+                    Apply these settings
+                  </button>
               </form>
             </div>
-          }
+        }
       </div>
     );
   }

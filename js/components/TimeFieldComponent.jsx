@@ -27,7 +27,7 @@ var TimeFieldComponent = React.createClass({
               </time>
             </dd> :
             <dd className="text-muted">None</dd>
-          }
+        }
       </div>
     );
   }

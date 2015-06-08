@@ -1,7 +1,6 @@
 var Backbone = require("backbone");
 
-var noop = function () {
-};
+var noop = function () {};
 
 var Router = Backbone.Router.extend({
   routes: {
@@ -18,9 +17,7 @@ var Router = Backbone.Router.extend({
   task: noop,
   about: noop,
 
-  currentHash: function () {
-    return Backbone.history.fragment;
-  }
+  currentHash: function () { return Backbone.history.fragment; }
 });
 
 module.exports = Router;

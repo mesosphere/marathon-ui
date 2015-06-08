@@ -21,15 +21,15 @@ function buildTaskAnchors(task) {
     taskAnchors =
       <span className="text-muted">
         {task.get("host")}:[{ports.map(function (p, index) {
-        return (
-          <span key={p}>
-            <a className="text-muted" href={buildHref(task.get("host"), p)}>
+          return (
+            <span key={p}>
+              <a className="text-muted" href={buildHref(task.get("host"), p)}>
                 {p}
-            </a>
+              </a>
               {index < portsLength - 1 ? ", " : ""}
-          </span>
-        );
-      })}]
+            </span>
+          );
+        })}]
       </span>;
   } else if (portsLength === 1) {
     // Linkify the hostname + port since there is only one port.
@@ -120,7 +120,7 @@ var TaskListItemComponent = React.createClass({
             onChange={this.handleCheckboxClick} />
         </td>
         <td>
-          <a href={taskUri}>{taskId}</a>
+            <a href={taskUri}>{taskId}</a>
           <br />
           {buildTaskAnchors(task)}
         </td>
@@ -137,13 +137,13 @@ var TaskListItemComponent = React.createClass({
         </td>
         <td className="text-right">
           <time className={updatedAtNodeClassSet}
-            dateTime={updatedAtISO}
-            title={updatedAtISO}>
+              dateTime={updatedAtISO}
+              title={updatedAtISO}>
             {updatedAtLocal}
           </time>
         </td>
         <td className={hasHealthClassSet} title={this.props.taskHealthMessage}>
-          <span className={healthClassSet} />
+            <span className={healthClassSet} />
         </td>
       </tr>
     );

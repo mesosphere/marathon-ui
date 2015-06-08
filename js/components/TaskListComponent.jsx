@@ -43,7 +43,7 @@ var TaskListComponent = React.createClass({
     comparator =
       collection.sortKey === comparator && !collection.sortReverse ?
       "-" + comparator :
-        comparator;
+      comparator;
     collection.setComparator(comparator);
     collection.sort();
   },
@@ -75,9 +75,9 @@ var TaskListComponent = React.createClass({
 
   allTasksSelected: function (tasksLength) {
     var selectedTasks = this.props.selectedTasks;
-    return tasksLength > 0 && this.props.tasks.find(function (task) {
-        return selectedTasks[task.id] == null;
-      }) == null;
+    return tasksLength > 0  && this.props.tasks.find(function (task) {
+      return selectedTasks[task.id] == null;
+    }) == null;
   },
 
   render: function () {
@@ -133,13 +133,13 @@ var TaskListComponent = React.createClass({
               </th>
               <th>
                 <span onClick={this.sortCollectionBy.bind(null, "id")}
-                  className={headerClassSet}>
+                      className={headerClassSet}>
                   ID {(sortKey === "id") ? <span className="caret"></span> : null}
                 </span>
               </th>
               <th className="text-center">
                 <span onClick={this.sortCollectionBy.bind(null, "status")}
-                  className={headerClassSet}>
+                      className={headerClassSet}>
                   Status {(sortKey === "status") ? <span className="caret"></span> : null}
                 </span>
               </th>
@@ -152,22 +152,22 @@ var TaskListComponent = React.createClass({
               </th>
               <th className="text-right">
                 <span onClick={this.sortCollectionBy.bind(null, "updatedAt")}
-                  className={headerClassSet}>
+                      className={headerClassSet}>
                   {(sortKey === "updatedAt") ? <span className="caret"></span> : null} Updated
                 </span>
               </th>
-              <th className={hasHealthClassSet}>
-                <span onClick={this.sortCollectionBy.bind(null, "getHealth")}
-                  className={headerClassSet}>
+                <th className={hasHealthClassSet}>
+                  <span onClick={this.sortCollectionBy.bind(null, "getHealth")}
+                        className={headerClassSet}>
                     {(sortKey === "getHealth") ? <span className="caret"></span> : null} Health
-                </span>
-              </th>
+                  </span>
+                </th>
             </tr>
           </thead>
           <PagedContentComponent
-            currentPage={this.props.currentPage}
-            itemsPerPage={this.props.itemsPerPage}
-            tag="tbody" >
+              currentPage={this.props.currentPage}
+              itemsPerPage={this.props.itemsPerPage}
+              tag="tbody" >
             <tr className={noTasksClassSet}>
               <td className="text-center" colSpan="7">
                 No tasks running.
