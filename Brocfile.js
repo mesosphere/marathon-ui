@@ -89,12 +89,42 @@ var tasks = {
 
   webpack: function (masterTree) {
     // transform merge module dependencies into one file
-    return webpackify(masterTree, {
+    var options = {
       entry: "./" + fileNames.mainJs + ".js",
       output: {
         filename: dirs.jsDist + "/" + fileNames.mainJsDist + ".js"
+      },
+      module: {
+        loaders: [
+          {
+            test: /\.js$/,
+            loader: "jsx-loader?harmony",
+            exclude: /node_modules/
+          }
+        ],
+        postLoaders: [
+          {
+            loader: "transform?envify"
+          }
+        ]
+      },
+      resolve: {
+        extensions: ["", ".js"]
       }
-    });
+    };
+
+    // Extend options with source mapping
+    if (env === "development") {
+      options.devtool = "source-map";
+      options.module.preLoaders = [
+        {
+          test: /\.js$/,
+          loader: "source-map-loader",
+          exclude: /node_modules/
+        }
+      ];
+    }
+    return webpackify(masterTree, options);
   },
 
   minifyJs: function (masterTree) {
@@ -158,10 +188,11 @@ function createJsTree() {
     srcDir: "./",
     destDir: "",
     files: [
-      "**/*.jsx",
       "**/*.js"
     ]
   });
+
+  jsTree = filterReact(jsTree, {extensions: ["js"]});
 
   // compile react files
   jsTree = filterReact(jsTree);
