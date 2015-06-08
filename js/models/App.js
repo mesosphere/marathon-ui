@@ -167,9 +167,7 @@ var App = Backbone.Model.extend({
    * changed.
    */
   save: function (attrs, options) {
-    /* jshint -W030 */
-    options || (options = {});
-    /* jshint +W030 */
+    options = options || {};
 
     var allAttrs;
     if (options.patch === true) {
@@ -229,9 +227,7 @@ var App = Backbone.Model.extend({
   },
 
   restart: function (options) {
-    /* jshint -W030 */
-    options || (options = {});
-    /* jshint +W030 */
+    options = options || {};
 
     if (options.force == null) {
       options.force = false;
@@ -321,7 +317,7 @@ var App = Backbone.Model.extend({
     if (errors.length > 0) { return errors; }
   },
 
-  url : function () {
+  url: function () {
     return config.apiURL + (this.isNew() ? "v2/apps" : "v2/apps/" + this.id);
   }
 }, {
