@@ -1,7 +1,7 @@
-var EventEmitter = require('events').EventEmitter;
+var EventEmitter = require("events").EventEmitter;
 var lazy = require("lazy.js");
 
-var AppDispatcher = require('../AppDispatcher');
+var AppDispatcher = require("../AppDispatcher");
 var DeploymentEvents = require("../events/DeploymentEvents");
 
 var DeploymentStore = lazy(EventEmitter.prototype).extend({
@@ -18,11 +18,17 @@ AppDispatcher.register(function (action) {
       DeploymentStore.emit(DeploymentEvents.REQUEST_ERROR);
       break;
     case DeploymentEvents.REVERT:
-      DeploymentStore.deployments = action.data;
+      DeploymentStore.deployments.push(action.data);
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REVERT_ERROR:
       DeploymentStore.emit(DeploymentEvents.REVERT_ERROR);
+      break;
+    case DeploymentEvents.STOP:
+      DeploymentStore.emit(DeploymentEvents.CHANGE);
+      break;
+    case DeploymentEvents.STOP_ERROR:
+      DeploymentStore.emit(DeploymentEvents.STOP_ERROR);
       break;
   }
 });

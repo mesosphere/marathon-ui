@@ -1,7 +1,7 @@
 var oboe = require("oboe");
 
 var config = require("../config/config");
-var AppDispatcher = require('../AppDispatcher');
+var AppDispatcher = require("../AppDispatcher");
 var DeploymentEvents = require("../events/DeploymentEvents");
 
 var DeploymentActions = {
@@ -32,6 +32,22 @@ var DeploymentActions = {
     }).fail(function (error) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REVERT_ERROR,
+        data: error
+      });
+    });
+  },
+  stopDeployment: function (deploymentID) {
+    this.request({
+      method: "DELETE",
+      url: config.apiURL + "v2/deployments/" + deploymentID + "?force=true"
+    }).done(function (deployment) {
+      AppDispatcher.dispatch({
+        actionType: DeploymentEvents.STOP,
+        data: deployment
+      });
+    }).fail(function (error) {
+      AppDispatcher.dispatch({
+        actionType: DeploymentEvents.STOP_ERROR,
         data: error
       });
     });
