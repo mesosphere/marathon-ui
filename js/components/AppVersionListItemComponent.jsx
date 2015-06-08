@@ -62,16 +62,12 @@ var AppVersionListItemComponent = React.createClass({
     if (this.state.fetchState !== States.STATE_LOADING &&
         this.state.fetchState !== States.STATE_ERROR) {
       return (
-        /* jshint trailing:false, quotmark:false, newcap:false */
-        /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
         <AppVersionComponent
           className="dl-unstyled"
           app={this.props.app}
           appVersion={this.props.appVersion}
           onRollback={this.props.onRollback} />
       );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }
 
     return null;
@@ -89,8 +85,6 @@ var AppVersionListItemComponent = React.createClass({
     });
 
     if (this.state.open) {
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <div className="panel-body">
           <p className={loadingClassSet}>
@@ -102,8 +96,6 @@ var AppVersionListItemComponent = React.createClass({
           {this.getAppVersionComponent()}
         </div>
       );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }
 
     return null;
@@ -118,8 +110,6 @@ var AppVersionListItemComponent = React.createClass({
       "dropup": this.state.open
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="panel panel-inverse">
         <div className="panel-heading clickable"

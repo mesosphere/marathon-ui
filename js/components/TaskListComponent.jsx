@@ -55,8 +55,6 @@ var TaskListComponent = React.createClass({
       this.props.tasks.map(function (task) {
         var isActive = this.props.selectedTasks[task.id] === true;
 
-        /* jshint trailing:false, quotmark:false, newcap:false */
-        /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
         return (
           <TaskListItemComponent
             appId={this.props.tasks.options.appId}
@@ -67,8 +65,6 @@ var TaskListComponent = React.createClass({
             task={task}
             taskHealthMessage={this.props.formatTaskHealthMessage(task)}/>
         );
-        /* jshint trailing:true, quotmark:true, newcap:true */
-        /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       }, this)
     );
   },
@@ -110,8 +106,6 @@ var TaskListComponent = React.createClass({
       "hidden": !hasHealth
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <div className={errorClassSet}>

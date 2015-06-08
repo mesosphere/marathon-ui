@@ -61,8 +61,6 @@ var ModalComponent = React.createClass({
       "in": this.state.isIn
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <div className={modalClassName}

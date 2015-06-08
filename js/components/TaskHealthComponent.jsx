@@ -13,8 +13,6 @@ var TaskHealthComponent = React.createClass({
     var healthCheckResults = task.get("healthCheckResults");
     var healthNodeList;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     if (healthCheckResults != null) {
       healthNodeList = healthCheckResults.map(function (cResult, index) {
         if (cResult != null) {

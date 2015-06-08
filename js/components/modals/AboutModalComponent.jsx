@@ -30,8 +30,6 @@ var AboutModalComponent = React.createClass({
   },
 
   getInfo: function (attr) {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return this.state.info.get(attr) ||
       <span className="text-muted">Unspecified</span>;
   },
@@ -40,8 +38,6 @@ var AboutModalComponent = React.createClass({
     var marathonConfig = this.state.info.get("marathon_config");
     var zookeeperConfig = this.state.info.get("zookeeper_config");
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ModalComponent
           onDestroy={this.props.onDestroy}
