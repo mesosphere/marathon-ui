@@ -17,7 +17,7 @@ var TaskListComponent = React.createClass({
     itemsPerPage: React.PropTypes.number.isRequired,
     hasHealth: React.PropTypes.bool,
     selectedTasks: React.PropTypes.object.isRequired,
-    tasks: React.PropTypes.object.isRequired,
+    tasks: React.PropTypes.object.isRequired
   },
 
   getResource: function () {
@@ -75,7 +75,7 @@ var TaskListComponent = React.createClass({
 
   allTasksSelected: function (tasksLength) {
     var selectedTasks = this.props.selectedTasks;
-    return tasksLength > 0  && this.props.tasks.find(function (task) {
+    return tasksLength > 0 && this.props.tasks.find(function (task) {
       return selectedTasks[task.id] == null;
     }) == null;
   },
