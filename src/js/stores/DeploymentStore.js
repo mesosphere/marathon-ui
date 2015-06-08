@@ -4,6 +4,14 @@ var lazy = require("lazy.js");
 var AppDispatcher = require("../AppDispatcher");
 var DeploymentEvents = require("../events/DeploymentEvents");
 
+function processDeployments (deployments) {
+  return lazy(deployments).map(function (deployment) {
+    deployment.affectedAppsString = deployment.affectedApps.join(", ");
+    deployment.currentActionsString = deployment.currentActions.join(", ");
+    return deployment;
+  }).value();
+}
+
 var DeploymentStore = lazy(EventEmitter.prototype).extend({
   deployments: []
 }).value();
@@ -11,7 +19,7 @@ var DeploymentStore = lazy(EventEmitter.prototype).extend({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case DeploymentEvents.REQUEST:
-      DeploymentStore.deployments = action.data;
+      DeploymentStore.deployments = processDeployments(action.data);
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REQUEST_ERROR:

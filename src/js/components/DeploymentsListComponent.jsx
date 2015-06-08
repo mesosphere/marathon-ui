@@ -1,20 +1,15 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var States = require("../constants/States");
-var DeploymentComponent = require("../components/DeploymentComponent");
 
+var DeploymentComponent = require("../components/DeploymentComponent");
 var DeploymentStore = require("../stores/DeploymentStore");
 var DeploymentEvents = require("../events/DeploymentEvents");
 
-var lazy = require("lazy.js");
-
 var DeploymentListComponent = React.createClass({
   displayName: "DeploymentListComponent",
-
-  propTypes: {
-    destroyDeployment: React.PropTypes.func.isRequired
-  },
 
   getInitialState: function () {
     return {
@@ -52,21 +47,23 @@ var DeploymentListComponent = React.createClass({
 
   sortCollectionBy: function (comparator) {
     var deployments = this.state.deployments;
+
     comparator =
       deployments.sortKey === comparator && !deployments.sortReverse ?
       "-" + comparator :
       comparator;
-    deployments.setComparator(comparator);
-    deployments.sort();
+
+    this.setState({
+      deployments: lazy(deployments).sortBy(function (deployment) {
+        return deployment[comparator];
+      }).value()
+    });
   },
 
   getDeploymentNodes: function () {
     return lazy(this.state.deployments).map(function (model) {
       return (
-        <DeploymentComponent
-          key={model.id}
-          destroyDeployment={this.props.destroyDeployment}
-          model={model} />
+        <DeploymentComponent key={model.id} model={model} />
       );
     }.bind(this)).value();
   },
