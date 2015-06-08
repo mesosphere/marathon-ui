@@ -71,7 +71,7 @@ var Marathon = React.createClass({
 
     Mousetrap.bind("c", function () {
       router.navigate("newapp", {trigger: true});
-    }.bind(this), "keyup");
+    }, "keyup");
 
     Mousetrap.bind("g a", function () {
       if (this.state.modalClass == null) {
@@ -93,14 +93,14 @@ var Marathon = React.createClass({
 
     Mousetrap.bind("shift+,", function () {
       router.navigate("about", {trigger: true});
-    }.bind(this));
+    });
 
     this.updatePolling();
   },
 
   componentDidUpdate: function (prevProps, prevState) {
-    if (prevState.activeApp != this.state.activeApp ||
-      prevState.activeTabId != this.state.activeTabId) {
+    if (prevState.activeApp !== this.state.activeApp ||
+      prevState.activeTabId !== this.state.activeTabId) {
       this.updatePolling();
     }
   },
@@ -233,6 +233,7 @@ var Marathon = React.createClass({
   destroyApp: function () {
     var app = this.state.activeApp;
 
+    /*eslint-disable no-alert, no-console */
     if (confirm("Destroy app '" + app.id + "'?\nThis is irreversible.")) {
       app.destroy({
         error: function (data, response) {
@@ -245,11 +246,13 @@ var Marathon = React.createClass({
         wait: true
       });
     }
+    /*eslint-enable no-alert */
   },
 
   restartApp: function () {
     var app = this.state.activeApp;
 
+    /*eslint-disable no-alert, no-console */
     if (confirm("Restart app '" + app.id + "'?")) {
       app.restart({
         error: function (data, response) {
@@ -259,6 +262,7 @@ var Marathon = React.createClass({
         wait: true
       });
     }
+    /*eslint-enable no-alert */
   },
 
   destroyDeployment: function (deployment, options, component) {
@@ -273,6 +277,7 @@ var Marathon = React.createClass({
         "'?\nThis will stop the deployment immediately and leave it in the " +
         "current state.";
 
+    /*eslint-disable no-alert, no-console */
     if (confirm(confirmMessage)) {
       setTimeout(function () {
         deployment.destroy({
@@ -296,6 +301,7 @@ var Marathon = React.createClass({
     } else {
       component.setLoading(false);
     }
+    /*eslint-enable no-alert */
   },
 
   rollbackToAppVersion: function (version) {
@@ -307,7 +313,9 @@ var Marathon = React.createClass({
         {
           error: function (data, response) {
             var msg = response.responseJSON.message || response.statusText;
+            /*eslint-disable no-alert, no-console */
             alert("Could not update to chosen version: " + msg);
+            /*eslint-enable no-alert */
           },
           success: function () {
             // refresh app versions
@@ -325,7 +333,9 @@ var Marathon = React.createClass({
         {
           error: function (data, response) {
             var msg = response.responseJSON.message || response.statusText;
+            /*eslint-disable no-alert, no-console */
             alert("Not scaling: " + msg);
+            /*eslint-enable no-alert */
           },
           success: function () {
             // refresh app versions
@@ -338,12 +348,15 @@ var Marathon = React.createClass({
         // If the model is not valid, revert the changes to prevent the UI
         // from showing an invalid state.
         app.update(app.previousAttributes());
+        /*eslint-disable no-alert, no-console */
         alert("Not scaling: " + app.validationError[0].message);
+        /*eslint-enable no-alert */
       }
     }
   },
 
   suspendApp: function () {
+    /*eslint-disable no-alert, no-console */
     if (confirm("Suspend app by scaling to 0 instances?")) {
       this.state.activeApp.suspend({
         error: function (data, response) {
@@ -356,6 +369,7 @@ var Marathon = React.createClass({
         }.bind(this)
       });
     }
+    /*eslint-enable no-alert */
   },
 
   poll: function () {
@@ -427,7 +441,7 @@ var Marathon = React.createClass({
   getAppPage: function () {
     var activeApp = this.state.collection.get(this.state.activeAppId);
     if (!activeApp) {
-      return;
+      return null;
     }
 
     return (

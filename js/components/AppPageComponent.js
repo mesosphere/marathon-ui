@@ -88,8 +88,10 @@ var AppPageComponent = React.createClass({
 
   scaleApp: function () {
     var model = this.props.model;
+    /*eslint-disable no-alert, no-console */
     var instancesString = prompt("Scale to how many instances?",
       model.get("instances"));
+    /*eslint-enable no-alert */
 
     // Clicking "Cancel" in a prompt returns either null or an empty String.
     // perform the action only if a value is submitted.
@@ -178,7 +180,7 @@ var AppPageComponent = React.createClass({
 
     if (this.state.activeViewIndex === 0) {
       content = this.getAppDetails();
-    } else if (this.state.activeViewIndex === 1)  {
+    } else if (this.state.activeViewIndex === 1) {
       content = this.getTaskDetailComponent();
     }
 

@@ -9,7 +9,7 @@ module.exports = React.createClass({
       className: React.PropTypes.string,
       currentPage: React.PropTypes.number.isRequired,
       itemsPerPage: React.PropTypes.number,
-      tag: React.PropTypes.string,
+      tag: React.PropTypes.string
     },
 
     getDefaultProps: function () {

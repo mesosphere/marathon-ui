@@ -28,10 +28,10 @@ var TaskHealthComponent = React.createClass({
               time: cResult.lastFailure
             }
           ];
-          var timeFields = timeNodes.map(function (timeNode, index) {
+          var timeFields = timeNodes.map(function (timeNode, i) {
             return (
               <TimeFieldComponent
-                key={index}
+                key={i}
                 label={timeNode.label}
                 time={timeNode.time} />
             );
