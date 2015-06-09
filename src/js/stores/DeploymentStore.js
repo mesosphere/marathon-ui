@@ -12,6 +12,12 @@ function processDeployments (deployments) {
   }).value();
 }
 
+function removeDeployment (deployments, deploymentId) {
+  return lazy(deployments).reject({
+    id: deploymentId
+  }).value();
+}
+
 var DeploymentStore = lazy(EventEmitter.prototype).extend({
   deployments: []
 }).value();
@@ -26,20 +32,20 @@ AppDispatcher.register(function (action) {
       DeploymentStore.emit(DeploymentEvents.REQUEST_ERROR);
       break;
     case DeploymentEvents.REVERT:
-      DeploymentStore.deployments.push(action.data);
+      DeploymentStore.deployments =
+        removeDeployment(DeploymentStore.deployments, action.deploymentId);
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REVERT_ERROR:
-      DeploymentStore.emit(DeploymentEvents.REVERT_ERROR);
+      DeploymentStore.emit(DeploymentEvents.REVERT_ERROR, action.data.jsonBody);
       break;
     case DeploymentEvents.STOP:
-      DeploymentStore.deployments = lazy(DeploymentStore.deployments).reject({
-        deploymentId: action.deploymentId
-      }).value();
+      DeploymentStore.deployments =
+        removeDeployment(DeploymentStore.deployments, action.deploymentId);
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.STOP_ERROR:
-      DeploymentStore.emit(DeploymentEvents.STOP_ERROR);
+      DeploymentStore.emit(DeploymentEvents.STOP_ERROR, action.data.jsonBody);
       break;
   }
 });
