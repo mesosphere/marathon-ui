@@ -88,10 +88,8 @@ var AppPageComponent = React.createClass({
 
   scaleApp: function () {
     var model = this.props.model;
-    /*eslint-disable no-alert, no-console */
     var instancesString = prompt("Scale to how many instances?",
       model.get("instances"));
-    /*eslint-enable no-alert */
 
     // Clicking "Cancel" in a prompt returns either null or an empty String.
     // perform the action only if a value is submitted.
@@ -106,6 +104,8 @@ var AppPageComponent = React.createClass({
       return null;
     }
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="header-btn">
         <button className="btn btn-sm btn-default"
@@ -126,11 +126,15 @@ var AppPageComponent = React.createClass({
         </button>
       </div>
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getTaskDetailComponent: function () {
     var model = this.props.model;
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <TaskDetailComponent
         fetchState={this.props.tasksFetchState}
@@ -138,11 +142,15 @@ var AppPageComponent = React.createClass({
         hasHealth={model.hasHealth()}
         task={this.state.activeTask} />
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getAppDetails: function () {
     var model = this.props.model;
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
           activeTabId={this.state.activeTabId}
@@ -169,6 +177,8 @@ var AppPageComponent = React.createClass({
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
@@ -180,10 +190,12 @@ var AppPageComponent = React.createClass({
 
     if (this.state.activeViewIndex === 0) {
       content = this.getAppDetails();
-    } else if (this.state.activeViewIndex === 1) {
+    } else if (this.state.activeViewIndex === 1)  {
       content = this.getTaskDetailComponent();
     }
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <AppBreadcrumbsComponent

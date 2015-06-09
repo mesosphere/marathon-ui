@@ -25,6 +25,8 @@ var NavTabsComponent = React.createClass({
         "active": tab.id === activeTabId
       });
 
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       var badge = tab.badge > 0 ?
         <span className="badge">{tab.badge}</span> :
         null;

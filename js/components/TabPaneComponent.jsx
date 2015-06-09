@@ -29,6 +29,8 @@ var TabPaneComponent = React.createClass({
       "tab-pane": true
     });
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className={classSet}>
         {this.props.children}

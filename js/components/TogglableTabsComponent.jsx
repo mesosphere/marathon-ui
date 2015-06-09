@@ -30,6 +30,8 @@ module.exports = React.createClass({
         "hidden": this.props.tabs.length === 0
       });
 
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <div className={this.props.className}>
           <NavTabsComponent

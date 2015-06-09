@@ -1,31 +1,30 @@
 // dependencies
+var chalk = require("chalk");
 var cleanCSS = require("broccoli-clean-css");
 var concatCSS = require("broccoli-concat");
 var env = require("broccoli-env").getEnv();
-var funnel = require("broccoli-funnel");
-var eslint = require("broccoli-lint-eslint");
+var filterReact = require("broccoli-react");
+var jscs = require("broccoli-jscs");
+var jsHintTree = require("broccoli-jshint");
 var less = require("broccoli-less");
 var mergeTrees = require("broccoli-merge-trees");
+var pickFiles = require("broccoli-static-compiler");
 var replace = require("broccoli-replace");
 var uglifyJavaScript = require("broccoli-uglify-js");
 var webpackify = require("broccoli-webpack");
 var _ = require("underscore");
-var packageConfig = require("./package.json");
 
 /*
  * configuration
  */
 var dirs = {
-  src: ".",
+  src: "",
   js: "js",
-  jsDist: "dist",
+  jsDist: ".", // use . for root
   styles: "css",
-  stylesVendor: "vendor",
-  stylesDist: "dist",
+  stylesDist: ".", // use . for root
   img: "img",
-  imgDist: "img",
-  html: "html",
-  htmlDist: "." // use . for root
+  imgDist: "img"
 };
 
 // without extensions
@@ -41,49 +40,63 @@ var fileNames = {
  */
 var tasks = {
 
-  eslint: function (jsTree) {
-    return eslint(jsTree, {config: ".eslintrc"});
+  jsHint: function (jsTree) {
+    // run jscs on compiled js
+    var jscsTree = jscs(jsTree, {
+      disableTestGenerator: true,
+      enabled: true,
+      logError: function (message) {
+        switch (env) {
+          case "production":
+            // TODO(mlunoe) disabled for production
+            break;
+          default:
+            // use pretty colors in test and development mode
+            console.log(chalk.red(message) + "\n");
+            break;
+        }
+      },
+      jshintrcPath: dirs.js + "/.jscsrc"
+    });
+
+    // run jshint on compiled js
+    var hintTree = jsHintTree(jsTree , {
+      logError: function (message) {
+        switch (env) {
+          case "production":
+            // TODO(mlunoe) disabled for production
+            break;
+          default:
+            // use pretty colors in test and development mode
+            this._errors.push(chalk.red(message) + "\n");
+            break;
+        }
+      },
+      jshintrcPath: dirs.js + "/.jshintrc"
+    });
+
+    // hack to strip test files from jshint tree
+    hintTree = pickFiles(hintTree, {
+      srcDir: "/",
+      files: []
+    });
+
+    return mergeTrees(
+      [jscsTree, hintTree, jsTree],
+      { overwrite: true }
+    );
   },
 
   webpack: function (masterTree) {
     // transform merge module dependencies into one file
-    var options = {
-      entry: "./" + dirs.js + "/" + fileNames.mainJs + ".js",
+    return webpackify(masterTree, {
+      entry: "./" + fileNames.mainJs + ".js",
       output: {
-        filename: fileNames.mainJsDist + ".js"
-      },
-      module: {
-        loaders: [
-          {
-            test: /\.js$/,
-            loader: "jsx-loader?harmony",
-            exclude: /node_modules/
-          }
-        ],
-        postLoaders: [
-          {
-            loader: "transform?envify"
-          }
-        ]
-      },
-      resolve: {
-        extensions: ["", ".js"]
+        filename: dirs.jsDist + "/" + fileNames.mainJsDist + ".js"
       }
-    };
-
-    // Extend options with source mapping
-    if (env === "development") {
-      options.devtool = "source-map";
-      options.module.preLoaders = [
-        {
-          test: /\.js$/,
-          loader: "source-map-loader",
-          exclude: /node_modules/
-        }
-      ];
-    }
-    return webpackify(masterTree, options);
+    });
   },
+
   minifyJs: function (masterTree) {
     return uglifyJavaScript(masterTree, {
       mangle: true,
@@ -93,8 +106,9 @@ var tasks = {
 
   css: function (masterTree) {
     // create tree for less
-    var cssTree = funnel(dirs.styles, {
-      include: ["**/main.less", "**/*.css"],
+    var cssTree = pickFiles(dirs.styles, {
+      srcDir: "./",
+      files: ["**/main.less", "**/*.css"],
       destDir: dirs.stylesDist
     });
 
@@ -104,10 +118,11 @@ var tasks = {
     // concatenate css
     cssTree = concatCSS(cssTree, {
       inputFiles: [
-        dirs.stylesDist + "/" + dirs.stylesVendor + "/*.css",
+        "**/*.css",
+        "!" + dirs.stylesDist + "/" + fileNames.mainStyles + ".css",
         dirs.stylesDist + "/" + fileNames.mainStyles + ".css"
       ],
-      outputFile: "/" + fileNames.mainStylesDist + ".css"
+      outputFile: "/" + dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css",
     });
 
     return mergeTrees(
@@ -120,22 +135,11 @@ var tasks = {
     return cleanCSS(masterTree);
   },
 
-  html: function (masterTree) {
-    // create tree for html
-    var htmlTree = funnel(dirs.html, {
-      files: ["index.html"]
-    });
-
-    return mergeTrees(
-      [masterTree, htmlTree],
-      { overwrite: true }
-    );
-  },
-
   img: function (masterTree) {
     // create tree for image files
-    var imgTree = funnel(dirs.img, {
-      destDir: dirs.imgDist
+    var imgTree = pickFiles(dirs.img, {
+      srcDir: "./",
+      destDir: dirs.imgDist,
     });
 
     return mergeTrees(
@@ -150,10 +154,17 @@ var tasks = {
  */
 function createJsTree() {
   // create tree for .js and .jsx
-  var jsTree = funnel(dirs.js, {
-    include: ["**/*.js"],
-    destDir: dirs.js
+  var jsTree = pickFiles(dirs.js, {
+    srcDir: "./",
+    destDir: "",
+    files: [
+      "**/*.jsx",
+      "**/*.js"
+    ]
   });
+
+  // compile react files
+  jsTree = filterReact(jsTree);
 
   // replace @@ENV in js code with current BROCCOLI_ENV environment variable
   // {default: "development" | "production"}
@@ -163,10 +174,6 @@ function createJsTree() {
       {
         match: "ENV", // replaces @@ENV
         replacement: env
-      },
-      {
-        match: "VERSION",
-        replacement: packageConfig.version
       }
     ]
   });
@@ -175,7 +182,7 @@ function createJsTree() {
 /*
  * Start the build
  */
-var buildTree = _.compose(tasks.eslint, createJsTree);
+var buildTree = _.compose(tasks.jsHint, createJsTree);
 
 // export BROCCOLI_ENV={default : "development" | "production"}
 if (env === "development" || env === "production" ) {
@@ -184,14 +191,6 @@ if (env === "development" || env === "production" ) {
     tasks.img,
     tasks.css,
     tasks.webpack,
-    buildTree
-  );
-}
-
-if (env === "development") {
-  // add steps that are exclusively used in development
-  buildTree = _.compose(
-    tasks.html,
     buildTree
   );
 }

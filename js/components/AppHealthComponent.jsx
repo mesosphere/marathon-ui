@@ -74,6 +74,8 @@ var AppHealthComponent = React.createClass({
         allZeroWidthBefore = false;
       }
 
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <div
           className={React.addons.classSet(classSet)}
@@ -84,6 +86,8 @@ var AppHealthComponent = React.createClass({
   },
 
   render: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="progress health-bar">
         {this.getHealthBar()}

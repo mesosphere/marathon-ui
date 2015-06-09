@@ -34,6 +34,8 @@ var TaskDetailComponent = React.createClass({
     var timeFields;
     var appUri = "#apps/" + encodeURIComponent(this.props.task.get("appId"));
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     if (!hasError) {
       healthClassSet = React.addons.classSet({
         "text-unhealthy": taskHealth === Task.HEALTH.UNHEALTHY,

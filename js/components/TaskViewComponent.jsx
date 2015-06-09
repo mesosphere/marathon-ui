@@ -100,6 +100,8 @@ var TaskViewComponent = React.createClass({
       "hidden": selectedTasksLength === 0
     });
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="btn-group">
         <button
@@ -120,6 +122,8 @@ var TaskViewComponent = React.createClass({
         </button>
       </div>
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getPagedNav: function () {
@@ -128,6 +132,8 @@ var TaskViewComponent = React.createClass({
 
     // at least two pages
     if (tasksLength > itemsPerPage) {
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <PagedNavComponent
           className="text-right"
@@ -137,12 +143,16 @@ var TaskViewComponent = React.createClass({
           noItems={tasksLength}
           useArrows={true} />
       );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }
 
     return null;
   },
 
   render: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <div className="row">
