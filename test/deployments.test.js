@@ -9,95 +9,110 @@ var DeploymentStore = require("../js/stores/DeploymentStore");
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
 
-describe("A request to the deployments endpoint", function () {
+describe("Deployments", function () {
 
-  before(function (done) {
+  beforeEach(function (done) {
     this.server = new HttpServer({
       address: "localhost",
       port: 8181
-    }).start(done);
+    })
+    .setup([{}, {}, {}], 200)
+    .start(function () {
+      DeploymentStore.once(DeploymentEvents.CHANGE, done);
+      DeploymentActions.requestDeployments();
+    });
     config.apiURL = "http://localhost:8181/";
   });
 
-  after(function (done) {
+  afterEach(function (done) {
     this.server.stop(done);
   });
 
-  it("updates the DeploymentStore on success", function (done) {
-    this.server.setup([{}, {}, {}], 200);
+  describe("on request", function() {
 
-    DeploymentStore.once(DeploymentEvents.CHANGE, function () {
-      expectAsync(function () {
-        expect(DeploymentStore.deployments).to.have.length(3);
-      }, done);
+    it("updates the DeploymentStore on success", function (done) {
+
+      DeploymentStore.once(DeploymentEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(DeploymentStore.deployments).to.have.length(3);
+        }, done);
+      });
+
+      DeploymentActions.requestDeployments();
     });
 
-    DeploymentActions.requestDeployments();
-  });
+    it("handles failure gracefully", function (done) {
+      this.server.setup({ message: "Guru Meditation" }, 404);
 
-  it("handles failure gracefully", function (done) {
-    this.server.setup({ message: "Guru Meditation" }, 404);
+      DeploymentStore.once(DeploymentEvents.REQUEST_ERROR, done);
 
-    DeploymentStore.once(DeploymentEvents.REQUEST_ERROR, done);
-
-    DeploymentActions.requestDeployments();
-  });
-
-  it("reverts (rollback) a deployment", function (done) {
-    this.server.setup({
-        "deploymentId": "52c51d0a-27eb-4971-a0bb-b0fa47528e33",
-        "version": "2014-07-09T11:14:58.232Z"
-      }, 200);
-
-    DeploymentStore.once(DeploymentEvents.CHANGE, function () {
-      expectAsync(function () {
-
-        expect(DeploymentStore.deployments).to.have.length(4);
-
-        expect(_.where(DeploymentStore.deployments, {
-          deploymentId: "52c51d0a-27eb-4971-a0bb-b0fa47528e33"
-        })).to.not.be.undefined;
-
-      }, done);
+      DeploymentActions.requestDeployments();
     });
 
-    DeploymentActions.revertDeployment("2e72dbf1-2b2a-4204-b628-e8bd160945dd");
   });
 
-  it("recieves a revert error", function (done) {
-    this.server.setup(null, 404);
+  describe("on revert (rollback)", function () {
 
-    DeploymentStore.once(DeploymentEvents.REVERT_ERROR, function () {
-      expectAsync(function () {
-        expect(DeploymentStore.deployments).to.have.length(4);
-      }, done);
+    it("reverts (rollback) a deployment on success", function (done) {
+      this.server.setup({
+          "deploymentId": "deployment-reverts",
+          "version": "v1"
+        }, 200);
+
+      DeploymentStore.once(DeploymentEvents.CHANGE, function () {
+        expectAsync(function () {
+
+          expect(DeploymentStore.deployments).to.have.length(4);
+
+          expect(_.where(DeploymentStore.deployments, {
+            deploymentId: "deployment-reverts"
+          })).to.not.be.undefined;
+
+        }, done);
+      });
+
+      DeploymentActions.revertDeployment("deployment-to-revert");
     });
 
-    DeploymentActions.revertDeployment("2e72dbf1-2b2a-4204-b628-e8bd160945dd");
+    it("receives a revert error", function (done) {
+      this.server.setup(null, 404);
+
+      DeploymentStore.once(DeploymentEvents.REVERT_ERROR, function () {
+        expectAsync(function () {
+          expect(DeploymentStore.deployments).to.have.length(3);
+        }, done);
+      });
+
+      DeploymentActions.revertDeployment("deployment-to-revert");
+    });
+
   });
 
-  it("forcefully stops a deployment", function (done) {
-    this.server.setup(null, 202);
+  describe("on stop", function () {
 
-    DeploymentStore.once(DeploymentEvents.CHANGE, function () {
-      expectAsync(function () {
-        expect(DeploymentStore.deployments).to.have.length(3);
-      }, done);
+    it("forcefully stops a deployment", function (done) {
+      this.server.setup(null, 202);
+
+      DeploymentStore.once(DeploymentEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(DeploymentStore.deployments).to.have.length(3);
+        }, done);
+      });
+
+      DeploymentActions.stopDeployment("deployment-to-stop");
     });
 
-    DeploymentActions.stopDeployment("52c51d0a-27eb-4971-a0bb-b0fa47528e33");
-  });
+    it("receives a stop error", function (done) {
+      this.server.setup(null, 404);
 
-  it("recieves a stop error", function (done) {
-    this.server.setup(null, 404);
+      DeploymentStore.once(DeploymentEvents.STOP_ERROR, function () {
+        expectAsync(function () {
+          expect(DeploymentStore.deployments).to.have.length(3);
+        }, done);
+      });
 
-    DeploymentStore.once(DeploymentEvents.STOP_ERROR, function () {
-      expectAsync(function () {
-        expect(DeploymentStore.deployments).to.have.length(3);
-      }, done);
+      DeploymentActions.stopDeployment();
     });
-
-    DeploymentActions.stopDeployment();
   });
 
 });
