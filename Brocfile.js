@@ -6,7 +6,6 @@ var funnel = require("broccoli-funnel");
 var eslint = require("broccoli-lint-eslint");
 var less = require("broccoli-less");
 var mergeTrees = require("broccoli-merge-trees");
-var pickFiles = require("broccoli-static-compiler");
 var replace = require("broccoli-replace");
 var uglifyJavaScript = require("broccoli-uglify-js");
 var webpackify = require("broccoli-webpack");
@@ -92,9 +91,8 @@ var tasks = {
 
   css: function (masterTree) {
     // create tree for less
-    var cssTree = pickFiles(dirs.styles, {
-      srcDir: "./",
-      files: ["**/main.less", "**/*.css"],
+    var cssTree = funnel(dirs.styles, {
+      include: ["**/main.less", "**/*.css"],
       destDir: dirs.stylesDist
     });
 
@@ -122,9 +120,8 @@ var tasks = {
 
   img: function (masterTree) {
     // create tree for image files
-    var imgTree = pickFiles(dirs.img, {
-      srcDir: "./",
-      destDir: dirs.imgDist,
+    var imgTree = funnel(dirs.img, {
+      destDir: dirs.imgDist
     });
 
     return mergeTrees(

@@ -31,7 +31,6 @@
     "broccoli-lint-eslint": "^1.0.1",
     "broccoli-less": "^2.0.0",
     "broccoli-merge-trees": "^0.2.1",
-    "broccoli-react": "^0.7.0",
     "broccoli-replace": "^0.2.0",
     "broccoli-static-compiler": "^0.1.4",
     "broccoli-uglify-js": "^0.1.3",
