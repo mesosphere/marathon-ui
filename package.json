@@ -41,9 +41,10 @@
     "envify": "^3.4.0",
     "eslint": "^0.22.1",
     "eslint-plugin-react": "^2.5.0",
+    "jsdom": "^3.1.2",
     "jsx-loader": "^0.13.2",
     "mocha": "^2.1.0",
-    "npm-shrinkwrap": "https://registry.npmjs.org/npm-shrinkwrap/-/npm-shrinkwrap-5.4.0.tgz",
+    "npm-shrinkwrap": "^5.4.0",
     "sinon": "^1.12.2",
     "source-map-loader": "^0.1.5",
     "transform-loader": "^0.2.2"
@@ -53,6 +54,7 @@
     "clean": "rm -rf dist tmp",
     "dist": "export BROCCOLI_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "test": "mocha --ui exports --reporter spec --compilers jsx:src/test/compiler.js src/test/object-assign-polyfill.js src/test/**/*.test.* src/test/*.test.*",
-    "serve": "export BROCCOLI_WARN_READ_API=y BROCCOLI_ENV=\"development\" DISABLE_SOURCE_MAP=false && broccoli serve"
+    "serve": "export BROCCOLI_WARN_READ_API=y BROCCOLI_ENV=\"development\" DISABLE_SOURCE_MAP=false && broccoli serve",
+    "shrinkwrap": "npm-shrinkwrap --dev"
   }
 }

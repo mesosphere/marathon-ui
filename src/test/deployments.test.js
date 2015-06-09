@@ -1,8 +1,12 @@
 var expect = require("chai").expect;
 var _ = require("underscore");
+var jsdom = require("jsdom");
+var React = require("react/addons");
+var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
 var DeploymentActions = require("../js/actions/DeploymentActions");
+var DeploymentComponent  = require("../js/components/DeploymentComponent");
 var DeploymentEvents = require("../js/events/DeploymentEvents");
 var DeploymentStore = require("../js/stores/DeploymentStore");
 
@@ -122,6 +126,39 @@ describe("Deployments", function () {
       DeploymentActions.stopDeployment();
     });
 
+  });
+
+});
+
+describe("a deployment component", function () {
+
+  before(function () {
+    global.document = jsdom.jsdom();
+    global.window = document.parentWindow;
+  });
+
+  beforeEach(function () {
+    var model = {
+      id: "123",
+      version: "v1",
+      affectedApps: [],
+      currentActions: [
+        { app: "app1", action: "action1" },
+        { app: "app2", action: "action2" },
+        { app: "app3", action: "action3" }
+      ]
+    };
+
+    this.instance = TestUtils.renderIntoDocument(
+      <DeploymentComponent key="dc1" model={model} />
+    );
+
+    var row = TestUtils.findRenderedDOMComponentWithTag(this.instance, "tr");
+    this.columns = TestUtils.scryRenderedDOMComponentsWithTag(row, "td");
+  });
+
+  it("has 5 table columns", function () {
+    expect(this.columns.length).to.equal(5);
   });
 
 });

@@ -45,6 +45,7 @@ var Marathon = React.createClass({
   },
 
   componentWillMount: function () {
+    // TODO: That should be handled directly on the NavTabs
     DeploymentStore.on(DeploymentEvents.CHANGE, function () {
       tabs[1].badge = DeploymentStore.deployments.length;
       this.forceUpdate();
