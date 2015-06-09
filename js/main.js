@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 var Backbone = require("backbone");
 var React = require("react/addons");
 

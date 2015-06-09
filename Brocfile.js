@@ -16,14 +16,16 @@ var packageConfig = require("./package.json");
  * configuration
  */
 var dirs = {
-  src: "",
+  src: ".",
   js: "js",
-  jsDist: ".", // use . for root
+  jsDist: "dist",
   styles: "css",
   stylesVendor: "vendor",
-  stylesDist: ".", // use . for root
+  stylesDist: "dist",
   img: "img",
-  imgDist: "img"
+  imgDist: "img",
+  html: "html",
+  htmlDist: "." // use . for root
 };
 
 // without extensions
@@ -46,9 +48,9 @@ var tasks = {
   webpack: function (masterTree) {
     // transform merge module dependencies into one file
     var options = {
-      entry: "./" + fileNames.mainJs + ".js",
+      entry: "./" + dirs.js + "/" + fileNames.mainJs + ".js",
       output: {
-        filename: dirs.jsDist + "/" + fileNames.mainJsDist + ".js"
+        filename: fileNames.mainJsDist + ".js"
       },
       module: {
         loaders: [
@@ -102,10 +104,10 @@ var tasks = {
     // concatenate css
     cssTree = concatCSS(cssTree, {
       inputFiles: [
-        dirs.stylesVendor + "/*.css",
+        dirs.stylesDist + "/" + dirs.stylesVendor + "/*.css",
         dirs.stylesDist + "/" + fileNames.mainStyles + ".css"
       ],
-      outputFile: "/" + dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css",
+      outputFile: "/" + fileNames.mainStylesDist + ".css"
     });
 
     return mergeTrees(
@@ -116,6 +118,18 @@ var tasks = {
 
   minifyCSS: function (masterTree) {
     return cleanCSS(masterTree);
+  },
+
+  html: function (masterTree) {
+    // create tree for html
+    var htmlTree = funnel(dirs.html, {
+      files: ["index.html"]
+    });
+
+    return mergeTrees(
+      [masterTree, htmlTree],
+      { overwrite: true }
+    );
   },
 
   img: function (masterTree) {
@@ -138,7 +152,7 @@ function createJsTree() {
   // create tree for .js and .jsx
   var jsTree = funnel(dirs.js, {
     include: ["**/*.js"],
-    destDir: dirs.jsDist
+    destDir: dirs.js
   });
 
   // replace @@ENV in js code with current BROCCOLI_ENV environment variable
@@ -170,6 +184,14 @@ if (env === "development" || env === "production" ) {
     tasks.img,
     tasks.css,
     tasks.webpack,
+    buildTree
+  );
+}
+
+if (env === "development") {
+  // add steps that are exclusively used in development
+  buildTree = _.compose(
+    tasks.html,
     buildTree
   );
 }

@@ -52,7 +52,6 @@
     "dist": "export BROCCOLI_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "test": "mocha --ui exports --reporter spec --compilers js:test/compiler.js test/object-assign-polyfill.js test/**/*.test.*",
     "test-watch": "mocha --ui exports --reporter spec --watch --compilers js:test/compiler.js test/object-assign-polyfill.js test/**/*.test.*",
-    "watch": "export BROCCOLI_ENV=\"development\" && broccoli-timepiece dist",
-    "serve": "export BROCCOLI_ENV=\"development\" && export NODE_ENV=\"development\" && broccoli serve"
+    "serve": "export BROCCOLI_ENV=\"development\" && export NODE_ENV=\"development\" && broccoli serve --host 0.0.0.0"
   }
 }
