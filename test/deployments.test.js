@@ -12,7 +12,10 @@ var HttpServer = require("./helpers/HttpServer").HttpServer;
 describe("A request to the deployments endpoint", function () {
 
   before(function (done) {
-    this.server = new HttpServer({port: 8181, address: "localhost"}).start(done);
+    this.server = new HttpServer({
+      address: "localhost",
+      port: 8181
+    }).start(done);
     config.apiURL = "http://localhost:8181/";
   });
 
@@ -21,10 +24,7 @@ describe("A request to the deployments endpoint", function () {
   });
 
   it("updates the DeploymentStore on success", function (done) {
-    this.server.setup({
-      data: [{}, {}, {}],
-      resCode: 200
-    });
+    this.server.setup([{}, {}, {}], 200);
 
     DeploymentStore.once(DeploymentEvents.CHANGE, function () {
       expectAsync(function () {
@@ -36,10 +36,7 @@ describe("A request to the deployments endpoint", function () {
   });
 
   it("handles failure gracefully", function (done) {
-    this.server.setup({
-      data: { message: "Guru Meditation" },
-      resCode: 404
-    });
+    this.server.setup({ message: "Guru Meditation" }, 404);
 
     DeploymentStore.once(DeploymentEvents.REQUEST_ERROR, done);
 
@@ -48,12 +45,9 @@ describe("A request to the deployments endpoint", function () {
 
   it("reverts (rollback) a deployment", function (done) {
     this.server.setup({
-      data: {
         "deploymentId": "52c51d0a-27eb-4971-a0bb-b0fa47528e33",
         "version": "2014-07-09T11:14:58.232Z"
-      },
-      resCode: 200
-    });
+      }, 200);
 
     DeploymentStore.once(DeploymentEvents.CHANGE, function () {
       expectAsync(function () {
@@ -71,10 +65,7 @@ describe("A request to the deployments endpoint", function () {
   });
 
   it("recieves a revert error", function (done) {
-    this.server.setup({
-      data: null,
-      resCode: 404
-    });
+    this.server.setup(null, 404);
 
     DeploymentStore.once(DeploymentEvents.REVERT_ERROR, function () {
       expectAsync(function () {
@@ -86,10 +77,7 @@ describe("A request to the deployments endpoint", function () {
   });
 
   it("forcefully stops a deployment", function (done) {
-    this.server.setup({
-      data: null,
-      resCode: 202
-    });
+    this.server.setup(null, 202);
 
     DeploymentStore.once(DeploymentEvents.CHANGE, function () {
       expectAsync(function () {
@@ -101,10 +89,7 @@ describe("A request to the deployments endpoint", function () {
   });
 
   it("recieves a stop error", function (done) {
-    this.server.setup({
-      data: null,
-      resCode: 404
-    });
+    this.server.setup(null, 404);
 
     DeploymentStore.once(DeploymentEvents.STOP_ERROR, function () {
       expectAsync(function () {

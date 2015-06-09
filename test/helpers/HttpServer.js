@@ -14,13 +14,13 @@ HttpServer.prototype.start = function (fn) {
     res.writeHead(this.options.resCode, {'Content-Type': 'application/json'});
     res.end(JSON.stringify(this.options.data));
   }.bind(this)).listen(this.port, this.address, fn);
-  // console.log("Server started at %s:%s", this.address, this.port);
   return this;
 };
 
-HttpServer.prototype.setup = function (options) {
-  this.options.data = options.data;
-  this.options.resCode = options.resCode;
+HttpServer.prototype.setup = function (data, resCode) {
+  this.options.data = data;
+  this.options.resCode = resCode || 200;
+  return this;
 };
 
 HttpServer.prototype.stop = function (fn) {

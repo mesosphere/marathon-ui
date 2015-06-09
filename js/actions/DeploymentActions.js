@@ -8,12 +8,14 @@ var DeploymentActions = {
   requestDeployments: function () {
     this.request({
       url: config.apiURL + "v2/deployments"
-    }).done(function (deployments) {
+    })
+    .done(function (deployments) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REQUEST,
         data: deployments
       });
-    }).fail(function (error) {
+    })
+    .fail(function (error) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REQUEST_ERROR,
         data: error
@@ -24,12 +26,14 @@ var DeploymentActions = {
     this.request({
       method: "DELETE",
       url: config.apiURL + "v2/deployments/" + deploymentID
-    }).done(function (deployment) {
+    })
+    .done(function (deployment) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REVERT,
         data: deployment
       });
-    }).fail(function (error) {
+    })
+    .fail(function (error) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REVERT_ERROR,
         data: error
@@ -40,13 +44,15 @@ var DeploymentActions = {
     this.request({
       method: "DELETE",
       url: config.apiURL + "v2/deployments/" + deploymentID + "?force=true"
-    }).done(function (deployment) {
+    })
+    .done(function (deployment) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.STOP,
         data: deployment,
         deploymentId: deploymentID
       });
-    }).fail(function (error) {
+    })
+    .fail(function (error) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.STOP_ERROR,
         data: error
