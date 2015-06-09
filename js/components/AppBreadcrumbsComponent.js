@@ -40,8 +40,6 @@ var AppBreadcrumbsComponent = React.createClass({
       "hidden": activeViewIndex === 0
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ol className="breadcrumb">
         <li>

@@ -30,8 +30,6 @@ var AboutModalComponent = React.createClass({
   },
 
   getInfo: function (attr) {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return this.state.info.get(attr) ||
       <span className="text-muted">Unspecified</span>;
   },
@@ -40,8 +38,6 @@ var AboutModalComponent = React.createClass({
     var marathonConfig = this.state.info.get("marathon_config");
     var zookeeperConfig = this.state.info.get("zookeeper_config");
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ModalComponent
           onDestroy={this.props.onDestroy}
@@ -51,7 +47,10 @@ var AboutModalComponent = React.createClass({
           <button type="button" className="close"
             aria-hidden="true" onClick={this.destroy}>&times;</button>
           <h3 className="modal-title">
-            <img width="160" height="27" alt="Marathon" src="img/marathon-logo.png" />
+            <img width="160"
+              height="27"
+              alt="Marathon"
+              src="img/marathon-logo.png" />
             <small className="text-muted" style={{"marginLeft": "1em"}}>
               Version {this.getInfo("version")}
             </small>

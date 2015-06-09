@@ -162,13 +162,13 @@ var NewAppModalComponent = React.createClass({
   render: function () {
     var model = this.state.model;
     var errors = this.state.errors;
+    var constraintsHelpString = "Comma-separated list of valid constraints. "
+      + "Valid constraint format is \"field:operator[:value]\"";
 
     var generalErrors = errors.filter(function (e) {
         return (e.attribute === "general");
       });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     var errorBlock = generalErrors.map(function (error, i) {
       return <p key={i} className="text-danger"><strong>{error.message}</strong></p>;
     });
@@ -253,7 +253,7 @@ var NewAppModalComponent = React.createClass({
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="constraints"
-                help='Comma-separated list of valid constraints. Valid constraint format is "field:operator[:value]".'
+                help={constraintsHelpString}
                 label="Constraints"
                 model={model}
                 errors={errors}>

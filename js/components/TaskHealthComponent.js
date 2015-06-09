@@ -13,8 +13,6 @@ var TaskHealthComponent = React.createClass({
     var healthCheckResults = task.get("healthCheckResults");
     var healthNodeList;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     if (healthCheckResults != null) {
       healthNodeList = healthCheckResults.map(function (cResult, index) {
         if (cResult != null) {
@@ -30,10 +28,10 @@ var TaskHealthComponent = React.createClass({
               time: cResult.lastFailure
             }
           ];
-          var timeFields = timeNodes.map(function (timeNode, index) {
+          var timeFields = timeNodes.map(function (timeNode, i) {
             return (
               <TimeFieldComponent
-                key={index}
+                key={i}
                 label={timeNode.label}
                 time={timeNode.time} />
             );

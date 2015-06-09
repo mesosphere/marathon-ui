@@ -32,16 +32,12 @@ var AppListComponent = React.createClass({
   getAppNodes: function () {
     return (
       this.props.collection.map(function (model) {
-        /* jshint trailing:false, quotmark:false, newcap:false */
-        /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
         return (
           <AppComponent
             key={model.id}
             model={model}
             router={this.props.router} />
         );
-        /* jshint trailing:true, quotmark:true, newcap:true */
-        /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       }, this)
     );
   },
@@ -73,8 +69,6 @@ var AppListComponent = React.createClass({
         this.props.fetchState !== States.STATE_LOADING
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <table className={tableClassSet}>
         <colgroup>

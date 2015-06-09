@@ -17,7 +17,7 @@ var TaskListComponent = React.createClass({
     itemsPerPage: React.PropTypes.number.isRequired,
     hasHealth: React.PropTypes.bool,
     selectedTasks: React.PropTypes.object.isRequired,
-    tasks: React.PropTypes.object.isRequired,
+    tasks: React.PropTypes.object.isRequired
   },
 
   getResource: function () {
@@ -55,8 +55,6 @@ var TaskListComponent = React.createClass({
       this.props.tasks.map(function (task) {
         var isActive = this.props.selectedTasks[task.id] === true;
 
-        /* jshint trailing:false, quotmark:false, newcap:false */
-        /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
         return (
           <TaskListItemComponent
             appId={this.props.tasks.options.appId}
@@ -67,15 +65,13 @@ var TaskListComponent = React.createClass({
             task={task}
             taskHealthMessage={this.props.formatTaskHealthMessage(task)}/>
         );
-        /* jshint trailing:true, quotmark:true, newcap:true */
-        /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       }, this)
     );
   },
 
   allTasksSelected: function (tasksLength) {
     var selectedTasks = this.props.selectedTasks;
-    return tasksLength > 0  && this.props.tasks.find(function (task) {
+    return tasksLength > 0 && this.props.tasks.find(function (task) {
       return selectedTasks[task.id] == null;
     }) == null;
   },
@@ -110,8 +106,6 @@ var TaskListComponent = React.createClass({
       "hidden": !hasHealth
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <div className={errorClassSet}>
