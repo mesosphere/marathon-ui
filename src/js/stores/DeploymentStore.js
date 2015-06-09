@@ -6,8 +6,16 @@ var DeploymentEvents = require("../events/DeploymentEvents");
 
 function processDeployments (deployments) {
   return lazy(deployments).map(function (deployment) {
+    if (deployment.affectedApps == null) {
+      deployment.affectedApps = []
+    }
+    if (deployment.currentActions == null) {
+      deployment.currentActions = []
+    }
+
     deployment.affectedAppsString = deployment.affectedApps.join(", ");
     deployment.currentActionsString = deployment.currentActions.join(", ");
+
     return deployment;
   }).value();
 }
@@ -29,7 +37,7 @@ AppDispatcher.register(function (action) {
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REQUEST_ERROR:
-      DeploymentStore.emit(DeploymentEvents.REQUEST_ERROR);
+      DeploymentStore.emit(DeploymentEvents.REQUEST_ERROR, action.data.jsonBody);
       break;
     case DeploymentEvents.REVERT:
       DeploymentStore.deployments =

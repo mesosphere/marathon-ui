@@ -16,7 +16,10 @@ describe("Deployments", function () {
       address: "localhost",
       port: 8181
     })
-    .setup([{}, {}, {}], 200)
+    .setup([{
+      affectedApps: ["app1", "app2"],
+      currentActions: ["ScaleApplication"]
+    }, {}, {}], 200)
     .start(function () {
       DeploymentStore.once(DeploymentEvents.CHANGE, done);
       DeploymentActions.requestDeployments();
@@ -31,10 +34,11 @@ describe("Deployments", function () {
   describe("on request", function() {
 
     it("updates the DeploymentStore on success", function (done) {
-
       DeploymentStore.once(DeploymentEvents.CHANGE, function () {
         expectAsync(function () {
           expect(DeploymentStore.deployments).to.have.length(3);
+          expect(DeploymentStore.deployments[1].currentActions).to.be.empty;
+          expect(DeploymentStore.deployments[1].currentActionsString).to.equal("");
         }, done);
       });
 
@@ -44,7 +48,11 @@ describe("Deployments", function () {
     it("handles failure gracefully", function (done) {
       this.server.setup({ message: "Guru Meditation" }, 404);
 
-      DeploymentStore.once(DeploymentEvents.REQUEST_ERROR, done);
+      DeploymentStore.once(DeploymentEvents.REQUEST_ERROR, function (error) {
+        expectAsync(function () {
+          expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
 
       DeploymentActions.requestDeployments();
     });
@@ -61,13 +69,11 @@ describe("Deployments", function () {
 
       DeploymentStore.once(DeploymentEvents.CHANGE, function () {
         expectAsync(function () {
-
-          expect(DeploymentStore.deployments).to.have.length(4);
+          expect(DeploymentStore.deployments).to.have.length(3);
 
           expect(_.where(DeploymentStore.deployments, {
             deploymentId: "deployment-reverts"
           })).to.not.be.undefined;
-
         }, done);
       });
 
@@ -75,11 +81,12 @@ describe("Deployments", function () {
     });
 
     it("receives a revert error", function (done) {
-      this.server.setup(null, 404);
+      this.server.setup({ message: "revert error" }, 404);
 
-      DeploymentStore.once(DeploymentEvents.REVERT_ERROR, function () {
+      DeploymentStore.once(DeploymentEvents.REVERT_ERROR, function (error) {
         expectAsync(function () {
           expect(DeploymentStore.deployments).to.have.length(3);
+          expect(error.message).to.equal("revert error");
         }, done);
       });
 
@@ -103,16 +110,18 @@ describe("Deployments", function () {
     });
 
     it("receives a stop error", function (done) {
-      this.server.setup(null, 404);
+      this.server.setup({ message: "stop error" }, 404);
 
-      DeploymentStore.once(DeploymentEvents.STOP_ERROR, function () {
+      DeploymentStore.once(DeploymentEvents.STOP_ERROR, function (error) {
         expectAsync(function () {
           expect(DeploymentStore.deployments).to.have.length(3);
+          expect(error.message).to.equal("stop error");
         }, done);
       });
 
       DeploymentActions.stopDeployment();
     });
+
   });
 
 });
