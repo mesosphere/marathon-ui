@@ -18,10 +18,6 @@ var DeploymentComponent = React.createClass({
     };
   },
 
-  setLoading: function (bool) {
-    this.setState({loading: bool});
-  },
-
   handleRevertDeployment: function () {
     var model = this.props.model;
 
@@ -31,6 +27,7 @@ var DeploymentComponent = React.createClass({
       "deployment to revert the affected app to its previous version.";
 
     if (confirm(confirmMessage)) {
+      this.setState({loading: true});
       DeploymentActions.revertDeployment(model.id);
     }
   },
@@ -44,6 +41,7 @@ var DeploymentComponent = React.createClass({
       "current state.";
 
     if (confirm(confirmMessage)) {
+      this.setState({loading: true});
       DeploymentActions.stopDeployment(model.id);
     }
   },
