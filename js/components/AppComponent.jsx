@@ -27,6 +27,8 @@ var AppComponent = React.createClass({
       "text-warning": model.isDeploying()
     });
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.

@@ -28,7 +28,9 @@ var Deployment = Backbone.Model.extend({
   },
 
   destroy: function (options) {
-    options = options || {};
+    /* jshint -W030 */
+    options || (options = {});
+    /* jshint +W030 */
 
     if (!options.url && options.forceStop) {
       options.url = this.url() + "?force=true";

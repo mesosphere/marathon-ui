@@ -71,6 +71,8 @@ var PagedNavComponent = React.createClass({
       noItems
     );
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     var pagination = [];
     if (this.props.usePages) {
       for (var i = 0; i < noItems; i++) {

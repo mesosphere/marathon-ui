@@ -71,7 +71,7 @@ var Marathon = React.createClass({
 
     Mousetrap.bind("c", function () {
       router.navigate("newapp", {trigger: true});
-    }, "keyup");
+    }.bind(this), "keyup");
 
     Mousetrap.bind("g a", function () {
       if (this.state.modalClass == null) {
@@ -93,14 +93,15 @@ var Marathon = React.createClass({
 
     Mousetrap.bind("shift+,", function () {
       router.navigate("about", {trigger: true});
-    });
+    }.bind(this));
 
     this.updatePolling();
   },
 
   componentDidUpdate: function (prevProps, prevState) {
-    if (prevState.activeApp !== this.state.activeApp ||
-      prevState.activeTabId !== this.state.activeTabId) {
+    /* jshint eqeqeq: false */
+    if (prevState.activeApp != this.state.activeApp ||
+      prevState.activeTabId != this.state.activeTabId) {
       this.updatePolling();
     }
   },
@@ -233,7 +234,6 @@ var Marathon = React.createClass({
   destroyApp: function () {
     var app = this.state.activeApp;
 
-    /*eslint-disable no-alert, no-console */
     if (confirm("Destroy app '" + app.id + "'?\nThis is irreversible.")) {
       app.destroy({
         error: function (data, response) {
@@ -246,13 +246,11 @@ var Marathon = React.createClass({
         wait: true
       });
     }
-    /*eslint-enable no-alert */
   },
 
   restartApp: function () {
     var app = this.state.activeApp;
 
-    /*eslint-disable no-alert, no-console */
     if (confirm("Restart app '" + app.id + "'?")) {
       app.restart({
         error: function (data, response) {
@@ -262,7 +260,6 @@ var Marathon = React.createClass({
         wait: true
       });
     }
-    /*eslint-enable no-alert */
   },
 
   destroyDeployment: function (deployment, options, component) {
@@ -277,7 +274,6 @@ var Marathon = React.createClass({
         "'?\nThis will stop the deployment immediately and leave it in the " +
         "current state.";
 
-    /*eslint-disable no-alert, no-console */
     if (confirm(confirmMessage)) {
       setTimeout(function () {
         deployment.destroy({
@@ -301,7 +297,6 @@ var Marathon = React.createClass({
     } else {
       component.setLoading(false);
     }
-    /*eslint-enable no-alert */
   },
 
   rollbackToAppVersion: function (version) {
@@ -313,9 +308,7 @@ var Marathon = React.createClass({
         {
           error: function (data, response) {
             var msg = response.responseJSON.message || response.statusText;
-            /*eslint-disable no-alert, no-console */
             alert("Could not update to chosen version: " + msg);
-            /*eslint-enable no-alert */
           },
           success: function () {
             // refresh app versions
@@ -333,9 +326,7 @@ var Marathon = React.createClass({
         {
           error: function (data, response) {
             var msg = response.responseJSON.message || response.statusText;
-            /*eslint-disable no-alert, no-console */
             alert("Not scaling: " + msg);
-            /*eslint-enable no-alert */
           },
           success: function () {
             // refresh app versions
@@ -348,15 +339,12 @@ var Marathon = React.createClass({
         // If the model is not valid, revert the changes to prevent the UI
         // from showing an invalid state.
         app.update(app.previousAttributes());
-        /*eslint-disable no-alert, no-console */
         alert("Not scaling: " + app.validationError[0].message);
-        /*eslint-enable no-alert */
       }
     }
   },
 
   suspendApp: function () {
-    /*eslint-disable no-alert, no-console */
     if (confirm("Suspend app by scaling to 0 instances?")) {
       this.state.activeApp.suspend({
         error: function (data, response) {
@@ -369,7 +357,6 @@ var Marathon = React.createClass({
         }.bind(this)
       });
     }
-    /*eslint-enable no-alert */
   },
 
   poll: function () {
@@ -421,14 +408,20 @@ var Marathon = React.createClass({
   },
 
   getAboutModal: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <AboutModalComponent
         onDestroy={this.handleModalDestroy}
         ref="modal" />
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getNewAppModal: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <NewAppModalComponent
         model={this.state.activeApp}
@@ -436,14 +429,18 @@ var Marathon = React.createClass({
         onCreate={this.handleAppCreate}
         ref="modal" />
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getAppPage: function () {
     var activeApp = this.state.collection.get(this.state.activeAppId);
     if (!activeApp) {
-      return null;
+      return;
     }
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <AppPageComponent
         appVersionsFetchState={this.state.appVersionsFetchState}
@@ -459,9 +456,13 @@ var Marathon = React.createClass({
         tasksFetchState={this.state.tasksFetchState}
         view={this.state.activeAppView} />
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getTabPane: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <TogglableTabsComponent activeTabId={this.state.activeTabId}
         className="container-fluid">
@@ -484,6 +485,8 @@ var Marathon = React.createClass({
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
@@ -502,6 +505,8 @@ var Marathon = React.createClass({
       modal = this.getAboutModal();
     }
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <nav className="navbar navbar-inverse navbar-static-top" role="navigation">

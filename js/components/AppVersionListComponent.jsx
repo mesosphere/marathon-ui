@@ -46,6 +46,8 @@ var AppVersionListComponent = React.createClass({
 
   getAppVersionList: function (appVersions) {
     return appVersions.map(function (v) {
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <AppVersionListItemComponent
           app={this.props.app}
@@ -53,6 +55,8 @@ var AppVersionListComponent = React.createClass({
           key={v.get("version")}
           onRollback={this.props.onRollback} />
       );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }, this);
   },
 
@@ -61,6 +65,8 @@ var AppVersionListComponent = React.createClass({
 
     // at least two pages
     if (appVersions.length > itemsPerPage) {
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <PagedNavComponent
           className="pull-right"
@@ -70,6 +76,8 @@ var AppVersionListComponent = React.createClass({
           noItems={appVersions.length}
           useArrows={true} />
       );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }
 
     return null;
@@ -92,6 +100,8 @@ var AppVersionListComponent = React.createClass({
 
     // at least one older version
     if (appVersions.length > 0) {
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <div className="panel-group">
           <div className="panel panel-header panel-inverse">
@@ -109,12 +119,16 @@ var AppVersionListComponent = React.createClass({
           </PagedContentComponent>
         </div>
       );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }
 
     return null;
   },
 
   render: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <h5>

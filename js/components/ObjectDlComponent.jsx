@@ -9,6 +9,8 @@ function formatKey(key) {
 }
 
 function prettyPrint(object) {
+  /* jshint trailing:false, quotmark:false, newcap:false */
+  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   if (typeof object === "object" && !!object) {
     return <code>{JSON.stringify(object, null, " ")}</code>;
   } else if (typeof object === "boolean") {
@@ -27,6 +29,8 @@ var ObjectDlComponent = React.createClass({
   },
 
   render: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     var dlNodes;
     if (this.props.object != null) {
       dlNodes = [];

@@ -13,6 +13,8 @@ function buildTaskAnchors(task) {
   var ports = task.get("ports");
   var portsLength = ports.length;
 
+  /* jshint trailing:false, quotmark:false, newcap:false */
+  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   if (portsLength > 1) {
     // Linkify each port with the hostname. The port is the text of the
     // anchor, but the href contains the hostname and port, a full link.
@@ -108,6 +110,8 @@ var TaskListItemComponent = React.createClass({
       updatedAtLocal = task.get("updatedAt").toLocaleString();
     }
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <tr className={listItemClassSet}>
         <td width="1" className="clickable" onClick={this.handleClick}>

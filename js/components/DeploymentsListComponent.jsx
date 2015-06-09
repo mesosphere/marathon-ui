@@ -32,12 +32,16 @@ var DeploymentListComponent = React.createClass({
 
   getDeploymentNodes: function () {
     return this.props.deployments.map(function (model) {
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <DeploymentComponent
           key={model.id}
           destroyDeployment={this.props.destroyDeployment}
           model={model} />
       );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }, this);
   },
 
@@ -61,6 +65,8 @@ var DeploymentListComponent = React.createClass({
       "hidden": this.props.deployments.length !== 0
     });
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <table className="table table-fixed">
         <colgroup>

@@ -51,6 +51,9 @@ var FormGroupComponent = React.createClass({
       }
     );
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+
     if (errors.length > 0) {
       className += " has-error";
       errorBlock = errors.map(function (error, i) {

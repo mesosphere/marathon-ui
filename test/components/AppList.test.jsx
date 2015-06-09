@@ -42,6 +42,8 @@ module.exports = {
     "should render the component populated with data": function () {
       this.collection.fetch();
 
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks */
+      /* jshint trailing:false, quotmark:false, newcap:false */
       var appList = React.renderToString(
         <AppListComponent
                   collection={this.collection}
