@@ -6,7 +6,7 @@ var FormGroupComponent = React.createClass({
   displayName: "FormGroupComponent",
   propTypes: {
     errors: React.PropTypes.array,
-    children: React.PropTypes.component.isRequired,
+    children: React.PropTypes.object.isRequired,
     model: React.PropTypes.object.isRequired
   },
 

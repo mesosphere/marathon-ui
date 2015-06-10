@@ -3773,12 +3773,12 @@
       }
     },
     "react": {
-      "version": "0.12.2",
-      "resolved": "https://registry.npmjs.org/react/-/react-0.12.2.tgz"
+      "version": "0.13.3",
+      "resolved": "https://registry.npmjs.org/react/-/react-0.13.3.tgz"
     },
     "react-tools": {
-      "version": "0.12.2",
-      "resolved": "https://registry.npmjs.org/react-tools/-/react-tools-0.12.2.tgz",
+      "version": "0.13.3",
+      "resolved": "https://registry.npmjs.org/react-tools/-/react-tools-0.13.3.tgz",
       "dependencies": {
         "commoner": {
           "version": "0.10.1",
@@ -3889,16 +3889,16 @@
           }
         },
         "jstransform": {
-          "version": "8.2.0",
-          "resolved": "https://registry.npmjs.org/jstransform/-/jstransform-8.2.0.tgz",
+          "version": "10.1.0",
+          "resolved": "http://registry.npmjs.org/jstransform/-/jstransform-10.1.0.tgz",
           "dependencies": {
             "base62": {
               "version": "0.1.1",
               "resolved": "https://registry.npmjs.org/base62/-/base62-0.1.1.tgz"
             },
             "esprima-fb": {
-              "version": "8001.1001.0-dev-harmony-fb",
-              "resolved": "https://registry.npmjs.org/esprima-fb/-/esprima-fb-8001.1001.0-dev-harmony-fb.tgz"
+              "version": "13001.1001.0-dev-harmony-fb",
+              "resolved": "https://registry.npmjs.org/esprima-fb/-/esprima-fb-13001.1001.0-dev-harmony-fb.tgz"
             },
             "source-map": {
               "version": "0.1.31",
