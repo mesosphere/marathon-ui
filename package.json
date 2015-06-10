@@ -42,6 +42,7 @@
     "eslint-plugin-react": "^2.5.0",
     "jsx-loader": "^0.13.2",
     "mocha": "^2.1.0",
+    "npm-shrinkwrap": "^5.4.0",
     "sinon": "^1.12.2",
     "source-map-loader": "^0.1.5",
     "transform-loader": "^0.2.2"
