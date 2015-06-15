@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var $ = require("jquery");
 var classNames = require("classnames");
 var React = require("react/addons");

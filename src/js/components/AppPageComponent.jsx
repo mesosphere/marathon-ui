@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");

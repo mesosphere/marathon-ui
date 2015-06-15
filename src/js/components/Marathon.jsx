@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var _ = require("underscore");
 var config = require("../config/config");
 var Mousetrap = require("mousetrap");

@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var classNames = require("classnames");
 var React = require("react/addons");
 var Moment = require("moment");
