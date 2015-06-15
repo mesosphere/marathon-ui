@@ -140,7 +140,6 @@ var tasks = {
 };
 
 var buildTree = _.compose(
-  tasks.index,
   tasks.img,
   tasks.css,
   tasks.webpack,
@@ -151,6 +150,7 @@ var buildTree = _.compose(
 if (env === "development") {
   buildTree = _.compose(
     tasks.toDestDir,
+    tasks.index,
     buildTree
   );
 }
