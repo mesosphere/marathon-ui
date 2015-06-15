@@ -18,7 +18,7 @@ If you want to start development on the Marathon UI please follow these steps.
 
 3. Run development environment
 
-        npm run watch
+        npm run serve
 
 #### Serve the UI for development
 
