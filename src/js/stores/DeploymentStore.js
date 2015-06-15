@@ -4,7 +4,7 @@ var lazy = require("lazy.js");
 var AppDispatcher = require("../AppDispatcher");
 var DeploymentEvents = require("../events/DeploymentEvents");
 
-function processDeployments (deployments) {
+function processDeployments(deployments) {
   return lazy(deployments).map(function (deployment) {
     if (deployment.affectedApps == null) {
       deployment.affectedApps = [];
@@ -20,7 +20,7 @@ function processDeployments (deployments) {
   }).value();
 }
 
-function removeDeployment (deployments, deploymentId) {
+function removeDeployment(deployments, deploymentId) {
   return lazy(deployments).reject({
     id: deploymentId
   }).value();

@@ -47,8 +47,6 @@ var DeploymentComponent = React.createClass({
   },
 
   getButtons: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     if (this.state.loading) {
       return (
         <div className="progress progress-striped active pull-right"
@@ -80,8 +78,6 @@ var DeploymentComponent = React.createClass({
         </ul>
       );
     }
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
@@ -93,8 +89,6 @@ var DeploymentComponent = React.createClass({
 
     var progressStep = Math.max(0, model.currentStep - 1);
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
