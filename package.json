@@ -52,6 +52,6 @@
     "clean": "rm -rf dist tmp",
     "dist": "export BROCCOLI_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "test": "mocha --ui exports --reporter spec --compilers jsx:src/test/compiler.js src/test/object-assign-polyfill.js src/test/**/*.test.* src/test/*.test.*",
-    "serve": "export BROCCOLI_WARN_READ_API=y BROCCOLI_ENV=\"development\" && broccoli serve"
+    "serve": "export BROCCOLI_WARN_READ_API=y BROCCOLI_ENV=\"development\" DISABLE_SOURCE_MAP=false && broccoli serve"
   }
 }

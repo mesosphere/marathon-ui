@@ -69,7 +69,9 @@ var tasks = {
     };
 
     // Extend options with source mapping
-    if (env === "development" && !process.env.DISABLE_SOURCE_MAP) {
+    if (env === "development" &&
+        !process.env.DISABLE_SOURCE_MAP ||
+        process.env.DISABLE_SOURCE_MAP === "false") {
       options.devtool = "source-map";
       options.module.preLoaders = [
         {
