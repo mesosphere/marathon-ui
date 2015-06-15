@@ -4,9 +4,12 @@
 
 The UI is bundled with the [Marathon](https://github.com/mesosphere/marathon) package.
 
-If you want to start development on the Marathon UI please follow these steps.
+Please note that issues are disabled for this repository. Please feel free to open an issue on the
+[issues page on the main Marathon Repository](https://github.com/mesosphere/marathon/issues).
 
 #### Setup
+
+If you want to start development on the Marathon UI please follow these steps.
 
 1. Install [NPM](https://npmjs.org/)
 
