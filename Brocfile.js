@@ -8,12 +8,11 @@ var less = require("broccoli-less-single");
 var mergeTrees = require("broccoli-merge-trees");
 var uglifyJavaScript = require("broccoli-uglify-js");
 var webpackify = require("broccoli-webpack");
-var packageConfig = require("./package.json");
 
 var dirs = {
   src: "./src",
   js: "./src/js",
-  dist: "",
+  dist: "dist",
   styles: "./src/css",
   img: "./src/img",
   imgDist: "img"
@@ -47,7 +46,7 @@ var tasks = {
     var options = {
       entry: dirs.js + "/" + files.mainJs + ".jsx",
       output: {
-        filename: dirs.dist + "/" + files.mainJsDist + ".js"
+        filename: "/" + files.mainJsDist + ".js"
       },
       module: {
         loaders: [
@@ -93,7 +92,7 @@ var tasks = {
     var lessTree = less(
       cssTree,
       files.mainLess + ".less",
-      dirs.dist + "/" + files.mainCssDist + ".css",
+      "/" + files.mainCssDist + ".css",
       {}
     );
 
@@ -127,17 +126,34 @@ var tasks = {
       mangle: true,
       compress: true
     });
+  },
+
+  // This includes all source files into a 'dist'-folder
+  // to be able to serve images from the correct path in 'development'-modes serve.
+  toDestDir: function (masterTree) {
+    var destDirTree = funnel(dirs.src, {
+      destDir: dirs.dist
+    });
+
+    return mergeTrees([masterTree, destDirTree], {overwrite: true});
   }
 };
 
 var buildTree = _.compose(
-  tasks.img,
   tasks.index,
+  tasks.img,
   tasks.css,
   tasks.webpack,
   tasks.eslint,
   tasks.createJsTree
 );
+
+if (env === "development") {
+  buildTree = _.compose(
+    tasks.toDestDir,
+    buildTree
+  );
+}
 
 if (env === "production") {
   buildTree = _.compose(
