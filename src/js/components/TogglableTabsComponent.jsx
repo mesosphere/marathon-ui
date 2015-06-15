@@ -21,7 +21,7 @@ module.exports = React.createClass({
     render: function () {
       var childNodes = React.Children.map(this.props.children,
         function (child) {
-          return React.addons.cloneWithProps(child, {
+          return React.cloneElement(child, {
             isActive: (child.props.id === this.props.activeTabId)
           });
         }, this);

@@ -40,7 +40,7 @@ var FormGroupComponent = React.createClass({
 
     // Assume there is a single child of either <input> or <textarea>, and add
     // the needed props to make it an input for this attribute.
-    var formControlChild = React.addons.cloneWithProps(
+    var formControlChild = React.cloneElement(
       React.Children.only(this.props.children),
       {
         className: "form-control",

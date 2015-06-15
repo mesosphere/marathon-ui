@@ -40,7 +40,7 @@ module.exports = React.createClass({
 
       return React.Children.map(visibleChildren, function (child, i) {
         if (i >= begin && i < end) {
-          return React.addons.cloneWithProps(child, {key: i});
+          return React.cloneElement(child, {key: i});
         }
       });
     },
