@@ -24,7 +24,6 @@ If you want to add a new npm package to 'node_modules':
 
         npm install
         npm install -g broccoli-cli
-        npm install -g broccoli-timepiece
 
 3. Run development environment
 

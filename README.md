@@ -14,7 +14,6 @@ If you want to start development on the Marathon UI please follow these steps.
 
         npm install
         npm install -g broccoli-cli
-        npm install -g broccoli-timepiece
 
 3. Run development environment
 
