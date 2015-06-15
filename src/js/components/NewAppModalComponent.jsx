@@ -166,8 +166,6 @@ var NewAppModalComponent = React.createClass({
         return (e.attribute === "general");
       });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     var errorBlock = generalErrors.map(function (error, i) {
       return <p key={i} className="text-danger"><strong>{error.message}</strong></p>;
     });

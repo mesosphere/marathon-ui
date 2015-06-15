@@ -104,8 +104,6 @@ var AppPageComponent = React.createClass({
       return null;
     }
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="header-btn">
         <button className="btn btn-sm btn-default"
@@ -126,15 +124,11 @@ var AppPageComponent = React.createClass({
         </button>
       </div>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getTaskDetailComponent: function () {
     var model = this.props.model;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <TaskDetailComponent
         fetchState={this.props.tasksFetchState}
@@ -142,15 +136,11 @@ var AppPageComponent = React.createClass({
         hasHealth={model.hasHealth()}
         task={this.state.activeTask} />
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getAppDetails: function () {
     var model = this.props.model;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
           activeTabId={this.state.activeTabId}
@@ -177,8 +167,6 @@ var AppPageComponent = React.createClass({
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
@@ -194,8 +182,6 @@ var AppPageComponent = React.createClass({
       content = this.getTaskDetailComponent();
     }
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <AppBreadcrumbsComponent

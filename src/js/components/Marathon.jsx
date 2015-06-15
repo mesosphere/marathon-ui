@@ -97,7 +97,6 @@ var Marathon = React.createClass({
   },
 
   componentDidUpdate: function (prevProps, prevState) {
-    /* jshint eqeqeq: false */
     if (prevState.activeApp != this.state.activeApp ||
       prevState.activeTabId != this.state.activeTabId) {
       this.updatePolling();
@@ -406,20 +405,14 @@ var Marathon = React.createClass({
   },
 
   getAboutModal: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <AboutModalComponent
         onDestroy={this.handleModalDestroy}
         ref="modal" />
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getNewAppModal: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <NewAppModalComponent
         model={this.state.activeApp}
@@ -427,8 +420,6 @@ var Marathon = React.createClass({
         onCreate={this.handleAppCreate}
         ref="modal" />
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getAppPage: function () {
@@ -437,8 +428,6 @@ var Marathon = React.createClass({
       return;
     }
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <AppPageComponent
         appVersionsFetchState={this.state.appVersionsFetchState}
@@ -454,13 +443,9 @@ var Marathon = React.createClass({
         tasksFetchState={this.state.tasksFetchState}
         view={this.state.activeAppView} />
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getTabPane: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <TogglableTabsComponent activeTabId={this.state.activeTabId}
         className="container-fluid">
@@ -483,8 +468,6 @@ var Marathon = React.createClass({
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
@@ -503,8 +486,6 @@ var Marathon = React.createClass({
       modal = this.getAboutModal();
     }
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <nav className="navbar navbar-inverse navbar-static-top" role="navigation">
