@@ -28,7 +28,7 @@ If you want to add a new npm package to 'node_modules':
 
 3. Run development environment
 
-        npm run watch
+        npm run serve
 
 4. Build the assets
 
