@@ -20,14 +20,6 @@ If you want to start development on the Marathon UI please follow these steps.
 
         npm run serve
 
-#### Serve the UI for development
-
- 1. Start a HTTP server on the Marathon UI root directory to serve the ```index.html```
-
-    For example:
-
-        python3 -m http.server 1337
-
 #### Contributing to this project
 
 Please refer to the [CONTRIBUTING.md](https://github.com/mesosphere/marathon-ui/blob/master/CONTRIBUTING.md) file.
