@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 module.exports = React.createClass({
@@ -26,7 +28,7 @@ module.exports = React.createClass({
           });
         }, this);
 
-      var navTabsClassSet = React.addons.classSet({
+      var navTabsClassSet = classNames({
         "hidden": this.props.tabs.length === 0
       });
 

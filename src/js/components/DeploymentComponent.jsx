@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var DeploymentComponent = React.createClass({
@@ -69,7 +70,7 @@ var DeploymentComponent = React.createClass({
   render: function () {
     var model = this.props.model;
 
-    var isDeployingClassSet = React.addons.classSet({
+    var isDeployingClassSet = classNames({
       "text-warning": model.get("currentStep") < model.get("totalSteps")
     });
 

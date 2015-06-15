@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var BackboneMixin = require("../mixins/BackboneMixin");
 var States = require("../constants/States");
 var Task = require("../models/Task");
@@ -37,7 +39,7 @@ var TaskDetailComponent = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     if (!hasError) {
-      healthClassSet = React.addons.classSet({
+      healthClassSet = classNames({
         "text-unhealthy": taskHealth === Task.HEALTH.UNHEALTHY,
         "text-muted": taskHealth === Task.HEALTH.UNKNOWN
       });

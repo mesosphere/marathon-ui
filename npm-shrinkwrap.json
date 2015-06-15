@@ -1,8 +1,8 @@
 {
-  "name": "marathon-assets",
+  "name": "marathon-ui",
   "version": "0.1.0",
   "npm-shrinkwrap-version": "5.4.0",
-  "node-version": "v2.2.2",
+  "node-version": "v0.10.37",
   "dependencies": {
     "backbone": {
       "version": "1.2.1",
@@ -2421,6 +2421,10 @@
           "resolved": "https://registry.npmjs.org/lodash/-/lodash-2.4.2.tgz"
         }
       }
+    },
+    "classnames": {
+      "version": "2.1.2",
+      "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.1.2.tgz"
     },
     "envify": {
       "version": "3.4.0",

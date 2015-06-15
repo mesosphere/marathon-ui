@@ -1,7 +1,9 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
@@ -184,7 +186,7 @@ var AppPageComponent = React.createClass({
   render: function () {
     var content;
     var model = this.props.model;
-    var statusClassSet = React.addons.classSet({
+    var statusClassSet = classNames({
       "text-warning": model.isDeploying()
     });
 

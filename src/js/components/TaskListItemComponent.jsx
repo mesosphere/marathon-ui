@@ -1,7 +1,9 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
 var Moment = require("moment");
+
 var Task = require("../models/Task");
 
 function buildHref(host, port) {
@@ -79,27 +81,27 @@ var TaskListItemComponent = React.createClass({
 
     var taskHealth = task.getHealth();
 
-    var listItemClassSet = React.addons.classSet({
+    var listItemClassSet = classNames({
       "active": this.props.isActive
     });
 
-    var healthClassSet = React.addons.classSet({
+    var healthClassSet = classNames({
       "health-dot": true,
       "health-dot-error": taskHealth === Task.HEALTH.UNHEALTHY,
       "health-dot-success": taskHealth === Task.HEALTH.HEALTHY,
       "health-dot-unknown": taskHealth === Task.HEALTH.UNKNOWN
     });
 
-    var statusClassSet = React.addons.classSet({
+    var statusClassSet = classNames({
       "text-warning": task.isStaged()
     });
 
-    var hasHealthClassSet = React.addons.classSet({
+    var hasHealthClassSet = classNames({
       "text-center": true,
       "hidden": !hasHealth
     });
 
-    var updatedAtNodeClassSet = React.addons.classSet({
+    var updatedAtNodeClassSet = classNames({
       "hidden": task.get("updatedAt") == null
     });
 

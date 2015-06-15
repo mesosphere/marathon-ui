@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var PagedNavComponent = React.createClass({
@@ -58,10 +59,10 @@ var PagedNavComponent = React.createClass({
       pageLBound -= currentPage + pagesOnEachSide - noPages;
     }
 
-    var leftArrowsClassSet = React.addons.classSet({
+    var leftArrowsClassSet = classNames({
       "disabled": currentPage === 0
     });
-    var rightArrowsClassSet = React.addons.classSet({
+    var rightArrowsClassSet = classNames({
       "disabled": currentPage === noPages - 1
     });
 

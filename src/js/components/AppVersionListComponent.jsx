@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var States = require("../constants/States");
 var App = require("../models/App");
 var BackboneMixin = require("../mixins/BackboneMixin");
@@ -87,12 +89,12 @@ var AppVersionListComponent = React.createClass({
     // take out current version, to be displayed seperately
     var appVersions = this.props.app.versions.models.slice(1);
 
-    var loadingClassSet = React.addons.classSet({
+    var loadingClassSet = classNames({
       "text-muted text-center": true,
       "hidden": this.props.fetchState !== States.STATE_LOADING
     });
 
-    var errorClassSet = React.addons.classSet({
+    var errorClassSet = classNames({
       "text-danger text-center": true,
       "hidden": this.props.fetchState === States.STATE_LOADING ||
         this.props.fetchState === States.STATE_SUCCESS

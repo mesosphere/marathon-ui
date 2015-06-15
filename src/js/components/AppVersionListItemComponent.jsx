@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var States = require("../constants/States");
 var App = require("../models/App");
 var AppVersion = require("../models/AppVersion");
@@ -78,12 +80,12 @@ var AppVersionListItemComponent = React.createClass({
   },
 
   getAppVersion: function () {
-    var loadingClassSet = React.addons.classSet({
+    var loadingClassSet = classNames({
       "text-center text-muted": true,
       "hidden": this.state.fetchState !== States.STATE_LOADING
     });
 
-    var errorClassSet = React.addons.classSet({
+    var errorClassSet = classNames({
       "text-center text-danger": true,
       "hidden": this.state.fetchState !== States.STATE_ERROR
     });
@@ -113,7 +115,7 @@ var AppVersionListItemComponent = React.createClass({
     var versionDate = new Date(this.props.appVersion.get("version"));
     var versionDateISOString = versionDate.toISOString();
 
-    var caretClassSet = React.addons.classSet({
+    var caretClassSet = classNames({
       "clickable text-right col-xs-2": true,
       "dropup": this.state.open
     });

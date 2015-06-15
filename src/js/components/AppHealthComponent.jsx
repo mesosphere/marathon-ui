@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
 
 function roundWorkaround(x) {
@@ -78,7 +79,7 @@ var AppHealthComponent = React.createClass({
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <div
-          className={React.addons.classSet(classSet)}
+          className={classNames(classSet)}
           style={{width: width + "%"}}
           key={i} />
       );
