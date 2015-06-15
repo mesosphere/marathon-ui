@@ -1,12 +1,15 @@
-tmp/
 
 !dist/
-
 dist/*
 !dist/img/
 !dist/main.css*
 !dist/main.js*
-node_modules/
 
+node_modules/
+tmp/
+
+npm-debug.log
+
+.DS_Store
 *.iml
 .idea/*
