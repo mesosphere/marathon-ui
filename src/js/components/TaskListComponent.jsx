@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
-
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var States = require("../constants/States");
 var BackboneMixin = require("../mixins/BackboneMixin");
 var TaskListItemComponent = require("../components/TaskListItemComponent");
@@ -87,25 +87,25 @@ var TaskListComponent = React.createClass({
 
     var sortKey = this.props.tasks.sortKey;
 
-    var headerClassSet = React.addons.classSet({
+    var headerClassSet = classNames({
       "clickable": true,
       "dropup": this.props.tasks.sortReverse
     });
 
-    var loadingClassSet = React.addons.classSet({
+    var loadingClassSet = classNames({
       "hidden": this.props.fetchState !== States.STATE_LOADING
     });
 
-    var noTasksClassSet = React.addons.classSet({
+    var noTasksClassSet = classNames({
       "hidden": tasksLength !== 0 || hasError
     });
 
-    var errorClassSet = React.addons.classSet({
+    var errorClassSet = classNames({
       "fluid-container": true,
       "hidden": !hasError
     });
 
-    var hasHealthClassSet = React.addons.classSet({
+    var hasHealthClassSet = classNames({
       "text-center": true,
       "hidden": !hasHealth
     });

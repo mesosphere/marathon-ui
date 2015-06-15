@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var NavTabsComponent = React.createClass({
@@ -21,7 +20,7 @@ var NavTabsComponent = React.createClass({
     var activeTabId = this.props.activeTabId;
 
     var tabs = this.props.tabs.map(function (tab) {
-      var tabClassSet = React.addons.classSet({
+      var tabClassSet = classNames({
         "active": tab.id === activeTabId
       });
 

@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var TabPaneComponent = React.createClass({
@@ -24,7 +23,7 @@ var TabPaneComponent = React.createClass({
   },
 
   render: function () {
-    var classSet = React.addons.classSet({
+    var classSet = classNames({
       "active": this.props.isActive,
       "tab-pane": true
     });

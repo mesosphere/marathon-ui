@@ -1,6 +1,5 @@
-/** @jsx React.DOM */
-
 var $ = require("jquery");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 function modalSizeClassName(size) {
@@ -51,12 +50,12 @@ var ModalComponent = React.createClass({
     var modalDialogClassName =
       "modal-dialog " + modalSizeClassName(this.props.size);
 
-    var modalBackdropClassName = React.addons.classSet({
+    var modalBackdropClassName = classNames({
       "modal-backdrop fade": true,
       "in": this.state.isIn
     });
 
-    var modalClassName = React.addons.classSet({
+    var modalClassName = classNames({
       "modal fade": true,
       "in": this.state.isIn
     });

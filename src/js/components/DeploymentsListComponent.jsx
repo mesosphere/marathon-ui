@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
-
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var States = require("../constants/States");
 var DeploymentComponent = require("../components/DeploymentComponent");
 var BackboneMixin = require("../mixins/BackboneMixin");
@@ -48,20 +48,20 @@ var DeploymentListComponent = React.createClass({
   render: function () {
     var sortKey = this.props.deployments.sortKey;
 
-    var headerClassSet = React.addons.classSet({
+    var headerClassSet = classNames({
       "clickable": true,
       "dropup": this.props.deployments.sortReverse
     });
 
-    var loadingClassSet = React.addons.classSet({
+    var loadingClassSet = classNames({
       "hidden": this.props.fetchState !== States.STATE_LOADING
     });
 
-    var errorClassSet = React.addons.classSet({
+    var errorClassSet = classNames({
       "hidden": this.props.fetchState !== States.STATE_ERROR
     });
 
-    var noDeploymentsClassSet = React.addons.classSet({
+    var noDeploymentsClassSet = classNames({
       "hidden": this.props.deployments.length !== 0
     });
 

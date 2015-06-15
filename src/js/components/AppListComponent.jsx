@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
-
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var States = require("../constants/States");
 var AppComponent = require("../components/AppComponent");
 var BackboneMixin = require("../mixins/BackboneMixin");
@@ -49,24 +49,24 @@ var AppListComponent = React.createClass({
   render: function () {
     var sortKey = this.props.collection.sortKey;
 
-    var loadingClassSet = React.addons.classSet({
+    var loadingClassSet = classNames({
       "hidden": this.props.fetchState !== States.STATE_LOADING
     });
 
-    var noAppsClassSet = React.addons.classSet({
+    var noAppsClassSet = classNames({
       "hidden": this.props.collection.length !== 0
     });
 
-    var errorClassSet = React.addons.classSet({
+    var errorClassSet = classNames({
       "hidden": this.props.fetchState !== States.STATE_ERROR
     });
 
-    var headerClassSet = React.addons.classSet({
+    var headerClassSet = classNames({
       "clickable": true,
       "dropup": this.props.collection.sortReverse
     });
 
-    var tableClassSet = React.addons.classSet({
+    var tableClassSet = classNames({
       "table table-fixed": true,
       "table-hover table-selectable":
         this.props.collection.length !== 0 &&

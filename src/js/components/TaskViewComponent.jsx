@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
-
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var PagedNavComponent = require("../components/PagedNavComponent");
 var TaskListComponent = require("../components/TaskListComponent");
 
@@ -90,12 +90,12 @@ var TaskViewComponent = React.createClass({
   getButtons: function () {
     var selectedTasksLength = Object.keys(this.state.selectedTasks).length;
 
-    var refreshButtonClassSet = React.addons.classSet({
+    var refreshButtonClassSet = classNames({
       "btn btn-sm btn-info": true,
       "hidden": selectedTasksLength !== 0
     });
 
-    var killButtonClassSet = React.addons.classSet({
+    var killButtonClassSet = classNames({
       "btn btn-sm btn-info": true,
       "hidden": selectedTasksLength === 0
     });

@@ -1,5 +1,4 @@
-/** @jsx React.DOM */
-
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppBreadcrumbsComponent = React.createClass({
@@ -28,14 +27,14 @@ var AppBreadcrumbsComponent = React.createClass({
       taskName = this.props.activeTask.get("id");
     }
 
-    var activeAppClassSet = React.addons.classSet({
+    var activeAppClassSet = classNames({
       "active": true,
       "hidden": activeViewIndex === 1
     });
-    var inactiveAppClassSet = React.addons.classSet({
+    var inactiveAppClassSet = classNames({
       "hidden": activeViewIndex === 0
     });
-    var taskClassSet = React.addons.classSet({
+    var taskClassSet = classNames({
       "active": true,
       "hidden": activeViewIndex === 0
     });

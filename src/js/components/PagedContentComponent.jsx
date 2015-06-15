@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require("react/addons");
 
 module.exports = React.createClass({
@@ -9,7 +7,7 @@ module.exports = React.createClass({
       className: React.PropTypes.string,
       currentPage: React.PropTypes.number.isRequired,
       itemsPerPage: React.PropTypes.number,
-      tag: React.PropTypes.string,
+      tag: React.PropTypes.string
     },
 
     getDefaultProps: function () {
@@ -40,7 +38,7 @@ module.exports = React.createClass({
 
       return React.Children.map(visibleChildren, function (child, i) {
         if (i >= begin && i < end) {
-          return React.addons.cloneWithProps(child, {key: i});
+          return React.cloneElement(child, {key: i});
         }
       });
     },

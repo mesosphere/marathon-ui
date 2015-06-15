@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
-
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var AppHealthComponent = require("../components/AppHealthComponent");
 
 var AppComponent = React.createClass({
@@ -19,11 +19,11 @@ var AppComponent = React.createClass({
   render: function () {
     var model = this.props.model;
 
-    var runningTasksClassSet = React.addons.classSet({
+    var runningTasksClassSet = classNames({
       "text-warning": !model.allInstancesBooted()
     });
 
-    var statusClassSet = React.addons.classSet({
+    var statusClassSet = classNames({
       "text-warning": model.isDeploying()
     });
 

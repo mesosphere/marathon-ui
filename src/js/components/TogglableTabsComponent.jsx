@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
-
+var classNames = require("classnames");
 var React = require("react/addons");
+
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 module.exports = React.createClass({
@@ -21,12 +21,12 @@ module.exports = React.createClass({
     render: function () {
       var childNodes = React.Children.map(this.props.children,
         function (child) {
-          return React.addons.cloneWithProps(child, {
+          return React.cloneElement(child, {
             isActive: (child.props.id === this.props.activeTabId)
           });
         }, this);
 
-      var navTabsClassSet = React.addons.classSet({
+      var navTabsClassSet = classNames({
         "hidden": this.props.tabs.length === 0
       });
 
