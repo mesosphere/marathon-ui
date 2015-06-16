@@ -1,12 +1,11 @@
 var expect = require("chai").expect;
 var _ = require("underscore");
-var jsdom = require("jsdom");
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
 var DeploymentActions = require("../js/actions/DeploymentActions");
-var DeploymentComponent  = require("../js/components/DeploymentComponent");
+var DeploymentComponent = require("../js/components/DeploymentComponent");
 var DeploymentEvents = require("../js/events/DeploymentEvents");
 var DeploymentStore = require("../js/stores/DeploymentStore");
 
@@ -35,7 +34,7 @@ describe("Deployments", function () {
     this.server.stop(done);
   });
 
-  describe("on request", function() {
+  describe("on request", function () {
 
     it("updates the DeploymentStore on success", function (done) {
       DeploymentStore.once(DeploymentEvents.CHANGE, function () {
@@ -132,11 +131,6 @@ describe("Deployments", function () {
 
 describe("a deployment component", function () {
 
-  before(function () {
-    global.document = jsdom.jsdom();
-    global.window = document.parentWindow;
-  });
-
   beforeEach(function () {
     var model = {
       id: "123",
@@ -149,16 +143,13 @@ describe("a deployment component", function () {
       ]
     };
 
-    this.instance = TestUtils.renderIntoDocument(
-      <DeploymentComponent key="dc1" model={model} />
-    );
-
-    var row = TestUtils.findRenderedDOMComponentWithTag(this.instance, "tr");
-    this.columns = TestUtils.scryRenderedDOMComponentsWithTag(row, "td");
+    var renderer = TestUtils.createRenderer();
+    renderer.render(<DeploymentComponent key="dc1" model={model} />);
+    this.component = renderer.getRenderOutput();
   });
 
   it("has 5 table columns", function () {
-    expect(this.columns.length).to.equal(5);
+    expect(this.component.props.children.length).to.equal(5);
   });
 
 });
