@@ -129,7 +129,7 @@ describe("Deployments", function () {
 
 });
 
-describe("a deployment component", function () {
+describe("Deployment component", function () {
 
   beforeEach(function () {
     var model = {
@@ -140,7 +140,9 @@ describe("a deployment component", function () {
         { app: "app1", action: "action1" },
         { app: "app2", action: "action2" },
         { app: "app3", action: "action3" }
-      ]
+      ],
+      currentStep: 2,
+      totalSteps: 2
     };
 
     var renderer = TestUtils.createRenderer();
@@ -148,8 +150,45 @@ describe("a deployment component", function () {
     this.component = renderer.getRenderOutput();
   });
 
-  it("has 5 table columns", function () {
-    expect(this.component.props.children.length).to.equal(5);
+  it("has the correct deployment id", function () {
+    var cellContent = this.component.props.children[0].props.children;
+    expect(cellContent).to.equal("123");
   });
 
+  it("has correct app in list element", function () {
+    _.each(this.component.props.children[1].props.children.props.children,
+        function (li, i) {
+      expect(li.props.children).to.equal("app" + (i + 1));
+    });
+  });
+
+  it("has correct action in list element", function () {
+    _.each(this.component.props.children[2].props.children.props.children,
+        function (li, i) {
+      expect(li.props.children).to.equal("action" + (i + 1));
+    });
+  });
+
+  it("it shows the current step", function () {
+    var progressStep =
+      this.component.props.children[3].props.children[0].props.children;
+    expect(progressStep).to.equal(1);
+  });
+
+  it("has correct number of total steps", function () {
+    var totalSteps = this.component.props.children[3].props.children[2];
+    expect(totalSteps).to.equal(2);
+  });
+
+  it("has Stop-button", function () {
+    var listElements =
+      this.component.props.children[4].props.children.props.children;
+    expect(listElements[0].props.children.props.children).to.equal("Stop");
+  });
+
+  it("has Rollback-button", function () {
+    var listElements =
+      this.component.props.children[4].props.children.props.children;
+    expect(listElements[1].props.children.props.children).to.equal("Rollback");
+  });
 });
