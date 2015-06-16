@@ -12,8 +12,6 @@ var TimeFieldComponent = React.createClass({
   render: function () {
     var time = this.props.time;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <dt>{this.props.label}</dt>

@@ -5,8 +5,6 @@ var AppVersion = require("../models/AppVersion");
 
 var UNSPECIFIED_NODE =
   React.createClass({
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     render: function () {
       return <dd className="text-muted">Unspecified</dd>;
     }
@@ -34,8 +32,6 @@ var AppVersionComponent = React.createClass({
   render: function () {
     var appVersion = this.props.appVersion;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     var cmdNode = (appVersion.get("cmd") == null) ?
       <UNSPECIFIED_NODE /> :
       <dd>{appVersion.get("cmd")}</dd>;
