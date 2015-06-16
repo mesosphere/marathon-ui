@@ -2,14 +2,14 @@ var _ = require("underscore");
 var React = require("react/addons");
 var App = require("../models/App");
 var AppVersion = require("../models/AppVersion");
-
+/*eslint-disable react/display-name, react/no-multi-comp */
 var UNSPECIFIED_NODE =
   React.createClass({
     render: function () {
       return <dd className="text-muted">Unspecified</dd>;
     }
   });
-
+/*eslint-enable react/display-name */
 var AppVersionComponent = React.createClass({
   displayName: "AppVersionComponent",
 
@@ -19,11 +19,13 @@ var AppVersionComponent = React.createClass({
       React.PropTypes.instanceOf(App).isRequired,
       React.PropTypes.instanceOf(AppVersion).isRequired
     ]),
+    className: React.PropTypes.string,
+    currentVersion: React.PropTypes.bool,
     onRollback: React.PropTypes.func
   },
 
   handleSubmit: function (event) {
-    if (_.isFunction (this.props.onRollback)) {
+    if (_.isFunction(this.props.onRollback)) {
       event.preventDefault();
       this.props.onRollback(this.props.appVersion, event);
     }

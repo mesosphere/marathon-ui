@@ -4,11 +4,13 @@ var React = require("react/addons");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 module.exports = React.createClass({
-    name: "TogglableTabsComponent",
+    displayName: "TogglableTabsComponent",
 
     propTypes: {
       activeTabId: React.PropTypes.string.isRequired,
+      children: React.PropTypes.node,
       className: React.PropTypes.string,
+      onTabClick: React.PropTypes.func,
       tabs: React.PropTypes.array
     },
 

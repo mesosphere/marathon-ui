@@ -15,7 +15,8 @@ var TaskDetailComponent = React.createClass({
   propTypes: {
     fetchState: React.PropTypes.number.isRequired,
     hasHealth: React.PropTypes.bool,
-    task: React.PropTypes.object.isRequired
+    task: React.PropTypes.object.isRequired,
+    taskHealthMessage: React.PropTypes.string
   },
 
   getResource: function () {

@@ -7,10 +7,10 @@ var PagedNavComponent = React.createClass({
   propTypes: {
     className: React.PropTypes.string,
     currentPage: React.PropTypes.number.isRequired,
-    onPageChange: React.PropTypes.func.isRequired,
     itemsPerPage: React.PropTypes.number,
     noItems: React.PropTypes.number.isRequired,
     noVisiblePages: React.PropTypes.number,
+    onPageChange: React.PropTypes.func.isRequired,
     useArrows: React.PropTypes.bool,
     useEndArrows: React.PropTypes.bool,
     useItemNumbers: React.PropTypes.bool,

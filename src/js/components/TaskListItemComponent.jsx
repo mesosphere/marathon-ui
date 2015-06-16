@@ -16,7 +16,7 @@ function buildTaskAnchors(task) {
   if (portsLength > 1) {
     // Linkify each port with the hostname. The port is the text of the
     // anchor, but the href contains the hostname and port, a full link.
-    taskAnchors =
+    taskAnchors = (
       <span className="text-muted">
         {task.get("host")}:[{ports.map(function (p, index) {
           return (
@@ -28,13 +28,15 @@ function buildTaskAnchors(task) {
             </span>
           );
         })}]
-      </span>;
+      </span>
+    );
   } else if (portsLength === 1) {
     // Linkify the hostname + port since there is only one port.
-    taskAnchors =
+    taskAnchors = (
       <a className="text-muted" href={buildHref(task.get("host"), ports[0])}>
         {task.get("host")}:{ports[0]}
-      </a>;
+      </a>
+    );
   } else {
     // Ain't no ports; don't linkify.
     taskAnchors = <span className="text-muted">{task.get("host")}</span>;
@@ -51,7 +53,8 @@ var TaskListItemComponent = React.createClass({
     hasHealth: React.PropTypes.bool,
     isActive: React.PropTypes.bool.isRequired,
     onToggle: React.PropTypes.func.isRequired,
-    task: React.PropTypes.object.isRequired
+    task: React.PropTypes.object.isRequired,
+    taskHealthMessage: React.PropTypes.string
   },
 
   handleClick: function (event) {

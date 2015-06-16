@@ -6,7 +6,13 @@ var ModalComponent = require("../components/../ModalComponent");
 var ObjectDlComponent = require("../components/../ObjectDlComponent");
 
 var AboutModalComponent = React.createClass({
+  displayName: "AboutModalComponent",
+
   mixins: [BackboneMixin],
+
+  propTypes: {
+    onDestroy: React.PropTypes.func.isRequired
+  },
 
   getInitialState: function () {
     return {

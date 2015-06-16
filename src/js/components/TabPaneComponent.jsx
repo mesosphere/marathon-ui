@@ -2,9 +2,10 @@ var classNames = require("classnames");
 var React = require("react/addons");
 
 var TabPaneComponent = React.createClass({
-  name: "TabPaneComponent",
+  displayName: "TabPaneComponent",
 
   propTypes: {
+    children: React.PropTypes.node,
     isActive: React.PropTypes.bool,
     onActivate: React.PropTypes.func
   },

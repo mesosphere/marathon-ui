@@ -170,6 +170,8 @@ var NewAppModalComponent = React.createClass({
       return <p key={i} className="text-danger"><strong>{error.message}</strong></p>;
     });
 
+    var helpMessage = "Comma-separated list of valid constraints. Valid constraint format is \"field:operator[:value]\".";
+
     return (
       <ModalComponent ref="modalComponent" onDestroy={this.props.onDestroy}>
         <form method="post" role="form" onSubmit={this.onSubmit}>
@@ -250,7 +252,7 @@ var NewAppModalComponent = React.createClass({
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="constraints"
-                help='Comma-separated list of valid constraints. Valid constraint format is "field:operator[:value]".'
+                help={helpMessage}
                 label="Constraints"
                 model={model}
                 errors={errors}>

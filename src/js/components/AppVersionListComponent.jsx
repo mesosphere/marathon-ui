@@ -18,6 +18,7 @@ var AppVersionListComponent = React.createClass({
   propTypes: {
     app: React.PropTypes.instanceOf(App).isRequired,
     fetchAppVersions: React.PropTypes.func.isRequired,
+    fetchState: React.PropTypes.number.isRequired,
     onRollback: React.PropTypes.func
   },
 

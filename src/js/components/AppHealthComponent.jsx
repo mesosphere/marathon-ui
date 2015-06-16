@@ -8,6 +8,10 @@ function roundWorkaround(x) {
 var AppHealthComponent = React.createClass({
   displayName: "AppHealthComponent",
 
+  propTypes: {
+    model: React.PropTypes.object.isRequired
+  },
+
   getHealthData: function () {
     var model = this.props.model;
 
