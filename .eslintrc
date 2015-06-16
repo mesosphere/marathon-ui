@@ -16,14 +16,14 @@
   "rules": {
     "quotes": [2, "double"],
     "indent": [2, 2],
-    "camelcase": false,
+    "camelcase": [2, {"properties": "always"}],
     "strict": [2, "never"], // <-- fix
-    "no-mixed-spaces-and-tabs": [2, "always"],
-    "no-trailing-spaces": [2, "always"],
-    "no-underscore-dangle": false,
+    "no-mixed-spaces-and-tabs": [2],
+    "no-trailing-spaces": [2, { "skipBlankLines": false }],
+    "no-underscore-dangle": 0,
     "no-multiple-empty-lines": [2, {"max": 1}],
     "space-after-keywords": [2, "always"],
-    "space-before-blocks": [2 "always"],
+    "space-before-blocks": [2, "always"],
     "space-before-function-paren": [2, {
       "anonymous": "always", "named": "never"
     }],
@@ -35,18 +35,17 @@
     }],
 
     // React plugin
-    "react/display-name": true,
+    "react/display-name": 2,
     "react/jsx-quotes": [2, "double"],
-    "react/jsx-no-undef": true,
+    "react/jsx-no-undef": 2,
     "react/jsx-uses-vars": [2, {"vars": "all", "args": "after-used"}],
-    "react/jsx-sort-props": true,
-    "react/jsx-sort-prop-types": true,
-    "react/no-did-mount-set-state": true,
-    "react/no-did-update-set-state": true,
-    "react/no-multi-comp": true,
-    "react/prop-types": true,
-    "react/react-in-jsx-scope": true,
-    "react/self-closing-comp": true,
-    "react/wrap-multilines": true
+    "react/jsx-sort-prop-types": 2,
+    "react/no-did-mount-set-state": 2,
+    "react/no-did-update-set-state": 2,
+    "react/no-multi-comp": 2,
+    "react/prop-types": 2,
+    "react/react-in-jsx-scope": 2,
+    "react/self-closing-comp": 2,
+    "react/wrap-multilines": 2
   }
 }
