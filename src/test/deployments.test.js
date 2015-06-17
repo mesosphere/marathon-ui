@@ -146,7 +146,7 @@ describe("Deployment component", function () {
     };
 
     var renderer = TestUtils.createRenderer();
-    renderer.render(<DeploymentComponent key="dc1" model={model} />);
+    renderer.render(<DeploymentComponent model={model} />);
     this.component = renderer.getRenderOutput();
   });
 
@@ -155,14 +155,14 @@ describe("Deployment component", function () {
     expect(cellContent).to.equal("123");
   });
 
-  it("has correct app in list element", function () {
+  it("has correct apps in list element", function () {
     _.each(this.component.props.children[1].props.children.props.children,
         function (li, i) {
       expect(li.props.children).to.equal("app" + (i + 1));
     });
   });
 
-  it("has correct action in list element", function () {
+  it("has correct actions in list element", function () {
     _.each(this.component.props.children[2].props.children.props.children,
         function (li, i) {
       expect(li.props.children).to.equal("action" + (i + 1));
