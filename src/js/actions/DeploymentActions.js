@@ -30,7 +30,8 @@ var DeploymentActions = {
     .done(function (deployment) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REVERT,
-        data: deployment
+        data: deployment,
+        deploymentId: deploymentID
       });
     })
     .fail(function (error) {

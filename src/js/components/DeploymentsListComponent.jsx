@@ -1,64 +1,125 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var States = require("../constants/States");
+
 var DeploymentComponent = require("../components/DeploymentComponent");
-var BackboneMixin = require("../mixins/BackboneMixin");
+var DeploymentStore = require("../stores/DeploymentStore");
+var DeploymentEvents = require("../events/DeploymentEvents");
 
 var DeploymentListComponent = React.createClass({
   displayName: "DeploymentListComponent",
 
-  mixins: [BackboneMixin],
-
-  propTypes: {
-    deployments: React.PropTypes.object.isRequired,
-    destroyDeployment: React.PropTypes.func.isRequired,
-    fetchState: React.PropTypes.number.isRequired
+  getInitialState: function () {
+    return {
+      deployments: [],
+      fetchState: States.STATE_LOADING,
+      sortKey: null,
+      sortDescending: false,
+      errorMessage: ""
+    };
   },
 
-  getResource: function () {
-    return this.props.deployments;
+  componentWillMount: function () {
+    DeploymentStore.on(DeploymentEvents.CHANGE, this.onDeploymentsChange);
+    DeploymentStore.on(DeploymentEvents.REQUEST_ERROR, this.onRequestError);
+    DeploymentStore.on(DeploymentEvents.REVERT_ERROR, this.onRevertError);
+    DeploymentStore.on(DeploymentEvents.STOP_ERROR, this.onStopError);
   },
 
-  sortCollectionBy: function (comparator) {
-    var deployments = this.props.deployments;
-    comparator =
-      deployments.sortKey === comparator && !deployments.sortReverse ?
-      "-" + comparator :
-      comparator;
-    deployments.setComparator(comparator);
-    deployments.sort();
+  componentWillUnmount: function () {
+    DeploymentStore.removeListener(DeploymentEvents.CHANGE,
+      this.onDeploymentsChange);
+    DeploymentStore.removeListener(DeploymentEvents.REQUEST_ERROR,
+      this.onRequestError);
+    DeploymentStore.removeListener(DeploymentEvents.STOP_ERROR,
+      this.onRevertError);
+    DeploymentStore.removeListener(DeploymentEvents.STOP_ERROR,
+      this.onStopError);
+  },
+
+  onDeploymentsChange: function () {
+    this.setState({
+      deployments: DeploymentStore.deployments,
+      fetchState: States.STATE_SUCCESS
+    });
+  },
+
+  onRequestError: function () {
+    this.setState({
+      fetchState: States.STATE_ERROR
+    });
+  },
+
+  onRevertError: function (error) {
+    this.setState({
+      errorMessage: "Can't revert deployment: " + error.message
+    });
+  },
+
+  onStopError: function (error) {
+    this.setState({
+      errorMessage: "Can't stop deployment: " + error.message
+    });
+  },
+
+  sortBy: function (sortKey) {
+    var state = this.state;
+
+    this.setState({
+      sortKey: sortKey,
+      sortDescending: state.sortKey === sortKey && !state.sortDescending
+    });
   },
 
   getDeploymentNodes: function () {
-    return this.props.deployments.map(function (model) {
+    var state = this.state;
+    var sortKey = state.sortKey;
+
+    return lazy(state.deployments)
+      .sortBy(function (deployment) {
+        return deployment[sortKey];
+      }, state.sortDescending)
+      .map(function (deployment) {
+        return (
+          <DeploymentComponent key={deployment.id} model={deployment} />
+        );
+      })
+      .value();
+  },
+
+  getCaret: function (sortKey) {
+    if (sortKey === this.state.sortKey) {
       return (
-        <DeploymentComponent
-          key={model.id}
-          destroyDeployment={this.props.destroyDeployment}
-          model={model} />
+        <span className="caret"></span>
       );
-    }, this);
+    }
+    return null;
   },
 
   render: function () {
-    var sortKey = this.props.deployments.sortKey;
+    var state = this.state;
 
     var headerClassSet = classNames({
       "clickable": true,
-      "dropup": this.props.deployments.sortReverse
+      "dropup": state.sortDescending
     });
 
     var loadingClassSet = classNames({
-      "hidden": this.props.fetchState !== States.STATE_LOADING
+      "hidden": state.fetchState !== States.STATE_LOADING
     });
 
     var errorClassSet = classNames({
-      "hidden": this.props.fetchState !== States.STATE_ERROR
+      "hidden": state.fetchState !== States.STATE_ERROR
     });
 
     var noDeploymentsClassSet = classNames({
-      "hidden": this.props.deployments.length !== 0
+      "hidden": state.deployments.length !== 0
+    });
+
+    var errorMessageClassSet = classNames({
+      "hidden": state.errorMessage === ""
     });
 
     return (
@@ -73,23 +134,23 @@ var DeploymentListComponent = React.createClass({
         <thead>
           <tr>
             <th>
-              <span onClick={this.sortCollectionBy.bind(null, "id")} className={headerClassSet}>
-                Deployment ID {sortKey === "id" ? <span className="caret"></span> : null}
+              <span onClick={this.sortBy.bind(null, "id")} className={headerClassSet}>
+                Deployment ID {this.getCaret("id")}
               </span>
             </th>
             <th>
-              <span onClick={this.sortCollectionBy.bind(null, "affectedAppsString")} className={headerClassSet}>
-                Affected Apps {sortKey === "affectedAppsString" ? <span className="caret"></span> : null}
+              <span onClick={this.sortBy.bind(null, "affectedAppsString")} className={headerClassSet}>
+                Affected Apps {this.getCaret("affectedAppsString")}
               </span>
             </th>
             <th>
-              <span onClick={this.sortCollectionBy.bind(null, "currentActionsString")} className={headerClassSet}>
-                {sortKey === "currentActionsString" ? <span className="caret"></span> : null} Action
+              <span onClick={this.sortBy.bind(null, "currentActionsString")} className={headerClassSet}>
+                {this.getCaret("currentActionsString")} Action
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortCollectionBy.bind(null, "currentStep")} className={headerClassSet}>
-                {sortKey === "currentStep" ? <span className="caret"></span> : null} Progress
+              <span onClick={this.sortBy.bind(null, "currentStep")} className={headerClassSet}>
+                {this.getCaret("currentStep")} Progress
               </span>
             </th>
             <th>
@@ -102,14 +163,19 @@ var DeploymentListComponent = React.createClass({
               Loading deployments...
             </td>
           </tr>
-          <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan="5">
-              Error fetching deployments. Refresh to try again.
-            </td>
-          </tr>
           <tr className={noDeploymentsClassSet}>
             <td className="text-center" colSpan="5">
               No deployments in progress.
+            </td>
+          </tr>
+          <tr className={errorMessageClassSet}>
+            <td className="text-center text-danger" colSpan="5">
+              {state.errorMessage}
+            </td>
+          </tr>
+          <tr className={errorClassSet}>
+            <td className="text-center text-danger" colSpan="5">
+              Error fetching deployments. Refresh to try again.
             </td>
           </tr>
           {this.getDeploymentNodes()}

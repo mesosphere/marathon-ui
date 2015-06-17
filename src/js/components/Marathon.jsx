@@ -4,7 +4,6 @@ var Mousetrap = require("mousetrap");
 var React = require("react/addons");
 var States = require("../constants/States");
 var AppCollection = require("../models/AppCollection");
-var DeploymentCollection = require("../models/DeploymentCollection");
 var AppListComponent = require("../components/AppListComponent");
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var AppPageComponent = require("../components/AppPageComponent");
@@ -14,6 +13,10 @@ var NewAppModalComponent = require("../components/NewAppModalComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
+
+var DeploymentActions = require("../actions/DeploymentActions");
+var DeploymentEvents = require("../events/DeploymentEvents");
+var DeploymentStore = require("../stores/DeploymentStore");
 
 var tabs = [
   {id: "apps", text: "Apps"},
@@ -35,12 +38,18 @@ var Marathon = React.createClass({
       activeTabId: tabs[0].id,
       appVersionsFetchState: States.STATE_LOADING,
       collection: new AppCollection(),
-      deployments: new DeploymentCollection(),
-      deploymentsFetchState: States.STATE_LOADING,
       fetchState: States.STATE_LOADING,
       modalClass: null,
       tasksFetchState: States.STATE_LOADING
     };
+  },
+
+  componentWillMount: function () {
+    // TODO: That should be handled directly on the NavTabs
+    DeploymentStore.on(DeploymentEvents.CHANGE, function () {
+      tabs[1].badge = DeploymentStore.deployments.length;
+      this.forceUpdate();
+    }.bind(this));
   },
 
   componentDidMount: function () {
@@ -93,13 +102,13 @@ var Marathon = React.createClass({
       router.navigate("about", {trigger: true});
     }.bind(this));
 
-    this.updatePolling();
+    this.startPolling();
   },
 
   componentDidUpdate: function (prevProps, prevState) {
     if (prevState.activeApp != this.state.activeApp ||
       prevState.activeTabId != this.state.activeTabId) {
-      this.updatePolling();
+      this.poll();
     }
   },
 
@@ -140,7 +149,6 @@ var Marathon = React.createClass({
         this.setState({fetchState: States.STATE_ERROR});
       }.bind(this),
       success: function () {
-        this.fetchDeployments();
         this.setState({
           fetchState: States.STATE_SUCCESS,
           activeApp: this.state.collection.get(this.state.activeAppId)
@@ -162,18 +170,6 @@ var Marathon = React.createClass({
     }
   },
 
-  fetchDeployments: function () {
-    this.state.deployments.fetch({
-      error: function () {
-        this.setState({deploymentsFetchState: States.STATE_ERROR});
-      }.bind(this),
-      success: function (response) {
-        tabs[1].badge = response.models.length;
-        this.setState({deploymentsFetchState: States.STATE_SUCCESS});
-      }.bind(this)
-    });
-  },
-
   fetchTasks: function () {
     if (this.state.activeApp != null) {
       this.state.activeApp.tasks.fetch({
@@ -181,7 +177,6 @@ var Marathon = React.createClass({
           this.setState({tasksFetchState: States.STATE_ERROR});
         }.bind(this),
         success: function (collection, response) {
-          this.fetchDeployments();
           // update changed attributes in app
           this.state.activeApp.update(response.app);
           this.setState({tasksFetchState: States.STATE_SUCCESS});
@@ -259,43 +254,6 @@ var Marathon = React.createClass({
     }
   },
 
-  destroyDeployment: function (deployment, options, component) {
-    component.setLoading(true);
-
-    var forceStop = options.forceStop;
-    var confirmMessage = !forceStop ?
-      "Destroy deployment of apps: '" + deployment.affectedAppsString() +
-        "'?\nDestroying this deployment will create and start a new " +
-        "deployment to revert the affected app to its previous version." :
-      "Stop deployment of apps: '" + deployment.affectedAppsString() +
-        "'?\nThis will stop the deployment immediately and leave it in the " +
-        "current state.";
-
-    if (confirm(confirmMessage)) {
-      setTimeout(function () {
-        deployment.destroy({
-          error: function (data, response) {
-            // Coming from async forceStop
-            if (response.status === 202) {
-              return;
-            }
-
-            var msg = response.responseJSON &&
-              response.responseJSON.message ||
-              response.statusText;
-            if (msg) {
-              alert("Error destroying app '" + deployment.id + "': " + msg);
-            }
-          },
-          forceStop: forceStop,
-          wait: !forceStop
-        });
-      }, 1000);
-    } else {
-      component.setLoading(false);
-    }
-  },
-
   rollbackToAppVersion: function (version) {
     if (this.state.activeApp != null) {
       var app = this.state.activeApp;
@@ -356,18 +314,6 @@ var Marathon = React.createClass({
     }
   },
 
-  poll: function () {
-    this._pollResource();
-  },
-
-  setPollResource: function (func) {
-    // Kill any poll that is in flight to ensure it doesn't fire after having changed
-    // the `_pollResource` function.
-    this.stopPolling();
-    this._pollResource = func;
-    this.startPolling();
-  },
-
   startPolling: function () {
     if (this._interval == null) {
       this.poll();
@@ -382,16 +328,16 @@ var Marathon = React.createClass({
     }
   },
 
-  updatePolling: function () {
-    var id = this.state.activeTabId;
-
+  poll: function () {
     if (this.state.activeApp) {
-      this.setPollResource(this.fetchTasks);
-    } else if (id === tabs[0].id) {
-      this.setPollResource(this.fetchApps);
-    } else if (id === tabs[1].id) {
-      this.setPollResource(this.fetchDeployments);
+      this.fetchTasks();
+    } else if (this.state.activeTabId === tabs[0].id) {
+      this.fetchApps();
     }
+
+    // Deployments needs to be fetched on every poll,
+    // because that data is also needed on the deployments tab badge.
+    DeploymentActions.requestDeployments();
   },
 
   activateTab: function (id) {
@@ -461,10 +407,7 @@ var Marathon = React.createClass({
         <TabPaneComponent
             id="deployments"
             onActivate={this.props.fetchAppVersions} >
-          <DeploymentsListComponent
-            deployments={this.state.deployments}
-            destroyDeployment={this.destroyDeployment}
-            fetchState={this.state.deploymentsFetchState} />
+          <DeploymentsListComponent />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );

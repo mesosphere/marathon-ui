@@ -1,12 +1,15 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
+
 var React = require("react/addons");
+
+var DeploymentActions = require("../actions/DeploymentActions");
 
 var DeploymentComponent = React.createClass({
   name: "DeploymentComponent",
 
   propTypes: {
-    model: React.PropTypes.object.isRequired,
-    destroyDeployment: React.PropTypes.func.isRequired
+    model: React.PropTypes.object.isRequired
   },
 
   getInitialState: function () {
@@ -15,16 +18,32 @@ var DeploymentComponent = React.createClass({
     };
   },
 
-  setLoading: function (bool) {
-    this.setState({loading: bool});
+  handleRevertDeployment: function () {
+    var model = this.props.model;
+
+    var confirmMessage =
+      "Destroy deployment of apps: '" + model.affectedAppsString +
+      "'?\nDestroying this deployment will create and start a new " +
+      "deployment to revert the affected app to its previous version.";
+
+    if (confirm(confirmMessage)) {
+      this.setState({loading: true});
+      DeploymentActions.revertDeployment(model.id);
+    }
   },
 
-  handleDestroyDeployment: function (forceStop) {
-    this.props.destroyDeployment(
-      this.props.model,
-      {forceStop: forceStop},
-      this
-    );
+  handleStopDeployment: function () {
+    var model = this.props.model;
+
+    var confirmMessage =
+      "Stop deployment of apps: '" + model.affectedAppsString +
+      "'?\nThis will stop the deployment immediately and leave it in the " +
+      "current state.";
+
+    if (confirm(confirmMessage)) {
+      this.setState({loading: true});
+      DeploymentActions.stopDeployment(model.id);
+    }
   },
 
   getButtons: function () {
@@ -44,14 +63,14 @@ var DeploymentComponent = React.createClass({
         <ul className="list-inline">
           <li>
             <button
-                onClick={this.handleDestroyDeployment.bind(this, true)}
+                onClick={this.handleStopDeployment}
                 className="btn btn-xs btn-default">
               Stop
             </button>
           </li>
           <li>
             <button
-                onClick={this.handleDestroyDeployment.bind(this, false)}
+                onClick={this.handleRevertDeployment}
                 className="btn btn-xs btn-default">
               Rollback
             </button>
@@ -65,36 +84,36 @@ var DeploymentComponent = React.createClass({
     var model = this.props.model;
 
     var isDeployingClassSet = classNames({
-      "text-warning": model.get("currentStep") < model.get("totalSteps")
+      "text-warning": model.currentStep < model.totalSteps
     });
 
-    var progressStep = Math.max(0, model.get("currentStep") - 1);
+    var progressStep = Math.max(0, model.currentStep - 1);
 
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
       <tr>
-        <td className="overflow-ellipsis" title={model.get("id")}>
-          {model.get("id")}
+        <td className="overflow-ellipsis" title={model.id}>
+          {model.id}
         </td>
         <td>
           <ul className="list-unstyled">
-            {model.get("currentActions").map(function (action) {
+            {lazy(model.currentActions).map(function (action) {
               return <li key={action.app}>{action.app}</li>;
-            })}
+            }).value()}
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            {model.get("currentActions").map(function (action) {
+            {lazy(model.currentActions).map(function (action) {
               return <li key={action.app}>{action.action}</li>;
-            })}
+            }).value()}
           </ul>
         </td>
         <td className="text-right">
           <span className={isDeployingClassSet}>
             {progressStep}
-          </span> / {model.get("totalSteps")}
+          </span> / {model.totalSteps}
         </td>
         <td className="text-right">
           {this.getButtons()}
