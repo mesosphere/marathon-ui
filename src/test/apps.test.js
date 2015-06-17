@@ -56,4 +56,30 @@ describe("Apps", function () {
 
   });
 
+  describe("on single app request", function () {
+
+    it("updates the AppsStore on success", function (done) {
+      this.server.setup({
+          "id": "/single-app"
+        }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.currentApp.id).to.equal("/single-app");
+        }, done);
+      });
+
+      AppsActions.requestApp("/single-app");
+    });
+
+    it("handles failure gracefully", function (done) {
+      this.server.setup({ message: "Guru Meditation" }, 404);
+
+      AppsStore.once(AppsEvents.REQUEST_APP_ERROR, done);
+
+      AppsActions.requestApp("/non-existing-app");
+    });
+
+  });
+
 });
