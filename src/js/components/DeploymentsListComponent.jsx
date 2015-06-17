@@ -118,7 +118,7 @@ var DeploymentListComponent = React.createClass({
       "hidden": state.deployments.length !== 0
     });
 
-    var errorMessageClassSet = React.addons.classSet({
+    var errorMessageClassSet = classNames({
       "hidden": state.errorMessage === ""
     });
 
@@ -163,9 +163,9 @@ var DeploymentListComponent = React.createClass({
               Loading deployments...
             </td>
           </tr>
-          <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan="5">
-              Error fetching deployments. Refresh to try again.
+          <tr className={noDeploymentsClassSet}>
+            <td className="text-center" colSpan="5">
+              No deployments in progress.
             </td>
           </tr>
           <tr className={errorMessageClassSet}>
@@ -173,9 +173,9 @@ var DeploymentListComponent = React.createClass({
               {state.errorMessage}
             </td>
           </tr>
-          <tr className={noDeploymentsClassSet}>
-            <td className="text-center" colSpan="5">
-              No deployments in progress.
+          <tr className={errorClassSet}>
+            <td className="text-center text-danger" colSpan="5">
+              Error fetching deployments. Refresh to try again.
             </td>
           </tr>
           {this.getDeploymentNodes()}
