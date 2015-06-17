@@ -335,6 +335,8 @@ var Marathon = React.createClass({
       this.fetchApps();
     }
 
+    // Deployments needs to be fetched on every poll,
+    // because that data is also needed on the deployments tab badge.
     DeploymentActions.requestDeployments();
   },
 

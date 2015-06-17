@@ -12,21 +12,24 @@ var DeploymentStore = require("../js/stores/DeploymentStore");
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
 
+var server = new HttpServer({
+  address: "localhost",
+  port: 8181
+});
+
 describe("Deployments", function () {
 
   beforeEach(function (done) {
-    this.server = new HttpServer({
-      address: "localhost",
-      port: 8181
-    })
-    .setup([{
-      affectedApps: ["app1", "app2"],
-      currentActions: ["ScaleApplication"]
-    }, {}, {}], 200)
-    .start(function () {
-      DeploymentStore.once(DeploymentEvents.CHANGE, done);
-      DeploymentActions.requestDeployments();
-    });
+    this.server = server
+      .setup([{
+        id: "deployment-1",
+        affectedApps: ["app1", "app2"],
+        currentActions: ["ScaleApplication"]
+      }, {}, {}], 200)
+      .start(function () {
+        DeploymentStore.once(DeploymentEvents.CHANGE, done);
+        DeploymentActions.requestDeployments();
+      });
     config.apiURL = "http://localhost:8181/";
   });
 
@@ -65,6 +68,9 @@ describe("Deployments", function () {
   describe("on revert (rollback)", function () {
 
     it("reverts (rollback) a deployment on success", function (done) {
+      // A succesfull response with a payload of a new revert-deployment,
+      // like the API would do.
+      // Indeed the payload isn't processed by the store yet.
       this.server.setup({
           "deploymentId": "deployment-reverts",
           "version": "v1"
@@ -72,15 +78,15 @@ describe("Deployments", function () {
 
       DeploymentStore.once(DeploymentEvents.CHANGE, function () {
         expectAsync(function () {
-          expect(DeploymentStore.deployments).to.have.length(3);
+          expect(DeploymentStore.deployments).to.have.length(2);
 
           expect(_.where(DeploymentStore.deployments, {
-            deploymentId: "deployment-reverts"
-          })).to.not.be.undefined;
+            deploymentId: "deployment-1"
+          })).to.be.empty;
         }, done);
       });
 
-      DeploymentActions.revertDeployment("deployment-to-revert");
+      DeploymentActions.revertDeployment("deployment-1");
     });
 
     it("receives a revert error", function (done) {
@@ -101,15 +107,16 @@ describe("Deployments", function () {
   describe("on stop", function () {
 
     it("forcefully stops a deployment", function (done) {
+      // Payload is 'null' on a forcefully stoped deployment
       this.server.setup(null, 202);
 
       DeploymentStore.once(DeploymentEvents.CHANGE, function () {
         expectAsync(function () {
-          expect(DeploymentStore.deployments).to.have.length(3);
+          expect(DeploymentStore.deployments).to.have.length(2);
         }, done);
       });
 
-      DeploymentActions.stopDeployment("deployment-to-stop");
+      DeploymentActions.stopDeployment("deployment-1");
     });
 
     it("receives a stop error", function (done) {
