@@ -49,7 +49,11 @@ describe("Apps", function () {
     it("handles failure gracefully", function (done) {
       this.server.setup({ message: "Guru Meditation" }, 404);
 
-      AppsStore.once(AppsEvents.REQUEST_APPS_ERROR, done);
+      AppsStore.once(AppsEvents.REQUEST_APPS_ERROR, function (error) {
+        expectAsync(function () {
+          expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
 
       AppsActions.requestApps();
     });
@@ -75,7 +79,11 @@ describe("Apps", function () {
     it("handles failure gracefully", function (done) {
       this.server.setup({ message: "Guru Meditation" }, 404);
 
-      AppsStore.once(AppsEvents.REQUEST_APP_ERROR, done);
+      AppsStore.once(AppsEvents.REQUEST_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
 
       AppsActions.requestApp("/non-existing-app");
     });
