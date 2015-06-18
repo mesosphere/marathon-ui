@@ -4,7 +4,7 @@ var lazy = require("lazy.js");
 var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
 
-function removeApps(apps, appId) {
+function removeApp(apps, appId) {
   return lazy(apps).reject({
     id: appId
   }).value();
@@ -33,9 +33,16 @@ AppDispatcher.register(function (action) {
     case AppsEvents.REQUEST_APP_ERROR:
       AppsStore.emit(AppsEvents.REQUEST_APP_ERROR, action.data.jsonBody);
       break;
+    case AppsEvents.CREATE_APP:
+      AppsStore.apps.push(action.data);
+      AppsStore.emit(AppsEvents.CHANGE);
+      break;
+    case AppsEvents.CREATE_APP_ERROR:
+      AppsStore.emit(AppsEvents.CREATE_APP_ERROR, action.data.jsonBody);
+      break;
     case AppsEvents.DELETE_APP:
       AppsStore.apps =
-        removeApps(AppsStore.apps, action.appId);
+        removeApp(AppsStore.apps, action.appId);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.DELETE_APP_ERROR:

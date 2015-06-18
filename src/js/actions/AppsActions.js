@@ -51,6 +51,34 @@ var AppsActions = {
       });
     });
   },
+  createApp: function (newAppAttributes) {
+    this.request({
+      method: "POST",
+      body: newAppAttributes,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      url: config.apiURL + "v2/apps"
+    })
+    .start(function (status) {
+      this.status = status;
+    })
+    .done(function (app) {
+      if (this.status !== 201) {
+        return;
+      }
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.CREATE_APP,
+        data: app
+      });
+    })
+    .fail(function (error) {
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.CREATE_APP_ERROR,
+        data: error
+      });
+    });
+  },
   deleteApp: function (appId) {
     this.request({
       method: "DELETE",

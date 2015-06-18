@@ -87,6 +87,44 @@ describe("Apps", function () {
 
   });
 
+  describe("on app creation", function () {
+
+    it("updates the AppsStore on success", function (done) {
+      this.server.setup({
+          "id": "/app-3"
+        }, 201);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(3);
+          expect(_.where(AppsStore.apps, {
+            id: "/app-3"
+          })).to.be.not.empty;
+        }, done);
+      });
+
+      AppsActions.createApp({
+        "id": "/app-3",
+        "cmd": "app command"
+      });
+    });
+
+    it("handles bad request", function (done) {
+      this.server.setup({ message: "Guru Meditation" }, 400);
+
+      AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
+
+      AppsActions.createApp({
+        cmd: "app command"
+      });
+    });
+
+  });
+
   describe("on app deletion", function () {
 
     it("deletes an app on success", function (done) {
