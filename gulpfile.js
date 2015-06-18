@@ -116,7 +116,7 @@ gulp.task("index", function () {
   return gulp.src(dirs.src + "/" + files.index)
     .pipe(gulpCopy(dirs.dist, { prefix: 1}));
 });
-gulp.task("serve", function () {
+gulp.task("connect:server", function () {
   connect.server({
     port: 4200,
     root: dirs.dist,
@@ -124,7 +124,7 @@ gulp.task("serve", function () {
   });
 });
 
-gulp.task("watch", ["default", "serve"], function () {
+gulp.task("serve", ["default", "connect:server"], function () {
   gulp.watch(dirs.styles + "/*", ["less"]);
   gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["eslint", "webpack"]);
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
