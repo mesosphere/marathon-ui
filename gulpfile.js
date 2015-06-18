@@ -82,8 +82,7 @@ gulp.task("eslint", function () {
   return gulp.src([dirs.js + "/**/*.?(js|jsx)"])
     .pipe(changed(dirs.dist))
     .pipe(eslint())
-    .pipe(eslint.formatEach("stylish", process.stderr))
-    .pipe(eslint.failOnError());
+    .pipe(eslint.formatEach("stylish", process.stderr));
 });
 
 gulp.task("less", function () {
