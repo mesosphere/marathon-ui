@@ -146,7 +146,7 @@ describe("Apps", function () {
       AppsActions.restartApp("/app-1");
     });
 
-    it("receives a restart error", function (done) {
+    it("receives a restart error on non existing app", function (done) {
       this.server.setup({ message: "restart error" }, 404);
 
       AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
@@ -157,6 +157,67 @@ describe("Apps", function () {
       });
 
       AppsActions.restartApp("/non-existing-app");
+    });
+
+    it("receives a restart error on locked app", function (done) {
+      this.server.setup({ message: "app locked by deployment" }, 409);
+
+      AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("app locked by deployment");
+        }, done);
+      });
+
+      AppsActions.restartApp("/app-1");
+    });
+
+  });
+
+  describe("on app scale", function () {
+
+    it("scales an app on success", function (done) {
+      // A succesfull response with a payload of a new revert-deployment,
+      // like the API would do.
+      // Indeed the payload isn't processed by the store yet.
+      this.server.setup({
+          "deploymentId": "deployment-that-scales-app",
+          "version": "v1"
+        }, 200);
+
+      AppsStore.once(AppsEvents.SCALE_APP, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+        }, done);
+      });
+
+      AppsActions.scaleApp("/app-1", 10);
+    });
+
+    it("receives a scale error on non existing app", function (done) {
+      this.server.setup({ message: "scale error" }, 404);
+
+      AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("scale error");
+        }, done);
+      });
+
+      AppsActions.scaleApp("/non-existing-app");
+    });
+
+    it("receives a scale error on bad data", function (done) {
+      this.server.setup({ message: "scale bad data error" }, 400);
+
+      AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("scale bad data error");
+        }, done);
+      });
+
+      AppsActions.scaleApp("/app-1", "needs a number! :P");
     });
 
   });

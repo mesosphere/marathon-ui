@@ -47,6 +47,12 @@ AppDispatcher.register(function (action) {
     case AppsEvents.RESTART_APP_ERROR:
       AppsStore.emit(AppsEvents.RESTART_APP_ERROR, action.data.jsonBody);
       break;
+    case AppsEvents.SCALE_APP:
+      AppsStore.emit(AppsEvents.SCALE_APP);
+      break;
+    case AppsEvents.SCALE_APP_ERROR:
+      AppsStore.emit(AppsEvents.SCALE_APP_ERROR, action.data.jsonBody);
+      break;
   }
 });
 

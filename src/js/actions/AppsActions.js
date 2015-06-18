@@ -107,6 +107,37 @@ var AppsActions = {
       });
     });
   },
+  scaleApp: function (appId, instances) {
+    this.request({
+      method: "PUT",
+      body: {
+        instances: instances
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      url: config.apiURL + "v2/apps/" + appId
+    })
+    .start(function (status) {
+      this.status = status;
+    })
+    .done(function (app) {
+      if (this.status !== 200) {
+        return;
+      }
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.SCALE_APP,
+        data: app,
+        appId: appId
+      });
+    })
+    .fail(function (error) {
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.SCALE_APP_ERROR,
+        data: error
+      });
+    });
+  },
   request: oboe
 };
 
