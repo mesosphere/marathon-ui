@@ -19,9 +19,9 @@ describe("Apps", function () {
   beforeEach(function (done) {
     this.server = server
     .setup([{
-      id: "app-1"
+      id: "/app-1"
     }, {
-      id: "app-2"
+      id: "/app-2"
     }], 200)
     .start(function () {
       AppsStore.once(AppsEvents.CHANGE, done);
@@ -86,6 +86,45 @@ describe("Apps", function () {
       });
 
       AppsActions.requestApp("/non-existing-app");
+    });
+
+  });
+
+  describe("on single app deletion", function () {
+
+    it("deletes an app on success", function (done) {
+      // A succesfull response with a payload of a new revert-deployment,
+      // like the API would do.
+      // Indeed the payload isn't processed by the store yet.
+      this.server.setup({
+          "deploymentId": "deployment-that-deletes",
+          "version": "v1"
+        }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(1);
+
+          expect(_.where(AppsStore.apps, {
+            id: "/app-1"
+          })).to.be.empty;
+        }, done);
+      });
+
+      AppsActions.deleteApp("/app-1");
+    });
+
+    it("receives a delete error", function (done) {
+      this.server.setup({ message: "delete error" }, 404);
+
+      AppsStore.once(AppsEvents.DELETE_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("delete error");
+        }, done);
+      });
+
+      AppsActions.deleteApp("/non-existing-app");
     });
 
   });
