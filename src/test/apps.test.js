@@ -9,10 +9,8 @@ var AppsStore = require("../js/stores/AppsStore");
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
 
-var server = new HttpServer({
-  address: "localhost",
-  port: 8181
-});
+var server = new HttpServer(config.localTestserverURI);
+config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("Apps", function () {
 
@@ -27,7 +25,6 @@ describe("Apps", function () {
       AppsStore.once(AppsEvents.CHANGE, done);
       AppsActions.requestApps();
     });
-    config.apiURL = "http://localhost:8181/";
   });
 
   afterEach(function (done) {
