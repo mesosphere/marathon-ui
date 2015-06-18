@@ -59,7 +59,7 @@
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "shrinkwrap": "npm-shrinkwrap --dev",
     "test": "mocha --ui exports --reporter spec --compilers jsx:src/test/helpers/compiler.js src/test/helpers/object-assign-polyfill.js src/test/**/*.test.* src/test/*.test.*",
-    "serve": "export GULP_ENV=\"development\" && gulp serve",
+    "serve": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve",
     "watch": "export GULP_ENV=\"development\" && gulp watch"
   }
 }
