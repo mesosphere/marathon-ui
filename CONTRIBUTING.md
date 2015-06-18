@@ -15,7 +15,7 @@ Before you submit your issue search the archive, maybe your question was already
 2. Install dev dependencies
 
         npm install
-        npm install -g broccoli-cli
+        npm install -g gulp
 
 3. Run development environment
 
