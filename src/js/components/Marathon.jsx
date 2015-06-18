@@ -107,10 +107,12 @@ var Marathon = React.createClass({
   },
 
   componentDidUpdate: function (prevProps, prevState) {
-    if (prevState.activeApp !== this.state.activeApp ||
-      prevState.activeTabId !== this.state.activeTabId) {
+    /*eslint-disable eqeqeq */
+    if (prevState.activeApp != this.state.activeApp ||
+      prevState.activeTabId != this.state.activeTabId) {
       this.poll();
     }
+    /*eslint-enable eqeqeq */
   },
 
   componentWillUnmount: function () {
@@ -253,45 +255,6 @@ var Marathon = React.createClass({
         },
         wait: true
       });
-    }
-    /*eslint-enable no-alert */
-  },
-
-  destroyDeployment: function (deployment, options, component) {
-    component.setLoading(true);
-
-    var forceStop = options.forceStop;
-    var confirmMessage = !forceStop ?
-      "Destroy deployment of apps: '" + deployment.affectedAppsString() +
-        "'?\nDestroying this deployment will create and start a new " +
-        "deployment to revert the affected app to its previous version." :
-      "Stop deployment of apps: '" + deployment.affectedAppsString() +
-        "'?\nThis will stop the deployment immediately and leave it in the " +
-        "current state.";
-
-    /*eslint-disable no-alert */
-    if (confirm(confirmMessage)) {
-      setTimeout(function () {
-        deployment.destroy({
-          error: function (data, response) {
-            // Coming from async forceStop
-            if (response.status === 202) {
-              return;
-            }
-
-            var msg = response.responseJSON &&
-              response.responseJSON.message ||
-              response.statusText;
-            if (msg) {
-              alert("Error destroying app '" + deployment.id + "': " + msg);
-            }
-          },
-          forceStop: forceStop,
-          wait: !forceStop
-        });
-      }, 1000);
-    } else {
-      component.setLoading(false);
     }
     /*eslint-enable no-alert */
   },
