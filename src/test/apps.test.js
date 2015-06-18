@@ -90,14 +90,14 @@ describe("Apps", function () {
 
   });
 
-  describe("on single app deletion", function () {
+  describe("on app deletion", function () {
 
     it("deletes an app on success", function (done) {
       // A succesfull response with a payload of a new revert-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
-          "deploymentId": "deployment-that-deletes",
+          "deploymentId": "deployment-that-deletes-app",
           "version": "v1"
         }, 200);
 
@@ -125,6 +125,41 @@ describe("Apps", function () {
       });
 
       AppsActions.deleteApp("/non-existing-app");
+    });
+
+  });
+
+  describe("on app restart", function () {
+
+    it("restarts an app on success", function (done) {
+      // A succesfull response with a payload of a new revert-deployment,
+      // like the API would do.
+      // Indeed the payload isn't processed by the store yet.
+      this.server.setup({
+          "deploymentId": "deployment-that-restarts-app",
+          "version": "v1"
+        }, 200);
+
+      AppsStore.once(AppsEvents.RESTART_APP, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+        }, done);
+      });
+
+      AppsActions.restartApp("/app-1");
+    });
+
+    it("receives a restart error", function (done) {
+      this.server.setup({ message: "restart error" }, 404);
+
+      AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("restart error");
+        }, done);
+      });
+
+      AppsActions.restartApp("/non-existing-app");
     });
 
   });

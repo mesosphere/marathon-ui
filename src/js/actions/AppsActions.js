@@ -76,6 +76,37 @@ var AppsActions = {
       });
     });
   },
+  restartApp: function (appId) {
+    this.request({
+      method: "POST",
+      body: {
+        force: false
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      url: config.apiURL + "v2/apps/" + appId + "/restart"
+    })
+    .start(function (status) {
+      this.status = status;
+    })
+    .done(function (app) {
+      if (this.status !== 200) {
+        return;
+      }
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.RESTART_APP,
+        data: app,
+        appId: appId
+      });
+    })
+    .fail(function (error) {
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.RESTART_APP_ERROR,
+        data: error
+      });
+    });
+  },
   request: oboe
 };
 

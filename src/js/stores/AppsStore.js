@@ -41,6 +41,12 @@ AppDispatcher.register(function (action) {
     case AppsEvents.DELETE_APP_ERROR:
       AppsStore.emit(AppsEvents.DELETE_APP_ERROR, action.data.jsonBody);
       break;
+    case AppsEvents.RESTART_APP:
+      AppsStore.emit(AppsEvents.RESTART_APP);
+      break;
+    case AppsEvents.RESTART_APP_ERROR:
+      AppsStore.emit(AppsEvents.RESTART_APP_ERROR, action.data.jsonBody);
+      break;
   }
 });
 
