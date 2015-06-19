@@ -114,7 +114,7 @@ gulp.task("images", function () {
 
 gulp.task("index", function () {
   return gulp.src(dirs.src + "/" + files.index)
-    .pipe(gulpCopy(dirs.dist, { prefix: 1}));
+    .pipe(gulpCopy(dirs.dist, {prefix: 1}));
 });
 gulp.task("connect:server", function () {
   connect.server({
