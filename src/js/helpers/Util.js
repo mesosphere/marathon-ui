@@ -1,15 +1,19 @@
-/*eslint-disable no-alert */
 var Util = {
-    alert: function (msg) {
-      return window.alert(msg);
-    },
-    confirm: function (msg) {
-      return window.confirm(msg);
-    },
-    prompt: function (msg) {
-      return window.prompt(msg);
-    }
+  alert: function (msg) {
+    /*eslint-disable no-alert */
+    return global.alert(msg);
+    /*eslint-enable no-alert */
+  },
+  confirm: function (msg) {
+    /*eslint-disable no-alert */
+    return global.confirm(msg);
+    /*eslint-enable no-alert */
+  },
+  prompt: function (msg) {
+    /*eslint-disable no-alert */
+    return global.prompt(msg);
+    /*eslint-enable no-alert */
+  }
 };
-/*eslint-enable no-alert */
 
 module.exports = Util;
