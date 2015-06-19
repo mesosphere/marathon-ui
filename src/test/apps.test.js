@@ -285,12 +285,12 @@ describe("Apps", function () {
     });
 
     it("receives an apply error on bad data", function (done) {
-      this.server.setup({ message: "scale bad data error" }, 400);
+      this.server.setup({ message: "apply bad data error" }, 400);
 
-      AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
+      AppsStore.once(AppsEvents.APPLY_APP_ERROR, function (error) {
         expectAsync(function () {
           expect(AppsStore.apps).to.have.length(2);
-          expect(error.message).to.equal("scale bad data error");
+          expect(error.message).to.equal("apply bad data error");
         }, done);
       });
 
