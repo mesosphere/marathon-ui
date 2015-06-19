@@ -17,6 +17,7 @@ var NavTabsComponent = require("../components/NavTabsComponent");
 var DeploymentActions = require("../actions/DeploymentActions");
 var DeploymentEvents = require("../events/DeploymentEvents");
 var DeploymentStore = require("../stores/DeploymentStore");
+var Util = require("../helpers/Util");
 
 var tabs = [
   {id: "apps", text: "Apps"},
@@ -228,12 +229,11 @@ var Marathon = React.createClass({
 
   destroyApp: function () {
     var app = this.state.activeApp;
-    /*eslint-disable no-alert */
-    if (confirm("Destroy app '" + app.id + "'?\nThis is irreversible.")) {
+    if (Util.confirm("Destroy app '" + app.id + "'?\nThis is irreversible.")) {
       app.destroy({
         error: function (data, response) {
           var msg = response.responseJSON.message || response.statusText;
-          alert("Error destroying app '" + app.id + "': " + msg);
+          Util.alert("Error destroying app '" + app.id + "': " + msg);
         },
         success: function () {
           this.props.router.navigate("apps", {trigger: true});
@@ -241,22 +241,19 @@ var Marathon = React.createClass({
         wait: true
       });
     }
-    /*eslint-enable no-alert */
   },
 
   restartApp: function () {
     var app = this.state.activeApp;
-    /*eslint-disable no-alert */
-    if (confirm("Restart app '" + app.id + "'?")) {
+    if (Util.confirm("Restart app '" + app.id + "'?")) {
       app.restart({
         error: function (data, response) {
           var msg = response.responseJSON.message || response.statusText;
-          alert("Error restarting app '" + app.id + "': " + msg);
+          Util.alert("Error restarting app '" + app.id + "': " + msg);
         },
         wait: true
       });
     }
-    /*eslint-enable no-alert */
   },
 
   rollbackToAppVersion: function (version) {
@@ -268,9 +265,7 @@ var Marathon = React.createClass({
         {
           error: function (data, response) {
             var msg = response.responseJSON.message || response.statusText;
-            /*eslint-disable no-alert */
-            alert("Could not update to chosen version: " + msg);
-            /*eslint-enable no-alert */
+            Util.alert("Could not update to chosen version: " + msg);
           },
           success: function () {
             // refresh app versions
@@ -288,9 +283,7 @@ var Marathon = React.createClass({
         {
           error: function (data, response) {
             var msg = response.responseJSON.message || response.statusText;
-            /*eslint-disable no-alert */
-            alert("Not scaling: " + msg);
-            /*eslint-enable no-alert */
+            Util.alert("Not scaling: " + msg);
           },
           success: function () {
             // refresh app versions
@@ -303,20 +296,17 @@ var Marathon = React.createClass({
         // If the model is not valid, revert the changes to prevent the UI
         // from showing an invalid state.
         app.update(app.previousAttributes());
-        /*eslint-disable no-alert */
-        alert("Not scaling: " + app.validationError[0].message);
-        /*eslint-enable no-alert */
+        Util.alert("Not scaling: " + app.validationError[0].message);
       }
     }
   },
 
   suspendApp: function () {
-    /*eslint-disable no-alert */
-    if (confirm("Suspend app by scaling to 0 instances?")) {
+    if (Util.confirm("Suspend app by scaling to 0 instances?")) {
       this.state.activeApp.suspend({
         error: function (data, response) {
           var msg = response.responseJSON.message || response.statusText;
-          alert("Could not suspend: " + msg);
+          Util.alert("Could not suspend: " + msg);
         },
         success: function () {
           // refresh app versions
@@ -324,7 +314,6 @@ var Marathon = React.createClass({
         }.bind(this)
       });
     }
-    /*eslint-enable no-alert */
   },
 
   startPolling: function () {
