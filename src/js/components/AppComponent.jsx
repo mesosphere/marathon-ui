@@ -26,6 +26,19 @@ var AppComponent = React.createClass({
     );
   },
 
+  getStatus: function () {
+    var model = this.props.model;
+    var status = "Running";
+
+    if (model.deployments.length > 0) {
+      status = "Deploying";
+    } else if (model.instances === 0 && model.tasksRunning === 0) {
+      status = "Suspended";
+    }
+
+    return status;
+  },
+
   render: function () {
     var model = this.props.model;
 

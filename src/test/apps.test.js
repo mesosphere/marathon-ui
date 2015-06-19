@@ -409,4 +409,5 @@ describe("App Health component", function () {
     var width = this.component.props.children[5].props.style.width;
     expect(width).to.equal("0%");
   });
+
 });
