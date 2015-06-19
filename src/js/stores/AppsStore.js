@@ -3,10 +3,17 @@ var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
+var TasksEvents = require("../events/TasksEvents");
 
 function removeApp(apps, appId) {
   return lazy(apps).reject({
     id: appId
+  }).value();
+}
+
+function removeTask(tasks, relatedAppId, taskId) {
+  return lazy(tasks).reject(function (task) {
+    return task.id === taskId && task.appId === relatedAppId;
   }).value();
 }
 
@@ -65,6 +72,18 @@ AppDispatcher.register(function (action) {
       break;
     case AppsEvents.APPLY_APP_ERROR:
       AppsStore.emit(AppsEvents.APPLY_APP_ERROR, action.data.jsonBody);
+      break;
+    case TasksEvents.DELETE_TASK:
+      AppsStore.currentApp.tasks =
+        removeTask(
+          AppsStore.currentApp.tasks,
+          action.appId,
+          action.taskId
+        );
+      AppsStore.emit(AppsEvents.CHANGE);
+      break;
+    case TasksEvents.DELETE_TASK_ERROR:
+      AppsStore.emit(TasksEvents.DELETE_TASK_ERROR, action.data.jsonBody);
       break;
   }
 });

@@ -1,0 +1,6 @@
+var TasksEvents = {
+  DELETE_TASK: "TASKS_EVENTS_DELETE_TASK",
+  DELETE_TASK_ERROR: "TASKS_EVENTS_DELETE_TASK_ERROR"
+};
+
+module.exports = TasksEvents;
