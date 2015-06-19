@@ -1,23 +1,51 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var States = require("../constants/States");
 var AppComponent = require("../components/AppComponent");
 var BackboneMixin = require("../mixins/BackboneMixin");
 
+var AppsStore = require("../stores/AppsStore");
+var AppsEvents = require("../events/AppsEvents");
+
 var AppListComponent = React.createClass({
   displayName: "AppListComponent",
 
-  mixins: [BackboneMixin],
-
   propTypes: {
-    collection: React.PropTypes.object.isRequired,
-    fetchState: React.PropTypes.number,
     router: React.PropTypes.object.isRequired
   },
 
-  getResource: function () {
-    return this.props.collection;
+  getInitialState: function () {
+    return {
+      apps: [],
+      fetchState: States.STATE_LOADING
+    };
+  },
+
+  componentWillMount: function () {
+    AppsStore.on(AppsEvents.CHANGE, this.onAppsChange);
+    AppsStore.on(AppsEvents.REQUEST_APPS_ERROR, this.onAppsRequestError);
+  },
+
+  componentWillUnmount: function () {
+    DeploymentStore.removeListener(AppsEvents.CHANGE,
+      this.onAppsChange);
+    DeploymentStore.removeListener(AppsEvents.REQUEST_APPS_ERROR,
+      this.onAppsRequestError);
+  },
+
+  onAppsChange: function () {
+    this.setState({
+      apps: AppsStore.apps,
+      fetchState: States.STATE_SUCCESS
+    });
+  },
+
+  onAppsRequestError: function () {
+    this.setState({
+      fetchState: States.STATE_ERROR
+    });
   },
 
   sortCollectionBy: function (comparator) {
@@ -31,31 +59,31 @@ var AppListComponent = React.createClass({
   },
 
   getAppNodes: function () {
-    return (
-      this.props.collection.map(function (model) {
+    var state = this.state;
+
+    return lazy(state.apps)
+      .map(function (app) {
         return (
-          <AppComponent
-            key={model.id}
-            model={model}
-            router={this.props.router} />
+          <AppComponent key={app.id} model={app} router={this.props.router} />
         );
-      }, this)
-    );
+      })
+      .value();
   },
 
   render: function () {
+    var state = this.state;
     var sortKey = this.props.collection.sortKey;
 
     var loadingClassSet = classNames({
-      "hidden": this.props.fetchState !== States.STATE_LOADING
+      "hidden": state.fetchState !== States.STATE_LOADING
     });
 
     var noAppsClassSet = classNames({
-      "hidden": this.props.collection.length !== 0
+      "hidden": state.apps.length !== 0
     });
 
     var errorClassSet = classNames({
-      "hidden": this.props.fetchState !== States.STATE_ERROR
+      "hidden": state.fetchState !== States.STATE_ERROR
     });
 
     var headerClassSet = classNames({
@@ -66,8 +94,8 @@ var AppListComponent = React.createClass({
     var tableClassSet = classNames({
       "table table-fixed": true,
       "table-hover table-selectable":
-        this.props.collection.length !== 0 &&
-        this.props.fetchState !== States.STATE_LOADING
+        state.apps.length !== 0 &&
+        state.fetchState !== States.STATE_LOADING
     });
 
     return (
