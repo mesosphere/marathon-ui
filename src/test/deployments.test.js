@@ -12,10 +12,8 @@ var DeploymentStore = require("../js/stores/DeploymentStore");
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
 
-var server = new HttpServer({
-  address: "localhost",
-  port: 8181
-});
+var server = new HttpServer(config.localTestserverURI);
+config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("Deployments", function () {
 
@@ -30,7 +28,6 @@ describe("Deployments", function () {
         DeploymentStore.once(DeploymentEvents.CHANGE, done);
         DeploymentActions.requestDeployments();
       });
-    config.apiURL = "http://localhost:8181/";
   });
 
   afterEach(function (done) {

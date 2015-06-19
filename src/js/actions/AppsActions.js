@@ -51,6 +51,34 @@ var AppsActions = {
       });
     });
   },
+  createApp: function (newAppAttributes) {
+    this.request({
+      method: "POST",
+      body: newAppAttributes,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      url: config.apiURL + "v2/apps"
+    })
+    .start(function (status) {
+      this.status = status;
+    })
+    .done(function (app) {
+      if (this.status !== 201) {
+        return;
+      }
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.CREATE_APP,
+        data: app
+      });
+    })
+    .fail(function (error) {
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.CREATE_APP_ERROR,
+        data: error
+      });
+    });
+  },
   deleteApp: function (appId) {
     this.request({
       method: "DELETE",
@@ -72,6 +100,97 @@ var AppsActions = {
     .fail(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.DELETE_APP_ERROR,
+        data: error
+      });
+    });
+  },
+  restartApp: function (appId) {
+    this.request({
+      method: "POST",
+      body: {
+        force: false
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      url: config.apiURL + "v2/apps/" + appId + "/restart"
+    })
+    .start(function (status) {
+      this.status = status;
+    })
+    .done(function (app) {
+      if (this.status !== 200) {
+        return;
+      }
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.RESTART_APP,
+        data: app,
+        appId: appId
+      });
+    })
+    .fail(function (error) {
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.RESTART_APP_ERROR,
+        data: error
+      });
+    });
+  },
+  scaleApp: function (appId, instances) {
+    this.request({
+      method: "PUT",
+      body: {
+        instances: instances
+      },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      url: config.apiURL + "v2/apps/" + appId
+    })
+    .start(function (status) {
+      this.status = status;
+    })
+    .done(function (app) {
+      if (this.status !== 200) {
+        return;
+      }
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.SCALE_APP,
+        data: app,
+        appId: appId
+      });
+    })
+    .fail(function (error) {
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.SCALE_APP_ERROR,
+        data: error
+      });
+    });
+  },
+  applySettingsOnApp: function (appId, settings) {
+    this.request({
+      method: "PUT",
+      body: settings,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      url: config.apiURL + "v2/apps/" + appId
+    })
+    .start(function (status) {
+      this.status = status;
+    })
+    .done(function (app) {
+      if (this.status !== 200) {
+        return;
+      }
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.APPLY_APP,
+        data: app,
+        appId: appId
+      });
+    })
+    .fail(function (error) {
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.APPLY_APP_ERROR,
         data: error
       });
     });
