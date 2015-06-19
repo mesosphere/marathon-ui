@@ -60,6 +60,12 @@ AppDispatcher.register(function (action) {
     case AppsEvents.SCALE_APP_ERROR:
       AppsStore.emit(AppsEvents.SCALE_APP_ERROR, action.data.jsonBody);
       break;
+    case AppsEvents.APPLY_APP:
+      AppsStore.emit(AppsEvents.APPLY_APP);
+      break;
+    case AppsEvents.APPLY_APP_ERROR:
+      AppsStore.emit(AppsEvents.APPLY_APP_ERROR, action.data.jsonBody);
+      break;
   }
 });
 
