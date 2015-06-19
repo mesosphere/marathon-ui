@@ -17,6 +17,18 @@ function removeTask(tasks, relatedAppId, taskId) {
   }).value();
 }
 
+function processCurrentApp(currentApp) {
+  if (currentApp == null) {
+    currentApp = {};
+  }
+
+  if (currentApp.tasks == null) {
+    currentApp.tasks = [];
+  }
+
+  return currentApp;
+}
+
 var AppsStore = lazy(EventEmitter.prototype).extend({
   // Array of apps objects recieved from the "apps/"-endpoint
   apps: [],
@@ -34,7 +46,7 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.REQUEST_APPS_ERROR, action.data.jsonBody);
       break;
     case AppsEvents.REQUEST_APP:
-      AppsStore.currentApp = action.data;
+      AppsStore.currentApp = processCurrentApp(action.data);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APP_ERROR:
