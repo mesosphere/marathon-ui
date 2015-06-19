@@ -260,4 +260,47 @@ describe("Apps", function () {
 
   });
 
+  describe("on app apply", function () {
+
+    it("applies app settings on success", function (done) {
+      // A succesfull response with a payload of a new revert-deployment,
+      // like the API would do.
+      // Indeed the payload isn't processed by the store yet.
+      this.server.setup({
+          "deploymentId": "deployment-that-applies-new-settings",
+          "version": "v2"
+        }, 200);
+
+      AppsStore.once(AppsEvents.APPLY_APP, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+        }, done);
+      });
+
+      AppsActions.applySettingsOnApp("/app-1", {
+        "cmd": "sleep 10",
+        "id": "/app-1",
+        "instances": 15
+      });
+    });
+
+    it("receives an apply error on bad data", function (done) {
+      this.server.setup({ message: "scale bad data error" }, 400);
+
+      AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("scale bad data error");
+        }, done);
+      });
+
+      AppsActions.applySettingsOnApp("/app-1", {
+        "cmd": "sleep 10",
+        "id": "/app-1",
+        "instances": "needs a number! :P"
+      });
+    });
+
+  });
+
 });
