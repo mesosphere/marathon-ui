@@ -65,7 +65,7 @@ describe("Deployments", function () {
   describe("on revert (rollback)", function () {
 
     it("reverts (rollback) a deployment on success", function (done) {
-      // A succesfull response with a payload of a new revert-deployment,
+      // A successful response with a payload of a new revert-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({

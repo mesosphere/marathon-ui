@@ -128,7 +128,7 @@ describe("Apps", function () {
   describe("on app deletion", function () {
 
     it("deletes an app on success", function (done) {
-      // A succesfull response with a payload of a new delete-deployment,
+      // A successful response with a payload of a new delete-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
@@ -167,7 +167,7 @@ describe("Apps", function () {
   describe("on app restart", function () {
 
     it("restarts an app on success", function (done) {
-      // A succesfull response with a payload of a new restart-deployment,
+      // A successful response with a payload of a new restart-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
@@ -215,7 +215,7 @@ describe("Apps", function () {
   describe("on app scale", function () {
 
     it("scales an app on success", function (done) {
-      // A succesfull response with a payload of a new scale-deployment,
+      // A successful response with a payload of a new scale-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
@@ -263,7 +263,7 @@ describe("Apps", function () {
   describe("on app apply", function () {
 
     it("applies app settings on success", function (done) {
-      // A succesfull response with a payload of a apply-settings-deployment,
+      // A successful response with a payload of a apply-settings-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
