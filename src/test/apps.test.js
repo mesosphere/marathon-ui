@@ -87,10 +87,48 @@ describe("Apps", function () {
 
   });
 
+  describe("on app creation", function () {
+
+    it("updates the AppsStore on success", function (done) {
+      this.server.setup({
+          "id": "/app-3"
+        }, 201);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(3);
+          expect(_.where(AppsStore.apps, {
+            id: "/app-3"
+          })).to.be.not.empty;
+        }, done);
+      });
+
+      AppsActions.createApp({
+        "id": "/app-3",
+        "cmd": "app command"
+      });
+    });
+
+    it("handles bad request", function (done) {
+      this.server.setup({ message: "Guru Meditation" }, 400);
+
+      AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
+
+      AppsActions.createApp({
+        cmd: "app command"
+      });
+    });
+
+  });
+
   describe("on app deletion", function () {
 
     it("deletes an app on success", function (done) {
-      // A succesfull response with a payload of a new revert-deployment,
+      // A succesfull response with a payload of a new delete-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
@@ -129,7 +167,7 @@ describe("Apps", function () {
   describe("on app restart", function () {
 
     it("restarts an app on success", function (done) {
-      // A succesfull response with a payload of a new revert-deployment,
+      // A succesfull response with a payload of a new restart-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
@@ -146,7 +184,7 @@ describe("Apps", function () {
       AppsActions.restartApp("/app-1");
     });
 
-    it("receives a restart error", function (done) {
+    it("receives a restart error on non existing app", function (done) {
       this.server.setup({ message: "restart error" }, 404);
 
       AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
@@ -157,6 +195,110 @@ describe("Apps", function () {
       });
 
       AppsActions.restartApp("/non-existing-app");
+    });
+
+    it("receives a restart error on locked app", function (done) {
+      this.server.setup({ message: "app locked by deployment" }, 409);
+
+      AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("app locked by deployment");
+        }, done);
+      });
+
+      AppsActions.restartApp("/app-1");
+    });
+
+  });
+
+  describe("on app scale", function () {
+
+    it("scales an app on success", function (done) {
+      // A succesfull response with a payload of a new scale-deployment,
+      // like the API would do.
+      // Indeed the payload isn't processed by the store yet.
+      this.server.setup({
+          "deploymentId": "deployment-that-scales-app",
+          "version": "v1"
+        }, 200);
+
+      AppsStore.once(AppsEvents.SCALE_APP, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+        }, done);
+      });
+
+      AppsActions.scaleApp("/app-1", 10);
+    });
+
+    it("receives a scale error on non existing app", function (done) {
+      this.server.setup({ message: "scale error" }, 404);
+
+      AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("scale error");
+        }, done);
+      });
+
+      AppsActions.scaleApp("/non-existing-app");
+    });
+
+    it("receives a scale error on bad data", function (done) {
+      this.server.setup({ message: "scale bad data error" }, 400);
+
+      AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("scale bad data error");
+        }, done);
+      });
+
+      AppsActions.scaleApp("/app-1", "needs a number! :P");
+    });
+
+  });
+
+  describe("on app apply", function () {
+
+    it("applies app settings on success", function (done) {
+      // A succesfull response with a payload of a apply-settings-deployment,
+      // like the API would do.
+      // Indeed the payload isn't processed by the store yet.
+      this.server.setup({
+          "deploymentId": "deployment-that-applies-new-settings",
+          "version": "v2"
+        }, 200);
+
+      AppsStore.once(AppsEvents.APPLY_APP, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+        }, done);
+      });
+
+      AppsActions.applySettingsOnApp("/app-1", {
+        "cmd": "sleep 10",
+        "id": "/app-1",
+        "instances": 15
+      });
+    });
+
+    it("receives an apply error on bad data", function (done) {
+      this.server.setup({ message: "apply bad data error" }, 400);
+
+      AppsStore.once(AppsEvents.APPLY_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(2);
+          expect(error.message).to.equal("apply bad data error");
+        }, done);
+      });
+
+      AppsActions.applySettingsOnApp("/app-1", {
+        "cmd": "sleep 10",
+        "id": "/app-1",
+        "instances": "needs a number! :P"
+      });
     });
 
   });
