@@ -3,7 +3,6 @@ var changed = require("gulp-changed");
 var connect = require("gulp-connect");
 var eslint = require("gulp-eslint");
 var gulp = require("gulp");
-var gulpCopy = require("gulp-copy");
 var gutil = require("gulp-util");
 var less = require("gulp-less");
 var minifyCSS = require("gulp-minify-css");
@@ -114,7 +113,7 @@ gulp.task("images", function () {
 
 gulp.task("index", function () {
   return gulp.src(dirs.src + "/" + files.index)
-    .pipe(gulpCopy(dirs.dist, {prefix: 1}));
+    .pipe(gulp.dest(dirs.dist));
 });
 gulp.task("connect:server", function () {
   connect.server({
