@@ -16,11 +16,13 @@ describe("Apps", function () {
 
   beforeEach(function (done) {
     this.server = server
-    .setup([{
-      id: "/app-1"
-    }, {
-      id: "/app-2"
-    }], 200)
+    .setup({
+      "apps": [{
+        id: "/app-1"
+      }, {
+        id: "/app-2"
+      }]
+    }, 200)
     .start(function () {
       AppsStore.once(AppsEvents.CHANGE, done);
       AppsActions.requestApps();
