@@ -15,6 +15,7 @@ var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
+var AppsActions = require("../actions/AppsActions");
 var DeploymentActions = require("../actions/DeploymentActions");
 var DeploymentEvents = require("../events/DeploymentEvents");
 var DeploymentStore = require("../stores/DeploymentStore");
@@ -136,20 +137,6 @@ var Marathon = React.createClass({
   setRouteNewApp: function () {
     this.setState({
       modalClass: NewAppModalComponent
-    });
-  },
-
-  fetchApps: function () {
-    this.state.collection.fetch({
-      error: function () {
-        this.setState({fetchState: States.STATE_ERROR});
-      }.bind(this),
-      success: function () {
-        this.setState({
-          fetchState: States.STATE_SUCCESS,
-          activeApp: this.state.collection.get(this.state.activeAppId)
-        });
-      }.bind(this)
     });
   },
 
@@ -326,7 +313,7 @@ var Marathon = React.createClass({
     if (this.state.activeApp) {
       this.fetchTasks();
     } else if (this.state.activeTabId === tabs[0].id) {
-      this.fetchApps();
+      AppsActions.requestApps();
     }
 
     // Deployments needs to be fetched on every poll,
@@ -393,10 +380,7 @@ var Marathon = React.createClass({
           <a href="#newapp" className="btn btn-success navbar-btn" >
             + New App
           </a>
-          <AppListComponent
-            collection={this.state.collection}
-            fetchState={this.state.fetchState}
-            router={this.props.router} />
+          <AppListComponent router={this.props.router} />
         </TabPaneComponent>
         <TabPaneComponent
             id="deployments"
