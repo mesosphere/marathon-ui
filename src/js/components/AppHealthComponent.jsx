@@ -16,35 +16,35 @@ var AppHealthComponent = React.createClass({
     var model = this.props.model;
 
     var tasksWithUnknownHealth = Math.max(
-      model.get("tasksRunning") -
-      model.get("tasksHealthy") -
-      model.get("tasksUnhealthy"),
+      model.tasksRunning -
+      model.tasksHealthy -
+      model.tasksUnhealthy,
       0
     );
 
     var healthData = [
-      {quantity: model.get("tasksHealthy"), name: "healthy"},
-      {quantity: model.get("tasksUnhealthy"), name: "unhealthy"},
+      {quantity: model.tasksHealthy, name: "healthy"},
+      {quantity: model.tasksUnhealthy, name: "unhealthy"},
       {quantity: tasksWithUnknownHealth, name: "running"},
-      {quantity: model.get("tasksStaged"), name: "staged"}
+      {quantity: model.tasksStaged, name: "staged"}
     ];
 
     // cut off after `instances` many tasks...
     var tasksSum = 0;
     for (var i = 0; i < healthData.length; i++) {
-      var capacityLeft = Math.max(0, model.get("instances") - tasksSum);
+      var capacityLeft = Math.max(0, model.instances - tasksSum);
       tasksSum += healthData[i].quantity;
       healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
     }
 
     // ... show everything above that in blue
-    var overCapacity = Math.max(0, tasksSum - model.get("instances"));
+    var overCapacity = Math.max(0, tasksSum - model.instances);
 
     healthData.push({quantity: overCapacity, name: "over-capacity"});
 
     // add unscheduled task, or show black if completely suspended
-    var isSuspended = model.get("instances") === 0 && tasksSum === 0;
-    var unscheduled = Math.max(0, (model.get("instances") - tasksSum));
+    var isSuspended = model.instances === 0 && tasksSum === 0;
+    var unscheduled = Math.max(0, (model.instances - tasksSum));
     var unscheduledOrSuspended = isSuspended ? 1 : unscheduled;
 
     healthData.push({quantity: unscheduledOrSuspended, name: "unscheduled"});

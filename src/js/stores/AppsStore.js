@@ -24,7 +24,7 @@ function processApps(apps) {
     }
 
     if (app.tasksRunning == null) {
-      app.tasksRunning = "-";
+      app.tasksRunning = 0;
     }
 
     return app;
