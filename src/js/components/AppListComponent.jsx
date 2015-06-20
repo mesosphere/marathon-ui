@@ -30,9 +30,9 @@ var AppListComponent = React.createClass({
   },
 
   componentWillUnmount: function () {
-    DeploymentStore.removeListener(AppsEvents.CHANGE,
+    AppsStore.removeListener(AppsEvents.CHANGE,
       this.onAppsChange);
-    DeploymentStore.removeListener(AppsEvents.REQUEST_APPS_ERROR,
+    AppsStore.removeListener(AppsEvents.REQUEST_APPS_ERROR,
       this.onAppsRequestError);
   },
 
