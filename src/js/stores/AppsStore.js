@@ -68,7 +68,7 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.REQUEST_APPS_ERROR, action.data.body);
       break;
     case AppsEvents.REQUEST_APP:
-      AppsStore.currentApp = processCurrentApp(action.data.body);
+      AppsStore.currentApp = processCurrentApp(action.data.body.app);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APP_ERROR:

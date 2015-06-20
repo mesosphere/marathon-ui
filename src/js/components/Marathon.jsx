@@ -125,9 +125,6 @@ var Marathon = React.createClass({
     if (appid != null) {
       this.setState({
         activeAppId: appid,
-        // activeApp could be undefined here, if this route is triggered on
-        // page load, because the collection is not ready.
-        activeApp: this.state.collection.get(appid),
         activeAppView: view,
         modalClass: null
       });
@@ -312,9 +309,11 @@ var Marathon = React.createClass({
   },
 
   poll: function () {
-    if (this.state.activeApp) {
-      this.fetchTasks();
-    } else if (this.state.activeTabId === tabs[0].id) {
+    var state = this.state;
+
+    if (state.activeAppId) {
+      AppsActions.requestApp(state.activeAppId);
+    } else if (state.activeTabId === tabs[0].id) {
       AppsActions.requestApps();
     }
 
@@ -352,25 +351,26 @@ var Marathon = React.createClass({
   },
 
   getAppPage: function () {
-    var activeApp = this.state.collection.get(this.state.activeAppId);
-    if (!activeApp) {
-      return null;
+    var state = this.state;
+
+    if (!state.activeAppId) {
+      return;
     }
 
     return (
       <AppPageComponent
-        appVersionsFetchState={this.state.appVersionsFetchState}
+        appId={state.activeAppId}
+        appVersionsFetchState={state.appVersionsFetchState}
         destroyApp={this.destroyApp}
         fetchTasks={this.fetchTasks}
         fetchAppVersions={this.fetchAppVersions}
-        model={this.state.activeApp}
         onTasksKilled={this.handleTasksKilled}
         restartApp={this.restartApp}
         rollBackApp={this.rollbackToAppVersion}
         scaleApp={this.scaleApp}
         suspendApp={this.suspendApp}
-        tasksFetchState={this.state.tasksFetchState}
-        view={this.state.activeAppView} />
+        tasksFetchState={state.tasksFetchState}
+        view={state.activeAppView} />
     );
   },
 
@@ -397,7 +397,7 @@ var Marathon = React.createClass({
     var modal;
     var page;
 
-    if (this.state.activeApp != null) {
+    if (this.state.activeAppId != null) {
       page = this.getAppPage();
     } else {
       page = this.getTabPane();
