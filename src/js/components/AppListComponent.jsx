@@ -149,8 +149,8 @@ var AppListComponent = React.createClass({
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "isDeploying")} className={headerClassSet}>
-                {this.getCaret("isDeploying")} Status
+              <span onClick={this.sortBy.bind(null, "status")} className={headerClassSet}>
+                {this.getCaret("status")} Status
               </span>
             </th>
           </tr>

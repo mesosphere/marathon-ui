@@ -3,6 +3,7 @@ var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
+var AppStatus = require("../constants/AppStatus");
 var TasksEvents = require("../events/TasksEvents");
 
 function removeApp(apps, appId) {
@@ -25,6 +26,13 @@ function processApps(apps) {
 
     if (app.tasksRunning == null) {
       app.tasksRunning = 0;
+    }
+
+    app.status = AppStatus.RUNNING;
+    if (app.deployments.length > 0) {
+      app.status = AppStatus.DEPLOYING;
+    } else if (app.instances === 0 && app.tasksRunning === 0) {
+      app.status = AppStatus.SUSPENDED;
     }
 
     return app;
