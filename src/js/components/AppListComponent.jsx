@@ -4,7 +4,6 @@ var React = require("react/addons");
 
 var States = require("../constants/States");
 var AppComponent = require("../components/AppComponent");
-var BackboneMixin = require("../mixins/BackboneMixin");
 
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");

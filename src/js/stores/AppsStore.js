@@ -17,6 +17,20 @@ function removeTask(tasks, relatedAppId, taskId) {
   }).value();
 }
 
+function processApps(apps) {
+  return lazy(apps).map(function (app) {
+    if (app.deployments == null) {
+      app.deployments = [];
+    }
+
+    if (app.tasksRunning == null) {
+      app.tasksRunning = "-";
+    }
+
+    return app;
+  }).value();
+}
+
 function processCurrentApp(currentApp) {
   if (currentApp == null) {
     currentApp = {};
@@ -39,7 +53,7 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
-      AppsStore.apps = action.data.body;
+      AppsStore.apps = processApps(action.data.body);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APPS_ERROR:

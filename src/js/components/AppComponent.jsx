@@ -12,42 +12,57 @@ var AppComponent = React.createClass({
   },
 
   onClick: function () {
-    this.props.router.navigate(
-      "apps/" + encodeURIComponent(this.props.model.get("id")),
+    var props = this.props;
+
+    props.router.navigate(
+      "apps/" + encodeURIComponent(props.model.id),
       {trigger: true}
     );
+  },
+
+  getStatus: function () {
+    var model = this.props.model;
+    var status = "Running";
+
+    if (model.deployments.length > 0) {
+      status = "Deploying";
+    } else if (model.instances === 0 && model.tasksRunning === 0) {
+      status = "Suspended";
+    }
+
+    return status;
   },
 
   render: function () {
     var model = this.props.model;
 
     var runningTasksClassSet = classNames({
-      "text-warning": !model.allInstancesBooted()
+      "text-warning": model.tasksRunning !== model.instances
     });
 
     var statusClassSet = classNames({
-      "text-warning": model.isDeploying()
+      "text-warning": model.deployments.length > 0
     });
 
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
       <tr onClick={this.onClick}>
-        <td className="overflow-ellipsis" title={model.get("id")}>
-          {model.get("id")}
+        <td className="overflow-ellipsis" title={model.id}>
+          {model.id}
         </td>
-        <td className="text-right">{model.get("mem")}</td>
-        <td className="text-right">{model.get("cpus")}</td>
+        <td className="text-right">{model.mem}</td>
+        <td className="text-right">{model.cpus}</td>
         <td className="text-right">
           <span className={runningTasksClassSet}>
-            {model.formatTasksRunning()}
-          </span> / {model.get("instances")}
+            {model.tasksRunning}
+          </span> / {model.instances}
         </td>
         <td className="text-right health-bar-column">
           <AppHealthComponent model={model} />
         </td>
         <td className="text-right">
-          <span className={statusClassSet}>{model.getStatus()}</span>
+          <span className={statusClassSet}>{this.getStatus()}</span>
         </td>
       </tr>
     );
