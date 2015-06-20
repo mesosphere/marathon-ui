@@ -2,8 +2,11 @@ var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
+var AppsStore = require("../stores/AppsStore");
+var AppsEvents = require("../events/AppsEvents");
 var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
+var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
@@ -19,6 +22,7 @@ var AppPageComponent = React.createClass({
   displayName: "AppPageComponent",
 
   propTypes: {
+    appId: React.PropTypes.string.isRequired,
     appVersionsFetchState: React.PropTypes.number.isRequired,
     destroyApp: React.PropTypes.func.isRequired,
     fetchAppVersions: React.PropTypes.func.isRequired,
@@ -29,13 +33,13 @@ var AppPageComponent = React.createClass({
     rollBackApp: React.PropTypes.func.isRequired,
     scaleApp: React.PropTypes.func.isRequired,
     suspendApp: React.PropTypes.func.isRequired,
-    tasksFetchState: React.PropTypes.number.isRequired,
+    fetchState: React.PropTypes.number.isRequired,
     view: React.PropTypes.string
   },
 
   getInitialState: function () {
-    var appId = this.props.model.get("id");
     var activeTabId;
+    var appId = this.props.appId;
 
     var tabs = _.map(tabsTemplate, function (tab) {
       var id = tab.id.replace(":appid", encodeURIComponent(appId));
@@ -52,14 +56,29 @@ var AppPageComponent = React.createClass({
     return {
       activeViewIndex: 0,
       activeTabId: activeTabId,
-      tabs: tabs
+      app: {},
+      tabs: tabs,
+      fetchState: States.STATE_LOADING
     };
+  },
+
+  componentWillMount: function () {
+    AppsStore.on(AppsEvents.CHANGE, this.onAppChange);
+    AppsStore.on(AppsEvents.REQUEST_APP_ERROR, this.onAppRequestError);
+  },
+
+  componentWillUnmount: function () {
+    AppsStore.removeListener(AppsEvents.CHANGE,
+      this.onAppChange);
+    AppsStore.removeListener(AppsEvents.REQUEST_APP_ERROR,
+      this.onAppsRequestError);
   },
 
   componentWillReceiveProps: function (nextProps) {
     var view = nextProps.view;
-    var activeTabId = "apps/" + encodeURIComponent(this.props.model.get("id"));
-    var activeTask = this.props.model.tasks.get(view);
+    var activeTabId = "apps/" + encodeURIComponent(this.props.appId);
+    console.log("VIEW", view); // TODO
+    var activeTask = null; // TODO this.props.model.tasks.get(view);
     var activeViewIndex = 0;
 
     if (view === "configuration") {
@@ -78,6 +97,19 @@ var AppPageComponent = React.createClass({
       activeTabId: activeTabId,
       activeTask: activeTask,
       activeViewIndex: activeViewIndex
+    });
+  },
+
+  onAppChange: function () {
+    this.setState({
+      app: AppsStore.currentApp,
+      fetchState: States.STATE_SUCCESS
+    });
+  },
+
+  onAppRequestError: function () {
+    this.setState({
+      fetchState: States.STATE_ERROR
     });
   },
 
@@ -100,6 +132,8 @@ var AppPageComponent = React.createClass({
   },
 
   getControls: function () {
+    var state = this.state;
+
     if (this.state.activeViewIndex !== 0) {
       return null;
     }
@@ -108,7 +142,7 @@ var AppPageComponent = React.createClass({
       <div className="header-btn">
         <button className="btn btn-sm btn-default"
             onClick={this.props.suspendApp}
-            disabled={this.props.model.get("instances") < 1}>
+            disabled={state.app.instances < 1}>
           Suspend
         </button>
         <button className="btn btn-sm btn-default" onClick={this.scaleApp}>
@@ -127,11 +161,12 @@ var AppPageComponent = React.createClass({
   },
 
   getTaskDetailComponent: function () {
-    var model = this.props.model;
+    var state = this.state;
+    var model = state.model;
 
     return (
       <TaskDetailComponent
-        fetchState={this.props.tasksFetchState}
+        fetchState={state.fetchState}
         taskHealthMessage={model.formatTaskHealthMessage(this.state.activeTask)}
         hasHealth={model.hasHealth()}
         task={this.state.activeTask} />
@@ -139,7 +174,7 @@ var AppPageComponent = React.createClass({
   },
 
   getAppDetails: function () {
-    var model = this.props.model;
+    var model = this.state.app;
 
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
@@ -147,17 +182,17 @@ var AppPageComponent = React.createClass({
           onTabClick={this.onTabClick}
           tabs={this.state.tabs} >
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(model.get("id"))}>
+          id={"apps/" + encodeURIComponent(model.id)}>
           <TaskViewComponent
             collection={model.tasks}
-            fetchState={this.props.tasksFetchState}
+            fetchState={state.fetchState}
             fetchTasks={this.props.fetchTasks}
             formatTaskHealthMessage={model.formatTaskHealthMessage}
             hasHealth={model.hasHealth()}
             onTasksKilled={this.props.onTasksKilled} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(model.get("id")) + "/configuration"}
+          id={"apps/" + encodeURIComponent(model.id) + "/configuration"}
           onActivate={this.props.fetchAppVersions} >
           <AppVersionListComponent
             app={model}
@@ -171,7 +206,7 @@ var AppPageComponent = React.createClass({
 
   render: function () {
     var content;
-    var model = this.props.model;
+    var model = this.state.app;
     var statusClassSet = classNames({
       "text-warning": model.isDeploying()
     });
@@ -190,7 +225,7 @@ var AppPageComponent = React.createClass({
           model={model} />
         <div className="container-fluid">
           <div className="page-header">
-            <span className="h3 modal-title">{model.get("id")}</span>
+            <span className="h3 modal-title">{model.id}</span>
             <ul className="list-inline list-inline-subtext">
               <li>
                 <span className={statusClassSet}>
