@@ -1,9 +1,11 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var States = require("../constants/States");
-var App = require("../models/App");
-var BackboneMixin = require("../mixins/BackboneMixin");
+var AppVersionsActions = require("../actions/AppVersionsActions");
+var AppVersionsEvents = require("../events/AppVersionsEvents");
+var AppVersionsStore = require("../stores/AppVersionsStore");
 var AppVersionComponent = require("../components/AppVersionComponent");
 var AppVersionListItemComponent =
   require("../components/AppVersionListItemComponent");
@@ -13,32 +15,56 @@ var PagedNavComponent = require("../components/PagedNavComponent");
 var AppVersionListComponent = React.createClass({
   displayName: "AppVersionListComponent",
 
-  mixins: [BackboneMixin],
-
   propTypes: {
-    app: React.PropTypes.instanceOf(App).isRequired,
-    fetchAppVersions: React.PropTypes.func.isRequired,
-    fetchState: React.PropTypes.number.isRequired,
+    app: React.PropTypes.object.isRequired,
     onRollback: React.PropTypes.func
   },
 
-  componentWillMount: function () {
-    this.props.fetchAppVersions();
-  },
-
-  getResource: function () {
-    return this.props.app.versions;
-  },
-
   getInitialState: function () {
+    var props = this.props;
+
     return {
+      appVersions: AppVersionsStore.getAppVersions(props.app.id),
       currentPage: 0,
-      itemsPerPage: 8
+      itemsPerPage: 8,
+      fetchState: States.STATE_LOADING
     };
   },
 
+  componentWillMount: function () {
+    AppVersionsStore.on(AppVersionsEvents.CHANGE, this.onAppVersionsChange);
+    AppVersionsStore.on(AppVersionsEvents.REQUEST_APP_VERSIONS_ERROR,
+      this.onAppVersionsRequestError);
+  },
+
+  componentDidMount: function () {
+    AppVersionsActions.requestAppVersions(this.props.app.id);
+  },
+
+  componentWillUnmount: function () {
+    AppVersionsStore.removeListener(AppVersionsEvents.CHANGE,
+      this.onAppVersionsChange);
+    AppVersionsStore.removeListener(
+      AppVersionsEvents.REQUEST_APP_VERSIONS_ERROR,
+      this.onAppVersionsRequestError
+    );
+  },
+
+  onAppVersionsChange: function () {
+    this.setState({
+      appVersions: AppVersionsStore.getAppVersions(this.props.app.id),
+      fetchState: States.STATE_SUCCESS
+    });
+  },
+
+  onAppVersionsRequestError: function () {
+    this.setState({
+      fetchState: States.STATE_ERROR
+    });
+  },
+
   handleRefresh: function () {
-    this.props.fetchAppVersions();
+    AppVersionsActions.requestAppVersions(this.props.app.id);
   },
 
   handlePageChange: function (pageNum) {
@@ -46,15 +72,17 @@ var AppVersionListComponent = React.createClass({
   },
 
   getAppVersionList: function (appVersions) {
-    return appVersions.map(function (v) {
+    var props = this.props;
+
+    return lazy(appVersions).map(function (versionTimestamp) {
       return (
         <AppVersionListItemComponent
-          app={this.props.app}
-          appVersion={v}
-          key={v.get("version")}
-          onRollback={this.props.onRollback} />
+          app={props.app}
+          appVersionTimestamp={versionTimestamp}
+          key={versionTimestamp}
+          onRollback={props.onRollback} />
       );
-    }, this);
+    }).value();
   },
 
   getPagedNav: function (appVersions) {
@@ -77,18 +105,20 @@ var AppVersionListComponent = React.createClass({
   },
 
   getAppVersionTable: function () {
+    var state = this.state;
+
     // take out current version, to be displayed seperately
-    var appVersions = this.props.app.versions.models.slice(1);
+    var appVersions = state.appVersions.slice(1);
 
     var loadingClassSet = classNames({
       "text-muted text-center": true,
-      "hidden": this.props.fetchState !== States.STATE_LOADING
+      "hidden": state.fetchState !== States.STATE_LOADING
     });
 
     var errorClassSet = classNames({
       "text-danger text-center": true,
-      "hidden": this.props.fetchState === States.STATE_LOADING ||
-        this.props.fetchState === States.STATE_SUCCESS
+      "hidden": state.fetchState === States.STATE_LOADING ||
+        state.fetchState === States.STATE_SUCCESS
     });
 
     // at least one older version
@@ -102,8 +132,8 @@ var AppVersionListComponent = React.createClass({
             </div>
           </div>
           <PagedContentComponent
-              currentPage={this.state.currentPage}
-              itemsPerPage={this.state.itemsPerPage}>
+              currentPage={state.currentPage}
+              itemsPerPage={state.itemsPerPage}>
             <p className={loadingClassSet}>Loading versions...</p>
             <p className={errorClassSet}>Error fetching app versions</p>
             {this.getAppVersionList(appVersions)}
@@ -126,9 +156,9 @@ var AppVersionListComponent = React.createClass({
           </button>
         </h5>
         <AppVersionComponent
-            app={this.props.app}
-            appVersion={this.props.app.getCurrentVersion()}
-            currentVersion={true} />
+          app={this.props.app}
+          appVersion={this.props.app}
+          currentVersion={true} />
           {this.getAppVersionTable()}
       </div>
     );

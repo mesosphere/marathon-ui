@@ -237,19 +237,13 @@ var AppPageComponent = React.createClass({
         <TabPaneComponent
           id={"apps/" + encodeURIComponent(model.id) + "/configuration"}
           onActivate={this.props.fetchAppVersions} >
-
+          <AppVersionListComponent
+            app={model}
+            onRollback={this.props.rollBackApp} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
   },
-
-/*
-          <AppVersionListComponent
-            app={model}
-            fetchAppVersions={this.props.fetchAppVersions}
-            fetchState={this.props.appVersionsFetchState}
-            onRollback={this.props.rollBackApp} />
-*/
 
   render: function () {
     var content;
