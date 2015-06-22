@@ -6,6 +6,15 @@ var AppsEvents = require("../events/AppsEvents");
 var AppStatus = require("../constants/AppStatus");
 var TasksEvents = require("../events/TasksEvents");
 
+var appScheme = {
+  deployments: [],
+  healthChecks: [],
+  instances: 0,
+  status: AppStatus.SUSPENDED,
+  tasks: [],
+  tasksRunning: 0
+};
+
 function removeApp(apps, appId) {
   return lazy(apps).reject({
     id: appId
@@ -18,44 +27,37 @@ function removeTask(tasks, relatedAppId, taskId) {
   }).value();
 }
 
-function processApps(apps) {
-  return lazy(apps).map(function (app) {
-    if (app.deployments == null) {
-      app.deployments = [];
-    }
+function processCurrentApp(app) {
+  app = lazy(appScheme).extend(app).value();
 
-    if (app.tasksRunning == null) {
-      app.tasksRunning = 0;
-    }
+  app.status = AppStatus.RUNNING;
+  if (app.deployments.length > 0) {
+    app.status = AppStatus.DEPLOYING;
+  } else if (app.instances === 0 && app.tasksRunning === 0) {
+    app.status = AppStatus.SUSPENDED;
+  }
 
-    app.status = AppStatus.RUNNING;
-    if (app.deployments.length > 0) {
-      app.status = AppStatus.DEPLOYING;
-    } else if (app.instances === 0 && app.tasksRunning === 0) {
-      app.status = AppStatus.SUSPENDED;
-    }
-
-    return app;
-  }).value();
+  return app;
 }
 
-function processCurrentApp(currentApp) {
-  if (currentApp == null) {
-    currentApp = {};
-  }
-
-  if (currentApp.tasks == null) {
-    currentApp.tasks = [];
-  }
-
-  return currentApp;
+function processApps(apps) {
+  return lazy(apps).map(function (app) {
+    return processCurrentApp(app);
+  }).value();
 }
 
 var AppsStore = lazy(EventEmitter.prototype).extend({
   // Array of apps objects recieved from the "apps/"-endpoint
   apps: [],
   // Object of the current app recieved from the "apps/[appid]"-endpoint
-  currentApp: {}
+  currentApp: appScheme,
+
+  getCurrentApp: function (appId) {
+    if (appId === this.currentApp.id) {
+      return this.currentApp;
+    }
+    return appScheme;
+  }
 }).value();
 
 AppDispatcher.register(function (action) {
