@@ -53,8 +53,7 @@ var webpackConfig = {
 };
 
 // Use webpack to compile jsx into js,
-// but only after eslint has run?
-gulp.task("webpack", ["eslint"], function (callback) {
+gulp.task("webpack", function (callback) {
   // Extend options with source mapping
   if (process.env.GULP_ENV === "development" &&
     !process.env.DISABLE_SOURCE_MAP ||
