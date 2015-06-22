@@ -1,8 +1,10 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 var Moment = require("moment");
 
-var Task = require("../models/Task");
+var HealthStatus = require("../constants/HealthStatus");
+var TaskStatus = require("../constants/TaskStatus");
 
 function buildHref(host, port) {
   return "http://" + host + ":" + port;
@@ -10,7 +12,7 @@ function buildHref(host, port) {
 
 function buildTaskAnchors(task) {
   var taskAnchors;
-  var ports = task.get("ports");
+  var ports = task.ports;
   var portsLength = ports.length;
 
   if (portsLength > 1) {
@@ -18,28 +20,26 @@ function buildTaskAnchors(task) {
     // anchor, but the href contains the hostname and port, a full link.
     taskAnchors = (
       <span className="text-muted">
-        {task.get("host")}:[{ports.map(function (p, index) {
+        {task.host}:[{lazy(ports).map(function (p, index) {
           return (
             <span key={p}>
-              <a className="text-muted" href={buildHref(task.get("host"), p)}>
+              <a className="text-muted" href={buildHref(task.host, p)}>
                 {p}
               </a>
               {index < portsLength - 1 ? ", " : ""}
             </span>
           );
-        })}]
-      </span>
-    );
+        }).value()}]
+      </span>;
   } else if (portsLength === 1) {
     // Linkify the hostname + port since there is only one port.
-    taskAnchors = (
-      <a className="text-muted" href={buildHref(task.get("host"), ports[0])}>
-        {task.get("host")}:{ports[0]}
-      </a>
-    );
+    taskAnchors =
+      <a className="text-muted" href={buildHref(task.host, ports[0])}>
+        {task.host}:{ports[0]}
+      </a>;
   } else {
     // Ain't no ports; don't linkify.
-    taskAnchors = <span className="text-muted">{task.get("host")}</span>;
+    taskAnchors = <span className="text-muted">{task.host}</span>;
   }
 
   return taskAnchors;
@@ -72,13 +72,13 @@ var TaskListItemComponent = React.createClass({
   render: function () {
     var task = this.props.task;
     var hasHealth = !!this.props.hasHealth;
-    var version = task.get("version").toISOString();
-    var taskId = task.get("id");
+    var version = new Date(task.version).toISOString();
+    var taskId = task.id;
     var taskUri = "#apps/" +
       encodeURIComponent(this.props.appId) +
       "/" + encodeURIComponent(taskId);
 
-    var taskHealth = task.getHealth();
+    var taskHealth = task.healthStatus;
 
     var listItemClassSet = classNames({
       "active": this.props.isActive
@@ -86,13 +86,13 @@ var TaskListItemComponent = React.createClass({
 
     var healthClassSet = classNames({
       "health-dot": true,
-      "health-dot-error": taskHealth === Task.HEALTH.UNHEALTHY,
-      "health-dot-success": taskHealth === Task.HEALTH.HEALTHY,
-      "health-dot-unknown": taskHealth === Task.HEALTH.UNKNOWN
+      "health-dot-error": taskHealth === HealthStatus.UNHEALTHY,
+      "health-dot-success": taskHealth === HealthStatus.HEALTHY,
+      "health-dot-unknown": taskHealth === HealthStatus.UNKNOWN
     });
 
     var statusClassSet = classNames({
-      "text-warning": task.isStaged()
+      "text-warning": task.status === TaskStatus.STAGED
     });
 
     var hasHealthClassSet = classNames({
@@ -101,14 +101,14 @@ var TaskListItemComponent = React.createClass({
     });
 
     var updatedAtNodeClassSet = classNames({
-      "hidden": task.get("updatedAt") == null
+      "hidden": task.updatedAt == null
     });
 
     var updatedAtISO;
     var updatedAtLocal;
-    if (task.get("updatedAt") != null) {
-      updatedAtISO = task.get("updatedAt").toISOString();
-      updatedAtLocal = task.get("updatedAt").toLocaleString();
+    if (task.updatedAt != null) {
+      updatedAtISO = new Date(task.updatedAt).toISOString();
+      updatedAtLocal = new Date(task.updatedAt).toLocaleString();
     }
 
     return (
@@ -125,7 +125,7 @@ var TaskListItemComponent = React.createClass({
         </td>
         <td className="text-center">
           <span className={statusClassSet}>
-            {task.get("status")}
+            {task.status}
           </span>
         </td>
         <td className="text-right">

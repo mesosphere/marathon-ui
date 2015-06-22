@@ -19,9 +19,16 @@ var AppListComponent = React.createClass({
   },
 
   getInitialState: function () {
+    var fetchState = States.STATE_LOADING;
+    var apps = AppsStore.apps;
+
+    if (apps.length > 0) {
+      fetchState = States.STATE_SUCCESS;
+    }
+
     return {
-      apps: [],
-      fetchState: States.STATE_LOADING,
+      apps: apps,
+      fetchState: fetchState,
       sortKey: "id",
       sortDescending: false
     };

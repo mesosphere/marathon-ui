@@ -1,4 +1,5 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var PagedNavComponent = require("../components/PagedNavComponent");
@@ -8,10 +9,10 @@ var TaskViewComponent = React.createClass({
   displayName: "TaskViewComponent",
 
   propTypes: {
-    collection: React.PropTypes.object.isRequired,
+    tasks: React.PropTypes.array.isRequired,
     fetchState: React.PropTypes.number.isRequired,
     fetchTasks: React.PropTypes.func.isRequired,
-    formatTaskHealthMessage: React.PropTypes.func.isRequired,
+    getTaskHealthMessage: React.PropTypes.func.isRequired,
     hasHealth: React.PropTypes.bool,
     onTasksKilled: React.PropTypes.func.isRequired
   },
@@ -32,9 +33,9 @@ var TaskViewComponent = React.createClass({
     var _options = options || {};
 
     var selectedTaskIds = Object.keys(this.state.selectedTasks);
-    var tasksToKill = this.props.collection.filter(function (task) {
+    var tasksToKill = lazy(this.props.tasks).filter(function (task) {
       return selectedTaskIds.indexOf(task.id) >= 0;
-    });
+    }).value();
 
     tasksToKill.forEach(function (task) {
       task.destroy({
@@ -54,7 +55,7 @@ var TaskViewComponent = React.createClass({
 
   toggleAllTasks: function () {
     var newSelectedTasks = {};
-    var modelTasks = this.props.collection;
+    var modelTasks = this.props.tasks;
 
     // Note: not an **exact** check for all tasks being selected but a good
     // enough proxy.
@@ -62,7 +63,9 @@ var TaskViewComponent = React.createClass({
       modelTasks.length;
 
     if (!allTasksSelected) {
-      modelTasks.map(function (task) { newSelectedTasks[task.id] = true; });
+      lazy(modelTasks).each(function (task) {
+        newSelectedTasks[task.id] = true;
+      });
     }
 
     this.setState({selectedTasks: newSelectedTasks});
@@ -123,7 +126,7 @@ var TaskViewComponent = React.createClass({
   },
 
   getPagedNav: function () {
-    var tasksLength = this.props.collection.length;
+    var tasksLength = this.props.tasks.length;
     var itemsPerPage = this.state.itemsPerPage;
 
     // at least two pages
@@ -156,12 +159,12 @@ var TaskViewComponent = React.createClass({
         <TaskListComponent
           currentPage={this.state.currentPage}
           fetchState={this.props.fetchState}
-          formatTaskHealthMessage={this.props.formatTaskHealthMessage}
+          getTaskHealthMessage={this.props.getTaskHealthMessage}
           hasHealth={this.props.hasHealth}
           onTaskToggle={this.onTaskToggle}
           itemsPerPage={this.state.itemsPerPage}
           selectedTasks={this.state.selectedTasks}
-          tasks={this.props.collection}
+          tasks={this.props.tasks}
           toggleAllTasks={this.toggleAllTasks} />
       </div>
     );
