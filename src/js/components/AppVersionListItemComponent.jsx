@@ -1,72 +1,110 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
-var States = require("../constants/States");
-var App = require("../models/App");
-var AppVersion = require("../models/AppVersion");
-var BackboneMixin = require("../mixins/BackboneMixin");
+var AppVersionsActions = require("../actions/AppVersionsActions");
+var AppVersionsEvents = require("../events/AppVersionsEvents");
+var AppVersionsStore = require("../stores/AppVersionsStore");
 var AppVersionComponent = require("../components/AppVersionComponent");
+var States = require("../constants/States");
 
 var AppVersionListItemComponent = React.createClass({
   displayName: "AppVersionListItemComponent",
 
-  mixins: [BackboneMixin],
-
   propTypes: {
-    app: React.PropTypes.instanceOf(App).isRequired,
-    appVersion: React.PropTypes.instanceOf(AppVersion).isRequired,
+    app: React.PropTypes.object.isRequired,
+    appVersionTimestamp: React.PropTypes.string.isRequired,
     onRollback: React.PropTypes.func
   },
 
-  componentDidMount: function () {
-    if (this.state.open) {
-      this.getVersionDetails();
-    }
-  },
-
-  getResource: function () {
-    return this.props.appVersion;
-  },
-
   getInitialState: function () {
+    var props = this.props;
+
     return {
       open: false,
-      fetchState: States.STATE_LOADING
+      fetchState: States.STATE_LOADING,
+      appVersion: AppVersionsStore.getAppVersion(
+        props.app.id,
+        props.appVersionTimestamp
+      )
     };
   },
 
-  getVersionDetails: function () {
-    this.props.appVersion.fetch({
-      error: function () {
-        this.setState({fetchState: States.STATE_ERROR});
-      }.bind(this),
-      success: function () {
-        this.setState({fetchState: States.STATE_SUCCESS});
-      }.bind(this)
+  componentWillMount: function () {
+    AppVersionsStore.on(AppVersionsEvents.CHANGE, this.onAppVersionChange);
+    AppVersionsStore.on(AppVersionsEvents.REQUEST_APP_VERSION_ERROR,
+      this.onAppVersionRequestError);
+  },
+
+  componentDidMount: function () {
+    var props = this.props;
+
+    if (this.state.open) {
+      AppVersionsActions.requestAppVersion(
+        props.app.id,
+        props.appVersionTimestamp
+      );
+    }
+  },
+
+  componentWillUnmount: function () {
+    AppVersionsStore.removeListener(AppVersionsEvents.CHANGE,
+      this.onAppVersionChange);
+    AppVersionsStore.removeListener(
+      AppVersionsEvents.REQUEST_APP_VERSION_ERROR,
+      this.onAppVersionRequestError
+    );
+  },
+
+  onAppVersionChange: function () {
+    var props = this.props;
+
+    this.setState({
+      appVersion: AppVersionsStore.getAppVersion(
+        props.app.id,
+        props.appVersionTimestamp
+      ),
+      fetchState: States.STATE_SUCCESS
+    });
+  },
+
+  onAppVersionRequestError: function () {
+    return;
+    this.setState({
+      fetchState: States.STATE_ERROR
     });
   },
 
   handleDetailsClick: function (event) {
+    var props = this.props;
+    var state = this.state;
+
     if (event.target.type === "radio") {
       // handled by other functions
       return;
     }
     event.preventDefault();
-    if (this.state.fetchState !== States.STATE_SUCCESS) {
-      this.getVersionDetails();
+
+    if (state.fetchState !== States.STATE_SUCCESS) {
+      AppVersionsActions.requestAppVersion(
+        props.app.id,
+        props.appVersionTimestamp
+      );
     }
-    this.setState({open: !this.state.open});
+    this.setState({open: !state.open});
   },
 
   getAppVersionComponent: function () {
-    if (this.state.fetchState !== States.STATE_LOADING &&
-        this.state.fetchState !== States.STATE_ERROR) {
+    var props = this.props;
+    var state = this.state;
+
+    if (state.fetchState !== States.STATE_LOADING &&
+        state.fetchState !== States.STATE_ERROR) {
       return (
         <AppVersionComponent
           className="dl-unstyled"
-          app={this.props.app}
-          appVersion={this.props.appVersion}
-          onRollback={this.props.onRollback} />
+          app={props.app}
+          appVersion={state.appVersion}
+          onRollback={props.onRollback} />
       );
     }
 
@@ -74,14 +112,16 @@ var AppVersionListItemComponent = React.createClass({
   },
 
   getAppVersion: function () {
+    var state = this.state;
+
     var loadingClassSet = classNames({
       "text-center text-muted": true,
-      "hidden": this.state.fetchState !== States.STATE_LOADING
+      "hidden": state.fetchState !== States.STATE_LOADING
     });
 
     var errorClassSet = classNames({
       "text-center text-danger": true,
-      "hidden": this.state.fetchState !== States.STATE_ERROR
+      "hidden": state.fetchState !== States.STATE_ERROR
     });
 
     if (this.state.open) {
@@ -102,7 +142,7 @@ var AppVersionListItemComponent = React.createClass({
   },
 
   render: function () {
-    var versionDate = new Date(this.props.appVersion.get("version"));
+    var versionDate = new Date(this.props.appVersionTimestamp);
     var versionDateISOString = versionDate.toISOString();
 
     var caretClassSet = classNames({
