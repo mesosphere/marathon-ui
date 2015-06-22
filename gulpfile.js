@@ -1,5 +1,4 @@
 var autoprefixer = require("gulp-autoprefixer");
-var changed = require("gulp-changed");
 var connect = require("gulp-connect");
 var eslint = require("gulp-eslint");
 var gulp = require("gulp");
@@ -78,14 +77,12 @@ gulp.task("webpack", function (callback) {
 
 gulp.task("eslint", function () {
   return gulp.src([dirs.js + "/**/*.?(js|jsx)"])
-    .pipe(changed(dirs.dist))
     .pipe(eslint())
     .pipe(eslint.formatEach("stylish", process.stderr));
 });
 
 gulp.task("less", function () {
   return gulp.src(dirs.styles + "/" + files.mainLess + ".less")
-    .pipe(changed(dirs.dist))
     .pipe(less({
       paths: [dirs.styles] // @import paths
     }))
