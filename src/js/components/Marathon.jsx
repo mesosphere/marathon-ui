@@ -104,9 +104,9 @@ var Marathon = React.createClass({
 
   componentDidUpdate: function (prevProps, prevState) {
     /*eslint-disable eqeqeq */
-    if (prevState.activeApp != this.state.activeApp ||
+    if (prevState.activeAppId != this.state.activeAppId ||
       prevState.activeTabId != this.state.activeTabId) {
-      this.poll();
+      this.resetPolling();
     }
     /*eslint-enable eqeqeq */
   },
@@ -306,6 +306,11 @@ var Marathon = React.createClass({
       clearInterval(this._interval);
       this._interval = null;
     }
+  },
+
+  resetPolling: function () {
+    this.stopPolling();
+    this.startPolling();
   },
 
   poll: function () {
