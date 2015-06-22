@@ -1,16 +1,13 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
-var BackboneMixin = require("../mixins/BackboneMixin");
 var States = require("../constants/States");
-var Task = require("../models/Task");
 var TimeFieldComponent = require("../components/TimeFieldComponent");
 var TaskHealthComponent = require("../components/TaskHealthComponent");
+var HealthStatus = require("../constants/HealthStatus");
 
 var TaskDetailComponent = React.createClass({
   displayName: "TaskDetailComponent",
-
-  mixins: [BackboneMixin],
 
   propTypes: {
     fetchState: React.PropTypes.number.isRequired,
@@ -19,35 +16,31 @@ var TaskDetailComponent = React.createClass({
     taskHealthMessage: React.PropTypes.string
   },
 
-  getResource: function () {
-    return this.props.task;
-  },
-
   render: function () {
     var task = this.props.task;
     var hasHealth = !!this.props.hasHealth;
     var hasError =
       this.props.fetchState === States.STATE_ERROR ||
-      task.collection == null;
-    var taskHealth = task.getHealth();
+      task == null;
+    var taskHealth = task.healthStatus;
     var healthClassSet;
     var timeNodes;
     var timeFields;
-    var appUri = "#apps/" + encodeURIComponent(this.props.task.get("appId"));
+    var appUri = "#apps/" + encodeURIComponent(this.props.task.appId);
 
     if (!hasError) {
       healthClassSet = classNames({
-        "text-unhealthy": taskHealth === Task.HEALTH.UNHEALTHY,
-        "text-muted": taskHealth === Task.HEALTH.UNKNOWN
+        "text-unhealthy": taskHealth === HealthStatus.UNHEALTHY,
+        "text-muted": taskHealth === HealthStatus.UNKNOWN
       });
 
       timeNodes = [
         {
           label: "Staged at",
-          time: task.get("stagedAt")
+          time: task.stagedAt
         }, {
           label: "Started at",
-          time: task.get("startedAt")
+          time: task.startedAt
         }
       ];
       timeFields = timeNodes.map(function (timeNode, index) {
@@ -72,16 +65,16 @@ var TaskDetailComponent = React.createClass({
         {<div>
           <dl className="dl-horizontal">
             <dt>Host</dt>
-            <dd>{task.get("host")}</dd>
+            <dd>{task.host}</dd>
             <dt>Ports</dt>
-            <dd>[{task.get("ports").toString()}]</dd>
+            <dd>[{task.ports.toString()}]</dd>
             <dt>Status</dt>
-            <dd>{task.get("status")}</dd>
+            <dd>{task.status}</dd>
             {timeFields}
             <dt>Version</dt>
             <dd>
-              <time dateTime={task.get("version")}>
-                {task.get("version").toLocaleString()}
+              <time dateTime={task.version}>
+                {new Date(task.version).toLocaleString()}
               </time>
             </dd>
             <dt>Health</dt>
