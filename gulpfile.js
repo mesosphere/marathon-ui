@@ -54,7 +54,7 @@ var webpackConfig = {
 // Use webpack to compile jsx into js,
 gulp.task("webpack", function (callback) {
   // Extend options with source mapping
-  if (process.env.GULP_ENV === "development" &&
+  if (process.env.NODE_ENV === "development" &&
     !process.env.DISABLE_SOURCE_MAP ||
     process.env.DISABLE_SOURCE_MAP === "false") {
     webpackConfig.devtool = "source-map";
@@ -133,7 +133,7 @@ var tasks = [
   "index"
 ];
 
-if (process.env.GULP_ENV === "production") {
+if (process.env.NODE_ENV === "production") {
   tasks.push("minify-css", "minify-js");
 }
 gulp.task("default", tasks);
