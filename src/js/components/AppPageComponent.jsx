@@ -1,11 +1,14 @@
 var _ = require("underscore");
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
+var AppStatus = require("../constants/AppStatus");
 var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
+var HealthStatus = require("../constants/HealthStatus");
 var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
@@ -17,6 +20,11 @@ var tabsTemplate = [
   {id: "apps/:appid", text: "Tasks"},
   {id: "apps/:appid/configuration", text: "Configuration"}
 ];
+
+var statusNameMapping = {};
+statusNameMapping[AppStatus.RUNNING] = "Running";
+statusNameMapping[AppStatus.DEPLOYING] = "Deploying";
+statusNameMapping[AppStatus.SUSPENDED] = "Suspended";
 
 var AppPageComponent = React.createClass({
   displayName: "AppPageComponent",
@@ -33,7 +41,6 @@ var AppPageComponent = React.createClass({
     rollBackApp: React.PropTypes.func.isRequired,
     scaleApp: React.PropTypes.func.isRequired,
     suspendApp: React.PropTypes.func.isRequired,
-    fetchState: React.PropTypes.number.isRequired,
     view: React.PropTypes.string
   },
 
@@ -56,7 +63,8 @@ var AppPageComponent = React.createClass({
     return {
       activeViewIndex: 0,
       activeTabId: activeTabId,
-      app: {},
+      activeTaskId: null,
+      app: AppsStore.getCurrentApp(appId),
       tabs: tabs,
       fetchState: States.STATE_LOADING
     };
@@ -71,38 +79,32 @@ var AppPageComponent = React.createClass({
     AppsStore.removeListener(AppsEvents.CHANGE,
       this.onAppChange);
     AppsStore.removeListener(AppsEvents.REQUEST_APP_ERROR,
-      this.onAppsRequestError);
+      this.onAppRequestError);
   },
 
   componentWillReceiveProps: function (nextProps) {
     var view = nextProps.view;
     var activeTabId = "apps/" + encodeURIComponent(this.props.appId);
-    console.log("VIEW", view); // TODO
-    var activeTask = null; // TODO this.props.model.tasks.get(view);
     var activeViewIndex = 0;
+    var activeTaskId = null;
 
     if (view === "configuration") {
       activeTabId += "/configuration";
-    }
-
-    if (view != null && activeTask == null) {
-      activeTask = this.state.activeTask;
-    }
-
-    if (activeTask != null) {
+    } else if (view != null) {
+      activeTaskId = view;
       activeViewIndex = 1;
     }
 
     this.setState({
       activeTabId: activeTabId,
-      activeTask: activeTask,
+      activeTaskId: activeTaskId,
       activeViewIndex: activeViewIndex
     });
   },
 
   onAppChange: function () {
     this.setState({
-      app: AppsStore.currentApp,
+      app: AppsStore.getCurrentApp(this.props.appId),
       fetchState: States.STATE_SUCCESS
     });
   },
@@ -117,6 +119,46 @@ var AppPageComponent = React.createClass({
     this.setState({
       activeTabId: id
     });
+  },
+
+  getTaskHealthMessage: function (taskId) {
+    var task = lazy(this.state.app.tasks).findWhere({"id": taskId});
+
+    if (task === undefined) {
+      return null;
+    }
+
+    var model = this.state.app;
+    var msg;
+
+    switch (task.healthStatus) {
+      case HealthStatus.HEALTHY:
+        msg = "Healthy";
+        break;
+      case HealthStatus.UNHEALTHY:
+        var healthCheckResults = task.healthCheckResults;
+        if (healthCheckResults != null) {
+          msg = lazy(healthCheckResults).map(function (hc, index) {
+            if (hc && !hc.alive) {
+              var failedCheck = model.healthChecks[index];
+              return "Warning: Health check '" +
+                (failedCheck.protocol ? failedCheck.protocol + " " : "") +
+                (model.host ? model.host : "") +
+                (failedCheck.path ? failedCheck.path : "") + "'" +
+                (hc.lastFailureCause ?
+                  " returned with status: '" + hc.lastFailureCause + "'" :
+                  " failed") +
+                ".";
+            }
+          }).value();
+        }
+        break;
+      default:
+        msg = "Unknown";
+        break;
+    }
+
+    return msg;
   },
 
   scaleApp: function () {
@@ -134,7 +176,7 @@ var AppPageComponent = React.createClass({
   getControls: function () {
     var state = this.state;
 
-    if (this.state.activeViewIndex !== 0) {
+    if (state.activeViewIndex !== 0) {
       return null;
     }
 
@@ -162,53 +204,60 @@ var AppPageComponent = React.createClass({
 
   getTaskDetailComponent: function () {
     var state = this.state;
-    var model = state.model;
+    var model = state.app;
 
     return (
       <TaskDetailComponent
         fetchState={state.fetchState}
-        taskHealthMessage={model.formatTaskHealthMessage(this.state.activeTask)}
-        hasHealth={model.hasHealth()}
-        task={this.state.activeTask} />
+        taskHealthMessage={this.getTaskHealthMessage(state.activeTaskId)}
+        hasHealth={model.healthChecks > 0}
+        task={lazy(this.state.app.tasks).findWhere({"id": state.activeTaskId})} />
     );
   },
 
   getAppDetails: function () {
-    var model = this.state.app;
+    var state = this.state;
+    var model = state.app;
 
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
-          activeTabId={this.state.activeTabId}
+          activeTabId={state.activeTabId}
           onTabClick={this.onTabClick}
-          tabs={this.state.tabs} >
+          tabs={state.tabs} >
         <TabPaneComponent
           id={"apps/" + encodeURIComponent(model.id)}>
           <TaskViewComponent
-            collection={model.tasks}
+            tasks={model.tasks}
             fetchState={state.fetchState}
             fetchTasks={this.props.fetchTasks}
-            formatTaskHealthMessage={model.formatTaskHealthMessage}
-            hasHealth={model.hasHealth()}
+            getTaskHealthMessage={this.getTaskHealthMessage}
+            hasHealth={model.healthChecks > 0}
             onTasksKilled={this.props.onTasksKilled} />
         </TabPaneComponent>
         <TabPaneComponent
           id={"apps/" + encodeURIComponent(model.id) + "/configuration"}
           onActivate={this.props.fetchAppVersions} >
-          <AppVersionListComponent
-            app={model}
-            fetchAppVersions={this.props.fetchAppVersions}
-            fetchState={this.props.appVersionsFetchState}
-            onRollback={this.props.rollBackApp} />
+
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
   },
 
+/*
+          <AppVersionListComponent
+            app={model}
+            fetchAppVersions={this.props.fetchAppVersions}
+            fetchState={this.props.appVersionsFetchState}
+            onRollback={this.props.rollBackApp} />
+*/
+
   render: function () {
     var content;
-    var model = this.state.app;
+    var state = this.state;
+    var model = state.app;
+
     var statusClassSet = classNames({
-      "text-warning": model.isDeploying()
+      "text-warning": model.deployments.length > 0
     });
 
     if (this.state.activeViewIndex === 0) {
@@ -220,8 +269,8 @@ var AppPageComponent = React.createClass({
     return (
       <div>
         <AppBreadcrumbsComponent
-          activeTask={this.state.activeTask}
-          activeViewIndex={this.state.activeViewIndex}
+          activeTaskId={state.activeTaskId}
+          activeViewIndex={state.activeViewIndex}
           model={model} />
         <div className="container-fluid">
           <div className="page-header">
@@ -229,7 +278,7 @@ var AppPageComponent = React.createClass({
             <ul className="list-inline list-inline-subtext">
               <li>
                 <span className={statusClassSet}>
-                  {model.getStatus()}
+                  {statusNameMapping[model.status]}
                 </span>
               </li>
             </ul>
