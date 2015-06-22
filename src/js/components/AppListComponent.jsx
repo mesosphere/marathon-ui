@@ -19,7 +19,7 @@ var AppListComponent = React.createClass({
     return {
       apps: [],
       fetchState: States.STATE_LOADING,
-      sortKey: null,
+      sortKey: "id",
       sortDescending: false
     };
   },
@@ -101,7 +101,7 @@ var AppListComponent = React.createClass({
 
     var headerClassSet = classNames({
       "clickable": true,
-      "dropup": state.sortDescending
+      "dropup": !state.sortDescending
     });
 
     var tableClassSet = classNames({
