@@ -4,7 +4,9 @@ var lazy = require("lazy.js");
 var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
 var AppStatus = require("../constants/AppStatus");
+var HealthStatus = require("../constants/HealthStatus");
 var TasksEvents = require("../events/TasksEvents");
+var TaskStatus = require("../constants/TaskStatus");
 
 var appScheme = {
   deployments: [],
@@ -27,7 +29,39 @@ function removeTask(tasks, relatedAppId, taskId) {
   }).value();
 }
 
-function processCurrentApp(app) {
+function getTaskHealth(task) {
+  var nullResult = true;
+  var health = false;
+  var healthCheckResults = task.healthCheckResults;
+  if (healthCheckResults != null) {
+    health = lazy(healthCheckResults).every(function (hcr) {
+      if (hcr.firstSuccess) {
+        nullResult = false;
+        return hcr.alive;
+      } else { // might be null
+        return false;
+      }
+    });
+  }
+  if (!health && nullResult) { // health check has not returned yet
+    return HealthStatus.UNKNOWN;
+  } else {
+    return health ? HealthStatus.HEALTHY : HealthStatus.UNHEALTHY;
+  }
+}
+
+function setTaskStatus(task) {
+  if (task.startedAt != null) {
+    task.status = TaskStatus.STARTED;
+    task.updatedAt = task.startedAt;
+  } else if (task.stagedAt != null) {
+    task.status = TaskStatus.STAGED;
+    task.updatedAt = task.stagedAt;
+  }
+  return task;
+}
+
+function processApp(app) {
   app = lazy(appScheme).extend(app).value();
 
   app.status = AppStatus.RUNNING;
@@ -37,12 +71,18 @@ function processCurrentApp(app) {
     app.status = AppStatus.SUSPENDED;
   }
 
+  app.tasks = lazy(app.tasks).map(function (task) {
+    task.healthStatus = getTaskHealth(task);
+    task = setTaskStatus(task);
+    return task;
+  }).value();
+
   return app;
 }
 
 function processApps(apps) {
   return lazy(apps).map(function (app) {
-    return processCurrentApp(app);
+    return processApp(app);
   }).value();
 }
 
@@ -50,12 +90,19 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
   // Array of apps objects recieved from the "apps/"-endpoint
   apps: [],
   // Object of the current app recieved from the "apps/[appid]"-endpoint
+  // This endpoint delievers more data, like the tasks on the app.
   currentApp: appScheme,
 
   getCurrentApp: function (appId) {
     if (appId === this.currentApp.id) {
       return this.currentApp;
     }
+
+    var shallowApp = lazy(this.apps).findWhere({id: appId});
+    if (shallowApp) {
+      return shallowApp;
+    }
+
     return appScheme;
   }
 }).value();
@@ -70,7 +117,7 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.REQUEST_APPS_ERROR, action.data.body);
       break;
     case AppsEvents.REQUEST_APP:
-      AppsStore.currentApp = processCurrentApp(action.data.body.app);
+      AppsStore.currentApp = processApp(action.data.body.app);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APP_ERROR:
