@@ -48,11 +48,11 @@
     "webpack": "^1.9.11"
   },
   "scripts": {
-    "build": "export NODE_ENV=\"development\" && gulp",
+    "build": "export GULP_ENV=\"development\" && gulp",
     "clean": "rm -rf dist",
-    "dist": "export NODE_ENV=\"production\" && npm run clean && npm run test && npm run build",
+    "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "shrinkwrap": "npm-shrinkwrap --dev",
     "test": "mocha --ui exports --reporter spec --compilers jsx:src/test/helpers/compiler.js src/test/helpers/object-assign-polyfill.js src/test/**/*.test.* src/test/*.test.*",
-    "serve": "export NODE_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve"
+    "serve": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve"
   }
 }
