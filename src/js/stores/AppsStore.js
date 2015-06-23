@@ -3,11 +3,30 @@ var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
+var TasksEvents = require("../events/TasksEvents");
 
 function removeApp(apps, appId) {
   return lazy(apps).reject({
     id: appId
   }).value();
+}
+
+function removeTask(tasks, relatedAppId, taskId) {
+  return lazy(tasks).reject(function (task) {
+    return task.id === taskId && task.appId === relatedAppId;
+  }).value();
+}
+
+function processCurrentApp(currentApp) {
+  if (currentApp == null) {
+    currentApp = {};
+  }
+
+  if (currentApp.tasks == null) {
+    currentApp.tasks = [];
+  }
+
+  return currentApp;
 }
 
 var AppsStore = lazy(EventEmitter.prototype).extend({
@@ -27,7 +46,7 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.REQUEST_APPS_ERROR, action.data.jsonBody);
       break;
     case AppsEvents.REQUEST_APP:
-      AppsStore.currentApp = action.data;
+      AppsStore.currentApp = processCurrentApp(action.data);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APP_ERROR:
@@ -65,6 +84,18 @@ AppDispatcher.register(function (action) {
       break;
     case AppsEvents.APPLY_APP_ERROR:
       AppsStore.emit(AppsEvents.APPLY_APP_ERROR, action.data.jsonBody);
+      break;
+    case TasksEvents.DELETE:
+      AppsStore.currentApp.tasks =
+        removeTask(
+          AppsStore.currentApp.tasks,
+          action.appId,
+          action.taskId
+        );
+      AppsStore.emit(AppsEvents.CHANGE);
+      break;
+    case TasksEvents.DELETE_ERROR:
+      AppsStore.emit(TasksEvents.DELETE_ERROR, action.data.jsonBody);
       break;
   }
 });
