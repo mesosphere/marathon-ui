@@ -67,8 +67,10 @@ describe("Apps", function () {
 
     it("updates the AppsStore on success", function (done) {
       this.server.setup({
+        "app": {
           "id": "/single-app"
-        }, 200);
+        }
+      }, 200);
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
