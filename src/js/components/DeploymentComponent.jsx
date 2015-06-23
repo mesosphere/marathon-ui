@@ -4,11 +4,13 @@ var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var DeploymentActions = require("../actions/DeploymentActions");
+var Util = require("../helpers/Util");
 
 var DeploymentComponent = React.createClass({
-  name: "DeploymentComponent",
+  displayName: "DeploymentComponent",
 
   propTypes: {
+    destroyDeployment: React.PropTypes.func.isRequired,
     model: React.PropTypes.object.isRequired
   },
 
@@ -25,8 +27,7 @@ var DeploymentComponent = React.createClass({
       "Destroy deployment of apps: '" + model.affectedAppsString +
       "'?\nDestroying this deployment will create and start a new " +
       "deployment to revert the affected app to its previous version.";
-
-    if (confirm(confirmMessage)) {
+    if (Util.confirm(confirmMessage)) {
       this.setState({loading: true});
       DeploymentActions.revertDeployment(model.id);
     }
@@ -39,8 +40,7 @@ var DeploymentComponent = React.createClass({
       "Stop deployment of apps: '" + model.affectedAppsString +
       "'?\nThis will stop the deployment immediately and leave it in the " +
       "current state.";
-
-    if (confirm(confirmMessage)) {
+    if (Util.confirm(confirmMessage)) {
       this.setState({loading: true});
       DeploymentActions.stopDeployment(model.id);
     }

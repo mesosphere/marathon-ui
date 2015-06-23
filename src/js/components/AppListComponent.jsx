@@ -12,6 +12,7 @@ var AppListComponent = React.createClass({
 
   propTypes: {
     collection: React.PropTypes.object.isRequired,
+    fetchState: React.PropTypes.number,
     router: React.PropTypes.object.isRequired
   },
 

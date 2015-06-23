@@ -16,7 +16,7 @@ If you want to start development on the Marathon UI please follow these steps.
 2. Install dev dependencies
 
         npm install
-        npm install -g broccoli-cli
+        npm install -g gulp
 
 3. Run development environment
 

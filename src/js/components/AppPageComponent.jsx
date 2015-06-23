@@ -8,6 +8,7 @@ var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
+var Util = require("../helpers/Util");
 
 var tabsTemplate = [
   {id: "apps/:appid", text: "Tasks"},
@@ -19,10 +20,10 @@ var AppPageComponent = React.createClass({
 
   propTypes: {
     appVersionsFetchState: React.PropTypes.number.isRequired,
-    model: React.PropTypes.object.isRequired,
     destroyApp: React.PropTypes.func.isRequired,
-    fetchTasks: React.PropTypes.func.isRequired,
     fetchAppVersions: React.PropTypes.func.isRequired,
+    fetchTasks: React.PropTypes.func.isRequired,
+    model: React.PropTypes.object.isRequired,
     onTasksKilled: React.PropTypes.func.isRequired,
     restartApp: React.PropTypes.func.isRequired,
     rollBackApp: React.PropTypes.func.isRequired,
@@ -88,9 +89,8 @@ var AppPageComponent = React.createClass({
 
   scaleApp: function () {
     var model = this.props.model;
-    var instancesString = prompt("Scale to how many instances?",
+    var instancesString = Util.prompt("Scale to how many instances?",
       model.get("instances"));
-
     // Clicking "Cancel" in a prompt returns either null or an empty String.
     // perform the action only if a value is submitted.
     if (instancesString != null && instancesString !== "") {
@@ -178,7 +178,7 @@ var AppPageComponent = React.createClass({
 
     if (this.state.activeViewIndex === 0) {
       content = this.getAppDetails();
-    } else if (this.state.activeViewIndex === 1)  {
+    } else if (this.state.activeViewIndex === 1) {
       content = this.getTaskDetailComponent();
     }
 

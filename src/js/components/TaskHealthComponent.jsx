@@ -4,6 +4,7 @@ var TimeFieldComponent = require("../components/TimeFieldComponent");
 var TaskHealthComponent = React.createClass({
   displayName: "TaskHealthComponent",
   propTypes: {
+    className: React.PropTypes.string,
     task: React.PropTypes.object.isRequired
   },
   render: function () {
@@ -26,10 +27,10 @@ var TaskHealthComponent = React.createClass({
               time: cResult.lastFailure
             }
           ];
-          var timeFields = timeNodes.map(function (timeNode, index) {
+          var timeFields = timeNodes.map(function (timeNode, i) {
             return (
               <TimeFieldComponent
-                key={index}
+                key={i}
                 label={timeNode.label}
                 time={timeNode.time} />
             );

@@ -2,7 +2,7 @@ var classNames = require("classnames");
 var React = require("react/addons");
 
 var NavTabsComponent = React.createClass({
-  name: "NavTabsComponent",
+  displayName: "NavTabsComponent",
 
   propTypes: {
     activeTabId: React.PropTypes.string.isRequired,

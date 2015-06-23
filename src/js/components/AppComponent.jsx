@@ -4,6 +4,8 @@ var React = require("react/addons");
 var AppHealthComponent = require("../components/AppHealthComponent");
 
 var AppComponent = React.createClass({
+  displayName: "AppComponent",
+
   propTypes: {
     model: React.PropTypes.object.isRequired,
     router: React.PropTypes.object.isRequired

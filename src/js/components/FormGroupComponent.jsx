@@ -3,8 +3,11 @@ var React = require("react/addons");
 var FormGroupComponent = React.createClass({
   displayName: "FormGroupComponent",
   propTypes: {
-    errors: React.PropTypes.array,
+    attribute: React.PropTypes.string,
     children: React.PropTypes.object.isRequired,
+    errors: React.PropTypes.array,
+    help: React.PropTypes.string,
+    label: React.PropTypes.string,
     model: React.PropTypes.object.isRequired
   },
 

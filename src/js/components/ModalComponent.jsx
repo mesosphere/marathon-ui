@@ -9,6 +9,7 @@ function modalSizeClassName(size) {
 var ModalComponent = React.createClass({
   displayName: "ModalComponent",
   propTypes: {
+    children: React.PropTypes.node,
     onDestroy: React.PropTypes.func,
     size: React.PropTypes.string
   },
