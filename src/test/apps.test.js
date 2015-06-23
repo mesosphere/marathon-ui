@@ -6,6 +6,7 @@ var TestUtils = React.addons.TestUtils;
 var config = require("../js/config/config");
 var AppsActions = require("../js/actions/AppsActions");
 var AppComponent = require("../js/components/AppComponent");
+var AppHealthComponent = require("../js/components/AppHealthComponent");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
 
@@ -358,5 +359,54 @@ describe("App component", function () {
     var statusDescription =
       this.component.props.children[5].props.children.props.children;
     expect(statusDescription).to.equal("Running");
+  });
+
+});
+
+describe("App Health component", function () {
+
+  beforeEach(function () {
+    var model = {
+      id: "app-123",
+      tasksRunning: 4,
+      tasksHealthy: 2,
+      tasksUnhealthy: 1,
+      tasksStaged: 1,
+      instances: 5
+    };
+
+    var renderer = TestUtils.createRenderer();
+    renderer.render(<AppHealthComponent model={model} />);
+    this.component = renderer.getRenderOutput();
+  });
+
+  it("health bar for healthy tasks has correct width", function () {
+    var width = this.component.props.children[0].props.style.width;
+    expect(width).to.equal("40%");
+  });
+
+  it("health bar for unhealthy tasks has correct width", function () {
+    var width = this.component.props.children[1].props.style.width;
+    expect(width).to.equal("20%");
+  });
+
+  it("health bar for running tasks has correct width", function () {
+    var width = this.component.props.children[2].props.style.width;
+    expect(width).to.equal("20%");
+  });
+
+  it("health bar for staged tasks has correct width", function () {
+    var width = this.component.props.children[3].props.style.width;
+    expect(width).to.equal("20%");
+  });
+
+  it("health bar for over capacity tasks has correct width", function () {
+    var width = this.component.props.children[4].props.style.width;
+    expect(width).to.equal("0%");
+  });
+
+  it("health bar for unscheduled tasks has correct width", function () {
+    var width = this.component.props.children[5].props.style.width;
+    expect(width).to.equal("0%");
   });
 });
