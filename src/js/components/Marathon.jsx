@@ -437,7 +437,7 @@ var Marathon = React.createClass({
           <div className="container-fluid">
             <div className="navbar-header">
               <a className="navbar-brand" href={window.location.pathname}>
-                <img width="160" height="27" alt="Marathon" src="dist/img/marathon-logo.png" />
+                <img width="160" height="27" alt="Marathon" src="img/marathon-logo.png" />
               </a>
             </div>
             <NavTabsComponent
