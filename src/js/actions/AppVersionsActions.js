@@ -17,14 +17,14 @@ var AppVersionsActions = {
         return;
       }
       AppDispatcher.dispatch({
-        actionType: AppVersionsEvents.REQUEST_APP_VERSIONS,
+        actionType: AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS,
         data: appVersions,
         appId: appId
       });
     })
     .fail(function (error) {
       AppDispatcher.dispatch({
-        actionType: AppVersionsEvents.REQUEST_APP_VERSIONS_ERROR,
+        actionType: AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
         data: error
       });
     });
@@ -41,7 +41,7 @@ var AppVersionsActions = {
         return;
       }
       AppDispatcher.dispatch({
-        actionType: AppVersionsEvents.REQUEST_APP_VERSION,
+        actionType: AppVersionsEvents.REQUEST_ONE,
         data: appVersion,
         appId: appId,
         versionTimestamp: versionTimestamp
@@ -49,7 +49,7 @@ var AppVersionsActions = {
     })
     .fail(function (error) {
       AppDispatcher.dispatch({
-        actionType: AppVersionsEvents.REQUEST_APP_VERSION_ERROR,
+        actionType: AppVersionsEvents.REQUEST_ONE_ERROR,
         data: error
       });
     });

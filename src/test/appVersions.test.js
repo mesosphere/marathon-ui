@@ -56,7 +56,7 @@ describe("AppVersions", function () {
     it("handles failure gracefully", function (done) {
       this.server.setup({ message: "Guru Meditation" }, 404);
 
-      AppVersionsStore.once(AppVersionsEvents.REQUEST_APP_VERSIONS_ERROR, function (error) {
+      AppVersionsStore.once(AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR, function (error) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
         }, done);
@@ -100,7 +100,7 @@ describe("AppVersions", function () {
     it("handles failure gracefully", function (done) {
       this.server.setup({ message: "Guru Meditation" }, 404);
 
-      AppVersionsStore.once(AppVersionsEvents.REQUEST_APP_VERSION_ERROR, function (error) {
+      AppVersionsStore.once(AppVersionsEvents.REQUEST_ONE_ERROR, function (error) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
         }, done);

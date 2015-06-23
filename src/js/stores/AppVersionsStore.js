@@ -23,23 +23,23 @@ var AppVersionsStore = lazy(EventEmitter.prototype).extend({
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
-    case AppVersionsEvents.REQUEST_APP_VERSIONS:
+    case AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS:
       AppVersionsStore.resetOnAppChange(action.appId);
       AppVersionsStore.availableAppVersions = action.data;
       AppVersionsStore.emit(AppVersionsEvents.CHANGE);
       break;
-    case AppVersionsEvents.REQUEST_APP_VERSIONS_ERROR:
-      AppVersionsStore.emit(AppVersionsEvents.REQUEST_APP_VERSIONS_ERROR,
+    case AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR:
+      AppVersionsStore.emit(AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
         action.data.jsonBody);
       break;
-    case AppVersionsEvents.REQUEST_APP_VERSION:
+    case AppVersionsEvents.REQUEST_ONE:
       AppVersionsStore.resetOnAppChange(action.appId);
       AppVersionsStore.appVersions[action.versionTimestamp] = action.data;
       AppVersionsStore.emit(AppVersionsEvents.CHANGE);
       break;
-    case AppVersionsEvents.REQUEST_APP_VERSION_ERROR:
+    case AppVersionsEvents.REQUEST_ONE_ERROR:
       AppVersionsStore.emit(
-        AppVersionsEvents.REQUEST_APP_VERSION_ERROR,
+        AppVersionsEvents.REQUEST_ONE_ERROR,
         action.data.jsonBody
       );
       break;
