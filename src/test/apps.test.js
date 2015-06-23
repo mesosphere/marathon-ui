@@ -1,8 +1,11 @@
-var expect = require("chai").expect;
 var _ = require("underscore");
+var expect = require("chai").expect;
+var React = require("react/addons");
+var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
 var AppsActions = require("../js/actions/AppsActions");
+var AppComponent = require("../js/components/AppComponent");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
 
@@ -305,4 +308,55 @@ describe("Apps", function () {
 
   });
 
+});
+
+describe("App component", function () {
+
+  beforeEach(function () {
+    var model = {
+      id: "app-123",
+      deployments: [],
+      tasksRunning: 4,
+      instances: 5,
+      mem: 100,
+      cpus: 4,
+      status: 0
+    };
+
+    var renderer = TestUtils.createRenderer();
+    renderer.render(<AppComponent model={model} router={{}} />);
+    this.component = renderer.getRenderOutput();
+  });
+
+  it("has the correct app id", function () {
+    var cellContent = this.component.props.children[0].props.children;
+    expect(cellContent).to.equal("app-123");
+  });
+
+  it("has the correct amount of memory", function () {
+    var cellContent = this.component.props.children[1].props.children;
+    expect(cellContent).to.equal(100);
+  });
+
+  it("has the correct amount of cpus", function () {
+    var cellContent = this.component.props.children[2].props.children;
+    expect(cellContent).to.equal(4);
+  });
+
+  it("has correct number of tasks running", function () {
+    var tasksRunning =
+      this.component.props.children[3].props.children[0].props.children;
+    expect(tasksRunning).to.equal(4);
+  });
+
+  it("has correct number of instances", function () {
+    var totalSteps = this.component.props.children[3].props.children[2];
+    expect(totalSteps).to.equal(5);
+  });
+
+  it("has correct status description", function () {
+    var statusDescription =
+      this.component.props.children[5].props.children.props.children;
+    expect(statusDescription).to.equal("Running");
+  });
 });
