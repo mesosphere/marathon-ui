@@ -31,11 +31,8 @@ var AppPageComponent = React.createClass({
 
   propTypes: {
     appId: React.PropTypes.string.isRequired,
-    appVersionsFetchState: React.PropTypes.number.isRequired,
     destroyApp: React.PropTypes.func.isRequired,
-    fetchAppVersions: React.PropTypes.func.isRequired,
     fetchTasks: React.PropTypes.func.isRequired,
-    model: React.PropTypes.object.isRequired,
     onTasksKilled: React.PropTypes.func.isRequired,
     restartApp: React.PropTypes.func.isRequired,
     rollBackApp: React.PropTypes.func.isRequired,
@@ -103,6 +100,7 @@ var AppPageComponent = React.createClass({
   },
 
   onAppChange: function () {
+    console.log(this.props.appId);
     this.setState({
       app: AppsStore.getCurrentApp(this.props.appId),
       fetchState: States.STATE_SUCCESS
@@ -235,8 +233,7 @@ var AppPageComponent = React.createClass({
             onTasksKilled={this.props.onTasksKilled} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(model.id) + "/configuration"}
-          onActivate={this.props.fetchAppVersions} >
+          id={"apps/" + encodeURIComponent(model.id) + "/configuration"}>
           <AppVersionListComponent
             app={model}
             onRollback={this.props.rollBackApp} />

@@ -39,7 +39,6 @@ var Marathon = React.createClass({
       activeApp: null,
       activeAppView: null,
       activeTabId: tabs[0].id,
-      appVersionsFetchState: States.STATE_LOADING,
       collection: new AppCollection(),
       fetchState: States.STATE_LOADING,
       modalClass: null,
@@ -137,19 +136,6 @@ var Marathon = React.createClass({
     this.setState({
       modalClass: NewAppModalComponent
     });
-  },
-
-  fetchAppVersions: function () {
-    if (this.state.activeApp != null) {
-      this.state.activeApp.versions.fetch({
-        error: function () {
-          this.setState({appVersionsFetchState: States.STATE_ERROR});
-        }.bind(this),
-        success: function () {
-          this.setState({appVersionsFetchState: States.STATE_SUCCESS});
-        }.bind(this)
-      });
-    }
   },
 
   fetchTasks: function () {
@@ -316,7 +302,7 @@ var Marathon = React.createClass({
   poll: function () {
     var state = this.state;
 
-    if (state.activeAppId) {
+    if (state.activeAppId != null) {
       AppsActions.requestApp(state.activeAppId);
     } else if (state.activeTabId === tabs[0].id) {
       AppsActions.requestApps();
@@ -365,7 +351,6 @@ var Marathon = React.createClass({
     return (
       <AppPageComponent
         appId={state.activeAppId}
-        appVersionsFetchState={state.appVersionsFetchState}
         destroyApp={this.destroyApp}
         fetchTasks={this.fetchTasks}
         fetchAppVersions={this.fetchAppVersions}

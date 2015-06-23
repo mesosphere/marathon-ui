@@ -9,10 +9,13 @@ var TasksEvents = require("../events/TasksEvents");
 var TaskStatus = require("../constants/TaskStatus");
 
 var appScheme = {
+  constraints: [],
   deployments: [],
   healthChecks: [],
   instances: 0,
   status: AppStatus.SUSPENDED,
+  ports: [],
+  uris: [],
   tasks: [],
   tasksRunning: 0
 };
