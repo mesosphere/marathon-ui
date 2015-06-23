@@ -100,7 +100,6 @@ var AppPageComponent = React.createClass({
   },
 
   onAppChange: function () {
-    console.log(this.props.appId);
     this.setState({
       app: AppsStore.getCurrentApp(this.props.appId),
       fetchState: States.STATE_SUCCESS
@@ -173,6 +172,7 @@ var AppPageComponent = React.createClass({
 
   getControls: function () {
     var state = this.state;
+    var props = this.props;
 
     if (state.activeViewIndex !== 0) {
       return null;
@@ -181,7 +181,7 @@ var AppPageComponent = React.createClass({
     return (
       <div className="header-btn">
         <button className="btn btn-sm btn-default"
-            onClick={this.props.suspendApp}
+            onClick={props.suspendApp}
             disabled={state.app.instances < 1}>
           Suspend
         </button>
@@ -189,11 +189,11 @@ var AppPageComponent = React.createClass({
           Scale
         </button>
         <button className="btn btn-sm btn-danger pull-right"
-          onClick={this.props.destroyApp}>
+          onClick={props.destroyApp}>
           Destroy App
         </button>
         <button className="btn btn-sm btn-default pull-right"
-          onClick={this.props.restartApp}>
+          onClick={props.restartApp}>
           Restart App
         </button>
       </div>
@@ -216,6 +216,7 @@ var AppPageComponent = React.createClass({
   getAppDetails: function () {
     var state = this.state;
     var model = state.app;
+    var props = this.props;
 
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
@@ -223,20 +224,20 @@ var AppPageComponent = React.createClass({
           onTabClick={this.onTabClick}
           tabs={state.tabs} >
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(model.id)}>
+          id={"apps/" + encodeURIComponent(props.appId)}>
           <TaskViewComponent
             tasks={model.tasks}
             fetchState={state.fetchState}
-            fetchTasks={this.props.fetchTasks}
+            fetchTasks={props.fetchTasks}
             getTaskHealthMessage={this.getTaskHealthMessage}
             hasHealth={model.healthChecks > 0}
-            onTasksKilled={this.props.onTasksKilled} />
+            onTasksKilled={props.onTasksKilled} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(model.id) + "/configuration"}>
+          id={"apps/" + encodeURIComponent(props.appId) + "/configuration"}>
           <AppVersionListComponent
             app={model}
-            onRollback={this.props.rollBackApp} />
+            onRollback={props.rollBackApp} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
@@ -246,6 +247,7 @@ var AppPageComponent = React.createClass({
     var content;
     var state = this.state;
     var model = state.app;
+    var props = this.props;
 
     var statusClassSet = classNames({
       "text-warning": model.deployments.length > 0
@@ -262,10 +264,10 @@ var AppPageComponent = React.createClass({
         <AppBreadcrumbsComponent
           activeTaskId={state.activeTaskId}
           activeViewIndex={state.activeViewIndex}
-          model={model} />
+          appId={props.appId} />
         <div className="container-fluid">
           <div className="page-header">
-            <span className="h3 modal-title">{model.id}</span>
+            <span className="h3 modal-title">{props.appId}</span>
             <ul className="list-inline list-inline-subtext">
               <li>
                 <span className={statusClassSet}>
