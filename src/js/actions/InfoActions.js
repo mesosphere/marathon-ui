@@ -1,4 +1,4 @@
-var oboe = require("oboe");
+var OboeWrapper = require("../helpers/OboeWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -9,13 +9,7 @@ var InfoActions = {
     this.request({
       url: config.apiURL + "v2/info"
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (info) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (info) {
       AppDispatcher.dispatch({
         actionType: InfoEvents.REQUEST,
         data: info
@@ -28,7 +22,7 @@ var InfoActions = {
       });
     });
   },
-  request: oboe
+  request: OboeWrapper
 };
 
 module.exports = InfoActions;

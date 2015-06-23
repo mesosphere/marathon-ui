@@ -1,4 +1,4 @@
-var oboe = require("oboe");
+var OboeWrapper = require("../helpers/OboeWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -9,13 +9,7 @@ var DeploymentActions = {
     this.request({
       url: config.apiURL + "v2/deployments"
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (deployments) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (deployments) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REQUEST,
         data: deployments
@@ -33,13 +27,7 @@ var DeploymentActions = {
       method: "DELETE",
       url: config.apiURL + "v2/deployments/" + deploymentID
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (deployment) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (deployment) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REVERT,
         data: deployment,
@@ -58,13 +46,7 @@ var DeploymentActions = {
       method: "DELETE",
       url: config.apiURL + "v2/deployments/" + deploymentID + "?force=true"
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (deployment) {
-      if (this.status !== 202) {
-        return;
-      }
+    .success(function (deployment) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.STOP,
         data: deployment,
@@ -78,7 +60,7 @@ var DeploymentActions = {
       });
     });
   },
-  request: oboe
+  request: OboeWrapper
 };
 
 module.exports = DeploymentActions;
