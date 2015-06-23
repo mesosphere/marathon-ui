@@ -22,10 +22,6 @@ var TaskListComponent = React.createClass({
     toggleAllTasks: React.PropTypes.func.isRequired
   },
 
-  getResource: function () {
-    return this.props.tasks;
-  },
-
   getInitialState: function () {
     return {
       fetchState: States.STATE_LOADING,
@@ -98,11 +94,7 @@ var TaskListComponent = React.createClass({
 
   allTasksSelected: function (tasksLength) {
     var selectedTasks = this.props.selectedTasks;
-<<<<<<< HEAD
-    return tasksLength > 0 && this.props.tasks.find(function (task) {
-=======
     return tasksLength > 0 && lazy(this.props.tasks).find(function (task) {
->>>>>>> Using flux store instead of backbone model for app components
       return selectedTasks[task.id] == null;
     }) == null;
   },
