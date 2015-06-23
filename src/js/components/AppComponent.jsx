@@ -5,9 +5,9 @@ var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatus = require("../constants/AppStatus");
 
 var statusNameMapping = {};
-statusNameMapping[AppStatus.RUNNING] = "Running",
-statusNameMapping[AppStatus.DEPLOYING] = "Deploying",
-statusNameMapping[AppStatus.SUSPENDED] = "Suspended"
+statusNameMapping[AppStatus.RUNNING] = "Running";
+statusNameMapping[AppStatus.DEPLOYING] = "Deploying";
+statusNameMapping[AppStatus.SUSPENDED] = "Suspended";
 
 var AppComponent = React.createClass({
   displayName: "AppComponent",
