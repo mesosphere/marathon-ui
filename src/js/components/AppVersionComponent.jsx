@@ -29,8 +29,6 @@ var AppVersionComponent = React.createClass({
   render: function () {
     var appVersion = this.props.appVersion;
 
-    console.log("av", appVersion);
-
     if (_.isEmpty(appVersion)) {
       return null;
     }
