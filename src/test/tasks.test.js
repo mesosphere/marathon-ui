@@ -19,15 +19,17 @@ describe("Tasks", function () {
   beforeEach(function (done) {
     this.server = server
     .setup({
-      id: "/app-1",
-      tasks: [{
-        id: "task-1",
-        appId: "/app-1"
-      },
-      {
-        id: "task-2",
-        appId: "/app-1"
-      }]
+      "app": {
+        id: "/app-1",
+        tasks: [{
+          id: "task-1",
+          appId: "/app-1"
+        },
+        {
+          id: "task-2",
+          appId: "/app-1"
+        }]
+      }
     }, 200)
     .start(function () {
       AppsStore.once(AppsEvents.CHANGE, done);

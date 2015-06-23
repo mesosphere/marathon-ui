@@ -15,10 +15,12 @@ describe("AppVersions", function () {
 
   beforeEach(function (done) {
     this.server = server
-    .setup([
-      "version-timestamp-1",
-      "version-timestamp-2"
-    ], 200)
+    .setup({
+      "versions": [
+        "version-timestamp-1",
+        "version-timestamp-2"
+      ]
+    }, 200)
     .start(function () {
       AppVersionsStore.once(AppVersionsEvents.CHANGE, done);
       AppVersionsActions.requestAppVersions("/app-1");
