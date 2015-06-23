@@ -21,7 +21,7 @@ var TasksActions = {
         return;
       }
       AppDispatcher.dispatch({
-        actionType: TasksEvents.DELETE_TASK,
+        actionType: TasksEvents.DELETE,
         data: task,
         appId: appId,
         taskId: taskId
@@ -29,7 +29,7 @@ var TasksActions = {
     })
     .fail(function (error) {
       AppDispatcher.dispatch({
-        actionType: TasksEvents.DELETE_TASK_ERROR,
+        actionType: TasksEvents.DELETE_ERROR,
         data: error
       });
     });
@@ -52,7 +52,7 @@ var TasksActions = {
         return;
       }
       AppDispatcher.dispatch({
-        actionType: TasksEvents.DELETE_TASK,
+        actionType: TasksEvents.DELETE,
         data: task,
         appId: appId,
         taskId: taskId
@@ -60,7 +60,7 @@ var TasksActions = {
     })
     .fail(function (error) {
       AppDispatcher.dispatch({
-        actionType: TasksEvents.DELETE_TASK_ERROR,
+        actionType: TasksEvents.DELETE_ERROR,
         data: error
       });
     });

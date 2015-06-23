@@ -85,7 +85,7 @@ AppDispatcher.register(function (action) {
     case AppsEvents.APPLY_APP_ERROR:
       AppsStore.emit(AppsEvents.APPLY_APP_ERROR, action.data.jsonBody);
       break;
-    case TasksEvents.DELETE_TASK:
+    case TasksEvents.DELETE:
       AppsStore.currentApp.tasks =
         removeTask(
           AppsStore.currentApp.tasks,
@@ -94,8 +94,8 @@ AppDispatcher.register(function (action) {
         );
       AppsStore.emit(AppsEvents.CHANGE);
       break;
-    case TasksEvents.DELETE_TASK_ERROR:
-      AppsStore.emit(TasksEvents.DELETE_TASK_ERROR, action.data.jsonBody);
+    case TasksEvents.DELETE_ERROR:
+      AppsStore.emit(TasksEvents.DELETE_ERROR, action.data.jsonBody);
       break;
   }
 });
