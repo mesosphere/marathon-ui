@@ -16,6 +16,17 @@ var oboeWrapper = function (req) {
     });
     return this;
   };
+
+  api.error = function (callback) {
+    this.fail(function (error) {
+      if (error.thrown) {
+        throw error.thrown;
+      }
+      callback(error);
+      return this;
+    });
+  };
+
   return api;
 };
 
