@@ -1,4 +1,4 @@
-var oboe = require("oboe");
+var oboeWrapper = require("../helpers/oboeWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -13,13 +13,7 @@ var TasksActions = {
       },
       url: config.apiURL + "v2/apps/" + appId + "/tasks/" + taskId
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (task) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (task) {
       AppDispatcher.dispatch({
         actionType: TasksEvents.DELETE,
         data: task,
@@ -27,7 +21,7 @@ var TasksActions = {
         taskId: taskId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: TasksEvents.DELETE_ERROR,
         data: error
@@ -44,13 +38,7 @@ var TasksActions = {
         appId + "/tasks/" +
         taskId + "?scale=true"
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (task) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (task) {
       AppDispatcher.dispatch({
         actionType: TasksEvents.DELETE,
         data: task,
@@ -58,14 +46,14 @@ var TasksActions = {
         taskId: taskId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: TasksEvents.DELETE_ERROR,
         data: error
       });
     });
   },
-  request: oboe
+  request: oboeWrapper
 };
 
 module.exports = TasksActions;
