@@ -1,4 +1,5 @@
 var autoprefixer = require("gulp-autoprefixer");
+var connect = require("gulp-connect");
 var browserSync = require("browser-sync");
 var eslint = require("gulp-eslint");
 var gulp = require("gulp");
@@ -113,7 +114,15 @@ gulp.task("index", function () {
   return gulp.src(dirs.src + "/" + files.index)
     .pipe(gulp.dest(dirs.dist));
 });
+
 gulp.task("connect:server", function () {
+  connect.server({
+    port: 4200,
+    root: dirs.dist
+  });
+});
+
+gulp.task("browsersync", function () {
   browserSync.init({
     server: {
       baseDir: dirs.dist
@@ -121,11 +130,14 @@ gulp.task("connect:server", function () {
   });
 });
 
-gulp.task("serve", ["default", "connect:server"], function () {
+gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/*", ["less"]);
   gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["eslint", "webpack"]);
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
 });
+
+gulp.task("serve", ["default", "connect:server", "watch"]);
+gulp.task("livereload", ["default", "browsersync", "watch"]);
 
 var tasks = [
   "eslint",
