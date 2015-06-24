@@ -28,7 +28,6 @@ var Marathon = React.createClass({
   displayName: "Marathon",
 
   propTypes: {
-    fetchAppVersions: React.PropTypes.func.isRequired,
     router: React.PropTypes.object.isRequired
   },
 
@@ -408,7 +407,7 @@ var Marathon = React.createClass({
         </TabPaneComponent>
         <TabPaneComponent
             id="deployments"
-            onActivate={this.props.fetchAppVersions} >
+            onActivate={this.fetchAppVersions} >
           <DeploymentsListComponent />
         </TabPaneComponent>
       </TogglableTabsComponent>
