@@ -1,6 +1,6 @@
 var oboe = require("oboe");
 
-var OboeWrapper = function (req) {
+var oboeWrapper = function (req) {
   var api = oboe(req)
     .start(function (status) {
       this.status = status;
@@ -19,4 +19,4 @@ var OboeWrapper = function (req) {
   return api;
 };
 
-module.exports = OboeWrapper;
+module.exports = oboeWrapper;

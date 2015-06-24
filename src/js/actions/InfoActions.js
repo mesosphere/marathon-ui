@@ -1,4 +1,4 @@
-var OboeWrapper = require("../helpers/OboeWrapper");
+var oboeWrapper = require("../helpers/oboeWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -22,7 +22,7 @@ var InfoActions = {
       });
     });
   },
-  request: OboeWrapper
+  request: oboeWrapper
 };
 
 module.exports = InfoActions;
