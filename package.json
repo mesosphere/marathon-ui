@@ -27,6 +27,7 @@
   "devDependencies": {
     "babel-core": "^5.5.8",
     "babel-loader": "^5.1.4",
+    "browser-sync": "^2.7.12",
     "chai": "^3.0.0",
     "chalk": "^0.5.1",
     "cheerio": "^0.18.0",
@@ -53,6 +54,7 @@
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "shrinkwrap": "npm-shrinkwrap --dev",
     "test": "mocha --ui exports --reporter spec --compilers jsx:src/test/helpers/compiler.js src/test/helpers/object-assign-polyfill.js src/test/**/*.test.* src/test/*.test.*",
-    "serve": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve"
+    "serve": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve",
+    "livereload": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp livereload"
   }
 }

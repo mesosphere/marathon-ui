@@ -1,5 +1,6 @@
 var autoprefixer = require("gulp-autoprefixer");
 var connect = require("gulp-connect");
+var browserSync = require("browser-sync");
 var eslint = require("gulp-eslint");
 var gulp = require("gulp");
 var gutil = require("gulp-util");
@@ -71,6 +72,7 @@ gulp.task("webpack", function (callback) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
     }
+    browserSync.reload();
     callback();
   });
 });
@@ -87,7 +89,8 @@ gulp.task("less", function () {
       paths: [dirs.styles] // @import paths
     }))
     .pipe(autoprefixer())
-    .pipe(gulp.dest(dirs.dist));
+    .pipe(gulp.dest(dirs.dist))
+    .pipe(browserSync.stream());
 });
 
 gulp.task("minify-css", ["less"], function () {
@@ -111,19 +114,30 @@ gulp.task("index", function () {
   return gulp.src(dirs.src + "/" + files.index)
     .pipe(gulp.dest(dirs.dist));
 });
+
 gulp.task("connect:server", function () {
   connect.server({
     port: 4200,
-    root: dirs.dist,
-    livereload: false // TODO
+    root: dirs.dist
   });
 });
 
-gulp.task("serve", ["default", "connect:server"], function () {
+gulp.task("browsersync", function () {
+  browserSync.init({
+    server: {
+      baseDir: dirs.dist
+    }
+  });
+});
+
+gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/*", ["less"]);
   gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["eslint", "webpack"]);
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
 });
+
+gulp.task("serve", ["default", "connect:server", "watch"]);
+gulp.task("livereload", ["default", "browsersync", "watch"]);
 
 var tasks = [
   "eslint",
