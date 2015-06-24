@@ -345,7 +345,7 @@ var Marathon = React.createClass({
     var state = this.state;
 
     if (!state.activeAppId) {
-      return;
+      return null;
     }
 
     return (
@@ -353,7 +353,6 @@ var Marathon = React.createClass({
         appId={state.activeAppId}
         destroyApp={this.destroyApp}
         fetchTasks={this.fetchTasks}
-        fetchAppVersions={this.fetchAppVersions}
         onTasksKilled={this.handleTasksKilled}
         restartApp={this.restartApp}
         rollBackApp={this.rollbackToAppVersion}
@@ -374,9 +373,7 @@ var Marathon = React.createClass({
           </a>
           <AppListComponent router={this.props.router} />
         </TabPaneComponent>
-        <TabPaneComponent
-            id="deployments"
-            onActivate={this.fetchAppVersions} >
+        <TabPaneComponent id="deployments">
           <DeploymentsListComponent />
         </TabPaneComponent>
       </TogglableTabsComponent>
