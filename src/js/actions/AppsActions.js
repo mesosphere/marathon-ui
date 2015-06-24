@@ -1,4 +1,4 @@
-var oboe = require("oboe");
+var oboeWrapper = require("../helpers/oboeWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -9,19 +9,13 @@ var AppsActions = {
     this.request({
       url: config.apiURL + "v2/apps"
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (apps) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (apps) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.REQUEST_APPS,
         data: apps
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.REQUEST_APPS_ERROR,
         data: error
@@ -32,19 +26,13 @@ var AppsActions = {
     this.request({
       url: config.apiURL + "v2/apps/" + appId
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (app) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (app) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.REQUEST_APP,
         data: app
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.REQUEST_APP_ERROR,
         data: error
@@ -60,19 +48,13 @@ var AppsActions = {
       },
       url: config.apiURL + "v2/apps"
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (app) {
-      if (this.status !== 201) {
-        return;
-      }
+    .success(function (app) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.CREATE_APP,
         data: app
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.CREATE_APP_ERROR,
         data: error
@@ -87,20 +69,14 @@ var AppsActions = {
       },
       url: config.apiURL + "v2/apps/" + appId
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (app) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (app) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.DELETE_APP,
         data: app,
         appId: appId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.DELETE_APP_ERROR,
         data: error
@@ -118,20 +94,14 @@ var AppsActions = {
       },
       url: config.apiURL + "v2/apps/" + appId + "/restart"
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (app) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (app) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.RESTART_APP,
         data: app,
         appId: appId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.RESTART_APP_ERROR,
         data: error
@@ -149,20 +119,14 @@ var AppsActions = {
       },
       url: config.apiURL + "v2/apps/" + appId
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (app) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (app) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.SCALE_APP,
         data: app,
         appId: appId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.SCALE_APP_ERROR,
         data: error
@@ -178,27 +142,21 @@ var AppsActions = {
       },
       url: config.apiURL + "v2/apps/" + appId
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (app) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (app) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.APPLY_APP,
         data: app,
         appId: appId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.APPLY_APP_ERROR,
         data: error
       });
     });
   },
-  request: oboe
+  request: oboeWrapper
 };
 
 module.exports = AppsActions;

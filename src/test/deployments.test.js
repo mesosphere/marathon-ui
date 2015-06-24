@@ -105,7 +105,7 @@ describe("Deployments", function () {
 
     it("forcefully stops a deployment", function (done) {
       // Payload is 'null' on a forcefully stoped deployment
-      this.server.setup(null, 202);
+      this.server.setup(undefined, 202);
 
       DeploymentStore.once(DeploymentEvents.CHANGE, function () {
         expectAsync(function () {

@@ -1,4 +1,4 @@
-var oboe = require("oboe");
+var oboeWrapper = require("../helpers/oboeWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -9,20 +9,14 @@ var AppVersionsActions = {
     this.request({
       url: config.apiURL + "v2/apps/" + appId + "/versions"
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (appVersions) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (appVersions) {
       AppDispatcher.dispatch({
         actionType: AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS,
         data: appVersions,
         appId: appId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
         data: error
@@ -33,13 +27,7 @@ var AppVersionsActions = {
     this.request({
       url: config.apiURL + "v2/apps/" + appId + "/versions/" + versionTimestamp
     })
-    .start(function (status) {
-      this.status = status;
-    })
-    .done(function (appVersion) {
-      if (this.status !== 200) {
-        return;
-      }
+    .success(function (appVersion) {
       AppDispatcher.dispatch({
         actionType: AppVersionsEvents.REQUEST_ONE,
         data: appVersion,
@@ -47,14 +35,14 @@ var AppVersionsActions = {
         versionTimestamp: versionTimestamp
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppVersionsEvents.REQUEST_ONE_ERROR,
         data: error
       });
     });
   },
-  request: oboe
+  request: oboeWrapper
 };
 
 module.exports = AppVersionsActions;
