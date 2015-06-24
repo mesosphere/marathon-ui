@@ -10,7 +10,6 @@ var DeploymentComponent = React.createClass({
   displayName: "DeploymentComponent",
 
   propTypes: {
-    destroyDeployment: React.PropTypes.func.isRequired,
     model: React.PropTypes.object.isRequired
   },
 
