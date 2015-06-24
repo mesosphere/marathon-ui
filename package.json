@@ -48,7 +48,7 @@
     "webpack": "^1.9.11"
   },
   "scripts": {
-    "build": "export GULP_ENV=\"development\" && gulp",
+    "build": "gulp",
     "clean": "rm -rf dist",
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "shrinkwrap": "npm-shrinkwrap --dev",
