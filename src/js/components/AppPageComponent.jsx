@@ -204,12 +204,18 @@ var AppPageComponent = React.createClass({
     var state = this.state;
     var model = state.app;
 
+    var task = lazy(model.tasks).findWhere({"id": state.activeTaskId});
+
+    if (task == null) {
+      return null;
+    }
+
     return (
       <TaskDetailComponent
         fetchState={state.fetchState}
         taskHealthMessage={this.getTaskHealthMessage(state.activeTaskId)}
         hasHealth={model.healthChecks > 0}
-        task={lazy(this.state.app.tasks).findWhere({"id": state.activeTaskId})} />
+        task={task} />
     );
   },
 

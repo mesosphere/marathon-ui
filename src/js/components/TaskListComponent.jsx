@@ -13,7 +13,6 @@ var TaskListComponent = React.createClass({
     currentPage: React.PropTypes.number.isRequired,
     fetchState: React.PropTypes.number.isRequired,
     getTaskHealthMessage: React.PropTypes.func.isRequired,
-    itemsPerPage: React.PropTypes.number.isRequired,
     hasHealth: React.PropTypes.bool,
     itemsPerPage: React.PropTypes.number.isRequired,
     onTaskToggle: React.PropTypes.func.isRequired,
@@ -24,7 +23,6 @@ var TaskListComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      fetchState: States.STATE_LOADING,
       sortKey: "updatedAt",
       sortDescending: false
     };
@@ -36,16 +34,6 @@ var TaskListComponent = React.createClass({
     if (event.target.nodeName !== "INPUT") {
       this.props.toggleAllTasks();
     }
-  },
-
-  sortCollectionBy: function (comparator) {
-    var collection = this.props.tasks;
-    comparator =
-      collection.sortKey === comparator && !collection.sortReverse ?
-      "-" + comparator :
-      comparator;
-    collection.setComparator(comparator);
-    collection.sort();
   },
 
   sortBy: function (sortKey) {

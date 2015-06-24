@@ -68,7 +68,6 @@ var AppVersionListItemComponent = React.createClass({
   },
 
   onAppVersionRequestError: function () {
-    return;
     this.setState({
       fetchState: States.STATE_ERROR
     });

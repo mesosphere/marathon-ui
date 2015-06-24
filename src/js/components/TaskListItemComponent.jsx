@@ -30,16 +30,20 @@ function buildTaskAnchors(task) {
             </span>
           );
         }).value()}]
-      </span>;
+      </span>
+    );
   } else if (portsLength === 1) {
     // Linkify the hostname + port since there is only one port.
-    taskAnchors =
+    taskAnchors = (
       <a className="text-muted" href={buildHref(task.host, ports[0])}>
         {task.host}:{ports[0]}
-      </a>;
+      </a>
+    );
   } else {
     // Ain't no ports; don't linkify.
-    taskAnchors = <span className="text-muted">{task.host}</span>;
+    taskAnchors = (
+      <span className="text-muted">{task.host}</span>
+    );
   }
 
   return taskAnchors;

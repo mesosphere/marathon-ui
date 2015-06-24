@@ -9,12 +9,11 @@ var TaskViewComponent = React.createClass({
   displayName: "TaskViewComponent",
 
   propTypes: {
-    tasks: React.PropTypes.array.isRequired,
     fetchState: React.PropTypes.number.isRequired,
-    fetchTasks: React.PropTypes.func.isRequired,
     getTaskHealthMessage: React.PropTypes.func.isRequired,
     hasHealth: React.PropTypes.bool,
-    onTasksKilled: React.PropTypes.func.isRequired
+    onTasksKilled: React.PropTypes.func.isRequired,
+    tasks: React.PropTypes.array.isRequired
   },
 
   getInitialState: function () {
@@ -107,7 +106,7 @@ var TaskViewComponent = React.createClass({
       <div className="btn-group">
         <button
             className={refreshButtonClassSet}
-            onClick={this.props.fetchTasks}>
+            onClick={this.fetchTasks}>
           ↻ Refresh
         </button>
         <button

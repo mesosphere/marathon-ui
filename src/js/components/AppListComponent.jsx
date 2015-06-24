@@ -8,9 +8,6 @@ var AppComponent = require("../components/AppComponent");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
-var AppsStore = require("../stores/AppsStore");
-var AppsEvents = require("../events/AppsEvents");
-
 var AppListComponent = React.createClass({
   displayName: "AppListComponent",
 
