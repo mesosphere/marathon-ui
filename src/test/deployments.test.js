@@ -150,7 +150,9 @@ describe("Deployment component", function () {
     };
 
     var renderer = TestUtils.createRenderer();
-    renderer.render(<DeploymentComponent model={model} />);
+    renderer.render(
+      <DeploymentComponent destroyDeployment={()=>null} model={model} />
+    );
     this.component = renderer.getRenderOutput();
   });
 
