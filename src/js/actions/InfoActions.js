@@ -15,7 +15,7 @@ var InfoActions = {
         data: info
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: InfoEvents.REQUEST_ERROR,
         data: error

@@ -15,7 +15,7 @@ var DeploymentActions = {
         data: deployments
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REQUEST_ERROR,
         data: error
@@ -34,7 +34,7 @@ var DeploymentActions = {
         deploymentId: deploymentID
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.REVERT_ERROR,
         data: error
@@ -53,7 +53,7 @@ var DeploymentActions = {
         deploymentId: deploymentID
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: DeploymentEvents.STOP_ERROR,
         data: error

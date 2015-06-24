@@ -15,7 +15,7 @@ var AppsActions = {
         data: apps
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.REQUEST_APPS_ERROR,
         data: error
@@ -32,7 +32,7 @@ var AppsActions = {
         data: app
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.REQUEST_APP_ERROR,
         data: error
@@ -54,7 +54,7 @@ var AppsActions = {
         data: app
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.CREATE_APP_ERROR,
         data: error
@@ -76,7 +76,7 @@ var AppsActions = {
         appId: appId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.DELETE_APP_ERROR,
         data: error
@@ -101,7 +101,7 @@ var AppsActions = {
         appId: appId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.RESTART_APP_ERROR,
         data: error
@@ -126,7 +126,7 @@ var AppsActions = {
         appId: appId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.SCALE_APP_ERROR,
         data: error
@@ -149,7 +149,7 @@ var AppsActions = {
         appId: appId
       });
     })
-    .fail(function (error) {
+    .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppsEvents.APPLY_APP_ERROR,
         data: error
