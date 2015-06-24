@@ -1,5 +1,5 @@
 var autoprefixer = require("gulp-autoprefixer");
-var connect = require("gulp-connect");
+var browserSync = require("browser-sync");
 var eslint = require("gulp-eslint");
 var gulp = require("gulp");
 var gutil = require("gulp-util");
@@ -71,6 +71,7 @@ gulp.task("webpack", function (callback) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
     }
+    browserSync.reload();
     callback();
   });
 });
@@ -87,7 +88,8 @@ gulp.task("less", function () {
       paths: [dirs.styles] // @import paths
     }))
     .pipe(autoprefixer())
-    .pipe(gulp.dest(dirs.dist));
+    .pipe(gulp.dest(dirs.dist))
+    .pipe(browserSync.stream());
 });
 
 gulp.task("minify-css", ["less"], function () {
@@ -112,10 +114,10 @@ gulp.task("index", function () {
     .pipe(gulp.dest(dirs.dist));
 });
 gulp.task("connect:server", function () {
-  connect.server({
-    port: 4200,
-    root: dirs.dist,
-    livereload: false // TODO
+  browserSync.init({
+    server: {
+      baseDir: dirs.dist
+    }
   });
 });
 
