@@ -2,17 +2,31 @@ var React = require("react/addons");
 
 var FormGroupComponent = React.createClass({
   displayName: "FormGroupComponent",
+
   propTypes: {
     attribute: React.PropTypes.string,
     children: React.PropTypes.object.isRequired,
     errors: React.PropTypes.array,
     help: React.PropTypes.string,
     label: React.PropTypes.string,
-    model: React.PropTypes.object.isRequired
+    model: React.PropTypes.object.isRequired,
+    validator: React.PropTypes.object.isRequired
+  },
+
+  getInitialState: function () {
+    return {
+      validationError: null
+    };
   },
 
   onInputChange: function (event) {
-    this.props.model.set(event.target.name, event.target.value);
+    var props = this.props;
+
+    props.model[event.target.name] = event.target.value;
+
+    this.setState({
+      validationError: props.validator.validate(props.model)
+    });
   },
 
   render: function () {
@@ -24,8 +38,8 @@ var FormGroupComponent = React.createClass({
     var fieldId = attribute + "-field";
 
     // Find any errors matching this attribute.
-    if (this.props.model.validationError != null) {
-      errors = this.props.model.validationError.filter(function (e) {
+    if (this.state.validationError != null) {
+      errors = this.state.validationError.filter(function (e) {
         return (e.attribute === attribute);
       });
     }
@@ -48,7 +62,7 @@ var FormGroupComponent = React.createClass({
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        value: this.props.model.get(attribute)
+        value: this.props.model[attribute]
       }
     );
 

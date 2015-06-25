@@ -232,15 +232,16 @@ var AppPageComponent = React.createClass({
             disabled={state.app.instances < 1}>
           Suspend
         </button>
-        <button className="btn btn-sm btn-default" onClick={this.handleScaleApp}>
+        <button className="btn btn-sm btn-default"
+            onClick={this.handleScaleApp}>
           Scale
         </button>
         <button className="btn btn-sm btn-danger pull-right"
-          onClick={this.handleDestroyApp}>
+            onClick={this.handleDestroyApp}>
           Destroy App
         </button>
         <button className="btn btn-sm btn-default pull-right"
-          onClick={this.handleRestartApp}>
+            onClick={this.handleRestartApp}>
           Restart App
         </button>
       </div>
