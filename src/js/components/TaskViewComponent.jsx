@@ -4,6 +4,7 @@ var React = require("react/addons");
 
 var AppsActions = require("../actions/AppsActions");
 var PagedNavComponent = require("../components/PagedNavComponent");
+var TasksActions = require("../actions/TasksActions");
 var TaskListComponent = require("../components/TaskListComponent");
 
 var TaskViewComponent = React.createClass({
@@ -14,7 +15,6 @@ var TaskViewComponent = React.createClass({
     fetchState: React.PropTypes.number.isRequired,
     getTaskHealthMessage: React.PropTypes.func.isRequired,
     hasHealth: React.PropTypes.bool,
-    onTasksKilled: React.PropTypes.func.isRequired,
     tasks: React.PropTypes.array.isRequired
   },
 
@@ -30,28 +30,26 @@ var TaskViewComponent = React.createClass({
     this.setState({currentPage: pageNum});
   },
 
-  killSelectedTasks: function (options) {
-    var _options = options || {};
-
-    var selectedTaskIds = Object.keys(this.state.selectedTasks);
-    var tasksToKill = lazy(this.props.tasks).filter(function (task) {
-      return selectedTaskIds.indexOf(task.id) >= 0;
-    }).value();
-
-    tasksToKill.forEach(function (task) {
-      task.destroy({
-        scale: _options.scale,
-        success: function () {
-          this.props.onTasksKilled(_options);
-          delete this.state.selectedTasks[task.id];
-        }.bind(this),
-        wait: true
-      });
-    }, this);
+  handleRefresh: function () {
+    AppsActions.requestApp(this.props.appId);
   },
 
-  killSelectedTasksAndScale: function () {
-    this.killSelectedTasks({scale: true});
+  handleKillSelectedTasks: function (scaleTask) {
+    var props = this.props;
+
+    var selectedTaskIds = Object.keys(this.state.selectedTasks);
+
+    lazy(props.tasks)
+    .filter(function (task) {
+      return selectedTaskIds.indexOf(task.id) >= 0;
+    })
+    .each(function (task) {
+      if (!scaleTask) {
+        TasksActions.deleteTask(props.appId, task.id);
+      } else {
+        TasksActions.deleteTaskAndScale(props.appId, task.id);
+      }
+    });
   },
 
   toggleAllTasks: function () {
@@ -91,10 +89,6 @@ var TaskViewComponent = React.createClass({
     this.setState({selectedTasks: selectedTasks});
   },
 
-  handleRefresh: function () {
-    AppsActions.requestApp(this.props.appId);
-  },
-
   getButtons: function () {
     var selectedTasksLength = Object.keys(this.state.selectedTasks).length;
 
@@ -117,13 +111,13 @@ var TaskViewComponent = React.createClass({
         </button>
         <button
             className={killButtonClassSet}
-            onClick={this.killSelectedTasks}>
+            onClick={this.handleKillSelectedTasks.bind(this, false)}>
           Kill
         </button>
         <button
             className={killButtonClassSet}
             disabled={selectedTasksLength > 1}
-            onClick={this.killSelectedTasksAndScale}>
+            onClick={this.handleKillSelectedTasks.bind(this, true)}>
           Kill &amp; Scale
         </button>
       </div>
