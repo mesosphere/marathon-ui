@@ -148,9 +148,9 @@ var Marathon = React.createClass({
     var router = this.props.router;
     var navigation = this.state.activeTabId;
 
-    var activeApp = this.state.activeApp;
-    if (activeApp != null) {
-      navigation = "apps/" + encodeURIComponent(activeApp.get("id"));
+    var activeAppId = this.state.activeAppId;
+    if (activeAppId != null) {
+      navigation = "apps/" + encodeURIComponent(activeAppId);
 
       var activeAppView = this.state.activeAppView;
       if (activeAppView != null) {
