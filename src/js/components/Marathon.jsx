@@ -207,19 +207,6 @@ var Marathon = React.createClass({
     }
   },
 
-  restartApp: function () {
-    var app = this.state.activeApp;
-    if (util.confirm("Restart app '" + app.id + "'?")) {
-      app.restart({
-        error: function (data, response) {
-          var msg = response.responseJSON.message || response.statusText;
-          util.alert("Error restarting app '" + app.id + "': " + msg);
-        },
-        wait: true
-      });
-    }
-  },
-
   rollbackToAppVersion: function (version) {
     if (this.state.activeApp != null) {
       var app = this.state.activeApp;
@@ -313,7 +300,6 @@ var Marathon = React.createClass({
         destroyApp={this.destroyApp}
         fetchTasks={this.fetchTasks}
         onTasksKilled={this.handleTasksKilled}
-        restartApp={this.restartApp}
         rollBackApp={this.rollbackToAppVersion}
         tasksFetchState={state.tasksFetchState}
         view={state.activeAppView} />
