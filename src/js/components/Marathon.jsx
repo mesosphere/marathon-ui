@@ -86,12 +86,6 @@ var Marathon = React.createClass({
       }
     }.bind(this));
 
-    Mousetrap.bind("#", function () {
-      if (this.state.activeApp != null) {
-        this.destroyApp();
-      }
-    }.bind(this));
-
     Mousetrap.bind("shift+,", function () {
       router.navigate("about", {trigger: true});
     });
