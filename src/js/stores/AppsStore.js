@@ -127,11 +127,16 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.REQUEST_APP_ERROR, action.data.body);
       break;
     case AppsEvents.CREATE_APP:
-      AppsStore.apps.push(action.data.body);
+      AppsStore.apps.push(processApp(action.data.body));
+      AppsStore.emit(AppsEvents.CREATE_APP);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.CREATE_APP_ERROR:
-      AppsStore.emit(AppsEvents.CREATE_APP_ERROR, action.data.body);
+      AppsStore.emit(
+        AppsEvents.CREATE_APP_ERROR,
+        action.data.body,
+        action.data.status
+      );
       break;
     case AppsEvents.DELETE_APP:
       AppsStore.apps =
