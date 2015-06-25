@@ -239,21 +239,6 @@ var Marathon = React.createClass({
     }
   },
 
-  suspendApp: function () {
-    if (util.confirm("Suspend app by scaling to 0 instances?")) {
-      this.state.activeApp.suspend({
-        error: function (data, response) {
-          var msg = response.responseJSON.message || response.statusText;
-          util.alert("Could not suspend: " + msg);
-        },
-        success: function () {
-          // refresh app versions
-          this.fetchAppVersions();
-        }.bind(this)
-      });
-    }
-  },
-
   startPolling: function () {
     if (this._interval == null) {
       this.poll();
@@ -330,8 +315,6 @@ var Marathon = React.createClass({
         onTasksKilled={this.handleTasksKilled}
         restartApp={this.restartApp}
         rollBackApp={this.rollbackToAppVersion}
-        scaleApp={this.scaleApp}
-        suspendApp={this.suspendApp}
         tasksFetchState={state.tasksFetchState}
         view={state.activeAppView} />
     );

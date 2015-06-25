@@ -37,7 +37,6 @@ var AppPageComponent = React.createClass({
     onTasksKilled: React.PropTypes.func.isRequired,
     restartApp: React.PropTypes.func.isRequired,
     rollBackApp: React.PropTypes.func.isRequired,
-    suspendApp: React.PropTypes.func.isRequired,
     view: React.PropTypes.string
   },
 
@@ -178,6 +177,12 @@ var AppPageComponent = React.createClass({
     }
   },
 
+  suspendApp: function () {
+    if (util.confirm("Suspend app by scaling to 0 instances?")) {
+      AppsActions.scaleApp(this.props.appId, 0);
+    }
+  },
+
   getControls: function () {
     var state = this.state;
     var props = this.props;
@@ -189,7 +194,7 @@ var AppPageComponent = React.createClass({
     return (
       <div className="header-btn">
         <button className="btn btn-sm btn-default"
-            onClick={props.suspendApp}
+            onClick={this.suspendApp}
             disabled={state.app.instances < 1}>
           Suspend
         </button>
