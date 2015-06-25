@@ -2,6 +2,7 @@ var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 
+var AppsActions = require("../actions/AppsActions");
 var PagedNavComponent = require("../components/PagedNavComponent");
 var TaskListComponent = require("../components/TaskListComponent");
 
@@ -9,6 +10,7 @@ var TaskViewComponent = React.createClass({
   displayName: "TaskViewComponent",
 
   propTypes: {
+    appId: React.PropTypes.string.isRequired,
     fetchState: React.PropTypes.number.isRequired,
     getTaskHealthMessage: React.PropTypes.func.isRequired,
     hasHealth: React.PropTypes.bool,
@@ -89,6 +91,10 @@ var TaskViewComponent = React.createClass({
     this.setState({selectedTasks: selectedTasks});
   },
 
+  handleRefresh: function () {
+    AppsActions.requestApp(this.props.appId);
+  },
+
   getButtons: function () {
     var selectedTasksLength = Object.keys(this.state.selectedTasks).length;
 
@@ -106,7 +112,7 @@ var TaskViewComponent = React.createClass({
       <div className="btn-group">
         <button
             className={refreshButtonClassSet}
-            onClick={this.fetchTasks}>
+            onClick={this.handleRefresh}>
           ↻ Refresh
         </button>
         <button

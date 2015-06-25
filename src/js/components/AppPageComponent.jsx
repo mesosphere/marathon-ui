@@ -280,6 +280,7 @@ var AppPageComponent = React.createClass({
         <TabPaneComponent
           id={"apps/" + encodeURIComponent(props.appId)}>
           <TaskViewComponent
+            appId={props.appId}
             fetchState={state.fetchState}
             getTaskHealthMessage={this.getTaskHealthMessage}
             hasHealth={model.healthChecks > 0}
