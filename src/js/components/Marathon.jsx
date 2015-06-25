@@ -17,7 +17,7 @@ var NavTabsComponent = require("../components/NavTabsComponent");
 var DeploymentActions = require("../actions/DeploymentActions");
 var DeploymentEvents = require("../events/DeploymentEvents");
 var DeploymentStore = require("../stores/DeploymentStore");
-var Util = require("../helpers/Util");
+var util = require("../helpers/util");
 
 var tabs = [
   {id: "apps", text: "Apps"},
@@ -229,11 +229,11 @@ var Marathon = React.createClass({
 
   destroyApp: function () {
     var app = this.state.activeApp;
-    if (Util.confirm("Destroy app '" + app.id + "'?\nThis is irreversible.")) {
+    if (util.confirm("Destroy app '" + app.id + "'?\nThis is irreversible.")) {
       app.destroy({
         error: function (data, response) {
           var msg = response.responseJSON.message || response.statusText;
-          Util.alert("Error destroying app '" + app.id + "': " + msg);
+          util.alert("Error destroying app '" + app.id + "': " + msg);
         },
         success: function () {
           this.props.router.navigate("apps", {trigger: true});
@@ -245,11 +245,11 @@ var Marathon = React.createClass({
 
   restartApp: function () {
     var app = this.state.activeApp;
-    if (Util.confirm("Restart app '" + app.id + "'?")) {
+    if (util.confirm("Restart app '" + app.id + "'?")) {
       app.restart({
         error: function (data, response) {
           var msg = response.responseJSON.message || response.statusText;
-          Util.alert("Error restarting app '" + app.id + "': " + msg);
+          util.alert("Error restarting app '" + app.id + "': " + msg);
         },
         wait: true
       });
@@ -265,7 +265,7 @@ var Marathon = React.createClass({
         {
           error: function (data, response) {
             var msg = response.responseJSON.message || response.statusText;
-            Util.alert("Could not update to chosen version: " + msg);
+            util.alert("Could not update to chosen version: " + msg);
           },
           success: function () {
             // refresh app versions
@@ -283,7 +283,7 @@ var Marathon = React.createClass({
         {
           error: function (data, response) {
             var msg = response.responseJSON.message || response.statusText;
-            Util.alert("Not scaling: " + msg);
+            util.alert("Not scaling: " + msg);
           },
           success: function () {
             // refresh app versions
@@ -296,17 +296,17 @@ var Marathon = React.createClass({
         // If the model is not valid, revert the changes to prevent the UI
         // from showing an invalid state.
         app.update(app.previousAttributes());
-        Util.alert("Not scaling: " + app.validationError[0].message);
+        util.alert("Not scaling: " + app.validationError[0].message);
       }
     }
   },
 
   suspendApp: function () {
-    if (Util.confirm("Suspend app by scaling to 0 instances?")) {
+    if (util.confirm("Suspend app by scaling to 0 instances?")) {
       this.state.activeApp.suspend({
         error: function (data, response) {
           var msg = response.responseJSON.message || response.statusText;
-          Util.alert("Could not suspend: " + msg);
+          util.alert("Could not suspend: " + msg);
         },
         success: function () {
           // refresh app versions
