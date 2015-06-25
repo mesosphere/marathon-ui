@@ -191,22 +191,6 @@ var Marathon = React.createClass({
     }
   },
 
-  destroyApp: function () {
-    var app = this.state.activeApp;
-    if (util.confirm("Destroy app '" + app.id + "'?\nThis is irreversible.")) {
-      app.destroy({
-        error: function (data, response) {
-          var msg = response.responseJSON.message || response.statusText;
-          util.alert("Error destroying app '" + app.id + "': " + msg);
-        },
-        success: function () {
-          this.props.router.navigate("apps", {trigger: true});
-        }.bind(this),
-        wait: true
-      });
-    }
-  },
-
   rollbackToAppVersion: function (version) {
     if (this.state.activeApp != null) {
       var app = this.state.activeApp;
@@ -297,10 +281,10 @@ var Marathon = React.createClass({
     return (
       <AppPageComponent
         appId={state.activeAppId}
-        destroyApp={this.destroyApp}
         fetchTasks={this.fetchTasks}
         onTasksKilled={this.handleTasksKilled}
         rollBackApp={this.rollbackToAppVersion}
+        router={this.props.router}
         tasksFetchState={state.tasksFetchState}
         view={state.activeAppView} />
     );

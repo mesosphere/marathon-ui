@@ -144,7 +144,7 @@ describe("Apps", function () {
           "version": "v1"
         }, 200);
 
-      AppsStore.once(AppsEvents.CHANGE, function () {
+      AppsStore.once(AppsEvents.DELETE_APP, function () {
         expectAsync(function () {
           expect(AppsStore.apps).to.have.length(1);
 

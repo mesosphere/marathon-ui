@@ -32,10 +32,10 @@ var AppPageComponent = React.createClass({
 
   propTypes: {
     appId: React.PropTypes.string.isRequired,
-    destroyApp: React.PropTypes.func.isRequired,
     fetchTasks: React.PropTypes.func.isRequired,
     onTasksKilled: React.PropTypes.func.isRequired,
     rollBackApp: React.PropTypes.func.isRequired,
+    router: React.PropTypes.object.isRequired,
     view: React.PropTypes.string
   },
 
@@ -70,6 +70,8 @@ var AppPageComponent = React.createClass({
     AppsStore.on(AppsEvents.REQUEST_APP_ERROR, this.onAppRequestError);
     AppsStore.on(AppsEvents.SCALE_APP_ERROR, this.onScaleAppError);
     AppsStore.on(AppsEvents.RESTART_APP_ERROR, this.onRestartAppError);
+    AppsStore.on(AppsEvents.DELETE_APP_ERROR, this.onDeleteAppError);
+    AppsStore.on(AppsEvents.DELETE_APP, this.onDeleteAppSuccess);
   },
 
   componentWillUnmount: function () {
@@ -81,6 +83,10 @@ var AppPageComponent = React.createClass({
       this.onScaleAppError);
     AppsStore.removeListener(AppsEvents.RESTART_APP_ERROR,
       this.onRestartAppError);
+    AppsStore.removeListener(AppsEvents.DELETE_APP_ERROR,
+      this.onDeleteAppError);
+    AppsStore.removeListener(AppsEvents.DELETE_APP,
+      this.onDeleteAppSuccess);
   },
 
   componentWillReceiveProps: function (nextProps) {
@@ -123,6 +129,15 @@ var AppPageComponent = React.createClass({
   onRestartAppError: function (errorMessage) {
     util.alert("Error restarting app: " +
       (errorMessage.message || errorMessage));
+  },
+
+  onDeleteAppError: function (errorMessage) {
+    util.alert("Error destroying app: " +
+      (errorMessage.message || errorMessage));
+  },
+
+  onDeleteAppSuccess: function () {
+    this.props.router.navigate("apps", {trigger: true});
   },
 
   onTabClick: function (id) {
@@ -191,8 +206,17 @@ var AppPageComponent = React.createClass({
   },
 
   restartApp: function () {
-    if (util.confirm("Restart app '" + this.props.appId + "'?")) {
-      AppsActions.restartApp(this.props.appId);
+    var appId = this.props.appId;
+    if (util.confirm("Restart app '" + appId + "'?")) {
+      AppsActions.restartApp(appId);
+    }
+  },
+
+  destroyApp: function () {
+    var appId = this.props.appId;
+    if (util.confirm("Destroy app '" + appId +
+      "'?\nThis is irreversible.")) {
+      AppsActions.deleteApp(appId);
     }
   },
 
@@ -215,7 +239,7 @@ var AppPageComponent = React.createClass({
           Scale
         </button>
         <button className="btn btn-sm btn-danger pull-right"
-          onClick={props.destroyApp}>
+          onClick={this.destroyApp}>
           Destroy App
         </button>
         <button className="btn btn-sm btn-default pull-right"
