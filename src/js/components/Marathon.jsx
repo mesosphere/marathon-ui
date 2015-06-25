@@ -239,32 +239,6 @@ var Marathon = React.createClass({
     }
   },
 
-  scaleApp: function (instances) {
-    if (this.state.activeApp != null) {
-      var app = this.state.activeApp;
-      app.save(
-        {instances: instances},
-        {
-          error: function (data, response) {
-            var msg = response.responseJSON.message || response.statusText;
-            util.alert("Not scaling: " + msg);
-          },
-          success: function () {
-            // refresh app versions
-            this.fetchAppVersions();
-          }.bind(this)
-        }
-      );
-
-      if (app.validationError != null) {
-        // If the model is not valid, revert the changes to prevent the UI
-        // from showing an invalid state.
-        app.update(app.previousAttributes());
-        util.alert("Not scaling: " + app.validationError[0].message);
-      }
-    }
-  },
-
   suspendApp: function () {
     if (util.confirm("Suspend app by scaling to 0 instances?")) {
       this.state.activeApp.suspend({
