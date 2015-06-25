@@ -2,6 +2,9 @@ var $ = require("jquery");
 var _ = require("underscore");
 var React = require("react/addons");
 
+var AppsActions = require("../actions/AppsActions");
+var AppsEvents = require("../events/AppsEvents");
+var AppsStore = require("../stores/AppsStore");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var ModalComponent = require("../components/ModalComponent");
 var ValidationError = require("../validators/ValidationError");
@@ -42,6 +45,32 @@ var NewAppModalComponent = React.createClass({
     };
   },
 
+  componentWillMount: function () {
+    AppsStore.on(AppsEvents.CREATE_APP, this.onCreateApp);
+    AppsStore.on(AppsEvents.CREATE_APP_ERROR, this.onCreateAppError);
+  },
+
+  componentWillUnmount: function () {
+    AppsStore.removeListener(AppsEvents.CREATE_APP,
+      this.onCreateApp);
+    AppsStore.removeListener(AppsEvents.CREATE_APP_ERROR,
+      this.onCreateAppError);
+  },
+
+  onCreateApp: function () {
+    this.clearValidation();
+    this.destroy();
+  },
+
+  onCreateAppError: function (data, status) {
+    this.validateResponse(data, status);
+
+    if (status < 300) {
+      this.clearValidation();
+      this.destroy();
+    }
+  },
+
   destroy: function () {
     // This will also call `this.props.onDestroy` since it is passed as the
     // callback for the modal's `onDestroy` prop.
@@ -52,12 +81,12 @@ var NewAppModalComponent = React.createClass({
     this.setState({errors: []});
   },
 
-  validateResponse: function (response) {
+  validateResponse: function (response, status) {
     var errors;
 
-    if (response.status === 422 && response.responseJSON != null &&
-        _.isArray(response.responseJSON.errors)) {
-      errors = response.responseJSON.errors.map(function (e) {
+    if (status === 422 && response != null &&
+        _.isArray(response.errors)) {
+      errors = response.errors.map(function (e) {
         return new ValidationError(
           // Errors that affect multiple attributes provide a blank string. In
           // that case, count it as a "general" error.
@@ -65,7 +94,7 @@ var NewAppModalComponent = React.createClass({
           e.error
         );
       });
-    } else if (response.status >= 500) {
+    } else if (status >= 500) {
       errors = [
         new ValidationError("general", "Server error, could not create app.")
       ];
@@ -136,27 +165,11 @@ var NewAppModalComponent = React.createClass({
       modelAttrs.instances = parseInt(modelAttrs.instances, 10);
     }
 
-    if (this.state.model.isValid()) {
-      this.props.onCreate(
-        this.state.model,
-        {
-          error: function (model, response) {
-            this.validateResponse(response);
-            if (response.status < 300) {
-              this.clearValidation();
-              this.destroy();
-            }
-          }.bind(this),
-          success: function () {
-            this.clearValidation();
-            this.destroy();
-          }.bind(this),
+    var model = _.extend(this.state.attributes, modelAttrs);
 
-          // Wait to add the model to the collection until a successful
-          // response code is received from the server.
-          wait: true
-        }
-      );
+    // Create app if validate() returns no errors
+    if (appValidator.validate(model) == null) {
+      AppsActions.createApp(model);
     }
   },
 

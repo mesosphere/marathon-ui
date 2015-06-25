@@ -26,17 +26,17 @@ var appValidator = {
   validate: function (attrs) {
     var errors = [];
 
-    if (_.isNaN(attrs.mem) || !_.isNumber(attrs.mem) || attrs.mem < 0) {
+    if (_.isNaN(attrs.mem) || attrs.mem < 0) {
       errors.push(
         new ValidationError("mem", "Memory must be a non-negative Number"));
     }
 
-    if (_.isNaN(attrs.cpus) || !_.isNumber(attrs.cpus) || attrs.cpus < 0) {
+    if (_.isNaN(attrs.cpus) || attrs.cpus < 0) {
       errors.push(
         new ValidationError("cpus", "CPUs must be a non-negative Number"));
     }
 
-    if (_.isNaN(attrs.disk) || !_.isNumber(attrs.disk) || attrs.disk < 0) {
+    if (_.isNaN(attrs.disk) || attrs.disk < 0) {
       errors.push(
         new ValidationError(
           "disk",
@@ -45,8 +45,7 @@ var appValidator = {
       );
     }
 
-    if (_.isNaN(attrs.instances) || !_.isNumber(attrs.instances) ||
-        attrs.instances < 0) {
+    if (_.isNaN(attrs.instances) || attrs.instances < 0) {
       errors.push(
         new ValidationError(
           "instances",
@@ -70,7 +69,9 @@ var appValidator = {
       );
     }
 
-    if (!_.every(attrs.ports, function (p) { return _.isNumber(p); })) {
+    if (!_.every(attrs.ports, function (p) {
+      return _.isNumber(parseInt(p, 10));
+    })) {
       errors.push(
         new ValidationError("ports", "Ports must be a list of Numbers"));
     }
