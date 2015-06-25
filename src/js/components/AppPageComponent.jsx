@@ -32,7 +32,6 @@ var AppPageComponent = React.createClass({
 
   propTypes: {
     appId: React.PropTypes.string.isRequired,
-    fetchTasks: React.PropTypes.func.isRequired,
     onTasksKilled: React.PropTypes.func.isRequired,
     rollBackApp: React.PropTypes.func.isRequired,
     router: React.PropTypes.object.isRequired,
@@ -222,7 +221,6 @@ var AppPageComponent = React.createClass({
 
   getControls: function () {
     var state = this.state;
-    var props = this.props;
 
     if (state.activeViewIndex !== 0) {
       return null;
@@ -282,12 +280,11 @@ var AppPageComponent = React.createClass({
         <TabPaneComponent
           id={"apps/" + encodeURIComponent(props.appId)}>
           <TaskViewComponent
-            tasks={model.tasks}
             fetchState={state.fetchState}
-            fetchTasks={props.fetchTasks}
             getTaskHealthMessage={this.getTaskHealthMessage}
             hasHealth={model.healthChecks > 0}
-            onTasksKilled={props.onTasksKilled} />
+            onTasksKilled={props.onTasksKilled}
+            tasks={model.tasks} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );

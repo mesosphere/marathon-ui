@@ -40,9 +40,7 @@ var Marathon = React.createClass({
       activeAppView: null,
       activeTabId: tabs[0].id,
       collection: new AppCollection(),
-      fetchState: States.STATE_LOADING,
-      modalClass: null,
-      tasksFetchState: States.STATE_LOADING
+      modalClass: null
     };
   },
 
@@ -136,21 +134,6 @@ var Marathon = React.createClass({
     this.setState({
       modalClass: NewAppModalComponent
     });
-  },
-
-  fetchTasks: function () {
-    if (this.state.activeApp != null) {
-      this.state.activeApp.tasks.fetch({
-        error: function () {
-          this.setState({tasksFetchState: States.STATE_ERROR});
-        }.bind(this),
-        success: function (collection, response) {
-          // update changed attributes in app
-          this.state.activeApp.update(response.app);
-          this.setState({tasksFetchState: States.STATE_SUCCESS});
-        }.bind(this)
-      });
-    }
   },
 
   handleAppCreate: function (appModel, options) {
@@ -281,11 +264,9 @@ var Marathon = React.createClass({
     return (
       <AppPageComponent
         appId={state.activeAppId}
-        fetchTasks={this.fetchTasks}
         onTasksKilled={this.handleTasksKilled}
         rollBackApp={this.rollbackToAppVersion}
         router={this.props.router}
-        tasksFetchState={state.tasksFetchState}
         view={state.activeAppView} />
     );
   },
