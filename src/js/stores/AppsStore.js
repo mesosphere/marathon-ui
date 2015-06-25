@@ -136,7 +136,7 @@ AppDispatcher.register(function (action) {
     case AppsEvents.DELETE_APP:
       AppsStore.apps =
         removeApp(AppsStore.apps, action.appId);
-      AppsStore.emit(AppsEvents.CHANGE);
+      AppsStore.emit(AppsEvents.DELETE_APP);
       break;
     case AppsEvents.DELETE_APP_ERROR:
       AppsStore.emit(AppsEvents.DELETE_APP_ERROR, action.data.body);
