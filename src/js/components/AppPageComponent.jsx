@@ -35,7 +35,6 @@ var AppPageComponent = React.createClass({
     destroyApp: React.PropTypes.func.isRequired,
     fetchTasks: React.PropTypes.func.isRequired,
     onTasksKilled: React.PropTypes.func.isRequired,
-    restartApp: React.PropTypes.func.isRequired,
     rollBackApp: React.PropTypes.func.isRequired,
     view: React.PropTypes.string
   },
@@ -70,6 +69,7 @@ var AppPageComponent = React.createClass({
     AppsStore.on(AppsEvents.CHANGE, this.onAppChange);
     AppsStore.on(AppsEvents.REQUEST_APP_ERROR, this.onAppRequestError);
     AppsStore.on(AppsEvents.SCALE_APP_ERROR, this.onScaleAppError);
+    AppsStore.on(AppsEvents.RESTART_APP_ERROR, this.onRestartAppError);
   },
 
   componentWillUnmount: function () {
@@ -79,6 +79,8 @@ var AppPageComponent = React.createClass({
       this.onAppRequestError);
     AppsStore.removeListener(AppsEvents.SCALE_APP_ERROR,
       this.onScaleAppError);
+    AppsStore.removeListener(AppsEvents.RESTART_APP_ERROR,
+      this.onRestartAppError);
   },
 
   componentWillReceiveProps: function (nextProps) {
@@ -116,6 +118,11 @@ var AppPageComponent = React.createClass({
 
   onScaleAppError: function (errorMessage) {
     util.alert("Not scaling: " + (errorMessage.message || errorMessage));
+  },
+
+  onRestartAppError: function (errorMessage) {
+    util.alert("Error restarting app: " +
+      (errorMessage.message || errorMessage));
   },
 
   onTabClick: function (id) {
@@ -183,6 +190,12 @@ var AppPageComponent = React.createClass({
     }
   },
 
+  restartApp: function () {
+    if (util.confirm("Restart app '" + this.props.appId + "'?")) {
+      AppsActions.restartApp(this.props.appId);
+    }
+  },
+
   getControls: function () {
     var state = this.state;
     var props = this.props;
@@ -206,7 +219,7 @@ var AppPageComponent = React.createClass({
           Destroy App
         </button>
         <button className="btn btn-sm btn-default pull-right"
-          onClick={props.restartApp}>
+          onClick={this.restartApp}>
           Restart App
         </button>
       </div>
