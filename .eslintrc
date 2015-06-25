@@ -1,6 +1,7 @@
 {
   "ecmaFeatures": {
-    "jsx": true
+    "jsx": true,
+    "arrowFunctions": true
   },
 
   "env": {
