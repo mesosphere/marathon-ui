@@ -3,8 +3,9 @@ var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 
-var AppsStore = require("../stores/AppsStore");
+var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
+var AppsStore = require("../stores/AppsStore");
 var AppStatus = require("../constants/AppStatus");
 var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
@@ -36,7 +37,6 @@ var AppPageComponent = React.createClass({
     onTasksKilled: React.PropTypes.func.isRequired,
     restartApp: React.PropTypes.func.isRequired,
     rollBackApp: React.PropTypes.func.isRequired,
-    scaleApp: React.PropTypes.func.isRequired,
     suspendApp: React.PropTypes.func.isRequired,
     view: React.PropTypes.string
   },
@@ -70,6 +70,7 @@ var AppPageComponent = React.createClass({
   componentWillMount: function () {
     AppsStore.on(AppsEvents.CHANGE, this.onAppChange);
     AppsStore.on(AppsEvents.REQUEST_APP_ERROR, this.onAppRequestError);
+    AppsStore.on(AppsEvents.SCALE_APP_ERROR, this.onScaleAppError);
   },
 
   componentWillUnmount: function () {
@@ -77,6 +78,8 @@ var AppPageComponent = React.createClass({
       this.onAppChange);
     AppsStore.removeListener(AppsEvents.REQUEST_APP_ERROR,
       this.onAppRequestError);
+    AppsStore.removeListener(AppsEvents.SCALE_APP_ERROR,
+      this.onScaleAppError);
   },
 
   componentWillReceiveProps: function (nextProps) {
@@ -110,6 +113,10 @@ var AppPageComponent = React.createClass({
     this.setState({
       fetchState: States.STATE_ERROR
     });
+  },
+
+  onScaleAppError: function (errorMessage) {
+    util.alert("Not scaling: " + (errorMessage.message || errorMessage));
   },
 
   onTabClick: function (id) {
@@ -159,14 +166,15 @@ var AppPageComponent = React.createClass({
   },
 
   scaleApp: function () {
-    var model = this.props.model;
+    var model = this.state.app;
+
     var instancesString = util.prompt("Scale to how many instances?",
-      model.get("instances"));
-    // Clicking "Cancel" in a prompt returns either null or an empty String.
-    // perform the action only if a value is submitted.
+      model.instances);
+
     if (instancesString != null && instancesString !== "") {
       var instances = parseInt(instancesString, 10);
-      this.props.scaleApp(instances);
+
+      AppsActions.scaleApp(this.props.appId, instances);
     }
   },
 
@@ -238,12 +246,6 @@ var AppPageComponent = React.createClass({
             getTaskHealthMessage={this.getTaskHealthMessage}
             hasHealth={model.healthChecks > 0}
             onTasksKilled={props.onTasksKilled} />
-        </TabPaneComponent>
-        <TabPaneComponent
-          id={"apps/" + encodeURIComponent(props.appId) + "/configuration"}>
-          <AppVersionListComponent
-            app={model}
-            onRollback={props.rollBackApp} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
