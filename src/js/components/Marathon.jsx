@@ -3,7 +3,6 @@ var config = require("../config/config");
 var Mousetrap = require("mousetrap");
 require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
-var AppCollection = require("../models/AppCollection");
 var AppListComponent = require("../components/AppListComponent");
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var AppPageComponent = require("../components/AppPageComponent");
@@ -38,7 +37,6 @@ var Marathon = React.createClass({
       activeApp: null,
       activeAppView: null,
       activeTabId: tabs[0].id,
-      collection: new AppCollection(),
       modalClass: null
     };
   },
@@ -127,10 +125,6 @@ var Marathon = React.createClass({
     this.setState({
       modalClass: NewAppModalComponent
     });
-  },
-
-  handleAppCreate: function (appModel, options) {
-    this.state.collection.create(appModel, options);
   },
 
   handleModalDestroy: function () {

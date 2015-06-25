@@ -2,34 +2,42 @@ var $ = require("jquery");
 var _ = require("underscore");
 var React = require("react/addons");
 
-var BackboneMixin = require("../mixins/BackboneMixin");
-var App = require("../models/App");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var ModalComponent = require("../components/ModalComponent");
-
-function ValidationError(attribute, message) {
-  this.attribute = attribute;
-  this.message = message;
-}
+var ValidationError = require("../validators/ValidationError");
+var appValidator = require("../validators/appValidator");
 
 var NewAppModalComponent = React.createClass({
   displayName: "NewAppModalComponent",
-  mixins: [BackboneMixin],
+
   propTypes: {
-    onCreate: React.PropTypes.func,
     onDestroy: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
-      onCreate: $.noop,
       onDestroy: $.noop
     };
   },
 
   getInitialState: function () {
     return {
-      model: new App(),
+      attributes: {
+        cmd: null,
+        constraints: [],
+        container: null,
+        cpus: 0.1,
+        deployments: [],
+        env: {},
+        executor: "",
+        healthChecks: [],
+        id: null,
+        instances: 1,
+        mem: 16.0,
+        disk: 0.0,
+        ports: [0],
+        uris: []
+      },
       errors: []
     };
   },
@@ -38,10 +46,6 @@ var NewAppModalComponent = React.createClass({
     // This will also call `this.props.onDestroy` since it is passed as the
     // callback for the modal's `onDestroy` prop.
     this.refs.modalComponent.destroy();
-  },
-
-  getResource: function () {
-    return this.state.model;
   },
 
   clearValidation: function () {
@@ -132,8 +136,6 @@ var NewAppModalComponent = React.createClass({
       modelAttrs.instances = parseInt(modelAttrs.instances, 10);
     }
 
-    this.state.model.set(modelAttrs);
-
     if (this.state.model.isValid()) {
       this.props.onCreate(
         this.state.model,
@@ -159,7 +161,7 @@ var NewAppModalComponent = React.createClass({
   },
 
   render: function () {
-    var model = this.state.model;
+    var model = this.state.attributes;
     var errors = this.state.errors;
 
     var generalErrors = errors.filter(function (e) {
@@ -185,35 +187,40 @@ var NewAppModalComponent = React.createClass({
                 attribute="id"
                 label="ID"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input autoFocus required />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="cpus"
                 label="CPUs"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input min="0" step="any" type="number" required />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="mem"
                 label="Memory (MB)"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input min="0" step="any" type="number" required />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="disk"
                 label="Disk Space (MB)"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input min="0" step="any" type="number" required />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="instances"
                 label="Instances"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input min="1" step="1" type="number" required />
             </FormGroupComponent>
             <hr />
@@ -222,16 +229,18 @@ var NewAppModalComponent = React.createClass({
                 attribute="cmd"
                 label="Command"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="executor"
                 label="Executor"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input
-                pattern={App.VALID_EXECUTOR_PATTERN}
+                pattern={appValidator.VALID_EXECUTOR_PATTERN}
                 title="Executor must be the string '//cmd', a string containing only single slashes ('/'), or blank." />
             </FormGroupComponent>
             <FormGroupComponent
@@ -239,7 +248,8 @@ var NewAppModalComponent = React.createClass({
                 help="Comma-separated list of numbers. 0's (zeros) assign random ports. (Default: one random port)"
                 label="Ports"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input />
             </FormGroupComponent>
             <FormGroupComponent
@@ -247,7 +257,8 @@ var NewAppModalComponent = React.createClass({
                 help="Comma-separated list of valid URIs."
                 label="URIs"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input />
             </FormGroupComponent>
             <FormGroupComponent
@@ -255,7 +266,8 @@ var NewAppModalComponent = React.createClass({
                 help={helpMessage}
                 label="Constraints"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input />
             </FormGroupComponent>
             <div>
