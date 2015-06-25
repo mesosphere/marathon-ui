@@ -3,7 +3,6 @@ var config = require("../config/config");
 var Mousetrap = require("mousetrap");
 require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
-var States = require("../constants/States");
 var AppCollection = require("../models/AppCollection");
 var AppListComponent = require("../components/AppListComponent");
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
@@ -155,19 +154,6 @@ var Marathon = React.createClass({
     router.navigate(navigation, {trigger: true});
   },
 
-  handleTasksKilled: function (options) {
-    var instances;
-    var app = this.state.activeApp;
-    var _options = options || {};
-    if (_options.scale) {
-      instances = app.get("instances");
-      app.set("instances", instances - 1);
-      this.setState({appVersionsFetchState: States.STATE_LOADING});
-      // refresh app versions
-      this.fetchAppVersions();
-    }
-  },
-
   rollbackToAppVersion: function (version) {
     if (this.state.activeApp != null) {
       var app = this.state.activeApp;
@@ -258,7 +244,6 @@ var Marathon = React.createClass({
     return (
       <AppPageComponent
         appId={state.activeAppId}
-        onTasksKilled={this.handleTasksKilled}
         rollBackApp={this.rollbackToAppVersion}
         router={this.props.router}
         view={state.activeAppView} />
