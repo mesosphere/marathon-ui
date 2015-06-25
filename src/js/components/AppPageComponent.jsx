@@ -145,6 +145,40 @@ var AppPageComponent = React.createClass({
     });
   },
 
+  handleScaleApp: function () {
+    var model = this.state.app;
+
+    var instancesString = util.prompt("Scale to how many instances?",
+      model.instances);
+
+    if (instancesString != null && instancesString !== "") {
+      var instances = parseInt(instancesString, 10);
+
+      AppsActions.scaleApp(this.props.appId, instances);
+    }
+  },
+
+  handleSuspendApp: function () {
+    if (util.confirm("Suspend app by scaling to 0 instances?")) {
+      AppsActions.scaleApp(this.props.appId, 0);
+    }
+  },
+
+  handleRestartApp: function () {
+    var appId = this.props.appId;
+    if (util.confirm("Restart app '" + appId + "'?")) {
+      AppsActions.restartApp(appId);
+    }
+  },
+
+  handleDestroyApp: function () {
+    var appId = this.props.appId;
+    if (util.confirm("Destroy app '" + appId +
+      "'?\nThis is irreversible.")) {
+      AppsActions.deleteApp(appId);
+    }
+  },
+
   getTaskHealthMessage: function (taskId) {
     var task = lazy(this.state.app.tasks).findWhere({"id": taskId});
 
@@ -185,40 +219,6 @@ var AppPageComponent = React.createClass({
     return msg;
   },
 
-  scaleApp: function () {
-    var model = this.state.app;
-
-    var instancesString = util.prompt("Scale to how many instances?",
-      model.instances);
-
-    if (instancesString != null && instancesString !== "") {
-      var instances = parseInt(instancesString, 10);
-
-      AppsActions.scaleApp(this.props.appId, instances);
-    }
-  },
-
-  suspendApp: function () {
-    if (util.confirm("Suspend app by scaling to 0 instances?")) {
-      AppsActions.scaleApp(this.props.appId, 0);
-    }
-  },
-
-  restartApp: function () {
-    var appId = this.props.appId;
-    if (util.confirm("Restart app '" + appId + "'?")) {
-      AppsActions.restartApp(appId);
-    }
-  },
-
-  destroyApp: function () {
-    var appId = this.props.appId;
-    if (util.confirm("Destroy app '" + appId +
-      "'?\nThis is irreversible.")) {
-      AppsActions.deleteApp(appId);
-    }
-  },
-
   getControls: function () {
     var state = this.state;
 
@@ -229,19 +229,19 @@ var AppPageComponent = React.createClass({
     return (
       <div className="header-btn">
         <button className="btn btn-sm btn-default"
-            onClick={this.suspendApp}
+            onClick={this.handleSuspendApp}
             disabled={state.app.instances < 1}>
           Suspend
         </button>
-        <button className="btn btn-sm btn-default" onClick={this.scaleApp}>
+        <button className="btn btn-sm btn-default" onClick={this.handleScaleApp}>
           Scale
         </button>
         <button className="btn btn-sm btn-danger pull-right"
-          onClick={this.destroyApp}>
+          onClick={this.handleDestroyApp}>
           Destroy App
         </button>
         <button className="btn btn-sm btn-default pull-right"
-          onClick={this.restartApp}>
+          onClick={this.handleRestartApp}>
           Restart App
         </button>
       </div>
