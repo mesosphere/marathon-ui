@@ -22,21 +22,25 @@ function isValidConstraint(p) {
   return (_.indexOf(VALID_CONSTRAINTS, operator.toLowerCase()) !== -1);
 }
 
+function isNotPositiveNumber(value) {
+  return !value.toString().match(/^[0-9\.]+$/);
+}
+
 var appValidator = {
   validate: function (attrs) {
     var errors = [];
 
-    if (_.isNaN(attrs.mem) || attrs.mem < 0) {
+    if (isNotPositiveNumber(attrs.mem)) {
       errors.push(
         new ValidationError("mem", "Memory must be a non-negative Number"));
     }
 
-    if (_.isNaN(attrs.cpus) || attrs.cpus < 0) {
+    if (isNotPositiveNumber(attrs.cpus)) {
       errors.push(
         new ValidationError("cpus", "CPUs must be a non-negative Number"));
     }
 
-    if (_.isNaN(attrs.disk) || attrs.disk < 0) {
+    if (isNotPositiveNumber(attrs.disk)) {
       errors.push(
         new ValidationError(
           "disk",
@@ -45,7 +49,7 @@ var appValidator = {
       );
     }
 
-    if (_.isNaN(attrs.instances) || attrs.instances < 0) {
+    if (isNotPositiveNumber(attrs.instances)) {
       errors.push(
         new ValidationError(
           "instances",
@@ -69,8 +73,12 @@ var appValidator = {
       );
     }
 
+    if (_.isString(attrs.ports)) {
+      attrs.ports = attrs.ports.split(",");
+    }
+
     if (!_.every(attrs.ports, function (p) {
-      return _.isNumber(parseInt(p, 10));
+      return !isNotPositiveNumber(p.toString().trim());
     })) {
       errors.push(
         new ValidationError("ports", "Ports must be a list of Numbers"));
