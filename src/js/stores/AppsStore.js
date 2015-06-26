@@ -3,22 +3,11 @@ var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
+var appScheme = require("../stores/appScheme");
 var AppStatus = require("../constants/AppStatus");
 var HealthStatus = require("../constants/HealthStatus");
 var TasksEvents = require("../events/TasksEvents");
 var TaskStatus = require("../constants/TaskStatus");
-
-var appScheme = {
-  constraints: [],
-  deployments: [],
-  healthChecks: [],
-  instances: 0,
-  status: AppStatus.SUSPENDED,
-  ports: [],
-  uris: [],
-  tasks: [],
-  tasksRunning: 0
-};
 
 function removeApp(apps, appId) {
   return lazy(apps).reject({

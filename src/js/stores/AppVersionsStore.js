@@ -4,17 +4,6 @@ var lazy = require("lazy.js");
 var AppDispatcher = require("../AppDispatcher");
 var AppVersionsEvents = require("../events/AppVersionsEvents");
 
-var appVersionScheme = {
-  cmd: null,
-  constraints: [],
-  contgainer: null,
-  env: {},
-  executor: "",
-  disk: null,
-  ports: [],
-  uris: []
-};
-
 var AppVersionsStore = lazy(EventEmitter.prototype).extend({
   // appId where the app versions belong to
   currentAppId: null,
