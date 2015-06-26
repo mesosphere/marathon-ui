@@ -22,7 +22,7 @@ var oboeWrapper = function (req) {
 
   api.success = function (callback) {
     this.done(function (json) {
-      if (!this.status.toString().match(/^2[0-9][0-9]$/)) {
+      if (this.status.toString()[0] !== "2") {
         return;
       } else {
         response.status = this.status;
@@ -36,7 +36,7 @@ var oboeWrapper = function (req) {
   api.error = function (callback) {
     // Non 200 statuses
     this.done(function (error) {
-      if (this.status.toString().match(/^[^2]/)) {
+      if (this.status.toString()[0] !== "2") {
         parseResponse(error);
         callback(response);
       }

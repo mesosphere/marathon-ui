@@ -27,7 +27,7 @@ var qajaxWrapper = function (options) {
     promise.then(
       // not a 2* response
       function (xhr) {
-        if (xhr.status.toString().match(/^[^2]/)) {
+        if (xhr.status.toString()[0] !== "2") {
           response.status = xhr.status;
           try {
             response.body = JSON.parse(xhr.responseText);
@@ -56,7 +56,7 @@ var qajaxWrapper = function (options) {
     var promise = this;
     promise
       .then(qajax.filterStatus(function (status) {
-        return status.toString().match(/^2/);
+        return status.toString()[0] === "2";
       }))
       .then(function (xhr) {
         response.status = xhr.status;
