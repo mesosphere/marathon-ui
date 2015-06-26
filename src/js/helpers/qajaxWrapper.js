@@ -20,6 +20,15 @@ var qajaxWrapper = function (options) {
     }
   });
 
+  var parseResponse = function (xhr) {
+    response.status = xhr.status;
+    try {
+      response.body = JSON.parse(xhr.responseText);
+    } catch (e) {
+      response.body = xhr.responseText;
+    }
+  };
+
   var api = qajax(options);
   api.error = function (callback) {
     var promise = this;
@@ -28,24 +37,14 @@ var qajaxWrapper = function (options) {
       // not a 2* response
       function (xhr) {
         if (xhr.status.toString()[0] !== "2") {
-          response.status = xhr.status;
-          try {
-            response.body = JSON.parse(xhr.responseText);
-          } catch (e) {
-            response.body = xhr.responseText;
-          }
+          parseResponse(xhr);
           callback(response);
         }
       },
       // the promise is only rejected if the server has failed
       // to reply to the client (network problem or timeout reached).
       function (xhr) {
-        response.status = xhr.status;
-        try {
-          response.body = JSON.parse(xhr.responseText);
-        } catch (e) {
-          response.body = xhr.responseText;
-        }
+        parseResponse(xhr);
         callback(response);
       }
     );
@@ -59,12 +58,7 @@ var qajaxWrapper = function (options) {
         return status.toString()[0] === "2";
       }))
       .then(function (xhr) {
-        response.status = xhr.status;
-        try {
-          response.body = JSON.parse(xhr.responseText);
-        } catch (e) {
-          response.body = xhr.responseText;
-        }
+        parseResponse(xhr);
         callback(response);
       });
     return promise;
