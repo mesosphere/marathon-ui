@@ -31,7 +31,7 @@ describe("oboeWrapper", function () {
       })
       .success(function (response) {
         expectAsync(function () {
-          expect(response.name).to.equal("Marathon");
+          expect(response.body.name).to.equal("Marathon");
         }, done);
       })
       .error(function () {
@@ -51,7 +51,7 @@ describe("oboeWrapper", function () {
       })
       .error(function (error) {
         expectAsync(function () {
-          expect(error.message).to.equal("Guru Meditation");
+          expect(error.body.message).to.equal("Guru Meditation");
         }, done);
       });
     });

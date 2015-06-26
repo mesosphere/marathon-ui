@@ -31,7 +31,7 @@ describe("qajaxWrapper", function () {
       })
       .success(function (response) {
         expectAsync(function () {
-          expect(response.name).to.equal("Marathon");
+          expect(response.body.name).to.equal("Marathon");
         }, done);
       })
       .error(function () {
@@ -49,9 +49,9 @@ describe("qajaxWrapper", function () {
       .success(function () {
         throw new Exception("I should not be called");
       })
-      .error(function (response) {
+      .error(function (error) {
         expectAsync(function () {
-          expect(response.message).to.equal("Guru Meditation");
+          expect(error.body.message).to.equal("Guru Meditation");
         }, done);
       });
     });
