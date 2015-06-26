@@ -3,6 +3,7 @@ var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var States = require("../constants/States");
+var AppsStore = require("../stores/AppsStore");
 var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppVersionsEvents = require("../events/AppVersionsEvents");
 var AppVersionsStore = require("../stores/AppVersionsStore");
@@ -16,14 +17,14 @@ var AppVersionListComponent = React.createClass({
   displayName: "AppVersionListComponent",
 
   propTypes: {
-    app: React.PropTypes.object.isRequired
+    appId: React.PropTypes.string.isRequired
   },
 
   getInitialState: function () {
     var props = this.props;
 
     return {
-      appVersions: AppVersionsStore.getAppVersions(props.app.id),
+      appVersions: AppVersionsStore.getAppVersions(props.appId),
       currentPage: 0,
       itemsPerPage: 8,
       fetchState: States.STATE_LOADING
@@ -37,7 +38,7 @@ var AppVersionListComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    AppVersionsActions.requestAppVersions(this.props.app.id);
+    AppVersionsActions.requestAppVersions(this.props.appId);
   },
 
   componentWillUnmount: function () {
@@ -51,7 +52,7 @@ var AppVersionListComponent = React.createClass({
 
   onAppVersionsChange: function () {
     this.setState({
-      appVersions: AppVersionsStore.getAppVersions(this.props.app.id),
+      appVersions: AppVersionsStore.getAppVersions(this.props.appId),
       fetchState: States.STATE_SUCCESS
     });
   },
@@ -63,7 +64,7 @@ var AppVersionListComponent = React.createClass({
   },
 
   handleRefresh: function () {
-    AppVersionsActions.requestAppVersions(this.props.app.id);
+    AppVersionsActions.requestAppVersions(this.props.appId);
   },
 
   handlePageChange: function (pageNum) {
@@ -76,7 +77,7 @@ var AppVersionListComponent = React.createClass({
     return lazy(appVersions).map(function (versionTimestamp) {
       return (
         <AppVersionListItemComponent
-          app={props.app}
+          appId={props.appId}
           appVersionTimestamp={versionTimestamp}
           key={versionTimestamp} />
       );
@@ -154,10 +155,8 @@ var AppVersionListComponent = React.createClass({
           </button>
         </h5>
         <AppVersionComponent
-          app={this.props.app}
-          appVersion={this.props.app}
+          appVersion={AppsStore.getCurrentApp(this.props.appId)}
           currentVersion={true} />
-          {this.getAppVersionTable()}
       </div>
     );
   }
