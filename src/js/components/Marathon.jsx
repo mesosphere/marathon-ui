@@ -221,9 +221,7 @@ var Marathon = React.createClass({
   getNewAppModal: function () {
     return (
       <NewAppModalComponent
-        model={this.state.activeApp}
         onDestroy={this.handleModalDestroy}
-        onCreate={this.handleAppCreate}
         ref="modal" />
     );
   },

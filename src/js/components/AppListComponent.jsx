@@ -131,22 +131,26 @@ var AppListComponent = React.createClass({
         <thead>
           <tr>
             <th>
-              <span onClick={this.sortBy.bind(null, "id")} className={headerClassSet}>
+              <span onClick={this.sortBy.bind(null, "id")}
+                  className={headerClassSet}>
                 ID {this.getCaret("id")}
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "mem")} className={headerClassSet}>
+              <span onClick={this.sortBy.bind(null, "mem")}
+                  className={headerClassSet}>
                 {this.getCaret("mem")} Memory (MB)
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "cpus")} className={headerClassSet}>
+              <span onClick={this.sortBy.bind(null, "cpus")}
+                  className={headerClassSet}>
                 {this.getCaret("cpus")} CPUs
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "instances")} className={headerClassSet}>
+              <span onClick={this.sortBy.bind(null, "instances")}
+                  className={headerClassSet}>
                 {this.getCaret("instances")} Tasks / Instances
               </span>
             </th>
@@ -156,7 +160,8 @@ var AppListComponent = React.createClass({
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "status")} className={headerClassSet}>
+              <span onClick={this.sortBy.bind(null, "status")}
+                  className={headerClassSet}>
                 {this.getCaret("status")} Status
               </span>
             </th>
