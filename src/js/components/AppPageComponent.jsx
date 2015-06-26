@@ -286,9 +286,8 @@ var AppPageComponent = React.createClass({
             tasks={model.tasks} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(props.appId) + "/configuration"}
-          onActivate={null} >
-          <AppVersionListComponent app={model} />
+          id={"apps/" + encodeURIComponent(props.appId) + "/configuration"}>
+          <AppVersionListComponent appId={props.appId} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );

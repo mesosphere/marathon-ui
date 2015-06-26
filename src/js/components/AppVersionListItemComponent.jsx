@@ -11,7 +11,7 @@ var AppVersionListItemComponent = React.createClass({
   displayName: "AppVersionListItemComponent",
 
   propTypes: {
-    app: React.PropTypes.object.isRequired,
+    appId: React.PropTypes.string.isRequired,
     appVersionTimestamp: React.PropTypes.string.isRequired
   },
 
@@ -22,7 +22,7 @@ var AppVersionListItemComponent = React.createClass({
       open: false,
       fetchState: States.STATE_LOADING,
       appVersion: AppVersionsStore.getAppVersion(
-        props.app.id,
+        props.appId,
         props.appVersionTimestamp
       )
     };
@@ -39,7 +39,7 @@ var AppVersionListItemComponent = React.createClass({
 
     if (this.state.open) {
       AppVersionsActions.requestAppVersion(
-        props.app.id,
+        props.appId,
         props.appVersionTimestamp
       );
     }
@@ -59,7 +59,7 @@ var AppVersionListItemComponent = React.createClass({
 
     this.setState({
       appVersion: AppVersionsStore.getAppVersion(
-        props.app.id,
+        props.appId,
         props.appVersionTimestamp
       ),
       fetchState: States.STATE_SUCCESS
@@ -84,7 +84,7 @@ var AppVersionListItemComponent = React.createClass({
 
     if (state.fetchState !== States.STATE_SUCCESS) {
       AppVersionsActions.requestAppVersion(
-        props.app.id,
+        props.appId,
         props.appVersionTimestamp
       );
     }
@@ -92,7 +92,6 @@ var AppVersionListItemComponent = React.createClass({
   },
 
   getAppVersionComponent: function () {
-    var props = this.props;
     var state = this.state;
 
     if (state.fetchState !== States.STATE_LOADING &&
@@ -100,7 +99,6 @@ var AppVersionListItemComponent = React.createClass({
       return (
         <AppVersionComponent
           className="dl-unstyled"
-          app={props.app}
           appVersion={state.appVersion} />
       );
     }
