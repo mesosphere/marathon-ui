@@ -47,6 +47,7 @@
     "qajax": "^1.3.0",
     "sinon": "^1.12.2",
     "source-map-loader": "^0.1.5",
+    "transform-loader": "^0.2.2",
     "webpack": "^1.9.11"
   },
   "scripts": {
