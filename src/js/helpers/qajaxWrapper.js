@@ -6,7 +6,6 @@ var qajaxWrapper = function (options) {
     body: null
   };
 
-
   var parseResponse = function (xhr) {
     response.status = xhr.status;
     try {
