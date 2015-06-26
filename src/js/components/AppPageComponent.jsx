@@ -8,7 +8,7 @@ var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
-var Util = require("../helpers/Util");
+var util = require("../helpers/util");
 
 var tabsTemplate = [
   {id: "apps/:appid", text: "Tasks"},
@@ -89,7 +89,7 @@ var AppPageComponent = React.createClass({
 
   scaleApp: function () {
     var model = this.props.model;
-    var instancesString = Util.prompt("Scale to how many instances?",
+    var instancesString = util.prompt("Scale to how many instances?",
       model.get("instances"));
     // Clicking "Cancel" in a prompt returns either null or an empty String.
     // perform the action only if a value is submitted.
