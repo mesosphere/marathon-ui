@@ -19,7 +19,8 @@ var AppVersionsActions = {
     .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
-        data: error
+        data: error,
+        appId: appId
       });
     });
   },
@@ -38,7 +39,9 @@ var AppVersionsActions = {
     .error(function (error) {
       AppDispatcher.dispatch({
         actionType: AppVersionsEvents.REQUEST_ONE_ERROR,
-        data: error
+        data: error,
+        appId: appId,
+        versionTimestamp: versionTimestamp
       });
     });
   },

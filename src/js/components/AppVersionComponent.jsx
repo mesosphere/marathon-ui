@@ -1,4 +1,3 @@
-var _ = require("underscore");
 var React = require("react/addons");
 
 var util = require("../helpers/util");
