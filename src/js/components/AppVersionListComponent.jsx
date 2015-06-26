@@ -157,6 +157,7 @@ var AppVersionListComponent = React.createClass({
         <AppVersionComponent
           appVersion={AppsStore.getCurrentApp(this.props.appId)}
           currentVersion={true} />
+        {this.getAppVersionTable()}
       </div>
     );
   }

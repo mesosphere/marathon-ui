@@ -54,8 +54,12 @@ var AppVersionListItemComponent = React.createClass({
     );
   },
 
-  onAppVersionChange: function () {
+  onAppVersionChange: function (versionTimestamp) {
     var props = this.props;
+
+    if (versionTimestamp !== props.appVersionTimestamp) {
+      return;
+    }
 
     this.setState({
       appVersion: AppVersionsStore.getAppVersion(
@@ -66,21 +70,19 @@ var AppVersionListItemComponent = React.createClass({
     });
   },
 
-  onAppVersionRequestError: function () {
+  onAppVersionRequestError: function (error, versionTimestamp) {
+    if (versionTimestamp !== this.props.appVersionTimestamp) {
+      return;
+    }
+
     this.setState({
       fetchState: States.STATE_ERROR
     });
   },
 
-  handleDetailsClick: function (event) {
+  handleDetailsClick: function () {
     var props = this.props;
     var state = this.state;
-
-    if (event.target.type === "radio") {
-      // handled by other functions
-      return;
-    }
-    event.preventDefault();
 
     if (state.fetchState !== States.STATE_SUCCESS) {
       AppVersionsActions.requestAppVersion(
@@ -88,6 +90,7 @@ var AppVersionListItemComponent = React.createClass({
         props.appVersionTimestamp
       );
     }
+
     this.setState({open: !state.open});
   },
 
