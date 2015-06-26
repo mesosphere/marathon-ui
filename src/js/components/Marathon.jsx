@@ -17,7 +17,6 @@ var AppsActions = require("../actions/AppsActions");
 var DeploymentActions = require("../actions/DeploymentActions");
 var DeploymentEvents = require("../events/DeploymentEvents");
 var DeploymentStore = require("../stores/DeploymentStore");
-var util = require("../helpers/util");
 
 var tabs = [
   {id: "apps", text: "Apps"},
@@ -34,7 +33,6 @@ var Marathon = React.createClass({
   getInitialState: function () {
     return {
       activeAppId: null,
-      activeApp: null,
       activeAppView: null,
       activeTabId: tabs[0].id,
       modalClass: null
@@ -148,25 +146,6 @@ var Marathon = React.createClass({
     router.navigate(navigation, {trigger: true});
   },
 
-  rollbackToAppVersion: function (version) {
-    if (this.state.activeApp != null) {
-      var app = this.state.activeApp;
-      app.setVersion(version);
-      app.save(
-        null,
-        {
-          error: function (data, response) {
-            var msg = response.responseJSON.message || response.statusText;
-            util.alert("Could not update to chosen version: " + msg);
-          },
-          success: function () {
-            // refresh app versions
-            this.fetchAppVersions();
-          }.bind(this)
-        });
-    }
-  },
-
   startPolling: function () {
     if (this._interval == null) {
       this.poll();
@@ -203,7 +182,6 @@ var Marathon = React.createClass({
   activateTab: function (id) {
     this.setState({
       activeTabId: id,
-      activeApp: null,
       activeAppId: null,
       activeAppView: null,
       modalClass: null
@@ -236,7 +214,6 @@ var Marathon = React.createClass({
     return (
       <AppPageComponent
         appId={state.activeAppId}
-        rollBackApp={this.rollbackToAppVersion}
         router={this.props.router}
         view={state.activeAppView} />
     );

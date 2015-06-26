@@ -1,5 +1,8 @@
 var _ = require("underscore");
 var React = require("react/addons");
+
+var util = require("../helpers/util");
+
 /*eslint-disable react/display-name, react/no-multi-comp */
 var UNSPECIFIED_NODE =
   React.createClass({
@@ -8,6 +11,7 @@ var UNSPECIFIED_NODE =
     }
   });
 /*eslint-enable react/display-name */
+
 var AppVersionComponent = React.createClass({
   displayName: "AppVersionComponent",
 
@@ -15,14 +19,29 @@ var AppVersionComponent = React.createClass({
     app: React.PropTypes.object.isRequired,
     appVersion: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
-    currentVersion: React.PropTypes.bool,
-    onRollback: React.PropTypes.func
+    currentVersion: React.PropTypes.bool
   },
 
-  handleSubmit: function (event) {
-    if (_.isFunction(this.props.onRollback)) {
-      event.preventDefault();
-      this.props.onRollback(this.props.appVersion, event);
+  handleSubmit: function () {
+    this.rollbackToAppVersion(this.props.appVersion);
+  },
+
+  rollbackToAppVersion: function (version) {
+    if (this.state.activeApp != null) {
+      var app = this.state.activeApp;
+      app.setVersion(version);
+      app.save(
+        null,
+        {
+          error: function (data, response) {
+            var msg = response.responseJSON.message || response.statusText;
+            util.alert("Could not update to chosen version: " + msg);
+          },
+          success: function () {
+            // refresh app versions
+            this.fetchAppVersions();
+          }.bind(this)
+        });
     }
   },
 

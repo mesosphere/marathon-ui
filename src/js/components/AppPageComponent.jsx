@@ -32,7 +32,6 @@ var AppPageComponent = React.createClass({
 
   propTypes: {
     appId: React.PropTypes.string.isRequired,
-    rollBackApp: React.PropTypes.func.isRequired,
     router: React.PropTypes.object.isRequired,
     view: React.PropTypes.string
   },
@@ -285,6 +284,11 @@ var AppPageComponent = React.createClass({
             getTaskHealthMessage={this.getTaskHealthMessage}
             hasHealth={model.healthChecks > 0}
             tasks={model.tasks} />
+        </TabPaneComponent>
+        <TabPaneComponent
+          id={"apps/" + encodeURIComponent(props.appId) + "/configuration"}
+          onActivate={null} >
+          <AppVersionListComponent app={model} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );

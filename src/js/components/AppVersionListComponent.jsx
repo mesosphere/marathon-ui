@@ -16,8 +16,7 @@ var AppVersionListComponent = React.createClass({
   displayName: "AppVersionListComponent",
 
   propTypes: {
-    app: React.PropTypes.object.isRequired,
-    onRollback: React.PropTypes.func
+    app: React.PropTypes.object.isRequired
   },
 
   getInitialState: function () {
@@ -79,8 +78,7 @@ var AppVersionListComponent = React.createClass({
         <AppVersionListItemComponent
           app={props.app}
           appVersionTimestamp={versionTimestamp}
-          key={versionTimestamp}
-          onRollback={props.onRollback} />
+          key={versionTimestamp} />
       );
     }).value();
   },
