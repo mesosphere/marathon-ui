@@ -179,7 +179,7 @@ var AppPageComponent = React.createClass({
   },
 
   getTaskHealthMessage: function (taskId) {
-    var task = lazy(this.state.app.tasks).findWhere({"id": taskId});
+    var task = AppsStore.getTask(this.props.appId, taskId);
 
     if (task === undefined) {
       return null;
@@ -252,7 +252,7 @@ var AppPageComponent = React.createClass({
     var state = this.state;
     var model = state.app;
 
-    var task = lazy(model.tasks).findWhere({"id": state.activeTaskId});
+    var task = AppsStore.getTask(this.props.appId, state.activeTaskId);
 
     if (task == null) {
       return null;
