@@ -107,6 +107,10 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
     }
 
     return appScheme;
+  },
+
+  getTask: function (appId, taskId) {
+    return lazy(this.getCurrentApp(appId).tasks).findWhere({"id": taskId});
   }
 }).value();
 
