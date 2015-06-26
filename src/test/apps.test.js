@@ -117,17 +117,68 @@ describe("Apps", function () {
       });
     });
 
+    it("sends create event on success", function (done) {
+      this.server.setup({
+          "id": "/app-3"
+        }, 201);
+
+      AppsStore.once(AppsEvents.CREATE_APP, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps).to.have.length(3);
+        }, done);
+      });
+
+      AppsActions.createApp({
+        "id": "/app-3"
+      });
+    });
+
     it("handles bad request", function (done) {
       this.server.setup({ message: "Guru Meditation" }, 400);
 
-      AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error) {
+      AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error, status) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
+          expect(status).to.equal(400);
         }, done);
       });
 
       AppsActions.createApp({
         cmd: "app command"
+      });
+    });
+
+    it("passes resonse status", function (done) {
+      this.server.setup({ message: "Guru Meditation" }, 400);
+
+      AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error, status) {
+        expectAsync(function () {
+          expect(status).to.equal(400);
+        }, done);
+      });
+
+      AppsActions.createApp({
+        cmd: "app command"
+      });
+    });
+
+    it("handles atttribute value error", function (done) {
+      this.server.setup({
+        errors: [{
+            attribute: "id",
+            error: "attribute has invalid value"
+          }
+        ]}, 422);
+
+      AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error) {
+        expectAsync(function () {
+          expect(error.errors[0].attribute).to.equal("id");
+          expect(error.errors[0].error).to.equal("attribute has invalid value");
+        }, done);
+      });
+
+      AppsActions.createApp({
+        id: "app 1"
       });
     });
 
