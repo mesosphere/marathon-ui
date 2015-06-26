@@ -25,22 +25,22 @@ AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS:
       AppVersionsStore.resetOnAppChange(action.appId);
-      AppVersionsStore.availableAppVersions = action.data;
+      AppVersionsStore.availableAppVersions = action.data.body;
       AppVersionsStore.emit(AppVersionsEvents.CHANGE);
       break;
     case AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR:
       AppVersionsStore.emit(AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
-        action.data.jsonBody);
+        action.data.body);
       break;
     case AppVersionsEvents.REQUEST_ONE:
       AppVersionsStore.resetOnAppChange(action.appId);
-      AppVersionsStore.appVersions[action.versionTimestamp] = action.data;
+      AppVersionsStore.appVersions[action.versionTimestamp] = action.data.body;
       AppVersionsStore.emit(AppVersionsEvents.CHANGE);
       break;
     case AppVersionsEvents.REQUEST_ONE_ERROR:
       AppVersionsStore.emit(
         AppVersionsEvents.REQUEST_ONE_ERROR,
-        action.data.jsonBody
+        action.data.body
       );
       break;
   }

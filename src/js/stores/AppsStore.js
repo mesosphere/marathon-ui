@@ -39,25 +39,25 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
-      AppsStore.apps = action.data;
+      AppsStore.apps = action.data.body;
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APPS_ERROR:
-      AppsStore.emit(AppsEvents.REQUEST_APPS_ERROR, action.data.jsonBody);
+      AppsStore.emit(AppsEvents.REQUEST_APPS_ERROR, action.data.body);
       break;
     case AppsEvents.REQUEST_APP:
-      AppsStore.currentApp = processCurrentApp(action.data);
+      AppsStore.currentApp = processCurrentApp(action.data.body);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APP_ERROR:
-      AppsStore.emit(AppsEvents.REQUEST_APP_ERROR, action.data.jsonBody);
+      AppsStore.emit(AppsEvents.REQUEST_APP_ERROR, action.data.body);
       break;
     case AppsEvents.CREATE_APP:
-      AppsStore.apps.push(action.data);
+      AppsStore.apps.push(action.data.body);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.CREATE_APP_ERROR:
-      AppsStore.emit(AppsEvents.CREATE_APP_ERROR, action.data.jsonBody);
+      AppsStore.emit(AppsEvents.CREATE_APP_ERROR, action.data.body);
       break;
     case AppsEvents.DELETE_APP:
       AppsStore.apps =
@@ -65,25 +65,25 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.DELETE_APP_ERROR:
-      AppsStore.emit(AppsEvents.DELETE_APP_ERROR, action.data.jsonBody);
+      AppsStore.emit(AppsEvents.DELETE_APP_ERROR, action.data.body);
       break;
     case AppsEvents.RESTART_APP:
       AppsStore.emit(AppsEvents.RESTART_APP);
       break;
     case AppsEvents.RESTART_APP_ERROR:
-      AppsStore.emit(AppsEvents.RESTART_APP_ERROR, action.data.jsonBody);
+      AppsStore.emit(AppsEvents.RESTART_APP_ERROR, action.data.body);
       break;
     case AppsEvents.SCALE_APP:
       AppsStore.emit(AppsEvents.SCALE_APP);
       break;
     case AppsEvents.SCALE_APP_ERROR:
-      AppsStore.emit(AppsEvents.SCALE_APP_ERROR, action.data.jsonBody);
+      AppsStore.emit(AppsEvents.SCALE_APP_ERROR, action.data.body);
       break;
     case AppsEvents.APPLY_APP:
       AppsStore.emit(AppsEvents.APPLY_APP);
       break;
     case AppsEvents.APPLY_APP_ERROR:
-      AppsStore.emit(AppsEvents.APPLY_APP_ERROR, action.data.jsonBody);
+      AppsStore.emit(AppsEvents.APPLY_APP_ERROR, action.data.body);
       break;
     case TasksEvents.DELETE:
       AppsStore.currentApp.tasks =
@@ -95,7 +95,7 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case TasksEvents.DELETE_ERROR:
-      AppsStore.emit(TasksEvents.DELETE_ERROR, action.data.jsonBody);
+      AppsStore.emit(TasksEvents.DELETE_ERROR, action.data.body);
       break;
   }
 });

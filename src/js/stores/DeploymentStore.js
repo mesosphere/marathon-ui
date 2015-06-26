@@ -33,12 +33,12 @@ var DeploymentStore = lazy(EventEmitter.prototype).extend({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case DeploymentEvents.REQUEST:
-      DeploymentStore.deployments = processDeployments(action.data);
+      DeploymentStore.deployments = processDeployments(action.data.body);
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REQUEST_ERROR:
       DeploymentStore.emit(DeploymentEvents.REQUEST_ERROR,
-        action.data.jsonBody);
+        action.data.body);
       break;
     case DeploymentEvents.REVERT:
       DeploymentStore.deployments =
@@ -46,7 +46,7 @@ AppDispatcher.register(function (action) {
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REVERT_ERROR:
-      DeploymentStore.emit(DeploymentEvents.REVERT_ERROR, action.data.jsonBody);
+      DeploymentStore.emit(DeploymentEvents.REVERT_ERROR, action.data.body);
       break;
     case DeploymentEvents.STOP:
       DeploymentStore.deployments =
@@ -54,7 +54,7 @@ AppDispatcher.register(function (action) {
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.STOP_ERROR:
-      DeploymentStore.emit(DeploymentEvents.STOP_ERROR, action.data.jsonBody);
+      DeploymentStore.emit(DeploymentEvents.STOP_ERROR, action.data.body);
       break;
   }
 });

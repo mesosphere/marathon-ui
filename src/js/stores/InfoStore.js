@@ -11,12 +11,12 @@ var InfoStore = lazy(EventEmitter.prototype).extend({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case InfoEvents.REQUEST:
-      InfoStore.info = action.data;
+      InfoStore.info = action.data.body;
       InfoStore.emit(InfoEvents.CHANGE);
       break;
     case InfoEvents.REQUEST_ERROR:
       InfoStore.emit(InfoEvents.REQUEST_ERROR,
-        action.data.jsonBody);
+        action.data.body);
       break;
   }
 });
