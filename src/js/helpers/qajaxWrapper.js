@@ -5,20 +5,7 @@ var qajaxWrapper = function (options) {
     status: null,
     body: null
   };
-  // Translate Oboe options to qajax equivalent
-  var oboeDictionary = {
-    "body": "data"
-  };
-  Object.keys(options).forEach((key) => {
-    if (oboeDictionary.hasOwnProperty(key)) {
-      Object.defineProperty(
-        options,
-        oboeDictionary[key],
-        Object.getOwnPropertyDescriptor(options, key)
-      );
-      delete options[key];
-    }
-  });
+
 
   var parseResponse = function (xhr) {
     response.status = xhr.status;

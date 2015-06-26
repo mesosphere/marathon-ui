@@ -1,6 +1,6 @@
 var oboe = require("oboe");
 
-var oboeWrapper = function (req) {
+var oboeWrapper = function (options) {
   var response = {
     status: null,
     body: null
@@ -15,7 +15,22 @@ var oboeWrapper = function (req) {
     }
   };
 
-  var api = oboe(req)
+  // Translate to Oboe options
+  var oboeDictionary = {
+    "data": "body"
+  };
+  Object.keys(options).forEach((key) => {
+    if (oboeDictionary.hasOwnProperty(key)) {
+      Object.defineProperty(
+        options,
+        oboeDictionary[key],
+        Object.getOwnPropertyDescriptor(options, key)
+      );
+      delete options[key];
+    }
+  });
+
+  var api = oboe(options)
     .start(function (status) {
       this.status = status;
     });

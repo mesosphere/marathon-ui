@@ -42,7 +42,7 @@ var AppsActions = {
   createApp: function (newAppAttributes) {
     this.request({
       method: "POST",
-      body: newAppAttributes,
+      data: newAppAttributes,
       headers: {
         "Content-Type": "application/json"
       },
@@ -86,7 +86,7 @@ var AppsActions = {
   restartApp: function (appId) {
     this.request({
       method: "POST",
-      body: {
+      data: {
         force: false
       },
       headers: {
@@ -111,7 +111,7 @@ var AppsActions = {
   scaleApp: function (appId, instances) {
     this.request({
       method: "PUT",
-      body: {
+      data: {
         instances: instances
       },
       headers: {
@@ -136,7 +136,7 @@ var AppsActions = {
   applySettingsOnApp: function (appId, settings) {
     this.request({
       method: "PUT",
-      body: settings,
+      data: settings,
       headers: {
         "Content-Type": "application/json"
       },
