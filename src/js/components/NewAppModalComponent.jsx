@@ -1,14 +1,16 @@
 var $ = require("jquery");
 var _ = require("underscore");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
+var appScheme = require("../stores/appScheme");
 var AppsStore = require("../stores/AppsStore");
+var appValidator = require("../validators/appValidator");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var ModalComponent = require("../components/ModalComponent");
 var ValidationError = require("../validators/ValidationError");
-var appValidator = require("../validators/appValidator");
 
 var NewAppModalComponent = React.createClass({
   displayName: "NewAppModalComponent",
@@ -25,22 +27,12 @@ var NewAppModalComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      attributes: {
-        cmd: null,
-        constraints: [],
-        container: null,
+      attributes: lazy(appScheme).extend({
         cpus: 0.1,
-        deployments: [],
-        env: {},
-        executor: "",
-        healthChecks: [],
-        id: null,
         instances: 1,
         mem: 16.0,
-        disk: 0.0,
-        ports: [0],
-        uris: []
-      },
+        disk: 0.0
+      }).value(),
       errors: []
     };
   },
