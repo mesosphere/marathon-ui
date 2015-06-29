@@ -7,9 +7,11 @@ var config = require("../js/config/config");
 var AppsActions = require("../js/actions/AppsActions");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
+var States = require("../js/constants/States");
 var TasksActions = require("../js/actions/TasksActions");
 var TasksEvents = require("../js/events/TasksEvents");
 var TaskListItemComponent = require("../js/components/TaskListItemComponent");
+var TaskDetailComponent = require("../js/components/TaskDetailComponent");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -162,6 +164,88 @@ describe("Task List Item component", function () {
       this.component.props.children[5].props.children.props.className;
 
     expect(cell).to.equal("health-dot");
+  });
+
+});
+
+describe("Task Detail component", function () {
+
+  beforeEach(function () {
+    this.model = {
+      appId: "/app-1",
+      id: "task-123",
+      host: "host-1",
+      ports: [1, 2, 3],
+      status: "status-0",
+      updatedAt: "2015-06-29T14:11:58.709Z",
+      stagedAt: "2015-06-29T14:11:58.709Z",
+      startedAt: "2015-06-29T14:11:58.709Z",
+      version: "2015-06-29T13:54:24.171Z"
+    };
+
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<TaskDetailComponent
+      fetchState={States.STATE_SUCCESS}
+      hasHealth={false}
+      task={this.model} />);
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  it("has the correct host", function () {
+    var content =
+      ShallowUtils.getText(
+        this.component.props.children[2].props.children[0].props.children[1]
+      );
+
+    expect(content).to.equal("host-1");
+  });
+
+  it("has the correct ports", function () {
+    var content =
+      ShallowUtils.getText(
+        this.component.props.children[2].props.children[0].props.children[3]
+      );
+
+    expect(content).to.equal("[1,2,3]");
+  });
+
+  it("has the correct status", function () {
+    var content =
+      ShallowUtils.getText(
+        this.component.props.children[2].props.children[0].props.children[5]
+      );
+
+    expect(content).to.equal("status-0");
+  });
+
+  it("has the correct timefields", function () {
+    var stagedAt =
+        this.component.props.children[2].props.children[0].props.children[6][0].props;
+    var startedAt =
+        this.component.props.children[2].props.children[0].props.children[6][1].props;
+
+    expect(stagedAt.time).to.equal("2015-06-29T14:11:58.709Z");
+    expect(startedAt.time).to.equal("2015-06-29T14:11:58.709Z");
+  });
+
+  it("has the correct version", function () {
+    var version =
+        this.component.props.children[2].props.children[0].props.children[8].props.children.props;
+
+    expect(version.dateTime).to.equal("2015-06-29T13:54:24.171Z");
+  });
+
+  it("has a loading error", function () {
+    this.renderer.render(<TaskDetailComponent
+      fetchState={States.STATE_ERROR}
+      hasHealth={false}
+      task={this.model} />);
+
+    var component = this.renderer.getRenderOutput();
+
+    var content = ShallowUtils.findOne(component, "text-danger");
+
+    expect(content).to.be.an.object;
   });
 
 });
