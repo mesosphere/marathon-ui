@@ -47,7 +47,9 @@ describe("Info", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({ message: "Guru Meditation" }, 404);
+      this.server.setup({
+        message: "Guru Meditation"
+      }, 404);
 
       InfoStore.once(InfoEvents.REQUEST_ERROR, function (error) {
         expectAsync(function () {
