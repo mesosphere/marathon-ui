@@ -134,6 +134,9 @@ var AppsActions = {
     });
   },
   applySettingsOnApp: function (appId, settings) {
+    // Version key is not allowed and not needed on settings object
+    delete settings.version;
+
     this.request({
       method: "PUT",
       data: settings,

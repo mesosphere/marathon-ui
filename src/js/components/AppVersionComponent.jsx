@@ -1,6 +1,6 @@
 var React = require("react/addons");
 
-var util = require("../helpers/util");
+var AppsActions = require("../actions/AppsActions");
 
 /*eslint-disable react/display-name, react/no-multi-comp */
 var UNSPECIFIED_NODE =
@@ -33,27 +33,9 @@ var AppVersionComponent = React.createClass({
     currentVersion: React.PropTypes.bool
   },
 
-  handleSubmit: function () {
-    this.rollbackToAppVersion(this.props.appVersion);
-  },
-
-  rollbackToAppVersion: function (version) {
-    if (this.state.activeApp != null) {
-      var app = this.state.activeApp;
-      app.setVersion(version);
-      app.save(
-        null,
-        {
-          error: function (data, response) {
-            var msg = response.responseJSON.message || response.statusText;
-            util.alert("Could not update to chosen version: " + msg);
-          },
-          success: function () {
-            // refresh app versions
-            this.fetchAppVersions();
-          }.bind(this)
-        });
-    }
+  handleRollbackToAppVersion: function () {
+    var appVersion = this.props.appVersion;
+    AppsActions.applySettingsOnApp(appVersion.id, appVersion);
   },
 
   getApplyButton: function () {
@@ -64,7 +46,7 @@ var AppVersionComponent = React.createClass({
         <div className="text-right">
           <button type="submit"
               className="btn btn-sm btn-default"
-              onSubmit={this.handleSubmit}>
+              onClick={this.handleRollbackToAppVersion}>
             Apply these settings
           </button>
         </div>
