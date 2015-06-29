@@ -8,6 +8,7 @@ var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
 var AppStatus = require("../constants/AppStatus");
 var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
+var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
 var HealthStatus = require("../constants/HealthStatus");
 var States = require("../constants/States");
@@ -111,6 +112,10 @@ var AppPageComponent = React.createClass({
       app: AppsStore.getCurrentApp(this.props.appId),
       fetchState: States.STATE_SUCCESS
     });
+
+    if (this.props.view === "configuration") {
+      AppVersionsActions.requestAppVersions(this.props.appId);
+    }
   },
 
   onAppRequestError: function () {
