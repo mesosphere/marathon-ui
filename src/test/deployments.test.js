@@ -12,6 +12,8 @@ var DeploymentStore = require("../js/stores/DeploymentStore");
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
 
+var ShallowUtils = require("./helpers/ShallowUtils");
+
 var server = new HttpServer(config.localTestserverURI);
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
@@ -155,20 +157,24 @@ describe("Deployment component", function () {
   });
 
   it("has the correct deployment id", function () {
-    var cellContent = this.component.props.children[0].props.children;
+    var cellContent = ShallowUtils.getText(this.component.props.children[0]);
     expect(cellContent).to.equal("123");
   });
 
   it("has correct apps in list element", function () {
-    _.each(this.component.props.children[1].props.children.props.children,
-        function (li, i) {
-      expect(li.props.children).to.equal("app" + (i + 1));
+    var list_text = ShallowUtils.getText(this.component.props.children[1].props.children);
+    expect(list_text).to.equal("app1app2app3");
+    // Alternatively, using React's Children API
+    var ul = this.component.props.children[1].props.children.props.children;
+    React.Children.forEach(ul, function (li, i) {
+      var text = ShallowUtils.getText(li.props.children);
+      expect(text).to.equal("app" + (i + 1));
     });
   });
 
   it("has correct actions in list element", function () {
-    _.each(this.component.props.children[2].props.children.props.children,
-        function (li, i) {
+    var ul = this.component.props.children[2].props.children.props.children;
+    React.Children.forEach(ul, function (li, i) {
       expect(li.props.children).to.equal("action" + (i + 1));
     });
   });
