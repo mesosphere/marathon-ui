@@ -1,5 +1,5 @@
 var Backbone = require("backbone");
-var $ = require("jquery");
+var util = require("../helpers/util");
 
 var STATUS_STAGED = "Staged";
 var STATUS_STARTED = "Started";
@@ -68,7 +68,7 @@ var Task = Backbone.Model.extend({
       // parameters. Construct the param string and append it to the normal
       // URL.
       _options.url = this.collection.url() + "/tasks/" + model.id +
-        "?" + $.param({scale: _options.scale});
+        "?" + util.param({scale: _options.scale});
     }
 
     return Backbone.sync.call(this, method, model, _options);
