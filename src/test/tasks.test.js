@@ -63,7 +63,7 @@ describe("Tasks", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({ message: "Guru Meditation" }, 404);
+      this.server.setup({message: "Guru Meditation"}, 404);
 
       AppsStore.once(TasksEvents.DELETE_ERROR, function (error) {
         expectAsync(function () {
