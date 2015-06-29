@@ -50,7 +50,7 @@ describe("Apps", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({ message: "Guru Meditation" }, 404);
+      this.server.setup({message: "Guru Meditation"}, 404);
 
       AppsStore.once(AppsEvents.REQUEST_APPS_ERROR, function (error) {
         expectAsync(function () {
@@ -82,7 +82,7 @@ describe("Apps", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({ message: "Guru Meditation" }, 404);
+      this.server.setup({message: "Guru Meditation"}, 404);
 
       AppsStore.once(AppsEvents.REQUEST_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -134,7 +134,7 @@ describe("Apps", function () {
     });
 
     it("handles bad request", function (done) {
-      this.server.setup({ message: "Guru Meditation" }, 400);
+      this.server.setup({message: "Guru Meditation"}, 400);
 
       AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error, status) {
         expectAsync(function () {
@@ -148,8 +148,8 @@ describe("Apps", function () {
       });
     });
 
-    it("passes resonse status", function (done) {
-      this.server.setup({ message: "Guru Meditation" }, 400);
+    it("passes response status", function (done) {
+      this.server.setup({message: "Guru Meditation"}, 400);
 
       AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error, status) {
         expectAsync(function () {
@@ -209,7 +209,7 @@ describe("Apps", function () {
     });
 
     it("receives a delete error", function (done) {
-      this.server.setup({ message: "delete error" }, 404);
+      this.server.setup({message: "delete error"}, 404);
 
       AppsStore.once(AppsEvents.DELETE_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -244,7 +244,7 @@ describe("Apps", function () {
     });
 
     it("receives a restart error on non existing app", function (done) {
-      this.server.setup({ message: "restart error" }, 404);
+      this.server.setup({message: "restart error"}, 404);
 
       AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -257,7 +257,7 @@ describe("Apps", function () {
     });
 
     it("receives a restart error on locked app", function (done) {
-      this.server.setup({ message: "app locked by deployment" }, 409);
+      this.server.setup({message: "app locked by deployment"}, 409);
 
       AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -292,7 +292,7 @@ describe("Apps", function () {
     });
 
     it("receives a scale error on non existing app", function (done) {
-      this.server.setup({ message: "scale error" }, 404);
+      this.server.setup({message: "scale error"}, 404);
 
       AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -305,7 +305,7 @@ describe("Apps", function () {
     });
 
     it("receives a scale error on bad data", function (done) {
-      this.server.setup({ message: "scale bad data error" }, 400);
+      this.server.setup({message: "scale bad data error"}, 400);
 
       AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -344,7 +344,7 @@ describe("Apps", function () {
     });
 
     it("receives an apply error on bad data", function (done) {
-      this.server.setup({ message: "apply bad data error" }, 400);
+      this.server.setup({message: "apply bad data error"}, 400);
 
       AppsStore.once(AppsEvents.APPLY_APP_ERROR, function (error) {
         expectAsync(function () {

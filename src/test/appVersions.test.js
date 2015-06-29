@@ -22,7 +22,9 @@ describe("AppVersions", function () {
       ]
     }, 200)
     .start(function () {
-      AppVersionsStore.once(AppVersionsEvents.CHANGE, done);
+      AppVersionsStore.once(AppVersionsEvents.CHANGE, function () {
+        done();
+      });
       AppVersionsActions.requestAppVersions("/app-1");
     });
   });
@@ -56,15 +58,39 @@ describe("AppVersions", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({ message: "Guru Meditation" }, 404);
+      this.server.setup({message: "Guru Meditation"}, 404);
 
-      AppVersionsStore.once(AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR, function (error) {
+      AppVersionsStore.once(AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
+          function (error) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
         }, done);
       });
 
       AppVersionsActions.requestAppVersions("/non-existing-app");
+    });
+
+    it("emits requesters appId", function (done) {
+      AppVersionsStore.once(AppVersionsEvents.CHANGE, function (appId) {
+        expectAsync(function () {
+          expect(appId).to.equal("/app-1");
+        }, done);
+      });
+
+      AppVersionsActions.requestAppVersions("/app-1");
+    });
+
+    it("emits requesters appId on error", function (done) {
+      this.server.setup({message: "Guru Meditation"}, 404);
+
+      AppVersionsStore.once(AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
+          function (error, appId) {
+        expectAsync(function () {
+          expect(appId).to.equal("/app-1");
+        }, done);
+      });
+
+      AppVersionsActions.requestAppVersions("/app-1");
     });
 
   });
@@ -100,15 +126,40 @@ describe("AppVersions", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({ message: "Guru Meditation" }, 404);
+      this.server.setup({message: "Guru Meditation"}, 404);
 
-      AppVersionsStore.once(AppVersionsEvents.REQUEST_ONE_ERROR, function (error) {
+      AppVersionsStore.once(AppVersionsEvents.REQUEST_ONE_ERROR,
+          function (error) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
         }, done);
       });
 
       AppVersionsActions.requestAppVersion("/app-1", "non-existing-version");
+    });
+
+    it("emits requesters version timestamp", function (done) {
+      AppVersionsStore.once(AppVersionsEvents.CHANGE,
+          function (versionTimestamp) {
+        expectAsync(function () {
+          expect(versionTimestamp).to.equal("version-timestamp-1");
+        }, done);
+      });
+
+      AppVersionsActions.requestAppVersion("/app-1", "version-timestamp-1");
+    });
+
+    it("emits requesters version timestamp on error", function (done) {
+      this.server.setup({message: "Guru Meditation"}, 404);
+
+      AppVersionsStore.once(AppVersionsEvents.REQUEST_ONE_ERROR,
+          function (error, versionTimestamp) {
+        expectAsync(function () {
+          expect(versionTimestamp).to.equal("version-timestamp-1");
+        }, done);
+      });
+
+      AppVersionsActions.requestAppVersion("/app-1", "version-timestamp-1");
     });
 
   });

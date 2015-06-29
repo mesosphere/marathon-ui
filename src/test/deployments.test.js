@@ -49,7 +49,7 @@ describe("Deployments", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({ message: "Guru Meditation" }, 404);
+      this.server.setup({message: "Guru Meditation"}, 404);
 
       DeploymentStore.once(DeploymentEvents.REQUEST_ERROR, function (error) {
         expectAsync(function () {
@@ -87,7 +87,7 @@ describe("Deployments", function () {
     });
 
     it("receives a revert error", function (done) {
-      this.server.setup({ message: "revert error" }, 404);
+      this.server.setup({message: "revert error"}, 404);
 
       DeploymentStore.once(DeploymentEvents.REVERT_ERROR, function (error) {
         expectAsync(function () {
@@ -117,7 +117,7 @@ describe("Deployments", function () {
     });
 
     it("receives a stop error", function (done) {
-      this.server.setup({ message: "stop error" }, 404);
+      this.server.setup({message: "stop error"}, 404);
 
       DeploymentStore.once(DeploymentEvents.STOP_ERROR, function (error) {
         expectAsync(function () {
@@ -141,9 +141,9 @@ describe("Deployment component", function () {
       version: "v1",
       affectedApps: [],
       currentActions: [
-        { app: "app1", action: "action1" },
-        { app: "app2", action: "action2" },
-        { app: "app3", action: "action3" }
+        {app: "app1", action: "action1"},
+        {app: "app2", action: "action2"},
+        {app: "app3", action: "action3"}
       ],
       currentStep: 2,
       totalSteps: 2
