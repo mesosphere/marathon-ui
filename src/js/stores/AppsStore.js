@@ -61,7 +61,7 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
-      AppsStore.apps = processApps(action.data.body);
+      AppsStore.apps = processApps(action.data.body.apps);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APPS_ERROR:
