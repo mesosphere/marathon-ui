@@ -13,6 +13,16 @@ var util = {
     /*eslint-disable no-alert */
     return global.prompt.apply(null, arguments);
     /*eslint-enable no-alert */
+  },
+  param: function (obj) {
+    try {
+      return Object.keys(obj).reduce(function (a, k) {
+        a.push(k + "=" + encodeURIComponent(obj[k]));
+        return a;
+      }, []).join("&");
+    } catch (e) {
+      return obj;
+    }
   }
 };
 
