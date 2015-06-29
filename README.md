@@ -5,7 +5,7 @@
 The UI is bundled with the [Marathon](https://github.com/mesosphere/marathon) package.
 
 Please note that issues are disabled for this repository. Please feel free to open an issue on the
-[issues page on the main Marathon Repository](https://github.com/mesosphere/marathon/issues).
+[issues page on the main Marathon Repository](https://github.com/mesosphere/marathon/issues?q=is%3Aopen+is%3Aissue+label%3Agui).
 
 #### Setup
 
