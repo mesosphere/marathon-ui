@@ -1,4 +1,4 @@
-var oboeWrapper = require("../helpers/oboeWrapper");
+var qajaxWrapper = require("../helpers/qajaxWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -53,7 +53,7 @@ var TasksActions = {
       });
     });
   },
-  request: oboeWrapper
+  request: qajaxWrapper
 };
 
 module.exports = TasksActions;
