@@ -1,6 +1,7 @@
 var _ = require("underscore");
 var config = require("../config/config");
 var Mousetrap = require("mousetrap");
+require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
 var States = require("../constants/States");
 var AppCollection = require("../models/AppCollection");
@@ -63,15 +64,7 @@ var Marathon = React.createClass({
     );
     router.on("route:newapp", this.setRouteNewApp);
 
-    // Override Mousetrap's `stopCallback` to allow "esc" to trigger even within
-    // input elements so the new app modal can be closed via "esc".
-    var mousetrapOriginalStopCallback = Mousetrap.stopCallback;
-    Mousetrap.stopCallback = function (e, element, combo) {
-      if (combo === "esc" || combo === "escape") { return false; }
-      return mousetrapOriginalStopCallback.apply(null, arguments);
-    };
-
-    Mousetrap.bind("esc", function () {
+    Mousetrap.bindGlobal("esc", function () {
       if (this.refs.modal != null) {
         this.handleModalDestroy();
       }
