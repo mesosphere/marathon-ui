@@ -5,6 +5,7 @@ var React = require("react/addons");
 var States = require("../constants/States");
 var AppsStore = require("../stores/AppsStore");
 var AppVersionsActions = require("../actions/AppVersionsActions");
+var AppsEvents = require("../events/AppsEvents");
 var AppVersionsEvents = require("../events/AppVersionsEvents");
 var AppVersionsStore = require("../stores/AppVersionsStore");
 var AppVersionComponent = require("../components/AppVersionComponent");
@@ -12,6 +13,7 @@ var AppVersionListItemComponent =
   require("../components/AppVersionListItemComponent");
 var PagedContentComponent = require("../components/PagedContentComponent");
 var PagedNavComponent = require("../components/PagedNavComponent");
+var util = require("../helpers/util");
 
 var AppVersionListComponent = React.createClass({
   displayName: "AppVersionListComponent",
@@ -35,6 +37,8 @@ var AppVersionListComponent = React.createClass({
     AppVersionsStore.on(AppVersionsEvents.CHANGE, this.onAppVersionsChange);
     AppVersionsStore.on(AppVersionsEvents.REQUEST_APP_VERSIONS_ERROR,
       this.onAppVersionsRequestError);
+    AppsStore.on(AppsEvents.APPLY_APP, this.onAppApplySettings);
+    AppsStore.on(AppsEvents.APPLY_APP_ERROR, this.onAppApplySettingsError);
   },
 
   componentDidMount: function () {
@@ -42,11 +46,17 @@ var AppVersionListComponent = React.createClass({
   },
 
   componentWillUnmount: function () {
-    AppVersionsStore.removeListener(AppVersionsEvents.CHANGE,
+    AppVersionsStore.removeListener(
+      AppVersionsEvents.CHANGE,
       this.onAppVersionsChange);
     AppVersionsStore.removeListener(
       AppVersionsEvents.REQUEST_APP_VERSIONS_ERROR,
       this.onAppVersionsRequestError
+    );
+    AppsStore.removeListener(AppsEvents.APPLY_APP, this.onAppApplySettings);
+    AppsStore.removeListener(
+      AppsEvents.APPLY_APP_ERROR,
+      this.onAppApplySettingsError
     );
   },
 
@@ -61,6 +71,15 @@ var AppVersionListComponent = React.createClass({
     this.setState({
       fetchState: States.STATE_ERROR
     });
+  },
+
+  onAppApplySettings: function () {
+    AppVersionsActions.requestAppVersions(this.props.appId);
+  },
+
+  onAppApplySettingsError: function (errorMessage) {
+    util.alert("Could not update to chosen version: " +
+      (errorMessage.message || errorMessage));
   },
 
   handleRefresh: function () {
