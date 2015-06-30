@@ -12,6 +12,7 @@ var TasksActions = require("../js/actions/TasksActions");
 var TasksEvents = require("../js/events/TasksEvents");
 var TaskListItemComponent = require("../js/components/TaskListItemComponent");
 var TaskDetailComponent = require("../js/components/TaskDetailComponent");
+var TaskListComponent = require("../js/components/TaskListComponent");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -246,6 +247,43 @@ describe("Task Detail component", function () {
     var content = ShallowUtils.findOne(component, "text-danger");
 
     expect(content).to.be.an.object;
+  });
+
+});
+
+describe("Task List component", function () {
+
+  beforeEach(function () {
+    this.model = [{
+      appId: "/app-1",
+      id: "task-1"
+    }, {
+      appId: "/app-1",
+      id: "task-2"
+    }];
+
+    var renderer = TestUtils.createRenderer();
+
+    renderer.render(<TaskListComponent
+      currentPage={0}
+      fetchState={States.STATE_SUCCESS}
+      getTaskHealthMessage={function () {}}
+      hasHealth={false}
+      itemsPerPage={8}
+      onTaskToggle={function () {}}
+      selectedTasks={{}}
+      tasks={this.model}
+      toggleAllTasks={function () {}} />);
+
+    this.component = renderer.getRenderOutput();
+  });
+
+  it("has correct TaskListItemComponents keys", function () {
+    var tasklistitems =
+      this.component.props.children[1].props.children[1].props.children[2];
+
+    expect(tasklistitems[0].key).to.equal("task-1");
+    expect(tasklistitems[1].key).to.equal("task-2");
   });
 
 });
