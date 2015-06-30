@@ -149,9 +149,13 @@ describe("Deployment component", function () {
       totalSteps: 2
     };
 
-    var renderer = TestUtils.createRenderer();
-    renderer.render(<DeploymentComponent model={model} />);
-    this.component = renderer.getRenderOutput();
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<DeploymentComponent model={model} />);
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
   });
 
   it("has the correct deployment id", function () {
