@@ -1,6 +1,6 @@
-var $ = require("jquery");
 var _ = require("underscore");
 var React = require("react/addons");
+var util = require("../helpers/util");
 
 var BackboneMixin = require("../mixins/BackboneMixin");
 var App = require("../models/App");
@@ -22,8 +22,8 @@ var NewAppModalComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
-      onCreate: $.noop,
-      onDestroy: $.noop
+      onCreate: _.noop,
+      onDestroy: _.noop
     };
   },
 
@@ -80,7 +80,7 @@ var NewAppModalComponent = React.createClass({
   onSubmit: function (event) {
     event.preventDefault();
 
-    var attrArray = $(event.target).serializeArray();
+    var attrArray = util.serializeArray(event.target);
     var modelAttrs = {};
 
     for (var i = 0; i < attrArray.length; i++) {

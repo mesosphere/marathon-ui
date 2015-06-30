@@ -1,4 +1,4 @@
-var $ = require("jquery");
+var util = require("../helpers/util");
 var classNames = require("classnames");
 var React = require("react/addons");
 
@@ -24,7 +24,7 @@ var ModalComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
-      onDestroy: $.noop,
+      onDestroy: function () {},
       size: null
     };
   },
@@ -36,9 +36,8 @@ var ModalComponent = React.createClass({
   },
 
   onClick: function (event) {
-    var $target = $(event.target);
-
-    if ($target.hasClass("modal") || $target.hasClass("modal-dialog")) {
+    if (util.hasClass(event.target, "modal") ||
+      util.hasClass(event.target, "modal-dialog")) {
       this.destroy();
     }
   },
