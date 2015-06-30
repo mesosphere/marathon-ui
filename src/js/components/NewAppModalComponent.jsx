@@ -214,7 +214,7 @@ var NewAppModalComponent = React.createClass({
                 label="Instances"
                 model={model}
                 errors={errors}>
-              <input min="1" step="1" type="number" required />
+              <input min="0" step="1" type="number" required />
             </FormGroupComponent>
             <hr />
             <h4>Optional Settings</h4>
