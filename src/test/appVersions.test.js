@@ -1,9 +1,12 @@
 var expect = require("chai").expect;
+var React = require("react/addons");
+var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
 var AppVersionsActions = require("../js/actions/AppVersionsActions");
 var AppVersionsEvents = require("../js/events/AppVersionsEvents");
 var AppVersionsStore = require("../js/stores/AppVersionsStore");
+var AppVersionListComponent = require("../js/components/AppVersionListComponent");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -162,6 +165,41 @@ describe("AppVersions", function () {
       AppVersionsActions.requestAppVersion("/app-1", "version-timestamp-1");
     });
 
+  });
+
+});
+
+describe("App Version List component", function () {
+
+  beforeEach(function () {
+    AppVersionsStore.currentAppId = "/app-test";
+    AppVersionsStore.availableAppVersions = [
+      "2015-06-29T13:54:01.577Z",
+      "2015-06-29T13:02:29.615Z",
+      "2015-06-29T13:02:19.363Z"
+    ];
+
+    this.renderer = TestUtils.createRenderer();
+
+    this.renderer.render(<AppVersionListComponent
+      appId={"/app-test"} />);
+
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("has correct AppVersionListItemComponents", function () {
+    var items =
+      this.component.props.children[2].props.children[1].props.children[2];
+
+    // First version is sliced out as current version,
+    // so that are only 2 versions here
+    expect(items.length).to.equal(2);
+    expect(items[0].key).to.equal("2015-06-29T13:02:29.615Z");
+    expect(items[1].key).to.equal("2015-06-29T13:02:19.363Z");
   });
 
 });
