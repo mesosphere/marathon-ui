@@ -1,14 +1,13 @@
 var React = require("react/addons");
 
-var Info = require("../../models/Info");
-var BackboneMixin = require("../../mixins/BackboneMixin");
+var InfoActions = require("../../actions/InfoActions");
+var InfoEvents = require("../../events/InfoEvents");
+var InfoStore = require("../../stores/InfoStore");
 var ModalComponent = require("../components/../ModalComponent");
 var ObjectDlComponent = require("../components/../ObjectDlComponent");
 
 var AboutModalComponent = React.createClass({
   displayName: "AboutModalComponent",
-
-  mixins: [BackboneMixin],
 
   propTypes: {
     onDestroy: React.PropTypes.func.isRequired
@@ -16,12 +15,20 @@ var AboutModalComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      info: new Info()
+      info: InfoStore.info
     };
   },
 
   componentDidMount: function () {
-    this.state.info.fetch();
+    InfoActions.requestInfo();
+  },
+
+  componentWillMount: function () {
+    InfoStore.on(InfoEvents.CHANGE, this.onInfoChange);
+  },
+
+  componentWillUnmount: function () {
+    InfoStore.removeListener(InfoEvents.CHANGE, this.onInfoChange);
   },
 
   destroy: function () {
@@ -30,18 +37,20 @@ var AboutModalComponent = React.createClass({
     this.refs.modalComponent.destroy();
   },
 
-  getResource: function () {
-    return this.state.info;
-  },
-
   getInfo: function (attr) {
-    return this.state.info.get(attr) ||
+    return this.state.info[attr] ||
       <span className="text-muted">Unspecified</span>;
   },
 
+  onInfoChange: function () {
+    this.setState({
+      info: InfoStore.info
+    });
+  },
+
   render: function () {
-    var marathonConfig = this.state.info.get("marathon_config");
-    var zookeeperConfig = this.state.info.get("zookeeper_config");
+    var marathonConfig = this.state.info.marathon_config;
+    var zookeeperConfig = this.state.info.zookeeper_config;
 
     return (
       <ModalComponent
