@@ -377,9 +377,13 @@ describe("App component", function () {
       status: 0
     };
 
-    var renderer = TestUtils.createRenderer();
-    renderer.render(<AppComponent model={model} router={{}} />);
-    this.component = renderer.getRenderOutput();
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<AppComponent model={model} router={{}} />);
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
   });
 
   it("has the correct app id", function () {
@@ -428,9 +432,13 @@ describe("App Health component", function () {
       instances: 5
     };
 
-    var renderer = TestUtils.createRenderer();
-    renderer.render(<AppHealthComponent model={model} />);
-    this.component = renderer.getRenderOutput();
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<AppHealthComponent model={model} />);
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
   });
 
   it("health bar for healthy tasks has correct width", function () {

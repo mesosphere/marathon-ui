@@ -121,14 +121,18 @@ describe("Task List Item component", function () {
       version: "2015-06-29T13:54:24.171Z"
     };
 
-    var renderer = TestUtils.createRenderer();
-    renderer.render(<TaskListItemComponent
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<TaskListItemComponent
       appId={"/app-1"}
       hasHealth={false}
       isActive={false}
       onToggle={()=>{}}
       task={model} />);
-    this.component = renderer.getRenderOutput();
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
   });
 
   it("has the correct task id", function () {
@@ -190,6 +194,10 @@ describe("Task Detail component", function () {
       hasHealth={false}
       task={this.model} />);
     this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
   });
 
   it("has the correct host", function () {
@@ -262,9 +270,9 @@ describe("Task List component", function () {
       id: "task-2"
     }];
 
-    var renderer = TestUtils.createRenderer();
+    this.renderer = TestUtils.createRenderer();
 
-    renderer.render(<TaskListComponent
+    this.renderer.render(<TaskListComponent
       currentPage={0}
       fetchState={States.STATE_SUCCESS}
       getTaskHealthMessage={function () {}}
@@ -275,7 +283,11 @@ describe("Task List component", function () {
       tasks={this.model}
       toggleAllTasks={function () {}} />);
 
-    this.component = renderer.getRenderOutput();
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
   });
 
   it("has correct TaskListItemComponents keys", function () {
