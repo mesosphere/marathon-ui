@@ -1,5 +1,4 @@
 var classNames = require("classnames");
-var lazy = require("lazy.js");
 var React = require("react/addons");
 var Moment = require("moment");
 
@@ -20,7 +19,7 @@ function buildTaskAnchors(task) {
     // anchor, but the href contains the hostname and port, a full link.
     taskAnchors = (
       <span className="text-muted">
-        {task.host}:[{lazy(ports).map(function (p, index) {
+        {task.host}:[{ports.map(function (p, index) {
           return (
             <span key={p}>
               <a className="text-muted" href={buildHref(task.host, p)}>
@@ -29,7 +28,7 @@ function buildTaskAnchors(task) {
               {index < portsLength - 1 ? ", " : ""}
             </span>
           );
-        }).value()}]
+        })}]
       </span>
     );
   } else if (portsLength === 1) {

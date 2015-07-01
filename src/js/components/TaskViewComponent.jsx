@@ -62,7 +62,7 @@ var TaskViewComponent = React.createClass({
       modelTasks.length;
 
     if (!allTasksSelected) {
-      lazy(modelTasks).each(function (task) {
+      modelTasks.forEach(function (task) {
         newSelectedTasks[task.id] = true;
       });
     }

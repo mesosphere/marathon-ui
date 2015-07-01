@@ -1,6 +1,5 @@
 var _ = require("underscore");
 var classNames = require("classnames");
-var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var AppsActions = require("../actions/AppsActions");
@@ -200,7 +199,7 @@ var AppPageComponent = React.createClass({
       case HealthStatus.UNHEALTHY:
         var healthCheckResults = task.healthCheckResults;
         if (healthCheckResults != null) {
-          msg = lazy(healthCheckResults).map(function (hc, index) {
+          msg = healthCheckResults.map(function (hc, index) {
             if (hc && !hc.alive) {
               var failedCheck = model.healthChecks[index];
               return "Warning: Health check '" +
@@ -212,7 +211,7 @@ var AppPageComponent = React.createClass({
                   " failed") +
                 ".";
             }
-          }).value();
+          });
         }
         break;
       default:
