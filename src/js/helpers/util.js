@@ -15,6 +15,9 @@ var util = {
     /*eslint-enable no-alert */
   },
   param: function (obj) {
+    if (typeof obj !== "object" ) {
+      return obj;
+    }
     try {
       return Object.keys(obj).reduce(function (a, k) {
         a.push(k + "=" + encodeURIComponent(obj[k]));
