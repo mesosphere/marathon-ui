@@ -3,15 +3,11 @@ var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
 var DeploymentEvents = require("../events/DeploymentEvents");
+var deploymentScheme = require("./deploymentScheme");
 
 function processDeployments(deployments) {
   return lazy(deployments).map(function (deployment) {
-    if (deployment.affectedApps == null) {
-      deployment.affectedApps = [];
-    }
-    if (deployment.currentActions == null) {
-      deployment.currentActions = [];
-    }
+    deployment = lazy(deploymentScheme).extend(deployment).value();
 
     deployment.affectedAppsString = deployment.affectedApps.join(", ");
     deployment.currentActionsString = deployment.currentActions.join(", ");
