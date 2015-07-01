@@ -1,5 +1,6 @@
 var classNames = require("classnames");
 var React = require("react/addons");
+var Navigation = require("react-router").Navigation;
 
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatus = require("../constants/AppStatus");
@@ -13,18 +14,14 @@ var statusNameMapping = {
 var AppComponent = React.createClass({
   displayName: "AppComponent",
 
+  mixins: [Navigation],
+
   propTypes: {
-    model: React.PropTypes.object.isRequired,
-    router: React.PropTypes.object.isRequired
+    model: React.PropTypes.object.isRequired
   },
 
   onClick: function () {
-    var props = this.props;
-
-    props.router.navigate(
-      "apps/" + encodeURIComponent(props.model.id),
-      {trigger: true}
-    );
+    this.transitionTo("app", {appid: encodeURIComponent(this.props.model.id)});
   },
 
   getStatus: function () {
