@@ -1,6 +1,7 @@
 var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
+var Navigation = require("react-router").Navigation;
 
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
@@ -31,18 +32,19 @@ var statusNameMapping = {
 var AppPageComponent = React.createClass({
   displayName: "AppPageComponent",
 
+  mixins: [Navigation],
+
   propTypes: {
-    appId: React.PropTypes.string.isRequired,
-    router: React.PropTypes.object.isRequired,
-    view: React.PropTypes.string
+    // react-router params
+    params: React.PropTypes.object
   },
 
   getInitialState: function () {
     var activeTabId;
-    var appId = this.props.appId;
+    var appId = this.props.params.appid;
 
     var tabs = _.map(tabsTemplate, function (tab) {
-      var id = tab.id.replace(":appid", encodeURIComponent(appId));
+      var id = tab.id.replace(":appid", appId);
       if (activeTabId == null) {
         activeTabId = id;
       }
@@ -58,6 +60,8 @@ var AppPageComponent = React.createClass({
       activeTabId: activeTabId,
       activeTaskId: null,
       app: AppsStore.getCurrentApp(appId),
+      appId: decodeURIComponent(appId),
+      view: decodeURIComponent(this.props.params.view),
       tabs: tabs,
       fetchState: States.STATE_LOADING
     };
@@ -89,7 +93,7 @@ var AppPageComponent = React.createClass({
 
   componentWillReceiveProps: function (nextProps) {
     var view = nextProps.view;
-    var activeTabId = "apps/" + encodeURIComponent(this.props.appId);
+    var activeTabId = "apps/" + encodeURIComponent(this.state.appId);
     var activeViewIndex = 0;
     var activeTaskId = null;
 
@@ -109,12 +113,12 @@ var AppPageComponent = React.createClass({
 
   onAppChange: function () {
     this.setState({
-      app: AppsStore.getCurrentApp(this.props.appId),
+      app: AppsStore.getCurrentApp(this.state.appId),
       fetchState: States.STATE_SUCCESS
     });
 
-    if (this.props.view === "configuration") {
-      AppVersionsActions.requestAppVersions(this.props.appId);
+    if (this.state.view === "configuration") {
+      AppVersionsActions.requestAppVersions(this.state.appId);
     }
   },
 
@@ -139,7 +143,7 @@ var AppPageComponent = React.createClass({
   },
 
   onDeleteAppSuccess: function () {
-    this.props.router.navigate("apps", {trigger: true});
+    this.transitionTo("apps");
   },
 
   handleTabClick: function (id) {
@@ -157,25 +161,25 @@ var AppPageComponent = React.createClass({
     if (instancesString != null && instancesString !== "") {
       var instances = parseInt(instancesString, 10);
 
-      AppsActions.scaleApp(this.props.appId, instances);
+      AppsActions.scaleApp(this.state.appId, instances);
     }
   },
 
   handleSuspendApp: function () {
     if (util.confirm("Suspend app by scaling to 0 instances?")) {
-      AppsActions.scaleApp(this.props.appId, 0);
+      AppsActions.scaleApp(this.state.appId, 0);
     }
   },
 
   handleRestartApp: function () {
-    var appId = this.props.appId;
+    var appId = this.state.appId;
     if (util.confirm("Restart app '" + appId + "'?")) {
       AppsActions.restartApp(appId);
     }
   },
 
   handleDestroyApp: function () {
-    var appId = this.props.appId;
+    var appId = this.state.appId;
     if (util.confirm("Destroy app '" + appId +
       "'?\nThis is irreversible.")) {
       AppsActions.deleteApp(appId);
@@ -203,7 +207,7 @@ var AppPageComponent = React.createClass({
   },
 
   getTaskHealthMessage: function (taskId) {
-    var task = AppsStore.getTask(this.props.appId, taskId);
+    var task = AppsStore.getTask(this.state.appId, taskId);
 
     if (task === undefined) {
       return null;
@@ -260,7 +264,7 @@ var AppPageComponent = React.createClass({
     var state = this.state;
     var model = state.app;
 
-    var task = AppsStore.getTask(this.props.appId, state.activeTaskId);
+    var task = AppsStore.getTask(this.state.appId, state.activeTaskId);
 
     if (task == null) {
       return null;
@@ -278,7 +282,6 @@ var AppPageComponent = React.createClass({
   getAppDetails: function () {
     var state = this.state;
     var model = state.app;
-    var props = this.props;
 
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
@@ -286,17 +289,17 @@ var AppPageComponent = React.createClass({
           onTabClick={this.handleTabClick}
           tabs={state.tabs} >
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(props.appId)}>
+          id={"apps/" + encodeURIComponent(state.appId)}>
           <TaskViewComponent
-            appId={props.appId}
+            appId={state.appId}
             fetchState={state.fetchState}
             getTaskHealthMessage={this.getTaskHealthMessage}
             hasHealth={model.healthChecks > 0}
             tasks={model.tasks} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(props.appId) + "/configuration"}>
-          <AppVersionListComponent appId={props.appId} />
+          id={"apps/" + encodeURIComponent(state.appId) + "/configuration"}>
+          <AppVersionListComponent appId={state.appId} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
@@ -306,7 +309,6 @@ var AppPageComponent = React.createClass({
     var content;
     var state = this.state;
     var model = state.app;
-    var props = this.props;
 
     var statusClassSet = classNames({
       "text-warning": model.deployments.length > 0
@@ -323,10 +325,10 @@ var AppPageComponent = React.createClass({
         <AppBreadcrumbsComponent
           activeTaskId={state.activeTaskId}
           activeViewIndex={state.activeViewIndex}
-          appId={props.appId} />
+          appId={state.appId} />
         <div className="container-fluid">
           <div className="page-header">
-            <span className="h3 modal-title">{props.appId}</span>
+            <span className="h3 modal-title">{state.appId}</span>
             <ul className="list-inline list-inline-subtext">
               <li>
                 <span className={statusClassSet}>
