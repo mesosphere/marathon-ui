@@ -1,8 +1,10 @@
-var _ = require("underscore");
 var config = require("../config/config");
 var Mousetrap = require("mousetrap");
 require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
+var RouteHandler = require("react-router").RouteHandler;
+var Navigation = require("react-router").Navigation;
+
 var AppListComponent = require("../components/AppListComponent");
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var AppPageComponent = require("../components/AppPageComponent");
@@ -24,8 +26,10 @@ var tabs = [
 var Marathon = React.createClass({
   displayName: "Marathon",
 
+  mixins: [Navigation],
+
   propTypes: {
-    router: React.PropTypes.object.isRequired
+    params: React.PropTypes.object
   },
 
   getInitialState: function () {
@@ -38,14 +42,16 @@ var Marathon = React.createClass({
   },
 
   componentDidMount: function () {
-    var router = this.props.router;
+    this.onRouteChange(this.props);
 
+    /*
     router.on("route:about", this.setRouteAbout);
     router.on("route:apps", this.setRouteApps);
     router.on("route:deployments",
       _.bind(this.activateTab, this, "deployments")
     );
     router.on("route:newapp", this.setRouteNewApp);
+    */
 
     Mousetrap.bindGlobal("esc", function () {
       if (this.refs.modal != null) {
@@ -54,26 +60,46 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("c", function () {
-      router.navigate("newapp", {trigger: true});
+      this.transitionTo("newapp");
     }, "keyup");
 
     Mousetrap.bind("g a", function () {
       if (this.state.modalClass == null) {
-        router.navigate("apps", {trigger: true});
+        this.transitionTo("apps");
       }
     }.bind(this));
 
     Mousetrap.bind("g d", function () {
       if (this.state.modalClass == null) {
-        router.navigate("deployments", {trigger: true});
+        this.transitionTo("deployments");
       }
     }.bind(this));
 
     Mousetrap.bind("shift+,", function () {
-      router.navigate("about", {trigger: true});
+      this.transitionTo("about");
     });
 
     this.startPolling();
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.onRouteChange(nextProps);
+  },
+
+  onRouteChange: function (props) {
+    var params = props.state.params || {};
+    var appId = params.appid != null ?
+      decodeURIComponent(params.appid) :
+      params.appid;
+    var view = params.view != null ?
+      decodeURIComponent(params.view) :
+      params.view;
+
+    this.setState({
+      activeAppId: appId,
+      activeAppView: params.view,
+      modalClass: null
+    });
   },
 
   componentDidUpdate: function (prevProps, prevState) {
@@ -118,7 +144,6 @@ var Marathon = React.createClass({
       return;
     }
 
-    var router = this.props.router;
     var navigation = this.state.activeTabId;
 
     var activeAppId = this.state.activeAppId;
@@ -131,7 +156,7 @@ var Marathon = React.createClass({
       }
     }
 
-    router.navigate(navigation, {trigger: true});
+    this.transitionTo(navigation);
   },
 
   startPolling: function () {
@@ -192,47 +217,8 @@ var Marathon = React.createClass({
     );
   },
 
-  getAppPage: function () {
-    var state = this.state;
-
-    if (!state.activeAppId) {
-      return null;
-    }
-
-    return (
-      <AppPageComponent
-        appId={state.activeAppId}
-        router={this.props.router}
-        view={state.activeAppView} />
-    );
-  },
-
-  getTabPane: function () {
-    return (
-      <TogglableTabsComponent activeTabId={this.state.activeTabId}
-        className="container-fluid">
-        <TabPaneComponent id="apps">
-          <a href="#newapp" className="btn btn-success navbar-btn" >
-            + New App
-          </a>
-          <AppListComponent router={this.props.router} />
-        </TabPaneComponent>
-        <TabPaneComponent id="deployments">
-          <DeploymentsListComponent />
-        </TabPaneComponent>
-      </TogglableTabsComponent>
-    );
-  },
-
   render: function () {
     var modal;
-    var page;
-
-    if (this.state.activeAppId != null) {
-      page = this.getAppPage();
-    } else {
-      page = this.getTabPane();
-    }
 
     if (this.state.modalClass === NewAppModalComponent) {
       modal = this.getNewAppModal();
@@ -267,7 +253,7 @@ var Marathon = React.createClass({
             </ul>
           </div>
         </nav>
-        {page}
+        <RouteHandler />
         {modal}
       </div>
     );
