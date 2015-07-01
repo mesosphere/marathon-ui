@@ -1,12 +1,25 @@
-var Backbone = require("backbone");
 var React = require("react/addons");
+var Router = require("react-router");
+var Route = Router.Route;
 
+var AppPageComponent = require("./components/AppPageComponent");
+var TabPanesComponent = require("./components/TabPanesComponent");
 var Marathon = require("./components/Marathon");
-var Router = require("./models/Router");
 
-React.render(
-  <Marathon router={new Router()} />,
-  document.getElementById("marathon")
+var routes = (
+  <Route name="home" path="/" handler={Marathon}>
+    <Route name="about" path="about" handler={Marathon} />
+    <Route name="apps" path="apps" handler={TabPanesComponent} />
+    <Route name="app" path="apps/:appid" handler={AppPageComponent} />
+    <Route name="appview" path="apps/:appid/:view" handler={AppPageComponent} />
+    <Route name="deployments" path="deployments" handler={TabPanesComponent} />
+    <Route name="newapp" path="newapp" handler={Marathon} />
+  </Route>
 );
 
-Backbone.history.start();
+Router.run(routes, function (Handler, state) {
+  React.render(
+    <Handler state={state} />,
+    document.getElementById("marathon")
+  );
+});
