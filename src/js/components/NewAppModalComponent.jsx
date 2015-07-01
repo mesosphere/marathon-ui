@@ -22,8 +22,8 @@ var NewAppModalComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
-      onCreate: _.noop,
-      onDestroy: _.noop
+      onCreate: util.noop,
+      onDestroy: util.noop
     };
   },
 

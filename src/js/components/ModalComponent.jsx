@@ -24,7 +24,7 @@ var ModalComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
-      onDestroy: function () {},
+      onDestroy: util.noop,
       size: null
     };
   },
