@@ -1,5 +1,4 @@
 var classNames = require("classnames");
-var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var States = require("../constants/States");
@@ -93,14 +92,14 @@ var AppVersionListComponent = React.createClass({
   getAppVersionList: function (appVersions) {
     var props = this.props;
 
-    return lazy(appVersions).map(function (versionTimestamp) {
+    return appVersions.map(function (versionTimestamp) {
       return (
         <AppVersionListItemComponent
           appId={props.appId}
           appVersionTimestamp={versionTimestamp}
           key={versionTimestamp} />
       );
-    }).value();
+    });
   },
 
   getPagedNav: function (appVersions) {
