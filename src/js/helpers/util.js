@@ -71,7 +71,8 @@ var util = {
   hasClass: function (element, className) {
     return element.className &&
       element.className.match(/\S+/g).indexOf(className) > -1;
-  }
+  },
+  noop: function () {}
 };
 
 module.exports = util;
