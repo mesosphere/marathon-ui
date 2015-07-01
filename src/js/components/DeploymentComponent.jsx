@@ -1,5 +1,4 @@
 var classNames = require("classnames");
-var lazy = require("lazy.js");
 
 var React = require("react/addons");
 
@@ -97,16 +96,16 @@ var DeploymentComponent = React.createClass({
         </td>
         <td>
           <ul className="list-unstyled">
-            {lazy(model.currentActions).map(function (action) {
+            {model.currentActions.map(function (action) {
               return <li key={action.app}>{action.app}</li>;
-            }).value()}
+            })}
           </ul>
         </td>
         <td>
           <ul className="list-unstyled">
-            {lazy(model.currentActions).map(function (action) {
+            {model.currentActions.map(function (action) {
               return <li key={action.app}>{action.action}</li>;
-            }).value()}
+            })}
           </ul>
         </td>
         <td className="text-right">
