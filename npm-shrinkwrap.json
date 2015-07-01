@@ -2,7 +2,7 @@
   "name": "marathon-ui",
   "version": "0.9.0",
   "npm-shrinkwrap-version": "5.4.0",
-  "node-version": "v0.10.38",
+  "node-version": "v0.12.4",
   "dependencies": {
     "babel-core": {
       "version": "5.6.15",
@@ -5135,6 +5135,10 @@
           }
         }
       }
+    },
+    "jquery": {
+      "version": "2.1.4",
+      "resolved": "https://registry.npmjs.org/jquery/-/jquery-2.1.4.tgz"
     },
     "lazy.js": {
       "version": "0.4.0",
