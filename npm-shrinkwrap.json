@@ -864,16 +864,6 @@
               "version": "0.1.6",
               "resolved": "https://registry.npmjs.org/async-each/-/async-each-0.1.6.tgz"
             },
-            "fsevents": {
-              "version": "0.3.6",
-              "resolved": "https://registry.npmjs.org/fsevents/-/fsevents-0.3.6.tgz",
-              "dependencies": {
-                "nan": {
-                  "version": "1.8.4",
-                  "resolved": "https://registry.npmjs.org/nan/-/nan-1.8.4.tgz"
-                }
-              }
-            },
             "glob-parent": {
               "version": "1.2.0",
               "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-1.2.0.tgz"
@@ -4136,6 +4126,56 @@
         }
       }
     },
+    "gulp-header": {
+      "version": "1.2.2",
+      "resolved": "https://registry.npmjs.org/gulp-header/-/gulp-header-1.2.2.tgz",
+      "dependencies": {
+        "object-assign": {
+          "version": "3.0.0",
+          "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-3.0.0.tgz"
+        },
+        "through2": {
+          "version": "2.0.0",
+          "resolved": "https://registry.npmjs.org/through2/-/through2-2.0.0.tgz",
+          "dependencies": {
+            "readable-stream": {
+              "version": "2.0.1",
+              "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.0.1.tgz",
+              "dependencies": {
+                "core-util-is": {
+                  "version": "1.0.1",
+                  "resolved": "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.1.tgz"
+                },
+                "inherits": {
+                  "version": "2.0.1",
+                  "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
+                },
+                "isarray": {
+                  "version": "0.0.1",
+                  "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                },
+                "process-nextick-args": {
+                  "version": "1.0.1",
+                  "resolved": "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-1.0.1.tgz"
+                },
+                "string_decoder": {
+                  "version": "0.10.31",
+                  "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz"
+                },
+                "util-deprecate": {
+                  "version": "1.0.1",
+                  "resolved": "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.1.tgz"
+                }
+              }
+            },
+            "xtend": {
+              "version": "4.0.0",
+              "resolved": "https://registry.npmjs.org/xtend/-/xtend-4.0.0.tgz"
+            }
+          }
+        }
+      }
+    },
     "gulp-less": {
       "version": "3.0.3",
       "resolved": "https://registry.npmjs.org/gulp-less/-/gulp-less-3.0.3.tgz",
@@ -6587,16 +6627,6 @@
                 "async-each": {
                   "version": "0.1.6",
                   "resolved": "https://registry.npmjs.org/async-each/-/async-each-0.1.6.tgz"
-                },
-                "fsevents": {
-                  "version": "0.3.6",
-                  "resolved": "https://registry.npmjs.org/fsevents/-/fsevents-0.3.6.tgz",
-                  "dependencies": {
-                    "nan": {
-                      "version": "1.8.4",
-                      "resolved": "https://registry.npmjs.org/nan/-/nan-1.8.4.tgz"
-                    }
-                  }
                 },
                 "glob-parent": {
                   "version": "1.2.0",

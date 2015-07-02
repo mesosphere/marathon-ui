@@ -1,5 +1,6 @@
 var autoprefixer = require("gulp-autoprefixer");
 var connect = require("gulp-connect");
+var header = require('gulp-header');
 var browserSync = require("browser-sync");
 var eslint = require("gulp-eslint");
 var gulp = require("gulp");
@@ -9,6 +10,8 @@ var minifyCSS = require("gulp-minify-css");
 var path = require("path");
 var uglify = require("gulp-uglify");
 var webpack = require("webpack");
+
+var packageInfo = require("./package");
 
 var dirs = {
   src: "./src",
@@ -101,8 +104,14 @@ gulp.task("minify-css", ["less"], function () {
 });
 
 gulp.task("minify-js", ["webpack"], function () {
+  var banner = "/**\n" +
+    " * <%= pkg.name %> - <%= pkg.description %>\n" +
+    " * @version v<%= pkg.version %>\n" +
+    " */\n";
+
   return gulp.src(dirs.dist + "/" + files.mainJs + ".js")
     .pipe(uglify())
+    .pipe(header(banner, { pkg : packageInfo } ))
     .pipe(gulp.dest(dirs.dist));
 });
 
