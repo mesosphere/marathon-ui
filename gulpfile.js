@@ -12,6 +12,8 @@ var war = require("gulp-war");
 var webpack = require("webpack");
 var zip = require("gulp-zip");
 
+var packageInfo = require("./package");
+
 var dirs = {
   src: "./src",
   js: "./src/js",
@@ -140,12 +142,13 @@ gulp.task("watch", function () {
 });
 
 gulp.task("make-war", function () {
+  var warFileName = packageInfo.name + "." + packageInfo.version + ".war";
   return gulp.src("./dist/**/*")
     .pipe(war({
       welcome: "index.html",
       displayName: "Marathon UI"
     }))
-    .pipe(zip("marathon-ui.war"))
+    .pipe(zip(warFileName))
     .pipe(gulp.dest("."));
 });
 
