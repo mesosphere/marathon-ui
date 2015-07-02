@@ -40,7 +40,7 @@ var Marathon = React.createClass({
   },
 
   componentWillMount: function () {
-    // TODO: That should be handled directly on the NavTabs
+    // TODO: #1738 - That should be handled directly on the NavTabs
     DeploymentStore.on(DeploymentEvents.CHANGE, function () {
       if (tabs[1].badge !== DeploymentStore.deployments.length) {
         tabs[1].badge = DeploymentStore.deployments.length;
