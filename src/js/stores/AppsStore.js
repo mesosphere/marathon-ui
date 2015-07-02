@@ -3,7 +3,11 @@ var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
+var appScheme = require("../stores/appScheme");
+var AppStatus = require("../constants/AppStatus");
+var HealthStatus = require("../constants/HealthStatus");
 var TasksEvents = require("../events/TasksEvents");
+var TaskStatus = require("../constants/TaskStatus");
 
 function removeApp(apps, appId) {
   return lazy(apps).reject({
@@ -17,52 +21,122 @@ function removeTask(tasks, relatedAppId, taskId) {
   }).value();
 }
 
-function processCurrentApp(currentApp) {
-  if (currentApp == null) {
-    currentApp = {};
+function getTaskHealth(task) {
+  var nullResult = true;
+  var health = false;
+  var healthCheckResults = task.healthCheckResults;
+
+  if (healthCheckResults != null) {
+    health = lazy(healthCheckResults).every(function (hcr) {
+      if (hcr.firstSuccess) {
+        nullResult = false;
+        return hcr.alive;
+      }
+
+      return false;
+    });
   }
 
-  if (currentApp.tasks == null) {
-    currentApp.tasks = [];
+  if (!health && nullResult) { // health check has not returned yet
+    return HealthStatus.UNKNOWN;
   }
 
-  return currentApp;
+  return health ? HealthStatus.HEALTHY : HealthStatus.UNHEALTHY;
+}
+
+function setTaskStatus(task) {
+  if (task.startedAt != null) {
+    task.status = TaskStatus.STARTED;
+    task.updatedAt = task.startedAt;
+  } else if (task.stagedAt != null) {
+    task.status = TaskStatus.STAGED;
+    task.updatedAt = task.stagedAt;
+  }
+  return task;
+}
+
+function processApp(app) {
+  app = lazy(appScheme).extend(app).value();
+
+  app.status = AppStatus.RUNNING;
+  if (app.deployments.length > 0) {
+    app.status = AppStatus.DEPLOYING;
+  } else if (app.instances === 0 && app.tasksRunning === 0) {
+    app.status = AppStatus.SUSPENDED;
+  }
+
+  app.tasks = lazy(app.tasks).map(function (task) {
+    task.healthStatus = getTaskHealth(task);
+    task = setTaskStatus(task);
+    return task;
+  }).value();
+
+  return app;
+}
+
+function processApps(apps) {
+  return lazy(apps).map(function (app) {
+    return processApp(app);
+  }).value();
 }
 
 var AppsStore = lazy(EventEmitter.prototype).extend({
   // Array of apps objects recieved from the "apps/"-endpoint
   apps: [],
   // Object of the current app recieved from the "apps/[appid]"-endpoint
-  currentApp: {}
+  // This endpoint delievers more data, like the tasks on the app.
+  currentApp: appScheme,
+
+  getCurrentApp: function (appId) {
+    if (appId === this.currentApp.id) {
+      return this.currentApp;
+    }
+
+    var shallowApp = lazy(this.apps).findWhere({id: appId});
+    if (shallowApp) {
+      return shallowApp;
+    }
+
+    return appScheme;
+  },
+
+  getTask: function (appId, taskId) {
+    return lazy(this.getCurrentApp(appId).tasks).findWhere({"id": taskId});
+  }
 }).value();
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
-      AppsStore.apps = action.data.body;
+      AppsStore.apps = processApps(action.data.body.apps);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APPS_ERROR:
       AppsStore.emit(AppsEvents.REQUEST_APPS_ERROR, action.data.body);
       break;
     case AppsEvents.REQUEST_APP:
-      AppsStore.currentApp = processCurrentApp(action.data.body);
+      AppsStore.currentApp = processApp(action.data.body.app);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APP_ERROR:
       AppsStore.emit(AppsEvents.REQUEST_APP_ERROR, action.data.body);
       break;
     case AppsEvents.CREATE_APP:
-      AppsStore.apps.push(action.data.body);
+      AppsStore.apps.push(processApp(action.data.body));
+      AppsStore.emit(AppsEvents.CREATE_APP);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.CREATE_APP_ERROR:
-      AppsStore.emit(AppsEvents.CREATE_APP_ERROR, action.data.body);
+      AppsStore.emit(
+        AppsEvents.CREATE_APP_ERROR,
+        action.data.body,
+        action.data.status
+      );
       break;
     case AppsEvents.DELETE_APP:
       AppsStore.apps =
         removeApp(AppsStore.apps, action.appId);
-      AppsStore.emit(AppsEvents.CHANGE);
+      AppsStore.emit(AppsEvents.DELETE_APP);
       break;
     case AppsEvents.DELETE_APP_ERROR:
       AppsStore.emit(AppsEvents.DELETE_APP_ERROR, action.data.body);

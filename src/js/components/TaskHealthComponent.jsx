@@ -9,7 +9,7 @@ var TaskHealthComponent = React.createClass({
   },
   render: function () {
     var task = this.props.task;
-    var healthCheckResults = task.get("healthCheckResults");
+    var healthCheckResults = task.healthCheckResults;
     var healthNodeList;
 
     if (healthCheckResults != null) {

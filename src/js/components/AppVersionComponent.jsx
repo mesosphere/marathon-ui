@@ -1,7 +1,7 @@
-var _ = require("underscore");
 var React = require("react/addons");
-var App = require("../models/App");
-var AppVersion = require("../models/AppVersion");
+
+var AppsActions = require("../actions/AppsActions");
+
 /*eslint-disable react/display-name, react/no-multi-comp */
 var UNSPECIFIED_NODE =
   React.createClass({
@@ -10,36 +10,58 @@ var UNSPECIFIED_NODE =
     }
   });
 /*eslint-enable react/display-name */
+
+function invalidateValue(value, suffix) {
+  if (value == null) {
+    return (
+      <UNSPECIFIED_NODE />
+    );
+  } else {
+    return (
+      <dd>{value} {suffix}</dd>
+    );
+  }
+}
+
 var AppVersionComponent = React.createClass({
   displayName: "AppVersionComponent",
 
   propTypes: {
-    app: React.PropTypes.instanceOf(App).isRequired,
-    appVersion: React.PropTypes.oneOfType([
-      React.PropTypes.instanceOf(App).isRequired,
-      React.PropTypes.instanceOf(AppVersion).isRequired
-    ]),
+    // App object
+    appVersion: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
-    currentVersion: React.PropTypes.bool,
-    onRollback: React.PropTypes.func
+    currentVersion: React.PropTypes.bool
   },
 
-  handleSubmit: function (event) {
-    if (_.isFunction(this.props.onRollback)) {
-      event.preventDefault();
-      this.props.onRollback(this.props.appVersion, event);
+  handleRollbackToAppVersion: function () {
+    var appVersion = this.props.appVersion;
+    AppsActions.applySettingsOnApp(appVersion.id, appVersion);
+  },
+
+  getApplyButton: function () {
+    var applyButton = null;
+
+    if (!this.props.currentVersion) {
+      applyButton = (
+        <div className="text-right">
+          <button type="submit"
+              className="btn btn-sm btn-default"
+              onClick={this.handleRollbackToAppVersion}>
+            Apply these settings
+          </button>
+        </div>
+      );
     }
+
+    return applyButton;
   },
 
   render: function () {
     var appVersion = this.props.appVersion;
 
-    var cmdNode = (appVersion.get("cmd") == null) ?
+    var constraintsNode = (appVersion.constraints.length < 1) ?
       <UNSPECIFIED_NODE /> :
-      <dd>{appVersion.get("cmd")}</dd>;
-    var constraintsNode = (appVersion.get("constraints").length < 1) ?
-      <UNSPECIFIED_NODE /> :
-      appVersion.get("constraints").map(function (c) {
+      appVersion.constraints.map(function (c) {
 
         // Only include constraint parts if they are not empty Strings. For
         // example, a hostname uniqueness constraint looks like:
@@ -54,86 +76,68 @@ var AppVersionComponent = React.createClass({
           </dd>
         );
       });
-    var containerNode = (appVersion.get("container") == null) ?
-      <UNSPECIFIED_NODE /> :
-      <dd><pre>{JSON.stringify(appVersion.get("container"), null, 2)}</pre></dd>;
-    var envNode = (Object.keys(appVersion.get("env")).length === 0) ?
-      <UNSPECIFIED_NODE /> :
 
+    var containerNode = (appVersion.container == null) ?
+      <UNSPECIFIED_NODE /> :
+      <dd><pre>{JSON.stringify(appVersion.container, null, 2)}</pre></dd>;
+
+    var envNode = (appVersion.env == null ||
+        Object.keys(appVersion.env).length === 0) ?
+      <UNSPECIFIED_NODE /> :
       // Print environment variables as key value pairs like "key=value"
-      Object.keys(appVersion.get("env")).map(function (k) {
-        return <dd key={k}>{k + "=" + appVersion.get("env")[k]}</dd>;
+      Object.keys(appVersion.env).map(function (k) {
+        return <dd key={k}>{k + "=" + appVersion.env[k]}</dd>;
       });
-    var executorNode = (appVersion.get("executor") === "") ?
+
+    var executorNode = (appVersion.executor === "") ?
       <UNSPECIFIED_NODE /> :
-      <dd>{appVersion.get("executor")}</dd>;
-    var diskNode = (appVersion.get("disk") == null) ?
+      <dd>{appVersion.executor}</dd>;
+
+    var portsNode = (appVersion.ports.length === 0) ?
       <UNSPECIFIED_NODE /> :
-      <dd>{appVersion.get("disk")} MB</dd>;
-    var portsNode = (appVersion.get("ports").length === 0) ?
+      <dd>{appVersion.ports.join(",")}</dd>;
+
+    var urisNode = (appVersion.uris.length === 0) ?
       <UNSPECIFIED_NODE /> :
-      <dd>{appVersion.get("ports").join(",")}</dd>;
-    var backoffFactorNode = (appVersion.get("backoffFactor") == null) ?
-      <UNSPECIFIED_NODE /> :
-      <dd>{appVersion.get("backoffFactor")}</dd>;
-    var backoffSecondsNode = (appVersion.get("backoffSeconds") == null) ?
-      <UNSPECIFIED_NODE /> :
-      <dd>{appVersion.get("backoffSeconds")} seconds</dd>;
-    var maxLaunchDelaySecondsNode = (appVersion.get("maxLaunchDelaySeconds") == null) ?
-      <UNSPECIFIED_NODE /> :
-      <dd>{appVersion.get("maxLaunchDelaySeconds")} seconds</dd>;
-    var urisNode = (appVersion.get("uris").length === 0) ?
-      <UNSPECIFIED_NODE /> :
-      appVersion.get("uris").map(function (u) {
+      appVersion.uris.map(function (u) {
         return <dd key={u}>{u}</dd>;
       });
+
     return (
       <div>
         <dl className={"dl-horizontal " + this.props.className}>
           <dt>Command</dt>
-          {cmdNode}
+          {invalidateValue(appVersion.cmd)}
           <dt>Constraints</dt>
           {constraintsNode}
           <dt>Container</dt>
           {containerNode}
           <dt>CPUs</dt>
-          <dd>{appVersion.get("cpus")}</dd>
+          {invalidateValue(appVersion.cpus)}
           <dt>Environment</dt>
           {envNode}
           <dt>Executor</dt>
           {executorNode}
           <dt>Instances</dt>
-          <dd>{appVersion.get("instances")}</dd>
+          {invalidateValue(appVersion.instances)}
           <dt>Memory</dt>
-          <dd>{appVersion.get("mem")} MB</dd>
+          {invalidateValue(appVersion.mem, "MB")}
           <dt>Disk Space</dt>
-          <dd>{diskNode}</dd>
+          {invalidateValue(appVersion.disk, "MB")}
           <dt>Ports</dt>
           {portsNode}
           <dt>Backoff Factor</dt>
-          {backoffFactorNode}
+          {invalidateValue(appVersion.backoffFactor)}
           <dt>Backoff</dt>
-          {backoffSecondsNode}
+          {invalidateValue(appVersion.backoffSeconds, "seconds")}
           <dt>Max Launch Delay</dt>
-          {maxLaunchDelaySecondsNode}
+          {invalidateValue(appVersion.maxLaunchDelaySeconds, "seconds")}
           <dt>URIs</dt>
           {urisNode}
           <dt>Version</dt>
-          <dd>{appVersion.id}</dd>
+          {invalidateValue(appVersion.version)}
         </dl>
-        {
-          this.props.currentVersion ?
-            null :
-            <div className="text-right">
-              <form action={this.props.app.url()} method="post" onSubmit={this.handleSubmit}>
-                  <input type="hidden" name="_method" value="put" />
-                  <input type="hidden" name="version" value={appVersion.get("version")} />
-                  <button type="submit" className="btn btn-sm btn-default">
-                    Apply these settings
-                  </button>
-              </form>
-            </div>
-        }
+        {this.getApplyButton()}
       </div>
     );
   }

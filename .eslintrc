@@ -1,7 +1,8 @@
 {
   "ecmaFeatures": {
     "jsx": true,
-    "arrowFunctions": true
+    "arrowFunctions": true,
+    "objectLiteralComputedProperties": true
   },
 
   "env": {

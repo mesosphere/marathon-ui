@@ -1,35 +1,30 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var States = require("../constants/States");
-var BackboneMixin = require("../mixins/BackboneMixin");
 var TaskListItemComponent = require("../components/TaskListItemComponent");
 var PagedContentComponent = require("../components/PagedContentComponent");
 
 var TaskListComponent = React.createClass({
   displayName: "TaskListComponent",
 
-  mixins: [BackboneMixin],
-
   propTypes: {
     currentPage: React.PropTypes.number.isRequired,
     fetchState: React.PropTypes.number.isRequired,
-    formatTaskHealthMessage: React.PropTypes.func.isRequired,
+    getTaskHealthMessage: React.PropTypes.func.isRequired,
     hasHealth: React.PropTypes.bool,
     itemsPerPage: React.PropTypes.number.isRequired,
     onTaskToggle: React.PropTypes.func.isRequired,
     selectedTasks: React.PropTypes.object.isRequired,
-    tasks: React.PropTypes.object.isRequired,
+    tasks: React.PropTypes.array.isRequired,
     toggleAllTasks: React.PropTypes.func.isRequired
-  },
-
-  getResource: function () {
-    return this.props.tasks;
   },
 
   getInitialState: function () {
     return {
-      fetchState: States.STATE_LOADING
+      sortKey: "updatedAt",
+      sortDescending: false
     };
   },
 
@@ -41,40 +36,53 @@ var TaskListComponent = React.createClass({
     }
   },
 
-  sortCollectionBy: function (comparator) {
-    var collection = this.props.tasks;
-    comparator =
-      collection.sortKey === comparator && !collection.sortReverse ?
-      "-" + comparator :
-      comparator;
-    collection.setComparator(comparator);
-    collection.sort();
+  sortBy: function (sortKey) {
+    var state = this.state;
+
+    this.setState({
+      sortKey: sortKey,
+      sortDescending: state.sortKey === sortKey && !state.sortDescending
+    });
   },
 
   getTasks: function () {
-    var hasHealth = !!this.props.hasHealth;
+    var props = this.props;
+    var state = this.state;
+    var sortKey = state.sortKey;
+    var hasHealth = !!props.hasHealth;
 
-    return (
-      this.props.tasks.map(function (task) {
-        var isActive = this.props.selectedTasks[task.id] === true;
+    return lazy(this.props.tasks)
+      .sortBy(function (app) {
+        return app[sortKey];
+      }, state.sortDescending)
+      .map(function (task) {
+        var isActive = props.selectedTasks[task.id] === true;
 
         return (
           <TaskListItemComponent
-            appId={this.props.tasks.options.appId}
+            appId={props.tasks[0].appId}
             hasHealth={hasHealth}
             isActive={isActive}
             key={task.id}
-            onToggle={this.props.onTaskToggle}
+            onToggle={props.onTaskToggle}
             task={task}
-            taskHealthMessage={this.props.formatTaskHealthMessage(task)}/>
+            taskHealthMessage={props.getTaskHealthMessage(task.id)}/>
         );
-      }, this)
-    );
+      }).value();
+  },
+
+  getCaret: function (sortKey) {
+    if (sortKey === this.state.sortKey) {
+      return (
+        <span className="caret"></span>
+      );
+    }
+    return null;
   },
 
   allTasksSelected: function (tasksLength) {
     var selectedTasks = this.props.selectedTasks;
-    return tasksLength > 0 && this.props.tasks.find(function (task) {
+    return tasksLength > 0 && lazy(this.props.tasks).find(function (task) {
       return selectedTasks[task.id] == null;
     }) == null;
   },
@@ -84,11 +92,9 @@ var TaskListComponent = React.createClass({
     var hasHealth = !!this.props.hasHealth;
     var hasError = this.props.fetchState === States.STATE_ERROR;
 
-    var sortKey = this.props.tasks.sortKey;
-
     var headerClassSet = classNames({
       "clickable": true,
-      "dropup": this.props.tasks.sortReverse
+      "dropup": !this.state.sortDescending
     });
 
     var loadingClassSet = classNames({
@@ -129,34 +135,34 @@ var TaskListComponent = React.createClass({
                   onChange={this.props.toggleAllTasks} />
               </th>
               <th>
-                <span onClick={this.sortCollectionBy.bind(null, "id")}
+                <span onClick={this.sortBy.bind(null, "id")}
                       className={headerClassSet}>
-                  ID {(sortKey === "id") ? <span className="caret"></span> : null}
+                  ID {this.getCaret("id")}
                 </span>
               </th>
               <th className="text-center">
-                <span onClick={this.sortCollectionBy.bind(null, "status")}
+                <span onClick={this.sortBy.bind(null, "status")}
                       className={headerClassSet}>
-                  Status {(sortKey === "status") ? <span className="caret"></span> : null}
+                  Status {this.getCaret("status")}
                 </span>
               </th>
               <th className="text-right">
                 <span
                   className={headerClassSet}
-                  onClick={this.sortCollectionBy.bind(null, "version")}>
-                  {(sortKey === "version") ? <span className="caret"></span> : null} Version
+                  onClick={this.sortBy.bind(null, "version")}>
+                  {this.getCaret("version")} Version
                 </span>
               </th>
               <th className="text-right">
-                <span onClick={this.sortCollectionBy.bind(null, "updatedAt")}
+                <span onClick={this.sortBy.bind(null, "updatedAt")}
                       className={headerClassSet}>
-                  {(sortKey === "updatedAt") ? <span className="caret"></span> : null} Updated
+                  {this.getCaret("updatedAt")} Updated
                 </span>
               </th>
                 <th className={hasHealthClassSet}>
-                  <span onClick={this.sortCollectionBy.bind(null, "getHealth")}
+                  <span onClick={this.sortBy.bind(null, "healthStatus")}
                         className={headerClassSet}>
-                    {(sortKey === "getHealth") ? <span className="caret"></span> : null} Health
+                    {this.getCaret("healthStatus")} Health
                   </span>
                 </th>
             </tr>

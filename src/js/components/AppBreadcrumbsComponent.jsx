@@ -5,9 +5,9 @@ var AppBreadcrumbsComponent = React.createClass({
   displayName: "AppBreadcrumbsComponent",
 
   propTypes: {
-    activeTask: React.PropTypes.object,
+    activeTaskId: React.PropTypes.string,
     activeViewIndex: React.PropTypes.number.isRequired,
-    model: React.PropTypes.object.isRequired
+    appId: React.PropTypes.string.isRequired
   },
 
   getDefaultProps: function () {
@@ -17,14 +17,14 @@ var AppBreadcrumbsComponent = React.createClass({
   },
 
   render: function () {
-    var model = this.props.model;
-    var activeViewIndex = this.props.activeViewIndex;
-    var appName = model.get("id");
-    var appUri = "#apps/" + encodeURIComponent(this.props.model.get("id"));
+    var props = this.props;
+    var activeViewIndex = props.activeViewIndex;
+    var appName = props.appId;
+    var appUri = "#apps/" + encodeURIComponent(props.appId);
 
     var taskName;
-    if (activeViewIndex === 1 && this.props.activeTask != null) {
-      taskName = this.props.activeTask.get("id");
+    if (activeViewIndex === 1 && props.activeTaskId != null) {
+      taskName = props.activeTaskId;
     }
 
     var activeAppClassSet = classNames({

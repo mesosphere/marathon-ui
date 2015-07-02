@@ -3,8 +3,6 @@ var config = require("../config/config");
 var Mousetrap = require("mousetrap");
 require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
-var States = require("../constants/States");
-var AppCollection = require("../models/AppCollection");
 var AppListComponent = require("../components/AppListComponent");
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var AppPageComponent = require("../components/AppPageComponent");
@@ -15,10 +13,10 @@ var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
+var AppsActions = require("../actions/AppsActions");
 var DeploymentActions = require("../actions/DeploymentActions");
 var DeploymentEvents = require("../events/DeploymentEvents");
 var DeploymentStore = require("../stores/DeploymentStore");
-var util = require("../helpers/util");
 
 var tabs = [
   {id: "apps", text: "Apps"},
@@ -35,22 +33,19 @@ var Marathon = React.createClass({
   getInitialState: function () {
     return {
       activeAppId: null,
-      activeApp: null,
       activeAppView: null,
       activeTabId: tabs[0].id,
-      appVersionsFetchState: States.STATE_LOADING,
-      collection: new AppCollection(),
-      fetchState: States.STATE_LOADING,
-      modalClass: null,
-      tasksFetchState: States.STATE_LOADING
+      modalClass: null
     };
   },
 
   componentWillMount: function () {
-    // TODO: That should be handled directly on the NavTabs
+    // TODO: #1738 - That should be handled directly on the NavTabs
     DeploymentStore.on(DeploymentEvents.CHANGE, function () {
-      tabs[1].badge = DeploymentStore.deployments.length;
-      this.forceUpdate();
+      if (tabs[1].badge !== DeploymentStore.deployments.length) {
+        tabs[1].badge = DeploymentStore.deployments.length;
+        this.forceUpdate();
+      }
     }.bind(this));
   },
 
@@ -86,12 +81,6 @@ var Marathon = React.createClass({
       }
     }.bind(this));
 
-    Mousetrap.bind("#", function () {
-      if (this.state.activeApp != null) {
-        this.destroyApp();
-      }
-    }.bind(this));
-
     Mousetrap.bind("shift+,", function () {
       router.navigate("about", {trigger: true});
     });
@@ -101,9 +90,9 @@ var Marathon = React.createClass({
 
   componentDidUpdate: function (prevProps, prevState) {
     /*eslint-disable eqeqeq */
-    if (prevState.activeApp != this.state.activeApp ||
+    if (prevState.activeAppId != this.state.activeAppId ||
       prevState.activeTabId != this.state.activeTabId) {
-      this.poll();
+      this.resetPolling();
     }
     /*eslint-enable eqeqeq */
   },
@@ -122,9 +111,6 @@ var Marathon = React.createClass({
     if (appid != null) {
       this.setState({
         activeAppId: appid,
-        // activeApp could be undefined here, if this route is triggered on
-        // page load, because the collection is not ready.
-        activeApp: this.state.collection.get(appid),
         activeAppView: view,
         modalClass: null
       });
@@ -139,52 +125,6 @@ var Marathon = React.createClass({
     });
   },
 
-  fetchApps: function () {
-    this.state.collection.fetch({
-      error: function () {
-        this.setState({fetchState: States.STATE_ERROR});
-      }.bind(this),
-      success: function () {
-        this.setState({
-          fetchState: States.STATE_SUCCESS,
-          activeApp: this.state.collection.get(this.state.activeAppId)
-        });
-      }.bind(this)
-    });
-  },
-
-  fetchAppVersions: function () {
-    if (this.state.activeApp != null) {
-      this.state.activeApp.versions.fetch({
-        error: function () {
-          this.setState({appVersionsFetchState: States.STATE_ERROR});
-        }.bind(this),
-        success: function () {
-          this.setState({appVersionsFetchState: States.STATE_SUCCESS});
-        }.bind(this)
-      });
-    }
-  },
-
-  fetchTasks: function () {
-    if (this.state.activeApp != null) {
-      this.state.activeApp.tasks.fetch({
-        error: function () {
-          this.setState({tasksFetchState: States.STATE_ERROR});
-        }.bind(this),
-        success: function (collection, response) {
-          // update changed attributes in app
-          this.state.activeApp.update(response.app);
-          this.setState({tasksFetchState: States.STATE_SUCCESS});
-        }.bind(this)
-      });
-    }
-  },
-
-  handleAppCreate: function (appModel, options) {
-    this.state.collection.create(appModel, options);
-  },
-
   handleModalDestroy: function () {
     if (!this.state.modalClass) {
       return;
@@ -193,9 +133,9 @@ var Marathon = React.createClass({
     var router = this.props.router;
     var navigation = this.state.activeTabId;
 
-    var activeApp = this.state.activeApp;
-    if (activeApp != null) {
-      navigation = "apps/" + encodeURIComponent(activeApp.get("id"));
+    var activeAppId = this.state.activeAppId;
+    if (activeAppId != null) {
+      navigation = "apps/" + encodeURIComponent(activeAppId);
 
       var activeAppView = this.state.activeAppView;
       if (activeAppView != null) {
@@ -204,108 +144,6 @@ var Marathon = React.createClass({
     }
 
     router.navigate(navigation, {trigger: true});
-  },
-
-  handleTasksKilled: function (options) {
-    var instances;
-    var app = this.state.activeApp;
-    var _options = options || {};
-    if (_options.scale) {
-      instances = app.get("instances");
-      app.set("instances", instances - 1);
-      this.setState({appVersionsFetchState: States.STATE_LOADING});
-      // refresh app versions
-      this.fetchAppVersions();
-    }
-  },
-
-  destroyApp: function () {
-    var app = this.state.activeApp;
-    if (util.confirm("Destroy app '" + app.id + "'?\nThis is irreversible.")) {
-      app.destroy({
-        error: function (data, response) {
-          var msg = response.responseJSON.message || response.statusText;
-          util.alert("Error destroying app '" + app.id + "': " + msg);
-        },
-        success: function () {
-          this.props.router.navigate("apps", {trigger: true});
-        }.bind(this),
-        wait: true
-      });
-    }
-  },
-
-  restartApp: function () {
-    var app = this.state.activeApp;
-    if (util.confirm("Restart app '" + app.id + "'?")) {
-      app.restart({
-        error: function (data, response) {
-          var msg = response.responseJSON.message || response.statusText;
-          util.alert("Error restarting app '" + app.id + "': " + msg);
-        },
-        wait: true
-      });
-    }
-  },
-
-  rollbackToAppVersion: function (version) {
-    if (this.state.activeApp != null) {
-      var app = this.state.activeApp;
-      app.setVersion(version);
-      app.save(
-        null,
-        {
-          error: function (data, response) {
-            var msg = response.responseJSON.message || response.statusText;
-            util.alert("Could not update to chosen version: " + msg);
-          },
-          success: function () {
-            // refresh app versions
-            this.fetchAppVersions();
-          }.bind(this)
-        });
-    }
-  },
-
-  scaleApp: function (instances) {
-    if (this.state.activeApp != null) {
-      var app = this.state.activeApp;
-      app.save(
-        {instances: instances},
-        {
-          error: function (data, response) {
-            var msg = response.responseJSON.message || response.statusText;
-            util.alert("Not scaling: " + msg);
-          },
-          success: function () {
-            // refresh app versions
-            this.fetchAppVersions();
-          }.bind(this)
-        }
-      );
-
-      if (app.validationError != null) {
-        // If the model is not valid, revert the changes to prevent the UI
-        // from showing an invalid state.
-        app.update(app.previousAttributes());
-        util.alert("Not scaling: " + app.validationError[0].message);
-      }
-    }
-  },
-
-  suspendApp: function () {
-    if (util.confirm("Suspend app by scaling to 0 instances?")) {
-      this.state.activeApp.suspend({
-        error: function (data, response) {
-          var msg = response.responseJSON.message || response.statusText;
-          util.alert("Could not suspend: " + msg);
-        },
-        success: function () {
-          // refresh app versions
-          this.fetchAppVersions();
-        }.bind(this)
-      });
-    }
   },
 
   startPolling: function () {
@@ -322,11 +160,18 @@ var Marathon = React.createClass({
     }
   },
 
+  resetPolling: function () {
+    this.stopPolling();
+    this.startPolling();
+  },
+
   poll: function () {
-    if (this.state.activeApp) {
-      this.fetchTasks();
-    } else if (this.state.activeTabId === tabs[0].id) {
-      this.fetchApps();
+    var state = this.state;
+
+    if (state.activeAppId != null) {
+      AppsActions.requestApp(state.activeAppId);
+    } else if (state.activeTabId === tabs[0].id) {
+      AppsActions.requestApps();
     }
 
     // Deployments needs to be fetched on every poll,
@@ -337,7 +182,6 @@ var Marathon = React.createClass({
   activateTab: function (id) {
     this.setState({
       activeTabId: id,
-      activeApp: null,
       activeAppId: null,
       activeAppView: null,
       modalClass: null
@@ -355,33 +199,23 @@ var Marathon = React.createClass({
   getNewAppModal: function () {
     return (
       <NewAppModalComponent
-        model={this.state.activeApp}
         onDestroy={this.handleModalDestroy}
-        onCreate={this.handleAppCreate}
         ref="modal" />
     );
   },
 
   getAppPage: function () {
-    var activeApp = this.state.collection.get(this.state.activeAppId);
-    if (!activeApp) {
+    var state = this.state;
+
+    if (!state.activeAppId) {
       return null;
     }
 
     return (
       <AppPageComponent
-        appVersionsFetchState={this.state.appVersionsFetchState}
-        destroyApp={this.destroyApp}
-        fetchTasks={this.fetchTasks}
-        fetchAppVersions={this.fetchAppVersions}
-        model={this.state.activeApp}
-        onTasksKilled={this.handleTasksKilled}
-        restartApp={this.restartApp}
-        rollBackApp={this.rollbackToAppVersion}
-        scaleApp={this.scaleApp}
-        suspendApp={this.suspendApp}
-        tasksFetchState={this.state.tasksFetchState}
-        view={this.state.activeAppView} />
+        appId={state.activeAppId}
+        router={this.props.router}
+        view={state.activeAppView} />
     );
   },
 
@@ -393,14 +227,9 @@ var Marathon = React.createClass({
           <a href="#newapp" className="btn btn-success navbar-btn" >
             + New App
           </a>
-          <AppListComponent
-            collection={this.state.collection}
-            fetchState={this.state.fetchState}
-            router={this.props.router} />
+          <AppListComponent router={this.props.router} />
         </TabPaneComponent>
-        <TabPaneComponent
-            id="deployments"
-            onActivate={this.fetchAppVersions} >
+        <TabPaneComponent id="deployments">
           <DeploymentsListComponent />
         </TabPaneComponent>
       </TogglableTabsComponent>
@@ -411,7 +240,7 @@ var Marathon = React.createClass({
     var modal;
     var page;
 
-    if (this.state.activeApp != null) {
+    if (this.state.activeAppId != null) {
       page = this.getAppPage();
     } else {
       page = this.getTabPane();

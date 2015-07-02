@@ -1,4 +1,4 @@
-var oboeWrapper = require("../helpers/oboeWrapper");
+var qajaxWrapper = require("../helpers/qajaxWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -134,6 +134,9 @@ var AppsActions = {
     });
   },
   applySettingsOnApp: function (appId, settings) {
+    // Version key is not allowed and not needed on settings object
+    delete settings.version;
+
     this.request({
       method: "PUT",
       data: settings,
@@ -156,7 +159,7 @@ var AppsActions = {
       });
     });
   },
-  request: oboeWrapper
+  request: qajaxWrapper
 };
 
 module.exports = AppsActions;

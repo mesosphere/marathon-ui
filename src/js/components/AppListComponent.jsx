@@ -1,73 +1,121 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var States = require("../constants/States");
 var AppComponent = require("../components/AppComponent");
-var BackboneMixin = require("../mixins/BackboneMixin");
+
+var AppsStore = require("../stores/AppsStore");
+var AppsEvents = require("../events/AppsEvents");
 
 var AppListComponent = React.createClass({
   displayName: "AppListComponent",
 
-  mixins: [BackboneMixin],
-
   propTypes: {
-    collection: React.PropTypes.object.isRequired,
-    fetchState: React.PropTypes.number,
     router: React.PropTypes.object.isRequired
   },
 
-  getResource: function () {
-    return this.props.collection;
+  getInitialState: function () {
+    var fetchState = States.STATE_LOADING;
+    var apps = AppsStore.apps;
+
+    if (apps.length > 0) {
+      fetchState = States.STATE_SUCCESS;
+    }
+
+    return {
+      apps: apps,
+      fetchState: fetchState,
+      sortKey: "id",
+      sortDescending: false
+    };
   },
 
-  sortCollectionBy: function (comparator) {
-    var collection = this.props.collection;
-    comparator =
-      collection.sortKey === comparator && !collection.sortReverse ?
-      "-" + comparator :
-      comparator;
-    collection.setComparator(comparator);
-    collection.sort();
+  componentWillMount: function () {
+    AppsStore.on(AppsEvents.CHANGE, this.onAppsChange);
+    AppsStore.on(AppsEvents.REQUEST_APPS_ERROR, this.onAppsRequestError);
+  },
+
+  componentWillUnmount: function () {
+    AppsStore.removeListener(AppsEvents.CHANGE,
+      this.onAppsChange);
+    AppsStore.removeListener(AppsEvents.REQUEST_APPS_ERROR,
+      this.onAppsRequestError);
+  },
+
+  onAppsChange: function () {
+    this.setState({
+      apps: AppsStore.apps,
+      fetchState: States.STATE_SUCCESS
+    });
+  },
+
+  onAppsRequestError: function () {
+    this.setState({
+      fetchState: States.STATE_ERROR
+    });
+  },
+
+  sortBy: function (sortKey) {
+    var state = this.state;
+
+    this.setState({
+      sortKey: sortKey,
+      sortDescending: state.sortKey === sortKey && !state.sortDescending
+    });
   },
 
   getAppNodes: function () {
-    return (
-      this.props.collection.map(function (model) {
+    var state = this.state;
+    var sortKey = state.sortKey;
+    var props = this.props;
+
+    return lazy(state.apps)
+      .sortBy(function (app) {
+        return app[sortKey];
+      }, state.sortDescending)
+      .map(function (app) {
         return (
-          <AppComponent
-            key={model.id}
-            model={model}
-            router={this.props.router} />
+          <AppComponent key={app.id} model={app} router={props.router} />
         );
-      }, this)
-    );
+      })
+      .value();
+  },
+
+  getCaret: function (sortKey) {
+    if (sortKey === this.state.sortKey) {
+      return (
+        <span className="caret"></span>
+      );
+    }
+    return null;
   },
 
   render: function () {
-    var sortKey = this.props.collection.sortKey;
+    var state = this.state;
 
     var loadingClassSet = classNames({
-      "hidden": this.props.fetchState !== States.STATE_LOADING
+      "hidden": state.fetchState !== States.STATE_LOADING
     });
 
     var noAppsClassSet = classNames({
-      "hidden": this.props.collection.length !== 0
+      "hidden": state.apps.length !== 0
     });
 
     var errorClassSet = classNames({
-      "hidden": this.props.fetchState !== States.STATE_ERROR
+      "hidden": state.fetchState !== States.STATE_ERROR
     });
 
     var headerClassSet = classNames({
       "clickable": true,
-      "dropup": this.props.collection.sortReverse
+      "dropup": !state.sortDescending
     });
 
     var tableClassSet = classNames({
       "table table-fixed": true,
       "table-hover table-selectable":
-        this.props.collection.length !== 0 &&
-        this.props.fetchState !== States.STATE_LOADING
+        state.apps.length !== 0 &&
+        state.fetchState !== States.STATE_LOADING
     });
 
     return (
@@ -83,23 +131,27 @@ var AppListComponent = React.createClass({
         <thead>
           <tr>
             <th>
-              <span onClick={this.sortCollectionBy.bind(null, "id")} className={headerClassSet}>
-                ID {sortKey === "id" ? <span className="caret"></span> : null}
+              <span onClick={this.sortBy.bind(null, "id")}
+                  className={headerClassSet}>
+                ID {this.getCaret("id")}
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortCollectionBy.bind(null, "mem")} className={headerClassSet}>
-                {sortKey === "mem" ? <span className="caret"></span> : null} Memory (MB)
+              <span onClick={this.sortBy.bind(null, "mem")}
+                  className={headerClassSet}>
+                {this.getCaret("mem")} Memory (MB)
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortCollectionBy.bind(null, "cpus")} className={headerClassSet}>
-                {sortKey === "cpus" ? <span className="caret"></span> : null} CPUs
+              <span onClick={this.sortBy.bind(null, "cpus")}
+                  className={headerClassSet}>
+                {this.getCaret("cpus")} CPUs
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortCollectionBy.bind(null, "instances")} className={headerClassSet}>
-                {sortKey === "instances" ? <span className="caret"></span> : null} Tasks / Instances
+              <span onClick={this.sortBy.bind(null, "instances")}
+                  className={headerClassSet}>
+                {this.getCaret("instances")} Tasks / Instances
               </span>
             </th>
             <th className="text-right">
@@ -108,8 +160,9 @@ var AppListComponent = React.createClass({
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortCollectionBy.bind(null, "isDeploying")} className={headerClassSet}>
-                {sortKey === "isDeploying" ? <span className="caret"></span> : null} Status
+              <span onClick={this.sortBy.bind(null, "status")}
+                  className={headerClassSet}>
+                {this.getCaret("status")} Status
               </span>
             </th>
           </tr>

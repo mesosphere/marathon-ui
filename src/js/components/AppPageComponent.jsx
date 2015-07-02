@@ -2,8 +2,15 @@ var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
+var AppsActions = require("../actions/AppsActions");
+var AppsEvents = require("../events/AppsEvents");
+var AppsStore = require("../stores/AppsStore");
+var AppStatus = require("../constants/AppStatus");
 var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
+var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
+var HealthStatus = require("../constants/HealthStatus");
+var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
@@ -15,27 +22,24 @@ var tabsTemplate = [
   {id: "apps/:appid/configuration", text: "Configuration"}
 ];
 
+var statusNameMapping = {
+  [AppStatus.RUNNING]: "Running",
+  [AppStatus.DEPLOYING]: "Deploying",
+  [AppStatus.SUSPENDED]: "Suspended"
+};
+
 var AppPageComponent = React.createClass({
   displayName: "AppPageComponent",
 
   propTypes: {
-    appVersionsFetchState: React.PropTypes.number.isRequired,
-    destroyApp: React.PropTypes.func.isRequired,
-    fetchAppVersions: React.PropTypes.func.isRequired,
-    fetchTasks: React.PropTypes.func.isRequired,
-    model: React.PropTypes.object.isRequired,
-    onTasksKilled: React.PropTypes.func.isRequired,
-    restartApp: React.PropTypes.func.isRequired,
-    rollBackApp: React.PropTypes.func.isRequired,
-    scaleApp: React.PropTypes.func.isRequired,
-    suspendApp: React.PropTypes.func.isRequired,
-    tasksFetchState: React.PropTypes.number.isRequired,
+    appId: React.PropTypes.string.isRequired,
+    router: React.PropTypes.object.isRequired,
     view: React.PropTypes.string
   },
 
   getInitialState: function () {
-    var appId = this.props.model.get("id");
     var activeTabId;
+    var appId = this.props.appId;
 
     var tabs = _.map(tabsTemplate, function (tab) {
       var id = tab.id.replace(":appid", encodeURIComponent(appId));
@@ -52,74 +56,196 @@ var AppPageComponent = React.createClass({
     return {
       activeViewIndex: 0,
       activeTabId: activeTabId,
-      tabs: tabs
+      activeTaskId: null,
+      app: AppsStore.getCurrentApp(appId),
+      tabs: tabs,
+      fetchState: States.STATE_LOADING
     };
+  },
+
+  componentWillMount: function () {
+    AppsStore.on(AppsEvents.CHANGE, this.onAppChange);
+    AppsStore.on(AppsEvents.REQUEST_APP_ERROR, this.onAppRequestError);
+    AppsStore.on(AppsEvents.SCALE_APP_ERROR, this.onScaleAppError);
+    AppsStore.on(AppsEvents.RESTART_APP_ERROR, this.onRestartAppError);
+    AppsStore.on(AppsEvents.DELETE_APP_ERROR, this.onDeleteAppError);
+    AppsStore.on(AppsEvents.DELETE_APP, this.onDeleteAppSuccess);
+  },
+
+  componentWillUnmount: function () {
+    AppsStore.removeListener(AppsEvents.CHANGE,
+      this.onAppChange);
+    AppsStore.removeListener(AppsEvents.REQUEST_APP_ERROR,
+      this.onAppRequestError);
+    AppsStore.removeListener(AppsEvents.SCALE_APP_ERROR,
+      this.onScaleAppError);
+    AppsStore.removeListener(AppsEvents.RESTART_APP_ERROR,
+      this.onRestartAppError);
+    AppsStore.removeListener(AppsEvents.DELETE_APP_ERROR,
+      this.onDeleteAppError);
+    AppsStore.removeListener(AppsEvents.DELETE_APP,
+      this.onDeleteAppSuccess);
   },
 
   componentWillReceiveProps: function (nextProps) {
     var view = nextProps.view;
-    var activeTabId = "apps/" + encodeURIComponent(this.props.model.get("id"));
-    var activeTask = this.props.model.tasks.get(view);
+    var activeTabId = "apps/" + encodeURIComponent(this.props.appId);
     var activeViewIndex = 0;
+    var activeTaskId = null;
 
     if (view === "configuration") {
       activeTabId += "/configuration";
-    }
-
-    if (view != null && activeTask == null) {
-      activeTask = this.state.activeTask;
-    }
-
-    if (activeTask != null) {
+    } else if (view != null) {
+      activeTaskId = view;
       activeViewIndex = 1;
     }
 
     this.setState({
       activeTabId: activeTabId,
-      activeTask: activeTask,
+      activeTaskId: activeTaskId,
       activeViewIndex: activeViewIndex
     });
   },
 
-  onTabClick: function (id) {
+  onAppChange: function () {
+    this.setState({
+      app: AppsStore.getCurrentApp(this.props.appId),
+      fetchState: States.STATE_SUCCESS
+    });
+
+    if (this.props.view === "configuration") {
+      AppVersionsActions.requestAppVersions(this.props.appId);
+    }
+  },
+
+  onAppRequestError: function () {
+    this.setState({
+      fetchState: States.STATE_ERROR
+    });
+  },
+
+  onScaleAppError: function (errorMessage) {
+    util.alert("Not scaling: " + (errorMessage.message || errorMessage));
+  },
+
+  onRestartAppError: function (errorMessage) {
+    util.alert("Error restarting app: " +
+      (errorMessage.message || errorMessage));
+  },
+
+  onDeleteAppError: function (errorMessage) {
+    util.alert("Error destroying app: " +
+      (errorMessage.message || errorMessage));
+  },
+
+  onDeleteAppSuccess: function () {
+    this.props.router.navigate("apps", {trigger: true});
+  },
+
+  handleTabClick: function (id) {
     this.setState({
       activeTabId: id
     });
   },
 
-  scaleApp: function () {
-    var model = this.props.model;
+  handleScaleApp: function () {
+    var model = this.state.app;
+
     var instancesString = util.prompt("Scale to how many instances?",
-      model.get("instances"));
-    // Clicking "Cancel" in a prompt returns either null or an empty String.
-    // perform the action only if a value is submitted.
+      model.instances);
+
     if (instancesString != null && instancesString !== "") {
       var instances = parseInt(instancesString, 10);
-      this.props.scaleApp(instances);
+
+      AppsActions.scaleApp(this.props.appId, instances);
     }
   },
 
+  handleSuspendApp: function () {
+    if (util.confirm("Suspend app by scaling to 0 instances?")) {
+      AppsActions.scaleApp(this.props.appId, 0);
+    }
+  },
+
+  handleRestartApp: function () {
+    var appId = this.props.appId;
+    if (util.confirm("Restart app '" + appId + "'?")) {
+      AppsActions.restartApp(appId);
+    }
+  },
+
+  handleDestroyApp: function () {
+    var appId = this.props.appId;
+    if (util.confirm("Destroy app '" + appId +
+      "'?\nThis is irreversible.")) {
+      AppsActions.deleteApp(appId);
+    }
+  },
+
+  getTaskHealthMessage: function (taskId) {
+    var task = AppsStore.getTask(this.props.appId, taskId);
+
+    if (task === undefined) {
+      return null;
+    }
+
+    var model = this.state.app;
+    var msg;
+
+    switch (task.healthStatus) {
+      case HealthStatus.HEALTHY:
+        msg = "Healthy";
+        break;
+      case HealthStatus.UNHEALTHY:
+        var healthCheckResults = task.healthCheckResults;
+        if (healthCheckResults != null) {
+          msg = healthCheckResults.map(function (hc, index) {
+            if (hc && !hc.alive) {
+              var failedCheck = model.healthChecks[index];
+              return "Warning: Health check '" +
+                (failedCheck.protocol ? failedCheck.protocol + " " : "") +
+                (model.host ? model.host : "") +
+                (failedCheck.path ? failedCheck.path : "") + "'" +
+                (hc.lastFailureCause ?
+                  " returned with status: '" + hc.lastFailureCause + "'" :
+                  " failed") +
+                ".";
+            }
+          });
+        }
+        break;
+      default:
+        msg = "Unknown";
+        break;
+    }
+
+    return msg;
+  },
+
   getControls: function () {
-    if (this.state.activeViewIndex !== 0) {
+    var state = this.state;
+
+    if (state.activeViewIndex !== 0) {
       return null;
     }
 
     return (
       <div className="header-btn">
         <button className="btn btn-sm btn-default"
-            onClick={this.props.suspendApp}
-            disabled={this.props.model.get("instances") < 1}>
+            onClick={this.handleSuspendApp}
+            disabled={state.app.instances < 1}>
           Suspend
         </button>
-        <button className="btn btn-sm btn-default" onClick={this.scaleApp}>
+        <button className="btn btn-sm btn-default"
+            onClick={this.handleScaleApp}>
           Scale
         </button>
         <button className="btn btn-sm btn-danger pull-right"
-          onClick={this.props.destroyApp}>
+            onClick={this.handleDestroyApp}>
           Destroy App
         </button>
         <button className="btn btn-sm btn-default pull-right"
-          onClick={this.props.restartApp}>
+            onClick={this.handleRestartApp}>
           Restart App
         </button>
       </div>
@@ -127,43 +253,46 @@ var AppPageComponent = React.createClass({
   },
 
   getTaskDetailComponent: function () {
-    var model = this.props.model;
+    var state = this.state;
+    var model = state.app;
+
+    var task = AppsStore.getTask(this.props.appId, state.activeTaskId);
+
+    if (task == null) {
+      return null;
+    }
 
     return (
       <TaskDetailComponent
-        fetchState={this.props.tasksFetchState}
-        taskHealthMessage={model.formatTaskHealthMessage(this.state.activeTask)}
-        hasHealth={model.hasHealth()}
-        task={this.state.activeTask} />
+        fetchState={state.fetchState}
+        taskHealthMessage={this.getTaskHealthMessage(state.activeTaskId)}
+        hasHealth={model.healthChecks > 0}
+        task={task} />
     );
   },
 
   getAppDetails: function () {
-    var model = this.props.model;
+    var state = this.state;
+    var model = state.app;
+    var props = this.props;
 
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
-          activeTabId={this.state.activeTabId}
-          onTabClick={this.onTabClick}
-          tabs={this.state.tabs} >
+          activeTabId={state.activeTabId}
+          onTabClick={this.handleTabClick}
+          tabs={state.tabs} >
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(model.get("id"))}>
+          id={"apps/" + encodeURIComponent(props.appId)}>
           <TaskViewComponent
-            collection={model.tasks}
-            fetchState={this.props.tasksFetchState}
-            fetchTasks={this.props.fetchTasks}
-            formatTaskHealthMessage={model.formatTaskHealthMessage}
-            hasHealth={model.hasHealth()}
-            onTasksKilled={this.props.onTasksKilled} />
+            appId={props.appId}
+            fetchState={state.fetchState}
+            getTaskHealthMessage={this.getTaskHealthMessage}
+            hasHealth={model.healthChecks > 0}
+            tasks={model.tasks} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(model.get("id")) + "/configuration"}
-          onActivate={this.props.fetchAppVersions} >
-          <AppVersionListComponent
-            app={model}
-            fetchAppVersions={this.props.fetchAppVersions}
-            fetchState={this.props.appVersionsFetchState}
-            onRollback={this.props.rollBackApp} />
+          id={"apps/" + encodeURIComponent(props.appId) + "/configuration"}>
+          <AppVersionListComponent appId={props.appId} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
@@ -171,9 +300,12 @@ var AppPageComponent = React.createClass({
 
   render: function () {
     var content;
-    var model = this.props.model;
+    var state = this.state;
+    var model = state.app;
+    var props = this.props;
+
     var statusClassSet = classNames({
-      "text-warning": model.isDeploying()
+      "text-warning": model.deployments.length > 0
     });
 
     if (this.state.activeViewIndex === 0) {
@@ -185,16 +317,16 @@ var AppPageComponent = React.createClass({
     return (
       <div>
         <AppBreadcrumbsComponent
-          activeTask={this.state.activeTask}
-          activeViewIndex={this.state.activeViewIndex}
-          model={model} />
+          activeTaskId={state.activeTaskId}
+          activeViewIndex={state.activeViewIndex}
+          appId={props.appId} />
         <div className="container-fluid">
           <div className="page-header">
-            <span className="h3 modal-title">{model.get("id")}</span>
+            <span className="h3 modal-title">{props.appId}</span>
             <ul className="list-inline list-inline-subtext">
               <li>
                 <span className={statusClassSet}>
-                  {model.getStatus()}
+                  {statusNameMapping[model.status]}
                 </span>
               </li>
             </ul>

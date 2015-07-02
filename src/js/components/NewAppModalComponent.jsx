@@ -1,37 +1,66 @@
 var _ = require("underscore");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 var util = require("../helpers/util");
 
-var BackboneMixin = require("../mixins/BackboneMixin");
-var App = require("../models/App");
+var AppsActions = require("../actions/AppsActions");
+var AppsEvents = require("../events/AppsEvents");
+var appScheme = require("../stores/appScheme");
+var AppsStore = require("../stores/AppsStore");
+var appValidator = require("../validators/appValidator");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var ModalComponent = require("../components/ModalComponent");
-
-function ValidationError(attribute, message) {
-  this.attribute = attribute;
-  this.message = message;
-}
+var ValidationError = require("../validators/ValidationError");
 
 var NewAppModalComponent = React.createClass({
   displayName: "NewAppModalComponent",
-  mixins: [BackboneMixin],
+
   propTypes: {
-    onCreate: React.PropTypes.func,
     onDestroy: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
-      onCreate: util.noop,
       onDestroy: util.noop
     };
   },
 
   getInitialState: function () {
     return {
-      model: new App(),
+      attributes: lazy(appScheme).extend({
+        cpus: 0.1,
+        instances: 1,
+        mem: 16.0,
+        disk: 0.0
+      }).value(),
       errors: []
     };
+  },
+
+  componentWillMount: function () {
+    AppsStore.on(AppsEvents.CREATE_APP, this.onCreateApp);
+    AppsStore.on(AppsEvents.CREATE_APP_ERROR, this.onCreateAppError);
+  },
+
+  componentWillUnmount: function () {
+    AppsStore.removeListener(AppsEvents.CREATE_APP,
+      this.onCreateApp);
+    AppsStore.removeListener(AppsEvents.CREATE_APP_ERROR,
+      this.onCreateAppError);
+  },
+
+  onCreateApp: function () {
+    this.clearValidation();
+    this.destroy();
+  },
+
+  onCreateAppError: function (data, status) {
+    this.validateResponse(data, status);
+
+    if (status < 300) {
+      this.clearValidation();
+      this.destroy();
+    }
   },
 
   destroy: function () {
@@ -40,20 +69,16 @@ var NewAppModalComponent = React.createClass({
     this.refs.modalComponent.destroy();
   },
 
-  getResource: function () {
-    return this.state.model;
-  },
-
   clearValidation: function () {
     this.setState({errors: []});
   },
 
-  validateResponse: function (response) {
+  validateResponse: function (response, status) {
     var errors;
 
-    if (response.status === 422 && response.responseJSON != null &&
-        _.isArray(response.responseJSON.errors)) {
-      errors = response.responseJSON.errors.map(function (e) {
+    if (status === 422 && response != null &&
+        _.isArray(response.errors)) {
+      errors = response.errors.map(function (e) {
         return new ValidationError(
           // Errors that affect multiple attributes provide a blank string. In
           // that case, count it as a "general" error.
@@ -61,7 +86,7 @@ var NewAppModalComponent = React.createClass({
           e.error
         );
       });
-    } else if (response.status >= 500) {
+    } else if (status >= 500) {
       errors = [
         new ValidationError("general", "Server error, could not create app.")
       ];
@@ -132,34 +157,16 @@ var NewAppModalComponent = React.createClass({
       modelAttrs.instances = parseInt(modelAttrs.instances, 10);
     }
 
-    this.state.model.set(modelAttrs);
+    var model = _.extend(this.state.attributes, modelAttrs);
 
-    if (this.state.model.isValid()) {
-      this.props.onCreate(
-        this.state.model,
-        {
-          error: function (model, response) {
-            this.validateResponse(response);
-            if (response.status < 300) {
-              this.clearValidation();
-              this.destroy();
-            }
-          }.bind(this),
-          success: function () {
-            this.clearValidation();
-            this.destroy();
-          }.bind(this),
-
-          // Wait to add the model to the collection until a successful
-          // response code is received from the server.
-          wait: true
-        }
-      );
+    // Create app if validate() returns no errors
+    if (appValidator.validate(model) == null) {
+      AppsActions.createApp(model);
     }
   },
 
   render: function () {
-    var model = this.state.model;
+    var model = this.state.attributes;
     var errors = this.state.errors;
 
     var generalErrors = errors.filter(function (e) {
@@ -185,35 +192,40 @@ var NewAppModalComponent = React.createClass({
                 attribute="id"
                 label="ID"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input autoFocus required />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="cpus"
                 label="CPUs"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input min="0" step="any" type="number" required />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="mem"
                 label="Memory (MB)"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input min="0" step="any" type="number" required />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="disk"
                 label="Disk Space (MB)"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input min="0" step="any" type="number" required />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="instances"
                 label="Instances"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input min="0" step="1" type="number" required />
             </FormGroupComponent>
             <hr />
@@ -222,16 +234,18 @@ var NewAppModalComponent = React.createClass({
                 attribute="cmd"
                 label="Command"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
             <FormGroupComponent
                 attribute="executor"
                 label="Executor"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input
-                pattern={App.VALID_EXECUTOR_PATTERN}
+                pattern={appValidator.VALID_EXECUTOR_PATTERN}
                 title="Executor must be the string '//cmd', a string containing only single slashes ('/'), or blank." />
             </FormGroupComponent>
             <FormGroupComponent
@@ -239,7 +253,8 @@ var NewAppModalComponent = React.createClass({
                 help="Comma-separated list of numbers. 0's (zeros) assign random ports. (Default: one random port)"
                 label="Ports"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input />
             </FormGroupComponent>
             <FormGroupComponent
@@ -247,7 +262,8 @@ var NewAppModalComponent = React.createClass({
                 help="Comma-separated list of valid URIs."
                 label="URIs"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input />
             </FormGroupComponent>
             <FormGroupComponent
@@ -255,7 +271,8 @@ var NewAppModalComponent = React.createClass({
                 help={helpMessage}
                 label="Constraints"
                 model={model}
-                errors={errors}>
+                errors={errors}
+                validator={appValidator}>
               <input />
             </FormGroupComponent>
             <div>

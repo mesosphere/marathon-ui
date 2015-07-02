@@ -103,7 +103,7 @@ var DeploymentListComponent = React.createClass({
 
     var headerClassSet = classNames({
       "clickable": true,
-      "dropup": state.sortDescending
+      "dropup": !state.sortDescending
     });
 
     var loadingClassSet = classNames({

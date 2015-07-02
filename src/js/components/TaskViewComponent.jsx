@@ -1,19 +1,21 @@
 var classNames = require("classnames");
+var lazy = require("lazy.js");
 var React = require("react/addons");
 
+var AppsActions = require("../actions/AppsActions");
 var PagedNavComponent = require("../components/PagedNavComponent");
+var TasksActions = require("../actions/TasksActions");
 var TaskListComponent = require("../components/TaskListComponent");
 
 var TaskViewComponent = React.createClass({
   displayName: "TaskViewComponent",
 
   propTypes: {
-    collection: React.PropTypes.object.isRequired,
+    appId: React.PropTypes.string.isRequired,
     fetchState: React.PropTypes.number.isRequired,
-    fetchTasks: React.PropTypes.func.isRequired,
-    formatTaskHealthMessage: React.PropTypes.func.isRequired,
+    getTaskHealthMessage: React.PropTypes.func.isRequired,
     hasHealth: React.PropTypes.bool,
-    onTasksKilled: React.PropTypes.func.isRequired
+    tasks: React.PropTypes.array.isRequired
   },
 
   getInitialState: function () {
@@ -28,33 +30,31 @@ var TaskViewComponent = React.createClass({
     this.setState({currentPage: pageNum});
   },
 
-  killSelectedTasks: function (options) {
-    var _options = options || {};
-
-    var selectedTaskIds = Object.keys(this.state.selectedTasks);
-    var tasksToKill = this.props.collection.filter(function (task) {
-      return selectedTaskIds.indexOf(task.id) >= 0;
-    });
-
-    tasksToKill.forEach(function (task) {
-      task.destroy({
-        scale: _options.scale,
-        success: function () {
-          this.props.onTasksKilled(_options);
-          delete this.state.selectedTasks[task.id];
-        }.bind(this),
-        wait: true
-      });
-    }, this);
+  handleRefresh: function () {
+    AppsActions.requestApp(this.props.appId);
   },
 
-  killSelectedTasksAndScale: function () {
-    this.killSelectedTasks({scale: true});
+  handleKillSelectedTasks: function (scaleTask) {
+    var props = this.props;
+
+    var selectedTaskIds = Object.keys(this.state.selectedTasks);
+
+    lazy(props.tasks)
+    .filter(function (task) {
+      return selectedTaskIds.indexOf(task.id) >= 0;
+    })
+    .each(function (task) {
+      if (!scaleTask) {
+        TasksActions.deleteTask(props.appId, task.id);
+      } else {
+        TasksActions.deleteTaskAndScale(props.appId, task.id);
+      }
+    });
   },
 
   toggleAllTasks: function () {
     var newSelectedTasks = {};
-    var modelTasks = this.props.collection;
+    var modelTasks = this.props.tasks;
 
     // Note: not an **exact** check for all tasks being selected but a good
     // enough proxy.
@@ -62,7 +62,9 @@ var TaskViewComponent = React.createClass({
       modelTasks.length;
 
     if (!allTasksSelected) {
-      modelTasks.map(function (task) { newSelectedTasks[task.id] = true; });
+      modelTasks.forEach(function (task) {
+        newSelectedTasks[task.id] = true;
+      });
     }
 
     this.setState({selectedTasks: newSelectedTasks});
@@ -104,18 +106,18 @@ var TaskViewComponent = React.createClass({
       <div className="btn-group">
         <button
             className={refreshButtonClassSet}
-            onClick={this.props.fetchTasks}>
+            onClick={this.handleRefresh}>
           ↻ Refresh
         </button>
         <button
             className={killButtonClassSet}
-            onClick={this.killSelectedTasks}>
+            onClick={this.handleKillSelectedTasks.bind(this, false)}>
           Kill
         </button>
         <button
             className={killButtonClassSet}
             disabled={selectedTasksLength > 1}
-            onClick={this.killSelectedTasksAndScale}>
+            onClick={this.handleKillSelectedTasks.bind(this, true)}>
           Kill &amp; Scale
         </button>
       </div>
@@ -123,7 +125,7 @@ var TaskViewComponent = React.createClass({
   },
 
   getPagedNav: function () {
-    var tasksLength = this.props.collection.length;
+    var tasksLength = this.props.tasks.length;
     var itemsPerPage = this.state.itemsPerPage;
 
     // at least two pages
@@ -156,12 +158,12 @@ var TaskViewComponent = React.createClass({
         <TaskListComponent
           currentPage={this.state.currentPage}
           fetchState={this.props.fetchState}
-          formatTaskHealthMessage={this.props.formatTaskHealthMessage}
+          getTaskHealthMessage={this.props.getTaskHealthMessage}
           hasHealth={this.props.hasHealth}
           onTaskToggle={this.onTaskToggle}
           itemsPerPage={this.state.itemsPerPage}
           selectedTasks={this.state.selectedTasks}
-          tasks={this.props.collection}
+          tasks={this.props.tasks}
           toggleAllTasks={this.toggleAllTasks} />
       </div>
     );
