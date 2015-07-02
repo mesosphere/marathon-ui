@@ -139,8 +139,8 @@ gulp.task("watch", function () {
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
 });
 
-gulp.task("war", function () {
-  gulp.src("./dist/**/*")
+gulp.task("make-war", function () {
+  return gulp.src("./dist/**/*")
     .pipe(war({
       welcome: "index.html",
       displayName: "Marathon UI"
@@ -151,6 +151,7 @@ gulp.task("war", function () {
 
 gulp.task("serve", ["default", "connect:server", "watch"]);
 gulp.task("livereload", ["default", "browsersync", "watch"]);
+gulp.task("war", ["default", "make-war"]);
 
 var tasks = [
   "eslint",
