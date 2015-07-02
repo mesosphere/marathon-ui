@@ -147,7 +147,8 @@ gulp.task("make-war", function () {
   return gulp.src("./dist/**/*")
     .pipe(war({
       welcome: "index.html",
-      displayName: "Marathon UI"
+      displayName: "Marathon UI",
+      version: packageInfo.version
     }))
     .pipe(zip(warFileName))
     .pipe(gulp.dest(dirs.release));
