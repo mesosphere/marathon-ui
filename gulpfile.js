@@ -20,7 +20,8 @@ var dirs = {
   dist: "dist",
   styles: "./src/css",
   img: "./src/img",
-  imgDist: "img"
+  imgDist: "img",
+  release: "./release"
 };
 
 var files = {
@@ -149,7 +150,7 @@ gulp.task("make-war", function () {
       displayName: "Marathon UI"
     }))
     .pipe(zip(warFileName))
-    .pipe(gulp.dest("."));
+    .pipe(gulp.dest(dirs.release));
 });
 
 gulp.task("serve", ["default", "connect:server", "watch"]);

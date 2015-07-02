@@ -54,7 +54,7 @@
   },
   "scripts": {
     "build": "gulp",
-    "clean": "rm -rf dist marathon-ui.war",
+    "clean": "rm -rf dist release",
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "shrinkwrap": "npm-shrinkwrap --dev",
     "test": "mocha --ui exports --reporter spec --compilers jsx:babel-core/register src/test/**/*.test.* src/test/*.test.*",

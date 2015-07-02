@@ -7,7 +7,7 @@ dist/*
 
 node_modules/
 tmp/
-*.war
+release/
 
 npm-debug.log
 
