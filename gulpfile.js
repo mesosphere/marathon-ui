@@ -8,7 +8,11 @@ var less = require("gulp-less");
 var minifyCSS = require("gulp-minify-css");
 var path = require("path");
 var uglify = require("gulp-uglify");
+var war = require("gulp-war");
 var webpack = require("webpack");
+var zip = require("gulp-zip");
+
+var packageInfo = require("./package");
 
 var dirs = {
   src: "./src",
@@ -16,7 +20,8 @@ var dirs = {
   dist: "dist",
   styles: "./src/css",
   img: "./src/img",
-  imgDist: "img"
+  imgDist: "img",
+  release: "./release"
 };
 
 var files = {
@@ -137,8 +142,21 @@ gulp.task("watch", function () {
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
 });
 
+gulp.task("make-war", function () {
+  var warFileName = packageInfo.name + "." + packageInfo.version + ".war";
+  return gulp.src("./dist/**/*")
+    .pipe(war({
+      welcome: "index.html",
+      displayName: "Marathon UI",
+      version: packageInfo.version
+    }))
+    .pipe(zip(warFileName))
+    .pipe(gulp.dest(dirs.release));
+});
+
 gulp.task("serve", ["default", "connect:server", "watch"]);
 gulp.task("livereload", ["default", "browsersync", "watch"]);
+gulp.task("war", ["default", "make-war"]);
 
 var tasks = [
   "eslint",
