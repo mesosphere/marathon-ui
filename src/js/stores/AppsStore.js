@@ -25,21 +25,23 @@ function getTaskHealth(task) {
   var nullResult = true;
   var health = false;
   var healthCheckResults = task.healthCheckResults;
+
   if (healthCheckResults != null) {
     health = lazy(healthCheckResults).every(function (hcr) {
       if (hcr.firstSuccess) {
         nullResult = false;
         return hcr.alive;
-      } else { // might be null
-        return false;
       }
+
+      return false;
     });
   }
+
   if (!health && nullResult) { // health check has not returned yet
     return HealthStatus.UNKNOWN;
-  } else {
-    return health ? HealthStatus.HEALTHY : HealthStatus.UNHEALTHY;
   }
+
+  return health ? HealthStatus.HEALTHY : HealthStatus.UNHEALTHY;
 }
 
 function setTaskStatus(task) {
