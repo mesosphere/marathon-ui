@@ -7,8 +7,8 @@
   Ajax-wrapper.
 
 ### Fixed
-- Allow app creation with 0 instances
-- Disfunctional refresh button in app configuration
+- #1660 - Allow app creation with 0 instances
+- #1236 - Disfunctional refresh button in app configuration
 
 ## 0.9.0 - 2015-06-17
 ### Changed
