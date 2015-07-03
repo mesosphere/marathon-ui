@@ -40,11 +40,22 @@ var AppPageComponent = React.createClass({
   },
 
   getInitialState: function () {
-    var activeTabId;
-    var appId = this.props.params.appid;
+    return _.extend({
+      fetchState: States.STATE_LOADING
+    }, this.getRouteSettings(this.props));
+  },
+
+  getRouteSettings: function (props) {
+    var appId = decodeURIComponent(props.params.appid);
+    var view = props.params.view;
+
+    var activeTabId = "apps/" + encodeURIComponent(appId);
+
+    var activeViewIndex = 0;
+    var activeTaskId = null;
 
     var tabs = _.map(tabsTemplate, function (tab) {
-      var id = tab.id.replace(":appid", appId);
+      var id = tab.id.replace(":appid", encodeURIComponent(appId));
       if (activeTabId == null) {
         activeTabId = id;
       }
@@ -55,15 +66,21 @@ var AppPageComponent = React.createClass({
       };
     });
 
+    if (view === "configuration") {
+      activeTabId += "/configuration";
+    } else if (view != null) {
+      activeTaskId = view;
+      activeViewIndex = 1;
+    }
+
     return {
-      activeViewIndex: 0,
       activeTabId: activeTabId,
-      activeTaskId: null,
+      activeTaskId: activeTaskId,
+      activeViewIndex: activeViewIndex,
       app: AppsStore.getCurrentApp(appId),
-      appId: decodeURIComponent(appId),
-      view: decodeURIComponent(this.props.params.view),
-      tabs: tabs,
-      fetchState: States.STATE_LOADING
+      appId: appId,
+      view: decodeURIComponent(props.params.view),
+      tabs: tabs
     };
   },
 
@@ -92,23 +109,11 @@ var AppPageComponent = React.createClass({
   },
 
   componentWillReceiveProps: function (nextProps) {
-    var view = nextProps.view;
-    var activeTabId = "apps/" + encodeURIComponent(this.state.appId);
-    var activeViewIndex = 0;
-    var activeTaskId = null;
-
-    if (view === "configuration") {
-      activeTabId += "/configuration";
-    } else if (view != null) {
-      activeTaskId = view;
-      activeViewIndex = 1;
-    }
-
-    this.setState({
-      activeTabId: activeTabId,
-      activeTaskId: activeTaskId,
-      activeViewIndex: activeViewIndex
-    });
+    this.setState(_.extend(
+      this.state,
+      {fetchState: States.STATE_LOADING},
+      this.getRouteSettings(nextProps)
+    ));
   },
 
   onAppChange: function () {

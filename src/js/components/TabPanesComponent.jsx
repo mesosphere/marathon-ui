@@ -1,4 +1,3 @@
-var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppListComponent = require("../components/AppListComponent");
@@ -17,7 +16,7 @@ var TabPanesComponent = React.createClass({
 
   render: function () {
     return (
-      <TogglableTabsComponent activeTabId={this.state.activeTabId}
+      <TogglableTabsComponent activeTabId={"apps"}
         className="container-fluid">
         <TabPaneComponent id="apps">
           <a href="#newapp" className="btn btn-success navbar-btn" >
