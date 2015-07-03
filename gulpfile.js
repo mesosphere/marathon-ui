@@ -15,8 +15,6 @@ var zip = require("gulp-zip");
 
 var packageInfo = require("./package");
 
-var packageInfo = require("./package");
-
 var dirs = {
   src: "./src",
   js: "./src/js",
