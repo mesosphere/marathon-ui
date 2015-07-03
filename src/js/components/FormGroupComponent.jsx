@@ -15,17 +15,20 @@ var FormGroupComponent = React.createClass({
 
   getInitialState: function () {
     return {
+      model: this.props.model,
       validationError: null
     };
   },
 
   onInputChange: function (event) {
     var props = this.props;
-
-    props.model[event.target.name] = event.target.value;
+    var model = React.addons.update(this.state.model, {
+      [event.target.name]: {$set: event.target.value}
+    });
 
     this.setState({
-      validationError: props.validator.validate(props.model)
+      model: model,
+      validationError: props.validator.validate(model)
     });
   },
 
@@ -62,7 +65,7 @@ var FormGroupComponent = React.createClass({
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        value: this.props.model[attribute]
+        value: this.state.model[attribute]
       }
     );
 
