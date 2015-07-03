@@ -6,6 +6,10 @@
   Actions now fetch data from the Marathon API through an replaceable
   Ajax-wrapper.
 
+### Fixed
+- Allow app creation with 0 instances
+- Disfunctional refresh button in app configuration
+
 ## 0.9.0 - 2015-06-17
 ### Changed
 - Marathon UI lives now in it's own Git repository
