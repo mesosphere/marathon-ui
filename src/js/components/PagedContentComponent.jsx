@@ -4,6 +4,7 @@ module.exports = React.createClass({
     displayName: "PagedContentComponent",
 
     propTypes: {
+      children: React.PropTypes.node,
       className: React.PropTypes.string,
       currentPage: React.PropTypes.number.isRequired,
       itemsPerPage: React.PropTypes.number,
