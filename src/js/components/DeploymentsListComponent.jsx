@@ -13,7 +13,7 @@ var DeploymentListComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      deployments: [],
+      deployments: DeploymentStore.deployments,
       fetchState: States.STATE_LOADING,
       sortKey: null,
       sortDescending: false,
