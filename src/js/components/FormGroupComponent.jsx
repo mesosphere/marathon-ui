@@ -5,7 +5,7 @@ var FormGroupComponent = React.createClass({
 
   propTypes: {
     attribute: React.PropTypes.string,
-    children: React.PropTypes.object.isRequired,
+    children: React.PropTypes.node.isRequired,
     errors: React.PropTypes.array,
     help: React.PropTypes.string,
     label: React.PropTypes.string,
