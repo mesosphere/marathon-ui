@@ -182,6 +182,22 @@ var AppPageComponent = React.createClass({
     }
   },
 
+  getUnhealthyTaskMessage: function (healthCheckResults = []) {
+    return healthCheckResults.map((hc, index) => {
+      if (hc && !hc.alive) {
+        var failedCheck = this.state.app.healthChecks[index];
+        return `Warning: Health check
+          '${(failedCheck.protocol ? failedCheck.protocol + " " : "")}
+          ${(this.state.app.host ? this.state.app.host : "")}
+          ${(failedCheck.path ? failedCheck.path : "")}'
+          ${(hc.lastFailureCause
+            ? " returned with status: '" + hc.lastFailureCause + "'"
+            : " failed"
+          )}.`;
+      }
+    }).join(" ");
+  },
+
   getTaskHealthMessage: function (taskId) {
     var task = AppsStore.getTask(this.props.appId, taskId);
 
@@ -189,7 +205,6 @@ var AppPageComponent = React.createClass({
       return null;
     }
 
-    var model = this.state.app;
     var msg;
 
     switch (task.healthStatus) {
@@ -197,22 +212,7 @@ var AppPageComponent = React.createClass({
         msg = "Healthy";
         break;
       case HealthStatus.UNHEALTHY:
-        var healthCheckResults = task.healthCheckResults;
-        if (healthCheckResults != null) {
-          msg = healthCheckResults.map(function (hc, index) {
-            if (hc && !hc.alive) {
-              var failedCheck = model.healthChecks[index];
-              return "Warning: Health check '" +
-                (failedCheck.protocol ? failedCheck.protocol + " " : "") +
-                (model.host ? model.host : "") +
-                (failedCheck.path ? failedCheck.path : "") + "'" +
-                (hc.lastFailureCause ?
-                  " returned with status: '" + hc.lastFailureCause + "'" :
-                  " failed") +
-                ".";
-            }
-          });
-        }
+        msg = this.getUnhealthyTaskMessage(task.healthCheckResults);
         break;
       default:
         msg = "Unknown";
