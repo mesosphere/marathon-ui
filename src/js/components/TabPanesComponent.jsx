@@ -7,6 +7,11 @@ var DeploymentsListComponent =
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 
+var tabs = [
+  {id: "/apps", text: "Apps"},
+  {id: "/deployments", text: "Deployments"}
+];
+
 var TabPanesComponent = React.createClass({
   displayName: "TabPanesComponent",
 
@@ -19,14 +24,24 @@ var TabPanesComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      tabId: this.getPath()
+      tabId: this.getTabId()
     };
   },
 
   componentWillReceiveProps: function () {
     this.setState({
-      tabId: this.getPath()
+      tabId: this.getTabId()
     });
+  },
+
+  getTabId: function () {
+    var path = this.getPath();
+    if (tabs.find(function (tab) {
+      return tab.id === path;
+    })) {
+      return path;
+    }
+    return tabs[0].id;
   },
 
   render: function () {
