@@ -42,11 +42,6 @@ var Marathon = React.createClass({
   componentDidMount: function () {
     this.onRouteChange(this.props);
 
-    /*
-    router.on("route:about", this.setRouteAbout);
-    router.on("route:newapp", this.setRouteNewApp);
-    */
-
     Mousetrap.bindGlobal("esc", function () {
       if (this.refs.modal != null) {
         this.handleModalDestroy();
@@ -98,11 +93,19 @@ var Marathon = React.createClass({
       activeTabId = path;
     }
 
+    var modalClass = null;
+
+    if (path === "/newapp") {
+      modalClass = NewAppModalComponent;
+    } else if (path === "/about") {
+      modalClass = AboutModalComponent;
+    }
+
     this.setState({
       activeAppId: appId,
       activeAppView: view,
       activeTabId: activeTabId,
-      modalClass: null
+      modalClass: modalClass
     });
   },
 
@@ -119,18 +122,6 @@ var Marathon = React.createClass({
     this.stopPolling();
   },
 
-  setRouteAbout: function () {
-    this.setState({
-      modalClass: AboutModalComponent
-    });
-  },
-
-  setRouteNewApp: function () {
-    this.setState({
-      modalClass: NewAppModalComponent
-    });
-  },
-
   handleModalDestroy: function () {
     if (!this.state.modalClass) {
       return;
@@ -140,7 +131,7 @@ var Marathon = React.createClass({
 
     var activeAppId = this.state.activeAppId;
     if (activeAppId != null) {
-      navigation = "apps/" + encodeURIComponent(activeAppId);
+      navigation = "/apps/" + encodeURIComponent(activeAppId);
 
       var activeAppView = this.state.activeAppView;
       if (activeAppView != null) {
