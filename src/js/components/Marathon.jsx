@@ -127,19 +127,7 @@ var Marathon = React.createClass({
       return;
     }
 
-    var navigation = this.state.activeTabId;
-
-    var activeAppId = this.state.activeAppId;
-    if (activeAppId != null) {
-      navigation = "/apps/" + encodeURIComponent(activeAppId);
-
-      var activeAppView = this.state.activeAppView;
-      if (activeAppView != null) {
-        navigation += "/" + activeAppView;
-      }
-    }
-
-    this.transitionTo(navigation);
+    this.transitionTo(this.getPathname());
   },
 
   startPolling: function () {
