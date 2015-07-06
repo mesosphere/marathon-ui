@@ -1,4 +1,8 @@
 ## Unversioned
+  ### Changed
+- The Backbone router was replaced by the react-router in order to remove the
+  jQuery and Backbone dependency completely.
+
 ### Removed
 - The static name field in the about/info modal got removed. It's reflected by
   the framework name field.
