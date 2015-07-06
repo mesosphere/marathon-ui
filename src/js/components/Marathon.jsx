@@ -6,14 +6,8 @@ var RouteHandler = require("react-router").RouteHandler;
 var Navigation = require("react-router").Navigation;
 var State = require("react-router").State;
 
-var AppListComponent = require("../components/AppListComponent");
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
-var AppPageComponent = require("../components/AppPageComponent");
-var DeploymentsListComponent =
-  require("../components/DeploymentsListComponent");
 var NewAppModalComponent = require("../components/NewAppModalComponent");
-var TabPaneComponent = require("../components/TabPaneComponent");
-var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");
@@ -50,10 +44,6 @@ var Marathon = React.createClass({
 
     /*
     router.on("route:about", this.setRouteAbout);
-    router.on("route:apps", this.setRouteApps);
-    router.on("route:deployments",
-      _.bind(this.activateTab, this, "deployments")
-    );
     router.on("route:newapp", this.setRouteNewApp);
     */
 
@@ -133,18 +123,6 @@ var Marathon = React.createClass({
     this.setState({
       modalClass: AboutModalComponent
     });
-  },
-
-  setRouteApps: function (appid, view) {
-    if (appid != null) {
-      this.setState({
-        activeAppId: appid,
-        activeAppView: view,
-        modalClass: null
-      });
-    } else {
-      this.activateTab("apps");
-    }
   },
 
   setRouteNewApp: function () {
