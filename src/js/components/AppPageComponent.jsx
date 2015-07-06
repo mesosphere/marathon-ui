@@ -109,9 +109,14 @@ var AppPageComponent = React.createClass({
   },
 
   componentWillReceiveProps: function (nextProps) {
+    var fetchState = this.state.fetchState;
+    if (decodeURIComponent(nextProps.params.appid) !== this.state.appId) {
+      fetchState = States.STATE_LOADING;
+    }
+
     this.setState(_.extend(
       this.state,
-      {fetchState: States.STATE_LOADING},
+      {fetchState: fetchState},
       this.getRouteSettings(nextProps)
     ));
   },
