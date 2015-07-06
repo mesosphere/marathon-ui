@@ -1,7 +1,6 @@
 var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
-var Navigation = require("react-router").Navigation;
 
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
@@ -32,7 +31,9 @@ var statusNameMapping = {
 var AppPageComponent = React.createClass({
   displayName: "AppPageComponent",
 
-  mixins: [Navigation],
+  contextTypes: {
+    router: React.PropTypes.func
+  },
 
   propTypes: {
     // react-router params
@@ -153,7 +154,8 @@ var AppPageComponent = React.createClass({
   },
 
   onDeleteAppSuccess: function () {
-    this.transitionTo("apps");
+    this.context.router.
+      transitionTo("apps");
   },
 
   handleTabClick: function (id) {

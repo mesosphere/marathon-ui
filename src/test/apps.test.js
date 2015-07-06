@@ -383,7 +383,7 @@ describe("App component", function () {
     };
 
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppComponent model={model} router={{}} />);
+    this.renderer.render(<AppComponent model={model} />);
     this.component = this.renderer.getRenderOutput();
   });
 

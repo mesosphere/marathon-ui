@@ -15,6 +15,7 @@ var routes = (
     <Route name="appview" path="apps/:appid/:view" handler={AppPageComponent} />
     <Route name="deployments" path="deployments" handler={TabPanesComponent} />
     <Redirect from="/" to="apps" />
+    // TODO: #1756 - Add a not found page
     <NotFoundRoute handler={TabPanesComponent} />
   </Route>
 );

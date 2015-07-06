@@ -1,5 +1,4 @@
 var React = require("react/addons");
-var State = require("react-router").State;
 
 var AppListComponent = require("../components/AppListComponent");
 var DeploymentsListComponent =
@@ -15,7 +14,9 @@ var tabs = [
 var TabPanesComponent = React.createClass({
   displayName: "TabPanesComponent",
 
-  mixins: [State],
+  contextTypes: {
+    router: React.PropTypes.func
+  },
 
   propTypes: {
     // react-router params
@@ -35,7 +36,8 @@ var TabPanesComponent = React.createClass({
   },
 
   getTabId: function () {
-    var path = this.getPathname();
+    var path = this.context.router.getCurrentPathname();
+
     if (tabs.find(function (tab) {
       return tab.id === path;
     })) {
@@ -45,11 +47,14 @@ var TabPanesComponent = React.createClass({
   },
 
   render: function () {
+    var path = this.context.router.getCurrentPathname();
+
     return (
       <TogglableTabsComponent activeTabId={this.state.tabId}
         className="container-fluid">
         <TabPaneComponent id="/apps">
-          <a href={"#" + this.getPathname() + "?modal=newapp"} className="btn btn-success navbar-btn">
+          <a href={"#" + path + "?modal=newapp"}
+              className="btn btn-success navbar-btn">
             + New App
           </a>
           <AppListComponent />

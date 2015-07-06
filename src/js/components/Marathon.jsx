@@ -2,7 +2,7 @@ var config = require("../config/config");
 var Mousetrap = require("mousetrap");
 require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
-var Router = require("react-router");
+var RouteHandler = require("react-router").RouteHandler;
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var NewAppModalComponent = require("../components/NewAppModalComponent");
@@ -19,12 +19,12 @@ var tabs = [
 var Marathon = React.createClass({
   displayName: "Marathon",
 
-  mixins: [
-    Router.Navigation,
-    Router.State
-  ],
+  contextTypes: {
+    router: React.PropTypes.func
+  },
 
   propTypes: {
+    // react-router params
     params: React.PropTypes.object
   },
 
@@ -38,7 +38,9 @@ var Marathon = React.createClass({
   },
 
   componentDidMount: function () {
-    this.onRouteChange(this.props);
+    var router = this.context.router;
+
+    this.onRouteChange();
 
     Mousetrap.bindGlobal("esc", function () {
       if (this.refs.modal != null) {
@@ -47,23 +49,23 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("c", function () {
-      this.transitionTo("newapp");
+      router.transitionTo("newapp");
     }, "keyup");
 
     Mousetrap.bind("g a", function () {
       if (this.state.modalClass == null) {
-        this.transitionTo("apps");
+        router.transitionTo("apps");
       }
     }.bind(this));
 
     Mousetrap.bind("g d", function () {
       if (this.state.modalClass == null) {
-        this.transitionTo("deployments");
+        router.transitionTo("deployments");
       }
     }.bind(this));
 
     Mousetrap.bind("shift+,", function () {
-      this.transitionTo("about");
+      router.transitionTo("about");
     });
 
     this.startPolling();
@@ -74,9 +76,11 @@ var Marathon = React.createClass({
   },
 
   onRouteChange: function (props) {
+    var router = this.context.router;
+
     var params = props.state.params || {};
-    var path = this.getPathname();
-    var modalQuery = this.getQuery().modal;
+    var path = router.getCurrentPathname();
+    var modalQuery = router.getCurrentQuery().modal;
     var modalClass = null;
 
     if (modalQuery === "newapp") {
@@ -127,7 +131,9 @@ var Marathon = React.createClass({
       return;
     }
 
-    this.transitionTo(this.getPathname());
+    var router = this.context.router;
+
+    router.transitionTo(router.getCurrentPathname());
   },
 
   startPolling: function () {
@@ -182,6 +188,7 @@ var Marathon = React.createClass({
   render: function () {
     var modal;
     var state = this.state;
+    var router = this.context.router;
 
     if (state.modalClass === NewAppModalComponent) {
       modal = this.getNewAppModal();
@@ -204,7 +211,7 @@ var Marathon = React.createClass({
               tabs={tabs} />
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href={"#" + this.getPathname() + "?modal=about"}>
+                <a href={"#" + router.getCurrentPathname() + "?modal=about"}>
                   About
                 </a>
               </li>
@@ -216,7 +223,7 @@ var Marathon = React.createClass({
             </ul>
           </div>
         </nav>
-        <Router.RouteHandler />
+        <RouteHandler />
         {modal}
       </div>
     );
