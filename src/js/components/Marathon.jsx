@@ -4,6 +4,7 @@ require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
 var RouteHandler = require("react-router").RouteHandler;
 var Navigation = require("react-router").Navigation;
+var State = require("react-router").State;
 
 var AppListComponent = require("../components/AppListComponent");
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
@@ -19,14 +20,17 @@ var AppsActions = require("../actions/AppsActions");
 var DeploymentActions = require("../actions/DeploymentActions");
 
 var tabs = [
-  {id: "apps", text: "Apps"},
-  {id: "deployments", text: "Deployments"}
+  {id: "/apps", text: "Apps"},
+  {id: "/deployments", text: "Deployments"}
 ];
 
 var Marathon = React.createClass({
   displayName: "Marathon",
 
-  mixins: [Navigation],
+  mixins: [
+    Navigation,
+    State
+  ],
 
   propTypes: {
     params: React.PropTypes.object
@@ -95,9 +99,19 @@ var Marathon = React.createClass({
       decodeURIComponent(params.view) :
       params.view;
 
+    var activeTabId = tabs[0].id;
+    var path = this.getPath();
+
+    if (tabs.find(function (tab) {
+      return tab.id === path;
+    })) {
+      activeTabId = path;
+    }
+
     this.setState({
       activeAppId: appId,
       activeAppView: view,
+      activeTabId: activeTabId,
       modalClass: null
     });
   },
@@ -190,15 +204,6 @@ var Marathon = React.createClass({
     // Deployments needs to be fetched on every poll,
     // because that data is also needed on the deployments tab badge.
     DeploymentActions.requestDeployments();
-  },
-
-  activateTab: function (id) {
-    this.setState({
-      activeTabId: id,
-      activeAppId: null,
-      activeAppView: null,
-      modalClass: null
-    });
   },
 
   getAboutModal: function () {
