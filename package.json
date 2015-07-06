@@ -12,10 +12,8 @@
     "url": "git://github.com/mesosphere/marathon-ui.git"
   },
   "dependencies": {
-    "backbone": "^1.1.2",
     "classnames": "^2.1.2",
     "flux": "^2.0.3",
-    "jquery": "^2.1.4",
     "lazy.js": "^0.4.0",
     "moment": "^2.9.0",
     "mousetrap": "^1.4.6",
