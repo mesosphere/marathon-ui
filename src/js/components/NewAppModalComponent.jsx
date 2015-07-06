@@ -16,16 +16,11 @@ var NewAppModalComponent = React.createClass({
   displayName: "NewAppModalComponent",
 
   propTypes: {
+    attributes: React.PropTypes.object,
     onDestroy: React.PropTypes.func
   },
 
   getDefaultProps: function () {
-    return {
-      onDestroy: util.noop
-    };
-  },
-
-  getInitialState: function () {
     return {
       attributes: lazy(appScheme).extend({
         cpus: 0.1,
@@ -33,6 +28,12 @@ var NewAppModalComponent = React.createClass({
         mem: 16.0,
         disk: 0.0
       }).value(),
+      onDestroy: util.noop
+    };
+  },
+
+  getInitialState: function () {
+    return {
       errors: []
     };
   },
@@ -157,7 +158,7 @@ var NewAppModalComponent = React.createClass({
       modelAttrs.instances = parseInt(modelAttrs.instances, 10);
     }
 
-    var model = _.extend(this.state.attributes, modelAttrs);
+    var model = _.extend(this.props.attributes, modelAttrs);
 
     // Create app if validate() returns no errors
     if (appValidator.validate(model) == null) {
@@ -166,7 +167,7 @@ var NewAppModalComponent = React.createClass({
   },
 
   render: function () {
-    var model = this.state.attributes;
+    var model = this.props.attributes;
     var errors = this.state.errors;
 
     var generalErrors = errors.filter(function (e) {
