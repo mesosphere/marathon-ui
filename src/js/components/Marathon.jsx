@@ -2,9 +2,7 @@ var config = require("../config/config");
 var Mousetrap = require("mousetrap");
 require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
-var RouteHandler = require("react-router").RouteHandler;
-var Navigation = require("react-router").Navigation;
-var State = require("react-router").State;
+var Router = require("react-router");
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var NewAppModalComponent = require("../components/NewAppModalComponent");
@@ -22,8 +20,8 @@ var Marathon = React.createClass({
   displayName: "Marathon",
 
   mixins: [
-    Navigation,
-    State
+    Router.Navigation,
+    Router.State
   ],
 
   propTypes: {
@@ -77,28 +75,30 @@ var Marathon = React.createClass({
 
   onRouteChange: function (props) {
     var params = props.state.params || {};
+    var path = this.getPathname();
+    var modalQuery = this.getQuery().modal;
+    var modalClass = null;
+
+    if (modalQuery === "newapp") {
+      modalClass = NewAppModalComponent;
+    } else if (modalQuery === "about") {
+      modalClass = AboutModalComponent;
+    }
+
     var appId = params.appid != null ?
       decodeURIComponent(params.appid) :
       params.appid;
+
     var view = params.view != null ?
       decodeURIComponent(params.view) :
       params.view;
 
     var activeTabId = tabs[0].id;
-    var path = this.getPath();
 
     if (tabs.find(function (tab) {
       return tab.id === path;
     })) {
       activeTabId = path;
-    }
-
-    var modalClass = null;
-
-    if (path === "/newapp") {
-      modalClass = NewAppModalComponent;
-    } else if (path === "/about") {
-      modalClass = AboutModalComponent;
     }
 
     this.setState({
@@ -193,10 +193,11 @@ var Marathon = React.createClass({
 
   render: function () {
     var modal;
+    var state = this.state;
 
-    if (this.state.modalClass === NewAppModalComponent) {
+    if (state.modalClass === NewAppModalComponent) {
       modal = this.getNewAppModal();
-    } else if (this.state.modalClass === AboutModalComponent) {
+    } else if (state.modalClass === AboutModalComponent) {
       modal = this.getAboutModal();
     }
 
@@ -210,12 +211,12 @@ var Marathon = React.createClass({
               </a>
             </div>
             <NavTabsComponent
-              activeTabId={this.state.activeTabId}
+              activeTabId={state.activeTabId}
               className="navbar-nav nav-tabs-unbordered"
               tabs={tabs} />
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href="#about">
+                <a href={"#" + this.getPathname() + "?modal=about"}>
                   About
                 </a>
               </li>
@@ -227,7 +228,7 @@ var Marathon = React.createClass({
             </ul>
           </div>
         </nav>
-        <RouteHandler />
+        <Router.RouteHandler />
         {modal}
       </div>
     );

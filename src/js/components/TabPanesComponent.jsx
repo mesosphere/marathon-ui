@@ -35,7 +35,7 @@ var TabPanesComponent = React.createClass({
   },
 
   getTabId: function () {
-    var path = this.getPath();
+    var path = this.getPathname();
     if (tabs.find(function (tab) {
       return tab.id === path;
     })) {
@@ -49,7 +49,7 @@ var TabPanesComponent = React.createClass({
       <TogglableTabsComponent activeTabId={this.state.tabId}
         className="container-fluid">
         <TabPaneComponent id="/apps">
-          <a href="#/newapp" className="btn btn-success navbar-btn">
+          <a href={"#" + this.getPathname() + "?modal=newapp"} className="btn btn-success navbar-btn">
             + New App
           </a>
           <AppListComponent />
