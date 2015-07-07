@@ -28,9 +28,9 @@ var QueueActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/queue/delay/" + appId
+      url: config.apiURL + "v2/queue/" + appId + "/delay"
     })
-    .success(function (data) {
+    .success(function () {
       AppDispatcher.dispatch({
         actionType: QueueEvents.RESET_DELAY,
         appId: appId
