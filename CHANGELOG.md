@@ -1,3 +1,8 @@
+## Unversioned
+### Removed
+- The static name field in the about/info modal got removed. It's reflected by
+  the framework name field.
+
 ## 0.9.1 - 2015-07-03
 ### Changed
 - The Broccoli build system was replaced by the Gulp build system
