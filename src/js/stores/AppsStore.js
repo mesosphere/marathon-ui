@@ -82,6 +82,8 @@ function processApps(apps) {
 }
 
 function applyAppDelayStatus(apps, queue) {
+  let changed = false;
+
   queue.forEach(function (entry) {
     if (entry.app == null || entry.delay == null) {
       return;
@@ -96,10 +98,19 @@ function applyAppDelayStatus(apps, queue) {
     }
 
     if (status) {
-      let app = lazy(apps).findWhere({id: entry.app.id});
+      let app = lazy(apps).findWhere({"id": entry.app.id});
+      if (app == null) {
+        return;
+      }
+      if (app.status !== status) {
+        changed = true;
+      }
       app.status = status;
     }
+
   });
+
+  return changed;
 }
 
 var AppsStore = lazy(EventEmitter.prototype).extend({
@@ -129,7 +140,7 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
 
 AppDispatcher.register(function (action) {
   QueueStore.on(QueueEvents.CHANGE, function () {
-    var change = applyAppDelayStatus(AppsStore.apps, QueueStore.queue);
+    let change = applyAppDelayStatus(AppsStore.apps, QueueStore.queue);
     if (change) {
       AppsStore.emit(AppsEvents.CHANGE);
     }
