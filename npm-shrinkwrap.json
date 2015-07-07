@@ -580,10 +580,6 @@
         }
       }
     },
-    "backbone": {
-      "version": "1.2.1",
-      "resolved": "https://registry.npmjs.org/backbone/-/backbone-1.2.1.tgz"
-    },
     "browser-sync": {
       "version": "2.7.13",
       "resolved": "https://registry.npmjs.org/browser-sync/-/browser-sync-2.7.13.tgz",
@@ -5576,10 +5572,6 @@
         }
       }
     },
-    "jquery": {
-      "version": "2.1.4",
-      "resolved": "https://registry.npmjs.org/jquery/-/jquery-2.1.4.tgz"
-    },
     "lazy.js": {
       "version": "0.4.0",
       "resolved": "https://registry.npmjs.org/lazy.js/-/lazy.js-0.4.0.tgz"
@@ -6553,6 +6545,20 @@
     "react": {
       "version": "0.13.3",
       "resolved": "https://registry.npmjs.org/react/-/react-0.13.3.tgz"
+    },
+    "react-router": {
+      "version": "0.13.3",
+      "resolved": "https://registry.npmjs.org/react-router/-/react-router-0.13.3.tgz",
+      "dependencies": {
+        "object-assign": {
+          "version": "2.1.1",
+          "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-2.1.1.tgz"
+        },
+        "qs": {
+          "version": "2.4.1",
+          "resolved": "https://registry.npmjs.org/qs/-/qs-2.4.1.tgz"
+        }
+      }
     },
     "react-tools": {
       "version": "0.13.3",
