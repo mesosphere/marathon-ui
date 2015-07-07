@@ -88,6 +88,57 @@ describe("Apps", function () {
       AppsActions.requestApp("/single-app");
     });
 
+    it("has the correct app status (running)", function (done) {
+      this.server.setup({
+        "app": {
+          "id": "/single-app",
+          "instances": 1,
+          "tasksRunning": 1
+        }
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.currentApp.status).to.equal(0);
+        }, done);
+      });
+
+      AppsActions.requestApp("/single-app");
+    });
+
+    it("has the correct app status (deploying)", function (done) {
+      this.server.setup({
+        "app": {
+          "id": "/single-app",
+          "deployments": ["deployment-1"]
+        }
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.currentApp.status).to.equal(1);
+        }, done);
+      });
+
+      AppsActions.requestApp("/single-app");
+    });
+
+    it("has the correct app status (suspended)", function (done) {
+      this.server.setup({
+        "app": {
+          "id": "/single-app"
+        }
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.currentApp.status).to.equal(2);
+        }, done);
+      });
+
+      AppsActions.requestApp("/single-app");
+    });
+
     it("handles failure gracefully", function (done) {
       this.server.setup({message: "Guru Meditation"}, 404);
 

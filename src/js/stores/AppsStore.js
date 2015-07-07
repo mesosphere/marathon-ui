@@ -55,15 +55,19 @@ function setTaskStatus(task) {
   return task;
 }
 
-function processApp(app) {
-  app = lazy(appScheme).extend(app).value();
-
+function setAppStatus(app) {
   app.status = AppStatus.RUNNING;
   if (app.deployments.length > 0) {
     app.status = AppStatus.DEPLOYING;
   } else if (app.instances === 0 && app.tasksRunning === 0) {
     app.status = AppStatus.SUSPENDED;
   }
+}
+
+function processApp(app) {
+  app = lazy(appScheme).extend(app).value();
+
+  setAppStatus(app);
 
   app.tasks = lazy(app.tasks).map(function (task) {
     task.healthStatus = getTaskHealth(task);
