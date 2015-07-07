@@ -77,10 +77,6 @@ var AboutModalComponent = React.createClass({
             <dd>
               {this.getInfo("leader")}
             </dd>
-            <dt title="name">Name</dt>
-            <dd>
-              {this.getInfo("name")}
-            </dd>
           </dl>
           <h5 title="marathon_config">Marathon Config</h5>
           <ObjectDlComponent object={marathonConfig} />
