@@ -7,9 +7,13 @@ var config = require("../js/config/config");
 var AppsActions = require("../js/actions/AppsActions");
 var AppComponent = require("../js/components/AppComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
+var AppPageComponent = require("../js/components/AppPageComponent");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
 var appValidator = require("../js/validators/appValidator");
+var AppStatus = require("../js/constants/AppStatus");
+var HealthStatus = require("../js/constants/HealthStatus");
+var appScheme = require("../js/stores/appScheme");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -554,4 +558,63 @@ describe("App validator", function () {
     expect(errors[1].attribute).to.equal("cpus");
     expect(errors[2].attribute).to.equal("disk");
   });
+});
+
+describe("App Page component", function () {
+
+  beforeEach(function () {
+    var app = _.extend(appScheme, {
+      id: "/test-app-1",
+      healthChecks: [{path: "/", protocol: "HTTP"}],
+      tasksStaged: 0,
+      tasksRunning: 1,
+      tasksHealthy: 0,
+      tasksUnhealthy: 1,
+      status: AppStatus.RUNNING,
+      tasks: [
+        {
+          id: "test-task-1",
+          host: "127.0.0.1",
+          ports: [31857],
+          startedAt: "2015-07-07T09:01:11.689Z",
+          stagedAt: "2015-07-07T09:01:11.130Z",
+          version: "2015-07-06T15:13:21.875Z",
+          appId: "/test-app-1",
+          healthStatus: HealthStatus.UNHEALTHY,
+          healthCheckResults: [
+            {
+              alive: false,
+              consecutiveFailures: 3,
+              firstSuccess: "2015-07-07T09:15:31.752Z",
+              lastFailure: "2015-07-07T09:18:08.943Z",
+              lastSuccess: "2015-07-07T09:17:52.306Z",
+              taskId: "test-task-1"
+            }
+          ]
+        }
+      ]
+    });
+
+    AppsStore.apps = [app];
+
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<AppPageComponent appId={app.id} router={{}} />);
+    this.component = this.renderer.getRenderOutput();
+    this.element = this.renderer._instance._instance;
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("has the correct app id", function () {
+    var appId = this.component.props.children[0].props.appId;
+    expect(appId).to.equal("/test-app-1");
+  });
+
+  it("returns the right health message for failing tasks", function () {
+    var msg = this.element.getTaskHealthMessage("test-task-1");
+    expect(msg).to.equal("Warning: Health check 'HTTP /' failed.");
+  });
+
 });
