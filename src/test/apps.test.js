@@ -604,4 +604,39 @@ describe("App Page component", function () {
     expect(msg).to.equal("Warning: Health check 'HTTP /' failed.");
   });
 
+  it("returns the right health message for tasks with unknown health", function () {
+    var app = _.extend(appScheme, {
+      id: "/test-app-1",
+      status: AppStatus.RUNNING,
+      tasks: [
+        {
+          id: "test-task-1",
+          appId: "/test-app-1",
+          healthStatus: HealthStatus.UNKNOWN,
+        }
+      ]
+    });
+
+    AppsStore.apps = [app];
+    var msg = this.element.getTaskHealthMessage("test-task-1");
+    expect(msg).to.equal("Unknown");
+  });
+
+  it("returns the right health message for healthy tasks", function () {
+    var app = _.extend(appScheme, {
+      id: "/test-app-1",
+      status: AppStatus.RUNNING,
+      tasks: [
+        {
+          id: "test-task-1",
+          appId: "/test-app-1",
+          healthStatus: HealthStatus.HEALTHY,
+        }
+      ]
+    });
+
+    AppsStore.apps = [app];
+    var msg = this.element.getTaskHealthMessage("test-task-1");
+    expect(msg).to.equal("Healthy");
+  });
 });
