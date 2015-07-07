@@ -186,14 +186,18 @@ var AppPageComponent = React.createClass({
     return healthCheckResults.map((hc, index) => {
       if (hc && !hc.alive) {
         var failedCheck = this.state.app.healthChecks[index];
-        return `Warning: Health check
-          '${(failedCheck.protocol ? failedCheck.protocol + " " : "")}
-          ${(this.state.app.host ? this.state.app.host : "")}
-          ${(failedCheck.path ? failedCheck.path : "")}'
-          ${(hc.lastFailureCause
-            ? " returned with status: '" + hc.lastFailureCause + "'"
-            : " failed"
-          )}.`;
+
+        var protocol = failedCheck.protocol
+          ? `${failedCheck.protocol} `
+          : "";
+        var host = this.state.app.host || "";
+        var path = failedCheck.path || "";
+        var lastFailureCause = hc.lastFailureCause
+          ? `returned with status: '${hc.lastFailureCause}'`
+          : "failed";
+
+        return "Warning: Health check " +
+          `'${protocol + host + path}' ${lastFailureCause}.`;
       }
     }).join(" ");
   },
