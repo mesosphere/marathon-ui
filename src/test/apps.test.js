@@ -566,28 +566,15 @@ describe("App Page component", function () {
     var app = _.extend(appScheme, {
       id: "/test-app-1",
       healthChecks: [{path: "/", protocol: "HTTP"}],
-      tasksStaged: 0,
-      tasksRunning: 1,
-      tasksHealthy: 0,
-      tasksUnhealthy: 1,
       status: AppStatus.RUNNING,
       tasks: [
         {
           id: "test-task-1",
-          host: "127.0.0.1",
-          ports: [31857],
-          startedAt: "2015-07-07T09:01:11.689Z",
-          stagedAt: "2015-07-07T09:01:11.130Z",
-          version: "2015-07-06T15:13:21.875Z",
           appId: "/test-app-1",
           healthStatus: HealthStatus.UNHEALTHY,
           healthCheckResults: [
             {
               alive: false,
-              consecutiveFailures: 3,
-              firstSuccess: "2015-07-07T09:15:31.752Z",
-              lastFailure: "2015-07-07T09:18:08.943Z",
-              lastSuccess: "2015-07-07T09:17:52.306Z",
               taskId: "test-task-1"
             }
           ]
