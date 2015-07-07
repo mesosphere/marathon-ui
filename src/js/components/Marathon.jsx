@@ -23,11 +23,6 @@ var Marathon = React.createClass({
     router: React.PropTypes.func
   },
 
-  propTypes: {
-    // react-router params
-    params: React.PropTypes.object
-  },
-
   getInitialState: function () {
     return {
       activeAppId: null,
@@ -71,14 +66,14 @@ var Marathon = React.createClass({
     this.startPolling();
   },
 
-  componentWillReceiveProps: function (nextProps) {
-    this.onRouteChange(nextProps);
+  componentWillReceiveProps: function () {
+    this.onRouteChange();
   },
 
-  onRouteChange: function (props) {
+  onRouteChange: function () {
     var router = this.context.router;
 
-    var params = props.state.params || {};
+    var params = router.getCurrentParams();
     var path = router.getCurrentPathname();
     var modalQuery = router.getCurrentQuery().modal;
     var modalClass = null;

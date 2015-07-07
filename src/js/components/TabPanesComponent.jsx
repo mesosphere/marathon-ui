@@ -18,11 +18,6 @@ var TabPanesComponent = React.createClass({
     router: React.PropTypes.func
   },
 
-  propTypes: {
-    // react-router params
-    params: React.PropTypes.object
-  },
-
   getInitialState: function () {
     return {
       tabId: this.getTabId()

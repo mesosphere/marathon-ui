@@ -35,20 +35,18 @@ var AppPageComponent = React.createClass({
     router: React.PropTypes.func
   },
 
-  propTypes: {
-    // react-router params
-    params: React.PropTypes.object
-  },
-
   getInitialState: function () {
     return _.extend({
       fetchState: States.STATE_LOADING
     }, this.getRouteSettings(this.props));
   },
 
-  getRouteSettings: function (props) {
-    var appId = decodeURIComponent(props.params.appid);
-    var view = props.params.view;
+  getRouteSettings: function () {
+    var router = this.context.router;
+    var params = router.getCurrentParams();
+
+    var appId = decodeURIComponent(params.appid);
+    var view = params.view;
 
     var activeTabId = "apps/" + encodeURIComponent(appId);
 
@@ -80,7 +78,7 @@ var AppPageComponent = React.createClass({
       activeViewIndex: activeViewIndex,
       app: AppsStore.getCurrentApp(appId),
       appId: appId,
-      view: decodeURIComponent(props.params.view),
+      view: decodeURIComponent(params.view),
       tabs: tabs
     };
   },
@@ -109,16 +107,18 @@ var AppPageComponent = React.createClass({
       this.onDeleteAppSuccess);
   },
 
-  componentWillReceiveProps: function (nextProps) {
+  componentWillReceiveProps: function () {
+    var params = this.context.router.getCurrentParams();
+
     var fetchState = this.state.fetchState;
-    if (decodeURIComponent(nextProps.params.appid) !== this.state.appId) {
+    if (decodeURIComponent(params.appid) !== this.state.appId) {
       fetchState = States.STATE_LOADING;
     }
 
     this.setState(_.extend(
       this.state,
       {fetchState: fetchState},
-      this.getRouteSettings(nextProps)
+      this.getRouteSettings()
     ));
   },
 
