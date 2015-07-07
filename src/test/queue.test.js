@@ -19,7 +19,7 @@ describe("Queue", function () {
       "queue": [
         {
           "app": {
-            "id": "app-1",
+            "id": "/app-1",
             "maxLaunchDelaySeconds": 3600
           },
           "delay": {
@@ -48,7 +48,7 @@ describe("Queue", function () {
         expectAsync(function () {
           expect(QueueStore.queue).to.have.length(1);
           expect(QueueStore.queue[0].app.id)
-            .to.equal("app-1");
+            .to.equal("/app-1");
           expect(QueueStore.queue[0].delay.overdue)
             .to.equal(false);
         }, done);
@@ -82,11 +82,11 @@ describe("Queue", function () {
 
       QueueStore.once(QueueEvents.RESET_DELAY, function (appId) {
         expectAsync(function () {
-          expect(appId).to.equal("app-1");
+          expect(appId).to.equal("/app-1");
         }, done);
       });
 
-      QueueActions.resetDelay("app-1");
+      QueueActions.resetDelay("/app-1");
     });
 
     it("handles failure gracefully", function (done) {
@@ -97,11 +97,11 @@ describe("Queue", function () {
       QueueStore.once(QueueEvents.RESET_DELAY_ERROR, function (error, appId) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
-          expect(appId).to.equal("app-1");
+          expect(appId).to.equal("/app-1");
         }, done);
       });
 
-      QueueActions.resetDelay("app-1");
+      QueueActions.resetDelay("/app-1");
     });
 
   });
