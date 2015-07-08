@@ -563,7 +563,7 @@ describe("App validator", function () {
 describe("App Page component", function () {
 
   beforeEach(function () {
-    var app = _.extend(appScheme, {
+    var app = React.addons.update(appScheme, {$merge: {
       id: "/test-app-1",
       healthChecks: [{path: "/", protocol: "HTTP"}],
       status: AppStatus.RUNNING,
@@ -580,7 +580,7 @@ describe("App Page component", function () {
           ]
         }
       ]
-    });
+    }});
 
     AppsStore.apps = [app];
 
@@ -605,7 +605,7 @@ describe("App Page component", function () {
   });
 
   it("returns the right health message for tasks with unknown health", function () {
-    var app = _.extend(appScheme, {
+    var app = React.addons.update(appScheme, {$merge: {
       id: "/test-app-1",
       status: AppStatus.RUNNING,
       tasks: [
@@ -615,7 +615,7 @@ describe("App Page component", function () {
           healthStatus: HealthStatus.UNKNOWN,
         }
       ]
-    });
+    }});
 
     AppsStore.apps = [app];
     var msg = this.element.getTaskHealthMessage("test-task-1");
@@ -623,7 +623,7 @@ describe("App Page component", function () {
   });
 
   it("returns the right health message for healthy tasks", function () {
-    var app = _.extend(appScheme, {
+    var app = React.addons.update(appScheme, {$merge: {
       id: "/test-app-1",
       status: AppStatus.RUNNING,
       tasks: [
@@ -633,7 +633,7 @@ describe("App Page component", function () {
           healthStatus: HealthStatus.HEALTHY,
         }
       ]
-    });
+    }});
 
     AppsStore.apps = [app];
     var msg = this.element.getTaskHealthMessage("test-task-1");
