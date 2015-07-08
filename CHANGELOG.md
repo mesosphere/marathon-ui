@@ -1,7 +1,10 @@
 ## Unversioned
-  ### Changed
+### Changed
 - The Backbone router was replaced by the react-router in order to remove the
   jQuery and Backbone dependency completely.
+  Routenames have now an leading slash, f.ex. ´´´#apps´´´ got ´´´/#apps´´´.
+  Modals can be called from every route with an query param,
+  f.ex. ´´´/#apps?modal=about´´´.
 
 ### Removed
 - The static name field in the about/info modal got removed. It's reflected by
