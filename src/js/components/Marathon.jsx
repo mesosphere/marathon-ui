@@ -81,13 +81,15 @@ var Marathon = React.createClass({
       modalClass = AboutModalComponent;
     }
 
-    var appId = params.appid != null ?
-      decodeURIComponent(params.appid) :
-      params.appid;
+    var appId = params.appid;
+    if (appId != null) {
+      appId = decodeURIComponent(appId);
+    }
 
-    var view = params.view != null ?
-      decodeURIComponent(params.view) :
-      params.view;
+    var view = params.view;
+    if (view != null) {
+      view = decodeURIComponent(view);
+    }
 
     var activeTabId = tabs[0].id;
 
