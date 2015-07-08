@@ -183,8 +183,8 @@ var AppPageComponent = React.createClass({
   },
 
   getUnhealthyTaskMessage: function (healthCheckResults = []) {
-    return healthCheckResults.map((hc, index) => {
-      if (hc && !hc.alive) {
+    return healthCheckResults.map((healthCheck, index) => {
+      if (healthCheck && !healthCheck.alive) {
         var failedCheck = this.state.app.healthChecks[index];
 
         var protocol = failedCheck.protocol
@@ -192,8 +192,8 @@ var AppPageComponent = React.createClass({
           : "";
         var host = this.state.app.host || "";
         var path = failedCheck.path || "";
-        var lastFailureCause = hc.lastFailureCause
-          ? `returned with status: '${hc.lastFailureCause}'`
+        var lastFailureCause = healthCheck.lastFailureCause
+          ? `returned with status: '${healthCheck.lastFailureCause}'`
           : "failed";
 
         return "Warning: Health check " +
