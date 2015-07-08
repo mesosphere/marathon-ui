@@ -48,7 +48,7 @@ var AppPageComponent = React.createClass({
     var appId = decodeURIComponent(params.appid);
     var view = params.view;
 
-    var activeTabId = "apps/" + encodeURIComponent(appId);
+    var activeTabId = `apps/${encodeURIComponent(appId)}`;
 
     var activeViewIndex = 0;
     var activeTaskId = null;
