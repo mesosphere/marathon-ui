@@ -137,9 +137,14 @@ describe("Deployments", function () {
 describe("Deployments navigation badge", function () {
 
   beforeEach(function () {
+
+    DeploymentStore.deployments = [
+      {id: "deployment-1"},
+      {id: "deployment-2"}
+    ];
+
     var props = {
       activeTabId: "deployments",
-      activeDeployments: 3,
       tabs: [
         {id: "apps", text: "Apps"},
         {id: "deployments", text: "Deployments"}
@@ -158,7 +163,7 @@ describe("Deployments navigation badge", function () {
   it("has the correct amount of deployments", function () {
     var badge = this.component.props.children[1].props.children[1];
     expect(badge.props.className).to.equal("badge");
-    expect(badge.props.children).to.equal(3);
+    expect(badge.props.children).to.equal(2);
   });
 
 });

@@ -10,14 +10,13 @@ var NavTabsComponent = React.createClass({
 
   propTypes: {
     activeTabId: React.PropTypes.string.isRequired,
-    activeDeployments: React.PropTypes.number,
     className: React.PropTypes.string,
     tabs: React.PropTypes.array.isRequired
   },
 
   getInitialState: function () {
     return {
-      activeDeployments: this.props.activeDeployments || 0
+      activeDeployments: DeploymentStore.deployments.length
     };
   },
 
@@ -33,6 +32,13 @@ var NavTabsComponent = React.createClass({
     });
   },
 
+  getBadge: function (tab) {
+    if (tab.id !== "deployments" || this.state.activeDeployments < 1 ) {
+      return null;
+    }
+    return <span className="badge">{this.state.activeDeployments}</span>;
+  },
+
   render: function () {
     var activeTabId = this.props.activeTabId;
 
@@ -41,9 +47,7 @@ var NavTabsComponent = React.createClass({
         "active": tab.id === activeTabId
       });
 
-      var badge = tab.id === "deployments" && this.state.activeDeployments > 0 ?
-        <span className="badge">{this.state.activeDeployments}</span> :
-        null;
+      var badge = this.getBadge(tab);
 
       return (
         <li className={tabClassSet} key={tab.id}>
