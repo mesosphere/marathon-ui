@@ -154,8 +154,7 @@ var AppPageComponent = React.createClass({
   },
 
   onDeleteAppSuccess: function () {
-    this.context.router.
-      transitionTo("apps");
+    this.context.router.transitionTo("apps");
   },
 
   handleTabClick: function (id) {

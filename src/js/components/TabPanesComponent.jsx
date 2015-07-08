@@ -33,11 +33,12 @@ var TabPanesComponent = React.createClass({
   getTabId: function () {
     var path = this.context.router.getCurrentPathname();
 
-    if (tabs.find(function (tab) {
-      return tab.id === path;
-    })) {
+    var hasTab = tabs.find(tab => tab.id === path);
+
+    if (hasTab) {
       return path;
     }
+
     return tabs[0].id;
   },
 
