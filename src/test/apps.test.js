@@ -1,6 +1,7 @@
 var _ = require("underscore");
 var expect = require("chai").expect;
 var React = require("react/addons");
+var ReactContext = require('react/lib/ReactContext');
 var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
@@ -383,7 +384,7 @@ describe("App component", function () {
     };
 
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppComponent model={model} router={{}} />);
+    this.renderer.render(<AppComponent model={model} />);
     this.component = this.renderer.getRenderOutput();
   });
 
@@ -584,8 +585,20 @@ describe("App Page component", function () {
 
     AppsStore.apps = [app];
 
+    var context = {
+      router: {
+        getCurrentParams: function () {
+          return {
+            appid: "/test-app-1"
+          };
+        }
+      }
+    };
+
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppPageComponent appId={app.id} router={{}} />);
+    ReactContext.current = context;
+    this.renderer.render(<AppPageComponent />, context);
+    ReactContext.current = {};
     this.component = this.renderer.getRenderOutput();
     this.element = this.renderer._instance._instance;
   });

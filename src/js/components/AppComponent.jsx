@@ -13,18 +13,17 @@ var statusNameMapping = {
 var AppComponent = React.createClass({
   displayName: "AppComponent",
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   propTypes: {
-    model: React.PropTypes.object.isRequired,
-    router: React.PropTypes.object.isRequired
+    model: React.PropTypes.object.isRequired
   },
 
   onClick: function () {
-    var props = this.props;
-
-    props.router.navigate(
-      "apps/" + encodeURIComponent(props.model.id),
-      {trigger: true}
-    );
+    this.context.router
+      .transitionTo("app", {appid: encodeURIComponent(this.props.model.id)});
   },
 
   getStatus: function () {

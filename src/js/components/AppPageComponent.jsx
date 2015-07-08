@@ -31,17 +31,33 @@ var statusNameMapping = {
 var AppPageComponent = React.createClass({
   displayName: "AppPageComponent",
 
-  propTypes: {
-    appId: React.PropTypes.string.isRequired,
-    router: React.PropTypes.object.isRequired,
-    view: React.PropTypes.string
+  contextTypes: {
+    router: React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      // This is needed for the tests, the context differs there.
+      React.PropTypes.object
+    ])
   },
 
   getInitialState: function () {
-    var activeTabId;
-    var appId = this.props.appId;
+    var settings = this.getRouteSettings(this.props);
+    settings.fetchState = States.STATE_LOADING;
+    return settings;
+  },
 
-    var tabs = _.map(tabsTemplate, function (tab) {
+  getRouteSettings: function () {
+    var router = this.context.router;
+    var params = router.getCurrentParams();
+
+    var appId = decodeURIComponent(params.appid);
+    var view = params.view;
+
+    var activeTabId = `apps/${encodeURIComponent(appId)}`;
+
+    var activeViewIndex = 0;
+    var activeTaskId = null;
+
+    var tabs = tabsTemplate.map(function (tab) {
       var id = tab.id.replace(":appid", encodeURIComponent(appId));
       if (activeTabId == null) {
         activeTabId = id;
@@ -53,13 +69,21 @@ var AppPageComponent = React.createClass({
       };
     });
 
+    if (view === "configuration") {
+      activeTabId += "/configuration";
+    } else if (view != null) {
+      activeTaskId = view;
+      activeViewIndex = 1;
+    }
+
     return {
-      activeViewIndex: 0,
       activeTabId: activeTabId,
-      activeTaskId: null,
+      activeTaskId: activeTaskId,
+      activeViewIndex: activeViewIndex,
       app: AppsStore.getCurrentApp(appId),
-      tabs: tabs,
-      fetchState: States.STATE_LOADING
+      appId: appId,
+      view: decodeURIComponent(params.view),
+      tabs: tabs
     };
   },
 
@@ -87,34 +111,29 @@ var AppPageComponent = React.createClass({
       this.onDeleteAppSuccess);
   },
 
-  componentWillReceiveProps: function (nextProps) {
-    var view = nextProps.view;
-    var activeTabId = "apps/" + encodeURIComponent(this.props.appId);
-    var activeViewIndex = 0;
-    var activeTaskId = null;
+  componentWillReceiveProps: function () {
+    var params = this.context.router.getCurrentParams();
 
-    if (view === "configuration") {
-      activeTabId += "/configuration";
-    } else if (view != null) {
-      activeTaskId = view;
-      activeViewIndex = 1;
+    var fetchState = this.state.fetchState;
+    if (decodeURIComponent(params.appid) !== this.state.appId) {
+      fetchState = States.STATE_LOADING;
     }
 
-    this.setState({
-      activeTabId: activeTabId,
-      activeTaskId: activeTaskId,
-      activeViewIndex: activeViewIndex
-    });
+    this.setState(_.extend(
+      this.state,
+      {fetchState: fetchState},
+      this.getRouteSettings()
+    ));
   },
 
   onAppChange: function () {
     this.setState({
-      app: AppsStore.getCurrentApp(this.props.appId),
+      app: AppsStore.getCurrentApp(this.state.appId),
       fetchState: States.STATE_SUCCESS
     });
 
-    if (this.props.view === "configuration") {
-      AppVersionsActions.requestAppVersions(this.props.appId);
+    if (this.state.view === "configuration") {
+      AppVersionsActions.requestAppVersions(this.state.appId);
     }
   },
 
@@ -139,7 +158,7 @@ var AppPageComponent = React.createClass({
   },
 
   onDeleteAppSuccess: function () {
-    this.props.router.navigate("apps", {trigger: true});
+    this.context.router.transitionTo("apps");
   },
 
   handleTabClick: function (id) {
@@ -157,25 +176,25 @@ var AppPageComponent = React.createClass({
     if (instancesString != null && instancesString !== "") {
       var instances = parseInt(instancesString, 10);
 
-      AppsActions.scaleApp(this.props.appId, instances);
+      AppsActions.scaleApp(this.state.appId, instances);
     }
   },
 
   handleSuspendApp: function () {
     if (util.confirm("Suspend app by scaling to 0 instances?")) {
-      AppsActions.scaleApp(this.props.appId, 0);
+      AppsActions.scaleApp(this.state.appId, 0);
     }
   },
 
   handleRestartApp: function () {
-    var appId = this.props.appId;
+    var appId = this.state.appId;
     if (util.confirm("Restart app '" + appId + "'?")) {
       AppsActions.restartApp(appId);
     }
   },
 
   handleDestroyApp: function () {
-    var appId = this.props.appId;
+    var appId = this.state.appId;
     if (util.confirm("Destroy app '" + appId +
       "'?\nThis is irreversible.")) {
       AppsActions.deleteApp(appId);
@@ -203,7 +222,7 @@ var AppPageComponent = React.createClass({
   },
 
   getTaskHealthMessage: function (taskId) {
-    var task = AppsStore.getTask(this.props.appId, taskId);
+    var task = AppsStore.getTask(this.state.appId, taskId);
 
     if (task === undefined) {
       return null;
@@ -260,7 +279,7 @@ var AppPageComponent = React.createClass({
     var state = this.state;
     var model = state.app;
 
-    var task = AppsStore.getTask(this.props.appId, state.activeTaskId);
+    var task = AppsStore.getTask(this.state.appId, state.activeTaskId);
 
     if (task == null) {
       return null;
@@ -278,7 +297,6 @@ var AppPageComponent = React.createClass({
   getAppDetails: function () {
     var state = this.state;
     var model = state.app;
-    var props = this.props;
 
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
@@ -286,17 +304,17 @@ var AppPageComponent = React.createClass({
           onTabClick={this.handleTabClick}
           tabs={state.tabs} >
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(props.appId)}>
+          id={"apps/" + encodeURIComponent(state.appId)}>
           <TaskViewComponent
-            appId={props.appId}
+            appId={state.appId}
             fetchState={state.fetchState}
             getTaskHealthMessage={this.getTaskHealthMessage}
             hasHealth={model.healthChecks > 0}
             tasks={model.tasks} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(props.appId) + "/configuration"}>
-          <AppVersionListComponent appId={props.appId} />
+          id={"apps/" + encodeURIComponent(state.appId) + "/configuration"}>
+          <AppVersionListComponent appId={state.appId} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
@@ -306,7 +324,6 @@ var AppPageComponent = React.createClass({
     var content;
     var state = this.state;
     var model = state.app;
-    var props = this.props;
 
     var statusClassSet = classNames({
       "text-warning": model.deployments.length > 0
@@ -323,10 +340,10 @@ var AppPageComponent = React.createClass({
         <AppBreadcrumbsComponent
           activeTaskId={state.activeTaskId}
           activeViewIndex={state.activeViewIndex}
-          appId={props.appId} />
+          appId={state.appId} />
         <div className="container-fluid">
           <div className="page-header">
-            <span className="h3 modal-title">{props.appId}</span>
+            <span className="h3 modal-title">{state.appId}</span>
             <ul className="list-inline list-inline-subtext">
               <li>
                 <span className={statusClassSet}>
