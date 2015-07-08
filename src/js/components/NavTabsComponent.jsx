@@ -3,7 +3,6 @@ var React = require("react/addons");
 
 var DeploymentEvents = require("../events/DeploymentEvents");
 var DeploymentStore = require("../stores/DeploymentStore");
-var DeploymentActions = require("../actions/DeploymentActions");
 
 var NavTabsComponent = React.createClass({
   displayName: "NavTabsComponent",
@@ -26,10 +25,17 @@ var NavTabsComponent = React.createClass({
     };
   },
 
-  componentWillMount: function () {
-    DeploymentStore.on(DeploymentEvents.CHANGE, () => {
-      this.setState({activeDeployments: DeploymentStore.deployments.length});
-    });
+  componentDidMount: function () {
+    DeploymentStore.on(DeploymentEvents.CHANGE, this.onDeploymentsChange);
+  },
+
+  componentWillUnmount: function () {
+    DeploymentStore.removeListener(DeploymentEvents.CHANGE,
+      this.onDeploymentsChange);
+  },
+
+  onDeploymentsChange: function () {
+    this.setState({activeDeployments: DeploymentStore.deployments.length});
   },
 
   getBadge: function (tab) {
