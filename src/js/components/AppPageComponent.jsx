@@ -36,9 +36,9 @@ var AppPageComponent = React.createClass({
   },
 
   getInitialState: function () {
-    return _.extend({
-      fetchState: States.STATE_LOADING
-    }, this.getRouteSettings(this.props));
+    var settings = this.getRouteSettings(this.props);
+    settings.fetchState = States.STATE_LOADING;
+    return settings;
   },
 
   getRouteSettings: function () {
