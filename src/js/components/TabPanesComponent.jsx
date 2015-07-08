@@ -18,18 +18,6 @@ var TabPanesComponent = React.createClass({
     router: React.PropTypes.func
   },
 
-  getInitialState: function () {
-    return {
-      tabId: this.getTabId()
-    };
-  },
-
-  componentWillReceiveProps: function () {
-    this.setState({
-      tabId: this.getTabId()
-    });
-  },
-
   getTabId: function () {
     var path = this.context.router.getCurrentPathname();
 
@@ -46,7 +34,7 @@ var TabPanesComponent = React.createClass({
     var path = this.context.router.getCurrentPathname();
 
     return (
-      <TogglableTabsComponent activeTabId={this.state.tabId}
+      <TogglableTabsComponent activeTabId={this.getTabId()}
         className="container-fluid">
         <TabPaneComponent id="/apps">
           <a href={"#" + path + "?modal=newapp"}
