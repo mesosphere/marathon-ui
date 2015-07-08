@@ -6,6 +6,7 @@ var TestUtils = React.addons.TestUtils;
 var config = require("../js/config/config");
 var DeploymentActions = require("../js/actions/DeploymentActions");
 var DeploymentComponent = require("../js/components/DeploymentComponent");
+var NavTabsComponent = require("../js/components/NavTabsComponent");
 var DeploymentEvents = require("../js/events/DeploymentEvents");
 var DeploymentStore = require("../js/stores/DeploymentStore");
 
@@ -129,6 +130,35 @@ describe("Deployments", function () {
       DeploymentActions.stopDeployment();
     });
 
+  });
+
+});
+
+describe("Deployments navigation badge", function () {
+
+  beforeEach(function () {
+    var props = {
+      activeTabId: "deployments",
+      activeDeployments: 3,
+      tabs: [
+        {id: "apps", text: "Apps"},
+        {id: "deployments", text: "Deployments"}
+      ]
+    };
+
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<NavTabsComponent {...props} />);
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("has the correct amount of deployments", function () {
+    var badge = this.component.props.children[1].props.children[1];
+    expect(badge.props.className).to.equal("badge");
+    expect(badge.props.children).to.equal(3);
   });
 
 });
