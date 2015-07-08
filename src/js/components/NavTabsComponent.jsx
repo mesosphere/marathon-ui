@@ -33,10 +33,11 @@ var NavTabsComponent = React.createClass({
   },
 
   getBadge: function (tab) {
-    if (tab.id !== "deployments" || this.state.activeDeployments < 1 ) {
+    var state = this.state;
+    if (tab.id !== "deployments" || state.activeDeployments < 1 ) {
       return null;
     }
-    return <span className="badge">{this.state.activeDeployments}</span>;
+    return <span className="badge">{state.activeDeployments}</span>;
   },
 
   render: function () {
@@ -47,14 +48,12 @@ var NavTabsComponent = React.createClass({
         "active": tab.id === activeTabId
       });
 
-      var badge = this.getBadge(tab);
-
       return (
         <li className={tabClassSet} key={tab.id}>
           <a href={"#" + tab.id}>
             {tab.text}
           </a>
-          {badge}
+          {this.getBadge(tab)}
         </li>
       );
     }, this);
