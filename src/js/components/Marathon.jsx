@@ -15,8 +15,6 @@ var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");
 var DeploymentActions = require("../actions/DeploymentActions");
-var DeploymentEvents = require("../events/DeploymentEvents");
-var DeploymentStore = require("../stores/DeploymentStore");
 
 var tabs = [
   {id: "apps", text: "Apps"},
@@ -37,16 +35,6 @@ var Marathon = React.createClass({
       activeTabId: tabs[0].id,
       modalClass: null
     };
-  },
-
-  componentWillMount: function () {
-    // TODO: #1738 - That should be handled directly on the NavTabs
-    DeploymentStore.on(DeploymentEvents.CHANGE, function () {
-      if (tabs[1].badge !== DeploymentStore.deployments.length) {
-        tabs[1].badge = DeploymentStore.deployments.length;
-        this.forceUpdate();
-      }
-    }.bind(this));
   },
 
   componentDidMount: function () {

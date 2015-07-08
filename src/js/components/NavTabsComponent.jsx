@@ -1,19 +1,36 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
+var DeploymentEvents = require("../events/DeploymentEvents");
+var DeploymentStore = require("../stores/DeploymentStore");
+var DeploymentActions = require("../actions/DeploymentActions");
+
 var NavTabsComponent = React.createClass({
   displayName: "NavTabsComponent",
 
   propTypes: {
     activeTabId: React.PropTypes.string.isRequired,
+    activeDeployments: React.PropTypes.number,
     className: React.PropTypes.string,
     tabs: React.PropTypes.array.isRequired
+  },
+
+  getInitialState: function () {
+    return {
+      activeDeployments: this.props.activeDeployments || 0
+    };
   },
 
   getDefaultProps: function () {
     return {
       className: ""
     };
+  },
+
+  componentWillMount: function () {
+    DeploymentStore.on(DeploymentEvents.CHANGE, () => {
+      this.setState({activeDeployments: DeploymentStore.deployments.length});
+    });
   },
 
   render: function () {
@@ -24,8 +41,8 @@ var NavTabsComponent = React.createClass({
         "active": tab.id === activeTabId
       });
 
-      var badge = tab.badge > 0 ?
-        <span className="badge">{tab.badge}</span> :
+      var badge = tab.id === "deployments" && this.state.activeDeployments > 0 ?
+        <span className="badge">{this.state.activeDeployments}</span> :
         null;
 
       return (
