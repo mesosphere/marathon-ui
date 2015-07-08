@@ -71,7 +71,6 @@ describe("About Modal", function () {
       "version": "1.2.3",
       "framework_id": "framework1",
       "leader": "leader1.dcos.io",
-      "name": "name1",
       "marathon_config": {
         "marathon_field_1": "mf1",
         "marathon_field_2": "mf2"
@@ -106,10 +105,6 @@ describe("About Modal", function () {
 
   it("displays the current leader", function () {
     expect(this.modalBodyText).to.contain("leader1.dcos.io");
-  });
-
-  it("displays the current name", function () {
-    expect(this.modalBodyText).to.contain("name1");
   });
 
   it("displays the fields in the marathon config", function () {
