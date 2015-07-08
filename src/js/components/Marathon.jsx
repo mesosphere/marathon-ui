@@ -1,4 +1,6 @@
 var config = require("../config/config");
+
+var Link = require("react-router").Link;
 var Mousetrap = require("mousetrap");
 require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
@@ -205,9 +207,11 @@ var Marathon = React.createClass({
               tabs={tabs} />
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href={"#" + router.getCurrentPathname() + "?modal=about"}>
+                <Link
+                    to={router.getCurrentPathname()}
+                    query={{modal: "about"}}>
                   About
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="https://mesosphere.github.io/marathon/docs/" target="_blank">

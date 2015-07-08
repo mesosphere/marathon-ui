@@ -1,3 +1,4 @@
+var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppListComponent = require("../components/AppListComponent");
@@ -34,10 +35,12 @@ var TabPanesComponent = React.createClass({
       <TogglableTabsComponent activeTabId={this.getTabId()}
         className="container-fluid">
         <TabPaneComponent id={tabs[0].id}>
-          <a href={"#" + path + "?modal=newapp"}
+          <Link
+              to={path}
+              query={{modal: "newapp"}}
               className="btn btn-success navbar-btn">
             + New App
-          </a>
+          </Link>
           <AppListComponent />
         </TabPaneComponent>
         <TabPaneComponent id={tabs[1].id}>
