@@ -47,6 +47,7 @@
     "gulp-zip": "^3.0.2",
     "mocha": "^2.1.0",
     "npm-shrinkwrap": "^5.4.0",
+    "oboe": "^2.1.2",
     "sinon": "^1.12.2",
     "source-map-loader": "^0.1.5",
     "transform-loader": "^0.2.2",
