@@ -7,9 +7,13 @@ var config = require("../js/config/config");
 var AppsActions = require("../js/actions/AppsActions");
 var AppComponent = require("../js/components/AppComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
+var AppPageComponent = require("../js/components/AppPageComponent");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
 var appValidator = require("../js/validators/appValidator");
+var AppStatus = require("../js/constants/AppStatus");
+var HealthStatus = require("../js/constants/HealthStatus");
+var appScheme = require("../js/stores/appScheme");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -553,5 +557,86 @@ describe("App validator", function () {
     expect(errors[0].attribute).to.equal("mem");
     expect(errors[1].attribute).to.equal("cpus");
     expect(errors[2].attribute).to.equal("disk");
+  });
+});
+
+describe("App Page component", function () {
+
+  beforeEach(function () {
+    var app = _.extend(appScheme, {
+      id: "/test-app-1",
+      healthChecks: [{path: "/", protocol: "HTTP"}],
+      status: AppStatus.RUNNING,
+      tasks: [
+        {
+          id: "test-task-1",
+          appId: "/test-app-1",
+          healthStatus: HealthStatus.UNHEALTHY,
+          healthCheckResults: [
+            {
+              alive: false,
+              taskId: "test-task-1"
+            }
+          ]
+        }
+      ]
+    });
+
+    AppsStore.apps = [app];
+
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<AppPageComponent appId={app.id} router={{}} />);
+    this.component = this.renderer.getRenderOutput();
+    this.element = this.renderer._instance._instance;
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("has the correct app id", function () {
+    var appId = this.component.props.children[0].props.appId;
+    expect(appId).to.equal("/test-app-1");
+  });
+
+  it("returns the right health message for failing tasks", function () {
+    var msg = this.element.getTaskHealthMessage("test-task-1");
+    expect(msg).to.equal("Warning: Health check 'HTTP /' failed.");
+  });
+
+  it("returns the right health message for tasks with unknown health", function () {
+    var app = _.extend(appScheme, {
+      id: "/test-app-1",
+      status: AppStatus.RUNNING,
+      tasks: [
+        {
+          id: "test-task-1",
+          appId: "/test-app-1",
+          healthStatus: HealthStatus.UNKNOWN,
+        }
+      ]
+    });
+
+    AppsStore.apps = [app];
+    var msg = this.element.getTaskHealthMessage("test-task-1");
+    expect(msg).to.equal("Unknown");
+  });
+
+  it("returns the right health message for healthy tasks", function () {
+    var app = _.extend(appScheme, {
+      id: "/test-app-1",
+      status: AppStatus.RUNNING,
+      tasks: [
+        {
+          id: "test-task-1",
+          appId: "/test-app-1",
+          healthStatus: HealthStatus.HEALTHY,
+        }
+      ]
+    });
+
+    AppsStore.apps = [app];
+    var msg = this.element.getTaskHealthMessage("test-task-1");
+    expect(msg).to.equal("Healthy");
   });
 });
