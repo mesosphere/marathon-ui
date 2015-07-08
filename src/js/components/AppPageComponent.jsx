@@ -32,7 +32,11 @@ var AppPageComponent = React.createClass({
   displayName: "AppPageComponent",
 
   contextTypes: {
-    router: React.PropTypes.func
+    router: React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      // This is needed for the tests, the context differs there.
+      React.PropTypes.object
+    ])
   },
 
   getInitialState: function () {
