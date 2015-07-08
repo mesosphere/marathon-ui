@@ -15,6 +15,7 @@ var HttpServer = require("./helpers/HttpServer").HttpServer;
 
 var server = new HttpServer(config.localTestserverURI);
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
+var tabs = require("../js/constants/tabs");
 
 describe("Deployments", function () {
 
@@ -144,11 +145,8 @@ describe("Deployments navigation badge", function () {
     ];
 
     var props = {
-      activeTabId: "deployments",
-      tabs: [
-        {id: "apps", text: "Apps"},
-        {id: "deployments", text: "Deployments"}
-      ]
+      activeTabId: "/deployments",
+      tabs: tabs
     };
 
     this.renderer = TestUtils.createRenderer();
