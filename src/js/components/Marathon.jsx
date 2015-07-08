@@ -11,10 +11,7 @@ var NavTabsComponent = require("../components/NavTabsComponent");
 var AppsActions = require("../actions/AppsActions");
 var DeploymentActions = require("../actions/DeploymentActions");
 
-var tabs = [
-  {id: "/apps", text: "Apps"},
-  {id: "/deployments", text: "Deployments"}
-];
+var tabs = require("../constants/tabs");
 
 var Marathon = React.createClass({
   displayName: "Marathon",

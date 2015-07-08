@@ -6,10 +6,7 @@ var DeploymentsListComponent =
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 
-var tabs = [
-  {id: "/apps", text: "Apps"},
-  {id: "/deployments", text: "Deployments"}
-];
+var tabs = require("../constants/tabs");
 
 var TabPanesComponent = React.createClass({
   displayName: "TabPanesComponent",
