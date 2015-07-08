@@ -36,14 +36,14 @@ var TabPanesComponent = React.createClass({
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
         className="container-fluid">
-        <TabPaneComponent id="/apps">
+        <TabPaneComponent id={tabs[0].id}>
           <a href={"#" + path + "?modal=newapp"}
               className="btn btn-success navbar-btn">
             + New App
           </a>
           <AppListComponent />
         </TabPaneComponent>
-        <TabPaneComponent id="/deployments">
+        <TabPaneComponent id={tabs[1].id}>
           <DeploymentsListComponent />
         </TabPaneComponent>
       </TogglableTabsComponent>
