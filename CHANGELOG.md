@@ -12,7 +12,7 @@
 - The App page now allows the user to reset the task launch delay for a
   "Delayed" app, thus forcing a new immediate launch attempt.
 
-### FIxed
+### Fixed
 - #1754 - UI: Allow administratively zeroing / resetting the taskLaunchDelay
 
 ### Removed
