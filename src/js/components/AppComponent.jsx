@@ -2,13 +2,7 @@ var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
-var AppStatus = require("../constants/AppStatus");
-
-var statusNameMapping = {
-  [AppStatus.RUNNING]: "Running",
-  [AppStatus.DEPLOYING]: "Deploying",
-  [AppStatus.SUSPENDED]: "Suspended"
-};
+var AppStatusComponent = require("../components/AppStatusComponent");
 
 var AppComponent = React.createClass({
   displayName: "AppComponent",
@@ -33,10 +27,6 @@ var AppComponent = React.createClass({
       "text-warning": model.tasksRunning !== model.instances
     });
 
-    var statusClassSet = classNames({
-      "text-warning": model.deployments.length > 0
-    });
-
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
@@ -55,9 +45,7 @@ var AppComponent = React.createClass({
           <AppHealthComponent model={model} />
         </td>
         <td className="text-right">
-          <span className={statusClassSet}>
-            {statusNameMapping[model.status]}
-          </span>
+          <AppStatusComponent model={model} />
         </td>
       </tr>
     );

@@ -12,7 +12,21 @@ function processQueue(queue = []) {
 }
 
 var QueueStore = lazy(EventEmitter.prototype).extend({
-  queue: []
+  queue: [],
+
+  getDelayByAppId: function (appId) {
+    var timeLeftSeconds = 0;
+
+    var queueEntry = lazy(this.queue).find(function (entry) {
+      return entry.app.id === appId && entry.delay != null;
+    });
+
+    if (queueEntry) {
+      timeLeftSeconds = queueEntry.delay.timeLeftSeconds;
+    }
+
+    return timeLeftSeconds;
+  }
 }).value();
 
 AppDispatcher.register(function (action) {

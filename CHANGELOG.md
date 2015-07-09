@@ -1,4 +1,12 @@
 ## Unversioned
+### Added
+- #1754 - UI: Allow administratively zeroing / resetting the taskLaunchDelay
+  * The App list now displays two additional possible statuses: "Delayed" and
+    "Waiting". The "Delayed" status also displays a tooltip showing
+    the remaining time until the next launch attempt.
+  * The App page now allows the user to reset the task launch delay for a
+    "Delayed" app, thus forcing a new immediate launch attempt.
+
 ### Changed
 - The Backbone router was replaced by the react-router in order to remove the
   jQuery and Backbone dependency completely.

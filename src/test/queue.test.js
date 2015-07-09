@@ -72,6 +72,17 @@ describe("Queue", function () {
       QueueActions.requestQueue();
     });
 
+    it("returns the right delay time for a delayed app", function (done) {
+      QueueStore.once(QueueEvents.CHANGE, function () {
+        expectAsync(function () {
+          let timeLeftSeconds = QueueStore.getDelayByAppId("/app-1");
+          expect(timeLeftSeconds).to.equal(784);
+        }, done);
+      });
+
+      QueueActions.requestQueue();
+    });
+
   });
 
   describe("on app delay reset", function () {

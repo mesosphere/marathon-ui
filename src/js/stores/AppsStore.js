@@ -81,35 +81,38 @@ function processApps(apps) {
   }).value();
 }
 
-function applyAppDelayStatus(apps, queue) {
+function applyAppDelayStatus(app, queue) {
   var changed = false;
+  var status;
 
-  queue.forEach(function (entry) {
-    if (entry.app == null || entry.delay == null) {
-      return;
-    }
+  var queueEntry = lazy(queue).find(function (entry) {
+    return entry.app != null && app.id === entry.app.id && entry.delay != null;
+  });
 
-    var status;
-
-    if (entry.delay.overdue === false && entry.delay.timeLeftSeconds > 0) {
+  if (queueEntry) {
+    if (queueEntry.delay.overdue === false
+        && queueEntry.delay.timeLeftSeconds > 0) {
       status = AppStatus.DELAYED;
-    } else if (entry.delay.overdue === true) {
+    } else if (queueEntry.delay.overdue === true) {
       status = AppStatus.WAITING;
     }
 
     if (status) {
-      let app = lazy(apps).findWhere({"id": entry.app.id});
-      if (app == null) {
-        return;
-      }
       if (app.status !== status) {
         changed = true;
       }
       app.status = status;
     }
+  }
 
+  return changed;
+}
+
+function applyAppDelayStatusOnAllApps(apps, queue) {
+  var changed = false;
+  apps.forEach(function (app) {
+    changed = applyAppDelayStatus(app, queue) || changed;
   });
-
   return changed;
 }
 
@@ -139,7 +142,7 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
 }).value();
 
 QueueStore.on(QueueEvents.CHANGE, function () {
-  var change = applyAppDelayStatus(AppsStore.apps, QueueStore.queue);
+  var change = applyAppDelayStatusOnAllApps(AppsStore.apps, QueueStore.queue);
   if (change) {
     AppsStore.emit(AppsEvents.CHANGE);
   }
@@ -149,7 +152,7 @@ AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
       AppsStore.apps = processApps(action.data.body.apps);
-      applyAppDelayStatus(AppsStore.apps, QueueStore.queue);
+      applyAppDelayStatusOnAllApps(AppsStore.apps, QueueStore.queue);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APPS_ERROR:
@@ -157,6 +160,7 @@ AppDispatcher.register(function (action) {
       break;
     case AppsEvents.REQUEST_APP:
       AppsStore.currentApp = processApp(action.data.body.app);
+      applyAppDelayStatus(AppsStore.currentApp, QueueStore.queue);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APP_ERROR:
