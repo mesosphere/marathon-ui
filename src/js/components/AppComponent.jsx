@@ -1,18 +1,8 @@
 var classNames = require("classnames");
-var moment = require("moment");
 var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
-var AppStatus = require("../constants/AppStatus");
-var QueueStore = require("../stores/QueueStore");
-
-var statusNameMapping = {
-  [AppStatus.RUNNING]: "Running",
-  [AppStatus.DEPLOYING]: "Deploying",
-  [AppStatus.SUSPENDED]: "Suspended",
-  [AppStatus.DELAYED]: "Delayed",
-  [AppStatus.WAITING]: "Waiting"
-};
+var AppStatusComponent = require("../components/AppStatusComponent");
 
 var AppComponent = React.createClass({
   displayName: "AppComponent",
@@ -30,38 +20,11 @@ var AppComponent = React.createClass({
       .transitionTo("app", {appid: encodeURIComponent(this.props.model.id)});
   },
 
-  isWarningStatus: function () {
-    var model = this.props.model;
-
-    return model.status === AppStatus.DEPLOYING
-      || model.status === AppStatus.WAITING;
-  },
-
-  getStatusTitle: function () {
-    var model = this.props.model;
-
-    var executionDelay = QueueStore.getDelayByAppId(model.id);
-
-    if (executionDelay) {
-      return "Task execution failed, delayed for " +
-        `${moment.duration(executionDelay, "seconds").humanize()}.`;
-    } else if (model.status === AppStatus.WAITING) {
-      return "Waiting for resource offer";
-    }
-
-    return null;
-  },
-
   render: function () {
     var model = this.props.model;
 
     var runningTasksClassSet = classNames({
       "text-warning": model.tasksRunning !== model.instances
-    });
-
-    var statusClassSet = classNames({
-      "text-warning": this.isWarningStatus(),
-      "text-danger": model.status === AppStatus.DELAYED
     });
 
     return (
@@ -81,10 +44,8 @@ var AppComponent = React.createClass({
         <td className="text-right health-bar-column">
           <AppHealthComponent model={model} />
         </td>
-        <td className="text-right" title={this.getStatusTitle()}>
-          <span className={statusClassSet}>
-            {statusNameMapping[model.status]}
-          </span>
+        <td className="text-right">
+          <AppStatusComponent model={model} />
         </td>
       </tr>
     );

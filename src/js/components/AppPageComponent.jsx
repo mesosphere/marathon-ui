@@ -1,11 +1,10 @@
-var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
-var AppStatus = require("../constants/AppStatus");
 var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
+var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
 var HealthStatus = require("../constants/HealthStatus");
@@ -20,12 +19,6 @@ var tabsTemplate = [
   {id: "apps/:appid", text: "Tasks"},
   {id: "apps/:appid/configuration", text: "Configuration"}
 ];
-
-var statusNameMapping = {
-  [AppStatus.RUNNING]: "Running",
-  [AppStatus.DEPLOYING]: "Deploying",
-  [AppStatus.SUSPENDED]: "Suspended"
-};
 
 var AppPageComponent = React.createClass({
   displayName: "AppPageComponent",
@@ -324,10 +317,6 @@ var AppPageComponent = React.createClass({
     var state = this.state;
     var model = state.app;
 
-    var statusClassSet = classNames({
-      "text-warning": model.deployments.length > 0
-    });
-
     if (this.state.activeViewIndex === 0) {
       content = this.getAppDetails();
     } else if (this.state.activeViewIndex === 1) {
@@ -345,9 +334,7 @@ var AppPageComponent = React.createClass({
             <span className="h3 modal-title">{state.appId}</span>
             <ul className="list-inline list-inline-subtext">
               <li>
-                <span className={statusClassSet}>
-                  {statusNameMapping[model.status]}
-                </span>
+                <AppStatusComponent model={model} />
               </li>
             </ul>
             {this.getControls()}
