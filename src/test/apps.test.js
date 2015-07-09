@@ -16,6 +16,7 @@ var AppsStore = require("../js/stores/AppsStore");
 var AppStatus = require("../js/constants/AppStatus");
 var HealthStatus = require("../js/constants/HealthStatus");
 var QueueActions = require("../js/actions/QueueActions");
+var QueueStore = require("../js/stores/QueueStore");
 
 var config = require("../js/config/config");
 
@@ -569,6 +570,42 @@ describe("App component", function () {
     var statusDescription =
       this.component.props.children[5].props.children.props.children;
     expect(statusDescription).to.equal("Running");
+  });
+
+  describe("on delayed apps", function () {
+    beforeEach(function () {
+      var model = {
+        id: "app-1",
+        deployments: [],
+        tasksRunning: 4,
+        instances: 5,
+        mem: 100,
+        cpus: 4,
+        status: AppStatus.DELAYED
+      };
+
+      QueueStore.queue = [
+        {
+          app: {id: "app-1"},
+          delay: {timeLeftSeconds: 173}
+        }
+      ];
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<AppComponent model={model} />);
+      this.component = this.renderer.getRenderOutput();
+    });
+
+    afterEach(function () {
+      this.renderer.unmount();
+    });
+
+    it("has correct title for delayed apps", function () {
+      var expectedTitle = "Task execution failed, delayed for 3 minutes.";
+      var title = this.component.props.children[5].props.title;
+
+      expect(title).to.equal(expectedTitle);
+    });
   });
 
 });
