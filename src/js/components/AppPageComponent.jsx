@@ -1,4 +1,3 @@
-var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
@@ -119,7 +118,7 @@ var AppPageComponent = React.createClass({
       fetchState = States.STATE_LOADING;
     }
 
-    this.setState(_.extend(
+    this.setState(util.extendObject(
       this.state,
       {fetchState: fetchState},
       this.getRouteSettings()

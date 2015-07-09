@@ -4,7 +4,8 @@
     "arrowFunctions": true,
     "objectLiteralComputedProperties": true,
     "templateStrings": true,
-    "defaultParams": true
+    "defaultParams": true,
+    "restParams": true,
   },
 
   "env": {

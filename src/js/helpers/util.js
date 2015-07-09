@@ -72,7 +72,10 @@ var util = {
     return element.className &&
       element.className.match(/\S+/g).indexOf(className) > -1;
   },
-  noop: function () {}
+  noop: function () {},
+  extendObject: function (...sources) {
+    return Object.assign({}, ...sources);
+  }
 };
 
 module.exports = util;
