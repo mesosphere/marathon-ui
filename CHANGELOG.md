@@ -6,6 +6,14 @@
   ```#apps``` is now reachable under ```#/apps```.
   Modal dialogs are now part of the URL via query strings,
   e.g. ```#/apps?modal=about```, so the underlying page is not lost on refresh.
+- The App list now displays two additional possible statuses: "Delayed" and
+  "Waiting". The "Delayed" status also displays a tooltip showing the remaining
+  time until the next launch attempt.
+- The App page now allows the user to reset the task launch delay for a
+  "Delayed" app, thus forcing a new immediate launch attempt.
+
+### FIxed
+- #1754 - UI: Allow administratively zeroing / resetting the taskLaunchDelay
 
 ### Removed
 - The static name field in the about/info modal got removed. It's reflected by
