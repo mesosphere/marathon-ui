@@ -9,6 +9,7 @@ var AppsActions = require("../js/actions/AppsActions");
 var AppComponent = require("../js/components/AppComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
+var AppStatusComponent = require("../js/components/AppStatusComponent");
 var appScheme = require("../js/stores/appScheme");
 var appValidator = require("../js/validators/appValidator");
 var AppsEvents = require("../js/events/AppsEvents");
@@ -566,54 +567,6 @@ describe("App component", function () {
     expect(totalSteps).to.equal(5);
   });
 
-  it("has correct status description", function () {
-    var statusDescription =
-      this.component.props.children[5].props.children.props.children;
-    expect(statusDescription).to.equal("Running");
-  });
-
-  describe("on delayed apps", function () {
-    beforeEach(function () {
-      var model = {
-        id: "app-1",
-        deployments: [],
-        tasksRunning: 4,
-        instances: 5,
-        mem: 100,
-        cpus: 4,
-        status: AppStatus.DELAYED
-      };
-
-      QueueStore.queue = [
-        {
-          app: {id: "app-1"},
-          delay: {timeLeftSeconds: 173}
-        }
-      ];
-
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(<AppComponent model={model} />);
-      this.component = this.renderer.getRenderOutput();
-    });
-
-    afterEach(function () {
-      this.renderer.unmount();
-    });
-
-    it("has correct status description", function () {
-      var statusDescription =
-        this.component.props.children[5].props.children.props.children;
-      expect(statusDescription).to.equal("Delayed");
-    });
-
-    it("has correct title for delayed apps", function () {
-      var expectedTitle = "Task execution failed, delayed for 3 minutes.";
-      var title = this.component.props.children[5].props.title;
-
-      expect(title).to.equal(expectedTitle);
-    });
-  });
-
 });
 
 describe("App Health component", function () {
@@ -842,4 +795,77 @@ describe("App Page component", function () {
     var msg = this.element.getTaskHealthMessage("test-task-1");
     expect(msg).to.equal("Healthy");
   });
+});
+
+describe("App Status component", function () {
+
+  describe("on delayed status", function () {
+
+    beforeEach(function () {
+      var model = {
+        id: "app-1",
+        deployments: [],
+        tasksRunning: 4,
+        instances: 5,
+        mem: 100,
+        cpus: 4,
+        status: AppStatus.DELAYED
+      };
+
+      QueueStore.queue = [
+        {
+          app: {id: "app-1"},
+          delay: {timeLeftSeconds: 173}
+        }
+      ];
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<AppStatusComponent model={model} />);
+      this.component = this.renderer.getRenderOutput();
+    });
+
+    afterEach(function () {
+      this.renderer.unmount();
+    });
+
+    it("has correct status description", function () {
+      var statusDescription = this.component.props.children;
+      expect(statusDescription).to.equal("Delayed");
+    });
+
+    it("has correct title", function () {
+      var expectedTitle = "Task execution failed, delayed for 3 minutes.";
+      var title = this.component.props.title;
+      expect(title).to.equal(expectedTitle);
+    });
+  });
+
+  describe("on running status", function () {
+
+    beforeEach(function () {
+      var model = {
+        id: "app-1",
+        deployments: [],
+        tasksRunning: 4,
+        instances: 5,
+        mem: 100,
+        cpus: 4,
+        status: AppStatus.RUNNING
+      };
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<AppStatusComponent model={model} />);
+      this.component = this.renderer.getRenderOutput();
+    });
+
+    afterEach(function () {
+      this.renderer.unmount();
+    });
+
+    it("has correct status description", function () {
+      var statusDescription = this.component.props.children;
+      expect(statusDescription).to.equal("Running");
+    });
+  });
+
 });
