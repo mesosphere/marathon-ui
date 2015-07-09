@@ -1,5 +1,4 @@
-[![Stories in Ready](https://badge.waffle.io/mesosphere/marathon.png?label=read,gui&title=Ready)](https://waffle.io/mesosphere/marathon)
-# Marathon UI [![Build Status](https://travis-ci.org/mesosphere/marathon-ui.png?branch=master)](https://travis-ci.org/mesosphere/marathon-ui)
+# Marathon UI [![Build Status](https://travis-ci.org/mesosphere/marathon-ui.png?branch=master)](https://travis-ci.org/mesosphere/marathon-ui) [![Stories in Ready](https://badge.waffle.io/mesosphere/marathon.png?label=read,gui&title=Ready)](https://waffle.io/mesosphere/marathon)
 
 ## The web user interface for Mesosphere's Marathon
 
