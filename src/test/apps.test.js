@@ -600,6 +600,12 @@ describe("App component", function () {
       this.renderer.unmount();
     });
 
+    it("has correct status description", function () {
+      var statusDescription =
+        this.component.props.children[5].props.children.props.children;
+      expect(statusDescription).to.equal("Delayed");
+    });
+
     it("has correct title for delayed apps", function () {
       var expectedTitle = "Task execution failed, delayed for 3 minutes.";
       var title = this.component.props.children[5].props.title;
