@@ -1,4 +1,5 @@
 var classNames = require("classnames");
+var moment = require("moment");
 var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
@@ -36,6 +37,21 @@ var AppComponent = React.createClass({
       || model.status === AppStatus.WAITING;
   },
 
+  getStatusTitle: function () {
+    var model = this.props.model;
+
+    var executionDelay = QueueStore.getDelayByAppId(model.id);
+
+    if (executionDelay) {
+      return "Task execution failed, delayed for " +
+        `${moment.duration(executionDelay, "seconds").humanize()}.`;
+    } else if (model.status === AppStatus.WAITING) {
+      return "Waiting for resource offer";
+    }
+
+    return null;
+  },
+
   render: function () {
     var model = this.props.model;
 
@@ -65,7 +81,7 @@ var AppComponent = React.createClass({
         <td className="text-right health-bar-column">
           <AppHealthComponent model={model} />
         </td>
-        <td className="text-right">
+        <td className="text-right" title={this.getStatusTitle()}>
           <span className={statusClassSet}>
             {statusNameMapping[model.status]}
           </span>
