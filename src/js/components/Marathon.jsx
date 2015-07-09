@@ -12,6 +12,7 @@ var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");
 var DeploymentActions = require("../actions/DeploymentActions");
+var QueueActions = require("../actions/QueueActions");
 
 var tabs = require("../constants/tabs");
 
@@ -163,6 +164,7 @@ var Marathon = React.createClass({
     // Deployments needs to be fetched on every poll,
     // because that data is also needed on the deployments tab badge.
     DeploymentActions.requestDeployments();
+    QueueActions.requestQueue();
   },
 
   getAboutModal: function () {

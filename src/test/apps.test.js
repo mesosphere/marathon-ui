@@ -5,17 +5,21 @@ var ReactContext = require('react/lib/ReactContext');
 var TestUtils = React.addons.TestUtils;
 var util = require("../js/helpers/util");
 
-var config = require("../js/config/config");
 var AppsActions = require("../js/actions/AppsActions");
 var AppComponent = require("../js/components/AppComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
+var AppStatusComponent = require("../js/components/AppStatusComponent");
+var appScheme = require("../js/stores/appScheme");
+var appValidator = require("../js/validators/appValidator");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
-var appValidator = require("../js/validators/appValidator");
 var AppStatus = require("../js/constants/AppStatus");
 var HealthStatus = require("../js/constants/HealthStatus");
-var appScheme = require("../js/stores/appScheme");
+var QueueActions = require("../js/actions/QueueActions");
+var QueueStore = require("../js/stores/QueueStore");
+
+var config = require("../js/config/config");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -88,6 +92,57 @@ describe("Apps", function () {
       AppsActions.requestApp("/single-app");
     });
 
+    it("has the correct app status (running)", function (done) {
+      this.server.setup({
+        "app": {
+          "id": "/single-app",
+          "instances": 1,
+          "tasksRunning": 1
+        }
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.currentApp.status).to.equal(0);
+        }, done);
+      });
+
+      AppsActions.requestApp("/single-app");
+    });
+
+    it("has the correct app status (deploying)", function (done) {
+      this.server.setup({
+        "app": {
+          "id": "/single-app",
+          "deployments": ["deployment-1"]
+        }
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.currentApp.status).to.equal(1);
+        }, done);
+      });
+
+      AppsActions.requestApp("/single-app");
+    });
+
+    it("has the correct app status (suspended)", function (done) {
+      this.server.setup({
+        "app": {
+          "id": "/single-app"
+        }
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.currentApp.status).to.equal(2);
+        }, done);
+      });
+
+      AppsActions.requestApp("/single-app");
+    });
+
     it("handles failure gracefully", function (done) {
       this.server.setup({message: "Guru Meditation"}, 404);
 
@@ -98,6 +153,99 @@ describe("Apps", function () {
       });
 
       AppsActions.requestApp("/non-existing-app");
+    });
+
+  });
+
+  describe("on queue update", function () {
+
+    it("has the correct app status (delayed)", function (done) {
+      this.server.setup({
+        "queue": [
+          {
+            "app": {
+              "id": "/app-1",
+              "maxLaunchDelaySeconds": 3600
+            },
+            "delay": {
+              "overdue": false,
+              "timeLeftSeconds": 784
+            }
+          }
+        ]
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(_.findWhere(AppsStore.apps, {id: "/app-1"}).status)
+          .to.equal(3);
+        }, done);
+      });
+
+      QueueActions.requestQueue();
+    });
+
+    it("has the correct app status (waiting)", function (done) {
+      this.server.setup({
+        "queue": [
+          {
+            "app": {
+              "id": "/app-1",
+              "maxLaunchDelaySeconds": 3600
+            },
+            "delay": {
+              "overdue": true,
+              "timeLeftSeconds": 123
+            }
+          }
+        ]
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(_.findWhere(AppsStore.apps, {id: "/app-1"}).status)
+          .to.equal(4);
+        }, done);
+      });
+
+      QueueActions.requestQueue();
+    });
+
+    it("does not trigger a change event if it doesn't update an app status",
+        function (done) {
+      var initialTimeout = this.timeout();
+      this.timeout(25);
+
+      this.server.setup({
+        "queue": [
+          {
+            "app": {
+              "id": "/app-1",
+              "maxLaunchDelaySeconds": 3600
+            },
+            "delay": {
+              "overdue": false,
+              "timeLeftSeconds": 0
+            }
+          }
+        ]
+      }, 200);
+
+      var onChange = function () {
+        expectAsync(function () {
+          throw new Error("AppsEvents.CHANGE shouldn't be called.");
+        }, done);
+      };
+
+      AppsStore.once(AppsEvents.CHANGE, onChange);
+
+      setTimeout(() => {
+        AppsStore.removeListener(AppsEvents.CHANGE, onChange);
+        this.timeout(initialTimeout);
+        done();
+      }, 10);
+
+      QueueActions.requestQueue();
     });
 
   });
@@ -419,12 +567,6 @@ describe("App component", function () {
     expect(totalSteps).to.equal(5);
   });
 
-  it("has correct status description", function () {
-    var statusDescription =
-      this.component.props.children[5].props.children.props.children;
-    expect(statusDescription).to.equal("Running");
-  });
-
 });
 
 describe("App Health component", function () {
@@ -653,4 +795,77 @@ describe("App Page component", function () {
     var msg = this.element.getTaskHealthMessage("test-task-1");
     expect(msg).to.equal("Healthy");
   });
+});
+
+describe("App Status component", function () {
+
+  describe("on delayed status", function () {
+
+    beforeEach(function () {
+      var model = {
+        id: "app-1",
+        deployments: [],
+        tasksRunning: 4,
+        instances: 5,
+        mem: 100,
+        cpus: 4,
+        status: AppStatus.DELAYED
+      };
+
+      QueueStore.queue = [
+        {
+          app: {id: "app-1"},
+          delay: {timeLeftSeconds: 173}
+        }
+      ];
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<AppStatusComponent model={model} />);
+      this.component = this.renderer.getRenderOutput();
+    });
+
+    afterEach(function () {
+      this.renderer.unmount();
+    });
+
+    it("has correct status description", function () {
+      var statusDescription = this.component.props.children;
+      expect(statusDescription).to.equal("Delayed");
+    });
+
+    it("has correct title", function () {
+      var expectedTitle = "Task execution failed, delayed for 3 minutes.";
+      var title = this.component.props.title;
+      expect(title).to.equal(expectedTitle);
+    });
+  });
+
+  describe("on running status", function () {
+
+    beforeEach(function () {
+      var model = {
+        id: "app-1",
+        deployments: [],
+        tasksRunning: 4,
+        instances: 5,
+        mem: 100,
+        cpus: 4,
+        status: AppStatus.RUNNING
+      };
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<AppStatusComponent model={model} />);
+      this.component = this.renderer.getRenderOutput();
+    });
+
+    afterEach(function () {
+      this.renderer.unmount();
+    });
+
+    it("has correct status description", function () {
+      var statusDescription = this.component.props.children;
+      expect(statusDescription).to.equal("Running");
+    });
+  });
+
 });

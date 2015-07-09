@@ -2,10 +2,11 @@
   "ecmaFeatures": {
     "jsx": true,
     "arrowFunctions": true,
+    "blockBindings": true,
     "objectLiteralComputedProperties": true,
     "templateStrings": true,
     "defaultParams": true,
-    "restParams": true,
+    "restParams": true
   },
 
   "env": {

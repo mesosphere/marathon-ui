@@ -2,13 +2,7 @@ var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
-var AppStatus = require("../constants/AppStatus");
-
-var statusNameMapping = {
-  [AppStatus.RUNNING]: "Running",
-  [AppStatus.DEPLOYING]: "Deploying",
-  [AppStatus.SUSPENDED]: "Suspended"
-};
+var AppStatusComponent = require("../components/AppStatusComponent");
 
 var AppComponent = React.createClass({
   displayName: "AppComponent",
@@ -26,28 +20,11 @@ var AppComponent = React.createClass({
       .transitionTo("app", {appid: encodeURIComponent(this.props.model.id)});
   },
 
-  getStatus: function () {
-    var model = this.props.model;
-    var status = "Running";
-
-    if (model.deployments.length > 0) {
-      status = "Deploying";
-    } else if (model.instances === 0 && model.tasksRunning === 0) {
-      status = "Suspended";
-    }
-
-    return status;
-  },
-
   render: function () {
     var model = this.props.model;
 
     var runningTasksClassSet = classNames({
       "text-warning": model.tasksRunning !== model.instances
-    });
-
-    var statusClassSet = classNames({
-      "text-warning": model.deployments.length > 0
     });
 
     return (
@@ -68,9 +45,7 @@ var AppComponent = React.createClass({
           <AppHealthComponent model={model} />
         </td>
         <td className="text-right">
-          <span className={statusClassSet}>
-            {statusNameMapping[model.status]}
-          </span>
+          <AppStatusComponent model={model} />
         </td>
       </tr>
     );
