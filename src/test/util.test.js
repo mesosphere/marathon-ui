@@ -38,4 +38,39 @@ describe("util", function () {
 
   });
 
+  describe("extend", function () {
+
+    it("returns a new object with merged properties", function () {
+      var objA = {hello: "world", foo: "bar"};
+      var objB = {hello: "there", baz: "foo"};
+      var expectedResult = {hello: "there", foo: "bar", baz: "foo"};
+      var result = util.extend(objA, objB);
+      expect(result).to.deep.equal(expectedResult);
+    });
+
+    it("returns a new object without modifying the source", function () {
+      var objA = {hello: "world", foo: "bar"};
+      var objB = {hello: "there", baz: "foo"};
+      var result = util.extend(objA, objB);
+      expect(objA).to.deep.equal({hello: "world", foo: "bar"});
+    });
+
+    it("accepts several sources", function () {
+      var objA = {hello: "world", foo: "bar"};
+      var objB = {hello: "there", baz: "foo"};
+      var objC = {id: null, flag: true};
+      var expectedResult = {
+        hello: "there",
+        foo: "bar",
+        baz: "foo",
+        id: null,
+        flag: true
+      };
+
+      var result = util.extend(objA, objB, objC);
+      expect(result).to.deep.equal(expectedResult);
+    });
+
+  });
+
 });
