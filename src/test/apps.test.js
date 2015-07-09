@@ -565,7 +565,7 @@ describe("App validator", function () {
 describe("App Page component", function () {
 
   beforeEach(function () {
-    var app = util.extend(appScheme, {
+    var app = util.extendObject(appScheme, {
       id: "/test-app-1",
       healthChecks: [{path: "/", protocol: "HTTP"}],
       status: AppStatus.RUNNING,
@@ -619,7 +619,7 @@ describe("App Page component", function () {
   });
 
   it("returns the right health message for tasks with unknown health", function () {
-    var app = util.extend(appScheme, {
+    var app = util.extendObject(appScheme, {
       id: "/test-app-1",
       status: AppStatus.RUNNING,
       tasks: [
@@ -637,7 +637,7 @@ describe("App Page component", function () {
   });
 
   it("returns the right health message for healthy tasks", function () {
-    var app = util.extend(appScheme, {
+    var app = util.extendObject(appScheme, {
       id: "/test-app-1",
       status: AppStatus.RUNNING,
       tasks: [

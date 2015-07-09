@@ -158,7 +158,7 @@ var NewAppModalComponent = React.createClass({
       modelAttrs.instances = parseInt(modelAttrs.instances, 10);
     }
 
-    var model = util.extend(this.props.attributes, modelAttrs);
+    var model = util.extendObject(this.props.attributes, modelAttrs);
 
     // Create app if validate() returns no errors
     if (appValidator.validate(model) == null) {

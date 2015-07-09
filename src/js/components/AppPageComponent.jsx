@@ -118,7 +118,7 @@ var AppPageComponent = React.createClass({
       fetchState = States.STATE_LOADING;
     }
 
-    this.setState(util.extend(
+    this.setState(util.extendObject(
       this.state,
       {fetchState: fetchState},
       this.getRouteSettings()
