@@ -71,6 +71,11 @@ describe("util", function () {
       expect(result).to.deep.equal(expectedResult);
     });
 
+    it("always returns an object", function () {
+      var expectedResult = {"0": "faz", "1": "bar"};
+      var result = util.extendObject(["foo", "bar"], ["faz"]);
+      expect(result).to.deep.equal(expectedResult);
+    });
   });
 
 });
