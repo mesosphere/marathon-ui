@@ -4,6 +4,7 @@ var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
 var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
+var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
@@ -14,6 +15,9 @@ var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var util = require("../helpers/util");
+var QueueActions = require("../actions/QueueActions");
+var QueueEvents = require("../events/QueueEvents");
+var QueueStore = require("../stores/QueueStore");
 
 var tabsTemplate = [
   {id: "apps/:appid", text: "Tasks"},
@@ -86,6 +90,8 @@ var AppPageComponent = React.createClass({
     AppsStore.on(AppsEvents.RESTART_APP_ERROR, this.onRestartAppError);
     AppsStore.on(AppsEvents.DELETE_APP_ERROR, this.onDeleteAppError);
     AppsStore.on(AppsEvents.DELETE_APP, this.onDeleteAppSuccess);
+    QueueStore.on(QueueEvents.RESET_DELAY_ERROR, this.onResetDelayError);
+    QueueStore.on(QueueEvents.RESET_DELAY, this.onResetDelaySuccess);
   },
 
   componentWillUnmount: function () {
@@ -101,6 +107,10 @@ var AppPageComponent = React.createClass({
       this.onDeleteAppError);
     AppsStore.removeListener(AppsEvents.DELETE_APP,
       this.onDeleteAppSuccess);
+    QueueStore.removeListener(QueueEvents.RESET_DELAY_ERROR,
+      this.onResetDelayError);
+    QueueStore.removeListener(QueueEvents.RESET_DELAY,
+      this.onResetDelaySuccess);
   },
 
   componentWillReceiveProps: function () {
@@ -153,6 +163,15 @@ var AppPageComponent = React.createClass({
     this.context.router.transitionTo("apps");
   },
 
+  onResetDelaySuccess: function () {
+    util.alert("Delay reset succesfully");
+  },
+
+  onResetDelayError: function (errorMessage) {
+    util.alert("Error resetting delay on app: " +
+      (errorMessage.message || errorMessage));
+  },
+
   handleTabClick: function (id) {
     this.setState({
       activeTabId: id
@@ -191,6 +210,11 @@ var AppPageComponent = React.createClass({
       "'?\nThis is irreversible.")) {
       AppsActions.deleteApp(appId);
     }
+  },
+
+  handleResetDelay: function () {
+    var appId = this.state.appId;
+    QueueActions.resetDelay(appId);
   },
 
   getUnhealthyTaskMessage: function (healthCheckResults = []) {
@@ -237,6 +261,22 @@ var AppPageComponent = React.createClass({
     return msg;
   },
 
+  getResetDelayButton: function () {
+    var state = this.state;
+    var model = state.app;
+
+    if (model.status !== AppStatus.DELAYED) {
+      return null;
+    }
+
+    return (
+      <button className="btn btn-sm btn-default pull-right"
+          onClick={this.handleResetDelay}>
+        Reset Delay
+      </button>
+    );
+  },
+
   getControls: function () {
     var state = this.state;
 
@@ -263,6 +303,7 @@ var AppPageComponent = React.createClass({
             onClick={this.handleRestartApp}>
           Restart App
         </button>
+        {this.getResetDelayButton()}
       </div>
     );
   },
