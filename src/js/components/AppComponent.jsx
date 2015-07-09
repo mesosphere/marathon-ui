@@ -3,11 +3,14 @@ var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatus = require("../constants/AppStatus");
+var QueueStore = require("../stores/QueueStore");
 
 var statusNameMapping = {
   [AppStatus.RUNNING]: "Running",
   [AppStatus.DEPLOYING]: "Deploying",
-  [AppStatus.SUSPENDED]: "Suspended"
+  [AppStatus.SUSPENDED]: "Suspended",
+  [AppStatus.DELAYED]: "Delayed",
+  [AppStatus.WAITING]: "Waiting"
 };
 
 var AppComponent = React.createClass({
@@ -26,6 +29,13 @@ var AppComponent = React.createClass({
       .transitionTo("app", {appid: encodeURIComponent(this.props.model.id)});
   },
 
+  isWarningStatus: function () {
+    var model = this.props.model;
+
+    return model.status === AppStatus.DEPLOYING
+      || model.status === AppStatus.WAITING;
+  },
+
   render: function () {
     var model = this.props.model;
 
@@ -34,7 +44,8 @@ var AppComponent = React.createClass({
     });
 
     var statusClassSet = classNames({
-      "text-warning": model.deployments.length > 0
+      "text-warning": this.isWarningStatus(),
+      "text-danger": model.status === AppStatus.DELAYED
     });
 
     return (
