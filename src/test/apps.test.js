@@ -5,17 +5,19 @@ var ReactContext = require('react/lib/ReactContext');
 var TestUtils = React.addons.TestUtils;
 var util = require("../js/helpers/util");
 
-var config = require("../js/config/config");
 var AppsActions = require("../js/actions/AppsActions");
 var AppComponent = require("../js/components/AppComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
+var appScheme = require("../js/stores/appScheme");
+var appValidator = require("../js/validators/appValidator");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
-var appValidator = require("../js/validators/appValidator");
 var AppStatus = require("../js/constants/AppStatus");
 var HealthStatus = require("../js/constants/HealthStatus");
-var appScheme = require("../js/stores/appScheme");
+var QueueActions = require("../js/actions/QueueActions");
+
+var config = require("../js/config/config");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -149,6 +151,99 @@ describe("Apps", function () {
       });
 
       AppsActions.requestApp("/non-existing-app");
+    });
+
+  });
+
+  describe("on queue update", function () {
+
+    it("has the correct app status (delayed)", function (done) {
+      this.server.setup({
+        "queue": [
+          {
+            "app": {
+              "id": "/app-1",
+              "maxLaunchDelaySeconds": 3600
+            },
+            "delay": {
+              "overdue": false,
+              "timeLeftSeconds": 784
+            }
+          }
+        ]
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(_.findWhere(AppsStore.apps, {id: "/app-1"}).status)
+          .to.equal(3);
+        }, done);
+      });
+
+      QueueActions.requestQueue();
+    });
+
+    it("has the correct app status (waiting)", function (done) {
+      this.server.setup({
+        "queue": [
+          {
+            "app": {
+              "id": "/app-1",
+              "maxLaunchDelaySeconds": 3600
+            },
+            "delay": {
+              "overdue": true,
+              "timeLeftSeconds": 123
+            }
+          }
+        ]
+      }, 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(_.findWhere(AppsStore.apps, {id: "/app-1"}).status)
+          .to.equal(4);
+        }, done);
+      });
+
+      QueueActions.requestQueue();
+    });
+
+    it("does not trigger a change event if it doesn't update an app status",
+        function (done) {
+      var initialTimeout = this.timeout();
+      this.timeout(25);
+
+      this.server.setup({
+        "queue": [
+          {
+            "app": {
+              "id": "/app-1",
+              "maxLaunchDelaySeconds": 3600
+            },
+            "delay": {
+              "overdue": false,
+              "timeLeftSeconds": 0
+            }
+          }
+        ]
+      }, 200);
+
+      var onChange = function () {
+        expectAsync(function () {
+          throw new Error("AppsEvents.CHANGE shouldn't be called.");
+        }, done);
+      };
+
+      AppsStore.once(AppsEvents.CHANGE, onChange);
+
+      setTimeout(() => {
+        AppsStore.removeListener(AppsEvents.CHANGE, onChange);
+        this.timeout(initialTimeout);
+        done();
+      }, 10);
+
+      QueueActions.requestQueue();
     });
 
   });
