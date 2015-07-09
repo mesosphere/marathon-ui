@@ -82,14 +82,14 @@ function processApps(apps) {
 }
 
 function applyAppDelayStatus(apps, queue) {
-  let changed = false;
+  var changed = false;
 
   queue.forEach(function (entry) {
     if (entry.app == null || entry.delay == null) {
       return;
     }
 
-    let status;
+    var status;
 
     if (entry.delay.overdue === false && entry.delay.timeLeftSeconds > 0) {
       status = AppStatus.DELAYED;
@@ -138,14 +138,14 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
   }
 }).value();
 
-AppDispatcher.register(function (action) {
-  QueueStore.on(QueueEvents.CHANGE, function () {
-    let change = applyAppDelayStatus(AppsStore.apps, QueueStore.queue);
-    if (change) {
-      AppsStore.emit(AppsEvents.CHANGE);
-    }
-  });
+QueueStore.on(QueueEvents.CHANGE, function () {
+  var change = applyAppDelayStatus(AppsStore.apps, QueueStore.queue);
+  if (change) {
+    AppsStore.emit(AppsEvents.CHANGE);
+  }
+});
 
+AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
       AppsStore.apps = processApps(action.data.body.apps);
