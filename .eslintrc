@@ -6,7 +6,7 @@
     "objectLiteralComputedProperties": true,
     "templateStrings": true,
     "defaultParams": true,
-    "restParams": true,
+    "restParams": true
   },
 
   "env": {
