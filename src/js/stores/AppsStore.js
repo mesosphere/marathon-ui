@@ -82,14 +82,15 @@ function processApps(apps) {
 }
 
 function applyAppDelayStatus(app, queue) {
-  var changed = false;
-  var status;
+  var hasChanges = false;
 
   var queueEntry = lazy(queue).find(function (entry) {
     return entry.app != null && app.id === entry.app.id && entry.delay != null;
   });
 
   if (queueEntry) {
+    let status;
+
     if (queueEntry.delay.overdue === false
         && queueEntry.delay.timeLeftSeconds > 0) {
       status = AppStatus.DELAYED;
@@ -99,21 +100,21 @@ function applyAppDelayStatus(app, queue) {
 
     if (status) {
       if (app.status !== status) {
-        changed = true;
+        hasChanges = true;
       }
       app.status = status;
     }
   }
 
-  return changed;
+  return hasChanges;
 }
 
 function applyAppDelayStatusOnAllApps(apps, queue) {
-  var changed = false;
+  var hasChanges = false;
   apps.forEach(function (app) {
-    changed = applyAppDelayStatus(app, queue) || changed;
+    hasChanges = applyAppDelayStatus(app, queue) || hasChanges;
   });
-  return changed;
+  return hasChanges;
 }
 
 var AppsStore = lazy(EventEmitter.prototype).extend({
