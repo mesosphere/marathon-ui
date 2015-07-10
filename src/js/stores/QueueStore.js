@@ -1,23 +1,24 @@
 var EventEmitter = require("events").EventEmitter;
-var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
 var QueueEvents = require("../events/QueueEvents");
 var queueScheme = require("./queueScheme");
 
+var util = require("../helpers/util");
+
 function processQueue(queue = []) {
-  return lazy(queue).map(function (entry) {
-    return lazy(queueScheme).extend(entry).value();
-  }).value();
+  return queue.map(function (entry) {
+    return util.extendObject(queueScheme, entry);
+  });
 }
 
-var QueueStore = lazy(EventEmitter.prototype).extend({
+var QueueStore = util.extendObject(EventEmitter.prototype, {
   queue: [],
 
   getDelayByAppId: function (appId) {
     var timeLeftSeconds = 0;
 
-    var queueEntry = lazy(this.queue).find(function (entry) {
+    var queueEntry = this.queue.find(function (entry) {
       return entry.app.id === appId && entry.delay != null;
     });
 
@@ -27,7 +28,7 @@ var QueueStore = lazy(EventEmitter.prototype).extend({
 
     return timeLeftSeconds;
   }
-}).value();
+});
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
