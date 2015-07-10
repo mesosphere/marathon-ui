@@ -157,14 +157,15 @@ var Marathon = React.createClass({
 
     if (state.activeAppId != null) {
       AppsActions.requestApp(state.activeAppId);
+      QueueActions.requestQueue();
     } else if (state.activeTabId === tabs[0].id) {
       AppsActions.requestApps();
+      QueueActions.requestQueue();
     }
 
     // Deployments needs to be fetched on every poll,
     // because that data is also needed on the deployments tab badge.
     DeploymentActions.requestDeployments();
-    QueueActions.requestQueue();
   },
 
   getAboutModal: function () {
