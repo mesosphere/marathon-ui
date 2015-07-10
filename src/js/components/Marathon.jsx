@@ -195,13 +195,15 @@ var Marathon = React.createClass({
       modal = this.getAboutModal();
     }
 
+    var logoPath = config.rootUrl + "img/marathon-logo.png";
+
     return (
       <div>
         <nav className="navbar navbar-inverse navbar-static-top" role="navigation">
           <div className="container-fluid">
             <div className="navbar-header">
               <a className="navbar-brand" href={window.location.pathname}>
-                <img width="160" height="27" alt="Marathon" src="img/marathon-logo.png" />
+                <img width="160" height="27" alt="Marathon" src={logoPath} />
               </a>
             </div>
             <NavTabsComponent

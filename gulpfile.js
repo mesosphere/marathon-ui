@@ -8,6 +8,7 @@ var gutil = require("gulp-util");
 var less = require("gulp-less");
 var minifyCSS = require("gulp-minify-css");
 var path = require("path");
+var replace = require("gulp-replace");
 var uglify = require("gulp-uglify");
 var war = require("gulp-war");
 var webpack = require("webpack");
@@ -161,6 +162,12 @@ gulp.task("make-war", function () {
     .pipe(gulp.dest(dirs.release));
 });
 
+gulp.task("replace-js-strings", ["webpack", "eslint", "minify-js"], function () {
+  return gulp.src(dirs.dist + "/main.js")
+    .pipe(replace("@@ENV", process.env.GULP_ENV))
+    .pipe(gulp.dest(dirs.dist));
+});
+
 gulp.task("serve", ["default", "connect:server", "watch"]);
 gulp.task("livereload", ["default", "browsersync", "watch"]);
 gulp.task("war", ["default", "make-war"]);
@@ -174,6 +181,6 @@ var tasks = [
 ];
 
 if (process.env.GULP_ENV === "production") {
-  tasks.push("minify-css", "minify-js");
+  tasks.push("minify-css", "minify-js", "replace-js-strings");
 }
 gulp.task("default", tasks);
