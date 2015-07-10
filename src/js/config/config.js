@@ -1,4 +1,7 @@
 var config = {
+  // @@ENV gets replaced by build system
+  environment: "@@ENV",
+  rootUrl: "",
   // Defines the Marathon API URL,
   // leave empty to use the same as the UI is served.
   apiURL: "",
@@ -10,5 +13,7 @@ var config = {
     port: 8181
   }
 };
-
+if (config.environment === "production") {
+  config.rootUrl = "dist/";
+}
 module.exports = config;
