@@ -1,4 +1,4 @@
-## Unversioned
+## 0.10.0 - 2015-07-10
 ### Added
 - #1754 - UI: Allow administratively zeroing / resetting the taskLaunchDelay
   * The App list now displays two additional possible statuses: "Delayed" and
