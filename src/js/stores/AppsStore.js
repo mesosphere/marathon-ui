@@ -83,13 +83,14 @@ function processApps(apps) {
 
 function applyAppDelayStatus(app, queue) {
   var hasChanges = false;
-  var status;
 
   var queueEntry = lazy(queue).find(function (entry) {
     return entry.app != null && app.id === entry.app.id && entry.delay != null;
   });
 
   if (queueEntry) {
+    let status;
+
     if (queueEntry.delay.overdue === false
         && queueEntry.delay.timeLeftSeconds > 0) {
       status = AppStatus.DELAYED;
