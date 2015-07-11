@@ -23,6 +23,8 @@ var dirs = {
   styles: "./src/css",
   img: "./src/img",
   imgDist: "img",
+  fonts: "./src/fonts",
+  fontsDist: "fonts",
   release: "./release"
 };
 
@@ -124,6 +126,11 @@ gulp.task("images", function () {
     .pipe(gulp.dest(dirs.dist + "/" + dirs.imgDist));
 });
 
+gulp.task("fonts", function () {
+  return gulp.src(dirs.fonts + "/**/*.*")
+    .pipe(gulp.dest(dirs.dist + "/" + dirs.fontsDist));
+});
+
 gulp.task("index", function () {
   return gulp.src(dirs.src + "/" + files.index)
     .pipe(gulp.dest(dirs.dist));
@@ -148,6 +155,7 @@ gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/*", ["less"]);
   gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["eslint", "webpack"]);
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
+  gulp.watch(dirs.fonts + "/**/*.*", ["fonts"]);
 });
 
 gulp.task("make-war", function () {
@@ -177,6 +185,7 @@ var tasks = [
   "webpack",
   "less",
   "images",
+  "fonts",
   "index"
 ];
 
