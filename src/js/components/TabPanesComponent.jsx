@@ -1,6 +1,7 @@
 var Link = require("react-router").Link;
 var React = require("react/addons");
 
+var AppListFilterComponent = require("../components/AppListFilterComponent");
 var AppListComponent = require("../components/AppListComponent");
 var DeploymentsListComponent =
   require("../components/DeploymentsListComponent");
@@ -14,6 +15,19 @@ var TabPanesComponent = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.func
+  },
+
+  getInitialState: function () {
+    return {
+      filterText: ""
+    };
+  },
+
+  updateFilterText: function (filterText) {
+    this.setState({
+      filterText: filterText
+    });
+
   },
 
   getTabId: function () {
@@ -33,15 +47,23 @@ var TabPanesComponent = React.createClass({
 
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
-        className="container-fluid">
+                              className="container-fluid">
         <TabPaneComponent id={tabs[0].id}>
-          <Link
+          <div className="row">
+            <div className="col-md-3">
+              <AppListFilterComponent onChange={this.updateFilterText}/>
+            </div>
+            <div className="col-md-4 col-md-offset-5">
+              <Link
               to={path}
               query={{modal: "newapp"}}
-              className="btn btn-success navbar-btn">
-            + New App
-          </Link>
-          <AppListComponent />
+              className="btn btn-success"
+              style={{float: "right"}}>
+                      + New App
+              </Link>
+            </div>
+          </div>
+          <AppListComponent filterText={this.state.filterText}/>
         </TabPaneComponent>
         <TabPaneComponent id={tabs[1].id}>
           <DeploymentsListComponent />
