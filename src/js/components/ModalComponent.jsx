@@ -10,6 +10,7 @@ var ModalComponent = React.createClass({
   displayName: "ModalComponent",
   propTypes: {
     children: React.PropTypes.node,
+    dismissOnClickOutside: React.PropTypes.bool,
     onDestroy: React.PropTypes.func,
     size: React.PropTypes.string
   },
@@ -24,6 +25,7 @@ var ModalComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
+      dismissOnClickOutside: true,
       onDestroy: util.noop,
       size: null
     };
@@ -36,8 +38,9 @@ var ModalComponent = React.createClass({
   },
 
   onClick: function (event) {
-    if (util.hasClass(event.target, "modal") ||
-      util.hasClass(event.target, "modal-dialog")) {
+    if (this.props.dismissOnClickOutside &&
+      (util.hasClass(event.target, "modal") ||
+      util.hasClass(event.target, "modal-dialog"))) {
       this.destroy();
     }
   },
