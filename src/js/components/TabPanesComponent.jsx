@@ -49,19 +49,14 @@ var TabPanesComponent = React.createClass({
       <TogglableTabsComponent activeTabId={this.getTabId()}
                               className="container-fluid">
         <TabPaneComponent id={tabs[0].id}>
-          <div className="row">
-            <div className="col-md-3">
-              <AppListFilterComponent onChange={this.updateFilterText}/>
-            </div>
-            <div className="col-md-4 col-md-offset-5">
-              <Link
+          <div className="app-list-controls">
+            <AppListFilterComponent onChange={this.updateFilterText}/>
+            <Link
               to={path}
               query={{modal: "newapp"}}
-              className="btn btn-success"
-              style={{float: "right"}}>
-                      + New App
-              </Link>
-            </div>
+              className="btn btn-success pull-right">
+                  + New App
+            </Link>
           </div>
           <AppListComponent filterText={this.state.filterText}/>
         </TabPaneComponent>
