@@ -50,13 +50,13 @@ var TabPanesComponent = React.createClass({
                               className="container-fluid">
         <TabPaneComponent id={tabs[0].id}>
           <div className="app-list-controls">
-            <AppListFilterComponent onChange={this.updateFilterText}/>
             <Link
               to={path}
               query={{modal: "newapp"}}
               className="btn btn-success pull-right">
                   + New App
             </Link>
+            <AppListFilterComponent onChange={this.updateFilterText}/>
           </div>
           <AppListComponent filterText={this.state.filterText}/>
         </TabPaneComponent>
