@@ -18,7 +18,12 @@ If you want to start development on the Marathon UI please follow these steps.
         npm install
         npm install -g gulp
 
-3. Run development environment
+3. Override development configuration
+
+    1. Copy `src/js/config/config.template.js` to `src/js/config/config.dev.js`
+    2. Override variables in `config.dev.js` to reflect your local development configuration
+
+4. Run development environment
 
         npm run serve
 
