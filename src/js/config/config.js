@@ -15,5 +15,8 @@ var config = {
 };
 if (config.environment === "production") {
   config.rootUrl = "dist/";
+} else {
+  var configDev = require("./config.dev");
+  config = Object.assign(config, configDev);
 }
 module.exports = config;
