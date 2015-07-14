@@ -15,7 +15,8 @@ var config = {
 };
 if (config.environment === "production") {
   config.rootUrl = "dist/";
-} else {
+}
+if (process.env.GULP_ENV === "development") {
   try {
     var configDev = require("./config.dev");
     config = Object.assign(config, configDev);
