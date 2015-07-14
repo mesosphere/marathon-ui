@@ -160,7 +160,7 @@ gulp.task("browsersync", function () {
 });
 
 gulp.task("watch", function () {
-  gulp.watch(dirs.styles + "/*", ["less"]);
+  gulp.watch(dirs.styles + "/**/*", ["less"]);
   gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["eslint", "webpack"]);
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
   gulp.watch(dirs.fonts + "/**/*.*", ["fonts"]);
