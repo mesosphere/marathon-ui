@@ -181,7 +181,10 @@ var NewAppModalComponent = React.createClass({
     var helpMessage = "Comma-separated list of valid constraints. Valid constraint format is \"field:operator[:value]\".";
 
     return (
-      <ModalComponent ref="modalComponent" onDestroy={this.props.onDestroy}>
+      <ModalComponent
+        dismissOnClickOutside={false}
+        ref="modalComponent"
+        onDestroy={this.props.onDestroy}>
         <form method="post" role="form" onSubmit={this.onSubmit}>
           <div className="modal-header">
             <button type="button" className="close"
