@@ -19,6 +19,8 @@ if (config.environment === "production") {
   try {
     var configDev = require("./config.dev");
     config = Object.assign(config, configDev);
-  } catch (e) {}
+  } catch (e) {
+    // Do nothing
+  }
 }
 module.exports = config;
