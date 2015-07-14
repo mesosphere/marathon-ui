@@ -1,6 +1,8 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
+var TooltipMixin = require("../mixins/TooltipMixin");
+
 function roundWorkaround(x) {
   return Math.floor(x * 1000) / 1000;
 }
@@ -8,8 +10,20 @@ function roundWorkaround(x) {
 var AppHealthComponent = React.createClass({
   displayName: "AppHealthComponent",
 
+  mixins: [TooltipMixin],
+
   propTypes: {
     model: React.PropTypes.object.isRequired
+  },
+
+  handleMouseOverHealthBar: function (ref) {
+    var el = this.refs[ref].getDOMNode();
+    this.tip_showTip(el);
+  },
+
+  handleMouseOutHealthBar: function (ref) {
+    var el = this.refs[ref].getDOMNode();
+    this.tip_hideTip(el);
   },
 
   getHealthData: function () {
@@ -77,13 +91,28 @@ var AppHealthComponent = React.createClass({
         allZeroWidthBefore = false;
       }
 
+      let attributes = {};
+      if (d.quantity > 0) {
+        let ref = "healthBar-" + i;
+        attributes = {
+          "ref": ref,
+          "data-behavior": "show-tip",
+          "data-tip-type-class": "default",
+          "data-tip-place": "top",
+          "data-tip-content": d.name,
+          "onMouseOver": this.handleMouseOverHealthBar.bind(null, ref),
+          "onMouseOut": this.handleMouseOutHealthBar.bind(null, ref)
+        };
+      }
+
       return (
         <div
           className={classNames(classSet)}
           style={{width: width + "%"}}
+          {...attributes}
           key={i} />
       );
-    });
+    }.bind(this));
   },
 
   render: function () {
