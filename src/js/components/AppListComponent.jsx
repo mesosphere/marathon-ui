@@ -11,6 +11,10 @@ var AppsEvents = require("../events/AppsEvents");
 var AppListComponent = React.createClass({
   displayName: "AppListComponent",
 
+  propTypes: {
+    filterText: React.PropTypes.string
+  },
+
   getInitialState: function () {
     var fetchState = States.STATE_LOADING;
     var apps = AppsStore.apps;
@@ -64,11 +68,15 @@ var AppListComponent = React.createClass({
   getAppNodes: function () {
     var state = this.state;
     var sortKey = state.sortKey;
+    var props = this.props;
 
     return lazy(state.apps)
       .sortBy(function (app) {
         return app[sortKey];
       }, state.sortDescending)
+      .filter(function (app) {
+        return app.id.indexOf(props.filterText || "") !== -1;
+      })
       .map(function (app) {
         return (
           <AppComponent key={app.id} model={app} />
