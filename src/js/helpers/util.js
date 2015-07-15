@@ -74,6 +74,48 @@ var util = {
     /*eslint-enable no-cond-assign */
     return serialized;
   },
+  serializedArrayToDictionary: function (serializedArray = []) {
+    let sanitizePath = function (path) {
+      return path
+        .replace(/^\.|\.$/, "") // leading/trailing dots
+        .replace(/\.\.+/, "."); // multiple dots
+    };
+    let parsePath = function (obj, position, tokens, value) {
+      if (position === tokens.length) {
+        return value;
+      }
+      let token = tokens[position];
+      let matches = token.match(/(\w+)\[(\d*)]$/); // parse array notation
+
+      if (!matches) {
+        if (obj[token] === undefined) {
+          obj[token] = {};
+        }
+        obj[token] = parsePath(obj[token], position + 1, tokens, value);
+      } else {
+        let [key, index] = matches.slice(1);
+        if (obj[key] === undefined) {
+          obj[key] = [];
+        }
+        if (index.length === 0) {
+          index = obj[key].length;
+        }
+        if (obj[key][index] === undefined) {
+          obj[key][index] = {};
+        }
+        obj[key][index] = parsePath(obj[key][index], position + 1, tokens, value);
+      }
+      return obj;
+    };
+
+    let json = {};
+    for (let i = 0; i < serializedArray.length; i++) {
+      const value = serializedArray[i].value;
+      const tokens = sanitizePath(serializedArray[i].name).split(".");
+      parsePath(json, 0, tokens, value);
+    }
+    return json;
+  },
   hasClass: function (element, className) {
     return element.className &&
       element.className.match(/\S+/g).indexOf(className) > -1;
