@@ -5,6 +5,18 @@ var ReactContext = require('react/lib/ReactContext');
 var TestUtils = React.addons.TestUtils;
 var util = require("../js/helpers/util");
 
+/**
+ * This *nasty* hack is needed because we want to prevent TooltipMixin from
+ * actually requiring vendor/tooltip.js due do it depending on the DOM.
+ *
+ * Let's get rid of this once we have jsDom or similar tools in our tests.
+ * TODO: https://github.com/mesosphere/marathon/issues/1796
+ */
+var TooltipMixin = require("../js/mixins/TooltipMixin");
+TooltipMixin.init = _.noop;
+TooltipMixin.getNewTooltip = _.noop;
+TooltipMixin.tip_destroyAllTips = _.noop;
+
 var AppsActions = require("../js/actions/AppsActions");
 var AppComponent = require("../js/components/AppComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");

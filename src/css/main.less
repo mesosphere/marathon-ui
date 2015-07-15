@@ -1,5 +1,6 @@
 @import (inline) "bootstrap-3.1.0.css";
 @import (inline) "ionicons.css";
+@import (inline) "vendor/tooltip.less";
 
 @font-face {
   font-family: 'Open Sans';
@@ -682,4 +683,21 @@ fieldset[disabled] .btn-info.active {
         color: #00b482;
         border-color: #00b482;
     }
+}
+
+/* ==============
+ * PLEASE NOTE
+ * The following styles are necessary due to tooltip.js using the same
+ * classnames as Bootstrap, in particular for the padding property.
+ * By setting the typeClass option we can pass an additional class name and
+ * override the Bootstrap values for padding via a more speciific selector.
+ * ==============
+ */
+.tooltip {
+  background: #222426;
+  text-transform: capitalize;
+
+  &.default {
+    padding: .8em 1em; /* this would be "10px 0" otherwise */
+  }
 }
