@@ -44,7 +44,7 @@ var AppListFilterComponent = React.createClass({
 
     return (
       <div className={classNames(filterBoxClassSet)}>
-        <span className="input-group-addon" ref="iconContainer">
+        <span className="input-group-addon search-icon-container" ref="iconContainer">
           <i className="icon ion-search"></i>
         </span>
         <input className="form-control"
