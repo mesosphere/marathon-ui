@@ -8,8 +8,14 @@ var AppsEvents = require("../events/AppsEvents");
 var appScheme = require("../stores/appScheme");
 var AppsStore = require("../stores/AppsStore");
 var appValidator = require("../validators/appValidator");
+var CollapsiblePanelComponent =
+  require("../components/CollapsiblePanelComponent");
+var ContainerSettingsComponent =
+  require("../components/ContainerSettingsComponent");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var ModalComponent = require("../components/ModalComponent");
+var OptionalSettingsComponent =
+  require("../components/OptionalSettingsComponent");
 var ValidationError = require("../validators/ValidationError");
 
 var NewAppModalComponent = React.createClass({
@@ -106,15 +112,11 @@ var NewAppModalComponent = React.createClass({
   onSubmit: function (event) {
     event.preventDefault();
 
-    var attrArray = util.serializeArray(event.target);
-    var modelAttrs = {};
+    var attrArray = util.serializeArray(event.target)
+      .filter((key) => key.value !== "");
 
-    for (var i = 0; i < attrArray.length; i++) {
-      var val = attrArray[i];
-      if (val.value !== "") {
-        modelAttrs[val.name] = val.value;
-      }
-    }
+    var modelAttrs = util.serializedArrayToDictionary(attrArray);
+    console.log(modelAttrs);
 
     // URIs should be an Array of Strings.
     if ("uris" in modelAttrs) {
@@ -178,12 +180,11 @@ var NewAppModalComponent = React.createClass({
       return <p key={i} className="text-danger"><strong>{error.message}</strong></p>;
     });
 
-    var helpMessage = "Comma-separated list of valid constraints. Valid constraint format is \"field:operator[:value]\".";
-
     return (
       <ModalComponent
         dismissOnClickOutside={false}
         ref="modalComponent"
+        size="md"
         onDestroy={this.props.onDestroy}>
         <form method="post" role="form" onSubmit={this.onSubmit}>
           <div className="modal-header">
@@ -191,7 +192,7 @@ var NewAppModalComponent = React.createClass({
               aria-hidden="true" onClick={this.destroy}>&times;</button>
             <h3 className="modal-title">New Application</h3>
           </div>
-          <div className="modal-body">
+          <div className="modal-body reduced-padding">
             <FormGroupComponent
                 attribute="id"
                 label="ID"
@@ -200,86 +201,68 @@ var NewAppModalComponent = React.createClass({
                 validator={appValidator}>
               <input autoFocus required />
             </FormGroupComponent>
+            <div className="row">
+              <div className="col-sm-3">
+                <FormGroupComponent
+                    attribute="cpus"
+                    label="CPUs"
+                    model={model}
+                    errors={errors}
+                    validator={appValidator}>
+                  <input min="0" step="any" type="number" required />
+                </FormGroupComponent>
+              </div>
+              <div className="col-sm-3">
+                <FormGroupComponent
+                    attribute="mem"
+                    label="Memory (MB)"
+                    model={model}
+                    errors={errors}
+                    validator={appValidator}>
+                  <input min="0" step="any" type="number" required />
+                </FormGroupComponent>
+              </div>
+              <div className="col-sm-3">
+                <FormGroupComponent
+                    attribute="disk"
+                    label="Disk Space (MB)"
+                    model={model}
+                    errors={errors}
+                    validator={appValidator}>
+                  <input min="0" step="any" type="number" required />
+                </FormGroupComponent>
+              </div>
+              <div className="col-sm-3">
+                <FormGroupComponent
+                    attribute="instances"
+                    label="Instances"
+                    model={model}
+                    errors={errors}
+                    validator={appValidator}>
+                  <input min="0" step="1" type="number" required />
+                </FormGroupComponent>
+              </div>
+            </div>
             <FormGroupComponent
-                attribute="cpus"
-                label="CPUs"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
-              <input min="0" step="any" type="number" required />
-            </FormGroupComponent>
-            <FormGroupComponent
-                attribute="mem"
-                label="Memory (MB)"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
-              <input min="0" step="any" type="number" required />
-            </FormGroupComponent>
-            <FormGroupComponent
-                attribute="disk"
-                label="Disk Space (MB)"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
-              <input min="0" step="any" type="number" required />
-            </FormGroupComponent>
-            <FormGroupComponent
-                attribute="instances"
-                label="Instances"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
-              <input min="0" step="1" type="number" required />
-            </FormGroupComponent>
-            <hr />
-            <h4>Optional Settings</h4>
-            <FormGroupComponent
-                attribute="cmd"
-                label="Command"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
+              attribute="cmd"
+              label="Command"
+              model={model}
+              errors={errors}
+              validator={appValidator}>
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
-            <FormGroupComponent
-                attribute="executor"
-                label="Executor"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
-              <input
-                pattern={appValidator.VALID_EXECUTOR_PATTERN}
-                title="Executor must be the string '//cmd', a string containing only single slashes ('/'), or blank." />
-            </FormGroupComponent>
-            <FormGroupComponent
-                attribute="ports"
-                help="Comma-separated list of numbers. 0's (zeros) assign random ports. (Default: one random port)"
-                label="Ports"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
-              <input />
-            </FormGroupComponent>
-            <FormGroupComponent
-                attribute="uris"
-                help="Comma-separated list of valid URIs."
-                label="URIs"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
-              <input />
-            </FormGroupComponent>
-            <FormGroupComponent
-                attribute="constraints"
-                help={helpMessage}
-                label="Constraints"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
-              <input />
-            </FormGroupComponent>
-            <div>
+            <hr />
+            <div className="row full-bleed">
+              <CollapsiblePanelComponent title="optional settings">
+                <OptionalSettingsComponent model={model} errors={errors} />
+              </CollapsiblePanelComponent>
+            </div>
+            <div className="row full-bleed">
+              <CollapsiblePanelComponent title="docker container settings">
+                <ContainerSettingsComponent model={model} errors={errors} />
+              </CollapsiblePanelComponent>
+            </div>
+            <div className="modal-controls">
               {errorBlock}
               <input type="submit" className="btn btn-success" value="+ Create" /> <button className="btn btn-default" type="button" onClick={this.destroy}>
                 Cancel
