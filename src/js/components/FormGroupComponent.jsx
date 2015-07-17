@@ -6,6 +6,7 @@ var FormGroupComponent = React.createClass({
   propTypes: {
     attribute: React.PropTypes.string,
     children: React.PropTypes.node.isRequired,
+    className: React.PropTypes.string,
     errors: React.PropTypes.array,
     help: React.PropTypes.string,
     label: React.PropTypes.string,
@@ -37,7 +38,7 @@ var FormGroupComponent = React.createClass({
 
     var errors = [];
     var attribute = this.props.attribute;
-    var className = "form-group";
+    var className = React.addons.classSet("form-group", this.props.className);
     var fieldId = attribute + "-field";
 
     // Find any errors matching this attribute.
