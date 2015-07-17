@@ -60,9 +60,15 @@ var util = {
     var field;
     /*eslint-disable no-cond-assign */
     while (field = nodeIterator.nextNode()) {
-      var val = field.value;
+      var val = field.value.replace(rCRLF, "\r\n");
+      if (field.type === "number") {
+        val = parseFloat(val);
+      }
+      if (field.type === "checkbox") {
+        val = !!val;
+      }
       if (val) {
-        serialized.push({name: field.name, value: val.replace(rCRLF, "\r\n")});
+        serialized.push({name: field.name, value: val});
       }
     }
     /*eslint-enable no-cond-assign */
