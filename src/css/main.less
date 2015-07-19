@@ -673,6 +673,7 @@ fieldset[disabled] .btn-info.active {
   .filter-box-clear {
     display: none;
     color: #5e646c;
+    transition: color ease-in-out .15s;
   }
 }
 
@@ -688,6 +689,9 @@ fieldset[disabled] .btn-info.active {
   }
   .filter-box-clear {
     display: inline;
+    &:hover {
+      color: #00b482;
+    }
   }
 }
 
