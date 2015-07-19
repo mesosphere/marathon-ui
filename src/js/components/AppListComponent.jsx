@@ -96,6 +96,7 @@ var AppListComponent = React.createClass({
 
   render: function () {
     var state = this.state;
+    var appNodes = this.getAppNodes();
 
     var loadingClassSet = classNames({
       "hidden": state.fetchState !== States.STATE_LOADING
@@ -103,6 +104,10 @@ var AppListComponent = React.createClass({
 
     var noAppsClassSet = classNames({
       "hidden": state.apps.length !== 0
+    });
+
+    var noRunningAppsClassSet = classNames({
+      "hidden": state.apps.length === 0 || appNodes.length > 0
     });
 
     var errorClassSet = classNames({
@@ -179,12 +184,15 @@ var AppListComponent = React.createClass({
           <tr className={noAppsClassSet}>
             <td className="text-center" colSpan="6">No running apps.</td>
           </tr>
+          <tr className={noRunningAppsClassSet}>
+            <td className="text-center" colSpan="6">No apps match your query.</td>
+          </tr>
           <tr className={errorClassSet}>
             <td className="text-center text-danger" colSpan="6">
               Error fetching apps. Refresh to try again.
             </td>
           </tr>
-          {this.getAppNodes()}
+          {appNodes}
         </tbody>
       </table>
     );
