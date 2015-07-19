@@ -57,7 +57,6 @@ var AppListFilterComponent = React.createClass({
                onKeyDown={this.handleKeyDown} />
         <span className="input-group-addon" ref="clearContainer">
           <i className="icon ion-close-circled clickable filter-box-clear"
-             style={{color: "#5e646c"}}
              onClick={this.clearFilterText}></i>
         </span>
       </div>
