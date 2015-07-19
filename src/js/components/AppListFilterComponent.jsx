@@ -71,7 +71,6 @@ var AppListFilterComponent = React.createClass({
   },
 
   blurInputGroup: function () {
-    console.log(this.state);
     this.setState({
       focused: false,
       activated: this.state.filterText !== ""
