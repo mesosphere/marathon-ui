@@ -53,7 +53,8 @@ var AppListFilterComponent = React.createClass({
                value={this.state.filterText}
                placeholder="Filter list"
                onFocus={this.focusInputGroup}
-               onBlur={this.blurInputGroup}/>
+               onBlur={this.blurInputGroup}
+               onKeyDown={this.handleKeyDown} />
         <span className="input-group-addon" ref="clearContainer">
           <i className="icon ion-close-circled clickable filter-box-clear"
              style={{color: "#5e646c"}}
@@ -75,6 +76,13 @@ var AppListFilterComponent = React.createClass({
       focused: false,
       activated: this.state.filterText !== ""
     });
+  },
+
+  handleKeyDown: function (event) {
+    if (event.key === "Escape") {
+      event.target.blur();
+      this.clearFilterText();
+    }
   },
 
   render: function () {
