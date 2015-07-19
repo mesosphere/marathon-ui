@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
@@ -22,8 +23,12 @@ var AppListFilterComponent = React.createClass({
       filterText: filterText,
       activated: filterText !== "" || this.state.focused
     });
-    this.props.onChange(filterText);
+    this.fireChangeEvent(filterText);
   },
+
+  fireChangeEvent: _.debounce(function (filterText) {
+    this.props.onChange(filterText);
+  }, 100),
 
   clearFilterText: function () {
     this.setState({
