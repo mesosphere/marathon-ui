@@ -184,17 +184,19 @@ var ContainerSettingsComponent = React.createClass({
     var model = this.props.model;
     var errors = this.props.errors;
 
-    var portMappingRows = this.state.rows.portMappings.map(function (exists, index) {
-      return exists
-        ? this.getPortMappingRow(index)
-        : null;
-    }.bind(this));
+    var portMappingRows = this.state.rows.portMappings
+      .map(function (exists, index) {
+        return exists
+          ? this.getPortMappingRow(index)
+          : null;
+      }.bind(this));
 
-    var parameterRows = this.state.rows.parameters.map(function (exists, index) {
-      return exists
-        ? this.getParameterRow(index)
-        : null;
-    }.bind(this));
+    var parameterRows = this.state.rows.parameters
+      .map(function (exists, index) {
+        return exists
+          ? this.getParameterRow(index)
+          : null;
+      }.bind(this));
 
     var volumeRows = this.state.rows.volumes.map(function (exists, index) {
       return exists
