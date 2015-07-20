@@ -33,6 +33,11 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   handleRemoveRow: function (rowKey, position, event) {
+    /* Each array represents a list of duplicable rows, in order to keep track
+     * of which rows have been deleted by the user. A value of false signifies
+     * a deleted row.
+     * The form submits values infered directly from the DOM.
+     */
     event.target.blur();
     event.preventDefault();
     var rows = React.addons.update(
