@@ -1,7 +1,7 @@
 ## Unversioned
 ### Added
 - \#1204 - Please add a search bar to the applications overview to filter the
-  of applications
+  list of applications
 
 ## 0.10.0 - 2015-07-10
 ### Added
