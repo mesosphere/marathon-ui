@@ -31,14 +31,14 @@ var CollapsiblePanelComponent = React.createClass({
   },
 
   getTitle: function () {
-    let showHide = this.state.open
+    var showHide = this.state.open
       ? "Hide"
       : "Show";
     return `${showHide} ${this.props.title}`;
   },
 
   render: function () {
-    let classes = React.addons.classSet({
+    var classes = React.addons.classSet({
       "clickable panel-title": true,
       "open": this.state.open
     });

@@ -75,16 +75,16 @@ var util = {
     return serialized;
   },
   serializedArrayToDictionary: function (serializedArray = []) {
-    let sanitizePath = function (path) {
+    var sanitizePath = function (path) {
       return path
         .replace(/^\.|\.$/, "") // leading/trailing dots
         .replace(/\.\.+/, "."); // multiple dots
     };
-    let parsePath = function (obj, position, tokens, value) {
+    var parsePath = function (obj, position, tokens, value) {
       if (position === tokens.length) {
         return value;
       }
-      let token = tokens[position];
+      const token = tokens[position];
       let matches = token.match(/(\w+)\[(\d*)]$/); // parse array notation
 
       if (!matches) {
@@ -111,7 +111,7 @@ var util = {
     let json = {};
     for (let i = 0; i < serializedArray.length; i++) {
       const value = serializedArray[i].value;
-      const tokens = sanitizePath(serializedArray[i].name).split(".");
+      let tokens = sanitizePath(serializedArray[i].name).split(".");
       parsePath(json, 0, tokens, value);
     }
     return json;

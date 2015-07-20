@@ -181,8 +181,8 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   render: function () {
-    let model = this.props.model;
-    let errors = this.props.errors;
+    var model = this.props.model;
+    var errors = this.props.errors;
 
     var portMappingRows = this.state.rows.portMappings.map(function (exists, index) {
       return exists

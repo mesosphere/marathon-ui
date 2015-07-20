@@ -12,9 +12,9 @@ var OptionalSettingsComponent = React.createClass({
   },
 
   render: function () {
-    let model = this.props.model;
-    let errors = this.props.errors;
-    let helpMessage = "Comma-separated list of valid constraints. Valid constraint format is \"field:operator[:value]\".";
+    var model = this.props.model;
+    var errors = this.props.errors;
+    var helpMessage = "Comma-separated list of valid constraints. Valid constraint format is \"field:operator[:value]\".";
 
     return (
       <div>
