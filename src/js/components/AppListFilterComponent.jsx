@@ -22,12 +22,11 @@ var AppListFilterComponent = React.createClass({
     this.setState({
       filterText: filterText,
       activated: filterText !== "" || this.state.focused
-    });
-    this.fireChangeEvent(filterText);
+    }, this.fireChangeEvent);
   },
 
-  fireChangeEvent: _.debounce(function (filterText) {
-    this.props.onChange(filterText);
+  fireChangeEvent: _.debounce(function () {
+    this.props.onChange(this.state.filterText);
   }, 100),
 
   clearFilterText: function () {
