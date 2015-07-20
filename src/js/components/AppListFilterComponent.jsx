@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
@@ -21,9 +22,12 @@ var AppListFilterComponent = React.createClass({
     this.setState({
       filterText: filterText,
       activated: filterText !== "" || this.state.focused
-    });
-    this.props.onChange(filterText);
+    }, this.fireChangeEvent);
   },
+
+  fireChangeEvent: _.debounce(function () {
+    this.props.onChange(this.state.filterText);
+  }, 100),
 
   clearFilterText: function () {
     this.setState({
@@ -44,7 +48,7 @@ var AppListFilterComponent = React.createClass({
 
     return (
       <div className={classNames(filterBoxClassSet)}>
-        <span className="input-group-addon" ref="iconContainer">
+        <span className="input-group-addon search-icon-container" ref="iconContainer">
           <i className="icon ion-search"></i>
         </span>
         <input className="form-control"
@@ -53,10 +57,10 @@ var AppListFilterComponent = React.createClass({
                value={this.state.filterText}
                placeholder="Filter list"
                onFocus={this.focusInputGroup}
-               onBlur={this.blurInputGroup}/>
+               onBlur={this.blurInputGroup}
+               onKeyDown={this.handleKeyDown} />
         <span className="input-group-addon" ref="clearContainer">
           <i className="icon ion-close-circled clickable filter-box-clear"
-             style={{color: "#5e646c"}}
              onClick={this.clearFilterText}></i>
         </span>
       </div>
@@ -71,11 +75,17 @@ var AppListFilterComponent = React.createClass({
   },
 
   blurInputGroup: function () {
-    console.log(this.state);
     this.setState({
       focused: false,
       activated: this.state.filterText !== ""
     });
+  },
+
+  handleKeyDown: function (event) {
+    if (event.key === "Escape") {
+      event.target.blur();
+      this.clearFilterText();
+    }
   },
 
   render: function () {
