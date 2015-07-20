@@ -116,7 +116,6 @@ var NewAppModalComponent = React.createClass({
       .filter((key) => key.value !== "");
 
     var modelAttrs = util.serializedArrayToDictionary(attrArray);
-    console.log(modelAttrs);
 
     // URIs should be an Array of Strings.
     if ("uris" in modelAttrs) {
