@@ -89,8 +89,10 @@ var ContainerSettingsComponent = React.createClass({
             model={this.props.model}
             errors={this.props.errors}
             validator={appValidator}>
-            <select>
-              <option value="" disabled="disabled" selected="selected">Select</option>
+            <select defaultValue="">
+              <option value="" disabled="disabled">
+                Select
+              </option>
               <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
                           {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
               </option>
@@ -167,8 +169,8 @@ var ContainerSettingsComponent = React.createClass({
             model={this.props.model}
             errors={this.props.errors}
             validator={appValidator}>
-            <select>
-              <option value="" disabled="disabled" selected="selected">Select</option>
+            <select defaultValue="">
+              <option value="" disabled="disabled">Select</option>
               <option value={ContainerConstants.VOLUMES.MODE.RO}>
                 Read Only
               </option>
@@ -229,8 +231,8 @@ var ContainerSettingsComponent = React.createClass({
               model={model}
               errors={errors}
               validator={appValidator}>
-              <select>
-                <option value="" disabled="disabled" selected="selected">Select</option>
+              <select defaultValue="">
+                <option value="" disabled="disabled">Select</option>
                 <option value={ContainerConstants.NETWORK.HOST}>
                   Host
                 </option>
