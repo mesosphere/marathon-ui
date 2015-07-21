@@ -2,6 +2,9 @@
 ### Added
 - \#1204 - Please add a search bar to the applications overview to filter the
   list of applications
+- \#1137 Add tooltip on hover to progress bars
+   * A tooltip that displays the individual health statuses is now shown when
+     the mouse is over the progress bars in the apps overview page.
 
 ## 0.10.0 - 2015-07-10
 ### Added
