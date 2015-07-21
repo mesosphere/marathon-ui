@@ -93,6 +93,11 @@ var NewAppModalComponent = React.createClass({
           e.error
         );
       });
+    } else if (status === 409 && response != null &&
+        response.message !== undefined) {
+      errors = [
+        new ValidationError("general", `Error: ${response.message}`)
+      ];
     } else if (status >= 500) {
       errors = [
         new ValidationError("general", "Server error, could not create app.")
