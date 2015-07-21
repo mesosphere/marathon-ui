@@ -232,10 +232,10 @@ var ContainerSettingsComponent = React.createClass({
               <select>
                 <option value="" disabled="disabled" selected="selected">Select</option>
                 <option value={ContainerConstants.NETWORK.HOST}>
-                    {ContainerConstants.NETWORK.HOST}
+                  Host
                 </option>
                 <option value={ContainerConstants.NETWORK.BRIDGED}>
-                    {ContainerConstants.NETWORK.BRIDGED}
+                  Bridged
                 </option>
               </select>
             </FormGroupComponent>
