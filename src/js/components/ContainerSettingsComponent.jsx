@@ -94,10 +94,10 @@ var ContainerSettingsComponent = React.createClass({
                 Select
               </option>
               <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
-                          {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
+                {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
               </option>
               <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}>
-                          {ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}
+                {ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}
               </option>
             </select>
           </FormGroupComponent>
