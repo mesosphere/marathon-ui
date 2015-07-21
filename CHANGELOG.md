@@ -3,6 +3,12 @@
 - \#1204 - Please add a search bar to the applications overview to filter the
   list of applications
 
+### Changed
+- #124 - Expose all /v2 App attributes in UI
+  * The optional settings inside the new application modal dialog are now
+    grouped together
+  * It is now possible to specify Docker container settings
+
 ## 0.10.0 - 2015-07-10
 ### Added
 - #1754 - UI: Allow administratively zeroing / resetting the taskLaunchDelay

@@ -3,6 +3,7 @@
     "jsx": true,
     "arrowFunctions": true,
     "blockBindings": true,
+    "destructuring": true,
     "objectLiteralComputedProperties": true,
     "templateStrings": true,
     "defaultParams": true,
