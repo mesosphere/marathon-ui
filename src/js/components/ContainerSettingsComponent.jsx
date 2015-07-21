@@ -102,8 +102,8 @@ var ContainerSettingsComponent = React.createClass({
             </select>
           </FormGroupComponent>
           <DuplicableRowControls
-            handleAddRow={this.handleAddRow.bind(null, "portMappings", i)}
-            handleRemoveRow={this.handleRemoveRow.bind(null, "portMappings", i)} />
+            handleAddRow={this.handleAddRow.bind(this, "portMappings", i)}
+            handleRemoveRow={this.handleRemoveRow.bind(this, "portMappings", i)} />
         </div>
       </div>
     );
