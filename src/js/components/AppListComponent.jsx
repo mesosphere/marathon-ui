@@ -98,16 +98,19 @@ var AppListComponent = React.createClass({
     var state = this.state;
     var appNodes = this.getAppNodes();
 
+    var pageIsLoading = state.fetchState === States.STATE_LOADING;
+    var noAppsOnPage = state.apps.length === 0;
+
     var loadingClassSet = classNames({
-      "hidden": state.fetchState !== States.STATE_LOADING
+      "hidden": !pageIsLoading
     });
 
     var noAppsClassSet = classNames({
-      "hidden": state.apps.length !== 0
+      "hidden": pageIsLoading || !noAppsOnPage
     });
 
     var noRunningAppsClassSet = classNames({
-      "hidden": state.apps.length === 0 || appNodes.length > 0
+      "hidden": noAppsOnPage || appNodes.length > 0
     });
 
     var errorClassSet = classNames({

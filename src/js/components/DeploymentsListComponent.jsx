@@ -101,13 +101,15 @@ var DeploymentListComponent = React.createClass({
   render: function () {
     var state = this.state;
 
+    var pageIsLoading = state.fetchState === States.STATE_LOADING;
+
     var headerClassSet = classNames({
       "clickable": true,
       "dropup": !state.sortDescending
     });
 
     var loadingClassSet = classNames({
-      "hidden": state.fetchState !== States.STATE_LOADING
+      "hidden": !pageIsLoading
     });
 
     var errorClassSet = classNames({
@@ -115,7 +117,7 @@ var DeploymentListComponent = React.createClass({
     });
 
     var noDeploymentsClassSet = classNames({
-      "hidden": state.deployments.length !== 0
+      "hidden": pageIsLoading || state.deployments.length !== 0
     });
 
     var errorMessageClassSet = classNames({
