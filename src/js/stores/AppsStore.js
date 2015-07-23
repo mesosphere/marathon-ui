@@ -17,9 +17,9 @@ function removeApp(apps, appId) {
   }).value();
 }
 
-function removeTask(tasks, relatedAppId, taskId) {
+function removeTasks(tasks, relatedAppId, taskIds) {
   return lazy(tasks).reject(function (task) {
-    return task.id === taskId && task.appId === relatedAppId;
+    return (lazy(taskIds).indexOf(task.id) > -1) && task.appId === relatedAppId;
   }).value();
 }
 
@@ -207,10 +207,10 @@ AppDispatcher.register(function (action) {
       break;
     case TasksEvents.DELETE:
       AppsStore.currentApp.tasks =
-        removeTask(
+        removeTasks(
           AppsStore.currentApp.tasks,
           action.appId,
-          action.taskId
+          action.taskIds
         );
       AppsStore.emit(AppsEvents.CHANGE);
       break;

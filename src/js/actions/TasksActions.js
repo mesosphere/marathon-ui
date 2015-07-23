@@ -5,20 +5,22 @@ var AppDispatcher = require("../AppDispatcher");
 var TasksEvents = require("../events/TasksEvents");
 
 var TasksActions = {
-  deleteTask: function (appId, taskId) {
+  deleteTasks: function (appId, taskIds = []) {
     this.request({
-      method: "DELETE",
+      method: "POST",
+      data: {
+        "ids": taskIds
+      },
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/apps/" + appId + "/tasks/" + taskId
+      url: config.apiURL + "v2/tasks/delete"
     })
-    .success(function (task) {
+    .success(function () {
       AppDispatcher.dispatch({
         actionType: TasksEvents.DELETE,
-        data: task,
         appId: appId,
-        taskId: taskId
+        taskIds: taskIds
       });
     })
     .error(function (error) {
@@ -28,22 +30,22 @@ var TasksActions = {
       });
     });
   },
-  deleteTaskAndScale: function (appId, taskId) {
+  deleteTasksAndScale: function (appId, taskIds = []) {
     this.request({
-      method: "DELETE",
+      method: "POST",
+      data: {
+        "ids": taskIds
+      },
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/apps/" +
-        appId + "/tasks/" +
-        taskId + "?scale=true"
+      url: config.apiURL + "v2/tasks/delete?scale=true"
     })
-    .success(function (task) {
+    .success(function () {
       AppDispatcher.dispatch({
         actionType: TasksEvents.DELETE,
-        data: task,
         appId: appId,
-        taskId: taskId
+        taskIds: taskIds
       });
     })
     .error(function (error) {

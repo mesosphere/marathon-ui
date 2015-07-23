@@ -36,20 +36,20 @@ var TaskViewComponent = React.createClass({
 
   handleKillSelectedTasks: function (scaleTask) {
     var props = this.props;
-
     var selectedTaskIds = Object.keys(this.state.selectedTasks);
 
-    lazy(props.tasks)
-    .filter(function (task) {
-      return selectedTaskIds.indexOf(task.id) >= 0;
-    })
-    .each(function (task) {
-      if (!scaleTask) {
-        TasksActions.deleteTask(props.appId, task.id);
-      } else {
-        TasksActions.deleteTaskAndScale(props.appId, task.id);
-      }
-    });
+    var taskIds = lazy(props.tasks).map(function (task) {
+      return lazy(selectedTaskIds).indexOf(task.id) >= 0
+        ? task.id
+        : null;
+    }).compact().value();
+
+    if (!scaleTask) {
+      TasksActions.deleteTasks(props.appId, taskIds);
+    } else {
+      TasksActions.deleteTasksAndScale(props.appId, taskIds);
+    }
+    this.setState({selectedTasks: {}});
   },
 
   toggleAllTasks: function () {
