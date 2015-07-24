@@ -6,6 +6,8 @@ var eslint = require("gulp-eslint");
 var gulp = require("gulp");
 var gutil = require("gulp-util");
 var less = require("gulp-less");
+var maven = require("gulp-maven-deploy");
+var merge = require("merge-stream");
 var minifyCSS = require("gulp-minify-css");
 var path = require("path");
 var replace = require("gulp-replace");
@@ -176,6 +178,24 @@ gulp.task("make-war", function () {
     }))
     .pipe(zip(warFileName))
     .pipe(gulp.dest(dirs.release));
+});
+
+gulp.task("make-webjar", function () {
+  var outputDir = "target/classes/META_INF/resources/webjars/" + packageInfo.name;
+  var projectVersion = packageInfo.version + ":-0.0.1-SNAPSHOT";
+
+  var pipeDistToTarget = gulp.src("dist/**/*")
+    .pipe(gulp.dest(outputDir));
+
+  var makePom = gulp.src("pom.xml.tpl")
+    .pipe(replace("${PROJECT_ARTIFACT_ID}", packageInfo.name))
+    .pipe(replace("${PROJECT_VERSION}", projectVersion))
+    .pipe(gulp.dest("pom.xml"));
+
+  var deploy = gulp.src(".")
+    .pipe(maven.install());
+
+  return merge(pipeDistToTarget, makePom, deploy);
 });
 
 gulp.task("replace-js-strings", ["webpack", "eslint", "minify-js"], function () {
