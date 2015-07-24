@@ -1,5 +1,5 @@
 var classNames = require("classnames");
-
+var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var DeploymentActions = require("../actions/DeploymentActions");
@@ -97,7 +97,12 @@ var DeploymentComponent = React.createClass({
         <td>
           <ul className="list-unstyled">
             {model.currentActions.map(function (action) {
-              return <li key={action.app}>{action.app}</li>;
+              let appId = encodeURIComponent(action.app);
+              return (
+                <li key={action.app}>
+                  <Link to="app" params={{appid: appId}}>{action.app}</Link>
+                </li>
+              );
             })}
           </ul>
         </td>

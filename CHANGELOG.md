@@ -5,6 +5,7 @@
 - \#1137 Add tooltip on hover to progress bars
    * A tooltip that displays the individual health statuses is now shown when
      the mouse is over the progress bars in the apps overview page.
+- \#1864 - Add a link to the app detail page from the deployments tab
 
 ### Changed
 - #124 - Expose all /v2 App attributes in UI
