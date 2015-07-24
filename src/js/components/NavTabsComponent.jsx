@@ -8,7 +8,7 @@ var NavTabsComponent = React.createClass({
   displayName: "NavTabsComponent",
 
   propTypes: {
-    activeTabId: React.PropTypes.string.isRequired,
+    activeTabId: React.PropTypes.string,
     className: React.PropTypes.string,
     tabs: React.PropTypes.array.isRequired
   },

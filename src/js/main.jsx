@@ -6,6 +6,7 @@ var Route = Router.Route;
 var NotFoundRoute = Router.NotFoundRoute;
 
 var AppPageComponent = require("./components/AppPageComponent");
+var PageNotFoundComponent = require("./components/PageNotFoundComponent");
 var TabPanesComponent = require("./components/TabPanesComponent");
 var Marathon = require("./components/Marathon");
 
@@ -16,8 +17,7 @@ var routes = (
     <Route name="appview" path="apps/:appid/:view" handler={AppPageComponent} />
     <Route name="deployments" path="deployments" handler={TabPanesComponent} />
     <Redirect from="/" to="apps" />
-    // TODO: #1756 - Add a not found page
-    <NotFoundRoute handler={TabPanesComponent} />
+    <NotFoundRoute name="404" handler={PageNotFoundComponent} />
   </Route>
 );
 

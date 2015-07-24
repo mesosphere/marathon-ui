@@ -5,6 +5,7 @@ var Mousetrap = require("mousetrap");
 require("mousetrap/plugins/global-bind/mousetrap-global-bind");
 var React = require("react/addons");
 var RouteHandler = require("react-router").RouteHandler;
+var RouterStateMixin = require("react-router").State;
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var NewAppModalComponent = require("../components/NewAppModalComponent");
@@ -19,6 +20,8 @@ var tabs = require("../constants/tabs");
 var Marathon = React.createClass({
   displayName: "Marathon",
 
+  mixins: [RouterStateMixin],
+
   contextTypes: {
     router: React.PropTypes.func
   },
@@ -27,7 +30,7 @@ var Marathon = React.createClass({
     return {
       activeAppId: null,
       activeAppView: null,
-      activeTabId: tabs[0].id,
+      activeTabId: null,
       modalClass: null
     };
   },
@@ -94,7 +97,9 @@ var Marathon = React.createClass({
       view = decodeURIComponent(view);
     }
 
-    var activeTabId = tabs[0].id;
+    var activeTabId = !this.isActive("404")
+      ? tabs[0].id
+      : null;
 
     if (tabs.find(function (tab) {
       return tab.id === path;
