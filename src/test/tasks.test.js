@@ -48,14 +48,10 @@ describe("Tasks", function () {
     this.server.stop(done);
   });
 
-  describe("on task deletion", function () {
+  describe("on single task deletion", function () {
 
     it("updates the tasks array on success", function (done) {
-      this.server.setup({
-        "task": {
-          "id": "task-1"
-        }
-      }, 200);
+      this.server.setup("", 200);
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -66,7 +62,7 @@ describe("Tasks", function () {
         }, done);
       });
 
-      TasksActions.deleteTask("/app-1", "task-1");
+      TasksActions.deleteTasks("/app-1", ["task-1"]);
     });
 
     it("handles failure gracefully", function (done) {
@@ -78,19 +74,15 @@ describe("Tasks", function () {
         }, done);
       });
 
-      TasksActions.deleteTask("/app-1", "task-3");
+      TasksActions.deleteTasks("/app-1", "task-3");
     });
 
   });
 
-  describe("on task deletion and scale", function () {
+  describe("on single task deletion and scale", function () {
 
     it("updates the tasks array on success", function (done) {
-      this.server.setup({
-        "task": {
-          "id": "task-2"
-        }
-      }, 200);
+      this.server.setup("", 200);
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -101,11 +93,38 @@ describe("Tasks", function () {
         }, done);
       });
 
-      TasksActions.deleteTaskAndScale("/app-1", "task-2");
+      TasksActions.deleteTasksAndScale("/app-1", ["task-2"]);
     });
 
   });
 
+  describe("on multiple task deletion", function () {
+
+    it("updates the tasks array on success", function (done) {
+      this.server.setup("", 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.currentApp.tasks).to.have.length(0);
+        }, done);
+      });
+
+      TasksActions.deleteTasks("/app-1", ["task-1", "task-2"]);
+    });
+
+    it("handles failure gracefully", function (done) {
+      this.server.setup({message: "Guru Meditation"}, 404);
+
+      AppsStore.once(TasksEvents.DELETE_ERROR, function (error) {
+        expectAsync(function () {
+          expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
+
+      TasksActions.deleteTasks("/app-1", "task-3");
+    });
+
+  });
 });
 
 describe("Task List Item component", function () {
