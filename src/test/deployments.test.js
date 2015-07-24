@@ -199,7 +199,7 @@ describe("Deployment component", function () {
   it("has correct apps in list element", function () {
     _.each(this.component.props.children[1].props.children.props.children,
         function (li, i) {
-      expect(li.props.children).to.equal("app" + (i + 1));
+      expect(li.props.children.props.children).to.equal("app" + (i + 1));
     });
   });
 
