@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var FormGroupComponent = React.createClass({
@@ -38,7 +39,7 @@ var FormGroupComponent = React.createClass({
 
     var errors = [];
     var attribute = this.props.attribute;
-    var className = React.addons.classSet("form-group", this.props.className);
+    var className = classNames("form-group", this.props.className);
     var fieldId = attribute + "-field";
 
     // Find any errors matching this attribute.
