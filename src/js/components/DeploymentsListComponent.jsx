@@ -33,7 +33,7 @@ var DeploymentListComponent = React.createClass({
       this.onDeploymentsChange);
     DeploymentStore.removeListener(DeploymentEvents.REQUEST_ERROR,
       this.onRequestError);
-    DeploymentStore.removeListener(DeploymentEvents.STOP_ERROR,
+    DeploymentStore.removeListener(DeploymentEvents.REVERT_ERROR,
       this.onRevertError);
     DeploymentStore.removeListener(DeploymentEvents.STOP_ERROR,
       this.onStopError);
