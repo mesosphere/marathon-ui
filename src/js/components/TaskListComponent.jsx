@@ -47,9 +47,9 @@ var TaskListComponent = React.createClass({
   getTasks: function () {
     var props = this.props;
     var state = this.state;
-    var sortKey = state.sortKey;
-    var hasHealth = !!props.hasHealth;
     var dropCount = this.props.currentPage * this.props.itemsPerPage;
+    var hasHealth = !!props.hasHealth;
+    var sortKey = state.sortKey;
 
     return lazy(this.props.tasks)
       .sortBy(function (app) {
