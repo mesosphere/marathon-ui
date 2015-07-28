@@ -11,14 +11,10 @@ var PageNotFoundComponent = React.createClass({
     var path = this.context.router.getCurrentPath();
     var message = `The requested page does not exist: ${path}`;
     return (
-      <div className="container-fluid">
-        <div className="page-header">
-          <span className="h3 modal-title">Page Not Found</span>
-          <ul className="list-inline list-inline-subtext">
-            <li>
-              <span className="text-warning">{message}</span>
-            </li>
-          </ul>
+      <div className="centered-content">
+        <div>
+          <h3 className="h3">Page Not Found</h3>
+          <p className="text-warning">{message}</p>
         </div>
       </div>
     );
