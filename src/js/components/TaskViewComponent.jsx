@@ -128,7 +128,6 @@ var TaskViewComponent = React.createClass({
         </button>
         <button
             className={killButtonClassSet}
-            disabled={selectedTasksLength > 1}
             onClick={this.handleKillSelectedTasks.bind(this, true)}>
           Kill &amp; Scale
         </button>
