@@ -27,7 +27,7 @@ var Marathon = React.createClass({
     return {
       activeAppId: null,
       activeAppView: null,
-      activeTabId: tabs[0].id,
+      activeTabId: null,
       modalClass: null
     };
   },
@@ -94,7 +94,9 @@ var Marathon = React.createClass({
       view = decodeURIComponent(view);
     }
 
-    var activeTabId = tabs[0].id;
+    var activeTabId = !this.context.router.isActive("404")
+      ? tabs[0].id
+      : null;
 
     if (tabs.find(function (tab) {
       return tab.id === path;
