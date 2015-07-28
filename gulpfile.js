@@ -10,6 +10,7 @@ var maven = require("gulp-maven-deploy");
 var merge = require("merge-stream");
 var minifyCSS = require("gulp-minify-css");
 var path = require("path");
+var rename = require("gulp-rename");
 var replace = require("gulp-replace");
 var uglify = require("gulp-uglify");
 var war = require("gulp-war");
@@ -21,7 +22,8 @@ var packageInfo = require("./package");
 var dirs = {
   src: "./src",
   js: "./src/js",
-  dist: "dist",
+  dist: "./dist",
+  distUi: "./dist/ui",
   styles: "./src/css",
   img: "./src/img",
   imgDist: "img",
@@ -41,7 +43,7 @@ var files = {
 var webpackConfig = {
   entry: dirs.js + "/" + files.mainJs + ".jsx",
   output: {
-    path: path.resolve(dirs.dist),
+    path: path.resolve(dirs.distUi),
     filename: files.mainJsDist + ".js"
   },
   module: {
@@ -109,14 +111,14 @@ gulp.task("less", function () {
       paths: [dirs.styles] // @import paths
     }))
     .pipe(autoprefixer())
-    .pipe(gulp.dest(dirs.dist))
+    .pipe(gulp.dest(dirs.distUi))
     .pipe(browserSync.stream());
 });
 
 gulp.task("minify-css", ["less"], function () {
-  return gulp.src(dirs.dist + "/" + files.mainCssDist + ".css")
+  return gulp.src(dirs.distUi + "/" + files.mainCssDist + ".css")
     .pipe(minifyCSS())
-    .pipe(gulp.dest(dirs.dist));
+    .pipe(gulp.dest(dirs.distUi));
 });
 
 gulp.task("minify-js", ["webpack"], function () {
@@ -125,31 +127,31 @@ gulp.task("minify-js", ["webpack"], function () {
     " * @version v<%= pkg.version %>\n" +
     " */\n";
 
-  return gulp.src(dirs.dist + "/" + files.mainJs + ".js")
+  return gulp.src(dirs.distUi + "/" + files.mainJs + ".js")
     .pipe(uglify())
     .pipe(header(banner, { pkg : packageInfo } ))
-    .pipe(gulp.dest(dirs.dist));
+    .pipe(gulp.dest(dirs.distUi));
 });
 
 gulp.task("images", function () {
   return gulp.src(dirs.img + "/**/*.*")
-    .pipe(gulp.dest(dirs.dist + "/" + dirs.imgDist));
+    .pipe(gulp.dest(dirs.distUi + "/" + dirs.imgDist));
 });
 
 gulp.task("fonts", function () {
   return gulp.src(dirs.fonts + "/**/*.*")
-    .pipe(gulp.dest(dirs.dist + "/" + dirs.fontsDist));
+    .pipe(gulp.dest(dirs.distUi + "/" + dirs.fontsDist));
 });
 
 gulp.task("index", function () {
   return gulp.src(dirs.src + "/" + files.index)
-    .pipe(gulp.dest(dirs.dist));
+    .pipe(gulp.dest("./dist")); // TODO dist/ui is not dist/
 });
 
 gulp.task("connect:server", function () {
   connect.server({
     port: 4200,
-    root: dirs.dist
+    root: "./dist"
   });
 });
 
@@ -168,17 +170,17 @@ gulp.task("watch", function () {
   gulp.watch(dirs.fonts + "/**/*.*", ["fonts"]);
 });
 
-gulp.task("make-war", function () {
-  var warFileName = packageInfo.name + "." + packageInfo.version + ".war";
-  return gulp.src("./dist/**/*")
-    .pipe(war({
-      welcome: "index.html",
-      displayName: "Marathon UI",
-      version: packageInfo.version
-    }))
-    .pipe(zip(warFileName))
-    .pipe(gulp.dest(dirs.release));
-});
+// gulp.task("make-war", function () {
+//   var warFileName = packageInfo.name + "." + packageInfo.version + ".war";
+//   return gulp.src("./dist/**/*")
+//     .pipe(war({
+//       welcome: "index.html",
+//       displayName: "Marathon UI",
+//       version: packageInfo.version
+//     }))
+//     .pipe(zip(warFileName))
+//     .pipe(gulp.dest(dirs.release));
+// });
 
 gulp.task("make-webjar", function () {
   var outputDir = "target/classes/META_INF/resources/webjars/" + packageInfo.name;
@@ -190,23 +192,29 @@ gulp.task("make-webjar", function () {
   var makePom = gulp.src("pom.xml.tpl")
     .pipe(replace("${PROJECT_ARTIFACT_ID}", packageInfo.name))
     .pipe(replace("${PROJECT_VERSION}", projectVersion))
-    .pipe(gulp.dest("pom.xml"));
+    .pipe(rename("pom.xml"))
+    .pipe(gulp.dest("./"));
 
   var deploy = gulp.src(".")
-    .pipe(maven.install());
+    .pipe(maven.install({
+      config: {
+        "groupId": "mesoshpere.marathon",
+        "type": "jar"
+      }
+    }));
 
   return merge(pipeDistToTarget, makePom, deploy);
 });
 
 gulp.task("replace-js-strings", ["webpack", "eslint", "minify-js"], function () {
-  return gulp.src(dirs.dist + "/main.js")
+  return gulp.src(dirs.distUi + "/main.js")
     .pipe(replace("@@ENV", process.env.GULP_ENV))
-    .pipe(gulp.dest(dirs.dist));
+    .pipe(gulp.dest(dirs.distUi));
 });
 
 gulp.task("serve", ["default", "connect:server", "watch"]);
 gulp.task("livereload", ["default", "browsersync", "watch"]);
-gulp.task("war", ["default", "make-war"]);
+//gulp.task("war", ["default", "make-war"]);
 
 var tasks = [
   "eslint",
