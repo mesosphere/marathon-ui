@@ -125,6 +125,35 @@ describe("Tasks", function () {
     });
 
   });
+
+  describe("on multiple task deletion and scale", function () {
+
+    it("updates the tasks array on success", function (done) {
+      this.server.setup("", 200);
+
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.currentApp.tasks).to.have.length(0);
+        }, done);
+      });
+
+      TasksActions.deleteTasksAndScale("/app-1", ["task-1", "task-2"]);
+    });
+
+    it("handles failure gracefully", function (done) {
+      this.server.setup({message: "Guru Meditation"}, 404);
+
+      AppsStore.once(TasksEvents.DELETE_ERROR, function (error) {
+        expectAsync(function () {
+          expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
+
+      TasksActions.deleteTasksAndScale("/app-1", "task-3");
+    });
+
+  });
+
 });
 
 describe("Task List Item component", function () {
