@@ -14,7 +14,7 @@ var PageNotFoundComponent = React.createClass({
       <div className="centered-content">
         <div>
           <h3 className="h3">Page Not Found</h3>
-          <p className="text-warning">{message}</p>
+          <p className="text-muted">{message}</p>
         </div>
       </div>
     );
