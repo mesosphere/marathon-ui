@@ -17,7 +17,7 @@ var AppComponent = React.createClass({
 
   onClick: function () {
     this.context.router
-      .transitionTo("app", {appid: encodeURIComponent(this.props.model.id)});
+      .transitionTo("app", {appId: encodeURIComponent(this.props.model.id)});
   },
 
   render: function () {

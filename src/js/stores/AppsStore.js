@@ -120,7 +120,7 @@ function applyAppDelayStatusOnAllApps(apps, queue) {
 var AppsStore = lazy(EventEmitter.prototype).extend({
   // Array of apps objects recieved from the "apps/"-endpoint
   apps: [],
-  // Object of the current app recieved from the "apps/[appid]"-endpoint
+  // Object of the current app recieved from the "apps/[appId]"-endpoint
   // This endpoint delievers more data, like the tasks on the app.
   currentApp: appScheme,
 

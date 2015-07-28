@@ -84,7 +84,7 @@ var Marathon = React.createClass({
       modalClass = AboutModalComponent;
     }
 
-    var appId = params.appid;
+    var appId = params.appId;
     if (appId != null) {
       appId = decodeURIComponent(appId);
     }

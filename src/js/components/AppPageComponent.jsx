@@ -20,8 +20,8 @@ var QueueEvents = require("../events/QueueEvents");
 var QueueStore = require("../stores/QueueStore");
 
 var tabsTemplate = [
-  {id: "apps/:appid", text: "Tasks"},
-  {id: "apps/:appid/configuration", text: "Configuration"}
+  {id: "apps/:appId", text: "Tasks"},
+  {id: "apps/:appId/configuration", text: "Configuration"}
 ];
 
 var AppPageComponent = React.createClass({
@@ -45,7 +45,7 @@ var AppPageComponent = React.createClass({
     var router = this.context.router;
     var params = router.getCurrentParams();
 
-    var appId = decodeURIComponent(params.appid);
+    var appId = decodeURIComponent(params.appId);
     var view = params.view;
 
     var activeTabId = `apps/${encodeURIComponent(appId)}`;
@@ -54,7 +54,7 @@ var AppPageComponent = React.createClass({
     var activeTaskId = null;
 
     var tabs = tabsTemplate.map(function (tab) {
-      var id = tab.id.replace(":appid", encodeURIComponent(appId));
+      var id = tab.id.replace(":appId", encodeURIComponent(appId));
       if (activeTabId == null) {
         activeTabId = id;
       }
@@ -117,7 +117,7 @@ var AppPageComponent = React.createClass({
     var params = this.context.router.getCurrentParams();
 
     var fetchState = this.state.fetchState;
-    if (decodeURIComponent(params.appid) !== this.state.appId) {
+    if (decodeURIComponent(params.appId) !== this.state.appId) {
       fetchState = States.STATE_LOADING;
     }
 
