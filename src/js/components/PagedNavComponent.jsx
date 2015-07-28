@@ -33,8 +33,6 @@ var PagedNavComponent = React.createClass({
         pageNum < noPages &&
         pageNum !== this.props.currentPage) {
       this.props.onPageChange(pageNum);
-    } else {
-      return false;
     }
   },
 

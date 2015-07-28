@@ -4,7 +4,6 @@ var React = require("react/addons");
 
 var States = require("../constants/States");
 var TaskListItemComponent = require("../components/TaskListItemComponent");
-var PagedContentComponent = require("../components/PagedContentComponent");
 
 var TaskListComponent = React.createClass({
   displayName: "TaskListComponent",
@@ -48,13 +47,16 @@ var TaskListComponent = React.createClass({
   getTasks: function () {
     var props = this.props;
     var state = this.state;
-    var sortKey = state.sortKey;
+    var dropCount = this.props.currentPage * this.props.itemsPerPage;
     var hasHealth = !!props.hasHealth;
+    var sortKey = state.sortKey;
 
     return lazy(this.props.tasks)
       .sortBy(function (app) {
         return app[sortKey];
       }, state.sortDescending)
+      .drop(dropCount)
+      .take(this.props.itemsPerPage)
       .map(function (task) {
         var isActive = props.selectedTasks[task.id] === true;
 
@@ -68,7 +70,8 @@ var TaskListComponent = React.createClass({
             task={task}
             taskHealthMessage={props.getTaskHealthMessage(task.id)}/>
         );
-      }).value();
+      })
+      .value();
   },
 
   getCaret: function (sortKey) {
@@ -167,10 +170,7 @@ var TaskListComponent = React.createClass({
                 </th>
             </tr>
           </thead>
-          <PagedContentComponent
-              currentPage={this.props.currentPage}
-              itemsPerPage={this.props.itemsPerPage}
-              tag="tbody" >
+          <tbody>
             <tr className={noTasksClassSet}>
               <td className="text-center" colSpan="7">
                 No tasks running.
@@ -182,7 +182,7 @@ var TaskListComponent = React.createClass({
               </td>
             </tr>
             {this.getTasks()}
-          </PagedContentComponent>
+          </tbody>
         </table>
       </div>
     );

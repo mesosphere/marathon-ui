@@ -20,10 +20,22 @@ var TaskViewComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      selectedTasks: {},
       currentPage: 0,
-      itemsPerPage: 8
+      itemsPerPage: 8,
+      selectedTasks: {}
     };
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    var state = this.state;
+    var tasksLength = nextProps.tasks.length;
+
+    if (state.currentPage * state.itemsPerPage > tasksLength) {
+      this.setState({
+        currentPage: parseInt(tasksLength / state.itemsPerPage, 10),
+        selectedTasks: {}
+      });
+    }
   },
 
   handlePageChange: function (pageNum) {

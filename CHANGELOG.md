@@ -13,6 +13,11 @@
     grouped together
   * It is now possible to specify Docker container settings
 
+### Fixed
+- #548 - UI showing empty list after scaling when on page > 1
+  * The task list shows the last available page
+    if tasks count decreases after scaling.
+
 ## 0.10.0 - 2015-07-10
 ### Added
 - #1754 - UI: Allow administratively zeroing / resetting the taskLaunchDelay
