@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var React = require("react");
 
 var CollapsiblePanelComponent = React.createClass({
@@ -38,7 +39,7 @@ var CollapsiblePanelComponent = React.createClass({
   },
 
   render: function () {
-    var classes = React.addons.classSet({
+    var classes = classNames({
       "clickable panel-title": true,
       "open": this.state.open
     });
