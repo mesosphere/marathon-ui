@@ -70,13 +70,19 @@ var AppListComponent = React.createClass({
     var sortKey = state.sortKey;
     var props = this.props;
 
-    return lazy(state.apps)
+    var appsSequence = lazy(state.apps);
+
+    if (props.filterText != null && props.filterText != "") {
+      appsSequence = appsSequence
+        .filter(function (app) {
+          return app.id.indexOf(props.filterText) !== -1;
+        });
+    }
+
+    return appsSequence
       .sortBy(function (app) {
         return app[sortKey];
       }, state.sortDescending)
-      .filter(function (app) {
-        return app.id.indexOf(props.filterText || "") !== -1;
-      })
       .map(function (app) {
         return (
           <AppComponent key={app.id} model={app} />
