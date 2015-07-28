@@ -1,13 +1,15 @@
 var React = require("react/addons");
-var RouterStateMixin = require("react-router").State;
 
 var PageNotFoundComponent = React.createClass({
   displayName: "PageNotFoundComponent",
 
-  mixins: [RouterStateMixin],
+  contextTypes: {
+    router: React.PropTypes.func
+  },
 
   render: function () {
-    let message = `The requested page does not exist: ${this.getPath()}`;
+    var path = this.context.router.getCurrentPath();
+    var message = `The requested page does not exist: ${path}`;
     return (
       <div className="container-fluid">
         <div className="page-header">
