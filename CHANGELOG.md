@@ -18,6 +18,7 @@
 - #548 - UI showing empty list after scaling when on page > 1
   * The task list shows the last available page
     if tasks count decreases after scaling.
+- \#1872 - Kill & Scale should be available for more than one task
 
 ## 0.10.0 - 2015-07-10
 ### Added
