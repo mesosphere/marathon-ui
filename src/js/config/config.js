@@ -1,7 +1,7 @@
 var config = {
   // @@ENV gets replaced by build system
   environment: "@@ENV",
-  rootUrl: "ui/",
+  rootUrl: "assets/",
   // Defines the Marathon API URL,
   // leave empty to use the same as the UI is served.
   apiURL: "",
@@ -14,7 +14,7 @@ var config = {
   }
 };
 if (config.environment === "production") {
-  config.rootUrl = "ui/";
+  config.rootUrl = "assets/";
 }
 if (process.env.GULP_ENV === "development") {
   try {

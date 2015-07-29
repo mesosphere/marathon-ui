@@ -21,7 +21,7 @@ var dirs = {
   src: "./src",
   js: "./src/js",
   dist: "./dist",
-  distUi: "./dist/ui",
+  distUi: "./dist/assets",
   styles: "./src/css",
   img: "./src/img",
   imgDist: "img",
