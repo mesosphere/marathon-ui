@@ -39,7 +39,7 @@ var TaskViewComponent = React.createClass({
     var selectedTaskIds = Object.keys(this.state.selectedTasks);
 
     var taskIds = lazy(props.tasks).map(function (task) {
-      return lazy(selectedTaskIds).indexOf(task.id) >= 0
+      return selectedTaskIds.indexOf(task.id) >= 0
         ? task.id
         : null;
     }).compact().value();

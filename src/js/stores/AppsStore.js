@@ -19,7 +19,7 @@ function removeApp(apps, appId) {
 
 function removeTasks(tasks, relatedAppId, taskIds) {
   return lazy(tasks).reject(function (task) {
-    return (lazy(taskIds).indexOf(task.id) > -1) && task.appId === relatedAppId;
+    return (taskIds.indexOf(task.id) > -1) && task.appId === relatedAppId;
   }).value();
 }
 
