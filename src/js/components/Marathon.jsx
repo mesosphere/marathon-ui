@@ -7,6 +7,7 @@ var React = require("react/addons");
 var RouteHandler = require("react-router").RouteHandler;
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
+var ChaosModalComponent = require("../components/modals/ChaosModalComponent");
 var NewAppModalComponent = require("../components/NewAppModalComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
@@ -82,6 +83,8 @@ var Marathon = React.createClass({
       modalClass = NewAppModalComponent;
     } else if (modalQuery === "about") {
       modalClass = AboutModalComponent;
+    } else if (modalQuery === "chaos") {
+      modalClass = ChaosModalComponent;
     }
 
     var appId = params.appId;
@@ -178,6 +181,15 @@ var Marathon = React.createClass({
     );
   },
 
+  getChaosModal: function () {
+    return (
+      <ChaosModalComponent
+        isChaosInProgress={this.state.isChaosInProgress}
+        onDestroy={this.handleModalDestroy}
+        ref="modal" />
+    );
+  },
+
   getNewAppModal: function () {
     return (
       <NewAppModalComponent
@@ -195,6 +207,8 @@ var Marathon = React.createClass({
       modal = this.getNewAppModal();
     } else if (state.modalClass === AboutModalComponent) {
       modal = this.getAboutModal();
+    } else if (state.modalClass === ChaosModalComponent) {
+      modal = this.getChaosModal();
     }
 
     var logoPath = config.rootUrl + "img/marathon-logo.png";

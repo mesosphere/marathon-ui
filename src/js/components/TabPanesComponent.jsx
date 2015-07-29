@@ -56,6 +56,12 @@ var TabPanesComponent = React.createClass({
               className="btn btn-success pull-right">
                   + New App
             </Link>
+            <Link
+                to={path}
+                query={{modal: "chaos"}}
+                className="btn btn-default pull-right">
+                  Chaos
+            </Link>
             <AppListFilterComponent onChange={this.updateFilterText}/>
           </div>
           <AppListComponent filterText={this.state.filterText}/>
