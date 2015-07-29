@@ -19,7 +19,7 @@ function requestApp(appId, onSuccess, onError) {
   });
 }
 
-function deleteTasks(taskIds = [], onSuccess, onError) {
+function deleteTasks(taskIds = [], onSuccess) {
   request({
     method: "POST",
     data: {
@@ -34,7 +34,7 @@ function deleteTasks(taskIds = [], onSuccess, onError) {
     onSuccess();
   })
   .error(function (error) {
-    onError(error.body);
+    onSuccess();
   });
 }
 
@@ -60,15 +60,10 @@ var ChaosActions = lazy(EventEmitter.prototype).extend({
           ChaosActions.emit(ChaosEvents.FINISHED);
         };
 
-        let onTaskDeletionError = function (error) {
-          ChaosActions.emit(ChaosEvents.ERROR, error);
-        };
-
         if (tasksToKill.length > 0) {
           deleteTasks(
             tasksToKill,
-            onTaskDeletion,
-            onTaskDeletionError
+            onTaskDeletion
           );
         } else {
           onTaskDeletion();
