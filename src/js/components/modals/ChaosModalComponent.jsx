@@ -1,8 +1,6 @@
 var React = require("react/addons");
 
-//var AppsStore = require("../stores/AppsStore");
-//var ChaosActions = require("../actions/ChaosActions");
-//var ChaosEvents = require("../events/ChaosEvents");
+var ChaosActions = require("../../actions/ChaosActions");
 var ModalComponent = require("../ModalComponent");
 
 var ChaosModalComponent = React.createClass({
@@ -11,9 +9,7 @@ var ChaosModalComponent = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   propTypes: {
-    isChaosInProgress: React.PropTypes.bool.isRequired,
-    onDestroy: React.PropTypes.func.isRequired,
-    onSubmit: React.PropTypes.func.isRequired
+    onDestroy: React.PropTypes.func.isRequired
   },
 
   getInitialState: function () {
@@ -21,16 +17,6 @@ var ChaosModalComponent = React.createClass({
       percentAmount: 10,
       confirmMessage: ""
     };
-  },
-
-  componentWillMount: function () {
-    //AppsStore.on(ChaosEvents.STARTED, this.onChaosStart);
-    //AppsStore.on(ChaosEvents.FINISHED, this.onChaosFinish);
-  },
-
-  componentWillUnmount: function () {
-    //AppsStore.removeListener(ChaosEvents.STARTED, this.onChaosStart);
-    //AppsStore.removeListener(ChaosEvents.FINISHED, this.onChaosFinish);
   },
 
   destroy: function () {
@@ -41,21 +27,14 @@ var ChaosModalComponent = React.createClass({
 
   handleSubmit: function (e) {
     e.preventDefault();
-
+    ChaosActions.makeChaos(this.state.percentAmount);
+    this.destroy();
   },
 
   isDisabled: function () {
     var state = this.state;
-    return state.confirmMessage !== "CHAOS" || state.isChaosInProgres;
+    return state.confirmMessage !== "CHAOS";
   },
-
-  //onChaosStart: function () {
-  //  this.setState({isChaosInProgress: true});
-  //},
-  //
-  //onChaosFinish: function () {
-  //  this.setState({isChaosInProgress: false});
-  //},
 
   render: function () {
     var state = this.state;

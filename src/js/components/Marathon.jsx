@@ -184,7 +184,6 @@ var Marathon = React.createClass({
   getChaosModal: function () {
     return (
       <ChaosModalComponent
-        isChaosInProgress={this.state.isChaosInProgress}
         onDestroy={this.handleModalDestroy}
         ref="modal" />
     );
