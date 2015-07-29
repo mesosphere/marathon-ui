@@ -40,6 +40,8 @@ function deleteTasks(taskIds = [], onSuccess) {
 
 var ChaosActions = lazy(EventEmitter.prototype).extend({
   makeChaos: function (amountPercentage = 10) {
+    ChaosActions.emit(ChaosEvents.STARTED);
+
     var apps = lazy(AppsStore.apps)
       .filter(function (app) {
         return app.tasksRunning > 1;
