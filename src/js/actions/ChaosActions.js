@@ -19,7 +19,7 @@ function requestApp(appId, onSuccess, onError) {
   });
 }
 
-function deleteTasks(appId, taskIds = [], onSuccess, onError) {
+function deleteTasks(taskIds = [], onSuccess, onError) {
   request({
     method: "POST",
     data: {
@@ -33,8 +33,8 @@ function deleteTasks(appId, taskIds = [], onSuccess, onError) {
   .success(function () {
     onSuccess();
   })
-  .error(function () {
-    onError();
+  .error(function (error) {
+    onError(error.body);
   });
 }
 
@@ -48,31 +48,48 @@ var ChaosActions = lazy(EventEmitter.prototype).extend({
 
     var iterator = apps.getIterator();
 
+    var totalTasksToKill = lazy([]);
+
     var iterateOverAppsAndMakeChaos = function () {
       var hasNext = iterator.moveNext();
 
       if (!hasNext) {
-        ChaosActions.emit(ChaosEvents.FINISHED);
+        let tasksToKill = totalTasksToKill.value();
+
+        let onTaskDeletion = function () {
+          ChaosActions.emit(ChaosEvents.FINISHED);
+        };
+
+        let onTaskDeletionError = function (error) {
+          ChaosActions.emit(ChaosEvents.ERROR, error);
+        };
+
+        if (tasksToKill.length > 0) {
+          deleteTasks(
+            tasksToKill,
+            onTaskDeletion,
+            onTaskDeletionError
+          );
+        } else {
+          onTaskDeletion();
+        }
+
         return;
       }
 
       var currentApp = iterator.current();
 
       var onAppRequest = function (app) {
-        var tasksToKill = lazy(app.tasks)
-          .shuffle()
-          .take(parseInt(app.tasksRunning * amountPercentage / 100, 10))
-          .map(function (task) {
-            return task.id;
-          })
-          .value();
+        totalTasksToKill = totalTasksToKill.concat(
+          lazy(app.tasks)
+            .shuffle()
+            .take(parseInt(app.tasksRunning * amountPercentage / 100, 10))
+            .map(function (task) {
+              return task.id;
+            })
+        );
 
-        deleteTasks(
-            currentApp.id,
-            tasksToKill,
-            iterateOverAppsAndMakeChaos,
-            iterateOverAppsAndMakeChaos
-          );
+        iterateOverAppsAndMakeChaos();
       };
 
       requestApp(
