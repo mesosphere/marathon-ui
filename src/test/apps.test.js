@@ -744,7 +744,7 @@ describe("App Page component", function () {
       router: {
         getCurrentParams: function () {
           return {
-            appid: "/test-app-1"
+            appId: "/test-app-1"
           };
         }
       }

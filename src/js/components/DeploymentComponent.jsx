@@ -100,7 +100,7 @@ var DeploymentComponent = React.createClass({
               let appId = encodeURIComponent(action.app);
               return (
                 <li key={action.app}>
-                  <Link to="app" params={{appid: appId}}>{action.app}</Link>
+                  <Link to="app" params={{appId: appId}}>{action.app}</Link>
                 </li>
               );
             })}
