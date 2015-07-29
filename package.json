@@ -57,8 +57,8 @@
   },
   "scripts": {
     "build": "gulp",
-    "clean": "rm -rf dist release target pom.xml",
-    "deploy": "npm run clean && npm run dist && gulp make-webjar && rm -rf target",
+    "clean": "rm -rf dist target pom.xml",
+    "deploy": "npm run clean && npm run dist && gulp make-webjar && rm -rf target pom.xml",
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "shrinkwrap": "npm-shrinkwrap --dev",
     "test": "mocha --ui exports --reporter spec --compilers jsx:babel-core/register src/test/**/*.test.* src/test/*.test.*",
