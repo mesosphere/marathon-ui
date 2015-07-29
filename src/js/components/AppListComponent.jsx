@@ -72,7 +72,7 @@ var AppListComponent = React.createClass({
 
     var appsSequence = lazy(state.apps);
 
-    if (props.filterText != null && props.filterText != "") {
+    if (props.filterText != null && props.filterText !== "") {
       appsSequence = appsSequence
         .filter(function (app) {
           return app.id.indexOf(props.filterText) !== -1;
