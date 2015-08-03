@@ -41,7 +41,7 @@ var TaskMesosUrlComponent = React.createClass({
       if (info.hasOwnProperty("marathon_config")) {
         var masterUrl = info.marathon_config.mesos_master_url;
         var frameworkId = info.frameworkId;
-        if (masterUrl === null || task.slaveId === null) {
+        if (masterUrl == null || task.slaveId == null) {
           return null;
         }
         var url = [
@@ -63,7 +63,7 @@ var TaskMesosUrlComponent = React.createClass({
     var task = this.props.task;
     var text = this.props.text;
     var mesosTaskUrl = this.buildUrl(task, info);
-    if (mesosTaskUrl === null) {
+    if (mesosTaskUrl == null) {
       return null;
     }
     return (
