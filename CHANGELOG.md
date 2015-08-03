@@ -2,11 +2,13 @@
 ### Added
 - \#1204 - Please add a search bar to the applications overview to filter the
   list of applications
-- \#1137 Add tooltip on hover to progress bars
-   * A tooltip that displays the individual health statuses is now shown when
-     the mouse is over the progress bars in the apps overview page.
+- \#1137 - Add tooltip on hover to progress bars
+  * A tooltip that displays the individual health statuses is now shown when
+    the mouse is over the progress bars in the apps overview page.
 - \#1864 - Add a link to the app detail page from the deployments tab
-- \#1756 Create a "Not found page"
+- \#1756 - Create a "Not found page"
+- \#878 - Jump to Mesos sandbox from UI
+  * You can go directly to the Mesos tasks sandbox from the tasks detail page.
 
 ### Changed
 - #124 - Expose all /v2 App attributes in UI
