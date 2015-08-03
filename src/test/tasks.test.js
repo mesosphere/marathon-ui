@@ -7,12 +7,14 @@ var config = require("../js/config/config");
 var AppsActions = require("../js/actions/AppsActions");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
+var InfoStore = require("../js/stores/InfoStore");
 var States = require("../js/constants/States");
 var TasksActions = require("../js/actions/TasksActions");
 var TasksEvents = require("../js/events/TasksEvents");
 var TaskListItemComponent = require("../js/components/TaskListItemComponent");
 var TaskDetailComponent = require("../js/components/TaskDetailComponent");
 var TaskListComponent = require("../js/components/TaskListComponent");
+var TaskMesosUrlComponent = require("../js/components/TaskMesosUrlComponent");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -346,4 +348,40 @@ describe("Task List component", function () {
     expect(tasklistitems[1].key).to.equal("task-2");
   });
 
+});
+
+
+describe("Task Detail component", function () {
+
+  beforeEach(function () {
+    this.model = {
+      appId: "/app-1",
+      id: "task-123",
+      slaveId: "20150720-125149-3839899402-5050-16758-S1"
+    };
+    InfoStore.info = {
+      "version": "1.2.3",
+      "frameworkId": "framework1",
+      "leader": "leader1.dcos.io",
+      "marathon_config": {
+        "marathon_field_1": "mf1",
+        "mesos_master_url": "http://leader1.dcos.io:5050"
+      }
+    };
+
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<TaskMesosUrlComponent task={this.model}/>);
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("has the correct mesos task url", function () {
+    var url = this.component.props.href;
+    expect(url).to.equal(
+"http://leader1.dcos.io:5050/#/slaves/20150720-125149-3839899402-5050-\
+16758-S1/frameworks/framework1/executors/task-123");
+  });
 });

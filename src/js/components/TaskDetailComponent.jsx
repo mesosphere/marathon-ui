@@ -4,6 +4,7 @@ var React = require("react/addons");
 var States = require("../constants/States");
 var TimeFieldComponent = require("../components/TimeFieldComponent");
 var TaskHealthComponent = require("../components/TaskHealthComponent");
+var TaskMesosUrlComponent = require("../components/TaskMesosUrlComponent");
 var HealthStatus = require("../constants/HealthStatus");
 
 var TaskDetailComponent = React.createClass({
@@ -79,6 +80,8 @@ var TaskDetailComponent = React.createClass({
             </dd>
             <dt>Health</dt>
             <dd className={healthClassSet}>{this.props.taskHealthMessage}</dd>
+            <dt>Mesos details</dt>
+            <dd><TaskMesosUrlComponent task={task}/></dd>
           </dl>
           {hasHealth ?
             <TaskHealthComponent task={task} /> :
