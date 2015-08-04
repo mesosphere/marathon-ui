@@ -236,7 +236,7 @@ var ContainerSettingsComponent = React.createClass({
                 <option value={ContainerConstants.NETWORK.HOST}>
                   Host
                 </option>
-                <option value={ContainerConstants.NETWORK.BRIDGED}>
+                <option value={ContainerConstants.NETWORK.BRIDGE}>
                   Bridged
                 </option>
               </select>
