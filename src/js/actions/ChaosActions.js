@@ -3,13 +3,14 @@ var lazy = require("lazy.js");
 var request = require("../helpers/qajaxWrapper");
 
 var config = require("../config/config");
+var util = require("../helpers/util");
 
 var AppsStore = require("../stores/AppsStore");
 var ChaosEvents = require("../events/ChaosEvents");
 
 function requestApp(appId, onSuccess, onError) {
   request({
-    url: config.apiURL + "v2/apps/" + appId
+    url: `${config.apiURL}v2/apps/${appId}`
   })
   .success(function (data) {
     onSuccess(data.body.app);
@@ -19,21 +20,21 @@ function requestApp(appId, onSuccess, onError) {
   });
 }
 
-function deleteTasks(taskIds = [], onSuccess) {
+function deleteTasks(taskIds = [], onSuccess = util.noop) {
   request({
     method: "POST",
     data: {
-      "ids": taskIds
+      ids: taskIds
     },
     headers: {
       "Content-Type": "application/json"
     },
-    url: config.apiURL + "v2/tasks/delete"
+    url: `${config.apiURL}v2/tasks/delete`
   })
   .success(function () {
     onSuccess();
   })
-  .error(function (error) {
+  .error(function () {
     onSuccess();
   });
 }
