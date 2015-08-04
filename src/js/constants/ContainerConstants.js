@@ -1,6 +1,6 @@
 var ContainerConstants = {
   NETWORK: {
-    BRIDGED: "BRIDGED",
+    BRIDGE: "BRIDGE",
     HOST: "HOST"
   },
   PORTMAPPINGS: {
