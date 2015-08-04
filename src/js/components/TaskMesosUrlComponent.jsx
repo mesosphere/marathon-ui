@@ -51,7 +51,7 @@ var TaskMesosUrlComponent = React.createClass({
           "/frameworks/",
           frameworkId,
           "/executors/",
-          task.id
+          task.id || task.taskId
         ].join("");
         return url;
       }

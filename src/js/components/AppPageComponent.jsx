@@ -7,6 +7,7 @@ var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
 var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
+var AppLastTaskFailureComponent = require("../components/AppLastTaskFailureComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
 var HealthStatus = require("../constants/HealthStatus");
 var States = require("../constants/States");
@@ -21,7 +22,8 @@ var QueueStore = require("../stores/QueueStore");
 
 var tabsTemplate = [
   {id: "apps/:appId", text: "Tasks"},
-  {id: "apps/:appId/configuration", text: "Configuration"}
+  {id: "apps/:appId/configuration", text: "Configuration"},
+  {id: "apps/:appId/last-task-failure", text: "Last task failure"}
 ];
 
 var AppPageComponent = React.createClass({
@@ -67,6 +69,8 @@ var AppPageComponent = React.createClass({
 
     if (view === "configuration") {
       activeTabId += "/configuration";
+    } else if (view === "last-task-failure") {
+      activeTabId += "/last-task-failure";
     } else if (view != null) {
       activeTaskId = view;
       activeViewIndex = 1;
@@ -348,6 +352,10 @@ var AppPageComponent = React.createClass({
         <TabPaneComponent
           id={"apps/" + encodeURIComponent(state.appId) + "/configuration"}>
           <AppVersionListComponent appId={state.appId} />
+        </TabPaneComponent>
+        <TabPaneComponent
+          id={"apps/" + encodeURIComponent(state.appId) + "/last-task-failure"}>
+          <AppLastTaskFailureComponent appId={state.appId} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
