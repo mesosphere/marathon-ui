@@ -3,7 +3,6 @@ var lazy = require("lazy.js");
 var request = require("../helpers/qajaxWrapper");
 
 var config = require("../config/config");
-var util = require("../helpers/util");
 
 var AppsStore = require("../stores/AppsStore");
 var ChaosEvents = require("../events/ChaosEvents");
@@ -20,7 +19,7 @@ function requestApp(appId, onSuccess, onError) {
   });
 }
 
-function deleteTasks(taskIds = [], onSuccess = util.noop) {
+function deleteTasks(taskIds = [], onComplete) {
   request({
     method: "POST",
     data: {
@@ -32,10 +31,10 @@ function deleteTasks(taskIds = [], onSuccess = util.noop) {
     url: `${config.apiURL}v2/tasks/delete`
   })
   .success(function () {
-    onSuccess();
+    onComplete();
   })
   .error(function () {
-    onSuccess();
+    onComplete();
   });
 }
 
