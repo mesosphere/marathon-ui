@@ -2,7 +2,7 @@ var ContainerConstants = require("../constants/ContainerConstants");
 
 var containerScheme = {
   "container": {
-    "type": ContainerConstants.TYPE.DOCKER,
+    "type": ContainerConstants.type.DOCKER,
     "docker": {
       "image": null,
       "network": null,
@@ -11,7 +11,7 @@ var containerScheme = {
           "containerPort": 0,
           "hostPort": 0,
           "servicePort": 0,
-          "protocol": ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP
+          "protocol": ContainerConstants.portMappings.protocol.TCP
         }
       ]
     },

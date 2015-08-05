@@ -93,11 +93,11 @@ var ContainerSettingsComponent = React.createClass({
               <option value="" disabled="disabled">
                 Select
               </option>
-              <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
-                {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
+              <option value={ContainerConstants.portMappings.protocol.TCP}>
+                {ContainerConstants.portMappings.protocol.TCP}
               </option>
-              <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}>
-                {ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}
+              <option value={ContainerConstants.portMappings.protocol.UDP}>
+                {ContainerConstants.portMappings.protocol.UDP}
               </option>
             </select>
           </FormGroupComponent>
@@ -171,10 +171,10 @@ var ContainerSettingsComponent = React.createClass({
             validator={appValidator}>
             <select defaultValue="">
               <option value="" disabled="disabled">Select</option>
-              <option value={ContainerConstants.VOLUMES.MODE.RO}>
+              <option value={ContainerConstants.volumes.mode.RO}>
                 Read Only
               </option>
-              <option value={ContainerConstants.VOLUMES.MODE.RW}>
+              <option value={ContainerConstants.volumes.mode.RW}>
                 Read and Write
               </option>
             </select>
@@ -233,10 +233,10 @@ var ContainerSettingsComponent = React.createClass({
               validator={appValidator}>
               <select defaultValue="">
                 <option value="" disabled="disabled">Select</option>
-                <option value={ContainerConstants.NETWORK.HOST}>
+                <option value={ContainerConstants.network.HOST}>
                   Host
                 </option>
-                <option value={ContainerConstants.NETWORK.BRIDGE}>
+                <option value={ContainerConstants.network.BRIDGE}>
                   Bridged
                 </option>
               </select>

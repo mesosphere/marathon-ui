@@ -1,22 +1,22 @@
 const ContainerConstants = {
-  NETWORK: {
+  network: Object.freeze({
     BRIDGE: "BRIDGE",
     HOST: "HOST"
-  },
-  PORTMAPPINGS: {
-    PROTOCOL: {
+  }),
+  portMappings: {
+    protocol: Object.freeze({
       TCP: "tcp",
       UDP: "udp"
-    }
+    })
   },
-  TYPE: {
+  type: Object.freeze({
     DOCKER: "DOCKER"
-  },
-  VOLUMES: {
-    MODE: {
+  }),
+  volumes: {
+    mode: Object.freeze({
       RO: "RO",
       RW: "RW"
-    }
+    })
   }
 };
 
