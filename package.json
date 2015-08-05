@@ -61,7 +61,7 @@
     "clean": "rm -rf dist release",
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "shrinkwrap": "npm-shrinkwrap --dev",
-    "test": "mocha --ui exports --reporter spec --compilers jsx:babel-core/register src/test/**/*.test.* src/test/*.test.*",
+    "test": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --compilers jsx:babel-core/register src/test/**/*.test.* src/test/*.test.*",
     "serve": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve",
     "livereload": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp livereload",
     "package": "gulp war"
