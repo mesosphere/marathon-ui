@@ -4,15 +4,15 @@ var AppDispatcher = require("../AppDispatcher");
 var QueueEvents = require("../events/QueueEvents");
 var queueScheme = require("./queueScheme");
 
-var util = require("../helpers/util");
+var Util = require("../helpers/Util");
 
 function processQueue(queue = []) {
   return queue.map(function (entry) {
-    return util.extendObject(queueScheme, entry);
+    return Util.extendObject(queueScheme, entry);
   });
 }
 
-var QueueStore = util.extendObject(EventEmitter.prototype, {
+var QueueStore = Util.extendObject(EventEmitter.prototype, {
   queue: [],
 
   getDelayByAppId: function (appId) {

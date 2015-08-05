@@ -1,4 +1,4 @@
-var util = {
+var Util = {
   alert: function () {
     /*eslint-disable no-alert */
     return global.alert.apply(null, arguments);
@@ -126,4 +126,4 @@ var util = {
   }
 };
 
-module.exports = util;
+module.exports = Util;

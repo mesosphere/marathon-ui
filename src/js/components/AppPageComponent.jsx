@@ -14,7 +14,7 @@ var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
-var util = require("../helpers/util");
+var Util = require("../helpers/Util");
 var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
 var QueueStore = require("../stores/QueueStore");
@@ -121,7 +121,7 @@ var AppPageComponent = React.createClass({
       fetchState = States.STATE_LOADING;
     }
 
-    this.setState(util.extendObject(
+    this.setState(Util.extendObject(
       this.state,
       {fetchState: fetchState},
       this.getRouteSettings()
@@ -146,16 +146,16 @@ var AppPageComponent = React.createClass({
   },
 
   onScaleAppError: function (errorMessage) {
-    util.alert("Not scaling: " + (errorMessage.message || errorMessage));
+    Util.alert("Not scaling: " + (errorMessage.message || errorMessage));
   },
 
   onRestartAppError: function (errorMessage) {
-    util.alert("Error restarting app: " +
+    Util.alert("Error restarting app: " +
       (errorMessage.message || errorMessage));
   },
 
   onDeleteAppError: function (errorMessage) {
-    util.alert("Error destroying app: " +
+    Util.alert("Error destroying app: " +
       (errorMessage.message || errorMessage));
   },
 
@@ -164,11 +164,11 @@ var AppPageComponent = React.createClass({
   },
 
   onResetDelaySuccess: function () {
-    util.alert("Delay reset succesfully");
+    Util.alert("Delay reset succesfully");
   },
 
   onResetDelayError: function (errorMessage) {
-    util.alert("Error resetting delay on app: " +
+    Util.alert("Error resetting delay on app: " +
       (errorMessage.message || errorMessage));
   },
 
@@ -181,7 +181,7 @@ var AppPageComponent = React.createClass({
   handleScaleApp: function () {
     var model = this.state.app;
 
-    var instancesString = util.prompt("Scale to how many instances?",
+    var instancesString = Util.prompt("Scale to how many instances?",
       model.instances);
 
     if (instancesString != null && instancesString !== "") {
@@ -192,21 +192,21 @@ var AppPageComponent = React.createClass({
   },
 
   handleSuspendApp: function () {
-    if (util.confirm("Suspend app by scaling to 0 instances?")) {
+    if (Util.confirm("Suspend app by scaling to 0 instances?")) {
       AppsActions.scaleApp(this.state.appId, 0);
     }
   },
 
   handleRestartApp: function () {
     var appId = this.state.appId;
-    if (util.confirm("Restart app '" + appId + "'?")) {
+    if (Util.confirm("Restart app '" + appId + "'?")) {
       AppsActions.restartApp(appId);
     }
   },
 
   handleDestroyApp: function () {
     var appId = this.state.appId;
-    if (util.confirm("Destroy app '" + appId +
+    if (Util.confirm("Destroy app '" + appId +
       "'?\nThis is irreversible.")) {
       AppsActions.deleteApp(appId);
     }

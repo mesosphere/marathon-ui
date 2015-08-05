@@ -12,7 +12,7 @@ var AppVersionListItemComponent =
   require("../components/AppVersionListItemComponent");
 var PagedContentComponent = require("../components/PagedContentComponent");
 var PagedNavComponent = require("../components/PagedNavComponent");
-var util = require("../helpers/util");
+var Util = require("../helpers/Util");
 
 var AppVersionListComponent = React.createClass({
   displayName: "AppVersionListComponent",
@@ -77,7 +77,7 @@ var AppVersionListComponent = React.createClass({
   },
 
   onAppApplySettingsError: function (errorMessage) {
-    util.alert("Could not update to chosen version: " +
+    Util.alert("Could not update to chosen version: " +
       (errorMessage.message || errorMessage));
   },
 
