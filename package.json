@@ -48,6 +48,7 @@
     "gulp-war": "0.0.1",
     "gulp-zip": "^3.0.2",
     "mocha": "^2.1.0",
+    "mocha-teamcity-reporter": "0.0.4",
     "npm-shrinkwrap": "^5.4.0",
     "oboe": "^2.1.2",
     "sinon": "^1.12.2",
