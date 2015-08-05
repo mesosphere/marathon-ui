@@ -1,6 +1,6 @@
-var TaskStatus = {
+const TaskStatus = {
   STAGED: "Staged",
   STARTED: "Started"
 };
 
-module.exports = TaskStatus;
+module.exports = Object.freeze(TaskStatus);

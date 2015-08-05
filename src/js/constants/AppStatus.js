@@ -1,4 +1,4 @@
-var AppStatus = {
+const AppStatus = {
   RUNNING: 0,
   DEPLOYING: 1,
   // App has 0 tasks
@@ -9,4 +9,4 @@ var AppStatus = {
   WAITING: 4
 };
 
-module.exports = AppStatus;
+module.exports = Object.freeze(AppStatus);
