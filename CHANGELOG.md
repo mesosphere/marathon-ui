@@ -29,6 +29,7 @@
   * The task list shows the last available page
     if tasks count decreases after scaling.
 - \#1872 - Kill & Scale should be available for more than one task
+- \#1960 - Task detail error message doesn't show up on non existent task
 
 ## 0.10.0 - 2015-07-10
 ### Added
