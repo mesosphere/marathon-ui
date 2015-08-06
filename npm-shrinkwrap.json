@@ -6062,6 +6062,10 @@
         }
       }
     },
+    "mocha-teamcity-reporter": {
+      "version": "0.0.4",
+      "resolved": "https://registry.npmjs.org/mocha-teamcity-reporter/-/mocha-teamcity-reporter-0.0.4.tgz"
+    },
     "moment": {
       "version": "2.10.3",
       "resolved": "https://registry.npmjs.org/moment/-/moment-2.10.3.tgz"
