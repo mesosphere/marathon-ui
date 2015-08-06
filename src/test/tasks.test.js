@@ -365,7 +365,7 @@ describe("Task Detail component", function () {
       "leader": "leader1.dcos.io",
       "marathon_config": {
         "marathon_field_1": "mf1",
-        "mesos_master_url": "http://leader1.dcos.io:5050"
+        "mesos_leader_ui_url": "http://leader1.dcos.io:5050"
       }
     };
 
