@@ -1,4 +1,4 @@
-var AppsEvents = {
+const AppsEvents = {
   CHANGE: "APPS_EVENTS_CHANGE",
   REQUEST_APPS: "APPS_EVENTS_REQUEST_APPS",
   REQUEST_APPS_ERROR: "APPS_EVENTS_REQUEST_APPS_ERROR",
@@ -16,4 +16,4 @@ var AppsEvents = {
   APPLY_APP_ERROR: "APPS_EVENTS_APPLY_APP_ERROR"
 };
 
-module.exports = AppsEvents;
+module.exports = Object.freeze(AppsEvents);

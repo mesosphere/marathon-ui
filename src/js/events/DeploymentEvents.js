@@ -1,4 +1,4 @@
-var DeploymentEvents = {
+const DeploymentEvents = {
   CHANGE: "DEPLOYMENT_EVENTS_CHANGE",
   REQUEST: "DEPLOYMENT_EVENTS_REQUEST",
   REQUEST_ERROR: "DEPLOYMENT_EVENTS_REQUEST_ERROR",
@@ -8,4 +8,4 @@ var DeploymentEvents = {
   STOP_ERROR: "DEPLOYMENT_EVENTS_STOP_ERROR"
 };
 
-module.exports = DeploymentEvents;
+module.exports = Object.freeze(DeploymentEvents);

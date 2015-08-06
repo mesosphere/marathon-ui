@@ -1,4 +1,4 @@
-var ContainerConstants = {
+const ContainerConstants = {
   NETWORK: {
     BRIDGE: "BRIDGE",
     HOST: "HOST"
@@ -20,4 +20,4 @@ var ContainerConstants = {
   }
 };
 
-module.exports = ContainerConstants;
+module.exports = Object.freeze(ContainerConstants);
