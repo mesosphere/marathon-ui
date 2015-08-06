@@ -1,7 +1,7 @@
 var _ = require("underscore");
 var lazy = require("lazy.js");
 var React = require("react/addons");
-var util = require("../helpers/util");
+var Util = require("../helpers/Util");
 
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
@@ -34,7 +34,7 @@ var NewAppModalComponent = React.createClass({
         mem: 16.0,
         disk: 0.0
       }).value(),
-      onDestroy: util.noop
+      onDestroy: Util.noop
     };
   },
 
@@ -117,10 +117,10 @@ var NewAppModalComponent = React.createClass({
   onSubmit: function (event) {
     event.preventDefault();
 
-    var attrArray = util.serializeArray(event.target)
+    var attrArray = Util.serializeArray(event.target)
       .filter((key) => key.value !== "");
 
-    var modelAttrs = util.serializedArrayToDictionary(attrArray);
+    var modelAttrs = Util.serializedArrayToDictionary(attrArray);
 
     // URIs should be an Array of Strings.
     if ("uris" in modelAttrs) {
@@ -164,7 +164,7 @@ var NewAppModalComponent = React.createClass({
       modelAttrs.instances = parseInt(modelAttrs.instances, 10);
     }
 
-    var model = util.extendObject(this.props.attributes, modelAttrs);
+    var model = Util.extendObject(this.props.attributes, modelAttrs);
 
     // Create app if validate() returns no errors
     if (appValidator.validate(model) == null) {

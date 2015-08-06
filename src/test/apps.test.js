@@ -3,7 +3,7 @@ var expect = require("chai").expect;
 var React = require("react/addons");
 var ReactContext = require('react/lib/ReactContext');
 var TestUtils = React.addons.TestUtils;
-var util = require("../js/helpers/util");
+var Util = require("../js/helpers/Util");
 
 /**
  * This *nasty* hack is needed because we want to prevent TooltipMixin from
@@ -719,7 +719,7 @@ describe("App validator", function () {
 describe("App Page component", function () {
 
   beforeEach(function () {
-    var app = util.extendObject(appScheme, {
+    var app = Util.extendObject(appScheme, {
       id: "/test-app-1",
       healthChecks: [{path: "/", protocol: "HTTP"}],
       status: AppStatus.RUNNING,
@@ -773,7 +773,7 @@ describe("App Page component", function () {
   });
 
   it("returns the right health message for tasks with unknown health", function () {
-    var app = util.extendObject(appScheme, {
+    var app = Util.extendObject(appScheme, {
       id: "/test-app-1",
       status: AppStatus.RUNNING,
       tasks: [
@@ -791,7 +791,7 @@ describe("App Page component", function () {
   });
 
   it("returns the right health message for healthy tasks", function () {
-    var app = util.extendObject(appScheme, {
+    var app = Util.extendObject(appScheme, {
       id: "/test-app-1",
       status: AppStatus.RUNNING,
       tasks: [

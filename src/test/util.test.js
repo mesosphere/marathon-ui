@@ -1,7 +1,7 @@
 var expect = require("chai").expect;
-var util = require("../js/helpers/util");
+var Util = require("../js/helpers/Util");
 
-describe("util", function () {
+describe("Util", function () {
 
   describe("param", function () {
 
@@ -10,29 +10,29 @@ describe("util", function () {
         hello: "world",
         foo: "bar"
       };
-      expect(util.param(obj)).to.equal("hello=world&foo=bar");
+      expect(Util.param(obj)).to.equal("hello=world&foo=bar");
     });
 
     it("handles spaces and other entities correctly", function () {
       var obj = {
         q: "is:open is:issue label:gui"
       };
-      expect(util.param(obj))
+      expect(Util.param(obj))
         .to.equal("q=is%3Aopen%20is%3Aissue%20label%3Agui");
     });
 
     it("handles bad input gracefully", function () {
       var obj = {};
-      expect(util.param(obj)).to.equal("");
+      expect(Util.param(obj)).to.equal("");
 
       obj = [1, 2, 3];
-      expect(util.param(obj)).to.equal("0=1&1=2&2=3");
+      expect(Util.param(obj)).to.equal("0=1&1=2&2=3");
 
       obj = null;
-      expect(util.param(obj)).to.equal(null);
+      expect(Util.param(obj)).to.equal(null);
 
       obj = "already=foo&also=bar";
-      expect(util.param(obj)).to.equal("already=foo&also=bar");
+      expect(Util.param(obj)).to.equal("already=foo&also=bar");
 
     });
 
@@ -44,14 +44,14 @@ describe("util", function () {
       var objA = {hello: "world", foo: "bar"};
       var objB = {hello: "there", baz: "foo"};
       var expectedResult = {hello: "there", foo: "bar", baz: "foo"};
-      var result = util.extendObject(objA, objB);
+      var result = Util.extendObject(objA, objB);
       expect(result).to.deep.equal(expectedResult);
     });
 
     it("returns a new object without modifying the source", function () {
       var objA = {hello: "world", foo: "bar"};
       var objB = {hello: "there", baz: "foo"};
-      var result = util.extendObject(objA, objB);
+      var result = Util.extendObject(objA, objB);
       expect(objA).to.deep.equal({hello: "world", foo: "bar"});
     });
 
@@ -67,13 +67,13 @@ describe("util", function () {
         flag: true
       };
 
-      var result = util.extendObject(objA, objB, objC);
+      var result = Util.extendObject(objA, objB, objC);
       expect(result).to.deep.equal(expectedResult);
     });
 
     it("always returns an object", function () {
       var expectedResult = {"0": "faz", "1": "bar"};
-      var result = util.extendObject(["foo", "bar"], ["faz"]);
+      var result = Util.extendObject(["foo", "bar"], ["faz"]);
       expect(result).to.deep.equal(expectedResult);
     });
   });
@@ -86,7 +86,7 @@ describe("util", function () {
         {name: "B", value: 2},
         {name: "C", value: 3}
       ];
-      var output = util.serializedArrayToDictionary(input);
+      var output = Util.serializedArrayToDictionary(input);
       expect(output).to.deep.equal({"A": 1, "B": 2, "C": 3});
     });
 
@@ -96,7 +96,7 @@ describe("util", function () {
         {name: "B.A", value: 2},
         {name: "B.B", value: 3}
       ];
-      var output = util.serializedArrayToDictionary(input);
+      var output = Util.serializedArrayToDictionary(input);
       expect(output).to.deep.equal({"A": 1, "B": {"A": 2, "B": 3}});
     });
 
@@ -105,7 +105,7 @@ describe("util", function () {
         {name: "A", value: 1},
         {name: "A", value: 2}
       ];
-      var output = util.serializedArrayToDictionary(input);
+      var output = Util.serializedArrayToDictionary(input);
       expect(output).to.deep.equal({"A": 2});
     });
 
@@ -113,13 +113,13 @@ describe("util", function () {
       var input = [
         {name: "A.B.C.D.E", value: 1}
       ];
-      var output = util.serializedArrayToDictionary(input);
+      var output = Util.serializedArrayToDictionary(input);
       expect(output).to.deep.equal({"A": {"B": {"C": {"D": {"E": 1}}}}});
     });
 
     it("handles empty arrays correctly", function () {
       var input = [];
-      var output = util.serializedArrayToDictionary(input);
+      var output = Util.serializedArrayToDictionary(input);
       expect(output).to.deep.equal({});
     });
 
@@ -128,7 +128,7 @@ describe("util", function () {
         {name: "A[0]", value: 1},
         {name: "A[1]", value: 2}
       ];
-      var output = util.serializedArrayToDictionary(input);
+      var output = Util.serializedArrayToDictionary(input);
       expect(output).to.deep.equal({"A": [1, 2]});
     });
 
@@ -137,7 +137,7 @@ describe("util", function () {
         {name: "A[0].A", value: 1},
         {name: "A[1].B", value: 2}
       ];
-      var output = util.serializedArrayToDictionary(input);
+      var output = Util.serializedArrayToDictionary(input);
       expect(output).to.deep.equal({"A": [{"A": 1}, {"B": 2}]});
     });
 
@@ -148,7 +148,7 @@ describe("util", function () {
         {name: "A[1].A", value: 3},
         {name: "A[1].B", value: 4}
       ];
-      var output = util.serializedArrayToDictionary(input);
+      var output = Util.serializedArrayToDictionary(input);
       expect(output).to.deep.equal({"A": [{"A": 1, "B": 2}, {"A": 3, "B": 4}]});
     });
 
@@ -156,7 +156,7 @@ describe("util", function () {
       var input = [
         {name: "A[0].B[0].C", value: 1}
       ];
-      var output = util.serializedArrayToDictionary(input);
+      var output = Util.serializedArrayToDictionary(input);
       expect(output).to.deep.equal({"A": [{"B": [{"C": 1}]}]});
     });
 
@@ -166,7 +166,7 @@ describe("util", function () {
         var input = [
           {name: ".A.B", value: 1}
         ];
-        var output = util.serializedArrayToDictionary(input);
+        var output = Util.serializedArrayToDictionary(input);
         expect(output).to.deep.equal({"A": {"B": 1}});
       });
 
@@ -174,7 +174,7 @@ describe("util", function () {
         var input = [
           {name: "A.B.", value: 1}
         ];
-        var output = util.serializedArrayToDictionary(input);
+        var output = Util.serializedArrayToDictionary(input);
         expect(output).to.deep.equal({"A": {"B": 1}});
       });
 
@@ -182,7 +182,7 @@ describe("util", function () {
         var input = [
           {name: "A..B", value: 1}
         ];
-        var output = util.serializedArrayToDictionary(input);
+        var output = Util.serializedArrayToDictionary(input);
         expect(output).to.deep.equal({"A": {"B": 1}});
       });
 
@@ -191,7 +191,7 @@ describe("util", function () {
           {name: "A[].B", value: 1},
           {name: "A[].B", value: 2}
         ];
-        var output = util.serializedArrayToDictionary(input);
+        var output = Util.serializedArrayToDictionary(input);
         expect(output).to.deep.equal({"A": [{"B": 1}, {"B": 2}]});
       });
 

@@ -1,4 +1,4 @@
-var util = require("../helpers/util");
+var Util = require("../helpers/Util");
 var classNames = require("classnames");
 var React = require("react/addons");
 
@@ -26,7 +26,7 @@ var ModalComponent = React.createClass({
   getDefaultProps: function () {
     return {
       dismissOnClickOutside: true,
-      onDestroy: util.noop,
+      onDestroy: Util.noop,
       size: null
     };
   },
@@ -39,8 +39,8 @@ var ModalComponent = React.createClass({
 
   onClick: function (event) {
     if (this.props.dismissOnClickOutside &&
-      (util.hasClass(event.target, "modal") ||
-      util.hasClass(event.target, "modal-dialog"))) {
+      (Util.hasClass(event.target, "modal") ||
+      Util.hasClass(event.target, "modal-dialog"))) {
       this.destroy();
     }
   },
