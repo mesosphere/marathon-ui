@@ -14,7 +14,7 @@ var TasksActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/tasks/delete"
+      url: `${config.apiURL}v2/tasks/delete`
     })
     .success(function () {
       AppDispatcher.dispatch({
@@ -39,7 +39,7 @@ var TasksActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/tasks/delete?scale=true"
+      url: `${config.apiURL}v2/tasks/delete?scale=true`
     })
     .success(function () {
       AppDispatcher.dispatch({

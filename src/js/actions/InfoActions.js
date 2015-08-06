@@ -7,7 +7,7 @@ var InfoEvents = require("../events/InfoEvents");
 var InfoActions = {
   requestInfo: function () {
     this.request({
-      url: config.apiURL + "v2/info"
+      url: `${config.apiURL}v2/info`
     })
     .success(function (info) {
       AppDispatcher.dispatch({

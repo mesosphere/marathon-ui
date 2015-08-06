@@ -7,7 +7,7 @@ var AppVersionsEvents = require("../events/AppVersionsEvents");
 var AppVersionsActions = {
   requestAppVersions: function (appId) {
     this.request({
-      url: config.apiURL + "v2/apps/" + appId + "/versions"
+      url: `${config.apiURL}v2/apps/${appId}/versions`
     })
     .success(function (appVersions) {
       AppDispatcher.dispatch({
@@ -26,7 +26,7 @@ var AppVersionsActions = {
   },
   requestAppVersion: function (appId, versionTimestamp) {
     this.request({
-      url: config.apiURL + "v2/apps/" + appId + "/versions/" + versionTimestamp
+      url: `${config.apiURL}v2/apps/${appId}/versions/${versionTimestamp}`
     })
     .success(function (appVersion) {
       AppDispatcher.dispatch({

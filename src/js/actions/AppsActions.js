@@ -7,7 +7,7 @@ var AppsEvents = require("../events/AppsEvents");
 var AppsActions = {
   requestApps: function () {
     this.request({
-      url: config.apiURL + "v2/apps"
+      url: `${config.apiURL}v2/apps`
     })
     .success(function (apps) {
       AppDispatcher.dispatch({
@@ -24,7 +24,7 @@ var AppsActions = {
   },
   requestApp: function (appId) {
     this.request({
-      url: config.apiURL + "v2/apps/" + appId
+      url: `${config.apiURL}v2/apps/${appId}`
     })
     .success(function (app) {
       AppDispatcher.dispatch({
@@ -46,7 +46,7 @@ var AppsActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/apps"
+      url: `${config.apiURL}v2/apps`
     })
     .success(function (app) {
       AppDispatcher.dispatch({
@@ -67,7 +67,7 @@ var AppsActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/apps/" + appId
+      url: `${config.apiURL}v2/apps/${appId}`
     })
     .success(function (app) {
       AppDispatcher.dispatch({
@@ -92,7 +92,7 @@ var AppsActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/apps/" + appId + "/restart"
+      url: `${config.apiURL}v2/apps/${appId}/restart`
     })
     .success(function (app) {
       AppDispatcher.dispatch({
@@ -117,7 +117,7 @@ var AppsActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/apps/" + appId
+      url: `${config.apiURL}v2/apps/${appId}`
     })
     .success(function (app) {
       AppDispatcher.dispatch({
@@ -143,7 +143,7 @@ var AppsActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/apps/" + appId
+      url: `${config.apiURL}v2/apps/${appId}`
     })
     .success(function (app) {
       AppDispatcher.dispatch({

@@ -7,7 +7,7 @@ var DeploymentEvents = require("../events/DeploymentEvents");
 var DeploymentActions = {
   requestDeployments: function () {
     this.request({
-      url: config.apiURL + "v2/deployments"
+      url: `${config.apiURL}v2/deployments`
     })
     .success(function (deployments) {
       AppDispatcher.dispatch({
@@ -25,7 +25,7 @@ var DeploymentActions = {
   revertDeployment: function (deploymentID) {
     this.request({
       method: "DELETE",
-      url: config.apiURL + "v2/deployments/" + deploymentID
+      url: `${config.apiURL}v2/deployments/${deploymentID}`
     })
     .success(function (deployment) {
       AppDispatcher.dispatch({
@@ -44,7 +44,7 @@ var DeploymentActions = {
   stopDeployment: function (deploymentID) {
     this.request({
       method: "DELETE",
-      url: config.apiURL + "v2/deployments/" + deploymentID + "?force=true"
+      url: `${config.apiURL}v2/deployments/${deploymentID}?force=true`
     })
     .success(function (deployment) {
       AppDispatcher.dispatch({

@@ -7,7 +7,7 @@ var QueueEvents = require("../events/QueueEvents");
 var QueueActions = {
   requestQueue: function () {
     this.request({
-      url: config.apiURL + "v2/queue"
+      url: `${config.apiURL}v2/queue`
     })
     .success(function (queue) {
       AppDispatcher.dispatch({
@@ -28,7 +28,7 @@ var QueueActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/queue/" + appId + "/delay"
+      url: `${config.apiURL}v2/queue/${appId}/delay`
     })
     .success(function () {
       AppDispatcher.dispatch({
