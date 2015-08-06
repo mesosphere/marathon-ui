@@ -163,17 +163,23 @@ var AppVersionListComponent = React.createClass({
   },
 
   render: function () {
+    var currentVersion = AppsStore.getCurrentApp(this.props.appId);
+
+    var versionDate = currentVersion.version != null ?
+      ` - ${new Date(currentVersion.version).toLocaleString()}` :
+      "";
+
     return (
       <div>
         <h5>
-          Current Version
+          Current Version{versionDate}
           <button className="btn btn-sm btn-info pull-right"
               onClick={this.handleRefresh}>
             ↻ Refresh
           </button>
         </h5>
         <AppVersionComponent
-          appVersion={AppsStore.getCurrentApp(this.props.appId)}
+          appVersion={currentVersion}
           currentVersion={true} />
         {this.getAppVersionTable()}
       </div>
