@@ -340,14 +340,11 @@ var AppPageComponent = React.createClass({
     var state = this.state;
     var model = state.app;
 
-    var task = AppsStore.getTask(this.state.appId, state.activeTaskId);
-
-    if (task == null) {
-      return null;
-    }
+    var task = AppsStore.getTask(state.appId, state.activeTaskId);
 
     return (
       <TaskDetailComponent
+        appId={state.appId}
         fetchState={state.fetchState}
         taskHealthMessage={this.getTaskHealthMessage(state.activeTaskId)}
         hasHealth={model.healthChecks > 0}
