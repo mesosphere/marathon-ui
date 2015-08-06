@@ -80,7 +80,7 @@ var TaskDetailComponent = React.createClass({
             </dd>
             <dt>Health</dt>
             <dd className={healthClassSet}>{this.props.taskHealthMessage}</dd>
-            <dt>Mesos details</dt>
+            <dt>Mesos Details</dt>
             <dd><TaskMesosUrlComponent task={task}/></dd>
           </dl>
           {hasHealth ?

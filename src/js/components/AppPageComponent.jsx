@@ -25,7 +25,7 @@ var tabsTemplate = [
   {id: "apps/:appId/configuration", text: "Configuration"},
   {
     id: "apps/:appId/last-task-failure",
-    text: "Last task failure",
+    text: "Last Task Failure",
     hidden: true
   }
 ];

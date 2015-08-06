@@ -63,7 +63,7 @@ var AppLastTaskFailureComponent = React.createClass({
                   <dd>{lastTaskFailure.timestamp}</dd>
                   <dt>Version</dt>
                   <dd>{lastTaskFailure.version}</dd>
-                  <dt>Mesos details</dt>
+                  <dt>Mesos Details</dt>
                   <dd><TaskMesosUrlComponent task={lastTaskFailure}/></dd>
               </dl>
           </div>
