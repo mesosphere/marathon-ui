@@ -39,7 +39,7 @@ var TaskMesosUrlComponent = React.createClass({
   buildUrl: function (task, info) {
     if (typeof task !== "undefined" && typeof info !== "undefined") {
       if (info.hasOwnProperty("marathon_config")) {
-        var masterUrl = info.marathon_config.mesos_master_url;
+        var masterUrl = info.marathon_config.mesos_leader_ui_url;
         var frameworkId = info.frameworkId;
         if (masterUrl == null || task.slaveId == null) {
           return null;
