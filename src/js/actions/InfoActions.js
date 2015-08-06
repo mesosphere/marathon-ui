@@ -9,18 +9,18 @@ var InfoActions = {
     this.request({
       url: `${config.apiURL}v2/info`
     })
-    .success(function (info) {
-      AppDispatcher.dispatch({
-        actionType: InfoEvents.REQUEST,
-        data: info
+      .success(function (info) {
+        AppDispatcher.dispatch({
+          actionType: InfoEvents.REQUEST,
+          data: info
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: InfoEvents.REQUEST_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: InfoEvents.REQUEST_ERROR,
-        data: error
-      });
-    });
   },
   request: qajaxWrapper
 };

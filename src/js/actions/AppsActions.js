@@ -9,35 +9,35 @@ var AppsActions = {
     this.request({
       url: `${config.apiURL}v2/apps`
     })
-    .success(function (apps) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.REQUEST_APPS,
-        data: apps
+      .success(function (apps) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.REQUEST_APPS,
+          data: apps
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.REQUEST_APPS_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.REQUEST_APPS_ERROR,
-        data: error
-      });
-    });
   },
   requestApp: function (appId) {
     this.request({
       url: `${config.apiURL}v2/apps/${appId}`
     })
-    .success(function (app) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.REQUEST_APP,
-        data: app
+      .success(function (app) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.REQUEST_APP,
+          data: app
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.REQUEST_APP_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.REQUEST_APP_ERROR,
-        data: error
-      });
-    });
   },
   createApp: function (newAppAttributes) {
     this.request({
@@ -48,18 +48,18 @@ var AppsActions = {
       },
       url: `${config.apiURL}v2/apps`
     })
-    .success(function (app) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.CREATE_APP,
-        data: app
+      .success(function (app) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.CREATE_APP,
+          data: app
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.CREATE_APP_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.CREATE_APP_ERROR,
-        data: error
-      });
-    });
   },
   deleteApp: function (appId) {
     this.request({
@@ -69,19 +69,19 @@ var AppsActions = {
       },
       url: `${config.apiURL}v2/apps/${appId}`
     })
-    .success(function (app) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.DELETE_APP,
-        data: app,
-        appId: appId
+      .success(function (app) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.DELETE_APP,
+          data: app,
+          appId: appId
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.DELETE_APP_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.DELETE_APP_ERROR,
-        data: error
-      });
-    });
   },
   restartApp: function (appId) {
     this.request({
@@ -94,19 +94,19 @@ var AppsActions = {
       },
       url: `${config.apiURL}v2/apps/${appId}/restart`
     })
-    .success(function (app) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.RESTART_APP,
-        data: app,
-        appId: appId
+      .success(function (app) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.RESTART_APP,
+          data: app,
+          appId: appId
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.RESTART_APP_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.RESTART_APP_ERROR,
-        data: error
-      });
-    });
   },
   scaleApp: function (appId, instances) {
     this.request({
@@ -119,19 +119,19 @@ var AppsActions = {
       },
       url: `${config.apiURL}v2/apps/${appId}`
     })
-    .success(function (app) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.SCALE_APP,
-        data: app,
-        appId: appId
+      .success(function (app) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.SCALE_APP,
+          data: app,
+          appId: appId
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.SCALE_APP_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.SCALE_APP_ERROR,
-        data: error
-      });
-    });
   },
   applySettingsOnApp: function (appId, settings) {
     // Version key is not allowed and not needed on settings object
@@ -145,19 +145,19 @@ var AppsActions = {
       },
       url: `${config.apiURL}v2/apps/${appId}`
     })
-    .success(function (app) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.APPLY_APP,
-        data: app,
-        appId: appId
+      .success(function (app) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.APPLY_APP,
+          data: app,
+          appId: appId
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: AppsEvents.APPLY_APP_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: AppsEvents.APPLY_APP_ERROR,
-        data: error
-      });
-    });
   },
   request: qajaxWrapper
 };
