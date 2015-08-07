@@ -87,6 +87,9 @@ var Marathon = React.createClass({
       modal = this.getNewAppModal();
     } else if (modalQuery === "about") {
       modal = this.getAboutModal();
+    } else if (modalQuery.indexOf("editapp--") > -1) {
+      let [, appId, appVersion] = modalQuery.split("--");
+      modal = this.getEditAppModal(decodeURIComponent(appId), appVersion);
     }
 
     var appId = params.appId;
@@ -187,6 +190,10 @@ var Marathon = React.createClass({
       <AppModalComponent
         onDestroy={this.handleModalDestroy} />
     );
+  },
+
+  getEditAppModal: function (appId, appVersion) {
+    console.log(appId, appVersion);
   },
 
   render: function () {

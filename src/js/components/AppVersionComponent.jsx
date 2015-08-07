@@ -26,6 +26,10 @@ function invalidateValue(value, suffix) {
 var AppVersionComponent = React.createClass({
   displayName: "AppVersionComponent",
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   propTypes: {
     // App object
     appVersion: React.PropTypes.object.isRequired,
@@ -35,7 +39,10 @@ var AppVersionComponent = React.createClass({
 
   handleEditAppVersion: function () {
     var appVersion = this.props.appVersion;
-
+    var router = this.context.router;
+    router.transitionTo(router.getCurrentPathname(), {}, {
+      modal: `editapp--${appVersion.id}--${appVersion.version}`
+    });
   },
 
   handleRollbackToAppVersion: function () {
