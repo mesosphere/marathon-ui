@@ -1,5 +1,6 @@
 var classNames = require("classnames");
 var React = require("react/addons");
+var Util = require("../helpers/Util");
 
 var FormGroupComponent = React.createClass({
   displayName: "FormGroupComponent",
@@ -67,7 +68,7 @@ var FormGroupComponent = React.createClass({
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        value: this.state.model[attribute]
+        value: Util.objectResolve(attribute, this.state.model, true)
       }
     );
 
