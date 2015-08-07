@@ -8,7 +8,7 @@ var React = require("react/addons");
 var RouteHandler = require("react-router").RouteHandler;
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
-var AppModalComponent = require("../components/AppModalComponent");
+var AppModalComponent = require("../components/modals/AppModalComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");

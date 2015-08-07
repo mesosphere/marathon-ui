@@ -1,24 +1,29 @@
 var _ = require("underscore");
 var lazy = require("lazy.js");
 var React = require("react/addons");
-var Util = require("../helpers/Util");
+var Util = require("../../helpers/Util");
 
-var AppsActions = require("../actions/AppsActions");
-var AppsEvents = require("../events/AppsEvents");
-var appScheme = require("../stores/appScheme");
-var AppsStore = require("../stores/AppsStore");
-var appValidator = require("../validators/appValidator");
+var AppsActions = require("../../actions/AppsActions");
+var AppsEvents = require("../../events/AppsEvents");
+var appScheme = require("../../stores/appScheme");
+var AppsStore = require("../../stores/AppsStore");
+var appValidator = require("../../validators/appValidator");
 var CollapsiblePanelComponent =
-  require("../components/CollapsiblePanelComponent");
+  require("../../components/CollapsiblePanelComponent");
 var ContainerSettingsComponent =
-  require("../components/ContainerSettingsComponent");
-var FormGroupComponent = require("../components/FormGroupComponent");
-var ModalComponent = require("../components/ModalComponent");
+  require("../../components/ContainerSettingsComponent");
+var FormGroupComponent = require("../../components/FormGroupComponent");
+var ModalComponent = require("../../components/ModalComponent");
 var OptionalSettingsComponent =
+<<<<<<< HEAD:src/js/components/AppModalComponent.jsx
   require("../components/OptionalSettingsComponent");
 var OptionalEnvironmentComponent =
   require("../components/OptionalEnviromentComponent");
 var ValidationError = require("../validators/ValidationError");
+=======
+  require("../../components/OptionalSettingsComponent");
+var ValidationError = require("../../validators/ValidationError");
+>>>>>>> Moving AppModalComponent to modals directory:src/js/components/modals/AppModalComponent.jsx
 
 var AppModalComponent = React.createClass({
   displayName: "AppModalComponent",
