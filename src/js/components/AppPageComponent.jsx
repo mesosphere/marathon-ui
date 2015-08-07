@@ -68,11 +68,7 @@ var AppPageComponent = React.createClass({
       }
 
       if (tab.id === "apps/:appId/last-task-failure") {
-        if (app.lastTaskFailure == null) {
-          tab.hidden = true;
-        } else {
-          tab.hidden = false;
-        }
+        tab.hidden = app.lastTaskFailure == null;
       }
 
       return {
@@ -155,13 +151,8 @@ var AppPageComponent = React.createClass({
     tabs = tabs.map(function (tab) {
       var tabId = `apps/${encodeURIComponent(state.appId)}/last-task-failure`;
       if (tab.id === tabId) {
-        if (app.lastTaskFailure == null) {
-          tab.hidden = true;
-        } else {
-          tab.hidden = false;
-        }
+        tab.hidden = app.lastTaskFailure == null;
       }
-
       return tab;
     });
 
