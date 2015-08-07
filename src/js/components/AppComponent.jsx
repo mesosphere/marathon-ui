@@ -34,9 +34,19 @@ var AppComponent = React.createClass({
         <td className="overflow-ellipsis" title={model.id}>
           {model.id}
         </td>
-        <td className="text-right">{model.mem}</td>
-        <td className="text-right">{model.cpus}</td>
-        <td className="text-right">
+        <td className="text-right ram">
+          {model.mem}
+        </td>
+        <td className="text-right total ram">
+          {model.totalMem}
+        </td>
+        <td className="text-right cpus">
+          {model.cpus}
+        </td>
+        <td className="text-right total cpu">
+          {model.totalCpus}
+        </td>
+        <td className="text-right running tak">
           <span className={runningTasksClassSet}>
             {model.tasksRunning}
           </span> / {model.instances}
