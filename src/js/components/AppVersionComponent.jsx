@@ -33,6 +33,11 @@ var AppVersionComponent = React.createClass({
     currentVersion: React.PropTypes.bool
   },
 
+  handleEditAppVersion: function () {
+    var appVersion = this.props.appVersion;
+
+  },
+
   handleRollbackToAppVersion: function () {
     var appVersion = this.props.appVersion;
     AppsActions.applySettingsOnApp(appVersion.id, appVersion);
@@ -43,17 +48,25 @@ var AppVersionComponent = React.createClass({
 
     if (!this.props.currentVersion) {
       applyButton = (
-        <div className="text-right">
-          <button type="submit"
-              className="btn btn-sm btn-default"
-              onClick={this.handleRollbackToAppVersion}>
-            Apply these settings
-          </button>
-        </div>
+        <button type="submit"
+            className="btn btn-sm btn-default pull-right"
+            onClick={this.handleRollbackToAppVersion}>
+          Apply these settings
+        </button>
       );
     }
 
     return applyButton;
+  },
+
+  getEditButton: function () {
+    return (
+      <button type="submit"
+          className="btn btn-sm btn-default pull-right"
+          onClick={this.handleEditAppVersion}>
+        Edit these settings
+      </button>
+    );
   },
 
   render: function () {
@@ -138,6 +151,7 @@ var AppVersionComponent = React.createClass({
           {invalidateValue(appVersion.version)}
         </dl>
         {this.getApplyButton()}
+        {this.getEditButton()}
       </div>
     );
   }
