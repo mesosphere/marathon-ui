@@ -201,6 +201,14 @@ var AppModalComponent = React.createClass({
       return <p key={i} className="text-danger"><strong>{error.message}</strong></p>;
     });
 
+    var modalTitle = "New Application";
+    var submitButtonTitle = "+ Create";
+
+    if (this.props.edit) {
+      modalTitle = "Edit Application";
+      submitButtonTitle = "Change and deploy configuration";
+    }
+
     return (
       <ModalComponent
         dismissOnClickOutside={false}
@@ -211,7 +219,7 @@ var AppModalComponent = React.createClass({
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>
-            <h3 className="modal-title">New Application</h3>
+            <h3 className="modal-title">{modalTitle}</h3>
           </div>
           <div className="modal-body reduced-padding">
             <FormGroupComponent
@@ -290,7 +298,7 @@ var AppModalComponent = React.createClass({
             </div>
             <div className="modal-controls">
               {errorBlock}
-              <input type="submit" className="btn btn-success" value="+ Create" /> <button className="btn btn-default" type="button" onClick={this.destroy}>
+              <input type="submit" className="btn btn-success" value={submitButtonTitle} /> <button className="btn btn-default" type="button" onClick={this.destroy}>
                 Cancel
               </button>
             </div>
