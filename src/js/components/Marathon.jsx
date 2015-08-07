@@ -29,7 +29,7 @@ var Marathon = React.createClass({
       activeAppId: null,
       activeAppView: null,
       activeTabId: null,
-      modalClass: null
+      modal: null
     };
   },
 
@@ -39,7 +39,7 @@ var Marathon = React.createClass({
     this.onRouteChange();
 
     Mousetrap.bindGlobal("esc", function () {
-      if (this.refs.modal != null) {
+      if (this.state.modal != null) {
         this.handleModalDestroy();
       }
     }.bind(this));
@@ -49,13 +49,13 @@ var Marathon = React.createClass({
     }, "keyup");
 
     Mousetrap.bind("g a", function () {
-      if (this.state.modalClass == null) {
+      if (this.state.modal == null) {
         router.transitionTo("apps");
       }
     }.bind(this));
 
     Mousetrap.bind("g d", function () {
-      if (this.state.modalClass == null) {
+      if (this.state.modal == null) {
         router.transitionTo("deployments");
       }
     }.bind(this));
@@ -81,12 +81,12 @@ var Marathon = React.createClass({
     var params = router.getCurrentParams();
     var path = router.getCurrentPathname();
     var modalQuery = router.getCurrentQuery().modal;
-    var modalClass = null;
+    var modal = null;
 
     if (modalQuery === "newapp") {
-      modalClass = AppModalComponent;
+      modal = this.getNewAppModal();
     } else if (modalQuery === "about") {
-      modalClass = AboutModalComponent;
+      modal = this.getAboutModal();
     }
 
     var appId = params.appId;
@@ -113,7 +113,7 @@ var Marathon = React.createClass({
       activeAppId: appId,
       activeAppView: view,
       activeTabId: activeTabId,
-      modalClass: modalClass
+      modal: modal
     });
   },
 
@@ -131,7 +131,7 @@ var Marathon = React.createClass({
   },
 
   handleModalDestroy: function () {
-    if (!this.state.modalClass) {
+    if (!this.state.modal) {
       return;
     }
 
@@ -178,29 +178,20 @@ var Marathon = React.createClass({
   getAboutModal: function () {
     return (
       <AboutModalComponent
-        onDestroy={this.handleModalDestroy}
-        ref="modal" />
+        onDestroy={this.handleModalDestroy} />
     );
   },
 
   getNewAppModal: function () {
     return (
       <AppModalComponent
-        onDestroy={this.handleModalDestroy}
-        ref="modal" />
+        onDestroy={this.handleModalDestroy} />
     );
   },
 
   render: function () {
-    var modal;
     var state = this.state;
     var router = this.context.router;
-
-    if (state.modalClass === AppModalComponent) {
-      modal = this.getNewAppModal();
-    } else if (state.modalClass === AboutModalComponent) {
-      modal = this.getAboutModal();
-    }
 
     var logoPath = config.rootUrl + "img/marathon-logo.png";
 
@@ -234,7 +225,7 @@ var Marathon = React.createClass({
           </div>
         </nav>
         <RouteHandler />
-        {modal}
+        {state.modal}
       </div>
     );
   }
