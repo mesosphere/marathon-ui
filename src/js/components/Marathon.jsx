@@ -8,7 +8,7 @@ var React = require("react/addons");
 var RouteHandler = require("react-router").RouteHandler;
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
-var NewAppModalComponent = require("../components/NewAppModalComponent");
+var AppModalComponent = require("../components/AppModalComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");
@@ -84,7 +84,7 @@ var Marathon = React.createClass({
     var modalClass = null;
 
     if (modalQuery === "newapp") {
-      modalClass = NewAppModalComponent;
+      modalClass = AppModalComponent;
     } else if (modalQuery === "about") {
       modalClass = AboutModalComponent;
     }
@@ -185,7 +185,7 @@ var Marathon = React.createClass({
 
   getNewAppModal: function () {
     return (
-      <NewAppModalComponent
+      <AppModalComponent
         onDestroy={this.handleModalDestroy}
         ref="modal" />
     );
@@ -196,7 +196,7 @@ var Marathon = React.createClass({
     var state = this.state;
     var router = this.context.router;
 
-    if (state.modalClass === NewAppModalComponent) {
+    if (state.modalClass === AppModalComponent) {
       modal = this.getNewAppModal();
     } else if (state.modalClass === AboutModalComponent) {
       modal = this.getAboutModal();
