@@ -138,12 +138,14 @@ var AppListComponent = React.createClass({
     return (
       <table className={tableClassSet}>
         <colgroup>
-          <col style={{width: "28%"}} />
-          <col style={{width: "14%"}} />
-          <col style={{width: "14%"}} />
-          <col style={{width: "14%"}} />
-          <col style={{width: "14%"}} />
-          <col style={{width: "16%"}} />
+          <col style={{width: "25%"}} />
+          <col style={{width: "10%"}} />
+          <col style={{width: "10%"}} />
+          <col style={{width: "10%"}} />
+          <col style={{width: "10%"}} />
+          <col style={{width: "10%"}} />
+          <col style={{width: "10%"}} />
+          <col style={{width: "15%"}} />
         </colgroup>
         <thead>
           <tr>
@@ -156,13 +158,25 @@ var AppListComponent = React.createClass({
             <th className="text-right">
               <span onClick={this.sortBy.bind(null, "mem")}
                   className={headerClassSet}>
-                {this.getCaret("mem")} Memory (MB)
+                {this.getCaret("mem")} Memory task (MB)
+              </span>
+            </th>
+            <th className="text-right">
+              <span onClick={this.sortBy.bind(null, "totalMem")}
+                  className={headerClassSet}>
+                {this.getCaret("totalMem")} Memory total (MB)
               </span>
             </th>
             <th className="text-right">
               <span onClick={this.sortBy.bind(null, "cpus")}
                   className={headerClassSet}>
-                {this.getCaret("cpus")} CPUs
+                {this.getCaret("cpus")} CPUs task
+              </span>
+            </th>
+            <th className="text-right">
+              <span onClick={this.sortBy.bind(null, "totalCpus")}
+                  className={headerClassSet}>
+                {this.getCaret("totalCpus")} CPUs total
               </span>
             </th>
             <th className="text-right">
