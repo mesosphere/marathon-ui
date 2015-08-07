@@ -13,7 +13,15 @@ var FormGroupComponent = React.createClass({
     help: React.PropTypes.string,
     label: React.PropTypes.string,
     model: React.PropTypes.object.isRequired,
-    validator: React.PropTypes.object.isRequired
+    validator: React.PropTypes.object
+  },
+
+  getDefaultProps: function () {
+    return {
+      validator: {
+        validate: () => {}
+      }
+    };
   },
 
   getInitialState: function () {
@@ -61,14 +69,15 @@ var FormGroupComponent = React.createClass({
 
     // Assume there is a single child of either <input> or <textarea>, and add
     // the needed props to make it an input for this attribute.
+    var child = React.Children.only(this.props.children);
     var formControlChild = React.cloneElement(
-      React.Children.only(this.props.children),
+      child,
       {
         className: "form-control",
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        value: Util.objectResolve(attribute, this.state.model, true)
+        value: child.props.value || Util.objectResolve(attribute, this.state.model, true)
       }
     );
 

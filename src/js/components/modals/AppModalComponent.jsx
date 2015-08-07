@@ -189,6 +189,26 @@ var AppModalComponent = React.createClass({
 
     var model = Util.extendObject(this.props.attributes, modelAttrs);
 
+    /*
+    if (model.container.docker != null) {
+      if (!Object.keys(model.container.docker.portMappings[0]).length) {
+        delete model.container.docker;
+      }
+    }
+
+    if (model.container.parameters != null) {
+      if (!Object.keys(model.container.parameters[0]).length) {
+        delete model.container.parameters;
+      }
+    }
+
+    if (model.container.volumes != null) {
+      if (!Object.keys(model.container.volumes[0]).length) {
+        delete model.container.volumes;
+      }
+    }
+    */
+
     // Create app if validate() returns no errors
     if (appValidator.validate(model) == null) {
       let props = this.props;

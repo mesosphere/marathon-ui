@@ -14,11 +14,28 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getInitialState: function () {
+    var container = this.props.model.container;
+
+    var [portMappingsCount, parametersCount, volumesCount] = [1, 1, 1];
+
+    if (container != null) {
+      if (container.docker != null && container.docker.portMappings != null) {
+        portMappingsCount = container.docker.portMappings.length;
+      }
+      if (container.parameters != null) {
+        parametersCount = container.parameters.length;
+      }
+      if (container.volumes != null) {
+        volumesCount = container.volumes.length;
+      }
+    }
+
     return {
       rows: {
-        portMappings: [true],
-        parameters: [true],
-        volumes: [true]
+        portMappings:
+          Array(portMappingsCount).fill(true),
+        parameters: Array(parametersCount).fill(true),
+        volumes: Array(volumesCount).fill(true)
       }
     };
   },
@@ -140,16 +157,18 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getVolumeRow: function (i = 0) {
+    var model = this.props.model;
+
     return (
       <div key={`v-${i}`} className="row duplicable-row">
         <div className="col-sm-4">
           <FormGroupComponent
             attribute={`container.volumes[${i}].containerPath`}
             label="Container path"
-            model={this.props.model}
+            model={model}
             errors={this.props.errors}
             validator={appValidator}>
-            <input />
+            <input defaultValue={model.container.volumes[i].containerPath} />
           </FormGroupComponent>
         </div>
         <div className="col-sm-4">
@@ -159,7 +178,7 @@ var ContainerSettingsComponent = React.createClass({
             model={this.props.model}
             errors={this.props.errors}
             validator={appValidator}>
-            <input />
+            <input defaultValue={model.container.volumes[i].hostPath} />
           </FormGroupComponent>
         </div>
         <div className="col-sm-4">
@@ -169,7 +188,7 @@ var ContainerSettingsComponent = React.createClass({
             model={this.props.model}
             errors={this.props.errors}
             validator={appValidator}>
-            <select defaultValue="">
+            <select defaultValue={model.container.volumes[i].mode}>
               <option value="" disabled="disabled">Select</option>
               <option value={ContainerConstants.VOLUMES.MODE.RO}>
                 Read Only
