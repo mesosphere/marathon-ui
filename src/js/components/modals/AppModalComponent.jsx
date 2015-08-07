@@ -56,12 +56,18 @@ var AppModalComponent = React.createClass({
   componentWillMount: function () {
     AppsStore.on(AppsEvents.CREATE_APP, this.onCreateApp);
     AppsStore.on(AppsEvents.CREATE_APP_ERROR, this.onCreateAppError);
+    AppsStore.on(AppsEvents.APPLY_APP, this.onCreateApp);
+    AppsStore.on(AppsEvents.APPLY_APP_ERROR, this.onCreateAppError);
   },
 
   componentWillUnmount: function () {
     AppsStore.removeListener(AppsEvents.CREATE_APP,
       this.onCreateApp);
     AppsStore.removeListener(AppsEvents.CREATE_APP_ERROR,
+      this.onCreateAppError);
+    AppsStore.removeListener(AppsEvents.APPLY_APP,
+      this.onCreateApp);
+    AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR,
       this.onCreateAppError);
   },
 
@@ -185,11 +191,17 @@ var AppModalComponent = React.createClass({
 
     // Create app if validate() returns no errors
     if (appValidator.validate(model) == null) {
-      AppsActions.createApp(model);
+      let props = this.props;
+      if (props.edit) {
+        AppsActions.applySettingsOnApp(model.id, model);
+      } else {
+        AppsActions.createApp(model);
+      }
     }
   },
 
   render: function () {
+    var props = this.props;
     var model = this.props.attributes;
     var errors = this.state.errors;
 
@@ -204,7 +216,7 @@ var AppModalComponent = React.createClass({
     var modalTitle = "New Application";
     var submitButtonTitle = "+ Create";
 
-    if (this.props.edit) {
+    if (props.edit) {
       modalTitle = "Edit Application";
       submitButtonTitle = "Change and deploy configuration";
     }
