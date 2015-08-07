@@ -9,6 +9,7 @@ var RouteHandler = require("react-router").RouteHandler;
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var AppModalComponent = require("../components/modals/AppModalComponent");
+var EditAppModalComponent = require("../components/modals/EditAppModalComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");
@@ -87,7 +88,7 @@ var Marathon = React.createClass({
       modal = this.getNewAppModal();
     } else if (modalQuery === "about") {
       modal = this.getAboutModal();
-    } else if (modalQuery.indexOf("editapp--") > -1) {
+    } else if (modalQuery != null && modalQuery.indexOf("editapp--") > -1) {
       let [, appId, appVersion] = modalQuery.split("--");
       modal = this.getEditAppModal(decodeURIComponent(appId), appVersion);
     }
@@ -193,7 +194,12 @@ var Marathon = React.createClass({
   },
 
   getEditAppModal: function (appId, appVersion) {
-    console.log(appId, appVersion);
+    return (
+      <EditAppModalComponent
+        appId={appId}
+        appVersion={appVersion}
+        onDestroy={this.handleModalDestroy} />
+    );
   },
 
   render: function () {
