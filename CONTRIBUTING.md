@@ -21,13 +21,9 @@ Before you submit your issue search the archive, maybe your question was already
 
         npm run serve
 
-4. Build the assets
+    Or build the assets
 
         npm run dist
-
-5. Check it in.
-
-        git add dist/main.js dist/main.css img/*
 
 #### Adding npm package dependencies to package.json
 
