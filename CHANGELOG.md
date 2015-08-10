@@ -15,6 +15,11 @@
   * The optional settings inside the new application modal dialog are now
     grouped together
   * It is now possible to specify Docker container settings
+- \#1673 - Prerequisites to deploy a webjar via TeamCity
+  * In a production environment, the API will be requested by ../v2/ instead of
+    ./v2/, because the UI is now served in an "/ui/"-path via Marathon.
+    Also the dist-folder isn't needed in the repository anymore, the files will
+    be generated on-the-fly.
 
 ### Fixed
 - #548 - UI showing empty list after scaling when on page > 1
