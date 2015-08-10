@@ -25,9 +25,9 @@ Before you submit your issue search the archive, maybe your question was already
 
         npm run dist
 
-5. Check it in.
+    Or create a webjar
 
-        git add dist/main.js dist/main.css img/*
+        npm run deploy
 
 #### Adding npm package dependencies to package.json
 
