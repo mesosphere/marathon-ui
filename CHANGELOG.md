@@ -17,6 +17,9 @@
 - \#1993 - Show Marathon UI version in about modal
   * The Marathon UI version will be shown on mouse hovering
     above the API version field. Second way is pressing "g v" on the keyboard.
+- \#808 - Make app configuration fields editable
+  * A selected application version can now be edited
+    by pressing on the "Edit these settings"-button.
 
 ### Changed
 - \#124 - Expose all /v2 App attributes in UI
