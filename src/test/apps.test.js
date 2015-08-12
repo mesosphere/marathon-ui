@@ -84,6 +84,48 @@ describe("Apps", function () {
       AppsActions.requestApps();
     });
 
+    describe("App", function () {
+      beforeEach(function () {
+        this.server.setup({
+          "apps": [{
+            id: "/app-1",
+            tasksHealthy: 2,
+            tasksUnhealthy: 2,
+            tasksRunning: 5,
+            tasksStaged: 2,
+            instances: 10
+          }]
+        }, 200);
+      });
+
+      it("has correct health weight", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].healthWeight).to.equal(47);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+
+      it("has correct health data object", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].health).to.deep.equal([
+              { quantity: 2, state: HealthStatus.HEALTHY },
+              { quantity: 2, state: HealthStatus.UNHEALTHY },
+              { quantity: 1, state: HealthStatus.UNKNOWN },
+              { quantity: 2, state: HealthStatus.STAGED },
+              { quantity: 0, state: HealthStatus.OVERCAPACITY },
+              { quantity: 3, state: HealthStatus.UNSCHEDULED }
+            ]);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+    });
+
   });
 
   describe("on single app request", function () {
