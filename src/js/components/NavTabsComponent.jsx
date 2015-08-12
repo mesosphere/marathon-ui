@@ -50,6 +50,10 @@ var NavTabsComponent = React.createClass({
     var activeTabId = this.props.activeTabId;
 
     var tabs = this.props.tabs.map(function (tab) {
+      if (tab.hidden === true) {
+        return null;
+      }
+
       var tabClassSet = classNames({
         "active": tab.id === activeTabId
       });

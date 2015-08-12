@@ -23,7 +23,11 @@ var QueueStore = require("../stores/QueueStore");
 var tabsTemplate = [
   {id: "apps/:appId", text: "Tasks"},
   {id: "apps/:appId/configuration", text: "Configuration"},
-  {id: "apps/:appId/last-task-failure", text: "Last task failure"}
+  {
+    id: "apps/:appId/last-task-failure",
+    text: "Last Task Failure",
+    hidden: true
+  }
 ];
 
 var AppPageComponent = React.createClass({
@@ -55,15 +59,22 @@ var AppPageComponent = React.createClass({
     var activeViewIndex = 0;
     var activeTaskId = null;
 
+    var app = AppsStore.getCurrentApp(appId);
+
     var tabs = tabsTemplate.map(function (tab) {
       var id = tab.id.replace(":appId", encodeURIComponent(appId));
       if (activeTabId == null) {
         activeTabId = id;
       }
 
+      if (tab.id === "apps/:appId/last-task-failure") {
+        tab.hidden = app.lastTaskFailure == null;
+      }
+
       return {
         id: id,
-        text: tab.text
+        text: tab.text,
+        hidden: tab.hidden
       };
     });
 
@@ -80,7 +91,7 @@ var AppPageComponent = React.createClass({
       activeTabId: activeTabId,
       activeTaskId: activeTaskId,
       activeViewIndex: activeViewIndex,
-      app: AppsStore.getCurrentApp(appId),
+      app: app,
       appId: appId,
       view: decodeURIComponent(params.view),
       tabs: tabs
@@ -133,9 +144,22 @@ var AppPageComponent = React.createClass({
   },
 
   onAppChange: function () {
+    var state = this.state;
+    var app = AppsStore.getCurrentApp(state.appId);
+    var tabs = state.tabs;
+
+    tabs = tabs.map(function (tab) {
+      var tabId = `apps/${encodeURIComponent(state.appId)}/last-task-failure`;
+      if (tab.id === tabId) {
+        tab.hidden = app.lastTaskFailure == null;
+      }
+      return tab;
+    });
+
     this.setState({
-      app: AppsStore.getCurrentApp(this.state.appId),
-      fetchState: States.STATE_SUCCESS
+      app: app,
+      fetchState: States.STATE_SUCCESS,
+      tabs: tabs
     });
 
     if (this.state.view === "configuration") {

@@ -9,6 +9,9 @@
 - \#1756 - Create a "Not found page"
 - \#878 - Jump to Mesos sandbox from UI
   * You can go directly to the Mesos tasks sandbox from the tasks detail page.
+- \#968 - Expose a way to identify "fragile" marathon apps in the web UI
+  * If there is a lastTaskFailure this information will be shown in a tab
+    called "Last task failure" on the app page.
 
 ### Changed
 - #124 - Expose all /v2 App attributes in UI
