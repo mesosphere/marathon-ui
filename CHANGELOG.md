@@ -13,6 +13,7 @@
   * If there is a lastTaskFailure this information will be shown in a tab
     called "Last task failure" on the app page.
 - \#1937 - Display version string also in local time
+- \#1058 - Add sorting to the health column in the app list
 
 ### Changed
 - #124 - Expose all /v2 App attributes in UI
