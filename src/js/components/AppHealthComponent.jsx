@@ -26,57 +26,19 @@ var AppHealthComponent = React.createClass({
     this.tip_hideTip(el);
   },
 
-  getHealthData: function () {
-    var model = this.props.model;
-
-    var tasksWithUnknownHealth = Math.max(
-      model.tasksRunning -
-      model.tasksHealthy -
-      model.tasksUnhealthy,
-      0
-    );
-
-    var healthData = [
-      {quantity: model.tasksHealthy, name: "healthy"},
-      {quantity: model.tasksUnhealthy, name: "unhealthy"},
-      {quantity: tasksWithUnknownHealth, name: "running"},
-      {quantity: model.tasksStaged, name: "staged"}
-    ];
-
-    // cut off after `instances` many tasks...
-    var tasksSum = 0;
-    for (var i = 0; i < healthData.length; i++) {
-      var capacityLeft = Math.max(0, model.instances - tasksSum);
-      tasksSum += healthData[i].quantity;
-      healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
-    }
-
-    // ... show everything above that in blue
-    var overCapacity = Math.max(0, tasksSum - model.instances);
-
-    healthData.push({quantity: overCapacity, name: "over-capacity"});
-
-    // add unscheduled task, or show black if completely suspended
-    var isSuspended = model.instances === 0 && tasksSum === 0;
-    var unscheduled = Math.max(0, (model.instances - tasksSum));
-    var unscheduledOrSuspended = isSuspended ? 1 : unscheduled;
-
-    healthData.push({quantity: unscheduledOrSuspended, name: "unscheduled"});
-
-    return healthData;
-  },
-
   getHealthBar: function () {
-    var healthData = this.getHealthData();
+    var health = this.props.model.health;
+
+    console.log(this.props.model);
 
     // normalize quantities to add up to 100%. Cut off digits at
     // third decimal to work around rounding error leading to more than 100%.
-    var dataSum = healthData.reduce(function (a, x) {
+    var dataSum = health.reduce(function (a, x) {
       return a + x.quantity;
     }, 0);
 
     var allZeroWidthBefore = true;
-    return healthData.map(function (d, i) {
+    return health.map(function (d, i) {
       var width = roundWorkaround(d.quantity * 100 / dataSum);
       var classSet = {
         // set health-bar-inner class for bars in the stack which have a

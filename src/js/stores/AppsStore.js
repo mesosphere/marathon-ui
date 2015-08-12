@@ -56,6 +56,44 @@ function setTaskStatus(task) {
   }
 }
 
+function getAppHealth(app) {
+  var tasksWithUnknownHealth = Math.max(
+    app.tasksRunning -
+    app.tasksHealthy -
+    app.tasksUnhealthy,
+    0
+  );
+
+  var healthData = [
+    {quantity: app.tasksHealthy, name: "healthy"},
+    {quantity: app.tasksUnhealthy, name: "unhealthy"},
+    {quantity: tasksWithUnknownHealth, name: "running"},
+    {quantity: app.tasksStaged, name: "staged"}
+  ];
+
+  // cut off after `instances` many tasks...
+  var tasksSum = 0;
+  for (var i = 0; i < healthData.length; i++) {
+    var capacityLeft = Math.max(0, app.instances - tasksSum);
+    tasksSum += healthData[i].quantity;
+    healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
+  }
+
+  // ... show everything above that in blue
+  var overCapacity = Math.max(0, tasksSum - app.instances);
+
+  healthData.push({quantity: overCapacity, name: "over-capacity"});
+
+  // add unscheduled task, or show black if completely suspended
+  var isSuspended = app.instances === 0 && tasksSum === 0;
+  var unscheduled = Math.max(0, (app.instances - tasksSum));
+  var unscheduledOrSuspended = isSuspended ? 1 : unscheduled;
+
+  healthData.push({quantity: unscheduledOrSuspended, name: "unscheduled"});
+
+  return healthData;
+}
+
 function processApp(app) {
   app = lazy(appScheme).extend(app).value();
 
@@ -65,6 +103,8 @@ function processApp(app) {
   } else if (app.instances === 0 && app.tasksRunning === 0) {
     app.status = AppStatus.SUSPENDED;
   }
+
+  app.health = getAppHealth(app);
 
   app.tasks = lazy(app.tasks).map(function (task) {
     task.healthStatus = getTaskHealth(task);
