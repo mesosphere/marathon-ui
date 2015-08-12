@@ -1,6 +1,6 @@
 var classNames = require("classnames");
+var dotpathResolve = require("dotpath-resolve");
 var React = require("react/addons");
-var Util = require("../helpers/Util");
 
 var FormGroupComponent = React.createClass({
   displayName: "FormGroupComponent",
@@ -77,7 +77,7 @@ var FormGroupComponent = React.createClass({
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        value: child.props.value || Util.objectResolve(attribute, this.state.model, true)
+        value: dotpathResolve(this.state.model, attribute)
       }
     );
 

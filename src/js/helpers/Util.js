@@ -123,11 +123,6 @@ var Util = {
   noop: function () {},
   extendObject: function (...sources) {
     return Object.assign({}, ...sources);
-  },
-  objectResolve: function (path, obj, safe) {
-    return path.split(".").reduce(function (prev, curr) {
-      return !safe ? prev[curr] : (prev ? prev[curr] : undefined);
-    }, obj);
   }
 };
 
