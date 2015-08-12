@@ -14,21 +14,21 @@ var TasksActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/tasks/delete"
+      url: `${config.apiURL}v2/tasks/delete`
     })
-    .success(function () {
-      AppDispatcher.dispatch({
-        actionType: TasksEvents.DELETE,
-        appId: appId,
-        taskIds: taskIds
+      .success(function () {
+        AppDispatcher.dispatch({
+          actionType: TasksEvents.DELETE,
+          appId: appId,
+          taskIds: taskIds
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: TasksEvents.DELETE_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: TasksEvents.DELETE_ERROR,
-        data: error
-      });
-    });
   },
   deleteTasksAndScale: function (appId, taskIds = []) {
     this.request({
@@ -39,21 +39,21 @@ var TasksActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: config.apiURL + "v2/tasks/delete?scale=true"
+      url: `${config.apiURL}v2/tasks/delete?scale=true`
     })
-    .success(function () {
-      AppDispatcher.dispatch({
-        actionType: TasksEvents.DELETE,
-        appId: appId,
-        taskIds: taskIds
+      .success(function () {
+        AppDispatcher.dispatch({
+          actionType: TasksEvents.DELETE,
+          appId: appId,
+          taskIds: taskIds
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: TasksEvents.DELETE_ERROR,
+          data: error
+        });
       });
-    })
-    .error(function (error) {
-      AppDispatcher.dispatch({
-        actionType: TasksEvents.DELETE_ERROR,
-        data: error
-      });
-    });
   },
   request: qajaxWrapper
 };
