@@ -11,6 +11,15 @@ var TaskStatus = require("../constants/TaskStatus");
 var QueueStore = require("./QueueStore");
 var QueueEvents = require("../events/QueueEvents");
 
+var healthWeights = {
+  [HealthStatus.UNHEALTHY]: 32,
+  [HealthStatus.OVERCAPACITY]: 16,
+  [HealthStatus.STAGED]: 8,
+  [HealthStatus.HEALTHY]: 4,
+  [HealthStatus.UNKNOWN]: 2,
+  [HealthStatus.UNSCHEDULED]: 1
+};
+
 function removeApp(apps, appId) {
   return lazy(apps).reject({
     id: appId
@@ -58,17 +67,17 @@ function setTaskStatus(task) {
 
 function getAppHealth(app) {
   var tasksWithUnknownHealth = Math.max(
-    app.tasksRunning -
-    app.tasksHealthy -
-    app.tasksUnhealthy,
+    (app.tasksRunning || 0) -
+    (app.tasksHealthy || 0) -
+    (app.tasksUnhealthy || 0),
     0
   );
 
   var healthData = [
-    {quantity: app.tasksHealthy, state: HealthStatus.HEALTHY},
-    {quantity: app.tasksUnhealthy, state: HealthStatus.UNHEALTHY},
+    {quantity: app.tasksHealthy || 0, state: HealthStatus.HEALTHY},
+    {quantity: app.tasksUnhealthy || 0, state: HealthStatus.UNHEALTHY},
     {quantity: tasksWithUnknownHealth, state: HealthStatus.UNKNOWN},
-    {quantity: app.tasksStaged, state: HealthStatus.STAGED}
+    {quantity: app.tasksStaged || 0, state: HealthStatus.STAGED}
   ];
 
   // cut off after `instances` many tasks...
@@ -98,7 +107,11 @@ function getAppHealth(app) {
 }
 
 function getAppHealthWeight(health) {
-  return health.reduce(function (weight, state) {
+  return health.reduce(function (totalWeight, entry) {
+    if (entry.quantity) {
+      return totalWeight + healthWeights[entry.state];
+    }
+    return totalWeight;
   }, 0);
 }
 
@@ -113,6 +126,7 @@ function processApp(app) {
   }
 
   app.health = getAppHealth(app);
+  app.healthWeight = getAppHealthWeight(app.health);
 
   app.tasks = lazy(app.tasks).map(function (task) {
     task.healthStatus = getTaskHealth(task);
