@@ -10,7 +10,6 @@ var minifyCSS = require("gulp-minify-css");
 var path = require("path");
 var replace = require("gulp-replace");
 var uglify = require("gulp-uglify");
-var war = require("gulp-war");
 var webpack = require("webpack");
 var zip = require("gulp-zip");
 
@@ -166,18 +165,6 @@ gulp.task("watch", function () {
   gulp.watch(dirs.fonts + "/**/*.*", ["fonts"]);
 });
 
-gulp.task("make-war", function () {
-  var warFileName = packageInfo.name + "." + packageInfo.version + ".war";
-  return gulp.src("./dist/**/*")
-    .pipe(war({
-      welcome: "index.html",
-      displayName: "Marathon UI",
-      version: packageInfo.version
-    }))
-    .pipe(zip(warFileName))
-    .pipe(gulp.dest(dirs.release));
-});
-
 gulp.task("replace-js-strings", ["webpack", "eslint", "minify-js"], function () {
   return gulp.src(dirs.dist + "/main.js")
     .pipe(replace("@@ENV", process.env.GULP_ENV))
@@ -186,7 +173,6 @@ gulp.task("replace-js-strings", ["webpack", "eslint", "minify-js"], function () 
 
 gulp.task("serve", ["default", "connect:server", "watch"]);
 gulp.task("livereload", ["default", "browsersync", "watch"]);
-gulp.task("war", ["default", "make-war"]);
 
 var tasks = [
   "eslint",
