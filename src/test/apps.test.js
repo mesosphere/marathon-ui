@@ -587,12 +587,12 @@ describe("App Health component", function () {
     var model = {
       id: "app-123",
       health: [
-        { name: 'healthy', quantity: 2 },
-        { name: 'unhealthy', quantity: 2 },
-        { name: 'running', quantity: 1 },
-        { name: 'staged', quantity: 1 },
-        { name: 'over-capacity', quantity: 2 },
-        { name: 'unscheduled', quantity: 2 }
+        { state: HealthStatus.HEALTHY, quantity: 2 },
+        { state: HealthStatus.UNHEALTHY, quantity: 2 },
+        { state: HealthStatus.UNKNOWN, quantity: 1 },
+        { state: HealthStatus.STAGED, quantity: 1 },
+        { state: HealthStatus.OVERCAPACITY, quantity: 2 },
+        { state: HealthStatus.UNSCHEDULED, quantity: 2 }
       ]
     };
 
@@ -633,6 +633,36 @@ describe("App Health component", function () {
   it("health bar for unscheduled tasks has correct width", function () {
     var width = this.component.props.children[5].props.style.width;
     expect(width).to.equal("20%");
+  });
+
+  it("health bar for healthy tasks has correct content", function () {
+    var content = this.component.props.children[0].props["data-tip-content"];
+    expect(content).to.equal("healthy");
+  });
+
+  it("health bar for unhealthy tasks has correct content", function () {
+    var content = this.component.props.children[1].props["data-tip-content"];
+    expect(content).to.equal("unhealthy");
+  });
+
+  it("health bar for running tasks has correct content", function () {
+    var content = this.component.props.children[2].props["data-tip-content"];
+    expect(content).to.equal("running");
+  });
+
+  it("health bar for staged tasks has correct content", function () {
+    var content = this.component.props.children[3].props["data-tip-content"];
+    expect(content).to.equal("staged");
+  });
+
+  it("health bar for over capacity tasks has correct content", function () {
+    var content = this.component.props.children[4].props["data-tip-content"];
+    expect(content).to.equal("over-capacity");
+  });
+
+  it("health bar for unscheduled tasks has correct content", function () {
+    var content = this.component.props.children[5].props["data-tip-content"];
+    expect(content).to.equal("unscheduled");
   });
 
 });

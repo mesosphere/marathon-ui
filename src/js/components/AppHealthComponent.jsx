@@ -3,9 +3,20 @@ var React = require("react/addons");
 
 var TooltipMixin = require("../mixins/TooltipMixin");
 
+var HealthStatus = require("../constants/HealthStatus");
+
 function roundWorkaround(x) {
   return Math.floor(x * 1000) / 1000;
 }
+
+var healthNameMap = {
+  [HealthStatus.HEALTHY]: "healthy",
+  [HealthStatus.UNHEALTHY]: "unhealthy",
+  [HealthStatus.UNKNOWN]: "running",
+  [HealthStatus.STAGED]: "staged",
+  [HealthStatus.OVERCAPACITY]: "over-capacity",
+  [HealthStatus.UNSCHEDULED]: "unscheduled"
+};
 
 var AppHealthComponent = React.createClass({
   displayName: "AppHealthComponent",
@@ -29,8 +40,6 @@ var AppHealthComponent = React.createClass({
   getHealthBar: function () {
     var health = this.props.model.health;
 
-    console.log(this.props.model);
-
     // normalize quantities to add up to 100%. Cut off digits at
     // third decimal to work around rounding error leading to more than 100%.
     var dataSum = health.reduce(function (a, x) {
@@ -39,6 +48,7 @@ var AppHealthComponent = React.createClass({
 
     var allZeroWidthBefore = true;
     return health.map(function (d, i) {
+      var name = healthNameMap[d.state];
       var width = roundWorkaround(d.quantity * 100 / dataSum);
       var classSet = {
         // set health-bar-inner class for bars in the stack which have a
@@ -47,7 +57,7 @@ var AppHealthComponent = React.createClass({
         "progress-bar": true
       };
       // add health bar name
-      classSet["health-bar-" + d.name] = true;
+      classSet["health-bar-" + name] = true;
 
       if (width !== 0) {
         allZeroWidthBefore = false;
@@ -61,7 +71,7 @@ var AppHealthComponent = React.createClass({
           "data-behavior": "show-tip",
           "data-tip-type-class": "default",
           "data-tip-place": "top",
-          "data-tip-content": d.name,
+          "data-tip-content": name,
           "onMouseOver": this.handleMouseOverHealthBar.bind(null, ref),
           "onMouseOut": this.handleMouseOutHealthBar.bind(null, ref)
         };
