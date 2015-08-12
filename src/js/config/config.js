@@ -4,7 +4,7 @@ var config = {
   rootUrl: "",
   // Defines the Marathon API URL,
   // leave empty to use the same as the UI is served.
-  apiURL: "",
+  apiURL: "../",
   // Intervall of API request in ms
   updateInterval: 5000,
   // Local http server URI while tests run
@@ -13,9 +13,7 @@ var config = {
     port: 8181
   }
 };
-if (config.environment === "production") {
-  config.rootUrl = "dist/";
-}
+
 if (process.env.GULP_ENV === "development") {
   try {
     var configDev = require("./config.dev");
