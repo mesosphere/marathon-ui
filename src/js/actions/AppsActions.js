@@ -133,7 +133,7 @@ var AppsActions = {
         });
       });
   },
-  applySettingsOnApp: function (appId, settings) {
+  applySettingsOnApp: function (appId, settings, fromEdit = false) {
     // Version key is not allowed and not needed on settings object
     delete settings.version;
 
@@ -149,13 +149,15 @@ var AppsActions = {
         AppDispatcher.dispatch({
           actionType: AppsEvents.APPLY_APP,
           data: app,
-          appId: appId
+          appId: appId,
+          fromEdit: fromEdit
         });
       })
       .error(function (error) {
         AppDispatcher.dispatch({
           actionType: AppsEvents.APPLY_APP_ERROR,
-          data: error
+          data: error,
+          fromEdit: fromEdit
         });
       });
   },
