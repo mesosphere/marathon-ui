@@ -165,9 +165,13 @@ var AppVersionListComponent = React.createClass({
   render: function () {
     var currentVersion = AppsStore.getCurrentApp(this.props.appId);
 
-    var versionDate = currentVersion.version != null ?
-      ` - ${new Date(currentVersion.version).toLocaleString()}` :
-      "";
+    var versionDate = "";
+    if (currentVersion != null) {
+      let currentVersionLocale =
+        new Date(currentVersion.version).toLocaleString();
+
+      versionDate = ` - ${currentVersionLocale}`;
+    }
 
     return (
       <div>
