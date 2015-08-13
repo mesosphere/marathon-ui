@@ -13,11 +13,12 @@ var OptionalSettingsComponent = React.createClass({
   },
 
   getInitialState: function () {
+    var env = this.props.model.env;
     var state = {
-      env: Object.keys(this.props.model.env).map(function (key) {
+      env: Object.keys(env).map(function (key) {
         return {
           key: key,
-          value: this.props.model.env[key]
+          value: env[key]
         };
       })
     };
