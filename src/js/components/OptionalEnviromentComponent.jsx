@@ -13,21 +13,26 @@ var OptionalSettingsComponent = React.createClass({
   },
 
   getInitialState: function () {
-    return {
-      rows: {
-        enviromentVariables: [true]
-      }
+    var state = {
+      env: Object.keys(this.props.model.env).map(function (key) {
+        return {
+          key: key,
+          value: this.props.model.env[key]
+        };
+      })
     };
+    if (state.env.length === 0) {
+      state.env = [true];
+    }
+    return state;
   },
 
   handleAddRow: function (rowKey, position, event) {
     event.target.blur();
     event.preventDefault();
-    console.log(this.props.model, rowKey, position);
-    var rows = React.addons.update(
-      this.state.rows, {[rowKey]: {$push: [true]}}
-    );
-    this.setState({rows: rows});
+    var state = this.state;
+    state.env.push(true); // = [true];
+    this.setState(state);
   },
 
   handleRemoveRow: function (rowKey, position, event) {
@@ -38,17 +43,16 @@ var OptionalSettingsComponent = React.createClass({
      */
     event.target.blur();
     event.preventDefault();
-    var rows = React.addons.update(
-      this.state.rows, {[rowKey]: {[position]: {$set: false}}}
-    );
-    if (rows[rowKey].filter((exists) => exists).length === 0) {
-      rows[rowKey].push(true);
-    }
-    this.setState({rows: rows});
+    var state = {
+      env: this.state.env.filter(function (value, index) {
+        return index !== position;
+      })
+    };
+    this.setState(state);
   },
 
   render: function () {
-    var enviromentRows = this.state.rows.enviromentVariables
+    var enviromentRows = this.state.env
       .map(function (exists, index) {
         return exists
           ? this.getEnviromentRow(index)
@@ -69,9 +73,9 @@ var OptionalSettingsComponent = React.createClass({
       <div key={`p-${i}`} className="row duplicable-row">
         <div className="col-sm-6 add-colon">
           <FormGroupComponent
-            attribute={`enviromentVariables[${i}].key`}
+            attribute={`env[${i}].key`}
             label="Key"
-            model={this.props.model}
+            model={this.state}
             errors={this.props.errors}
             validator={appValidator}>
             <input />
@@ -79,9 +83,9 @@ var OptionalSettingsComponent = React.createClass({
         </div>
         <div className="col-sm-6">
           <FormGroupComponent
-            attribute={`enviromentVariables[${i}].value`}
+            attribute={`env[${i}].value`}
             label="Value"
-            model={this.props.model}
+            model={this.state}
             errors={this.props.errors}
             validator={appValidator}>
             <input />
