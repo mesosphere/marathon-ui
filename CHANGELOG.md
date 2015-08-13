@@ -12,6 +12,7 @@
 - \#968 - Expose a way to identify "fragile" marathon apps in the web UI
   * If there is a lastTaskFailure this information will be shown in a tab
     called "Last task failure" on the app page.
+- \#1937 - Display version string also in local time
 
 ### Changed
 - #124 - Expose all /v2 App attributes in UI
