@@ -11,14 +11,14 @@ var TaskStatus = require("../constants/TaskStatus");
 var QueueStore = require("./QueueStore");
 var QueueEvents = require("../events/QueueEvents");
 
-var healthWeights = {
+const healthWeights = Object.freeze({
   [HealthStatus.UNHEALTHY]: 32,
   [HealthStatus.OVERCAPACITY]: 16,
   [HealthStatus.STAGED]: 8,
   [HealthStatus.HEALTHY]: 4,
   [HealthStatus.UNKNOWN]: 2,
   [HealthStatus.UNSCHEDULED]: 1
-};
+});
 
 function removeApp(apps, appId) {
   return lazy(apps).reject({
@@ -82,8 +82,8 @@ function getAppHealth(app) {
 
   // cut off after `instances` many tasks...
   var tasksSum = 0;
-  for (var i = 0; i < healthData.length; i++) {
-    var capacityLeft = Math.max(0, app.instances - tasksSum);
+  for (let i = 0; i < healthData.length; i++) {
+    let capacityLeft = Math.max(0, app.instances - tasksSum);
     tasksSum += healthData[i].quantity;
     healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
   }
