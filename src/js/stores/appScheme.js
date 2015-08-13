@@ -9,6 +9,8 @@ var appScheme = {
   env: {},
   executor: "",
   healthChecks: [],
+  health: [],
+  healthWeight: 0,
   id: null,
   instances: 0,
   lastTaskFailure: null,

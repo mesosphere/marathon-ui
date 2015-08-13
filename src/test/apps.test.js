@@ -84,6 +84,48 @@ describe("Apps", function () {
       AppsActions.requestApps();
     });
 
+    describe("App", function () {
+      beforeEach(function () {
+        this.server.setup({
+          "apps": [{
+            id: "/app-1",
+            tasksHealthy: 2,
+            tasksUnhealthy: 2,
+            tasksRunning: 5,
+            tasksStaged: 2,
+            instances: 10
+          }]
+        }, 200);
+      });
+
+      it("has correct health weight", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].healthWeight).to.equal(47);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+
+      it("has correct health data object", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].health).to.deep.equal([
+              { quantity: 2, state: HealthStatus.HEALTHY },
+              { quantity: 2, state: HealthStatus.UNHEALTHY },
+              { quantity: 1, state: HealthStatus.UNKNOWN },
+              { quantity: 2, state: HealthStatus.STAGED },
+              { quantity: 0, state: HealthStatus.OVERCAPACITY },
+              { quantity: 3, state: HealthStatus.UNSCHEDULED }
+            ]);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+    });
+
   });
 
   describe("on single app request", function () {
@@ -586,11 +628,14 @@ describe("App Health component", function () {
   beforeEach(function () {
     var model = {
       id: "app-123",
-      tasksRunning: 4,
-      tasksHealthy: 2,
-      tasksUnhealthy: 1,
-      tasksStaged: 1,
-      instances: 5
+      health: [
+        { state: HealthStatus.HEALTHY, quantity: 2 },
+        { state: HealthStatus.UNHEALTHY, quantity: 2 },
+        { state: HealthStatus.UNKNOWN, quantity: 1 },
+        { state: HealthStatus.STAGED, quantity: 1 },
+        { state: HealthStatus.OVERCAPACITY, quantity: 2 },
+        { state: HealthStatus.UNSCHEDULED, quantity: 2 }
+      ]
     };
 
     this.renderer = TestUtils.createRenderer();
@@ -604,7 +649,7 @@ describe("App Health component", function () {
 
   it("health bar for healthy tasks has correct width", function () {
     var width = this.component.props.children[0].props.style.width;
-    expect(width).to.equal("40%");
+    expect(width).to.equal("20%");
   });
 
   it("health bar for unhealthy tasks has correct width", function () {
@@ -614,22 +659,52 @@ describe("App Health component", function () {
 
   it("health bar for running tasks has correct width", function () {
     var width = this.component.props.children[2].props.style.width;
-    expect(width).to.equal("20%");
+    expect(width).to.equal("10%");
   });
 
   it("health bar for staged tasks has correct width", function () {
     var width = this.component.props.children[3].props.style.width;
-    expect(width).to.equal("20%");
+    expect(width).to.equal("10%");
   });
 
   it("health bar for over capacity tasks has correct width", function () {
     var width = this.component.props.children[4].props.style.width;
-    expect(width).to.equal("0%");
+    expect(width).to.equal("20%");
   });
 
   it("health bar for unscheduled tasks has correct width", function () {
     var width = this.component.props.children[5].props.style.width;
-    expect(width).to.equal("0%");
+    expect(width).to.equal("20%");
+  });
+
+  it("health bar for healthy tasks has correct content", function () {
+    var content = this.component.props.children[0].props["data-tip-content"];
+    expect(content).to.equal("healthy");
+  });
+
+  it("health bar for unhealthy tasks has correct content", function () {
+    var content = this.component.props.children[1].props["data-tip-content"];
+    expect(content).to.equal("unhealthy");
+  });
+
+  it("health bar for running tasks has correct content", function () {
+    var content = this.component.props.children[2].props["data-tip-content"];
+    expect(content).to.equal("running");
+  });
+
+  it("health bar for staged tasks has correct content", function () {
+    var content = this.component.props.children[3].props["data-tip-content"];
+    expect(content).to.equal("staged");
+  });
+
+  it("health bar for over capacity tasks has correct content", function () {
+    var content = this.component.props.children[4].props["data-tip-content"];
+    expect(content).to.equal("over-capacity");
+  });
+
+  it("health bar for unscheduled tasks has correct content", function () {
+    var content = this.component.props.children[5].props["data-tip-content"];
+    expect(content).to.equal("unscheduled");
   });
 
 });

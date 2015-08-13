@@ -172,8 +172,9 @@ var AppListComponent = React.createClass({
               </span>
             </th>
             <th className="text-right">
-              <span className={headerClassSet}>
-                Health
+              <span onClick={this.sortBy.bind(null, "healthWeight")}
+                  className={headerClassSet}>
+                {this.getCaret("healthWeight")} Health
               </span>
             </th>
             <th className="text-right">

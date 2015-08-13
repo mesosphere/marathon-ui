@@ -13,6 +13,7 @@
   * If there is a lastTaskFailure this information will be shown in a tab
     called "Last task failure" on the app page.
 - \#1937 - Display version string also in local time
+- \#1058 - Add sorting to the health column in the app list
 
 ### Changed
 - #124 - Expose all /v2 App attributes in UI
@@ -31,6 +32,7 @@
     if tasks count decreases after scaling.
 - \#1872 - Kill & Scale should be available for more than one task
 - \#1960 - Task detail error message doesn't show up on non existent task
+- \#1989 - HealthBar isn't working correctly on non existing health data
 
 ## 0.10.0 - 2015-07-10
 ### Added

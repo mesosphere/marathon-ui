@@ -3,9 +3,20 @@ var React = require("react/addons");
 
 var TooltipMixin = require("../mixins/TooltipMixin");
 
+var HealthStatus = require("../constants/HealthStatus");
+
 function roundWorkaround(x) {
   return Math.floor(x * 1000) / 1000;
 }
+
+var healthNameMap = {
+  [HealthStatus.HEALTHY]: "healthy",
+  [HealthStatus.UNHEALTHY]: "unhealthy",
+  [HealthStatus.UNKNOWN]: "running",
+  [HealthStatus.STAGED]: "staged",
+  [HealthStatus.OVERCAPACITY]: "over-capacity",
+  [HealthStatus.UNSCHEDULED]: "unscheduled"
+};
 
 var AppHealthComponent = React.createClass({
   displayName: "AppHealthComponent",
@@ -26,57 +37,18 @@ var AppHealthComponent = React.createClass({
     this.tip_hideTip(el);
   },
 
-  getHealthData: function () {
-    var model = this.props.model;
-
-    var tasksWithUnknownHealth = Math.max(
-      model.tasksRunning -
-      model.tasksHealthy -
-      model.tasksUnhealthy,
-      0
-    );
-
-    var healthData = [
-      {quantity: model.tasksHealthy, name: "healthy"},
-      {quantity: model.tasksUnhealthy, name: "unhealthy"},
-      {quantity: tasksWithUnknownHealth, name: "running"},
-      {quantity: model.tasksStaged, name: "staged"}
-    ];
-
-    // cut off after `instances` many tasks...
-    var tasksSum = 0;
-    for (var i = 0; i < healthData.length; i++) {
-      var capacityLeft = Math.max(0, model.instances - tasksSum);
-      tasksSum += healthData[i].quantity;
-      healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
-    }
-
-    // ... show everything above that in blue
-    var overCapacity = Math.max(0, tasksSum - model.instances);
-
-    healthData.push({quantity: overCapacity, name: "over-capacity"});
-
-    // add unscheduled task, or show black if completely suspended
-    var isSuspended = model.instances === 0 && tasksSum === 0;
-    var unscheduled = Math.max(0, (model.instances - tasksSum));
-    var unscheduledOrSuspended = isSuspended ? 1 : unscheduled;
-
-    healthData.push({quantity: unscheduledOrSuspended, name: "unscheduled"});
-
-    return healthData;
-  },
-
   getHealthBar: function () {
-    var healthData = this.getHealthData();
+    var health = this.props.model.health;
 
     // normalize quantities to add up to 100%. Cut off digits at
     // third decimal to work around rounding error leading to more than 100%.
-    var dataSum = healthData.reduce(function (a, x) {
+    var dataSum = health.reduce(function (a, x) {
       return a + x.quantity;
     }, 0);
 
     var allZeroWidthBefore = true;
-    return healthData.map(function (d, i) {
+    return health.map(function (d, i) {
+      var name = healthNameMap[d.state];
       var width = roundWorkaround(d.quantity * 100 / dataSum);
       var classSet = {
         // set health-bar-inner class for bars in the stack which have a
@@ -85,7 +57,7 @@ var AppHealthComponent = React.createClass({
         "progress-bar": true
       };
       // add health bar name
-      classSet["health-bar-" + d.name] = true;
+      classSet["health-bar-" + name] = true;
 
       if (width !== 0) {
         allZeroWidthBefore = false;
@@ -99,7 +71,7 @@ var AppHealthComponent = React.createClass({
           "data-behavior": "show-tip",
           "data-tip-type-class": "default",
           "data-tip-place": "top",
-          "data-tip-content": d.name,
+          "data-tip-content": name,
           "onMouseOver": this.handleMouseOverHealthBar.bind(null, ref),
           "onMouseOut": this.handleMouseOutHealthBar.bind(null, ref)
         };

@@ -11,6 +11,15 @@ var TaskStatus = require("../constants/TaskStatus");
 var QueueStore = require("./QueueStore");
 var QueueEvents = require("../events/QueueEvents");
 
+const healthWeights = Object.freeze({
+  [HealthStatus.UNHEALTHY]: 32,
+  [HealthStatus.OVERCAPACITY]: 16,
+  [HealthStatus.STAGED]: 8,
+  [HealthStatus.HEALTHY]: 4,
+  [HealthStatus.UNKNOWN]: 2,
+  [HealthStatus.UNSCHEDULED]: 1
+});
+
 function removeApp(apps, appId) {
   return lazy(apps).reject({
     id: appId
@@ -56,6 +65,56 @@ function setTaskStatus(task) {
   }
 }
 
+function getAppHealth(app) {
+  var tasksWithUnknownHealth = Math.max(
+    (app.tasksRunning || 0) -
+    (app.tasksHealthy || 0) -
+    (app.tasksUnhealthy || 0),
+    0
+  );
+
+  var healthData = [
+    {quantity: app.tasksHealthy || 0, state: HealthStatus.HEALTHY},
+    {quantity: app.tasksUnhealthy || 0, state: HealthStatus.UNHEALTHY},
+    {quantity: tasksWithUnknownHealth, state: HealthStatus.UNKNOWN},
+    {quantity: app.tasksStaged || 0, state: HealthStatus.STAGED}
+  ];
+
+  // cut off after `instances` many tasks...
+  var tasksSum = 0;
+  for (let i = 0; i < healthData.length; i++) {
+    let capacityLeft = Math.max(0, app.instances - tasksSum);
+    tasksSum += healthData[i].quantity;
+    healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
+  }
+
+  // ... show everything above that in blue
+  var overCapacity = Math.max(0, tasksSum - app.instances);
+
+  healthData.push({quantity: overCapacity, state: HealthStatus.OVERCAPACITY});
+
+  // add unscheduled task, or show black if completely suspended
+  var isSuspended = app.instances === 0 && tasksSum === 0;
+  var unscheduled = Math.max(0, (app.instances - tasksSum));
+  var unscheduledOrSuspended = isSuspended ? 1 : unscheduled;
+
+  healthData.push({
+    quantity: unscheduledOrSuspended,
+    state: HealthStatus.UNSCHEDULED
+  });
+
+  return healthData;
+}
+
+function getAppHealthWeight(health) {
+  return health.reduce(function (totalWeight, entry) {
+    if (entry.quantity) {
+      return totalWeight + healthWeights[entry.state];
+    }
+    return totalWeight;
+  }, 0);
+}
+
 function processApp(app) {
   app = lazy(appScheme).extend(app).value();
 
@@ -65,6 +124,9 @@ function processApp(app) {
   } else if (app.instances === 0 && app.tasksRunning === 0) {
     app.status = AppStatus.SUSPENDED;
   }
+
+  app.health = getAppHealth(app);
+  app.healthWeight = getAppHealthWeight(app.health);
 
   app.tasks = lazy(app.tasks).map(function (task) {
     task.healthStatus = getTaskHealth(task);
