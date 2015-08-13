@@ -119,9 +119,9 @@ gulp.task("minify-css", ["less"], function () {
 gulp.task("minify-js", ["webpack"], function () {
   var banner = "/**\n" +
     " * <%= pkg.name %> - <%= pkg.description %>\n" +
-    " * @version v%TEAMCITY_UI_VERSION%\n" +
-    " * @buildnumber %TEAMCITY_BUILDNUMBER%\n" +
-    " * @branchname %TEAMCITY_BRANCHNAME%\n" +
+    " * @version v@@TEAMCITY_UI_VERSION\n" +
+    " * @buildnumber @@TEAMCITY_BUILDNUMBER\n" +
+    " * @branchname @@TEAMCITY_BRANCHNAME\n" +
     " */\n";
 
   return gulp.src(dirs.dist + "/" + files.mainJs + ".js")
