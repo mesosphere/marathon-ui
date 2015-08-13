@@ -27,28 +27,24 @@ var OptionalSettingsComponent = React.createClass({
     return state;
   },
 
-  handleAddRow: function (rowKey, position, event) {
+  handleAddRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
-    var state = this.state;
-    state.env.push(true); // = [true];
-    this.setState(state);
+    var env = this.state.env.concat(true);
+    this.setState({env: env});
   },
 
-  handleRemoveRow: function (rowKey, position, event) {
-    /* Each array represents a list of duplicable rows, in order to keep track
-     * of which rows have been deleted by the user. A value of false signifies
-     * a deleted row.
-     * The form submits values infered directly from the DOM.
-     */
+  handleRemoveRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
-    var state = {
-      env: this.state.env.filter(function (value, index) {
-        return index !== position;
-      })
-    };
-    this.setState(state);
+    var env = this.state.env.slice();
+    env = env.map(function (value, index) {
+      return value && index !== position;
+    });
+    if (env.filter((exists) => exists).length === 0) {
+      env.push(true);
+    }
+    this.setState({env: env});
   },
 
   render: function () {
@@ -91,8 +87,8 @@ var OptionalSettingsComponent = React.createClass({
             <input />
           </FormGroupComponent>
           <DuplicableRowControls
-            handleAddRow={this.handleAddRow.bind(null, "env", i)}
-            handleRemoveRow={this.handleRemoveRow.bind(null, "env", i)} />
+            handleAddRow={this.handleAddRow.bind(null, i)}
+            handleRemoveRow={this.handleRemoveRow.bind(null, i)} />
         </div>
       </div>
     );

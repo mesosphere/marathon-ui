@@ -141,6 +141,14 @@ var NewAppModalComponent = React.createClass({
       });
     }
 
+    // env should not be an array.
+    if ("env" in modelAttrs) {
+      modelAttrs.env = modelAttrs.env.reduce(function (memo, item) {
+        memo[item.key] = item.value;
+        return memo;
+      }, {});
+    }
+
     // Ports should always be an Array.
     if ("ports" in modelAttrs) {
       var portStrings = modelAttrs.ports.split(",");
