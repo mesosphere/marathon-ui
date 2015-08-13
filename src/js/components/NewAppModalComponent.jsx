@@ -16,6 +16,8 @@ var FormGroupComponent = require("../components/FormGroupComponent");
 var ModalComponent = require("../components/ModalComponent");
 var OptionalSettingsComponent =
   require("../components/OptionalSettingsComponent");
+var OptionalEnvironmentComponent =
+  require("../components/OptionalEnviromentComponent");
 var ValidationError = require("../validators/ValidationError");
 
 var NewAppModalComponent = React.createClass({
@@ -256,6 +258,11 @@ var NewAppModalComponent = React.createClass({
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
             <hr />
+            <div className="row full-bleed">
+              <CollapsiblePanelComponent title="optional environment variables">
+                <OptionalEnvironmentComponent model={model} errors={errors} />
+              </CollapsiblePanelComponent>
+            </div>
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="optional settings">
                 <OptionalSettingsComponent model={model} errors={errors} />
