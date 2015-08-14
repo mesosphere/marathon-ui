@@ -240,6 +240,7 @@ describe("Task Detail component", function () {
 
     this.renderer = TestUtils.createRenderer();
     this.renderer.render(<TaskDetailComponent
+      appId={this.model.appId}
       fetchState={States.STATE_SUCCESS}
       hasHealth={false}
       task={this.model} />);
@@ -296,6 +297,7 @@ describe("Task Detail component", function () {
 
   it("has a loading error", function () {
     this.renderer.render(<TaskDetailComponent
+      appId={this.model.appId}
       fetchState={States.STATE_ERROR}
       hasHealth={false}
       task={this.model} />);
