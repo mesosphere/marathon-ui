@@ -14,6 +14,9 @@
     called "Last task failure" on the app page.
 - \#1937 - Display version string also in local time
 - \#1058 - Add sorting to the health column in the app list
+- \#1993 - Show Marathon UI version in about modal
+  * The Marathon UI version will be shown on mouse hovering
+    above the API version field. Second way is pressing "g v" on the keyboard.
 
 ### Changed
 - #124 - Expose all /v2 App attributes in UI
