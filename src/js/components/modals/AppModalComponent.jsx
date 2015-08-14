@@ -180,6 +180,25 @@ var AppModalComponent = React.createClass({
       modelAttrs.ports = [];
     }
 
+    // Container arrays shouldn't have null-values
+    if ("container" in modelAttrs) {
+      let container = modelAttrs.container;
+      if ("docker" in container) {
+        if ("portMappings" in container.docker) {
+          container.docker.portMappings =
+            lazy(container.docker.portMappings).compact().value();
+        }
+      }
+      if ("parameters" in container) {
+        container.parameters =
+          lazy(container.parameters).compact().value();
+      }
+      if ("volumes" in container) {
+        container.volumes =
+          lazy(container.volumes).compact().value();
+      }
+    }
+
     // mem, cpus, and instances are all Numbers and should be parsed as such.
     if ("mem" in modelAttrs) {
       modelAttrs.mem = parseFloat(modelAttrs.mem);
