@@ -1,3 +1,5 @@
+var packageJSON = require("../../../package.json");
+
 var config = {
   // @@ENV gets replaced by build system
   environment: "@@ENV",
@@ -12,7 +14,10 @@ var config = {
   localTestserverURI: {
     address: "localhost",
     port: 8181
-  }
+  },
+  version: ("@@TEAMCITY_UI_VERSION".indexOf("@@TEAMCITY") === -1) ?
+    "@@TEAMCITY_UI_VERSION" :
+    `${packageJSON.version}-SNAPSHOT`
 };
 
 if (process.env.GULP_ENV === "development") {
