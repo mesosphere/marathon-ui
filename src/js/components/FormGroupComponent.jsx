@@ -44,24 +44,27 @@ var FormGroupComponent = React.createClass({
   },
 
   render: function () {
+    var props = this.props;
+    var state = this.state;
+
     var errorBlock, helpBlock;
 
     var errors = [];
-    var attribute = this.props.attribute;
-    var className = classNames("form-group", this.props.className);
+    var attribute = props.attribute;
+    var className = classNames("form-group", props.className);
     var fieldId = attribute + "-field";
 
     // Find any errors matching this attribute.
-    if (this.state.validationError != null) {
-      errors = this.state.validationError.filter(function (e) {
+    if (state.validationError != null) {
+      errors = state.validationError.filter(function (e) {
         return (e.attribute === attribute);
       });
     }
 
     // Also check for passed in errors
-    if (this.props.errors != null) {
+    if (props.errors != null) {
       errors = errors.concat(
-        this.props.errors.filter(function (e) {
+        props.errors.filter(function (e) {
           return (e.attribute === attribute);
         })
       );
@@ -69,15 +72,14 @@ var FormGroupComponent = React.createClass({
 
     // Assume there is a single child of either <input> or <textarea>, and add
     // the needed props to make it an input for this attribute.
-    var child = React.Children.only(this.props.children);
     var formControlChild = React.cloneElement(
-      child,
+      React.Children.only(props.children),
       {
         className: "form-control",
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        value: dotpathResolve(this.state.model, attribute)
+        value: dotpathResolve(state.model, attribute)
       }
     );
 
@@ -88,14 +90,14 @@ var FormGroupComponent = React.createClass({
       });
     }
 
-    if (this.props.help != null) {
-      helpBlock = <div className="help-block">{this.props.help}</div>;
+    if (props.help != null) {
+      helpBlock = <div className="help-block">{props.help}</div>;
     }
 
     return (
       <div className={className}>
         <label htmlFor={fieldId} className="control-label">
-          {this.props.label}
+          {props.label}
         </label>
         <div>
           {formControlChild}
