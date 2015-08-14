@@ -2308,10 +2308,6 @@
       "version": "2.1.2",
       "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.1.2.tgz"
     },
-    "dotpath-resolve": {
-      "version": "0.1.3",
-      "resolved": "https://registry.npmjs.org/dotpath-resolve/-/dotpath-resolve-0.1.3.tgz"
-    },
     "envify": {
       "version": "3.4.0",
       "resolved": "http://registry.npmjs.org/envify/-/envify-3.4.0.tgz",
@@ -2739,6 +2735,10 @@
     "flux": {
       "version": "2.0.3",
       "resolved": "https://registry.npmjs.org/flux/-/flux-2.0.3.tgz"
+    },
+    "get-object-path": {
+      "version": "0.0.2",
+      "resolved": "https://registry.npmjs.org/get-object-path/-/get-object-path-0.0.2.tgz"
     },
     "gulp": {
       "version": "3.9.0",

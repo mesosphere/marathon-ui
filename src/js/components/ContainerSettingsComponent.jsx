@@ -71,7 +71,7 @@ var ContainerSettingsComponent = React.createClass({
       <div key={`pm-${i}`} className="row duplicable-row">
         <div className="col-sm-3">
           <FormGroupComponent
-            attribute={`container.docker.portMappings.${i}.containerPort`}
+            attribute={`container.docker.portMappings[${i}].containerPort`}
             label="Container Port"
             model={this.props.model}
             errors={this.props.errors}
@@ -81,7 +81,7 @@ var ContainerSettingsComponent = React.createClass({
         </div>
         <div className="col-sm-3">
           <FormGroupComponent
-            attribute={`container.docker.portMappings.${i}.hostPort`}
+            attribute={`container.docker.portMappings[${i}].hostPort`}
             label="Host Port"
             model={this.props.model}
             errors={this.props.errors}
@@ -91,7 +91,7 @@ var ContainerSettingsComponent = React.createClass({
         </div>
         <div className="col-sm-3">
           <FormGroupComponent
-            attribute={`container.docker.portMappings.${i}.servicePort`}
+            attribute={`container.docker.portMappings[${i}].servicePort`}
             label="Service Port"
             model={this.props.model}
             errors={this.props.errors}
@@ -101,7 +101,7 @@ var ContainerSettingsComponent = React.createClass({
         </div>
         <div className="col-sm-3">
           <FormGroupComponent
-            attribute={`container.docker.portMappings.${i}.protocol`}
+            attribute={`container.docker.portMappings[${i}].protocol`}
             label="Protocol"
             model={this.props.model}
             errors={this.props.errors}
@@ -131,7 +131,7 @@ var ContainerSettingsComponent = React.createClass({
       <div key={`p-${i}`} className="row duplicable-row">
         <div className="col-sm-6 add-colon">
           <FormGroupComponent
-            attribute={`container.parameters.${i}.key`}
+            attribute={`container.parameters[${i}].key`}
             label="Key"
             model={this.props.model}
             errors={this.props.errors}
@@ -141,7 +141,7 @@ var ContainerSettingsComponent = React.createClass({
         </div>
         <div className="col-sm-6">
           <FormGroupComponent
-            attribute={`container.parameters.${i}.value`}
+            attribute={`container.parameters[${i}].value`}
             label="Value"
             model={this.props.model}
             errors={this.props.errors}
@@ -170,7 +170,7 @@ var ContainerSettingsComponent = React.createClass({
       <div key={`v-${i}`} className="row duplicable-row">
         <div className="col-sm-4">
           <FormGroupComponent
-            attribute={`container.volumes.${i}.containerPath`}
+            attribute={`container.volumes[${i}].containerPath`}
             label="Container path"
             model={model}
             errors={this.props.errors}
@@ -180,7 +180,7 @@ var ContainerSettingsComponent = React.createClass({
         </div>
         <div className="col-sm-4">
           <FormGroupComponent
-            attribute={`container.volumes.${i}.hostPath`}
+            attribute={`container.volumes[${i}].hostPath`}
             label="Host path"
             model={this.props.model}
             errors={this.props.errors}
@@ -190,7 +190,7 @@ var ContainerSettingsComponent = React.createClass({
         </div>
         <div className="col-sm-4">
           <FormGroupComponent
-            attribute={`container.volumes.${i}.mode`}
+            attribute={`container.volumes[${i}].mode`}
             label="Mode"
             model={this.props.model}
             errors={this.props.errors}

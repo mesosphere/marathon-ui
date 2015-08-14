@@ -1,5 +1,5 @@
 var classNames = require("classnames");
-var dotpathResolve = require("dotpath-resolve");
+var dotpathResolve = require("get-object-path");
 var React = require("react/addons");
 
 var FormGroupComponent = React.createClass({
