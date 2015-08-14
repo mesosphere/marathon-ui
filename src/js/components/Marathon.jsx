@@ -1,4 +1,5 @@
 var config = require("../config/config");
+var Util = require("../helpers/Util");
 
 var Link = require("react-router").Link;
 var Mousetrap = require("mousetrap");
@@ -58,6 +59,10 @@ var Marathon = React.createClass({
         router.transitionTo("deployments");
       }
     }.bind(this));
+
+    Mousetrap.bind("g v", function () {
+      Util.alert(`The UI version is ${config.version}`);
+    });
 
     Mousetrap.bind("shift+,", function () {
       router.transitionTo("about");
