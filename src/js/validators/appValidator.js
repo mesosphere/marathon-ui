@@ -1,4 +1,4 @@
-var _ = require("underscore");
+var Util = require("../helpers/Util");
 var ValidationError = require("./ValidationError");
 
 // Matches the command executor, like "//cmd", and custom executors starting
@@ -19,7 +19,7 @@ function isValidConstraint(p) {
    * return an error on a specific field.
    */
   var operator = p[1];
-  return (_.indexOf(VALID_CONSTRAINTS, operator.toLowerCase()) !== -1);
+  return VALID_CONSTRAINTS.indexOf(operator.toLowerCase()) !== -1;
 }
 
 function isNotPositiveNumber(value) {
@@ -58,11 +58,11 @@ var appValidator = {
       );
     }
 
-    if (!_.isString(attrs.id) || attrs.id.length < 1) {
+    if (!Util.isString(attrs.id) || attrs.id.length < 1) {
       errors.push(new ValidationError("id", "ID must not be empty"));
     }
 
-    if (_.isString(attrs.executor) &&
+    if (Util.isString(attrs.executor) &&
         !VALID_EXECUTOR_REGEX.test(attrs.executor)) {
       errors.push(
         new ValidationError(
@@ -73,11 +73,11 @@ var appValidator = {
       );
     }
 
-    if (_.isString(attrs.ports)) {
+    if (Util.isString(attrs.ports)) {
       attrs.ports = attrs.ports.split(",");
     }
 
-    if (!_.every(attrs.ports, function (p) {
+    if (!attrs.ports.every(function (p) {
       return !isNotPositiveNumber(p.toString().trim());
     })) {
       errors.push(
