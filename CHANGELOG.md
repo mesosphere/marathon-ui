@@ -19,7 +19,7 @@
     above the API version field. Second way is pressing "g v" on the keyboard.
 
 ### Changed
-- #124 - Expose all /v2 App attributes in UI
+- \#124 - Expose all /v2 App attributes in UI
   * The optional settings inside the new application modal dialog are now
     grouped together
   * It is now possible to specify Docker container settings
@@ -30,7 +30,7 @@
     be generated on-the-fly.
 
 ### Fixed
-- #548 - UI showing empty list after scaling when on page > 1
+- \#548 - UI showing empty list after scaling when on page > 1
   * The task list shows the last available page
     if tasks count decreases after scaling.
 - \#1872 - Kill & Scale should be available for more than one task
@@ -39,7 +39,7 @@
 
 ## 0.10.0 - 2015-07-10
 ### Added
-- #1754 - UI: Allow administratively zeroing / resetting the taskLaunchDelay
+- \#1754 - UI: Allow administratively zeroing / resetting the taskLaunchDelay
   * The App list now displays two additional possible statuses: "Delayed" and
     "Waiting". The "Delayed" status also displays a tooltip showing
     the remaining time until the next launch attempt.
@@ -67,8 +67,8 @@
   Ajax-wrapper.
 
 ### Fixed
-- #1660 - Allow app creation with 0 instances
-- #1236 - Disfunctional refresh button in app configuration
+- \#1660 - Allow app creation with 0 instances
+- \#1236 - Disfunctional refresh button in app configuration
 
 ## 0.9.0 - 2015-06-17
 ### Changed
