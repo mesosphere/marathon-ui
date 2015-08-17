@@ -13,6 +13,12 @@ var OptionalSettingsComponent = React.createClass({
   },
 
   getInitialState: function () {
+    /*
+     * env is a representation of `model.env` which is normally an object.
+     * In this component we use an array of objects to represent every line
+     * of environment variables as a default the first line is set with an empty
+     * state of `[{key: "", value: ""}]`.
+     */
     var env = this.props.model.env;
     var state = {
       env: Object.keys(env).map(function (key) {
@@ -23,7 +29,7 @@ var OptionalSettingsComponent = React.createClass({
       })
     };
     if (state.env.length === 0) {
-      state.env = [true];
+      state.env = [{key: "", value: ""}];
     }
     return state;
   },
@@ -31,7 +37,8 @@ var OptionalSettingsComponent = React.createClass({
   handleAddRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
-    var env = this.state.env.concat(true);
+    // Add a new empty line.
+    var env = this.state.env.concat({key: "", value: ""});
     this.setState({env: env});
   },
 
@@ -42,8 +49,9 @@ var OptionalSettingsComponent = React.createClass({
     env = env.map(function (value, index) {
       return value && index !== position;
     });
+    // If the array is empty we need to add a default object.
     if (env.filter((exists) => exists).length === 0) {
-      env.push(true);
+      env.push({key: "", value: ""});
     }
     this.setState({env: env});
   },
