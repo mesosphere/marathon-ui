@@ -1,6 +1,22 @@
 var qajax = require("qajax");
 
+var uniqueCalls = [];
+
+function removeCall(options) {
+  uniqueCalls.splice(uniqueCalls.indexOf(options.url), 1);
+}
+
 var qajaxWrapper = function (options) {
+  if (!options.concurrent) {
+    if (uniqueCalls.indexOf(options.url) > -1) {
+      return {
+        error: () => { return this; },
+        success: function () { return this; }
+      };
+    }
+    uniqueCalls.push(options.url);
+  }
+
   var response = {
     status: null,
     body: null
@@ -24,6 +40,7 @@ var qajaxWrapper = function (options) {
       function (xhr) {
         if (xhr.status.toString()[0] !== "2") {
           parseResponse(xhr);
+          removeCall(options);
           callback(response);
         }
       },
@@ -31,6 +48,7 @@ var qajaxWrapper = function (options) {
       // to reply to the client (network problem or timeout reached).
       function (xhr) {
         parseResponse(xhr);
+        removeCall(options);
         callback(response);
       }
     );
@@ -45,6 +63,7 @@ var qajaxWrapper = function (options) {
       }))
       .then(function (xhr) {
         parseResponse(xhr);
+        removeCall(options);
         callback(response);
       });
     return promise;
