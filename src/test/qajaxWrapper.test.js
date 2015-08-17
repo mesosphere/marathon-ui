@@ -35,7 +35,7 @@ describe("qajaxWrapper", function () {
         }, done);
       })
       .error(function () {
-        throw new Exception("I should not be called");
+        done(new Error("I should not be called"));
       });
     });
 
@@ -47,13 +47,74 @@ describe("qajaxWrapper", function () {
         url: config.apiURL + "/foo/bar"
       })
       .success(function () {
-        throw new Exception("I should not be called");
+        done(new Error("I should not be called"));
       })
       .error(function (error) {
         expectAsync(function () {
           expect(error.body.message).to.equal("Guru Meditation");
         }, done);
       });
+    });
+
+  });
+
+  describe("on concurrent request", function () {
+
+    it("should timeout on second request", function (done) {
+      var responses = 0;
+      var timeoutId;
+      var initialTimeout = this.timeout();
+      this.timeout(50);
+
+      var increaseResponses = function () {
+        responses++;
+        if (responses === 2) {
+          clearTimeout(timeoutId);
+          done(new Error("Second request should never be fulfilled"));
+        }
+      };
+
+      qajax({
+        method: "GET",
+        url: config.apiURL + "/concurrent"
+      })
+      .success(increaseResponses);
+
+      qajax({
+        method: "GET",
+        url: config.apiURL + "/concurrent"
+      })
+      .success(increaseResponses);
+
+      timeoutId = setTimeout(() => {
+        this.timeout(initialTimeout);
+        done();
+      }, 25);
+    });
+
+    it("should not timeout with flag set", function (done) {
+      var responses = 0;
+
+      function increaseResponses() {
+        responses++;
+        if (responses === 2) {
+          done();
+        }
+      }
+
+      qajax({
+        method: "GET",
+        url: config.apiURL + "/concurrent",
+        concurrent: true
+      })
+      .success(increaseResponses);
+
+      qajax({
+        method: "GET",
+        url: config.apiURL + "/concurrent",
+        concurrent: true
+      })
+      .success(increaseResponses);
     });
 
   });

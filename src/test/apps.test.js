@@ -287,7 +287,7 @@ describe("Apps", function () {
 
       var onChange = function () {
         expectAsync(function () {
-          throw new Error("AppsEvents.CHANGE shouldn't be called.");
+          done(new Error("AppsEvents.CHANGE shouldn't be called."));
         }, done);
       };
 
