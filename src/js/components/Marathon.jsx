@@ -45,7 +45,7 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("c", function () {
-      router.transitionTo("newapp");
+      router.transitionTo("apps", null, {modal: "newapp"});
     }, "keyup");
 
     Mousetrap.bind("g a", function () {
