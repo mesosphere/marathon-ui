@@ -41,7 +41,7 @@ var AppVersionComponent = React.createClass({
     var appVersion = this.props.appVersion;
     var router = this.context.router;
     router.transitionTo(router.getCurrentPathname(), {}, {
-      modal: `editapp--${appVersion.id}--${appVersion.version}`
+      modal: `edit-app--${appVersion.id}--${appVersion.version}`
     });
   },
 
