@@ -46,7 +46,7 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("c", function () {
-      router.transitionTo(router.getCurrentPathname(), {}, {modal: "newapp"});
+      router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-app"});
     }, "keyup");
 
     Mousetrap.bind("g a", function () {
@@ -84,7 +84,7 @@ var Marathon = React.createClass({
     var modalQuery = router.getCurrentQuery().modal;
     var modal = null;
 
-    if (modalQuery === "newapp") {
+    if (modalQuery === "new-app") {
       modal = this.getNewAppModal();
     } else if (modalQuery === "about") {
       modal = this.getAboutModal();
