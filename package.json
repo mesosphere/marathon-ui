@@ -46,6 +46,7 @@
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.5",
     "gulp-zip": "^3.0.2",
+    "json-loader": "^0.5.2",
     "mocha": "^2.1.0",
     "mocha-teamcity-reporter": "0.0.4",
     "npm-shrinkwrap": "^5.4.0",
