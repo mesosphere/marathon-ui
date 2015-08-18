@@ -14,16 +14,11 @@ var ContainerSettingsComponent =
   require("../../components/ContainerSettingsComponent");
 var FormGroupComponent = require("../../components/FormGroupComponent");
 var ModalComponent = require("../../components/ModalComponent");
-var OptionalSettingsComponent =
-<<<<<<< HEAD:src/js/components/AppModalComponent.jsx
-  require("../components/OptionalSettingsComponent");
 var OptionalEnvironmentComponent =
-  require("../components/OptionalEnviromentComponent");
-var ValidationError = require("../validators/ValidationError");
-=======
+  require("../../components/OptionalEnviromentComponent");
+var OptionalSettingsComponent =
   require("../../components/OptionalSettingsComponent");
 var ValidationError = require("../../validators/ValidationError");
->>>>>>> Moving AppModalComponent to modals directory:src/js/components/modals/AppModalComponent.jsx
 
 var AppModalComponent = React.createClass({
   displayName: "AppModalComponent",
