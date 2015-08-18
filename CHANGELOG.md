@@ -21,6 +21,7 @@
   * A selected application version can now be edited
     by pressing on the "Edit these settings"-button.
 - \#124 - Expose environment variables in app modal dialog
+- \#2010 - Show task life time in debug tab
 
 ### Changed
 - \#124 - Expose all /v2 App attributes in UI
