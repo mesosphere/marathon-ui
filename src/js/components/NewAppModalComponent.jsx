@@ -16,6 +16,8 @@ var FormGroupComponent = require("../components/FormGroupComponent");
 var ModalComponent = require("../components/ModalComponent");
 var OptionalSettingsComponent =
   require("../components/OptionalSettingsComponent");
+var OptionalEnvironmentComponent =
+  require("../components/OptionalEnviromentComponent");
 var ValidationError = require("../validators/ValidationError");
 
 var NewAppModalComponent = React.createClass({
@@ -139,6 +141,14 @@ var NewAppModalComponent = React.createClass({
       });
     }
 
+    // env should not be an array.
+    if ("env" in modelAttrs) {
+      modelAttrs.env = modelAttrs.env.reduce(function (memo, item) {
+        memo[item.key] = item.value;
+        return memo;
+      }, {});
+    }
+
     // Ports should always be an Array.
     if ("ports" in modelAttrs) {
       var portStrings = modelAttrs.ports.split(",");
@@ -256,6 +266,11 @@ var NewAppModalComponent = React.createClass({
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
             <hr />
+            <div className="row full-bleed">
+              <CollapsiblePanelComponent title="optional environment variables">
+                <OptionalEnvironmentComponent model={model} errors={errors} />
+              </CollapsiblePanelComponent>
+            </div>
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="optional settings">
                 <OptionalSettingsComponent model={model} errors={errors} />
