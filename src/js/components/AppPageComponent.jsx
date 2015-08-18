@@ -7,7 +7,7 @@ var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
 var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
-var AppLastTaskFailureComponent = require("../components/AppLastTaskFailureComponent");
+var AppDebugInfoComponent = require("../components/AppDebugInfoComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
 var HealthStatus = require("../constants/HealthStatus");
 var States = require("../constants/States");
@@ -23,11 +23,7 @@ var QueueStore = require("../stores/QueueStore");
 var tabsTemplate = [
   {id: "apps/:appId", text: "Tasks"},
   {id: "apps/:appId/configuration", text: "Configuration"},
-  {
-    id: "apps/:appId/last-task-failure",
-    text: "Last Task Failure",
-    hidden: true
-  }
+  {id: "apps/:appId/debug", text: "Debug"}
 ];
 
 var AppPageComponent = React.createClass({
@@ -67,21 +63,16 @@ var AppPageComponent = React.createClass({
         activeTabId = id;
       }
 
-      if (tab.id === "apps/:appId/last-task-failure") {
-        tab.hidden = app.lastTaskFailure == null;
-      }
-
       return {
         id: id,
-        text: tab.text,
-        hidden: tab.hidden
+        text: tab.text
       };
     });
 
     if (view === "configuration") {
       activeTabId += "/configuration";
-    } else if (view === "last-task-failure") {
-      activeTabId += "/last-task-failure";
+    } else if (view === "debug") {
+      activeTabId += "/debug";
     } else if (view != null) {
       activeTaskId = view;
       activeViewIndex = 1;
@@ -146,24 +137,15 @@ var AppPageComponent = React.createClass({
   onAppChange: function () {
     var state = this.state;
     var app = AppsStore.getCurrentApp(state.appId);
-    var tabs = state.tabs;
-
-    tabs = tabs.map(function (tab) {
-      var tabId = `apps/${encodeURIComponent(state.appId)}/last-task-failure`;
-      if (tab.id === tabId) {
-        tab.hidden = app.lastTaskFailure == null;
-      }
-      return tab;
-    });
 
     this.setState({
       app: app,
       fetchState: States.STATE_SUCCESS,
-      tabs: tabs
+      tabs: state.tabs
     });
 
-    if (this.state.view === "configuration") {
-      AppVersionsActions.requestAppVersions(this.state.appId);
+    if (state.view === "configuration") {
+      AppVersionsActions.requestAppVersions(state.appId);
     }
   },
 
@@ -375,8 +357,8 @@ var AppPageComponent = React.createClass({
           <AppVersionListComponent appId={state.appId} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(state.appId) + "/last-task-failure"}>
-          <AppLastTaskFailureComponent appId={state.appId} />
+          id={"apps/" + encodeURIComponent(state.appId) + "/debug"}>
+          <AppDebugInfoComponent appId={state.appId} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
