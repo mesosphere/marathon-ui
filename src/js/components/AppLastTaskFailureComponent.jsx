@@ -36,52 +36,50 @@ var AppLastTaskFailureComponent = React.createClass({
     });
   },
 
-  render: function () {
-    var app = this.state.app;
-    var lastTaskFailure = app.lastTaskFailure;
-    if (lastTaskFailure != null) {
+  getLastTaskFailureInfo: function () {
+    var lastTaskFailure = this.state.app.lastTaskFailure;
+
+    if (lastTaskFailure == null) {
       return (
-        <div>
-          <h5>
-            Last Task Failure
-            <button className="btn btn-sm btn-info pull-right"
-              onClick={this.handleRefresh}>
-              ↻ Refresh
-            </button>
-          </h5>
-          <div>
-              <dl className="dl-horizontal">
-                  <dt>Task id</dt>
-                  <dd>{lastTaskFailure.taskId}</dd>
-                  <dt>State</dt>
-                  <dd>{lastTaskFailure.state}</dd>
-                  <dt>Message</dt>
-                  <dd>{lastTaskFailure.message}</dd>
-                  <dt>Host</dt>
-                  <dd>{lastTaskFailure.host}</dd>
-                  <dt>Timestamp</dt>
-                  <dd>{lastTaskFailure.timestamp}</dd>
-                  <dt>Version</dt>
-                  <dd>{lastTaskFailure.version}</dd>
-                  <dt>Mesos Details</dt>
-                  <dd><TaskMesosUrlComponent task={lastTaskFailure}/></dd>
-              </dl>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <h5>
-            This app does not have failed task
-          </h5>
-            <button className="btn btn-sm btn-info pull-right"
-              onClick={this.handleRefresh}>
-              ↻ Refresh
-            </button>
-        </div>
+        <span className="text-muted">This app does not have failed task</span>
       );
     }
+
+    return (
+      <dl className="dl-horizontal">
+        <dt>Task id</dt>
+        <dd>{lastTaskFailure.taskId}</dd>
+        <dt>State</dt>
+        <dd>{lastTaskFailure.state}</dd>
+        <dt>Message</dt>
+        <dd>{lastTaskFailure.message}</dd>
+        <dt>Host</dt>
+        <dd>{lastTaskFailure.host}</dd>
+        <dt>Timestamp</dt>
+        <dd>{lastTaskFailure.timestamp}</dd>
+        <dt>Version</dt>
+        <dd>{lastTaskFailure.version}</dd>
+        <dt>Mesos Details</dt>
+        <dd><TaskMesosUrlComponent task={lastTaskFailure}/></dd>
+      </dl>
+    );
+  },
+
+  render: function () {
+    return (
+      <div>
+        <h5>
+          Last Task Failure
+          <button className="btn btn-sm btn-info pull-right"
+            onClick={this.handleRefresh}>
+            ↻ Refresh
+          </button>
+        </h5>
+        <div>
+          {this.getLastTaskFailureInfo()}
+        </div>
+      </div>
+    );
   }
 });
 
