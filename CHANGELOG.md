@@ -20,6 +20,7 @@
 - \#808 - Make app configuration fields editable
   * A selected application version can now be edited
     by pressing on the "Edit these settings"-button.
+- \#124 - Expose environment variables in app modal dialog
 
 ### Changed
 - \#124 - Expose all /v2 App attributes in UI
