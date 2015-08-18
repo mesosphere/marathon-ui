@@ -20,7 +20,8 @@ var appScheme = {
   ports: [0],
   uris: [],
   tasks: [],
-  tasksRunning: 0
+  tasksRunning: 0,
+  taskStats: {}
 };
 
 module.exports = appScheme;
