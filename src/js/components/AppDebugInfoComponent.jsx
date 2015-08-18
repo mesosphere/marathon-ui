@@ -65,6 +65,30 @@ var AppDebugInfoComponent = React.createClass({
     );
   },
 
+  getTaskLifetime: function () {
+    var app = this.state.app;
+    var lifeTime = (app.taskStats != null) ?
+      app.taskStats.lifeTime :
+      null;
+
+    if (lifeTime == null) {
+      return (
+        <span className="text-muted">
+          This app does not have task lifetime information
+        </span>
+      );
+    }
+
+    return (
+      <dl className="dl-horizontal">
+        <dt>Average</dt>
+        <dd>{lifeTime.averageSeconds} seconds</dd>
+        <dt>Median</dt>
+        <dd>{lifeTime.medianSeconds} seconds</dd>
+      </dl>
+    );
+  },
+
   render: function () {
     return (
       <div>
@@ -77,6 +101,12 @@ var AppDebugInfoComponent = React.createClass({
         </h5>
         <div>
           {this.getLastTaskFailureInfo()}
+        </div>
+        <h5>
+          Task Lifetime
+        </h5>
+        <div>
+          {this.getTaskLifetime()}
         </div>
       </div>
     );
