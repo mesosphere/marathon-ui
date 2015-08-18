@@ -262,13 +262,13 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.SCALE_APP_ERROR, action.data.body);
       break;
     case AppsEvents.APPLY_APP:
-      AppsStore.emit(AppsEvents.APPLY_APP, action.fromEdit);
+      AppsStore.emit(AppsEvents.APPLY_APP, action.isEditing);
       break;
     case AppsEvents.APPLY_APP_ERROR:
       AppsStore.emit(
         AppsEvents.APPLY_APP_ERROR,
         action.data.body,
-        action.fromEdit,
+        action.isEditing,
         action.data.status
       );
       break;

@@ -85,8 +85,8 @@ var AppModalComponent = React.createClass({
     }
   },
 
-  onApplyAppError: function (error, fromEdit, status) {
-    if (!fromEdit) {
+  onApplyAppError: function (error, isEditing, status) {
+    if (!isEditing) {
       return;
     }
     this.onCreateAppError(error, status);

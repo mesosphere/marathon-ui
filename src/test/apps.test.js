@@ -569,7 +569,7 @@ describe("Apps", function () {
       }, true);
     });
 
-    it("it passes fromEdit-flag on success", function (done) {
+    it("it passes isEditing-flag on success", function (done) {
       // A successful response with a payload of a apply-settings-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
@@ -578,21 +578,21 @@ describe("Apps", function () {
           "version": "v2"
         }, 200);
 
-      AppsStore.once(AppsEvents.APPLY_APP, function (fromEdit) {
+      AppsStore.once(AppsEvents.APPLY_APP, function (isEditing) {
         expectAsync(function () {
-          expect(fromEdit).to.be.true;
+          expect(isEditing).to.be.true;
         }, done);
       });
 
       AppsActions.applySettingsOnApp("/app-1", {}, true);
     });
 
-    it("it passes fromEdit-flag on error", function (done) {
+    it("it passes isEditing-flag on error", function (done) {
       this.server.setup({message: "apply bad data error"}, 400);
 
-      AppsStore.once(AppsEvents.APPLY_APP_ERROR, function (error, fromEdit) {
+      AppsStore.once(AppsEvents.APPLY_APP_ERROR, function (error, isEditing) {
         expectAsync(function () {
-          expect(fromEdit).to.be.true;
+          expect(isEditing).to.be.true;
         }, done);
       });
 

@@ -76,9 +76,9 @@ var AppVersionListComponent = React.createClass({
     AppVersionsActions.requestAppVersions(this.props.appId);
   },
 
-  onAppApplySettingsError: function (errorMessage, fromEdit) {
+  onAppApplySettingsError: function (errorMessage, isEditing) {
     // Errors will be handled seperatly in the edit dialog
-    if (fromEdit) {
+    if (isEditing) {
       return;
     }
 
