@@ -9,7 +9,6 @@ var InfoStore = require("../js/stores/InfoStore");
 var AppsStore = require("../js/stores/AppsStore");
 var AppDebugInfoComponent = require("../js/components/AppDebugInfoComponent");
 
-var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
 
 var server = new HttpServer(config.localTestserverURI);
@@ -36,7 +35,7 @@ describe("App last task failure component", function () {
         "mesos_master_url": "http://leader1.dcos.io:5050"
       }
     };
-    this.appId = '/python';
+    this.appId = "/python";
     var app = Util.extendObject(appScheme, {
       id: "/python",
       lastTaskFailure: {
@@ -66,17 +65,17 @@ describe("App last task failure component", function () {
     var version = element[11]._store.props.children;
     var mesosElement= element[13]._store.props.children.type.displayName;
 
-    expect(taskId).to.equal('python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7');
-    expect(state).to.equal('TASK_LOST');
-    expect(message).to.equal('Slave slave1.dcos.io removed');
-    expect(host).to.equal('slave1.dcos.io');
-    expect(timestamp).to.equal('2015-08-05T09:08:56.349Z');
-    expect(version).to.equal('2015-07-06T12:37:28.774Z');
+    expect(taskId).to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
+    expect(state).to.equal("TASK_LOST");
+    expect(message).to.equal("Slave slave1.dcos.io removed");
+    expect(host).to.equal("slave1.dcos.io");
+    expect(timestamp).to.equal("2015-08-05T09:08:56.349Z");
+    expect(version).to.equal("2015-07-06T12:37:28.774Z");
   });
 
   it("should show message when app never failed", function () {
 
-    this.appId = '/python';
+    this.appId = "/python";
     var app = Util.extendObject(appScheme, {
       id: "/python",
     });
@@ -89,6 +88,6 @@ describe("App last task failure component", function () {
 
     var message = this.component.props.children[1].props.children.props.children;
 
-    expect(message).to.equal('This app does not have failed task');
+    expect(message).to.equal("This app does not have failed tasks");
   });
 });

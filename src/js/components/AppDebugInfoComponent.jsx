@@ -41,7 +41,7 @@ var AppDebugInfoComponent = React.createClass({
 
     if (lastTaskFailure == null) {
       return (
-        <span className="text-muted">This app does not have failed task</span>
+        <span className="text-muted">This app does not have failed tasks</span>
       );
     }
 
