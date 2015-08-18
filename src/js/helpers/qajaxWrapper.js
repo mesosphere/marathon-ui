@@ -11,7 +11,7 @@ var qajaxWrapper = function (options) {
     if (uniqueCalls.indexOf(options.url) > -1) {
       return {
         error: () => { return this; },
-        success: function () { return this; }
+        success: () => { return this; }
       };
     }
     uniqueCalls.push(options.url);
