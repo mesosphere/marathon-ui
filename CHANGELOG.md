@@ -17,6 +17,7 @@
 - \#1993 - Show Marathon UI version in about modal
   * The Marathon UI version will be shown on mouse hovering
     above the API version field. Second way is pressing "g v" on the keyboard.
+- \#2010 - Show task life time in debug tab
 
 ### Changed
 - \#124 - Expose all /v2 App attributes in UI
