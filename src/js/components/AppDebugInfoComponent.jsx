@@ -5,8 +5,8 @@ var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
 var TaskMesosUrlComponent = require("../components/TaskMesosUrlComponent");
 
-var AppLastTaskFailureComponent = React.createClass({
-  displayName: "AppLastTaskFailureComponent",
+var AppDebugInfoComponent = React.createClass({
+  displayName: "AppDebugInfoComponent",
 
   propTypes: {
     appId: React.PropTypes.string.isRequired
@@ -83,4 +83,4 @@ var AppLastTaskFailureComponent = React.createClass({
   }
 });
 
-module.exports = AppLastTaskFailureComponent;
+module.exports = AppDebugInfoComponent;

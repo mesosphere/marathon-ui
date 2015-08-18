@@ -7,7 +7,7 @@ var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
 var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
-var AppLastTaskFailureComponent = require("../components/AppLastTaskFailureComponent");
+var AppDebugInfoComponent = require("../components/AppDebugInfoComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
 var HealthStatus = require("../constants/HealthStatus");
 var States = require("../constants/States");
@@ -358,7 +358,7 @@ var AppPageComponent = React.createClass({
         </TabPaneComponent>
         <TabPaneComponent
           id={"apps/" + encodeURIComponent(state.appId) + "/debug"}>
-          <AppLastTaskFailureComponent appId={state.appId} />
+          <AppDebugInfoComponent appId={state.appId} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
