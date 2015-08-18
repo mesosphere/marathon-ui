@@ -79,7 +79,7 @@ var FormGroupComponent = React.createClass({
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        value: objectPath(state.model, attribute)
+        defaultValue: objectPath(state.model, attribute)
       }
     );
 
