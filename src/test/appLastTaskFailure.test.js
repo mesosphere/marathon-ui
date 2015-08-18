@@ -7,7 +7,7 @@ var Util = require("../js/helpers/Util");
 var appScheme = require("../js/stores/appScheme");
 var InfoStore = require("../js/stores/InfoStore");
 var AppsStore = require("../js/stores/AppsStore");
-var AppLastTaskFailureComponent = require("../js/components/AppLastTaskFailureComponent");
+var AppDebugInfoComponent = require("../js/components/AppDebugInfoComponent");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -53,7 +53,7 @@ describe("App last task failure component", function () {
     AppsStore.apps = [app];
 
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppLastTaskFailureComponent appId={this.appId} />);
+    this.renderer.render(<AppDebugInfoComponent appId={this.appId} />);
     this.component = this.renderer.getRenderOutput();
 
     var element = this.component.props.children[1].props.children.props.children;
@@ -84,10 +84,11 @@ describe("App last task failure component", function () {
     AppsStore.apps = [app];
 
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppLastTaskFailureComponent appId={this.appId} />);
+    this.renderer.render(<AppDebugInfoComponent appId={this.appId} />);
     this.component = this.renderer.getRenderOutput();
 
-    var message = this.component.props.children[0]._store.props.children;
+    var message = this.component.props.children[1].props.children.props.children;
+
     expect(message).to.equal('This app does not have failed task');
   });
 });
