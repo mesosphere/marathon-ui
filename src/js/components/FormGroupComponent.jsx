@@ -1,5 +1,5 @@
 var classNames = require("classnames");
-var dotpathResolve = require("get-object-path");
+var objectPath = require("get-object-path");
 var React = require("react/addons");
 
 var FormGroupComponent = React.createClass({
@@ -79,7 +79,7 @@ var FormGroupComponent = React.createClass({
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        value: dotpathResolve(state.model, attribute)
+        value: objectPath(state.model, attribute)
       }
     );
 
