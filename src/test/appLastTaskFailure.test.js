@@ -55,7 +55,7 @@ describe("App last task failure component", function () {
     this.renderer.render(<AppDebugInfoComponent appId={this.appId} />);
     this.component = this.renderer.getRenderOutput();
 
-    var element = this.component.props.children[1].props.children.props.children;
+    var element = this.component.props.children[1].props.children;
 
     var taskId = element[1]._store.props.children;
     var state = element[3]._store.props.children;
@@ -86,7 +86,7 @@ describe("App last task failure component", function () {
     this.renderer.render(<AppDebugInfoComponent appId={this.appId} />);
     this.component = this.renderer.getRenderOutput();
 
-    var message = this.component.props.children[1].props.children.props.children;
+    var message = this.component.props.children[1].props.children;
 
     expect(message).to.equal("This app does not have failed tasks");
   });
