@@ -89,6 +89,27 @@ var AppDebugInfoComponent = React.createClass({
     );
   },
 
+  getLastVersionChange: function () {
+    var versionInfo = this.state.app.versionInfo;
+
+    if (versionInfo == null) {
+      return (
+        <span className="text-muted">
+          This app does not have version change information
+        </span>
+      );
+    }
+
+    return (
+      <dl className="dl-horizontal">
+        <dt>Scale or restart</dt>
+        <dd>{versionInfo.lastChangeAt}</dd>
+        <dt>Configuration</dt>
+        <dd>{versionInfo.lastConfigChangeAt}</dd>
+      </dl>
+    );
+  },
+
   render: function () {
     return (
       <div>
@@ -99,15 +120,15 @@ var AppDebugInfoComponent = React.createClass({
             ↻ Refresh
           </button>
         </h5>
-        <div>
-          {this.getLastTaskFailureInfo()}
-        </div>
+        {this.getLastTaskFailureInfo()}
         <h5>
           Task Lifetime
         </h5>
-        <div>
-          {this.getTaskLifetime()}
-        </div>
+        {this.getTaskLifetime()}
+        <h5>
+          Last Version Change
+        </h5>
+        {this.getLastVersionChange()}
       </div>
     );
   }
