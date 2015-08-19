@@ -10,8 +10,8 @@ var qajaxWrapper = function (options) {
   if (!options.concurrent) {
     if (uniqueCalls.indexOf(options.url) > -1) {
       return {
-        error: () => { return this; },
-        success: () => { return this; }
+        error: function () { return this; },
+        success: function () { return this; }
       };
     }
     uniqueCalls.push(options.url);
