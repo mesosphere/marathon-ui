@@ -16,7 +16,9 @@ var ContainerSettingsComponent = React.createClass({
   getInitialState: function () {
     var container = this.props.model.container;
 
-    var [portMappingsCount, parametersCount, volumesCount] = Array(3).fill(1);
+    var portMappingsCount = 1;
+    var parametersCount = 1;
+    var volumesCount = 1;
 
     if (container != null) {
       if (container.docker != null && container.docker.portMappings != null) {
