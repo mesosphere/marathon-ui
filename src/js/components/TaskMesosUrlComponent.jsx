@@ -64,7 +64,9 @@ var TaskMesosUrlComponent = React.createClass({
     var text = this.props.text;
     var mesosTaskUrl = this.buildUrl(task, info);
     if (mesosTaskUrl == null) {
-      return null;
+      return (
+        <span className="text-muted">No link available</span>
+      );
     }
     return (
       <a href={mesosTaskUrl} target="_blank">{text ? text : "link"}</a>
