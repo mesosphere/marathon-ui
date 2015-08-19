@@ -46,6 +46,9 @@ var AppDebugInfoComponent = React.createClass({
       );
     }
 
+    const timestamp = lastTaskFailure.timestamp;
+    const version = lastTaskFailure.version;
+
     return (
       <dl className="dl-horizontal">
         <dt>Task id</dt>
@@ -58,11 +61,11 @@ var AppDebugInfoComponent = React.createClass({
         <dd>{lastTaskFailure.host}</dd>
         <dt>Timestamp</dt>
         <dd>
-          <span>{lastTaskFailure.timestamp}</span> ({new Moment(lastTaskFailure.timestamp).fromNow()})
+          <span>{timestamp}</span> ({new Moment(timestamp).fromNow()})
         </dd>
         <dt>Version</dt>
         <dd>
-          <span>{lastTaskFailure.version}</span> ({new Moment(lastTaskFailure.version).fromNow()})
+          <span>{version}</span> ({new Moment(version).fromNow()})
         </dd>
         <dt>Mesos Details</dt>
         <dd><TaskMesosUrlComponent task={lastTaskFailure}/></dd>
@@ -105,16 +108,19 @@ var AppDebugInfoComponent = React.createClass({
       );
     }
 
+    const lastScalingAt = versionInfo.lastScalingAt;
+    const lastConfigChangeAt = versionInfo.lastConfigChangeAt;
+
     var lastScaling = (
       <dd>
         <span>No operation since last config change</span>
       </dd>
     );
 
-    if (versionInfo.lastScalingAt !== versionInfo.lastConfigChangeAt) {
+    if (lastScalingAt !== lastConfigChangeAt) {
       lastScaling = (
         <dd>
-          <span>{versionInfo.lastScalingAt}</span> ({new Moment(versionInfo.lastScalingAt).fromNow()})
+          <span>{lastScalingAt}</span> ({new Moment(lastScalingAt).fromNow()})
         </dd>
       );
     }
@@ -125,7 +131,7 @@ var AppDebugInfoComponent = React.createClass({
         {lastScaling}
         <dt>Configuration</dt>
         <dd>
-          <span>{versionInfo.lastConfigChangeAt}</span> ({new Moment(versionInfo.lastConfigChangeAt).fromNow()})
+          <span>{lastConfigChangeAt}</span> ({new Moment(lastConfigChangeAt).fromNow()})
         </dd>
       </dl>
     );
