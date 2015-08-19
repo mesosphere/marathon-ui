@@ -52,7 +52,7 @@ var TabPanesComponent = React.createClass({
           <div className="app-list-controls">
             <Link
               to={path}
-              query={{modal: "newapp"}}
+              query={{modal: "new-app"}}
               className="btn btn-success pull-right">
                   + New App
             </Link>

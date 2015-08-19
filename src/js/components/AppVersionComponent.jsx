@@ -26,11 +26,23 @@ function invalidateValue(value, suffix) {
 var AppVersionComponent = React.createClass({
   displayName: "AppVersionComponent",
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   propTypes: {
     // App object
     appVersion: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
     currentVersion: React.PropTypes.bool
+  },
+
+  handleEditAppVersion: function () {
+    var appVersion = this.props.appVersion;
+    var router = this.context.router;
+    router.transitionTo(router.getCurrentPathname(), {}, {
+      modal: `edit-app--${appVersion.id}--${appVersion.version}`
+    });
   },
 
   handleRollbackToAppVersion: function () {
@@ -43,17 +55,25 @@ var AppVersionComponent = React.createClass({
 
     if (!this.props.currentVersion) {
       applyButton = (
-        <div className="text-right">
-          <button type="submit"
-              className="btn btn-sm btn-default"
-              onClick={this.handleRollbackToAppVersion}>
-            Apply these settings
-          </button>
-        </div>
+        <button type="submit"
+            className="btn btn-sm btn-default pull-right"
+            onClick={this.handleRollbackToAppVersion}>
+          Apply these settings
+        </button>
       );
     }
 
     return applyButton;
+  },
+
+  getEditButton: function () {
+    return (
+      <button type="submit"
+          className="btn btn-sm btn-default pull-right"
+          onClick={this.handleEditAppVersion}>
+        Edit these settings
+      </button>
+    );
   },
 
   render: function () {
@@ -138,6 +158,7 @@ var AppVersionComponent = React.createClass({
           {invalidateValue(appVersion.version)}
         </dl>
         {this.getApplyButton()}
+        {this.getEditButton()}
       </div>
     );
   }

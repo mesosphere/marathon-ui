@@ -549,7 +549,7 @@ describe("Apps", function () {
         "cmd": "sleep 10",
         "id": "/app-1",
         "instances": 15
-      });
+      }, true);
     });
 
     it("receives an apply error on bad data", function (done) {
@@ -566,7 +566,37 @@ describe("Apps", function () {
         "cmd": "sleep 10",
         "id": "/app-1",
         "instances": "needs a number! :P"
+      }, true);
+    });
+
+    it("it passes isEditing-flag on success", function (done) {
+      // A successful response with a payload of a apply-settings-deployment,
+      // like the API would do.
+      // Indeed the payload isn't processed by the store yet.
+      this.server.setup({
+          "deploymentId": "deployment-that-applies-new-settings",
+          "version": "v2"
+        }, 200);
+
+      AppsStore.once(AppsEvents.APPLY_APP, function (isEditing) {
+        expectAsync(function () {
+          expect(isEditing).to.be.true;
+        }, done);
       });
+
+      AppsActions.applySettingsOnApp("/app-1", {}, true);
+    });
+
+    it("it passes isEditing-flag on error", function (done) {
+      this.server.setup({message: "apply bad data error"}, 400);
+
+      AppsStore.once(AppsEvents.APPLY_APP_ERROR, function (error, isEditing) {
+        expectAsync(function () {
+          expect(isEditing).to.be.true;
+        }, done);
+      });
+
+      AppsActions.applySettingsOnApp("/app-1", {}, true);
     });
 
   });

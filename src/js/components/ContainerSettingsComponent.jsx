@@ -14,11 +14,30 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getInitialState: function () {
+    var container = this.props.model.container;
+
+    var portMappingsCount = 1;
+    var parametersCount = 1;
+    var volumesCount = 1;
+
+    if (container != null) {
+      if (container.docker != null && container.docker.portMappings != null) {
+        portMappingsCount = container.docker.portMappings.length || 1;
+      }
+      if (container.parameters != null) {
+        parametersCount = container.parameters.length || 1;
+      }
+      if (container.volumes != null) {
+        volumesCount = container.volumes.length || 1;
+      }
+    }
+
     return {
       rows: {
-        portMappings: [true],
-        parameters: [true],
-        volumes: [true]
+        portMappings:
+          Array(portMappingsCount).fill(true),
+        parameters: Array(parametersCount).fill(true),
+        volumes: Array(volumesCount).fill(true)
       }
     };
   },
@@ -50,14 +69,18 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getPortMappingRow: function (i = 0) {
+    var props = this.props;
+    var model = props.model;
+    var errors = props.errors;
+
     return (
       <div key={`pm-${i}`} className="row duplicable-row">
         <div className="col-sm-3">
           <FormGroupComponent
             attribute={`container.docker.portMappings[${i}].containerPort`}
             label="Container Port"
-            model={this.props.model}
-            errors={this.props.errors}
+            model={model}
+            errors={errors}
             validator={appValidator}>
             <input type="number" step="1" min="0" max="65535"/>
           </FormGroupComponent>
@@ -66,8 +89,8 @@ var ContainerSettingsComponent = React.createClass({
           <FormGroupComponent
             attribute={`container.docker.portMappings[${i}].hostPort`}
             label="Host Port"
-            model={this.props.model}
-            errors={this.props.errors}
+            model={model}
+            errors={errors}
             validator={appValidator}>
             <input type="number" step="1" min="0" max="65535"/>
           </FormGroupComponent>
@@ -76,8 +99,8 @@ var ContainerSettingsComponent = React.createClass({
           <FormGroupComponent
             attribute={`container.docker.portMappings[${i}].servicePort`}
             label="Service Port"
-            model={this.props.model}
-            errors={this.props.errors}
+            model={model}
+            errors={errors}
             validator={appValidator}>
             <input type="number" step="1" min="0" max="65535"/>
           </FormGroupComponent>
@@ -86,8 +109,8 @@ var ContainerSettingsComponent = React.createClass({
           <FormGroupComponent
             attribute={`container.docker.portMappings[${i}].protocol`}
             label="Protocol"
-            model={this.props.model}
-            errors={this.props.errors}
+            model={model}
+            errors={errors}
             validator={appValidator}>
             <select defaultValue="">
               <option value="" disabled="disabled">
@@ -110,14 +133,18 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getParameterRow: function (i = 0) {
+    var props = this.props;
+    var model = props.model;
+    var errors = props.errors;
+
     return (
       <div key={`p-${i}`} className="row duplicable-row">
         <div className="col-sm-6 add-colon">
           <FormGroupComponent
             attribute={`container.parameters[${i}].key`}
             label="Key"
-            model={this.props.model}
-            errors={this.props.errors}
+            model={model}
+            errors={errors}
             validator={appValidator}>
             <input />
           </FormGroupComponent>
@@ -126,8 +153,8 @@ var ContainerSettingsComponent = React.createClass({
           <FormGroupComponent
             attribute={`container.parameters[${i}].value`}
             label="Value"
-            model={this.props.model}
-            errors={this.props.errors}
+            model={model}
+            errors={errors}
             validator={appValidator}>
             <input />
           </FormGroupComponent>
@@ -140,14 +167,25 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getVolumeRow: function (i = 0) {
+    var props = this.props;
+    var model = props.model;
+    var errors = props.errors;
+    var mode;
+
+    try {
+      mode = model.container.volumes[i].mode;
+    } catch (e) {
+      mode = "";
+    }
+
     return (
       <div key={`v-${i}`} className="row duplicable-row">
         <div className="col-sm-4">
           <FormGroupComponent
             attribute={`container.volumes[${i}].containerPath`}
             label="Container path"
-            model={this.props.model}
-            errors={this.props.errors}
+            model={model}
+            errors={errors}
             validator={appValidator}>
             <input />
           </FormGroupComponent>
@@ -156,8 +194,8 @@ var ContainerSettingsComponent = React.createClass({
           <FormGroupComponent
             attribute={`container.volumes[${i}].hostPath`}
             label="Host path"
-            model={this.props.model}
-            errors={this.props.errors}
+            model={model}
+            errors={errors}
             validator={appValidator}>
             <input />
           </FormGroupComponent>
@@ -166,10 +204,10 @@ var ContainerSettingsComponent = React.createClass({
           <FormGroupComponent
             attribute={`container.volumes[${i}].mode`}
             label="Mode"
-            model={this.props.model}
-            errors={this.props.errors}
+            model={model}
+            errors={errors}
             validator={appValidator}>
-            <select defaultValue="">
+            <select defaultValue={mode}>
               <option value="" disabled="disabled">Select</option>
               <option value={ContainerConstants.VOLUMES.MODE.RO}>
                 Read Only
@@ -188,24 +226,32 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   render: function () {
+    var state = this.state;
     var model = this.props.model;
     var errors = this.props.errors;
+    var network;
 
-    var portMappingRows = this.state.rows.portMappings
+    try {
+      network = model.container.docker.network;
+    } catch (e) {
+      network = "";
+    }
+
+    var portMappingRows = state.rows.portMappings
       .map(function (exists, index) {
         return exists
           ? this.getPortMappingRow(index)
           : null;
       }.bind(this));
 
-    var parameterRows = this.state.rows.parameters
+    var parameterRows = state.rows.parameters
       .map(function (exists, index) {
         return exists
           ? this.getParameterRow(index)
           : null;
       }.bind(this));
 
-    var volumeRows = this.state.rows.volumes.map(function (exists, index) {
+    var volumeRows = state.rows.volumes.map(function (exists, index) {
       return exists
         ? this.getVolumeRow(index)
         : null;
@@ -231,7 +277,7 @@ var ContainerSettingsComponent = React.createClass({
               model={model}
               errors={errors}
               validator={appValidator}>
-              <select defaultValue="">
+              <select defaultValue={network}>
                 <option value="" disabled="disabled">Select</option>
                 <option value={ContainerConstants.NETWORK.HOST}>
                   Host

@@ -1,6 +1,5 @@
 var React = require("react/addons");
 
-var appValidator = require("../validators/appValidator");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
 
@@ -74,15 +73,17 @@ var OptionalSettingsComponent = React.createClass({
   },
 
   getEnviromentRow: function (i = 0) {
+    var errors = this.props.errors;
+    var state = this.state;
+
     return (
       <div key={`p-${i}`} className="row duplicable-row">
         <div className="col-sm-6 add-colon">
           <FormGroupComponent
             attribute={`env[${i}].key`}
             label="Key"
-            model={this.state}
-            errors={this.props.errors}
-            validator={appValidator}>
+            model={state}
+            errors={errors}>
             <input />
           </FormGroupComponent>
         </div>
@@ -90,9 +91,8 @@ var OptionalSettingsComponent = React.createClass({
           <FormGroupComponent
             attribute={`env[${i}].value`}
             label="Value"
-            model={this.state}
-            errors={this.props.errors}
-            validator={appValidator}>
+            model={state}
+            errors={errors}>
             <input />
           </FormGroupComponent>
           <DuplicableRowControls

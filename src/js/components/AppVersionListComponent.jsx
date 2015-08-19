@@ -76,7 +76,12 @@ var AppVersionListComponent = React.createClass({
     AppVersionsActions.requestAppVersions(this.props.appId);
   },
 
-  onAppApplySettingsError: function (errorMessage) {
+  onAppApplySettingsError: function (errorMessage, isEditing) {
+    // Errors will be handled seperatly in the edit dialog
+    if (isEditing) {
+      return;
+    }
+
     Util.alert("Could not update to chosen version: " +
       (errorMessage.message || errorMessage));
   },

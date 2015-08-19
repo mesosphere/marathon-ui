@@ -17,6 +17,10 @@
 - \#1993 - Show Marathon UI version in about modal
   * The Marathon UI version will be shown on mouse hovering
     above the API version field. Second way is pressing "g v" on the keyboard.
+- \#808 - Make app configuration fields editable
+  * A selected application version can now be edited
+    by pressing on the "Edit these settings"-button.
+- \#124 - Expose environment variables in app modal dialog
 
 ### Changed
 - \#124 - Expose all /v2 App attributes in UI
@@ -37,6 +41,8 @@
 - \#1960 - Task detail error message doesn't show up on non existent task
 - \#1989 - HealthBar isn't working correctly on non existing health data
 - \#2014 - Avoid concurrent http requests on same endpoint
+- \#1996 - Duplicable fields in app creation modal can send null values
+- \#2030 - Shortcut for app creation no longer works
 
 ## 0.10.0 - 2015-07-10
 ### Added

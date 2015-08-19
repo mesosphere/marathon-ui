@@ -8,7 +8,8 @@ var React = require("react/addons");
 var RouteHandler = require("react-router").RouteHandler;
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
-var NewAppModalComponent = require("../components/NewAppModalComponent");
+var AppModalComponent = require("../components/modals/AppModalComponent");
+var EditAppModalComponent = require("../components/modals/EditAppModalComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");
@@ -29,7 +30,7 @@ var Marathon = React.createClass({
       activeAppId: null,
       activeAppView: null,
       activeTabId: null,
-      modalClass: null
+      modal: null
     };
   },
 
@@ -39,23 +40,23 @@ var Marathon = React.createClass({
     this.onRouteChange();
 
     Mousetrap.bindGlobal("esc", function () {
-      if (this.refs.modal != null) {
+      if (this.state.modal != null) {
         this.handleModalDestroy();
       }
     }.bind(this));
 
     Mousetrap.bind("c", function () {
-      router.transitionTo("newapp");
+      router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-app"});
     }, "keyup");
 
     Mousetrap.bind("g a", function () {
-      if (this.state.modalClass == null) {
+      if (this.state.modal == null) {
         router.transitionTo("apps");
       }
     }.bind(this));
 
     Mousetrap.bind("g d", function () {
-      if (this.state.modalClass == null) {
+      if (this.state.modal == null) {
         router.transitionTo("deployments");
       }
     }.bind(this));
@@ -65,7 +66,7 @@ var Marathon = React.createClass({
     });
 
     Mousetrap.bind("shift+,", function () {
-      router.transitionTo("about");
+      router.transitionTo(router.getCurrentPathname(), {}, {modal: "about"});
     });
 
     this.startPolling();
@@ -81,12 +82,15 @@ var Marathon = React.createClass({
     var params = router.getCurrentParams();
     var path = router.getCurrentPathname();
     var modalQuery = router.getCurrentQuery().modal;
-    var modalClass = null;
+    var modal = null;
 
-    if (modalQuery === "newapp") {
-      modalClass = NewAppModalComponent;
+    if (modalQuery === "new-app") {
+      modal = this.getNewAppModal();
     } else if (modalQuery === "about") {
-      modalClass = AboutModalComponent;
+      modal = this.getAboutModal();
+    } else if (modalQuery != null && modalQuery.indexOf("edit-app--") > -1) {
+      let [, appId, appVersion] = modalQuery.split("--");
+      modal = this.getEditAppModal(decodeURIComponent(appId), appVersion);
     }
 
     var appId = params.appId;
@@ -113,7 +117,7 @@ var Marathon = React.createClass({
       activeAppId: appId,
       activeAppView: view,
       activeTabId: activeTabId,
-      modalClass: modalClass
+      modal: modal
     });
   },
 
@@ -131,7 +135,7 @@ var Marathon = React.createClass({
   },
 
   handleModalDestroy: function () {
-    if (!this.state.modalClass) {
+    if (!this.state.modal) {
       return;
     }
 
@@ -178,29 +182,29 @@ var Marathon = React.createClass({
   getAboutModal: function () {
     return (
       <AboutModalComponent
-        onDestroy={this.handleModalDestroy}
-        ref="modal" />
+        onDestroy={this.handleModalDestroy} />
     );
   },
 
   getNewAppModal: function () {
     return (
-      <NewAppModalComponent
-        onDestroy={this.handleModalDestroy}
-        ref="modal" />
+      <AppModalComponent
+        onDestroy={this.handleModalDestroy} />
+    );
+  },
+
+  getEditAppModal: function (appId, appVersion) {
+    return (
+      <EditAppModalComponent
+        appId={appId}
+        appVersion={appVersion}
+        onDestroy={this.handleModalDestroy} />
     );
   },
 
   render: function () {
-    var modal;
     var state = this.state;
     var router = this.context.router;
-
-    if (state.modalClass === NewAppModalComponent) {
-      modal = this.getNewAppModal();
-    } else if (state.modalClass === AboutModalComponent) {
-      modal = this.getAboutModal();
-    }
 
     var logoPath = config.rootUrl + "img/marathon-logo.png";
 
@@ -234,7 +238,7 @@ var Marathon = React.createClass({
           </div>
         </nav>
         <RouteHandler />
-        {modal}
+        {state.modal}
       </div>
     );
   }

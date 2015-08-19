@@ -2736,6 +2736,10 @@
       "version": "2.0.3",
       "resolved": "https://registry.npmjs.org/flux/-/flux-2.0.3.tgz"
     },
+    "get-object-path": {
+      "version": "0.0.2",
+      "resolved": "https://registry.npmjs.org/get-object-path/-/get-object-path-0.0.2.tgz"
+    },
     "gulp": {
       "version": "3.9.0",
       "resolved": "https://registry.npmjs.org/gulp/-/gulp-3.9.0.tgz",

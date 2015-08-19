@@ -1,30 +1,31 @@
 var _ = require("underscore");
 var lazy = require("lazy.js");
 var React = require("react/addons");
-var Util = require("../helpers/Util");
+var Util = require("../../helpers/Util");
 
-var AppsActions = require("../actions/AppsActions");
-var AppsEvents = require("../events/AppsEvents");
-var appScheme = require("../stores/appScheme");
-var AppsStore = require("../stores/AppsStore");
-var appValidator = require("../validators/appValidator");
+var AppsActions = require("../../actions/AppsActions");
+var AppsEvents = require("../../events/AppsEvents");
+var appScheme = require("../../stores/appScheme");
+var AppsStore = require("../../stores/AppsStore");
+var appValidator = require("../../validators/appValidator");
 var CollapsiblePanelComponent =
-  require("../components/CollapsiblePanelComponent");
+  require("../../components/CollapsiblePanelComponent");
 var ContainerSettingsComponent =
-  require("../components/ContainerSettingsComponent");
-var FormGroupComponent = require("../components/FormGroupComponent");
-var ModalComponent = require("../components/ModalComponent");
-var OptionalSettingsComponent =
-  require("../components/OptionalSettingsComponent");
+  require("../../components/ContainerSettingsComponent");
+var FormGroupComponent = require("../../components/FormGroupComponent");
+var ModalComponent = require("../../components/ModalComponent");
 var OptionalEnvironmentComponent =
-  require("../components/OptionalEnviromentComponent");
-var ValidationError = require("../validators/ValidationError");
+  require("../../components/OptionalEnviromentComponent");
+var OptionalSettingsComponent =
+  require("../../components/OptionalSettingsComponent");
+var ValidationError = require("../../validators/ValidationError");
 
-var NewAppModalComponent = React.createClass({
-  displayName: "NewAppModalComponent",
+var AppModalComponent = React.createClass({
+  displayName: "AppModalComponent",
 
   propTypes: {
     attributes: React.PropTypes.object,
+    edit: React.PropTypes.bool,
     onDestroy: React.PropTypes.func
   },
 
@@ -36,6 +37,7 @@ var NewAppModalComponent = React.createClass({
         mem: 16.0,
         disk: 0.0
       }).value(),
+      edit: false,
       onDestroy: Util.noop
     };
   },
@@ -49,6 +51,8 @@ var NewAppModalComponent = React.createClass({
   componentWillMount: function () {
     AppsStore.on(AppsEvents.CREATE_APP, this.onCreateApp);
     AppsStore.on(AppsEvents.CREATE_APP_ERROR, this.onCreateAppError);
+    AppsStore.on(AppsEvents.APPLY_APP, this.onCreateApp);
+    AppsStore.on(AppsEvents.APPLY_APP_ERROR, this.onApplyAppError);
   },
 
   componentWillUnmount: function () {
@@ -56,6 +60,10 @@ var NewAppModalComponent = React.createClass({
       this.onCreateApp);
     AppsStore.removeListener(AppsEvents.CREATE_APP_ERROR,
       this.onCreateAppError);
+    AppsStore.removeListener(AppsEvents.APPLY_APP,
+      this.onCreateApp);
+    AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR,
+      this.onApplyAppError);
   },
 
   onCreateApp: function () {
@@ -70,6 +78,13 @@ var NewAppModalComponent = React.createClass({
       this.clearValidation();
       this.destroy();
     }
+  },
+
+  onApplyAppError: function (error, isEditing, status) {
+    if (!isEditing) {
+      return;
+    }
+    this.onCreateAppError(error, status);
   },
 
   destroy: function () {
@@ -108,7 +123,7 @@ var NewAppModalComponent = React.createClass({
       errors = [
         new ValidationError(
           "general",
-          "App creation unsuccessful. Check your connection and try again."
+          "App creation unsuccessful. Check your app settings and try again."
         )
       ];
     }
@@ -160,6 +175,25 @@ var NewAppModalComponent = React.createClass({
       modelAttrs.ports = [];
     }
 
+    // Container arrays shouldn't have null-values
+    if ("container" in modelAttrs) {
+      let container = modelAttrs.container;
+      if ("docker" in container) {
+        if ("portMappings" in container.docker) {
+          container.docker.portMappings =
+            lazy(container.docker.portMappings).compact().value();
+        }
+      }
+      if ("parameters" in container) {
+        container.parameters =
+          lazy(container.parameters).compact().value();
+      }
+      if ("volumes" in container) {
+        container.volumes =
+          lazy(container.volumes).compact().value();
+      }
+    }
+
     // mem, cpus, and instances are all Numbers and should be parsed as such.
     if ("mem" in modelAttrs) {
       modelAttrs.mem = parseFloat(modelAttrs.mem);
@@ -178,11 +212,17 @@ var NewAppModalComponent = React.createClass({
 
     // Create app if validate() returns no errors
     if (appValidator.validate(model) == null) {
-      AppsActions.createApp(model);
+      let props = this.props;
+      if (props.edit) {
+        AppsActions.applySettingsOnApp(model.id, model, true);
+      } else {
+        AppsActions.createApp(model);
+      }
     }
   },
 
   render: function () {
+    var props = this.props;
     var model = this.props.attributes;
     var errors = this.state.errors;
 
@@ -194,6 +234,14 @@ var NewAppModalComponent = React.createClass({
       return <p key={i} className="text-danger"><strong>{error.message}</strong></p>;
     });
 
+    var modalTitle = "New Application";
+    var submitButtonTitle = "+ Create";
+
+    if (props.edit) {
+      modalTitle = "Edit Application";
+      submitButtonTitle = "Change and deploy configuration";
+    }
+
     return (
       <ModalComponent
         dismissOnClickOutside={false}
@@ -204,7 +252,7 @@ var NewAppModalComponent = React.createClass({
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>
-            <h3 className="modal-title">New Application</h3>
+            <h3 className="modal-title">{modalTitle}</h3>
           </div>
           <div className="modal-body reduced-padding">
             <FormGroupComponent
@@ -283,7 +331,7 @@ var NewAppModalComponent = React.createClass({
             </div>
             <div className="modal-controls">
               {errorBlock}
-              <input type="submit" className="btn btn-success" value="+ Create" /> <button className="btn btn-default" type="button" onClick={this.destroy}>
+              <input type="submit" className="btn btn-success" value={submitButtonTitle} /> <button className="btn btn-default" type="button" onClick={this.destroy}>
                 Cancel
               </button>
             </div>
@@ -294,4 +342,4 @@ var NewAppModalComponent = React.createClass({
   }
 });
 
-module.exports = NewAppModalComponent;
+module.exports = AppModalComponent;
