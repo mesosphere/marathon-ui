@@ -34,14 +34,8 @@ var AppComponent = React.createClass({
         <td className="overflow-ellipsis" title={model.id}>
           {model.id}
         </td>
-        <td className="text-right ram">
-          {model.mem}
-        </td>
         <td className="text-right total ram">
           {model.totalMem}
-        </td>
-        <td className="text-right cpus">
-          {model.cpus}
         </td>
         <td className="text-right total cpu">
           {model.totalCpus}

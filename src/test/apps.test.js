@@ -645,33 +645,23 @@ describe("App component", function () {
     expect(cellContent).to.equal("app-123");
   });
 
-  it("has the correct amount of memory", function () {
-    var cellContent = this.component.props.children[1].props.children;
-    expect(cellContent).to.equal(100);
-  });
-
   it("has the correct amount of total memory", function () {
-    var cellContent = this.component.props.children[2].props.children;
+    var cellContent = this.component.props.children[1].props.children;
     expect(cellContent).to.equal(500);
   });
 
-  it("has the correct amount of cpus", function () {
-    var cellContent = this.component.props.children[3].props.children;
-    expect(cellContent).to.equal(4);
-  });
-
   it("has the correct amount of total cpus", function () {
-    var cellContent = this.component.props.children[4].props.children;
+    var cellContent = this.component.props.children[2].props.children;
     expect(cellContent).to.equal(20);
   });
 
   it("has correct number of tasks running", function () {
-    var tasksRunning = this.component.props.children[3].props.children;
+    var tasksRunning = this.component.props.children[3].props.children[0].props.children;
     expect(tasksRunning).to.equal(4);
   });
 
   it("has correct number of instances", function () {
-    var totalSteps = this.component.props.children[5].props.children[2];
+    var totalSteps = this.component.props.children[3].props.children[2];
     expect(totalSteps).to.equal(5);
   });
 
