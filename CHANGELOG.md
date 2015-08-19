@@ -17,6 +17,7 @@
 - \#1993 - Show Marathon UI version in about modal
   * The Marathon UI version will be shown on mouse hovering
     above the API version field. Second way is pressing "g v" on the keyboard.
+- \#2010 - Show task life time in debug tab
 
 ### Changed
 - \#124 - Expose all /v2 App attributes in UI
@@ -36,6 +37,7 @@
 - \#1872 - Kill & Scale should be available for more than one task
 - \#1960 - Task detail error message doesn't show up on non existent task
 - \#1989 - HealthBar isn't working correctly on non existing health data
+- \#2014 - Avoid concurrent http requests on same endpoint
 
 ## 0.10.0 - 2015-07-10
 ### Added
