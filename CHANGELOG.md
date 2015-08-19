@@ -21,6 +21,7 @@
   * A selected application version can now be edited
     by pressing on the "Edit these settings"-button.
 - \#124 - Expose environment variables in app modal dialog
+- \#1251 - Show total resource usage in app list
 
 ### Changed
 - \#124 - Expose all /v2 App attributes in UI
