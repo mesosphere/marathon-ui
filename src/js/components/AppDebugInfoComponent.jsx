@@ -67,9 +67,9 @@ var AppDebugInfoComponent = React.createClass({
 
   getTaskLifetime: function () {
     var app = this.state.app;
-    var lifeTime = (app.taskStats != null) ?
-      app.taskStats.lifeTime :
-      null;
+    var lifeTime = app.taskStats != null
+      ? app.taskStats.lifeTime
+      : null;
 
     if (lifeTime == null) {
       return (
