@@ -72,14 +72,17 @@ var FormGroupComponent = React.createClass({
 
     // Assume there is a single child of either <input> or <textarea>, and add
     // the needed props to make it an input for this attribute.
+    var child = React.Children.only(props.children);
     var formControlChild = React.cloneElement(
-      React.Children.only(props.children),
+      child,
       {
         className: "form-control",
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        defaultValue: objectPath(state.model, attribute)
+        defaultValue: child.props.defaultValue != null
+          ? child.props.defaultValue
+          : objectPath(state.model, attribute)
       }
     );
 
