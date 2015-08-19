@@ -1,4 +1,5 @@
 var React = require("react/addons");
+var Moment = require("moment");
 
 var AppsStore = require("../stores/AppsStore");
 var AppsActions = require("../actions/AppsActions");
@@ -56,9 +57,13 @@ var AppDebugInfoComponent = React.createClass({
         <dt>Host</dt>
         <dd>{lastTaskFailure.host}</dd>
         <dt>Timestamp</dt>
-        <dd>{lastTaskFailure.timestamp}</dd>
+        <dd>
+          <span>{lastTaskFailure.timestamp}</span> ({new Moment(lastTaskFailure.timestamp).fromNow()})
+        </dd>
         <dt>Version</dt>
-        <dd>{lastTaskFailure.version}</dd>
+        <dd>
+          <span>{lastTaskFailure.version}</span> ({new Moment(lastTaskFailure.version).fromNow()})
+        </dd>
         <dt>Mesos Details</dt>
         <dd><TaskMesosUrlComponent task={lastTaskFailure}/></dd>
       </dl>
@@ -100,12 +105,28 @@ var AppDebugInfoComponent = React.createClass({
       );
     }
 
+    var lastScaling = (
+      <dd>
+        <span>No operation since last config change</span>
+      </dd>
+    );
+
+    if (versionInfo.lastScalingAt !== versionInfo.lastConfigChangeAt) {
+      lastScaling = (
+        <dd>
+          <span>{versionInfo.lastScalingAt}</span> ({new Moment(versionInfo.lastScalingAt).fromNow()})
+        </dd>
+      );
+    }
+
     return (
       <dl className="dl-horizontal">
-        <dt>Scale or restart</dt>
-        <dd>{versionInfo.lastChangeAt}</dd>
+        <dt>Scale or Restart</dt>
+        {lastScaling}
         <dt>Configuration</dt>
-        <dd>{versionInfo.lastConfigChangeAt}</dd>
+        <dd>
+          <span>{versionInfo.lastConfigChangeAt}</span> ({new Moment(versionInfo.lastConfigChangeAt).fromNow()})
+        </dd>
       </dl>
     );
   },
@@ -126,7 +147,7 @@ var AppDebugInfoComponent = React.createClass({
         </h5>
         {this.getTaskLifetime()}
         <h5>
-          Last Version Change
+          Last Changes
         </h5>
         {this.getLastVersionChange()}
       </div>
