@@ -24,7 +24,7 @@ var AppsActions = {
   },
   requestApp: function (appId) {
     this.request({
-      url: `${config.apiURL}v2/apps/${appId}`
+      url: `${config.apiURL}v2/apps/${appId}?embed=app.taskStats`
     })
       .success(function (app) {
         AppDispatcher.dispatch({
