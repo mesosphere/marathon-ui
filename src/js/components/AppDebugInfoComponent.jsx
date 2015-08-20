@@ -141,21 +141,21 @@ var AppDebugInfoComponent = React.createClass({
     return (
       <div>
         <h5>
-          Last Task Failure
+          Last Changes
           <button className="btn btn-sm btn-info pull-right"
             onClick={this.handleRefresh}>
             ↻ Refresh
           </button>
+        </h5>
+        {this.getLastVersionChange()}
+        <h5>
+          Last Task Failure
         </h5>
         {this.getLastTaskFailureInfo()}
         <h5>
           Task Lifetime
         </h5>
         {this.getTaskLifetime()}
-        <h5>
-          Last Changes
-        </h5>
-        {this.getLastVersionChange()}
       </div>
     );
   }
