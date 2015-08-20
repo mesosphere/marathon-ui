@@ -1,4 +1,5 @@
 var React = require("react/addons");
+var Moment = require("moment");
 
 var AppsStore = require("../stores/AppsStore");
 var AppsActions = require("../actions/AppsActions");
@@ -45,6 +46,9 @@ var AppDebugInfoComponent = React.createClass({
       );
     }
 
+    const timestamp = lastTaskFailure.timestamp;
+    const version = lastTaskFailure.version;
+
     return (
       <dl className="dl-horizontal">
         <dt>Task id</dt>
@@ -56,9 +60,13 @@ var AppDebugInfoComponent = React.createClass({
         <dt>Host</dt>
         <dd>{lastTaskFailure.host}</dd>
         <dt>Timestamp</dt>
-        <dd>{lastTaskFailure.timestamp}</dd>
+        <dd>
+          <span>{timestamp}</span> ({new Moment(timestamp).fromNow()})
+        </dd>
         <dt>Version</dt>
-        <dd>{lastTaskFailure.version}</dd>
+        <dd>
+          <span>{version}</span> ({new Moment(version).fromNow()})
+        </dd>
         <dt>Mesos Details</dt>
         <dd><TaskMesosUrlComponent task={lastTaskFailure}/></dd>
       </dl>
@@ -89,6 +97,46 @@ var AppDebugInfoComponent = React.createClass({
     );
   },
 
+  getLastVersionChange: function () {
+    var versionInfo = this.state.app.versionInfo;
+
+    if (versionInfo == null) {
+      return (
+        <span className="text-muted">
+          This app does not have version change information
+        </span>
+      );
+    }
+
+    const lastScalingAt = versionInfo.lastScalingAt;
+    const lastConfigChangeAt = versionInfo.lastConfigChangeAt;
+
+    var lastScaling = (
+      <dd>
+        <span>No operation since last config change</span>
+      </dd>
+    );
+
+    if (lastScalingAt !== lastConfigChangeAt) {
+      lastScaling = (
+        <dd>
+          <span>{lastScalingAt}</span> ({new Moment(lastScalingAt).fromNow()})
+        </dd>
+      );
+    }
+
+    return (
+      <dl className="dl-horizontal">
+        <dt>Scale or Restart</dt>
+        {lastScaling}
+        <dt>Configuration</dt>
+        <dd>
+          <span>{lastConfigChangeAt}</span> ({new Moment(lastConfigChangeAt).fromNow()})
+        </dd>
+      </dl>
+    );
+  },
+
   render: function () {
     return (
       <div>
@@ -99,15 +147,15 @@ var AppDebugInfoComponent = React.createClass({
             ↻ Refresh
           </button>
         </h5>
-        <div>
-          {this.getLastTaskFailureInfo()}
-        </div>
+        {this.getLastTaskFailureInfo()}
         <h5>
           Task Lifetime
         </h5>
-        <div>
-          {this.getTaskLifetime()}
-        </div>
+        {this.getTaskLifetime()}
+        <h5>
+          Last Changes
+        </h5>
+        {this.getLastVersionChange()}
       </div>
     );
   }
