@@ -44,7 +44,9 @@ var AppDebugInfoComponent = React.createClass({
 
     if (lastTaskFailure == null) {
       return (
-        <span className="text-muted">This app does not have failed tasks</span>
+        <span className="text-muted">
+          This app does not have failed tasks
+        </span>
       );
     }
 
@@ -118,18 +120,30 @@ var AppDebugInfoComponent = React.createClass({
   render: function () {
     return (
       <div>
-        <h5>
-          Last Changes
-          <button className="btn btn-sm btn-info pull-right"
-            onClick={this.handleRefresh}>
-            ↻ Refresh
-          </button>
-        </h5>
-        {this.getLastVersionChange()}
-        <h5>
-          Last Task Failure
-        </h5>
-        {this.getLastTaskFailureInfo()}
+        <button className="btn btn-sm btn-info pull-right"
+          onClick={this.handleRefresh}>
+          ↻ Refresh
+        </button>
+        <div className="panel-group">
+          <div className="panel panel-header panel-inverse">
+            <div className="panel-heading">
+              Last Changes
+            </div>
+          </div>
+          <div className="panel panel-body panel-inverse">
+            {this.getLastVersionChange()}
+          </div>
+        </div>
+        <div className="panel-group">
+          <div className="panel panel-header panel-inverse">
+            <div className="panel-heading">
+              Last Task Failure
+            </div>
+          </div>
+          <div className="panel panel-body panel-inverse">
+            {this.getLastTaskFailureInfo()}
+          </div>
+        </div>
         <AppTaskStatsListComponent taskStatsList={this.state.app.taskStats} />
       </div>
     );
