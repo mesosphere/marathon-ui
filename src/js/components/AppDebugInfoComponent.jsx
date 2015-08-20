@@ -4,6 +4,8 @@ var Moment = require("moment");
 var AppsStore = require("../stores/AppsStore");
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
+var AppTaskStatsListComponent =
+  require("../components/AppTaskStatsListComponent");
 var TaskMesosUrlComponent = require("../components/TaskMesosUrlComponent");
 
 var AppDebugInfoComponent = React.createClass({
@@ -73,30 +75,6 @@ var AppDebugInfoComponent = React.createClass({
     );
   },
 
-  getTaskLifetime: function () {
-    var app = this.state.app;
-    var lifeTime = app.taskStats != null
-      ? app.taskStats.lifeTime
-      : null;
-
-    if (lifeTime == null) {
-      return (
-        <span className="text-muted">
-          This app does not have task lifetime information
-        </span>
-      );
-    }
-
-    return (
-      <dl className="dl-horizontal">
-        <dt>Average</dt>
-        <dd>{lifeTime.averageSeconds} seconds</dd>
-        <dt>Median</dt>
-        <dd>{lifeTime.medianSeconds} seconds</dd>
-      </dl>
-    );
-  },
-
   getLastVersionChange: function () {
     var versionInfo = this.state.app.versionInfo;
 
@@ -152,10 +130,7 @@ var AppDebugInfoComponent = React.createClass({
           Last Task Failure
         </h5>
         {this.getLastTaskFailureInfo()}
-        <h5>
-          Task Lifetime
-        </h5>
-        {this.getTaskLifetime()}
+        <AppTaskStatsListComponent taskStatsList={this.state.app.taskStats} />
       </div>
     );
   }
