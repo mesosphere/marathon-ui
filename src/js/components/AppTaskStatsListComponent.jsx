@@ -17,7 +17,12 @@ var AppTaskStatsListComponent = React.createClass({
   },
 
   getByCategory: function (key) {
-    var taskStats = this.props.taskStatsList[key];
+    var taskStatsList = this.props.taskStatsList;
+    if (taskStatsList == null) {
+      return null;
+    }
+
+    let taskStats = taskStatsList[key];
 
     if (taskStats == null) {
       return null;
@@ -32,12 +37,15 @@ var AppTaskStatsListComponent = React.createClass({
 
   render: function () {
     var taskStatsList = this.props.taskStatsList;
+    var noTaskStatistics = null;
 
     if (taskStatsList == null) {
-      return (
-        <span className="text-muted">
-          This app does not have task statistics
-        </span>
+      noTaskStatistics = (
+        <div className="panel panel-body panel-inverse">
+          <span className="text-muted">
+            This app does not have task statistics
+          </span>
+        </div>
       );
     }
 
@@ -52,6 +60,7 @@ var AppTaskStatsListComponent = React.createClass({
         {this.getByCategory("withLatestConfig")}
         {this.getByCategory("withOutdatedConfig")}
         {this.getByCategory("totalSummary")}
+        {noTaskStatistics}
       </div>
     );
   }
