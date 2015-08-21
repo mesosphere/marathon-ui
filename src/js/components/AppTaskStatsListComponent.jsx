@@ -13,7 +13,7 @@ var AppTaskStatsListComponent = React.createClass({
   displayName: "AppTaskStatsListComponent",
 
   propTypes: {
-    taskStatsList: React.PropTypes.object.isRequired
+    taskStatsList: React.PropTypes.object
   },
 
   getByCategory: function (key) {
