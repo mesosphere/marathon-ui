@@ -8,6 +8,8 @@ var appScheme = require("../js/stores/appScheme");
 var InfoStore = require("../js/stores/InfoStore");
 var AppsStore = require("../js/stores/AppsStore");
 var AppDebugInfoComponent = require("../js/components/AppDebugInfoComponent");
+var AppTaskStatsListComponent =
+  require("../js/components/AppTaskStatsListComponent");
 
 var HttpServer = require("./helpers/HttpServer").HttpServer;
 
@@ -127,6 +129,46 @@ describe("App debug info component", function () {
       expect(message).to.equal("2015-08-11T13:57:11.238Z");
     });
 
+  });
+
+  describe("App Tasks Stats List component", function () {
+    afterEach(function () {
+      this.renderer.unmount();
+    });
+
+    it("displayes given amount of categories", function () {
+      var app = Util.extendObject(appScheme, {
+        id: "/app-1",
+        "taskStats": {
+          "startedAfterLastScaling": {
+            "stats": {}
+          },
+          "withLatestConfig": {
+            "stats": {}
+          },
+          "withOutdatedConfig": {
+            "stats": {}
+          },
+          "totalSummary": {
+            "stats": {}
+          }
+        }
+      });
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<AppTaskStatsListComponent
+        taskStatsList={app.taskStats} />);
+      this.component = this.renderer.getRenderOutput();
+
+      expect(this.component.props.children[1].props.caption)
+        .to.equal("Started After Last Scaling");
+      expect(this.component.props.children[2].props.caption)
+        .to.equal("With Latest Config");
+      expect(this.component.props.children[3].props.caption)
+        .to.equal("With Outdated Config");
+      expect(this.component.props.children[4].props.caption)
+        .to.equal("Total Summary");
+    });
   });
 
 });
