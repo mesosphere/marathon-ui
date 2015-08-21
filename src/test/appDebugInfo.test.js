@@ -59,13 +59,13 @@ describe("App debug info component", function () {
 
       var element = this.component.props.children[1].props.children;
 
-      var taskId = element[1]._store.props.children;
-      var state = element[3]._store.props.children;
-      var message = element[5]._store.props.children;
-      var host = element[7]._store.props.children;
-      var timestamp = element[9]._store.props.children[0].props.children;
-      var version = element[11]._store.props.children[0].props.children;
-      var mesosElement= element[13]._store.props.children.type.displayName;
+      var taskId = element[1].props.children;
+      var state = element[3].props.children;
+      var message = element[5].props.children;
+      var host = element[7].props.children;
+      var timestamp = element[9].props.children[0].props.children;
+      var version = element[11].props.children[0].props.children;
+      var mesosElement= element[13].props.children.type.displayName;
 
       expect(taskId).to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
       expect(state).to.equal("TASK_LOST");
