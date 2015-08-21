@@ -115,8 +115,15 @@ function getAppHealthWeight(health) {
   }, 0);
 }
 
+function calculateTotalResources(app) {
+  app.totalMem = app.mem * app.instances;
+  app.totalCpus = parseFloat((app.cpus * app.instances).toPrecision(4));
+  return app;
+}
+
 function processApp(app) {
   app = lazy(appScheme).extend(app).value();
+  app = calculateTotalResources(app);
 
   app.status = AppStatus.RUNNING;
   if (app.deployments.length > 0) {

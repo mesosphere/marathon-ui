@@ -154,15 +154,15 @@ var AppListComponent = React.createClass({
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "mem")}
+              <span onClick={this.sortBy.bind(null, "totalMem")}
                   className={headerClassSet}>
-                {this.getCaret("mem")} Memory (MB)
+                {this.getCaret("totalMem")} Memory (MB)
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "cpus")}
+              <span onClick={this.sortBy.bind(null, "totalCpus")}
                   className={headerClassSet}>
-                {this.getCaret("cpus")} CPUs
+                {this.getCaret("totalCpus")} CPUs
               </span>
             </th>
             <th className="text-right">

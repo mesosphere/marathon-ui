@@ -32,6 +32,7 @@
     ./v2/, because the UI is now served in an "/ui/"-path via Marathon.
     Also the dist-folder isn't needed in the repository anymore, the files will
     be generated on-the-fly.
+- \#1251 - Show total resource usage in app list
 
 ### Fixed
 - \#548 - UI showing empty list after scaling when on page > 1

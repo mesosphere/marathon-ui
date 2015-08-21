@@ -45,7 +45,10 @@ describe("Apps", function () {
     this.server = server
     .setup({
       "apps": [{
-        id: "/app-1"
+        id: "/app-1",
+        instances: 5,
+        mem: 100,
+        cpus: 4
       }, {
         id: "/app-2"
       }]
@@ -66,6 +69,17 @@ describe("Apps", function () {
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
           expect(AppsStore.apps).to.have.length(2);
+        }, done);
+      });
+
+      AppsActions.requestApps();
+    });
+
+    it("calculate total resources", function (done) {
+      AppsStore.once(AppsEvents.CHANGE, function () {
+        expectAsync(function () {
+          expect(AppsStore.apps[0].totalMem).to.equal(500);
+          expect(AppsStore.apps[0].totalCpus).to.equal(20);
         }, done);
       });
 
@@ -612,10 +626,11 @@ describe("App component", function () {
       tasksRunning: 4,
       instances: 5,
       mem: 100,
+      totalMem: 500,
       cpus: 4,
+      totalCpus: 20,
       status: 0
     };
-
     this.renderer = TestUtils.createRenderer();
     this.renderer.render(<AppComponent model={model} />);
     this.component = this.renderer.getRenderOutput();
@@ -630,19 +645,18 @@ describe("App component", function () {
     expect(cellContent).to.equal("app-123");
   });
 
-  it("has the correct amount of memory", function () {
+  it("has the correct amount of total memory", function () {
     var cellContent = this.component.props.children[1].props.children;
-    expect(cellContent).to.equal(100);
+    expect(cellContent).to.equal(500);
   });
 
-  it("has the correct amount of cpus", function () {
+  it("has the correct amount of total cpus", function () {
     var cellContent = this.component.props.children[2].props.children;
-    expect(cellContent).to.equal(4);
+    expect(cellContent).to.equal(20);
   });
 
   it("has correct number of tasks running", function () {
-    var tasksRunning =
-      this.component.props.children[3].props.children[0].props.children;
+    var tasksRunning = this.component.props.children[3].props.children[0].props.children;
     expect(tasksRunning).to.equal(4);
   });
 
