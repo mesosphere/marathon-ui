@@ -352,8 +352,7 @@ describe("Task List component", function () {
 
 });
 
-
-describe("Task Detail component", function () {
+describe("Task Mesos Url component", function () {
 
   beforeEach(function () {
     this.model = {
