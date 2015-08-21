@@ -168,7 +168,7 @@ var AppModalComponent = React.createClass({
       var portStrings = modelAttrs.ports.split(",");
       modelAttrs.ports = portStrings.map(function (p) {
         var port = parseInt(p, 10);
-        return Util.isNaN(port) ? p : port;
+        return Util.isNotNumber(port) ? p : port;
       });
     }
 

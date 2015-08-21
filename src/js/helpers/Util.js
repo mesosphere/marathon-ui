@@ -122,7 +122,7 @@ var Util = {
   isNumber: function (obj) {
     return toString.call(obj) === "[object Number]";
   },
-  isNaN: function (obj) {
+  isNotNumber: function (obj) {
     return this.isNumber(obj) && obj !== +obj;
   },
   isString: function (obj) {
