@@ -89,4 +89,44 @@ describe("App debug info component", function () {
     });
   });
 
+  describe("Last configuration changes", function () {
+
+    beforeEach(function () {
+      var app = Util.extendObject(appScheme, {
+        id: "/app-1",
+        versionInfo: {
+          lastScalingAt: "2015-08-11T13:57:11.238Z",
+          lastConfigChangeAt: "2015-08-11T13:57:11.238Z"
+        }
+      });
+
+      AppsStore.apps = [app];
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<AppDebugInfoComponent appId={app.id} />);
+      this.component = this.renderer.getRenderOutput();
+    });
+
+    afterEach(function () {
+      this.renderer.unmount();
+    });
+
+    it("scale or restart field has no recent operation", function () {
+      var message = this.component
+        .props.children[1].props.children[1].props.children.props.children[1]
+        .props.children.props.children;
+
+      expect(message).to.equal("No operation since last config change");
+    });
+
+    it("last configuration change has correct date", function () {
+      var message = this.component
+        .props.children[1].props.children[1].props.children.props.children[3]
+        .props.children[0].props.children;
+
+      expect(message).to.equal("2015-08-11T13:57:11.238Z");
+    });
+
+  });
+
 });
