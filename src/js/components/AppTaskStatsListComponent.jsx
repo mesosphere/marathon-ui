@@ -50,7 +50,7 @@ var AppTaskStatsListComponent = React.createClass({
     }
 
     return (
-      <div className="panel-group">
+      <div className="panel-group flush-top">
           <div className="panel panel-header panel-inverse">
             <div className="panel-heading">
               Task Statistics

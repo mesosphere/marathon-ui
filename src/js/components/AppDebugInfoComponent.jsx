@@ -54,7 +54,7 @@ var AppDebugInfoComponent = React.createClass({
     const version = lastTaskFailure.version;
 
     return (
-      <dl className="dl-horizontal">
+      <dl className="dl-horizontal flush-bottom">
         <dt>Task id</dt>
         <dd>{lastTaskFailure.taskId}</dd>
         <dt>State</dt>
@@ -106,7 +106,7 @@ var AppDebugInfoComponent = React.createClass({
     }
 
     return (
-      <dl className="dl-horizontal">
+      <dl className="dl-horizontal flush-bottom">
         <dt>Scale or Restart</dt>
         {lastScaling}
         <dt>Configuration</dt>
@@ -124,7 +124,7 @@ var AppDebugInfoComponent = React.createClass({
           onClick={this.handleRefresh}>
           ↻ Refresh
         </button>
-        <div className="panel-group">
+        <div className="panel-group flush-top">
           <div className="panel panel-header panel-inverse">
             <div className="panel-heading">
               Last Changes
@@ -134,7 +134,7 @@ var AppDebugInfoComponent = React.createClass({
             {this.getLastVersionChange()}
           </div>
         </div>
-        <div className="panel-group">
+        <div className="panel-group flush-top">
           <div className="panel panel-header panel-inverse">
             <div className="panel-heading">
               Last Task Failure

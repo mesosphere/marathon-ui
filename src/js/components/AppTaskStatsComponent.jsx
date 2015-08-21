@@ -69,9 +69,9 @@ var AppTaskStatsComponent = React.createClass({
 
     return (
       <div className={hiddenClassSet}>
-        <h5>Task States</h5>
+        <h5>Tasks Status</h5>
         {this.getStates()}
-        <h5>Lifetime</h5>
+        <h5>Tasks Lifetime</h5>
         {this.getLifeTime()}
       </div>
     );
