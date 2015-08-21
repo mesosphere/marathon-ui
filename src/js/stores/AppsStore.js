@@ -117,7 +117,7 @@ function getAppHealthWeight(health) {
 
 function calculateTotalResources(app) {
   app.totalMem = app.mem * app.instances;
-  app.totalCpus = parseFloat((app.cpus * app.instances).toPrecision(2));
+  app.totalCpus = parseFloat((app.cpus * app.instances).toPrecision(4));
   return app;
 }
 
