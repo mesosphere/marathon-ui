@@ -23,11 +23,6 @@ describe("App debug info component", function () {
     });
 
     it("should show failed task", function () {
-      this.model = {
-        appId: "/python",
-        id: "task-123",
-        slaveId: "20150720-125149-3839899402-5050-16758-S1"
-      };
       InfoStore.info = {
         "version": "1.2.3",
         "frameworkId": "framework1",
@@ -37,7 +32,6 @@ describe("App debug info component", function () {
           "mesos_master_url": "http://leader1.dcos.io:5050"
         }
       };
-      this.appId = "/python";
       var app = Util.extendObject(appScheme, {
         id: "/python",
         lastTaskFailure: {
@@ -54,10 +48,11 @@ describe("App debug info component", function () {
       AppsStore.apps = [app];
 
       this.renderer = TestUtils.createRenderer();
-      this.renderer.render(<AppDebugInfoComponent appId={this.appId} />);
+      this.renderer.render(<AppDebugInfoComponent appId={app.id} />);
       this.component = this.renderer.getRenderOutput();
 
-      var element = this.component.props.children[1].props.children;
+      var element = this.component
+        .props.children[2].props.children[1].props.children.props.children;
 
       var taskId = element[1].props.children;
       var state = element[3].props.children;
@@ -65,7 +60,6 @@ describe("App debug info component", function () {
       var host = element[7].props.children;
       var timestamp = element[9].props.children[0].props.children;
       var version = element[11].props.children[0].props.children;
-      var mesosElement= element[13].props.children.type.displayName;
 
       expect(taskId).to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
       expect(state).to.equal("TASK_LOST");
@@ -79,7 +73,7 @@ describe("App debug info component", function () {
 
       this.appId = "/python";
       var app = Util.extendObject(appScheme, {
-        id: "/python",
+        id: "/python"
       });
 
       AppsStore.apps = [app];
@@ -88,7 +82,8 @@ describe("App debug info component", function () {
       this.renderer.render(<AppDebugInfoComponent appId={this.appId} />);
       this.component = this.renderer.getRenderOutput();
 
-      var message = this.component.props.children[1].props.children;
+      var message = this.component
+        .props.children[2].props.children[1].props.children.props.children;
 
       expect(message).to.equal("This app does not have failed tasks");
     });
