@@ -134,6 +134,8 @@ var AppModalComponent = React.createClass({
   onSubmit: function (event) {
     event.preventDefault();
 
+    var props = this.props;
+
     var attrArray = Util.serializeArray(event.target)
       .filter((key) => key.value !== "");
 
@@ -142,8 +144,6 @@ var AppModalComponent = React.createClass({
     // URIs should be an Array of Strings.
     if ("uris" in modelAttrs) {
       modelAttrs.uris = modelAttrs.uris.split(",");
-    } else {
-      modelAttrs.uris = [];
     }
 
     // Constraints should be an Array of Strings.
@@ -171,8 +171,6 @@ var AppModalComponent = React.createClass({
         var port = parseInt(p, 10);
         return _.isNaN(port) ? p : port;
       });
-    } else {
-      modelAttrs.ports = [];
     }
 
     // Container arrays shouldn't have null-values
@@ -208,11 +206,10 @@ var AppModalComponent = React.createClass({
       modelAttrs.instances = parseInt(modelAttrs.instances, 10);
     }
 
-    var model = Util.extendObject(this.props.attributes, modelAttrs);
+    var model = Util.extendObject(props.attributes, modelAttrs);
 
     // Create app if validate() returns no errors
     if (appValidator.validate(model) == null) {
-      let props = this.props;
       if (props.edit) {
         AppsActions.applySettingsOnApp(model.id, model, true);
       } else {
