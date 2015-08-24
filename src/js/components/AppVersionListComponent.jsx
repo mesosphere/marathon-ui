@@ -21,6 +21,10 @@ var AppVersionListComponent = React.createClass({
     appId: React.PropTypes.string.isRequired
   },
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   getInitialState: function () {
     var props = this.props;
 
@@ -88,6 +92,15 @@ var AppVersionListComponent = React.createClass({
 
   handleRefresh: function () {
     AppVersionsActions.requestAppVersions(this.props.appId);
+  },
+
+  handleEdit: function () {
+    var currentVersion = AppsStore.getCurrentApp(this.props.appId);
+    var router = this.context.router;
+
+    router.transitionTo(router.getCurrentPathname(), {}, {
+      modal: `edit-app--${currentVersion.id}--${currentVersion.version}`
+    });
   },
 
   handlePageChange: function (pageNum) {
@@ -185,6 +198,10 @@ var AppVersionListComponent = React.createClass({
           <button className="btn btn-sm btn-info pull-right"
               onClick={this.handleRefresh}>
             ↻ Refresh
+          </button>
+          <button className="btn btn-sm btn-default pull-right"
+              onClick={this.handleEdit}>
+            ✎ Edit
           </button>
         </h5>
         <AppVersionComponent
