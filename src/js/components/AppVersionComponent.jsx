@@ -51,10 +51,8 @@ var AppVersionComponent = React.createClass({
   },
 
   getApplyButton: function () {
-    var applyButton = null;
-
     if (!this.props.currentVersion) {
-      applyButton = (
+      return (
         <button type="submit"
             className="btn btn-sm btn-default pull-right"
             onClick={this.handleRollbackToAppVersion}>
@@ -62,8 +60,6 @@ var AppVersionComponent = React.createClass({
         </button>
       );
     }
-
-    return applyButton;
   },
 
   getEditButton: function () {
