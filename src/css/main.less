@@ -664,6 +664,11 @@ fieldset[disabled] .btn-info.active {
 .filter-box {
   max-width: 240px;
 
+  // Hide native clear button in IE10+
+  ::-ms-clear {
+    display: none;
+  }
+
   .search-icon-container {
     .icon {
       font-size: 1.4em;
