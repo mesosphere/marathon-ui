@@ -12,6 +12,10 @@ var AppModalComponent = React.createClass({
     title: React.PropTypes.string
   },
 
+  componentDidMount: function () {
+    this.refs.button.getDOMNode().focus();
+  },
+
   getDefaultProps: function () {
     return {
       message: "",
@@ -36,6 +40,7 @@ var AppModalComponent = React.createClass({
           <div className="modal-controls">
             <button
                 className="btn btn-default"
+                ref="button"
                 type="button"
                 onClick={this.destroy}>
               OK
