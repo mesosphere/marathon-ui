@@ -195,7 +195,7 @@ var AppVersionListComponent = React.createClass({
       <div>
         <h5>
           Current Version{versionDate}
-          <button className="btn btn-sm btn-info pull-right"
+          <button className="btn btn-sm btn-default pull-right"
               onClick={this.handleRefresh}>
             ↻ Refresh
           </button>
