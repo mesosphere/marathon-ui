@@ -1,5 +1,4 @@
 var config = require("../config/config");
-var Util = require("../helpers/Util");
 
 var Link = require("react-router").Link;
 var Mousetrap = require("mousetrap");
@@ -8,6 +7,7 @@ var React = require("react/addons");
 var RouteHandler = require("react-router").RouteHandler;
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
+var AlertModalComponent = require("../components/modals/AlertModalComponent");
 var AppModalComponent = require("../components/modals/AppModalComponent");
 var EditAppModalComponent = require("../components/modals/EditAppModalComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
@@ -30,6 +30,7 @@ var Marathon = React.createClass({
       activeAppId: null,
       activeAppView: null,
       activeTabId: null,
+      alert: null,
       modal: null
     };
   },
@@ -61,9 +62,7 @@ var Marathon = React.createClass({
       }
     }.bind(this));
 
-    Mousetrap.bind("g v", function () {
-      Util.alert(`The UI version is ${config.version}`);
-    });
+    Mousetrap.bind("g v", this.handleShowVersionDialog);
 
     Mousetrap.bind("shift+,", function () {
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "about"});
@@ -134,6 +133,18 @@ var Marathon = React.createClass({
     this.stopPolling();
   },
 
+  handleShowVersionDialog: function () {
+    this.setState({
+      alert: `The UI version is ${config.version}`
+    });
+  },
+
+  handleCloseAlertDialog: function () {
+    this.setState({
+      alert: null
+    });
+  },
+
   handleModalDestroy: function () {
     if (!this.state.modal) {
       return;
@@ -202,6 +213,20 @@ var Marathon = React.createClass({
     );
   },
 
+  getAlertDialog: function () {
+    var alert = this.state.alert;
+
+    if (alert == null) {
+      return null;
+    }
+
+    return (
+      <AlertModalComponent
+        message={alert}
+        onDestroy={this.handleCloseAlertDialog} />
+    );
+  },
+
   render: function () {
     var state = this.state;
     var router = this.context.router;
@@ -239,6 +264,7 @@ var Marathon = React.createClass({
         </nav>
         <RouteHandler />
         {state.modal}
+        {this.getAlertDialog()}
       </div>
     );
   }
