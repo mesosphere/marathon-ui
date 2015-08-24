@@ -199,4 +199,47 @@ describe("Util", function () {
 
   });
 
+  describe("isArray", function () {
+
+    it("array is an array", function () {
+      expect(Util.isArray([])).to.be.true;
+    });
+
+    it("object is not an array", function () {
+      expect(Util.isArray({})).to.be.false;
+    });
+
+  });
+
+  describe("isNumber", function () {
+
+    it("detects numbers", function () {
+      expect(Util.isNumber(1)).to.be.true;
+      expect(Util.isNumber(2.3)).to.be.true;
+      expect(Util.isNumber(-5)).to.be.true;
+    });
+
+    it("string is not a number", function () {
+      expect(Util.isNumber("666")).to.be.false;
+    });
+
+  });
+
+  describe("isString", function () {
+
+    it("detects strings", function () {
+      expect(Util.isString("1")).to.be.true;
+      expect(Util.isString("abc")).to.be.true;
+    });
+
+    it("number is not a string", function () {
+      expect(Util.isString(123)).to.be.false;
+    });
+
+    it("function is not a string", function () {
+      expect(Util.isString(function () {})).to.be.false;
+    });
+
+  });
+
 });

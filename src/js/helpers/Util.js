@@ -116,6 +116,15 @@ var Util = {
     }
     return json;
   },
+  isArray: Array.isArray || function (obj) {
+    return toString.call(obj) === "[object Array]";
+  },
+  isNumber: function (obj) {
+    return toString.call(obj) === "[object Number]";
+  },
+  isString: function (obj) {
+    return toString.call(obj) === "[object String]";
+  },
   hasClass: function (element, className) {
     return element.className &&
       element.className.match(/\S+/g).indexOf(className) > -1;

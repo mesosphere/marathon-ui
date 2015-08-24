@@ -1,4 +1,3 @@
-var _ = require("underscore");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 var Util = require("../../helpers/Util");
@@ -101,7 +100,7 @@ var AppModalComponent = React.createClass({
     var errors;
 
     if (status === 422 && response != null &&
-        _.isArray(response.errors)) {
+        Util.isArray(response.errors)) {
       errors = response.errors.map(function (e) {
         return new ValidationError(
           // Errors that affect multiple attributes provide a blank string. In
@@ -167,9 +166,9 @@ var AppModalComponent = React.createClass({
     // Ports should always be an Array.
     if ("ports" in modelAttrs) {
       var portStrings = modelAttrs.ports.split(",");
-      modelAttrs.ports = _.map(portStrings, function (p) {
+      modelAttrs.ports = portStrings.map(function (p) {
         var port = parseInt(p, 10);
-        return _.isNaN(port) ? p : port;
+        return isNaN(port) ? p : port;
       });
     }
 
