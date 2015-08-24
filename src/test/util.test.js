@@ -225,20 +225,6 @@ describe("Util", function () {
 
   });
 
-  describe("isNotNumber", function () {
-
-    it("values are not NaN", function () {
-      expect(Util.isNotNumber(1)).to.be.false;
-      expect(Util.isNotNumber("666")).to.be.false;
-      expect(Util.isNotNumber("abc")).to.be.false;
-    });
-
-    it("NaN is not a number", function () {
-      expect(Util.isNotNumber(NaN)).to.be.true;
-    });
-
-  });
-
   describe("isString", function () {
 
     it("is a string", function () {

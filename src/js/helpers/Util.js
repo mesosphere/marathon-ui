@@ -122,9 +122,6 @@ var Util = {
   isNumber: function (obj) {
     return toString.call(obj) === "[object Number]";
   },
-  isNotNumber: function (obj) {
-    return this.isNumber(obj) && obj !== +obj;
-  },
   isString: function (obj) {
     return toString.call(obj) === "[object String]";
   },
