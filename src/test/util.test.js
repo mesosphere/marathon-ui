@@ -213,7 +213,7 @@ describe("Util", function () {
 
   describe("isNumber", function () {
 
-    it("number is a number", function () {
+    it("detects numbers", function () {
       expect(Util.isNumber(1)).to.be.true;
       expect(Util.isNumber(2.3)).to.be.true;
       expect(Util.isNumber(-5)).to.be.true;
@@ -227,15 +227,19 @@ describe("Util", function () {
 
   describe("isString", function () {
 
-    it("is a string", function () {
+    it("detects strings", function () {
       expect(Util.isString("1")).to.be.true;
       expect(Util.isString("abc")).to.be.true;
     });
 
-    it("is not a string", function () {
+    it("number is not a string", function () {
       expect(Util.isString(123)).to.be.false;
+    });
+
+    it("function is not a string", function () {
       expect(Util.isString(function () {})).to.be.false;
     });
+
   });
 
 });
