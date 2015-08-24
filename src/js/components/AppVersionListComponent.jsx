@@ -10,9 +10,9 @@ var AppVersionsStore = require("../stores/AppVersionsStore");
 var AppVersionComponent = require("../components/AppVersionComponent");
 var AppVersionListItemComponent =
   require("../components/AppVersionListItemComponent");
+var DialogActions = require("../actions/DialogActions");
 var PagedContentComponent = require("../components/PagedContentComponent");
 var PagedNavComponent = require("../components/PagedNavComponent");
-var Util = require("../helpers/Util");
 
 var AppVersionListComponent = React.createClass({
   displayName: "AppVersionListComponent",
@@ -82,8 +82,7 @@ var AppVersionListComponent = React.createClass({
       return;
     }
 
-    Util.alert("Could not update to chosen version: " +
-      (errorMessage.message || errorMessage));
+    DialogActions.alert(`Could not update to chosen version: ${errorMessage.message || errorMessage}`);
   },
 
   handleRefresh: function () {

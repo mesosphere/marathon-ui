@@ -9,6 +9,7 @@ var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppDebugInfoComponent = require("../components/AppDebugInfoComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
+var DialogActions = require("../actions/DialogActions");
 var HealthStatus = require("../constants/HealthStatus");
 var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
@@ -156,17 +157,15 @@ var AppPageComponent = React.createClass({
   },
 
   onScaleAppError: function (errorMessage) {
-    Util.alert("Not scaling: " + (errorMessage.message || errorMessage));
+    DialogActions.alert(`Not scaling: ${errorMessage.message || errorMessage}`);
   },
 
   onRestartAppError: function (errorMessage) {
-    Util.alert("Error restarting app: " +
-      (errorMessage.message || errorMessage));
+    DialogActions.alert(`Error restarting app: ${errorMessage.message || errorMessage}`);
   },
 
   onDeleteAppError: function (errorMessage) {
-    Util.alert("Error destroying app: " +
-      (errorMessage.message || errorMessage));
+    DialogActions.alert(`Error destroying app: ${errorMessage.message || errorMessage}`);
   },
 
   onDeleteAppSuccess: function () {
@@ -174,12 +173,11 @@ var AppPageComponent = React.createClass({
   },
 
   onResetDelaySuccess: function () {
-    Util.alert("Delay reset succesfully");
+    DialogActions.alert("Delay reset succesfully");
   },
 
   onResetDelayError: function (errorMessage) {
-    Util.alert("Error resetting delay on app: " +
-      (errorMessage.message || errorMessage));
+    DialogActions.alert(`Error resetting delay on app: ${errorMessage.message || errorMessage}`);
   },
 
   handleTabClick: function (id) {

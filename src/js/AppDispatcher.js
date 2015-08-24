@@ -1,3 +1,9 @@
-var Dispatcher = require("flux").Dispatcher;
+var dispatcher = new (require("flux").Dispatcher)();
 
-module.exports = new Dispatcher();
+dispatcher.dispatchNext = function (obj) {
+  setTimeout(function () {
+    dispatcher.dispatch(obj);
+  }, 1);
+};
+
+module.exports = dispatcher;
