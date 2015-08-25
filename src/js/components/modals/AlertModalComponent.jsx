@@ -3,8 +3,8 @@ var Util = require("../../helpers/Util");
 
 var ModalComponent = require("../components/../ModalComponent");
 
-var AppModalComponent = React.createClass({
-  displayName: "AppModalComponent",
+var AlertModalComponent = React.createClass({
+  displayName: "AlertModalComponent",
 
   propTypes: {
     message: React.PropTypes.string,
@@ -50,4 +50,4 @@ var AppModalComponent = React.createClass({
   }
 });
 
-module.exports = AppModalComponent;
+module.exports = AlertModalComponent;
