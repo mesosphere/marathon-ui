@@ -95,7 +95,7 @@ var ContainerSettingsComponent = React.createClass({
             <input type="number" step="1" min="0" max="65535"/>
           </FormGroupComponent>
         </div>
-        <div className="col-sm-3">
+        <div className="col-sm-2">
           <FormGroupComponent
             attribute={`container.docker.portMappings[${i}].servicePort`}
             label="Service Port"
@@ -105,7 +105,7 @@ var ContainerSettingsComponent = React.createClass({
             <input type="number" step="1" min="0" max="65535"/>
           </FormGroupComponent>
         </div>
-        <div className="col-sm-3">
+        <div className="col-sm-4">
           <FormGroupComponent
             attribute={`container.docker.portMappings[${i}].protocol`}
             label="Protocol"
