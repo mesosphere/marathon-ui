@@ -24,6 +24,7 @@ var PromptModalComponent = React.createClass({
 
   componentDidMount: function () {
     this.refs.textinput.getDOMNode().focus();
+    this.refs.textinput.getDOMNode().select();
   },
 
   handleDestroy: function () {
