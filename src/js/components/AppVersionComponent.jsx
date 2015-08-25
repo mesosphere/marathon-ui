@@ -123,6 +123,8 @@ var AppVersionComponent = React.createClass({
 
     return (
       <div>
+        {this.getApplyButton()}
+        {this.getEditButton()}
         <dl className={"dl-horizontal " + this.props.className}>
           <dt>Command</dt>
           {invalidateValue(appVersion.cmd)}
@@ -155,8 +157,6 @@ var AppVersionComponent = React.createClass({
           <dt>Version</dt>
           {invalidateValue(appVersion.version)}
         </dl>
-        {this.getApplyButton()}
-        {this.getEditButton()}
       </div>
     );
   }
