@@ -78,7 +78,7 @@ var ContainerSettingsComponent = React.createClass({
         <div className="col-sm-3">
           <FormGroupComponent
             attribute={`container.docker.portMappings[${i}].containerPort`}
-            label="Container Port"
+            label="Container port"
             model={model}
             errors={errors}
             validator={appValidator}>
@@ -88,7 +88,7 @@ var ContainerSettingsComponent = React.createClass({
         <div className="col-sm-3">
           <FormGroupComponent
             attribute={`container.docker.portMappings[${i}].hostPort`}
-            label="Host Port"
+            label="Host port"
             model={model}
             errors={errors}
             validator={appValidator}>
@@ -98,7 +98,7 @@ var ContainerSettingsComponent = React.createClass({
         <div className="col-sm-2">
           <FormGroupComponent
             attribute={`container.docker.portMappings[${i}].servicePort`}
-            label="Service Port"
+            label="Service port"
             model={model}
             errors={errors}
             validator={appValidator}>
