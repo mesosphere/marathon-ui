@@ -36,6 +36,7 @@
     be generated on-the-fly.
 - \#1251 - Show total resource usage in app list
 - \#2039 - Updated app config edit button styles
+- \#2071 - Replace native alert, prompt and confirm with custom modals
 
 ### Fixed
 - \#548 - UI showing empty list after scaling when on page > 1
