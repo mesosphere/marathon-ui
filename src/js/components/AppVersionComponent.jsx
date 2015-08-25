@@ -63,15 +63,13 @@ var AppVersionComponent = React.createClass({
   },
 
   getEditButton: function () {
-    if (!this.props.currentVersion) {
-      return (
-        <button type="submit"
-            className="btn btn-sm btn-default pull-right"
-            onClick={this.handleEditAppVersion}>
-          Edit these settings
-        </button>
-      );
-    }
+    return (
+      <button type="submit"
+          className="btn btn-sm btn-default pull-right"
+          onClick={this.handleEditAppVersion}>
+        ✎ Edit
+      </button>
+    );
   },
 
   render: function () {
