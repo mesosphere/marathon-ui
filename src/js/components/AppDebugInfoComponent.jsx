@@ -120,7 +120,7 @@ var AppDebugInfoComponent = React.createClass({
   render: function () {
     return (
       <div>
-        <button className="btn btn-sm btn-info pull-right"
+        <button className="btn btn-sm btn-default pull-right"
           onClick={this.handleRefresh}>
           ↻ Refresh
         </button>
