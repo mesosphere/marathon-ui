@@ -321,7 +321,7 @@ var AppModalComponent = React.createClass({
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="docker container settings">
+              <CollapsiblePanelComponent title="Docker container settings">
                 <ContainerSettingsComponent model={model} errors={errors} />
               </CollapsiblePanelComponent>
             </div>

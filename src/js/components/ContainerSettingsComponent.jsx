@@ -183,7 +183,7 @@ var ContainerSettingsComponent = React.createClass({
         <div className="col-sm-4">
           <FormGroupComponent
             attribute={`container.volumes[${i}].containerPath`}
-            label="Container path"
+            label="Container Path"
             model={model}
             errors={errors}
             validator={appValidator}>
@@ -193,7 +193,7 @@ var ContainerSettingsComponent = React.createClass({
         <div className="col-sm-4">
           <FormGroupComponent
             attribute={`container.volumes[${i}].hostPath`}
-            label="Host path"
+            label="Host Path"
             model={model}
             errors={errors}
             validator={appValidator}>
