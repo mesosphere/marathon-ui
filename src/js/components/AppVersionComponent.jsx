@@ -56,7 +56,7 @@ var AppVersionComponent = React.createClass({
         <button type="submit"
             className="btn btn-sm btn-default pull-right"
             onClick={this.handleRollbackToAppVersion}>
-          Apply these settings
+          ✓ Apply
         </button>
       );
     }
