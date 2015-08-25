@@ -243,7 +243,7 @@ describe("App Version component", function () {
     this.renderer.render(<AppVersionComponent
       appVersion={model} />);
     this.component = this.renderer.getRenderOutput();
-    this.table = this.component.props.children[0].props.children;
+    this.table = this.component.props.children[2].props.children;
   });
 
   afterEach(function () {

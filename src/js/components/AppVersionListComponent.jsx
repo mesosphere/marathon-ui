@@ -180,9 +180,9 @@ var AppVersionListComponent = React.createClass({
 
     return (
       <div>
-        <h5>
+        <h5 className="pane-header">
           Current Version{versionDate}
-          <button className="btn btn-sm btn-info pull-right"
+          <button className="btn btn-sm btn-default pull-right"
               onClick={this.handleRefresh}>
             ↻ Refresh
           </button>

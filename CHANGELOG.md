@@ -35,6 +35,7 @@
     Also the dist-folder isn't needed in the repository anymore, the files will
     be generated on-the-fly.
 - \#1251 - Show total resource usage in app list
+- \#2039 - Updated app config edit button styles
 
 ### Fixed
 - \#548 - UI showing empty list after scaling when on page > 1
