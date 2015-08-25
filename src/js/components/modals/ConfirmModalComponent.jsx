@@ -3,27 +3,29 @@ var Util = require("../../helpers/Util");
 
 var ModalComponent = require("../components/../ModalComponent");
 
-var AppModalComponent = React.createClass({
-  displayName: "AppModalComponent",
+var ConfirmModalComponent = React.createClass({
+  displayName: "ConfirmModalComponent",
 
   propTypes: {
     message: React.PropTypes.string,
+    onConfirm: React.PropTypes.func,
     onDestroy: React.PropTypes.func
-  },
-
-  componentDidMount: function () {
-    this.refs.button.getDOMNode().focus();
   },
 
   getDefaultProps: function () {
     return {
       message: "",
+      onConfirm: Util.noop,
       onDestroy: Util.noop
     };
   },
 
   handleDestroy: function () {
     this.refs.modalComponent.destroy();
+  },
+
+  handleConfirm: function () {
+    this.props.onConfirm();
   },
 
   render: function () {
@@ -37,11 +39,16 @@ var AppModalComponent = React.createClass({
           {this.props.message}
           <div className="modal-controls">
             <button
+                className="btn btn-success pull-right"
+                type="button"
+                onClick={this.handleConfirm}>
+              OK
+            </button>
+            <button
                 className="btn btn-default pull-right"
-                ref="button"
                 type="button"
                 onClick={this.handleDestroy}>
-              OK
+              Cancel
             </button>
           </div>
         </div>
@@ -50,4 +57,4 @@ var AppModalComponent = React.createClass({
   }
 });
 
-module.exports = AppModalComponent;
+module.exports = ConfirmModalComponent;

@@ -10,6 +10,7 @@ var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppDebugInfoComponent = require("../components/AppDebugInfoComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
 var DialogActions = require("../actions/DialogActions");
+var DialogStore = require("../stores/DialogStore");
 var HealthStatus = require("../constants/HealthStatus");
 var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
@@ -200,24 +201,34 @@ var AppPageComponent = React.createClass({
   },
 
   handleSuspendApp: function () {
-    if (Util.confirm("Suspend app by scaling to 0 instances?")) {
+    const dialogId =
+      DialogActions.confirm("Suspend app by scaling to 0 instances?");
+
+    DialogStore.handleConfirm(dialogId, function () {
       AppsActions.scaleApp(this.state.appId, 0);
-    }
+    }.bind(this));
   },
 
   handleRestartApp: function () {
     var appId = this.state.appId;
-    if (Util.confirm("Restart app '" + appId + "'?")) {
+
+    const dialogId =
+      DialogActions.confirm(`Restart app '${appId}'?`);
+
+    DialogStore.handleConfirm(dialogId, function () {
       AppsActions.restartApp(appId);
-    }
+    });
   },
 
   handleDestroyApp: function () {
     var appId = this.state.appId;
-    if (Util.confirm("Destroy app '" + appId +
-      "'?\nThis is irreversible.")) {
+
+    const dialogId =
+      DialogActions.confirm(`Destroy app '${appId}'? This is irreversible.`);
+
+    DialogStore.handleConfirm(dialogId, function () {
       AppsActions.deleteApp(appId);
-    }
+    });
   },
 
   handleResetDelay: function () {
