@@ -2,6 +2,7 @@ var React = require("react/addons");
 
 var AlertModalComponent = require("../components/modals/AlertModalComponent");
 var ConfirmModalComponent = require("../components/modals/ConfirmModalComponent");
+var PromptModalComponent = require("../components/modals/PromptModalComponent");
 
 var DialogActions = require("../actions/DialogActions");
 var DialogEvents = require("../events/DialogEvents");
@@ -24,6 +25,9 @@ var DialogsComponent = React.createClass({
     DialogStore.on(DialogEvents.CONFIRM, this.onDialogConfirm);
     DialogStore.on(DialogEvents.CONFIRM_CLOSE, this.onDialogClose);
     DialogStore.on(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
+    DialogStore.on(DialogEvents.PROMPT, this.onDialogPrompt);
+    DialogStore.on(DialogEvents.PROMPT_CLOSE, this.onDialogClose);
+    DialogStore.on(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
   },
 
   componentWillUnmount: function () {
@@ -35,6 +39,9 @@ var DialogsComponent = React.createClass({
     DialogStore.removeListener(DialogEvents.CONFIRM, this.onDialogConfirm);
     DialogStore.removeListener(DialogEvents.CONFIRM_CLOSE, this.onDialogClose);
     DialogStore.removeListener(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
+    DialogStore.removeListener(DialogEvents.PROMPT, this.onDialogPrompt);
+    DialogStore.removeListener(DialogEvents.PROMPT_CLOSE, this.onDialogClose);
+    DialogStore.removeListener(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
   },
 
   onDialogAlert: function (message, dialogId) {
@@ -52,6 +59,17 @@ var DialogsComponent = React.createClass({
       dialog: {
         type: DialogTypes.CONFIRM,
         message: message
+      },
+      currentId: dialogId
+    });
+  },
+
+  onDialogPrompt: function (message, defaultValue, dialogId) {
+    this.setState({
+      dialog: {
+        type: DialogTypes.PROMPT,
+        message: message,
+        defaultValue: defaultValue
       },
       currentId: dialogId
     });
@@ -79,6 +97,14 @@ var DialogsComponent = React.createClass({
     DialogActions.confirmAccept(this.state.currentId);
   },
 
+  handlePromptClose: function () {
+    DialogActions.promptClose(this.state.currentId);
+  },
+
+  handlePromptAccept: function (value) {
+    DialogActions.promptAccept(this.state.currentId, value);
+  },
+
   getDialog: function () {
     var dialog = this.state.dialog;
 
@@ -97,6 +123,13 @@ var DialogsComponent = React.createClass({
           <ConfirmModalComponent message={dialog.message}
             onConfirm={this.handleConfirmAccept}
             onDestroy={this.handleConfirmClose} />
+        );
+      case DialogTypes.PROMPT:
+        return (
+          <PromptModalComponent message={dialog.message}
+            defaultValue={dialog.defaultValue}
+            onConfirm={this.handlePromptAccept}
+            onDestroy={this.handlePromptClose} />
         );
       default:
         return null;

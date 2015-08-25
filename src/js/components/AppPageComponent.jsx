@@ -188,23 +188,25 @@ var AppPageComponent = React.createClass({
   },
 
   handleScaleApp: function () {
-    var model = this.state.app;
+    const dialogId =
+      DialogActions.prompt("Scale to how many instances?",
+        this.state.app.instances.toString()
+      );
 
-    var instancesString = Util.prompt("Scale to how many instances?",
-      model.instances);
+    DialogStore.handleUserResponse(dialogId, function (instancesString) {
+      if (instancesString != null && instancesString !== "") {
+        let instances = parseInt(instancesString, 10);
 
-    if (instancesString != null && instancesString !== "") {
-      var instances = parseInt(instancesString, 10);
-
-      AppsActions.scaleApp(this.state.appId, instances);
-    }
+        AppsActions.scaleApp(this.state.appId, instances);
+      }
+    }.bind(this));
   },
 
   handleSuspendApp: function () {
     const dialogId =
       DialogActions.confirm("Suspend app by scaling to 0 instances?");
 
-    DialogStore.handleConfirm(dialogId, function () {
+    DialogStore.handleUserResponse(dialogId, function () {
       AppsActions.scaleApp(this.state.appId, 0);
     }.bind(this));
   },
@@ -215,7 +217,7 @@ var AppPageComponent = React.createClass({
     const dialogId =
       DialogActions.confirm(`Restart app '${appId}'?`);
 
-    DialogStore.handleConfirm(dialogId, function () {
+    DialogStore.handleUserResponse(dialogId, function () {
       AppsActions.restartApp(appId);
     });
   },
@@ -226,7 +228,7 @@ var AppPageComponent = React.createClass({
     const dialogId =
       DialogActions.confirm(`Destroy app '${appId}'? This is irreversible.`);
 
-    DialogStore.handleConfirm(dialogId, function () {
+    DialogStore.handleUserResponse(dialogId, function () {
       AppsActions.deleteApp(appId);
     });
   },

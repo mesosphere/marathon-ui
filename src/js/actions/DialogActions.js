@@ -37,6 +37,29 @@ var DialogActions = {
       actionType: DialogEvents.CONFIRM_ACCEPT,
       dialogId: dialogId
     });
+  },
+  prompt: function (message, defaultValue = "") {
+    const dialogId = Symbol(message);
+    AppDispatcher.dispatchNext({
+      actionType: DialogEvents.PROMPT,
+      message: message,
+      defaultValue: defaultValue,
+      dialogId: dialogId
+    });
+    return dialogId;
+  },
+  promptClose: function (dialogId) {
+    AppDispatcher.dispatchNext({
+      actionType: DialogEvents.PROMPT_CLOSE,
+      dialogId: dialogId
+    });
+  },
+  promptAccept: function (dialogId, value) {
+    AppDispatcher.dispatchNext({
+      actionType: DialogEvents.PROMPT_ACCEPT,
+      dialogId: dialogId,
+      value: value
+    });
   }
 };
 

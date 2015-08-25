@@ -30,7 +30,7 @@ var DeploymentComponent = React.createClass({
     const dialogId =
       DialogActions.confirm(confirmMessage);
 
-    DialogStore.handleConfirm(dialogId, function () {
+    DialogStore.handleUserResponse(dialogId, function () {
       this.setState({loading: true});
       DeploymentActions.revertDeployment(model.id);
     }.bind(this));
@@ -47,7 +47,7 @@ var DeploymentComponent = React.createClass({
     const dialogId =
       DialogActions.confirm(confirmMessage);
 
-    DialogStore.handleConfirm(dialogId, function () {
+    DialogStore.handleUserResponse(dialogId, function () {
       this.setState({loading: true});
       DeploymentActions.stopDeployment(model.id);
     }.bind(this));

@@ -16,12 +16,12 @@ function removeDialog(dialogs, dialogId) {
 
 var DialogStore = lazy(EventEmitter.prototype).extend({
   dialogs: [],
-  handleConfirm: function (dialogId, acceptCallback, dismissCallback) {
+  handleUserResponse: function (dialogId, acceptCallback, dismissCallback) {
     dismissCallback = dismissCallback || function () {};
 
-    function onAccept(id) {
+    function onAccept(id, value = null) {
       if (dialogId === id) {
-        acceptCallback();
+        acceptCallback(value);
         removeListeners();
       }
     }
@@ -36,10 +36,14 @@ var DialogStore = lazy(EventEmitter.prototype).extend({
     function removeListeners() {
       DialogStore.removeListener(DialogEvents.CONFIRM_ACCEPT, onAccept);
       DialogStore.removeListener(DialogEvents.CONFIRM_CLOSE, onDismiss);
+      DialogStore.removeListener(DialogEvents.PROMPT_ACCEPT, onAccept);
+      DialogStore.removeListener(DialogEvents.PROMPT_CLOSE, onDismiss);
     }
 
     DialogStore.on(DialogEvents.CONFIRM_ACCEPT, onAccept);
     DialogStore.on(DialogEvents.CONFIRM_CLOSE, onDismiss);
+    DialogStore.on(DialogEvents.PROMPT_ACCEPT, onAccept);
+    DialogStore.on(DialogEvents.PROMPT_CLOSE, onDismiss);
   }
 }).value();
 
@@ -72,6 +76,27 @@ AppDispatcher.register(function (action) {
     case DialogEvents.CONFIRM_ACCEPT:
       removeDialog(DialogStore.dialogs, action.dialogId);
       DialogStore.emit(DialogEvents.CONFIRM_ACCEPT, action.dialogId);
+      break;
+    case DialogEvents.PROMPT:
+      addDialog(DialogStore.dialogs, action.message, action.dialogId);
+      DialogStore.emit(
+        DialogEvents.PROMPT,
+        action.message,
+        action.defaultValue,
+        action.dialogId
+      );
+      break;
+    case DialogEvents.PROMPT_CLOSE:
+      removeDialog(DialogStore.dialogs, action.dialogId);
+      DialogStore.emit(DialogEvents.PROMPT_CLOSE, action.dialogId);
+      break;
+    case DialogEvents.PROMPT_ACCEPT:
+      removeDialog(DialogStore.dialogs, action.dialogId);
+      DialogStore.emit(
+        DialogEvents.PROMPT_ACCEPT,
+        action.dialogId,
+        action.value
+      );
       break;
   }
 });
