@@ -4,6 +4,7 @@ var Util = require("../../helpers/Util");
 var AppVersionsActions = require("../../actions/AppVersionsActions");
 var AppVersionsEvents = require("../../events/AppVersionsEvents");
 var AppVersionsStore = require("../../stores/AppVersionsStore");
+var DialogActions = require("../../actions/DialogActions");
 
 var AppModalComponent = require("./AppModalComponent");
 
@@ -68,7 +69,7 @@ var EditAppModalComponent = React.createClass({
 
   onRequestAppVersionError: function () {
     var props = this.props;
-    Util.alert(`Could not fetch app '${props.appId}' version for editing: ${props.appVersion}`);
+    DialogActions.alert(`Could not fetch app '${props.appId}' version for editing: ${props.appVersion}`);
     props.onDestroy();
   },
 

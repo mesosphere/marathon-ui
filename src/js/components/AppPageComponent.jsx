@@ -9,6 +9,8 @@ var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppDebugInfoComponent = require("../components/AppDebugInfoComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
+var DialogActions = require("../actions/DialogActions");
+var DialogStore = require("../stores/DialogStore");
 var HealthStatus = require("../constants/HealthStatus");
 var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
@@ -156,17 +158,15 @@ var AppPageComponent = React.createClass({
   },
 
   onScaleAppError: function (errorMessage) {
-    Util.alert("Not scaling: " + (errorMessage.message || errorMessage));
+    DialogActions.alert(`Not scaling: ${errorMessage.message || errorMessage}`);
   },
 
   onRestartAppError: function (errorMessage) {
-    Util.alert("Error restarting app: " +
-      (errorMessage.message || errorMessage));
+    DialogActions.alert(`Error restarting app: ${errorMessage.message || errorMessage}`);
   },
 
   onDeleteAppError: function (errorMessage) {
-    Util.alert("Error destroying app: " +
-      (errorMessage.message || errorMessage));
+    DialogActions.alert(`Error destroying app: ${errorMessage.message || errorMessage}`);
   },
 
   onDeleteAppSuccess: function () {
@@ -174,12 +174,11 @@ var AppPageComponent = React.createClass({
   },
 
   onResetDelaySuccess: function () {
-    Util.alert("Delay reset succesfully");
+    DialogActions.alert("Delay reset succesfully");
   },
 
   onResetDelayError: function (errorMessage) {
-    Util.alert("Error resetting delay on app: " +
-      (errorMessage.message || errorMessage));
+    DialogActions.alert(`Error resetting delay on app: ${errorMessage.message || errorMessage}`);
   },
 
   handleTabClick: function (id) {
@@ -189,37 +188,49 @@ var AppPageComponent = React.createClass({
   },
 
   handleScaleApp: function () {
-    var model = this.state.app;
+    const dialogId =
+      DialogActions.prompt("Scale to how many instances?",
+        this.state.app.instances.toString()
+      );
 
-    var instancesString = Util.prompt("Scale to how many instances?",
-      model.instances);
+    DialogStore.handleUserResponse(dialogId, function (instancesString) {
+      if (instancesString != null && instancesString !== "") {
+        let instances = parseInt(instancesString, 10);
 
-    if (instancesString != null && instancesString !== "") {
-      var instances = parseInt(instancesString, 10);
-
-      AppsActions.scaleApp(this.state.appId, instances);
-    }
+        AppsActions.scaleApp(this.state.appId, instances);
+      }
+    }.bind(this));
   },
 
   handleSuspendApp: function () {
-    if (Util.confirm("Suspend app by scaling to 0 instances?")) {
+    const dialogId =
+      DialogActions.confirm("Suspend app by scaling to 0 instances?");
+
+    DialogStore.handleUserResponse(dialogId, function () {
       AppsActions.scaleApp(this.state.appId, 0);
-    }
+    }.bind(this));
   },
 
   handleRestartApp: function () {
     var appId = this.state.appId;
-    if (Util.confirm("Restart app '" + appId + "'?")) {
+
+    const dialogId =
+      DialogActions.confirm(`Restart app '${appId}'?`);
+
+    DialogStore.handleUserResponse(dialogId, function () {
       AppsActions.restartApp(appId);
-    }
+    });
   },
 
   handleDestroyApp: function () {
     var appId = this.state.appId;
-    if (Util.confirm("Destroy app '" + appId +
-      "'?\nThis is irreversible.")) {
+
+    const dialogId =
+      DialogActions.confirm(`Destroy app '${appId}'? This is irreversible.`);
+
+    DialogStore.handleUserResponse(dialogId, function () {
       AppsActions.deleteApp(appId);
-    }
+    });
   },
 
   handleResetDelay: function () {

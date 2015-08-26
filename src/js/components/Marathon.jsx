@@ -1,5 +1,4 @@
 var config = require("../config/config");
-var Util = require("../helpers/Util");
 
 var Link = require("react-router").Link;
 var Mousetrap = require("mousetrap");
@@ -9,11 +8,13 @@ var RouteHandler = require("react-router").RouteHandler;
 
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var AppModalComponent = require("../components/modals/AppModalComponent");
+var DialogsComponent = require("../components/DialogsComponent");
 var EditAppModalComponent = require("../components/modals/EditAppModalComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");
 var DeploymentActions = require("../actions/DeploymentActions");
+var DialogActions = require("../actions/DialogActions");
 var QueueActions = require("../actions/QueueActions");
 
 var tabs = require("../constants/tabs");
@@ -62,7 +63,7 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("g v", function () {
-      Util.alert(`The UI version is ${config.version}`);
+      DialogActions.alert(`The UI version is ${config.version}`);
     });
 
     Mousetrap.bind("shift+,", function () {
@@ -239,6 +240,7 @@ var Marathon = React.createClass({
         </nav>
         <RouteHandler />
         {state.modal}
+        <DialogsComponent />
       </div>
     );
   }

@@ -9,6 +9,7 @@ function modalSizeClassName(size) {
 var ModalComponent = React.createClass({
   displayName: "ModalComponent",
   propTypes: {
+    centered: React.PropTypes.bool,
     children: React.PropTypes.node,
     dismissOnClickOutside: React.PropTypes.bool,
     onDestroy: React.PropTypes.func,
@@ -60,7 +61,8 @@ var ModalComponent = React.createClass({
 
     var modalClassName = classNames({
       "modal fade": true,
-      "in": this.state.isIn
+      "in": this.state.isIn,
+      "modal-centered": this.props.centered
     });
 
     return (
