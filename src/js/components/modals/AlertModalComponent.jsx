@@ -38,7 +38,7 @@ var AlertModalComponent = React.createClass({
           {this.props.message}
           <div className="modal-controls">
             <button
-                className="btn btn-default pull-right"
+                className="btn btn-sm btn-default pull-right"
                 ref="button"
                 type="button"
                 onClick={this.handleDestroy}>

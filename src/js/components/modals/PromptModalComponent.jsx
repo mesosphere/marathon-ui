@@ -58,13 +58,13 @@ var PromptModalComponent = React.createClass({
             defaultValue={this.props.defaultValue} />
           <div className="modal-controls">
             <button
-                className="btn btn-success pull-right"
+                className="btn btn-sm btn-success pull-right"
                 type="button"
                 onClick={this.handleConfirm}>
               OK
             </button>
             <button
-                className="btn btn-default pull-right"
+                className="btn btn-sm btn-default pull-right"
                 type="button"
                 onClick={this.handleDestroy}>
               Cancel
