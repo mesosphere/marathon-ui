@@ -50,7 +50,7 @@ var PromptModalComponent = React.createClass({
           size="sm"
           onDestroy={this.props.onDestroy}>
         <div className="modal-body reduced-padding">
-          {this.props.message}
+          <label>{this.props.message}</label>
           <input className="form-control"
             type="text"
             ref="textinput"
