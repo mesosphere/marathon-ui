@@ -145,9 +145,9 @@ var AppModalComponent = React.createClass({
       if (modelAttrs.uris === "") {
         modelAttrs.uris = [];
       } else {
-        modelAttrs.uris = modelAttrs.uris.split(",").map(function (uri) {
+        modelAttrs.uris = lazy(modelAttrs.uris.split(",")).map(function (uri) {
           return uri.trim();
-        });
+        }).compact().value();
       }
     }
 
