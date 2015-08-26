@@ -3,8 +3,8 @@ var React = require("react/addons");
 var InfoActions = require("../../actions/InfoActions");
 var InfoEvents = require("../../events/InfoEvents");
 var InfoStore = require("../../stores/InfoStore");
-var ModalComponent = require("../components/../ModalComponent");
-var ObjectDlComponent = require("../components/../ObjectDlComponent");
+var ModalComponent = require("../ModalComponent");
+var ObjectDlComponent = require("../ObjectDlComponent");
 
 var config = require("../../config/config");
 
