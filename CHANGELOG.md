@@ -48,6 +48,7 @@
 - \#2014 - Avoid concurrent http requests on same endpoint
 - \#1996 - Duplicable fields in app creation modal can send null values
 - \#2030 - Shortcut for app creation no longer works
+- \#2062 - Resetting app delay can block all network requests in Firefox
 
 ## 0.10.0 - 2015-07-10
 ### Added
