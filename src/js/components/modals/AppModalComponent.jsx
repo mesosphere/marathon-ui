@@ -172,6 +172,8 @@ var AppModalComponent = React.createClass({
         var port = parseInt(p, 10);
         return isNaN(port) ? p : port;
       });
+    } else {
+      modelAttrs.ports = [];
     }
 
     // Container arrays shouldn't have null-values

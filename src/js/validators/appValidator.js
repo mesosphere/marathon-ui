@@ -73,8 +73,10 @@ var appValidator = {
       );
     }
 
-    let ports = [];
-    if (Util.isString(attrs.ports)) {
+    let ports = attrs.ports;
+    if (ports === "") {
+      ports = [];
+    } else if (Util.isString(attrs.ports)) {
       ports = attrs.ports.split(",");
     }
     if (!ports.every(function (p) {
