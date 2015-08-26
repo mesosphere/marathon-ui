@@ -73,18 +73,28 @@ var appValidator = {
       );
     }
 
+    let ports = [];
     if (Util.isString(attrs.ports)) {
-      attrs.ports = attrs.ports.split(",");
+      ports = attrs.ports.split(",");
     }
-
-    if (!attrs.ports.every(function (p) {
+    if (!ports.every(function (p) {
       return !isNotPositiveNumber(p.toString().trim());
     })) {
       errors.push(
         new ValidationError("ports", "Ports must be a list of Numbers"));
     }
 
-    if (!attrs.constraints.every(isValidConstraint)) {
+    let constraints = attrs.constraints;
+    if (constraints === "") {
+      constraints = [];
+    } else if (Util.isString(attrs.constraints)) {
+      constraints = attrs.constraints.split(",").map(function (constraint) {
+        return constraint.split(":").map(function (value) {
+          return value.trim();
+        });
+      });
+    }
+    if (!constraints.every(isValidConstraint)) {
       errors.push(
         new ValidationError("constraints",
           "Invalid constraints format or operator. Supported operators are " +

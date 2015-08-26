@@ -153,6 +153,8 @@ var AppModalComponent = React.createClass({
           return value.trim();
         });
       });
+    } else {
+      modelAttrs.constraints = [];
     }
 
     // env should not be an array.
