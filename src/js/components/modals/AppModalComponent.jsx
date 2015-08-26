@@ -142,7 +142,9 @@ var AppModalComponent = React.createClass({
 
     // URIs should be an Array of Strings.
     if ("uris" in modelAttrs) {
-      modelAttrs.uris = modelAttrs.uris.split(",");
+      modelAttrs.uris = modelAttrs.uris.split(",").map(function (uri) {
+        return uri.trim();
+      });
     }
 
     // Constraints should be an Array of Strings.
