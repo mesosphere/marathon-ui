@@ -38,7 +38,7 @@ var ConfirmModalComponent = React.createClass({
           onDestroy={this.props.onDestroy}>
         <div className="modal-body reduced-padding">
           {this.props.message}
-          <div className="modal-controls">
+          <div className="modal-controls fixed-height">
             <button
                 className="btn btn-sm  btn-success pull-right"
                 type="button"
