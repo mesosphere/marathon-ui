@@ -47,7 +47,6 @@
 - \#2014 - Avoid concurrent http requests on same endpoint
 - \#1996 - Duplicable fields in app creation modal can send null values
 - \#2030 - Shortcut for app creation no longer works
-- \#2058 - Edit App causes reset of ports assigned on save
 
 ## 0.10.0 - 2015-07-10
 ### Added
