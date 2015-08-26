@@ -29,6 +29,7 @@ var AlertModalComponent = React.createClass({
   render: function () {
     return (
       <ModalComponent
+          centered={true}
           dismissOnClickOutside={true}
           ref="modalComponent"
           size="sm"
