@@ -304,6 +304,7 @@ var AppModalComponent = React.createClass({
             <FormGroupComponent
               attribute="cmd"
               label="Command"
+              help="May be left blank if a container image is supplied"
               model={model}
               errors={errors}
               validator={appValidator}>
