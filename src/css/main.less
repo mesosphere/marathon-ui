@@ -772,7 +772,7 @@ fieldset[disabled] .btn-info.active {
 
   .panel-title {
     user-select: none;
-    font-size: 1em;
+    font-size: 1.1em;
   }
   .panel-title:before {
     display: inline-block;
@@ -878,6 +878,13 @@ fieldset[disabled] .btn-info.active {
       pointer-events: none;
       line-height: 1em;
       font-size: 2.6em;
+    }
+  }
+  &:only-child {
+    .controls .remove {
+      opacity: 0.4;
+      // disable row clearance on last remaining row
+      pointer-events: none;
     }
   }
 }

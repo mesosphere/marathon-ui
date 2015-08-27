@@ -304,25 +304,25 @@ var AppModalComponent = React.createClass({
             <FormGroupComponent
               attribute="cmd"
               label="Command"
+              help="May be left blank if a container image is supplied"
               model={model}
               errors={errors}
               validator={appValidator}>
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
-            <hr />
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="optional environment variables">
+              <CollapsiblePanelComponent title="Docker container settings">
+                <ContainerSettingsComponent model={model} errors={errors} />
+              </CollapsiblePanelComponent>
+            </div>
+            <div className="row full-bleed">
+              <CollapsiblePanelComponent title="Environment variables">
                 <OptionalEnvironmentComponent model={model} errors={errors} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="optional settings">
+              <CollapsiblePanelComponent title="Optional settings">
                 <OptionalSettingsComponent model={model} errors={errors} />
-              </CollapsiblePanelComponent>
-            </div>
-            <div className="row full-bleed">
-              <CollapsiblePanelComponent title="Docker container settings">
-                <ContainerSettingsComponent model={model} errors={errors} />
               </CollapsiblePanelComponent>
             </div>
             <div className="modal-controls">
