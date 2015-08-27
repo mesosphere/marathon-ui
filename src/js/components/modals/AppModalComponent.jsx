@@ -311,6 +311,11 @@ var AppModalComponent = React.createClass({
             </FormGroupComponent>
             <hr />
             <div className="row full-bleed">
+              <CollapsiblePanelComponent title="Docker container settings">
+                <ContainerSettingsComponent model={model} errors={errors} />
+              </CollapsiblePanelComponent>
+            </div>
+            <div className="row full-bleed">
               <CollapsiblePanelComponent title="Environment variables">
                 <OptionalEnvironmentComponent model={model} errors={errors} />
               </CollapsiblePanelComponent>
@@ -318,11 +323,6 @@ var AppModalComponent = React.createClass({
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="Optional settings">
                 <OptionalSettingsComponent model={model} errors={errors} />
-              </CollapsiblePanelComponent>
-            </div>
-            <div className="row full-bleed">
-              <CollapsiblePanelComponent title="Docker container settings">
-                <ContainerSettingsComponent model={model} errors={errors} />
               </CollapsiblePanelComponent>
             </div>
             <div className="modal-controls">
