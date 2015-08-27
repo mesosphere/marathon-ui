@@ -310,7 +310,6 @@ var AppModalComponent = React.createClass({
               validator={appValidator}>
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
-            <hr />
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="Docker container settings">
                 <ContainerSettingsComponent model={model} errors={errors} />
