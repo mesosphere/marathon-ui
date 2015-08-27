@@ -15,6 +15,13 @@ var OptionalSettingsComponent = React.createClass({
     var model = this.props.model;
     var errors = this.props.errors;
     var helpMessage = "Comma-separated list of valid constraints. Valid constraint format is \"field:operator[:value]\".";
+    var attr = {};
+
+    if (model.constraints != null) {
+      attr.constraints = model.constraints.map(function (constraint) {
+        return constraint.join(":");
+      });
+    }
 
     return (
       <div>
@@ -50,7 +57,7 @@ var OptionalSettingsComponent = React.createClass({
           attribute="constraints"
           help={helpMessage}
           label="Constraints"
-          model={model}
+          model={attr}
           errors={errors}
           validator={appValidator}>
           <input />

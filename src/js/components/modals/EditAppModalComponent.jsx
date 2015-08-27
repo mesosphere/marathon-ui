@@ -8,18 +8,6 @@ var DialogActions = require("../../actions/DialogActions");
 
 var AppModalComponent = require("./AppModalComponent");
 
-function transformAppModelToFormAttributes(app) {
-  var attr = Object.assign({}, app);
-
-  if (attr.constraints != null) {
-    attr.constraints = attr.constraints.map(function (constraint) {
-      return constraint.join(":");
-    });
-  }
-
-  return attr;
-}
-
 var EditAppModalComponent = React.createClass({
   displayName: "EditAppModalComponent",
 
@@ -74,7 +62,7 @@ var EditAppModalComponent = React.createClass({
       return null;
     }
 
-    let attributes = transformAppModelToFormAttributes(
+    let attributes = Object.assign({},
       AppVersionsStore.getAppVersion(props.appId, props.appVersion)
     );
 
