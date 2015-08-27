@@ -56,7 +56,7 @@ var PromptModalComponent = React.createClass({
             ref="textinput"
             onKeyUp={this.onKeyUp}
             defaultValue={this.props.defaultValue} />
-          <div className="modal-controls">
+          <div className="modal-controls fixed-height">
             <button
                 className="btn btn-sm btn-success pull-right"
                 type="button"
