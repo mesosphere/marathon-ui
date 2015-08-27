@@ -311,12 +311,12 @@ var AppModalComponent = React.createClass({
             </FormGroupComponent>
             <hr />
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="optional environment variables">
+              <CollapsiblePanelComponent title="Optional environment variables">
                 <OptionalEnvironmentComponent model={model} errors={errors} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="optional settings">
+              <CollapsiblePanelComponent title="Optional settings">
                 <OptionalSettingsComponent model={model} errors={errors} />
               </CollapsiblePanelComponent>
             </div>

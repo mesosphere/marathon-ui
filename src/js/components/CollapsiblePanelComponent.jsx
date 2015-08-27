@@ -31,13 +31,6 @@ var CollapsiblePanelComponent = React.createClass({
     return null;
   },
 
-  getTitle: function () {
-    var showHide = this.state.open
-      ? "Hide"
-      : "Show";
-    return `${showHide} ${this.props.title}`;
-  },
-
   render: function () {
     var classes = classNames({
       "clickable panel-title": true,
@@ -49,7 +42,7 @@ var CollapsiblePanelComponent = React.createClass({
         <div className="panel-heading clickable"
           onClick={this.handleToggle}>
           <div className={classes}>
-            {this.getTitle()}
+            {this.props.title}
           </div>
         </div>
         {this.getPanelBody()}
