@@ -135,6 +135,8 @@ var AppModalComponent = React.createClass({
 
     var props = this.props;
 
+    // null-values must be treated as null to let the app model untouched.
+
     var attrArray = Util.serializeArray(event.target)
       .filter((key) => key.name !== "");
 
