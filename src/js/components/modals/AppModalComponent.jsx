@@ -170,7 +170,9 @@ var AppModalComponent = React.createClass({
     // env should not be an array.
     if ("env" in modelAttrs) {
       modelAttrs.env = modelAttrs.env.reduce(function (memo, item) {
-        memo[item.key] = item.value;
+        if (item.key != null && item.key !== "") {
+          memo[item.key] = item.value;
+        }
         return memo;
       }, {});
     }

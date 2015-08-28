@@ -23,6 +23,9 @@ function isValidConstraint(p) {
 }
 
 function isNotPositiveNumber(value) {
+  if (value == null) {
+    return false;
+  }
   return !value.toString().match(/^[0-9\.]+$/);
 }
 
@@ -79,7 +82,7 @@ var appValidator = {
     } else if (Util.isString(attrs.ports)) {
       ports = attrs.ports.split(",");
     }
-    if (!ports.every(function (p) {
+    if (Util.isArray(ports) && !ports.every(function (p) {
       return !isNotPositiveNumber(p.toString().trim());
     })) {
       errors.push(
@@ -96,7 +99,7 @@ var appValidator = {
         });
       });
     }
-    if (!constraints.every(isValidConstraint)) {
+    if (Util.isArray(constraints) && !constraints.every(isValidConstraint)) {
       errors.push(
         new ValidationError("constraints",
           "Invalid constraints format or operator. Supported operators are " +
