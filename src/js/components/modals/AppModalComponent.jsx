@@ -135,41 +135,59 @@ var AppModalComponent = React.createClass({
 
     var props = this.props;
 
+    // null-values must be treated as null to let the app model untouched.
+
     var attrArray = Util.serializeArray(event.target)
-      .filter((key) => key.value !== "");
+      .filter((key) => key.name !== "");
 
     var modelAttrs = Util.serializedArrayToDictionary(attrArray);
 
     // URIs should be an Array of Strings.
     if ("uris" in modelAttrs) {
-      modelAttrs.uris = modelAttrs.uris.split(",");
+      if (modelAttrs.uris === "") {
+        modelAttrs.uris = [];
+      } else {
+        modelAttrs.uris = lazy(modelAttrs.uris.split(",")).map(function (uri) {
+          return uri.trim();
+        }).compact().value();
+      }
     }
 
     // Constraints should be an Array of Strings.
     if ("constraints" in modelAttrs) {
-      var constraintsArray = modelAttrs.constraints.split(",");
-      modelAttrs.constraints = constraintsArray.map(function (constraint) {
-        return constraint.split(":").map(function (value) {
-          return value.trim();
+      if (modelAttrs.constraints === "") {
+        modelAttrs.constraints = [];
+      } else {
+        let constraintsArray = modelAttrs.constraints.split(",");
+        modelAttrs.constraints = constraintsArray.map(function (constraint) {
+          return constraint.split(":").map(function (value) {
+            return value.trim();
+          });
         });
-      });
+      }
     }
 
     // env should not be an array.
     if ("env" in modelAttrs) {
       modelAttrs.env = modelAttrs.env.reduce(function (memo, item) {
-        memo[item.key] = item.value;
+        if (item.key != null && item.key !== "") {
+          memo[item.key] = item.value;
+        }
         return memo;
       }, {});
     }
 
     // Ports should always be an Array.
     if ("ports" in modelAttrs) {
-      var portStrings = modelAttrs.ports.split(",");
-      modelAttrs.ports = portStrings.map(function (p) {
-        var port = parseInt(p, 10);
-        return isNaN(port) ? p : port;
-      });
+      if (modelAttrs.ports === "") {
+        modelAttrs.ports = [];
+      } else {
+        let portStrings = modelAttrs.ports.split(",");
+        modelAttrs.ports = portStrings.map(function (p) {
+          var port = parseInt(p, 10);
+          return isNaN(port) ? p : port;
+        });
+      }
     }
 
     // Container arrays shouldn't have null-values

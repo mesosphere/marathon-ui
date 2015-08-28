@@ -52,7 +52,7 @@ var Util = {
       if (field.type === "checkbox") {
         val = !!val;
       }
-      if (val) {
+      if (val != null) {
         serialized.push({name: field.name, value: val});
       }
     }

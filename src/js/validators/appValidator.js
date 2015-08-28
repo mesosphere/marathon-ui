@@ -23,6 +23,9 @@ function isValidConstraint(p) {
 }
 
 function isNotPositiveNumber(value) {
+  if (value == null) {
+    return false;
+  }
   return !value.toString().match(/^[0-9\.]+$/);
 }
 
@@ -73,18 +76,30 @@ var appValidator = {
       );
     }
 
-    if (Util.isString(attrs.ports)) {
-      attrs.ports = attrs.ports.split(",");
+    let ports = attrs.ports;
+    if (ports === "") {
+      ports = [];
+    } else if (Util.isString(attrs.ports)) {
+      ports = attrs.ports.split(",");
     }
-
-    if (!attrs.ports.every(function (p) {
+    if (Util.isArray(ports) && !ports.every(function (p) {
       return !isNotPositiveNumber(p.toString().trim());
     })) {
       errors.push(
         new ValidationError("ports", "Ports must be a list of Numbers"));
     }
 
-    if (!attrs.constraints.every(isValidConstraint)) {
+    let constraints = attrs.constraints;
+    if (constraints === "") {
+      constraints = [];
+    } else if (Util.isString(attrs.constraints)) {
+      constraints = attrs.constraints.split(",").map(function (constraint) {
+        return constraint.split(":").map(function (value) {
+          return value.trim();
+        });
+      });
+    }
+    if (Util.isArray(constraints) && !constraints.every(isValidConstraint)) {
       errors.push(
         new ValidationError("constraints",
           "Invalid constraints format or operator. Supported operators are " +
