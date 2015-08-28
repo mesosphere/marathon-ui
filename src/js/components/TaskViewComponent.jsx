@@ -115,13 +115,13 @@ var TaskViewComponent = React.createClass({
       return (
         <div className="btn-group">
           <button
-            className="btn btn-sm btn-info"
-            onClick={this.handleKillSelectedTasks.bind(this, false)}>
+              className="btn btn-sm btn-info"
+              onClick={this.handleKillSelectedTasks.bind(this, false)}>
             Kill
           </button>
           <button
-            className="btn btn-sm btn-info"
-            onClick={this.handleKillSelectedTasks.bind(this, true)}>
+              className="btn btn-sm btn-info"
+              onClick={this.handleKillSelectedTasks.bind(this, true)}>
             Kill &amp; Scale
           </button>
         </div>
