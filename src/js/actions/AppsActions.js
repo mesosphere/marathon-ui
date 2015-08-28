@@ -135,11 +135,12 @@ var AppsActions = {
   },
   applySettingsOnApp: function (appId, settings, isEditing = false) {
     // Version key is not allowed and not needed on settings object
-    delete settings.version;
+    var clonedSettings = Object.assign({}, settings);
+    delete clonedSettings.version;
 
     this.request({
       method: "PUT",
-      data: settings,
+      data: clonedSettings,
       headers: {
         "Content-Type": "application/json"
       },
