@@ -39,7 +39,7 @@ var AppTaskStatsListComponent = React.createClass({
     var taskStatsList = this.props.taskStatsList;
     var noTaskStatistics = null;
 
-    if (taskStatsList == null) {
+    if (taskStatsList == null || Object.keys(taskStatsList).length === 0) {
       noTaskStatistics = (
         <div className="panel panel-body panel-inverse">
           <span className="text-muted">
