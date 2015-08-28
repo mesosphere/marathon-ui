@@ -37,6 +37,7 @@
 - \#1251 - Show total resource usage in app list
 - \#2039 - Updated app config edit button styles
 - \#2071 - Replace native alert, prompt and confirm with custom modals
+- \#2116 - Update replace button style
 
 ### Fixed
 - \#548 - UI showing empty list after scaling when on page > 1
