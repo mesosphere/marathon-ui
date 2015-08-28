@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppsActions = require("../actions/AppsActions");
@@ -50,11 +51,18 @@ var AppVersionComponent = React.createClass({
     AppsActions.applySettingsOnApp(appVersion.id, appVersion);
   },
 
+  getButtonClassSet: function () {
+    return classNames({
+      "btn btn-sm btn-default pull-right": true,
+      "disabled": this.props.appVersion.version == null
+    });
+  },
+
   getApplyButton: function () {
     if (!this.props.currentVersion) {
       return (
         <button type="submit"
-            className="btn btn-sm btn-default pull-right"
+            className={this.getButtonClassSet()}
             onClick={this.handleRollbackToAppVersion}>
           ✓ Apply
         </button>
@@ -65,7 +73,7 @@ var AppVersionComponent = React.createClass({
   getEditButton: function () {
     return (
       <button type="submit"
-          className="btn btn-sm btn-default pull-right"
+          className={this.getButtonClassSet()}
           onClick={this.handleEditAppVersion}>
         ✎ Edit
       </button>
