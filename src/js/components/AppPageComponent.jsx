@@ -340,7 +340,7 @@ var AppPageComponent = React.createClass({
         appId={state.appId}
         fetchState={state.fetchState}
         taskHealthMessage={this.getTaskHealthMessage(state.activeTaskId)}
-        hasHealth={model.healthChecks > 0}
+        hasHealth={Object.keys(model.healthChecks).length > 0}
         task={task} />
     );
   },
@@ -360,7 +360,7 @@ var AppPageComponent = React.createClass({
             appId={state.appId}
             fetchState={state.fetchState}
             getTaskHealthMessage={this.getTaskHealthMessage}
-            hasHealth={model.healthChecks > 0}
+            hasHealth={Object.keys(model.healthChecks).length > 0}
             tasks={model.tasks} />
         </TabPaneComponent>
         <TabPaneComponent
