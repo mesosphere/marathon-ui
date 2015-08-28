@@ -106,7 +106,7 @@ var TaskViewComponent = React.createClass({
     if (selectedTasksLength === 0) {
       return (
         <button
-            className="btn btn-sm btn-info"
+            className="btn btn-sm btn-default"
             onClick={this.handleRefresh}>
           ↻ Refresh
         </button>
