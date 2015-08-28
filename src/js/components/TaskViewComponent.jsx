@@ -1,4 +1,3 @@
-var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 
@@ -103,36 +102,30 @@ var TaskViewComponent = React.createClass({
 
   getButtons: function () {
     var selectedTasksLength = Object.keys(this.state.selectedTasks).length;
-
-    var refreshButtonClassSet = classNames({
-      "btn btn-sm btn-info": true,
-      "hidden": selectedTasksLength !== 0
-    });
-
-    var killButtonClassSet = classNames({
-      "btn btn-sm btn-info": true,
-      "hidden": selectedTasksLength === 0
-    });
-
-    return (
-      <div className="btn-group">
+    if (selectedTasksLength === 0) {
+      return (
         <button
-            className={refreshButtonClassSet}
+            className="btn btn-sm btn-default"
             onClick={this.handleRefresh}>
           ↻ Refresh
         </button>
-        <button
-            className={killButtonClassSet}
-            onClick={this.handleKillSelectedTasks.bind(this, false)}>
-          Kill
-        </button>
-        <button
-            className={killButtonClassSet}
-            onClick={this.handleKillSelectedTasks.bind(this, true)}>
-          Kill &amp; Scale
-        </button>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="btn-group">
+          <button
+              className="btn btn-sm btn-info"
+              onClick={this.handleKillSelectedTasks.bind(this, false)}>
+            Kill
+          </button>
+          <button
+              className="btn btn-sm btn-info"
+              onClick={this.handleKillSelectedTasks.bind(this, true)}>
+            Kill &amp; Scale
+          </button>
+        </div>
+      );
+    }
   },
 
   getPagedNav: function () {
