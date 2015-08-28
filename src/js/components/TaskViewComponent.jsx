@@ -1,4 +1,3 @@
-var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 
