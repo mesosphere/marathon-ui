@@ -83,9 +83,9 @@ var AppVersionComponent = React.createClass({
   render: function () {
     var appVersion = this.props.appVersion;
 
-    var constraintsNode = (appVersion.constraints.length < 1) ?
-      <UNSPECIFIED_NODE /> :
-      appVersion.constraints.map(function (c) {
+    var constraintsNode = (appVersion.constraints.length < 1)
+      ? <UNSPECIFIED_NODE />
+      : appVersion.constraints.map(function (c) {
 
         // Only include constraint parts if they are not empty Strings. For
         // example, a hostname uniqueness constraint looks like:
@@ -101,34 +101,34 @@ var AppVersionComponent = React.createClass({
         );
       });
 
-    var containerNode = (appVersion.container == null) ?
-      <UNSPECIFIED_NODE /> :
-      <dd><pre>{JSON.stringify(appVersion.container, null, 2)}</pre></dd>;
+    var containerNode = (appVersion.container == null)
+      ? <UNSPECIFIED_NODE />
+      : <dd><pre>{JSON.stringify(appVersion.container, null, 2)}</pre></dd>;
 
     var envNode = (appVersion.env == null ||
-        Object.keys(appVersion.env).length === 0) ?
-      <UNSPECIFIED_NODE /> :
+        Object.keys(appVersion.env).length === 0)
+      ? <UNSPECIFIED_NODE />
       // Print environment variables as key value pairs like "key=value"
-      Object.keys(appVersion.env).map(function (k) {
+      : Object.keys(appVersion.env).map(function (k) {
         return <dd key={k}>{k + "=" + appVersion.env[k]}</dd>;
       });
 
-    var executorNode = (appVersion.executor === "") ?
-      <UNSPECIFIED_NODE /> :
-      <dd>{appVersion.executor}</dd>;
+    var executorNode = (appVersion.executor === "")
+      ? <UNSPECIFIED_NODE />
+      : <dd>{appVersion.executor}</dd>;
 
     var healthChecksNode = (appVersion.healthChecks == null
-        || appVersion.healthChecks.length === 0) ?
-      <UNSPECIFIED_NODE /> :
-      <dd><pre>{JSON.stringify(appVersion.healthChecks, null, 2)}</pre></dd>;
+        || appVersion.healthChecks.length === 0)
+      ? <UNSPECIFIED_NODE />
+      : <dd><pre>{JSON.stringify(appVersion.healthChecks, null, 2)}</pre></dd>;
 
-    var portsNode = (appVersion.ports.length === 0) ?
-      <UNSPECIFIED_NODE /> :
-      <dd>{appVersion.ports.join(",")}</dd>;
+    var portsNode = (appVersion.ports.length === 0)
+      ? <UNSPECIFIED_NODE />
+      : <dd>{appVersion.ports.join(",")}</dd>;
 
-    var urisNode = (appVersion.uris.length === 0) ?
-      <UNSPECIFIED_NODE /> :
-      appVersion.uris.map(function (u) {
+    var urisNode = (appVersion.uris.length === 0)
+      ? <UNSPECIFIED_NODE />
+      : appVersion.uris.map(function (u) {
         return <dd key={u}>{u}</dd>;
       });
 
