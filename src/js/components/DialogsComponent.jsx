@@ -20,31 +20,37 @@ var DialogsComponent = React.createClass({
   },
 
   componentWillMount: function () {
-    DialogStore.on(DialogEvents.ALERT, this.onDialogAlert);
-    DialogStore.on(DialogEvents.ALERT_CLOSE, this.onDialogClose);
-    DialogStore.on(DialogEvents.CONFIRM, this.onDialogConfirm);
-    DialogStore.on(DialogEvents.CONFIRM_CLOSE, this.onDialogClose);
+    DialogStore.on(DialogEvents.ALERT_SHOW, this.onDialogAlertShow);
+    DialogStore.on(DialogEvents.ALERT_DISMISS, this.onDialogClose);
+    DialogStore.on(DialogEvents.CONFIRM_SHOW, this.onDialogConfirmShow);
+    DialogStore.on(DialogEvents.CONFIRM_DISMISS, this.onDialogClose);
     DialogStore.on(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
-    DialogStore.on(DialogEvents.PROMPT, this.onDialogPrompt);
-    DialogStore.on(DialogEvents.PROMPT_CLOSE, this.onDialogClose);
+    DialogStore.on(DialogEvents.PROMPT_SHOW, this.onDialogPromptShow);
+    DialogStore.on(DialogEvents.PROMPT_DISMISS, this.onDialogClose);
     DialogStore.on(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
   },
 
   componentWillUnmount: function () {
-    DialogStore.removeListener(DialogEvents.ALERT, this.onDialogAlert);
+    DialogStore.removeListener(DialogEvents.ALERT_SHOW, this.onDialogAlertShow);
     DialogStore.removeListener(
-      DialogEvents.ALERT_CLOSE,
+      DialogEvents.ALERT_DISMISS,
       this.onDialogAlertClose
     );
-    DialogStore.removeListener(DialogEvents.CONFIRM, this.onDialogConfirm);
-    DialogStore.removeListener(DialogEvents.CONFIRM_CLOSE, this.onDialogClose);
+    DialogStore.removeListener(
+      DialogEvents.CONFIRM_SHOW,
+      this.onDialogConfirmShow
+    );
+    DialogStore.removeListener(DialogEvents.CONFIRM_DISMISS, this.onDialogClose);
     DialogStore.removeListener(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
-    DialogStore.removeListener(DialogEvents.PROMPT, this.onDialogPrompt);
-    DialogStore.removeListener(DialogEvents.PROMPT_CLOSE, this.onDialogClose);
+    DialogStore.removeListener(
+      DialogEvents.PROMPT_SHOW,
+      this.onDialogPromptShow
+    );
+    DialogStore.removeListener(DialogEvents.PROMPT_DISMISS, this.onDialogClose);
     DialogStore.removeListener(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
   },
 
-  onDialogAlert: function (message, dialogId) {
+  onDialogAlertShow: function (message, dialogId) {
     this.setState({
       dialog: {
         type: DialogTypes.ALERT,
@@ -54,7 +60,7 @@ var DialogsComponent = React.createClass({
     });
   },
 
-  onDialogConfirm: function (message, dialogId) {
+  onDialogConfirmShow: function (message, dialogId) {
     this.setState({
       dialog: {
         type: DialogTypes.CONFIRM,
@@ -64,7 +70,7 @@ var DialogsComponent = React.createClass({
     });
   },
 
-  onDialogPrompt: function (message, defaultValue, dialogId) {
+  onDialogPromptShow: function (message, defaultValue, dialogId) {
     this.setState({
       dialog: {
         type: DialogTypes.PROMPT,
@@ -85,20 +91,20 @@ var DialogsComponent = React.createClass({
     });
   },
 
-  handleAlertClose: function () {
-    DialogActions.alertClose(this.state.currentId);
+  handleAlertDismiss: function () {
+    DialogActions.alertDismiss(this.state.currentId);
   },
 
-  handleConfirmClose: function () {
-    DialogActions.confirmClose(this.state.currentId);
+  handleConfirmDismiss: function () {
+    DialogActions.confirmDismiss(this.state.currentId);
   },
 
   handleConfirmAccept: function () {
     DialogActions.confirmAccept(this.state.currentId);
   },
 
-  handlePromptClose: function () {
-    DialogActions.promptClose(this.state.currentId);
+  handlePromptDismiss: function () {
+    DialogActions.promptDismiss(this.state.currentId);
   },
 
   handlePromptAccept: function (value) {
@@ -116,20 +122,20 @@ var DialogsComponent = React.createClass({
       case DialogTypes.ALERT:
         return (
           <AlertModalComponent message={dialog.message}
-            onDestroy={this.handleAlertClose} />
+            onDestroy={this.handleAlertDismiss} />
         );
       case DialogTypes.CONFIRM:
         return (
           <ConfirmModalComponent message={dialog.message}
             onConfirm={this.handleConfirmAccept}
-            onDestroy={this.handleConfirmClose} />
+            onDestroy={this.handleConfirmDismiss} />
         );
       case DialogTypes.PROMPT:
         return (
           <PromptModalComponent message={dialog.message}
             defaultValue={dialog.defaultValue}
             onConfirm={this.handlePromptAccept}
-            onDestroy={this.handlePromptClose} />
+            onDestroy={this.handlePromptDismiss} />
         );
       default:
         return null;

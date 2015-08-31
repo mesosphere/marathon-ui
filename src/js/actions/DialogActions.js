@@ -5,30 +5,30 @@ var DialogActions = {
   alert: function (message) {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.ALERT,
+      actionType: DialogEvents.ALERT_SHOW,
       message: message,
       dialogId: dialogId
     });
     return dialogId;
   },
-  alertClose: function (dialogId) {
+  alertDismiss: function (dialogId) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.ALERT_CLOSE,
+      actionType: DialogEvents.ALERT_DISMISS,
       dialogId: dialogId
     });
   },
   confirm: function (message) {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM,
+      actionType: DialogEvents.CONFIRM_SHOW,
       message: message,
       dialogId: dialogId
     });
     return dialogId;
   },
-  confirmClose: function (dialogId) {
+  confirmDismiss: function (dialogId) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM_CLOSE,
+      actionType: DialogEvents.CONFIRM_DISMISS,
       dialogId: dialogId
     });
   },
@@ -41,16 +41,16 @@ var DialogActions = {
   prompt: function (message, defaultValue = "") {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT,
+      actionType: DialogEvents.PROMPT_SHOW,
       message: message,
       defaultValue: defaultValue,
       dialogId: dialogId
     });
     return dialogId;
   },
-  promptClose: function (dialogId) {
+  promptDismiss: function (dialogId) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT_CLOSE,
+      actionType: DialogEvents.PROMPT_DISMISS,
       dialogId: dialogId
     });
   },
