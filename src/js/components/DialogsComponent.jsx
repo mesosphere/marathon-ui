@@ -53,7 +53,7 @@ var DialogsComponent = React.createClass({
   onDialogAlertShow: function (message, dialogId) {
     this.setState({
       dialog: {
-        type: DialogTypes.ALERT_SHOW,
+        type: DialogTypes.ALERT,
         message: message
       },
       currentId: dialogId
@@ -63,7 +63,7 @@ var DialogsComponent = React.createClass({
   onDialogConfirmShow: function (message, dialogId) {
     this.setState({
       dialog: {
-        type: DialogTypes.CONFIRM_SHOW,
+        type: DialogTypes.CONFIRM,
         message: message
       },
       currentId: dialogId
@@ -73,7 +73,7 @@ var DialogsComponent = React.createClass({
   onDialogPromptShow: function (message, defaultValue, dialogId) {
     this.setState({
       dialog: {
-        type: DialogTypes.PROMPT_SHOW,
+        type: DialogTypes.PROMPT,
         message: message,
         defaultValue: defaultValue
       },
