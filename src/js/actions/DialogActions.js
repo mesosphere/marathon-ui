@@ -5,7 +5,7 @@ var DialogActions = {
   alert: function (message) {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.ALERT,
+      actionType: DialogEvents.ALERT_SHOW,
       message: message,
       dialogId: dialogId
     });
@@ -20,7 +20,7 @@ var DialogActions = {
   confirm: function (message) {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM,
+      actionType: DialogEvents.CONFIRM_SHOW,
       message: message,
       dialogId: dialogId
     });
@@ -41,7 +41,7 @@ var DialogActions = {
   prompt: function (message, defaultValue = "") {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT,
+      actionType: DialogEvents.PROMPT_SHOW,
       message: message,
       defaultValue: defaultValue,
       dialogId: dialogId

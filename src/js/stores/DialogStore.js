@@ -52,10 +52,10 @@ var DialogStore = lazy(EventEmitter.prototype).extend({
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
-    case DialogEvents.ALERT:
+    case DialogEvents.ALERT_SHOW:
       addDialog(DialogStore.dialogs, action.message, action.dialogId);
       DialogStore.emit(
-        DialogEvents.ALERT,
+        DialogEvents.ALERT_SHOW,
         action.message,
         action.dialogId
       );
@@ -64,10 +64,10 @@ AppDispatcher.register(function (action) {
       removeDialog(DialogStore.dialogs, action.dialogId);
       DialogStore.emit(DialogEvents.ALERT_CLOSE, action.dialogId);
       break;
-    case DialogEvents.CONFIRM:
+    case DialogEvents.CONFIRM_SHOW:
       addDialog(DialogStore.dialogs, action.message, action.dialogId);
       DialogStore.emit(
-        DialogEvents.CONFIRM,
+        DialogEvents.CONFIRM_SHOW,
         action.message,
         action.dialogId
       );
@@ -80,10 +80,10 @@ AppDispatcher.register(function (action) {
       removeDialog(DialogStore.dialogs, action.dialogId);
       DialogStore.emit(DialogEvents.CONFIRM_ACCEPT, action.dialogId);
       break;
-    case DialogEvents.PROMPT:
+    case DialogEvents.PROMPT_SHOW:
       addDialog(DialogStore.dialogs, action.message, action.dialogId);
       DialogStore.emit(
-        DialogEvents.PROMPT,
+        DialogEvents.PROMPT_SHOW,
         action.message,
         action.defaultValue,
         action.dialogId
