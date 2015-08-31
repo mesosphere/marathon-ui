@@ -2,6 +2,8 @@ var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppsActions = require("../actions/AppsActions");
+var AppsEvents = require("../events/AppsEvents");
+var AppsStore = require("../stores/AppsStore");
 
 /*eslint-disable react/display-name, react/no-multi-comp */
 var UNSPECIFIED_NODE =
@@ -38,6 +40,40 @@ var AppVersionComponent = React.createClass({
     currentVersion: React.PropTypes.bool
   },
 
+  getInitialState: function () {
+    return {isStale: false};
+  },
+
+  componentWillMount: function () {
+    AppsStore.on(AppsEvents.APPLY_APP_REQUEST, this.onAppApplySettingsRequest);
+    AppsStore.on(AppsEvents.APPLY_APP_ERROR, this.onAppApplySettingsResponse);
+  },
+
+  componentWillUnmount: function () {
+    AppsStore.removeListener(
+      AppsEvents.APPLY_APP_REQUEST,
+      this.onAppApplySettingsRequest
+    );
+    AppsStore.removeListener(
+      AppsEvents.APPLY_APP_ERROR,
+      this.onAppApplySettingsResponse
+    );
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    if (nextProps.appVersion.version !== this.props.appVersion.version) {
+      this.onAppApplySettingsResponse();
+    }
+  },
+
+  onAppApplySettingsRequest: function () {
+    this.setState({isStale: true});
+  },
+
+  onAppApplySettingsResponse: function () {
+    this.setState({isStale: false});
+  },
+
   handleEditAppVersion: function () {
     var appVersion = this.props.appVersion;
     var router = this.context.router;
@@ -54,7 +90,7 @@ var AppVersionComponent = React.createClass({
   getButtonClassSet: function () {
     return classNames({
       "btn btn-sm btn-default pull-right": true,
-      "disabled": this.props.appVersion.version == null
+      "disabled": this.state.isStale || this.props.appVersion.version == null
     });
   },
 
