@@ -138,6 +138,12 @@ var AppsActions = {
     var clonedSettings = Object.assign({}, settings);
     delete clonedSettings.version;
 
+    // Used to mark current app config as stale
+    AppDispatcher.dispatch({
+      actionType: AppsEvents.APPLY_APP_REQUEST,
+      appId: appId
+    });
+
     this.request({
       method: "PUT",
       data: clonedSettings,
