@@ -38,15 +38,15 @@ var DialogStore = lazy(EventEmitter.prototype).extend({
 
     function removeListeners() {
       DialogStore.removeListener(DialogEvents.CONFIRM_ACCEPT, onAccept);
-      DialogStore.removeListener(DialogEvents.CONFIRM_CLOSE, onDismiss);
+      DialogStore.removeListener(DialogEvents.CONFIRM_DISMISS, onDismiss);
       DialogStore.removeListener(DialogEvents.PROMPT_ACCEPT, onAccept);
-      DialogStore.removeListener(DialogEvents.PROMPT_CLOSE, onDismiss);
+      DialogStore.removeListener(DialogEvents.PROMPT_DISMISS, onDismiss);
     }
 
     DialogStore.on(DialogEvents.CONFIRM_ACCEPT, onAccept);
-    DialogStore.on(DialogEvents.CONFIRM_CLOSE, onDismiss);
+    DialogStore.on(DialogEvents.CONFIRM_DISMISS, onDismiss);
     DialogStore.on(DialogEvents.PROMPT_ACCEPT, onAccept);
-    DialogStore.on(DialogEvents.PROMPT_CLOSE, onDismiss);
+    DialogStore.on(DialogEvents.PROMPT_DISMISS, onDismiss);
   }
 }).value();
 
@@ -60,9 +60,9 @@ AppDispatcher.register(function (action) {
         action.dialogId
       );
       break;
-    case DialogEvents.ALERT_CLOSE:
+    case DialogEvents.ALERT_DISMISS:
       removeDialog(DialogStore.dialogs, action.dialogId);
-      DialogStore.emit(DialogEvents.ALERT_CLOSE, action.dialogId);
+      DialogStore.emit(DialogEvents.ALERT_DISMISS, action.dialogId);
       break;
     case DialogEvents.CONFIRM_SHOW:
       addDialog(DialogStore.dialogs, action.message, action.dialogId);
@@ -72,9 +72,9 @@ AppDispatcher.register(function (action) {
         action.dialogId
       );
       break;
-    case DialogEvents.CONFIRM_CLOSE:
+    case DialogEvents.CONFIRM_DISMISS:
       removeDialog(DialogStore.dialogs, action.dialogId);
-      DialogStore.emit(DialogEvents.CONFIRM_CLOSE, action.dialogId);
+      DialogStore.emit(DialogEvents.CONFIRM_DISMISS, action.dialogId);
       break;
     case DialogEvents.CONFIRM_ACCEPT:
       removeDialog(DialogStore.dialogs, action.dialogId);
@@ -89,9 +89,9 @@ AppDispatcher.register(function (action) {
         action.dialogId
       );
       break;
-    case DialogEvents.PROMPT_CLOSE:
+    case DialogEvents.PROMPT_DISMISS:
       removeDialog(DialogStore.dialogs, action.dialogId);
-      DialogStore.emit(DialogEvents.PROMPT_CLOSE, action.dialogId);
+      DialogStore.emit(DialogEvents.PROMPT_DISMISS, action.dialogId);
       break;
     case DialogEvents.PROMPT_ACCEPT:
       removeDialog(DialogStore.dialogs, action.dialogId);

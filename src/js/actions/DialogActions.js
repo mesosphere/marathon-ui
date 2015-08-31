@@ -13,7 +13,7 @@ var DialogActions = {
   },
   alertClose: function (dialogId) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.ALERT_CLOSE,
+      actionType: DialogEvents.ALERT_DISMISS,
       dialogId: dialogId
     });
   },
@@ -28,7 +28,7 @@ var DialogActions = {
   },
   confirmClose: function (dialogId) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM_CLOSE,
+      actionType: DialogEvents.CONFIRM_DISMISS,
       dialogId: dialogId
     });
   },
@@ -50,7 +50,7 @@ var DialogActions = {
   },
   promptClose: function (dialogId) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT_CLOSE,
+      actionType: DialogEvents.PROMPT_DISMISS,
       dialogId: dialogId
     });
   },

@@ -21,26 +21,26 @@ var DialogsComponent = React.createClass({
 
   componentWillMount: function () {
     DialogStore.on(DialogEvents.ALERT_SHOW, this.onDialogAlert);
-    DialogStore.on(DialogEvents.ALERT_CLOSE, this.onDialogClose);
+    DialogStore.on(DialogEvents.ALERT_DISMISS, this.onDialogClose);
     DialogStore.on(DialogEvents.CONFIRM_SHOW, this.onDialogConfirm);
-    DialogStore.on(DialogEvents.CONFIRM_CLOSE, this.onDialogClose);
+    DialogStore.on(DialogEvents.CONFIRM_DISMISS, this.onDialogClose);
     DialogStore.on(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
     DialogStore.on(DialogEvents.PROMPT_SHOW, this.onDialogPrompt);
-    DialogStore.on(DialogEvents.PROMPT_CLOSE, this.onDialogClose);
+    DialogStore.on(DialogEvents.PROMPT_DISMISS, this.onDialogClose);
     DialogStore.on(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
   },
 
   componentWillUnmount: function () {
     DialogStore.removeListener(DialogEvents.ALERT_SHOW, this.onDialogAlert);
     DialogStore.removeListener(
-      DialogEvents.ALERT_CLOSE,
+      DialogEvents.ALERT_DISMISS,
       this.onDialogAlertClose
     );
     DialogStore.removeListener(DialogEvents.CONFIRM_SHOW, this.onDialogConfirm);
-    DialogStore.removeListener(DialogEvents.CONFIRM_CLOSE, this.onDialogClose);
+    DialogStore.removeListener(DialogEvents.CONFIRM_DISMISS, this.onDialogClose);
     DialogStore.removeListener(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
     DialogStore.removeListener(DialogEvents.PROMPT_SHOW, this.onDialogPrompt);
-    DialogStore.removeListener(DialogEvents.PROMPT_CLOSE, this.onDialogClose);
+    DialogStore.removeListener(DialogEvents.PROMPT_DISMISS, this.onDialogClose);
     DialogStore.removeListener(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
   },
 
