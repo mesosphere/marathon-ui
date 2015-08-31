@@ -20,31 +20,37 @@ var DialogsComponent = React.createClass({
   },
 
   componentWillMount: function () {
-    DialogStore.on(DialogEvents.ALERT_SHOW, this.onDialogAlert);
+    DialogStore.on(DialogEvents.ALERT_SHOW, this.onDialogAlertShow);
     DialogStore.on(DialogEvents.ALERT_DISMISS, this.onDialogClose);
-    DialogStore.on(DialogEvents.CONFIRM_SHOW, this.onDialogConfirm);
+    DialogStore.on(DialogEvents.CONFIRM_SHOW, this.onDialogConfirmShow);
     DialogStore.on(DialogEvents.CONFIRM_DISMISS, this.onDialogClose);
     DialogStore.on(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
-    DialogStore.on(DialogEvents.PROMPT_SHOW, this.onDialogPrompt);
+    DialogStore.on(DialogEvents.PROMPT_SHOW, this.onDialogPromptShow);
     DialogStore.on(DialogEvents.PROMPT_DISMISS, this.onDialogClose);
     DialogStore.on(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
   },
 
   componentWillUnmount: function () {
-    DialogStore.removeListener(DialogEvents.ALERT_SHOW, this.onDialogAlert);
+    DialogStore.removeListener(DialogEvents.ALERT_SHOW, this.onDialogAlertShow);
     DialogStore.removeListener(
       DialogEvents.ALERT_DISMISS,
       this.onDialogAlertClose
     );
-    DialogStore.removeListener(DialogEvents.CONFIRM_SHOW, this.onDialogConfirm);
+    DialogStore.removeListener(
+      DialogEvents.CONFIRM_SHOW,
+      this.onDialogConfirmShow
+    );
     DialogStore.removeListener(DialogEvents.CONFIRM_DISMISS, this.onDialogClose);
     DialogStore.removeListener(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
-    DialogStore.removeListener(DialogEvents.PROMPT_SHOW, this.onDialogPrompt);
+    DialogStore.removeListener(
+      DialogEvents.PROMPT_SHOW,
+      this.onDialogPromptShow
+    );
     DialogStore.removeListener(DialogEvents.PROMPT_DISMISS, this.onDialogClose);
     DialogStore.removeListener(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
   },
 
-  onDialogAlert: function (message, dialogId) {
+  onDialogAlertShow: function (message, dialogId) {
     this.setState({
       dialog: {
         type: DialogTypes.ALERT_SHOW,
@@ -54,7 +60,7 @@ var DialogsComponent = React.createClass({
     });
   },
 
-  onDialogConfirm: function (message, dialogId) {
+  onDialogConfirmShow: function (message, dialogId) {
     this.setState({
       dialog: {
         type: DialogTypes.CONFIRM_SHOW,
@@ -64,7 +70,7 @@ var DialogsComponent = React.createClass({
     });
   },
 
-  onDialogPrompt: function (message, defaultValue, dialogId) {
+  onDialogPromptShow: function (message, defaultValue, dialogId) {
     this.setState({
       dialog: {
         type: DialogTypes.PROMPT_SHOW,
