@@ -1,5 +1,6 @@
 var EventEmitter = require("events").EventEmitter;
 var lazy = require("lazy.js");
+var Util = require("../helpers/Util");
 
 var AppDispatcher = require("../AppDispatcher");
 var DialogEvents = require("../events/DialogEvents");
@@ -16,8 +17,10 @@ function removeDialog(dialogs, dialogId) {
 
 var DialogStore = lazy(EventEmitter.prototype).extend({
   dialogs: [],
-  handleUserResponse: function (dialogId, acceptCallback, dismissCallback) {
-    dismissCallback = dismissCallback || function () {};
+  handleUserResponse: function (dialogId,
+    acceptCallback,
+    dismissCallback = Util.noop
+  ) {
 
     function onAccept(id, value = null) {
       if (dialogId === id) {
