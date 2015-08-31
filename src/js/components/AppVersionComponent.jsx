@@ -117,6 +117,11 @@ var AppVersionComponent = React.createClass({
       <UNSPECIFIED_NODE /> :
       <dd>{appVersion.executor}</dd>;
 
+    var healthChecksNode = (appVersion.healthChecks == null
+        || appVersion.healthChecks.length === 0) ?
+      <UNSPECIFIED_NODE /> :
+      <dd><pre>{JSON.stringify(appVersion.healthChecks, null, 2)}</pre></dd>;
+
     var portsNode = (appVersion.ports.length === 0) ?
       <UNSPECIFIED_NODE /> :
       <dd>{appVersion.ports.join(",")}</dd>;
@@ -144,6 +149,8 @@ var AppVersionComponent = React.createClass({
           {envNode}
           <dt>Executor</dt>
           {executorNode}
+          <dt>Health Checks</dt>
+          {healthChecksNode}
           <dt>Instances</dt>
           {invalidateValue(appVersion.instances)}
           <dt>Memory</dt>
