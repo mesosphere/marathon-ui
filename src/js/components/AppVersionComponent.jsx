@@ -41,7 +41,7 @@ var AppVersionComponent = React.createClass({
   },
 
   getInitialState: function () {
-    return {stale: false};
+    return {isStale: false};
   },
 
   componentWillMount: function () {
@@ -67,11 +67,11 @@ var AppVersionComponent = React.createClass({
   },
 
   onAppApplySettingsRequest: function () {
-    this.setState({"stale": true});
+    this.setState({isStale: true});
   },
 
   onAppApplySettingsResponse: function () {
-    this.setState({"stale": false});
+    this.setState({isStale: false});
   },
 
   handleEditAppVersion: function () {
@@ -90,7 +90,7 @@ var AppVersionComponent = React.createClass({
   getButtonClassSet: function () {
     return classNames({
       "btn btn-sm btn-default pull-right": true,
-      "disabled": this.state.stale || this.props.appVersion.version == null
+      "disabled": this.state.isStale || this.props.appVersion.version == null
     });
   },
 
