@@ -60,17 +60,17 @@ var AppVersionComponent = React.createClass({
     );
   },
 
-  componentWillReceiveProps: function (previousProps, nextProps) {
-    // TODO
+  componentWillReceiveProps: function (nextProps) {
+    if (nextProps.appVersion.version !== this.props.appVersion.version) {
+      this.onAppApplySettingsResponse();
+    }
   },
 
   onAppApplySettingsRequest: function () {
-    console.log("stale", new Date());
     this.setState({"stale": true});
   },
 
   onAppApplySettingsResponse: function () {
-    console.log("fresh", new Date());
     this.setState({"stale": false});
   },
 
