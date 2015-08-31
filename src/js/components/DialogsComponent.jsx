@@ -91,20 +91,20 @@ var DialogsComponent = React.createClass({
     });
   },
 
-  handleAlertClose: function () {
-    DialogActions.alertClose(this.state.currentId);
+  handleAlertDismiss: function () {
+    DialogActions.alertDismiss(this.state.currentId);
   },
 
-  handleConfirmClose: function () {
-    DialogActions.confirmClose(this.state.currentId);
+  handleConfirmDismiss: function () {
+    DialogActions.confirmDismiss(this.state.currentId);
   },
 
   handleConfirmAccept: function () {
     DialogActions.confirmAccept(this.state.currentId);
   },
 
-  handlePromptClose: function () {
-    DialogActions.promptClose(this.state.currentId);
+  handlePromptDismiss: function () {
+    DialogActions.promptDismiss(this.state.currentId);
   },
 
   handlePromptAccept: function (value) {
@@ -122,20 +122,20 @@ var DialogsComponent = React.createClass({
       case DialogTypes.ALERT:
         return (
           <AlertModalComponent message={dialog.message}
-            onDestroy={this.handleAlertClose} />
+            onDestroy={this.handleAlertDismiss} />
         );
       case DialogTypes.CONFIRM:
         return (
           <ConfirmModalComponent message={dialog.message}
             onConfirm={this.handleConfirmAccept}
-            onDestroy={this.handleConfirmClose} />
+            onDestroy={this.handleConfirmDismiss} />
         );
       case DialogTypes.PROMPT:
         return (
           <PromptModalComponent message={dialog.message}
             defaultValue={dialog.defaultValue}
             onConfirm={this.handlePromptAccept}
-            onDestroy={this.handlePromptClose} />
+            onDestroy={this.handlePromptDismiss} />
         );
       default:
         return null;

@@ -11,7 +11,7 @@ var DialogActions = {
     });
     return dialogId;
   },
-  alertClose: function (dialogId) {
+  alertDismiss: function (dialogId) {
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.ALERT_DISMISS,
       dialogId: dialogId
@@ -26,7 +26,7 @@ var DialogActions = {
     });
     return dialogId;
   },
-  confirmClose: function (dialogId) {
+  confirmDismiss: function (dialogId) {
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.CONFIRM_DISMISS,
       dialogId: dialogId
@@ -48,7 +48,7 @@ var DialogActions = {
     });
     return dialogId;
   },
-  promptClose: function (dialogId) {
+  promptDismiss: function (dialogId) {
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.PROMPT_DISMISS,
       dialogId: dialogId
