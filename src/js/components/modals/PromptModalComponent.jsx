@@ -23,8 +23,8 @@ var PromptModalComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    this.refs.textinput.getDOMNode().focus();
-    this.refs.textinput.getDOMNode().select();
+    React.findDOMNode(this.refs.textinput).focus();
+    React.findDOMNode(this.refs.textinput).select();
   },
 
   handleDestroy: function () {
@@ -32,7 +32,7 @@ var PromptModalComponent = React.createClass({
   },
 
   handleConfirm: function () {
-    this.props.onConfirm(this.refs.textinput.getDOMNode().value);
+    this.props.onConfirm(React.findDOMNode(this.refs.textinput).value);
   },
 
   onKeyUp: function (event) {

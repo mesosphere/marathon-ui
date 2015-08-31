@@ -12,7 +12,7 @@ var AlertModalComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    this.refs.button.getDOMNode().focus();
+    React.findDOMNode(this.refs.button).focus();
   },
 
   getDefaultProps: function () {
