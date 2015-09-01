@@ -248,7 +248,7 @@ describe("Util", function () {
         {a: "", b: 1, c: "some value"},
         {a: "", b: 0, c: ""},
         {a: "", b: false, c: ""},
-        {a: "", b: "", c: ""}
+        {a: null, b: "", c: ""}
       ]);
       expect(result).to.deep.equal([
         {b: 1, c: "some value"},
