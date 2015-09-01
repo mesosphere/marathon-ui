@@ -142,12 +142,6 @@ var AppModalComponent = React.createClass({
 
     var modelAttrs = Util.serializedArrayToDictionary(attrArray);
 
-    if (modelAttrs.cmd === "") {
-      // An outstanding bug in Marathon #2147 means that a cmd field cannot be
-      // overridden with a blank string without failing validation.
-      modelAttrs.cmd = " ";
-    }
-
     // URIs should be an Array of Strings.
     if ("uris" in modelAttrs) {
       if (modelAttrs.uris === "") {
@@ -206,6 +200,11 @@ var AppModalComponent = React.createClass({
         }
         if (container.docker.network === "") {
           delete container.docker.network;
+        }
+        if (modelAttrs.cmd === "" && container.docker.image !== "") {
+          // An outstanding bug in Marathon #2147 means that a cmd field cannot be
+          // overridden with a blank string without failing validation.
+          modelAttrs.cmd = " ";
         }
       }
       if ("parameters" in container) {
