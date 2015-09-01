@@ -1,3 +1,4 @@
+var Mousetrap = require("mousetrap");
 var React = require("react/addons");
 var Util = require("../../helpers/Util");
 
@@ -16,6 +17,12 @@ var ConfirmModalComponent = React.createClass({
     let refs = this.refs;
 
     React.findDOMNode(refs.confirmButton).focus();
+    Mousetrap(React.findDOMNode(refs.modalComponent))
+      .bind("esc", this.handleDestroy);
+  },
+
+  componentWillUnmount: function () {
+    Mousetrap(React.findDOMNode(this.refs.modalComponent)).unbind("esc");
   },
 
   getDefaultProps: function () {
