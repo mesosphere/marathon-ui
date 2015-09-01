@@ -23,8 +23,9 @@ var PromptModalComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    React.findDOMNode(this.refs.textinput).focus();
-    React.findDOMNode(this.refs.textinput).select();
+    let input = React.findDOMNode(this.refs.textInput);
+    input.focus();
+    input.select();
   },
 
   handleDestroy: function () {
@@ -32,7 +33,7 @@ var PromptModalComponent = React.createClass({
   },
 
   handleConfirm: function () {
-    this.props.onConfirm(React.findDOMNode(this.refs.textinput).value);
+    this.props.onConfirm(React.findDOMNode(this.refs.textInput).value);
   },
 
   onKeyUp: function (event) {
@@ -53,7 +54,7 @@ var PromptModalComponent = React.createClass({
           <label>{this.props.message}</label>
           <input className="form-control"
             type="text"
-            ref="textinput"
+            ref="textInput"
             onKeyUp={this.onKeyUp}
             defaultValue={this.props.defaultValue} />
           <div className="modal-controls fixed-height">
