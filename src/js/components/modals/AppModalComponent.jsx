@@ -196,16 +196,14 @@ var AppModalComponent = React.createClass({
       if ("docker" in container) {
         if ("portMappings" in container.docker) {
           container.docker.portMappings =
-            lazy(container.docker.portMappings).compact().value();
+            Util.compactArray(container.docker.portMappings);
         }
       }
       if ("parameters" in container) {
-        container.parameters =
-          lazy(container.parameters).compact().value();
+        container.parameters = Util.compactArray(container.parameters);
       }
       if ("volumes" in container) {
-        container.volumes =
-          lazy(container.volumes).compact().value();
+        container.volumes = Util.compactArray(container.volumes);
       }
     }
 
