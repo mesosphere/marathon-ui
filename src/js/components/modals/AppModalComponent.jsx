@@ -196,16 +196,22 @@ var AppModalComponent = React.createClass({
       if ("docker" in container) {
         if ("portMappings" in container.docker) {
           container.docker.portMappings =
-            lazy(container.docker.portMappings).compact().value();
+            Util.compactArray(container.docker.portMappings);
+        }
+        if (container.docker.network === "") {
+          delete container.docker.network;
+        }
+        if (modelAttrs.cmd === "" && container.docker.image !== "") {
+          // An outstanding bug in Marathon #2147 means that a cmd field cannot be
+          // overridden with a blank string without failing validation.
+          modelAttrs.cmd = " ";
         }
       }
       if ("parameters" in container) {
-        container.parameters =
-          lazy(container.parameters).compact().value();
+        container.parameters = Util.compactArray(container.parameters);
       }
       if ("volumes" in container) {
-        container.volumes =
-          lazy(container.volumes).compact().value();
+        container.volumes = Util.compactArray(container.volumes);
       }
     }
 

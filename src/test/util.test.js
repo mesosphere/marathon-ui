@@ -242,4 +242,20 @@ describe("Util", function () {
 
   });
 
+  describe("compactArray", function () {
+    it("compacts an array of objects", function () {
+      var result = Util.compactArray([
+        {a: "", b: 1, c: "some value"},
+        {a: "", b: 0, c: ""},
+        {a: "", b: false, c: ""},
+        {a: null, b: "", c: ""}
+      ]);
+      expect(result).to.deep.equal([
+        {b: 1, c: "some value"},
+        {b: 0},
+        {b: false}
+      ]);
+    });
+  });
+
 });
