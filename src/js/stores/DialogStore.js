@@ -105,6 +105,20 @@ AppDispatcher.register(function (action) {
         action.value
       );
       break;
+    case DialogEvents.DISMISS_LATEST:
+      var latestDialog = DialogStore.dialogs.pop();
+      if (latestDialog) {
+        if (latestDialog.type === DialogTypes.ALERT) {
+          DialogStore.emit(DialogEvents.ALERT_DISMISS, latestDialog.id);
+        }
+        if (latestDialog.type === DialogTypes.CONFIRM) {
+          DialogStore.emit(DialogEvents.CONFIRM_DISMISS, latestDialog.id);
+        }
+        if (latestDialog.type === DialogTypes.PROMPT) {
+          DialogStore.emit(DialogEvents.PROMPT_DISMISS, latestDialog.id);
+        }
+      }
+      break;
   }
 });
 

@@ -1,4 +1,3 @@
-var Mousetrap = require("mousetrap");
 var React = require("react/addons");
 var Util = require("../../helpers/Util");
 
@@ -14,18 +13,7 @@ var AlertModalComponent = React.createClass({
 
   componentDidMount: function () {
     let refs = this.refs;
-
     React.findDOMNode(refs.button).focus();
-    /*eslint-disable new-cap */
-    Mousetrap(React.findDOMNode(refs.modalComponent))
-      .bind("esc", this.handleDestroy);
-    /*eslint-enable new-cap */
-  },
-
-  componentWillUnmount: function () {
-    /*eslint-disable new-cap */
-    Mousetrap(React.findDOMNode(this.refs.modalComponent)).unbind("esc");
-    /*eslint-enable new-cap */
   },
 
   getDefaultProps: function () {

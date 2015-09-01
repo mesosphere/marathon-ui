@@ -60,6 +60,11 @@ var DialogActions = {
       dialogId: dialogId,
       value: value
     });
+  },
+  dismissLatest: function () {
+    AppDispatcher.dispatchNext({
+      actionType: DialogEvents.DISMISS_LATEST
+    });
   }
 };
 
