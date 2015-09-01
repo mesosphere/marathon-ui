@@ -12,6 +12,12 @@ var ConfirmModalComponent = React.createClass({
     onDestroy: React.PropTypes.func
   },
 
+  componentDidMount: function () {
+    let refs = this.refs;
+
+    React.findDOMNode(refs.confirmButton).focus();
+  },
+
   getDefaultProps: function () {
     return {
       message: "",
@@ -41,12 +47,16 @@ var ConfirmModalComponent = React.createClass({
           <div className="modal-controls fixed-height">
             <button
                 className="btn btn-sm  btn-success pull-right"
+                ref="confirmButton"
+                tabIndex="2"
                 type="button"
                 onClick={this.handleConfirm}>
               OK
             </button>
             <button
                 className="btn btn-sm btn-default pull-right"
+                ref="dismissButton"
+                tabIndex="1"
                 type="button"
                 onClick={this.handleDestroy}>
               Cancel
