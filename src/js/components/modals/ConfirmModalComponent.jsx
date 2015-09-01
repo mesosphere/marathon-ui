@@ -17,12 +17,16 @@ var ConfirmModalComponent = React.createClass({
     let refs = this.refs;
 
     React.findDOMNode(refs.confirmButton).focus();
+    /*eslint-disable new-cap */
     Mousetrap(React.findDOMNode(refs.modalComponent))
       .bind("esc", this.handleDestroy);
+    /*eslint-enable new-cap */
   },
 
   componentWillUnmount: function () {
+    /*eslint-disable new-cap */
     Mousetrap(React.findDOMNode(this.refs.modalComponent)).unbind("esc");
+    /*eslint-enable new-cap */
   },
 
   getDefaultProps: function () {
