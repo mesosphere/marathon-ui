@@ -4,9 +4,10 @@ var Util = require("../helpers/Util");
 
 var AppDispatcher = require("../AppDispatcher");
 var DialogEvents = require("../events/DialogEvents");
+var DialogTypes = require("../constants/DialogTypes");
 
-function addDialog(dialogs, message, dialogId) {
-  dialogs.push({id: dialogId, message: message});
+function addDialog(dialogs, message, dialogId, dialogType) {
+  dialogs.push({id: dialogId, message: message, type: dialogType});
 }
 
 function removeDialog(dialogs, dialogId) {
@@ -53,7 +54,8 @@ var DialogStore = lazy(EventEmitter.prototype).extend({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case DialogEvents.ALERT_SHOW:
-      addDialog(DialogStore.dialogs, action.message, action.dialogId);
+      addDialog(DialogStore.dialogs, action.message, action.dialogId,
+        DialogTypes.ALERT);
       DialogStore.emit(
         DialogEvents.ALERT_SHOW,
         action.message,
@@ -65,7 +67,8 @@ AppDispatcher.register(function (action) {
       DialogStore.emit(DialogEvents.ALERT_DISMISS, action.dialogId);
       break;
     case DialogEvents.CONFIRM_SHOW:
-      addDialog(DialogStore.dialogs, action.message, action.dialogId);
+      addDialog(DialogStore.dialogs, action.message, action.dialogId,
+        DialogTypes.CONFIRM);
       DialogStore.emit(
         DialogEvents.CONFIRM_SHOW,
         action.message,
@@ -81,7 +84,8 @@ AppDispatcher.register(function (action) {
       DialogStore.emit(DialogEvents.CONFIRM_ACCEPT, action.dialogId);
       break;
     case DialogEvents.PROMPT_SHOW:
-      addDialog(DialogStore.dialogs, action.message, action.dialogId);
+      addDialog(DialogStore.dialogs, action.message, action.dialogId,
+        DialogTypes.PROMPT);
       DialogStore.emit(
         DialogEvents.PROMPT_SHOW,
         action.message,
