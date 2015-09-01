@@ -13,8 +13,7 @@ var ConfirmModalComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    let refs = this.refs;
-    React.findDOMNode(refs.confirmButton).focus();
+    React.findDOMNode(this.refs.confirmButton).focus();
   },
 
   getDefaultProps: function () {
@@ -54,7 +53,6 @@ var ConfirmModalComponent = React.createClass({
             </button>
             <button
                 className="btn btn-sm btn-default pull-right"
-                ref="dismissButton"
                 tabIndex="1"
                 type="button"
                 onClick={this.handleDestroy}>

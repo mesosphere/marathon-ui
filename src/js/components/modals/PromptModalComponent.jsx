@@ -23,8 +23,7 @@ var PromptModalComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    let refs = this.refs;
-    let input = React.findDOMNode(refs.textInput);
+    let input = React.findDOMNode(this.refs.textInput);
     input.focus();
     input.select();
   },
