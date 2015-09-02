@@ -6,51 +6,39 @@ function modalSizeClassName(size) {
   return (size == null) ? "" : "modal-" + size;
 }
 
-var ModalComponent = React.createClass({
-  displayName: "ModalComponent",
-  propTypes: {
-    centered: React.PropTypes.bool,
-    children: React.PropTypes.node,
-    dismissOnClickOutside: React.PropTypes.bool,
-    onDestroy: React.PropTypes.func,
-    size: React.PropTypes.string
-  },
+class ModalComponent extends React.Component {
+  constructor(props) {
+    super(props);
 
-  componentDidMount: function () {
-    this.timeout = setTimeout(this.transitionIn, 10);
-  },
-
-  destroy: function () {
-    this.props.onDestroy();
-  },
-
-  getDefaultProps: function () {
-    return {
-      dismissOnClickOutside: true,
-      onDestroy: Util.noop,
-      size: null
-    };
-  },
-
-  getInitialState: function () {
-    return {
+    this.state = {
       isIn: false
     };
-  },
 
-  onClick: function (event) {
+    this.onClick = this.onClick.bind(this);
+    this.transitionIn = this.transitionIn.bind(this);
+  }
+
+  componentDidMount() {
+    this.timeout = setTimeout(this.transitionIn, 10);
+  }
+
+  onClick(event) {
     if (this.props.dismissOnClickOutside &&
       (Util.hasClass(event.target, "modal") ||
       Util.hasClass(event.target, "modal-dialog"))) {
       this.destroy();
     }
-  },
+  }
 
-  transitionIn: function () {
+  destroy() {
+    this.props.onDestroy();
+  }
+
+  transitionIn() {
     this.setState({isIn: true});
-  },
+  }
 
-  render: function () {
+  render() {
     var modalDialogClassName =
       "modal-dialog " + modalSizeClassName(this.props.size);
 
@@ -82,6 +70,22 @@ var ModalComponent = React.createClass({
       </div>
     );
   }
-});
+}
+
+ModalComponent.propTypes = {
+  centered: React.PropTypes.bool,
+  children: React.PropTypes.node,
+  dismissOnClickOutside: React.PropTypes.bool,
+  onDestroy: React.PropTypes.func,
+  size: React.PropTypes.string
+};
+
+ModalComponent.defaultProps = {
+  dismissOnClickOutside: true,
+  onDestroy: Util.noop,
+  size: null
+};
+
+ModalComponent.displayName = "ModalComponent";
 
 module.exports = ModalComponent;
