@@ -38,7 +38,7 @@
       "anonymous": "always", "named": "never"
     }],
     "spaced-line-comment": [2, "always"],
-    // "max-len": [2, 80, 4], TODO
+    "max-len": [2, 80, 4],
     "valid-jsdoc": [2, {
       "requireReturn": false,
       "requireParamDescription": false
