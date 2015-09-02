@@ -42,7 +42,8 @@ var DialogsComponent = React.createClass({
       this.onDialogConfirmShow
     );
     DialogStore.removeListener(
-      DialogEvents.CONFIRM_DISMISS, this.onDialogClose
+      DialogEvents.CONFIRM_DISMISS,
+      this.onDialogClose
     );
     DialogStore.removeListener(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
     DialogStore.removeListener(
