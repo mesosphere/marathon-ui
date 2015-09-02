@@ -100,20 +100,23 @@ var AppDebugInfoComponent = React.createClass({
     if (lastScalingAt !== lastConfigChangeAt) {
       lastScaling = (
         <dd>
-          <span>{lastScalingAt}</span> ({new Moment(lastScalingAt).fromNow()})
+          {lastScalingAt} ({new Moment(lastScalingAt).fromNow()})
         </dd>
       );
     }
+
+    var lastConfig = (
+      <dd>
+        {lastConfigChangeAt} ({new Moment(lastConfigChangeAt).fromNow()})
+      </dd>
+    );
 
     return (
       <dl className="dl-horizontal flush-bottom">
         <dt>Scale or Restart</dt>
         {lastScaling}
         <dt>Configuration</dt>
-        <dd>
-          <span>{lastConfigChangeAt}</span>
-          ({new Moment(lastConfigChangeAt).fromNow()})
-        </dd>
+        {lastConfig}
       </dl>
     );
   },
