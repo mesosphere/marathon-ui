@@ -25,7 +25,8 @@ if (process.env.GULP_ENV === "development") {
     var configDev = require("./config.dev");
     config = Object.assign(config, configDev);
   } catch (e) {
-    // Do nothing
+    console.info("You could copy config.template.js to config.dev.js " +
+      "to enable a development configuration.");
   }
 }
 module.exports = config;
