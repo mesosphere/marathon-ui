@@ -264,11 +264,11 @@ describe("App Version component", function () {
   });
 
   it("has correct constraints", function () {
-    expect(this.table[3].type.displayName).to.equal("UNSPECIFIED_NODE");
+    expect(this.table[3].type.displayName).to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct container", function () {
-    expect(this.table[5].type.displayName).to.equal("UNSPECIFIED_NODE");
+    expect(this.table[5].type.displayName).to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct cpus", function () {
@@ -276,11 +276,11 @@ describe("App Version component", function () {
   });
 
   it("has correct environment", function () {
-    expect(this.table[9].type.displayName).to.equal("UNSPECIFIED_NODE");
+    expect(this.table[9].type.displayName).to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct executor", function () {
-    expect(this.table[11].type.displayName).to.equal("UNSPECIFIED_NODE");
+    expect(this.table[11].type.displayName).to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct health checks", function () {
@@ -323,7 +323,7 @@ describe("App Version component", function () {
   });
 
   it("has correct URIs", function () {
-    expect(this.table[29].type.displayName).to.equal("UNSPECIFIED_NODE");
+    expect(this.table[29].type.displayName).to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct version", function () {

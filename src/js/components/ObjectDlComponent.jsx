@@ -1,5 +1,8 @@
 var React = require("react/addons");
 
+var UnspecifiedNodeComponent =
+  require("../components/UnspecifiedNodeComponent");
+
 function formatKey(key) {
   return key.split("_").map(function (piece) {
     return piece.charAt(0).toUpperCase() + piece.slice(1);
@@ -35,7 +38,7 @@ var ObjectDlComponent = React.createClass({
         dlNodes.push(
           <dd key={key + "_val"}>
             {this.props.object[key] == null ?
-              <span className="text-muted">Unspecified</span> :
+              <UnspecifiedNodeComponent tag="span" /> :
               prettyPrint(this.props.object[key])}
           </dd>
         );
