@@ -266,6 +266,19 @@ var AppModalComponent = React.createClass({
       submitButtonTitle = "Change and deploy configuration";
     }
 
+    var submitButton = (
+      <input type="submit"
+          className="btn btn-success"
+          value={submitButtonTitle} />
+      );
+    var cancelButton = (
+      <button className="btn btn-default"
+          type="button"
+          onClick={this.destroy}>
+        Cancel
+      </button>
+    );
+
     return (
       <ModalComponent
         dismissOnClickOutside={false}
@@ -355,14 +368,7 @@ var AppModalComponent = React.createClass({
             </div>
             <div className="modal-controls">
               {errorBlock}
-              <input type="submit"
-                  className="btn btn-success"
-                  value={submitButtonTitle} />
-              <button className="btn btn-default"
-                  type="button"
-                  onClick={this.destroy}>
-                Cancel
-              </button>
+              {submitButton} {cancelButton}
             </div>
           </div>
         </form>
