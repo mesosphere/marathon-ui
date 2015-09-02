@@ -7,6 +7,20 @@ var AppsEvents = require("../events/AppsEvents");
 var AppTaskStatsListComponent =
   require("../components/AppTaskStatsListComponent");
 var TaskMesosUrlComponent = require("../components/TaskMesosUrlComponent");
+var UnspecifiedNodeComponent =
+  require("../components/UnspecifiedNodeComponent");
+
+function invalidateValue(value, suffix) {
+  if (value == null || value === "") {
+    return (
+      <UnspecifiedNodeComponent />
+    );
+  } else {
+    return (
+      <dd>{value} {suffix}</dd>
+    );
+  }
+}
 
 var AppDebugInfoComponent = React.createClass({
   displayName: "AppDebugInfoComponent",
@@ -56,13 +70,13 @@ var AppDebugInfoComponent = React.createClass({
     return (
       <dl className="dl-horizontal flush-bottom">
         <dt>Task id</dt>
-        <dd>{lastTaskFailure.taskId}</dd>
+        {invalidateValue(lastTaskFailure.taskId)}
         <dt>State</dt>
-        <dd>{lastTaskFailure.state}</dd>
+        {invalidateValue(lastTaskFailure.state)}
         <dt>Message</dt>
-        <dd>{lastTaskFailure.message}</dd>
+        {invalidateValue(lastTaskFailure.message)}
         <dt>Host</dt>
-        <dd>{lastTaskFailure.host}</dd>
+        {invalidateValue(lastTaskFailure.host)}
         <dt>Timestamp</dt>
         <dd>
           <span>{timestamp}</span> ({new Moment(timestamp).fromNow()})

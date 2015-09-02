@@ -4,20 +4,13 @@ var React = require("react/addons");
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
-
-/*eslint-disable react/display-name, react/no-multi-comp */
-var UNSPECIFIED_NODE =
-  React.createClass({
-    render: function () {
-      return <dd className="text-muted">Unspecified</dd>;
-    }
-  });
-/*eslint-enable react/display-name */
+var UnspecifiedNodeComponent =
+  require("../components/UnspecifiedNodeComponent");
 
 function invalidateValue(value, suffix) {
   if (value == null) {
     return (
-      <UNSPECIFIED_NODE />
+      <UnspecifiedNodeComponent />
     );
   } else {
     return (
@@ -120,7 +113,7 @@ var AppVersionComponent = React.createClass({
     var appVersion = this.props.appVersion;
 
     var constraintsNode = (appVersion.constraints.length < 1)
-      ? <UNSPECIFIED_NODE />
+      ? <UnspecifiedNodeComponent />
       : appVersion.constraints.map(function (c) {
 
         // Only include constraint parts if they are not empty Strings. For
@@ -138,32 +131,32 @@ var AppVersionComponent = React.createClass({
       });
 
     var containerNode = (appVersion.container == null)
-      ? <UNSPECIFIED_NODE />
+      ? <UnspecifiedNodeComponent />
       : <dd><pre>{JSON.stringify(appVersion.container, null, 2)}</pre></dd>;
 
     var envNode = (appVersion.env == null ||
         Object.keys(appVersion.env).length === 0)
-      ? <UNSPECIFIED_NODE />
+      ? <UnspecifiedNodeComponent />
       // Print environment variables as key value pairs like "key=value"
       : Object.keys(appVersion.env).map(function (k) {
         return <dd key={k}>{k + "=" + appVersion.env[k]}</dd>;
       });
 
     var executorNode = (appVersion.executor === "")
-      ? <UNSPECIFIED_NODE />
+      ? <UnspecifiedNodeComponent />
       : <dd>{appVersion.executor}</dd>;
 
     var healthChecksNode = (appVersion.healthChecks == null
         || appVersion.healthChecks.length === 0)
-      ? <UNSPECIFIED_NODE />
+      ? <UnspecifiedNodeComponent />
       : <dd><pre>{JSON.stringify(appVersion.healthChecks, null, 2)}</pre></dd>;
 
     var portsNode = (appVersion.ports.length === 0)
-      ? <UNSPECIFIED_NODE />
+      ? <UnspecifiedNodeComponent />
       : <dd>{appVersion.ports.join(",")}</dd>;
 
     var urisNode = (appVersion.uris.length === 0)
-      ? <UNSPECIFIED_NODE />
+      ? <UnspecifiedNodeComponent />
       : appVersion.uris.map(function (u) {
         return <dd key={u}>{u}</dd>;
       });

@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- \#2157 - Row is off-centre if upper row is empty in lists
+
 ## 0.11.0 - 2015-09-02
 ### Added
 - \#1204 - Please add a search bar to the applications overview to filter the

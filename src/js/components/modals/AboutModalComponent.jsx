@@ -5,6 +5,8 @@ var InfoEvents = require("../../events/InfoEvents");
 var InfoStore = require("../../stores/InfoStore");
 var ModalComponent = require("../ModalComponent");
 var ObjectDlComponent = require("../ObjectDlComponent");
+var UnspecifiedNodeComponent =
+  require("../../components/UnspecifiedNodeComponent");
 
 var config = require("../../config/config");
 
@@ -41,7 +43,7 @@ var AboutModalComponent = React.createClass({
 
   getInfo: function (attr) {
     return this.state.info[attr] ||
-      <span className="text-muted">Unspecified</span>;
+      <UnspecifiedNodeComponent tag="span" />;
   },
 
   onInfoChange: function () {

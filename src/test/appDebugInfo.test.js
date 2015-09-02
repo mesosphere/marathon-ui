@@ -56,10 +56,10 @@ describe("App debug info component", function () {
       var element = this.component
         .props.children[2].props.children[1].props.children.props.children;
 
-      var taskId = element[1].props.children;
-      var state = element[3].props.children;
-      var message = element[5].props.children;
-      var host = element[7].props.children;
+      var taskId = element[1].props.children[0];
+      var state = element[3].props.children[0];
+      var message = element[5].props.children[0];
+      var host = element[7].props.children[0];
       var timestamp = element[9].props.children[0].props.children;
       var version = element[11].props.children[0].props.children;
 
@@ -69,6 +69,34 @@ describe("App debug info component", function () {
       expect(host).to.equal("slave1.dcos.io");
       expect(timestamp).to.equal("2015-08-05T09:08:56.349Z");
       expect(version).to.equal("2015-07-06T12:37:28.774Z");
+    });
+
+    it("should show unspecified field on empty values", function () {
+      var app = Util.extendObject(appScheme, {
+        id: "/python",
+        lastTaskFailure: {
+          appId: "/python",
+          host: "slave1.dcos.io",
+          taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
+          timestamp: "2015-08-05T09:08:56.349Z",
+          version: "2015-07-06T12:37:28.774Z"
+        }
+      });
+
+      AppsStore.apps = [app];
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<AppDebugInfoComponent appId={app.id} />);
+      this.component = this.renderer.getRenderOutput();
+
+      var element = this.component
+        .props.children[2].props.children[1].props.children.props.children;
+
+      var state = element[3];
+      var message = element[5];
+
+      expect(state.type.displayName).to.equal("UnspecifiedNodeComponent");
+      expect(message.type.displayName).to.equal("UnspecifiedNodeComponent");
     });
 
     it("should show message when app never failed", function () {
