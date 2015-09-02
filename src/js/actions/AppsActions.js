@@ -43,9 +43,6 @@ var AppsActions = {
     this.request({
       method: "POST",
       data: newAppAttributes,
-      headers: {
-        "Content-Type": "application/json"
-      },
       url: `${config.apiURL}v2/apps`
     })
       .success(function (app) {
@@ -88,9 +85,6 @@ var AppsActions = {
       method: "POST",
       data: {
         force: false
-      },
-      headers: {
-        "Content-Type": "application/json"
       },
       url: `${config.apiURL}v2/apps/${appId}/restart`
     })
@@ -147,9 +141,6 @@ var AppsActions = {
     this.request({
       method: "PUT",
       data: clonedSettings,
-      headers: {
-        "Content-Type": "application/json"
-      },
       url: `${config.apiURL}v2/apps/${appId}`
     })
       .success(function (app) {

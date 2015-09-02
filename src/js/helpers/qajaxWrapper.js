@@ -1,4 +1,5 @@
 var qajax = require("qajax");
+var Util = require("./Util");
 
 var uniqueCalls = [];
 
@@ -6,7 +7,15 @@ function removeCall(options) {
   uniqueCalls.splice(uniqueCalls.indexOf(options.url), 1);
 }
 
-var qajaxWrapper = function (options) {
+var qajaxWrapper = function (opts = {}) {
+  var defaults = {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    }
+  };
+  var options = Util.extendObject(defaults, opts);
+
   if (!options.concurrent) {
     if (uniqueCalls.indexOf(options.url) > -1) {
       return {
