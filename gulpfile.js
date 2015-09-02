@@ -46,7 +46,10 @@ var webpackConfig = {
       {
         test: /\.(js|jsx)$/,
         loader: "babel-loader",
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        query: {
+          stage: 0
+        }
       },
       {
         test: /\.json$/,
