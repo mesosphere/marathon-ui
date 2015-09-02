@@ -75,8 +75,11 @@ var PagedNavComponent = React.createClass({
         if (i % itemsPerPage === 0) {
           // only draw those within the bounds
           if (pageNumber >= pageLBound && pageNumber <= pageUBound) {
+            let pageNumberClassSet = classNames({
+              "success disabled": pageNumber === currentPage
+            });
             pagination.push(
-              <li className={pageNumber === currentPage ? "success disabled" : ""}
+              <li className={pageNumberClassSet}
                   key={pageNumber + 1}>
                 <button
                   onClick={this.handlePageChange.bind(this, pageNumber)}>
@@ -91,9 +94,11 @@ var PagedNavComponent = React.createClass({
     }
 
     var itemNumbers =
-      this.props.useItemNumbers ?
-        <span className="item-numbers">{itemsLBound + 1}-{itemsUBound} of {noItems}</span> :
-        null;
+      this.props.useItemNumbers
+        ? <span className="item-numbers">
+            {itemsLBound + 1}-{itemsUBound} of {noItems}
+          </span>
+        : null;
 
     var leftArrow =
       this.props.useArrows ?

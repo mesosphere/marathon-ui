@@ -202,8 +202,8 @@ var AppModalComponent = React.createClass({
           delete container.docker.network;
         }
         if (modelAttrs.cmd === "" && container.docker.image !== "") {
-          // An outstanding bug in Marathon #2147 means that a cmd field cannot be
-          // overridden with a blank string without failing validation.
+          // An outstanding bug in Marathon (#2147) means that the cmd field
+          // can't be overridden with a blank string without failing validation
           modelAttrs.cmd = " ";
         }
       }
@@ -251,7 +251,11 @@ var AppModalComponent = React.createClass({
       });
 
     var errorBlock = generalErrors.map(function (error, i) {
-      return <p key={i} className="text-danger"><strong>{error.message}</strong></p>;
+      return (
+        <p key={i} className="text-danger">
+          <strong>{error.message}</strong>
+        </p>
+      );
     });
 
     var modalTitle = "New Application";
@@ -351,7 +355,12 @@ var AppModalComponent = React.createClass({
             </div>
             <div className="modal-controls">
               {errorBlock}
-              <input type="submit" className="btn btn-success" value={submitButtonTitle} /> <button className="btn btn-default" type="button" onClick={this.destroy}>
+              <input type="submit"
+                  className="btn btn-success"
+                  value={submitButtonTitle} />
+              <button className="btn btn-default"
+                  type="button"
+                  onClick={this.destroy}>
                 Cancel
               </button>
             </div>

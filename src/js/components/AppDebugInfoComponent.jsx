@@ -111,7 +111,8 @@ var AppDebugInfoComponent = React.createClass({
         {lastScaling}
         <dt>Configuration</dt>
         <dd>
-          <span>{lastConfigChangeAt}</span> ({new Moment(lastConfigChangeAt).fromNow()})
+          <span>{lastConfigChangeAt}</span>
+          ({new Moment(lastConfigChangeAt).fromNow()})
         </dd>
       </dl>
     );

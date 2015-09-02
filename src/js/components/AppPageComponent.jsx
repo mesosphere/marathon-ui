@@ -162,11 +162,15 @@ var AppPageComponent = React.createClass({
   },
 
   onRestartAppError: function (errorMessage) {
-    DialogActions.alert(`Error restarting app: ${errorMessage.message || errorMessage}`);
+    DialogActions.alert(
+      `Error restarting app: ${errorMessage.message || errorMessage}`
+    );
   },
 
   onDeleteAppError: function (errorMessage) {
-    DialogActions.alert(`Error destroying app: ${errorMessage.message || errorMessage}`);
+    DialogActions.alert(
+      `Error destroying app: ${errorMessage.message || errorMessage}`
+    );
   },
 
   onDeleteAppSuccess: function () {
@@ -178,7 +182,9 @@ var AppPageComponent = React.createClass({
   },
 
   onResetDelayError: function (errorMessage) {
-    DialogActions.alert(`Error resetting delay on app: ${errorMessage.message || errorMessage}`);
+    DialogActions.alert(
+      `Error resetting delay on app: ${errorMessage.message || errorMessage}`
+    );
   },
 
   handleTabClick: function (id) {

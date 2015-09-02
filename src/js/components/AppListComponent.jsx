@@ -195,7 +195,9 @@ var AppListComponent = React.createClass({
             <td className="text-center" colSpan="6">No running apps.</td>
           </tr>
           <tr className={noRunningAppsClassSet}>
-            <td className="text-center" colSpan="6">No apps match your query.</td>
+            <td className="text-center" colSpan="6">
+              No apps match your query.
+            </td>
           </tr>
           <tr className={errorClassSet}>
             <td className="text-center text-danger" colSpan="6">

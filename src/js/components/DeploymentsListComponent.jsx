@@ -136,22 +136,26 @@ var DeploymentListComponent = React.createClass({
         <thead>
           <tr>
             <th>
-              <span onClick={this.sortBy.bind(null, "id")} className={headerClassSet}>
+              <span onClick={this.sortBy.bind(null, "id")}
+                  className={headerClassSet}>
                 Deployment ID {this.getCaret("id")}
               </span>
             </th>
             <th>
-              <span onClick={this.sortBy.bind(null, "affectedAppsString")} className={headerClassSet}>
+              <span onClick={this.sortBy.bind(null, "affectedAppsString")}
+                  className={headerClassSet}>
                 Affected Apps {this.getCaret("affectedAppsString")}
               </span>
             </th>
             <th>
-              <span onClick={this.sortBy.bind(null, "currentActionsString")} className={headerClassSet}>
+              <span onClick={this.sortBy.bind(null, "currentActionsString")}
+                  className={headerClassSet}>
                 {this.getCaret("currentActionsString")} Action
               </span>
             </th>
             <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "currentStep")} className={headerClassSet}>
+              <span onClick={this.sortBy.bind(null, "currentStep")}
+                  className={headerClassSet}>
                 {this.getCaret("currentStep")} Progress
               </span>
             </th>
