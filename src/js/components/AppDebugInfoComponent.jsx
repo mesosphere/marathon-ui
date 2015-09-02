@@ -98,16 +98,18 @@ var AppDebugInfoComponent = React.createClass({
     );
 
     if (lastScalingAt !== lastConfigChangeAt) {
+      let lastScalingTimestamp = <span>{lastScalingAt}</span>;
       lastScaling = (
         <dd>
-          {lastScalingAt} ({new Moment(lastScalingAt).fromNow()})
+          {lastScalingTimestamp} ({new Moment(lastScalingAt).fromNow()})
         </dd>
       );
     }
 
+    var lastConfigTimestamp = <span>{lastConfigChangeAt}</span>;
     var lastConfig = (
       <dd>
-        {lastConfigChangeAt} ({new Moment(lastConfigChangeAt).fromNow()})
+        {lastConfigTimestamp} ({new Moment(lastConfigChangeAt).fromNow()})
       </dd>
     );
 
