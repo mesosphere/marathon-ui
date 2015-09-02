@@ -6,51 +6,52 @@ function modalSizeClassName(size) {
   return (size == null) ? "" : "modal-" + size;
 }
 
-var ModalComponent = React.createClass({
-  displayName: "ModalComponent",
-  propTypes: {
+class ModalComponent extends React.Component {
+  static displayName = "ModalComponent";
+
+  static propTypes = {
     centered: React.PropTypes.bool,
     children: React.PropTypes.node,
     dismissOnClickOutside: React.PropTypes.bool,
     onDestroy: React.PropTypes.func,
     size: React.PropTypes.string
-  },
+  };
 
-  componentDidMount: function () {
-    this.timeout = setTimeout(this.transitionIn, 10);
-  },
+  static defaultProps = {
+    dismissOnClickOutside: true,
+    onDestroy: Util.noop,
+    size: null
+  };
 
-  destroy: function () {
-    this.props.onDestroy();
-  },
+  constructor(props) {
+    super(props);
 
-  getDefaultProps: function () {
-    return {
-      dismissOnClickOutside: true,
-      onDestroy: Util.noop,
-      size: null
-    };
-  },
-
-  getInitialState: function () {
-    return {
+    this.state = {
       isIn: false
     };
-  },
+  }
 
-  onClick: function (event) {
+  componentDidMount() {
+    this.timeout = setTimeout(this.transitionIn, 10);
+  }
+
+  destroy() {
+    this.props.onDestroy();
+  }
+
+  onClick = (event) => {
     if (this.props.dismissOnClickOutside &&
       (Util.hasClass(event.target, "modal") ||
       Util.hasClass(event.target, "modal-dialog"))) {
       this.destroy();
     }
-  },
+  }
 
-  transitionIn: function () {
+  transitionIn = () => {
     this.setState({isIn: true});
-  },
+  }
 
-  render: function () {
+  render() {
     var modalDialogClassName =
       "modal-dialog " + modalSizeClassName(this.props.size);
 
@@ -82,6 +83,6 @@ var ModalComponent = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports = ModalComponent;

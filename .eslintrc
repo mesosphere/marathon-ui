@@ -1,13 +1,16 @@
 {
+  "parser": "babel-eslint",
+
   "ecmaFeatures": {
-    "jsx": true,
     "arrowFunctions": true,
     "blockBindings": true,
-    "destructuring": true,
-    "objectLiteralComputedProperties": true,
-    "templateStrings": true,
+    "classes": true,
     "defaultParams": true,
-    "restParams": true
+    "destructuring": true,
+    "jsx": true,
+    "objectLiteralComputedProperties": true,
+    "restParams": true,
+    "templateStrings": true
   },
 
   "env": {
