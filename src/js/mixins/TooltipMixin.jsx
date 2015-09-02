@@ -38,8 +38,9 @@ var TooltipMixin = {
   tip_handleContainerMouseMove: function (e) {
     var el = e.target;
 
-    if (el.dataset && el.dataset.behavior
-        && el.dataset.behavior === "show-tip") {
+    if (el.dataset &&
+        el.dataset.behavior &&
+        el.dataset.behavior === "show-tip") {
       this.tip_showTip(el);
       el.addEventListener("mouseleave", this.tip_handleMouseLeave);
     }
