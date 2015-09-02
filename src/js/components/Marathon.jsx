@@ -9,7 +9,8 @@ var RouteHandler = require("react-router").RouteHandler;
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var AppModalComponent = require("../components/modals/AppModalComponent");
 var DialogsComponent = require("../components/DialogsComponent");
-var EditAppModalComponent = require("../components/modals/EditAppModalComponent");
+var EditAppModalComponent =
+  require("../components/modals/EditAppModalComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");
@@ -212,7 +213,8 @@ var Marathon = React.createClass({
 
     return (
       <div>
-        <nav className="navbar navbar-inverse navbar-static-top" role="navigation">
+        <nav className="navbar navbar-inverse navbar-static-top"
+            role="navigation">
           <div className="container-fluid">
             <div className="navbar-header">
               <a className="navbar-brand" href={window.location.pathname}>
@@ -232,7 +234,8 @@ var Marathon = React.createClass({
                 </Link>
               </li>
               <li>
-                <a href="https://mesosphere.github.io/marathon/docs/" target="_blank">
+                <a href="https://mesosphere.github.io/marathon/docs/"
+                    target="_blank">
                   Docs ⇗
                 </a>
               </li>

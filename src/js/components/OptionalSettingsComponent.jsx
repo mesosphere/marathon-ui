@@ -14,7 +14,8 @@ var OptionalSettingsComponent = React.createClass({
   render: function () {
     var model = this.props.model;
     var errors = this.props.errors;
-    var helpMessage = "Comma-separated list of valid constraints. Valid constraint format is \"field:operator[:value]\".";
+    var helpMessage = "Comma-separated list of valid constraints. " +
+      "Valid constraint format is \"field:operator[:value]\".";
     var attr = {};
 
     if (model.constraints != null) {
@@ -22,6 +23,13 @@ var OptionalSettingsComponent = React.createClass({
         return constraint.join(":");
       });
     }
+
+    var help = {
+      executor: "Executor must be the string '//cmd', a string containing " +
+                "only single slashes ('/'), or blank.",
+      ports: "Comma-separated list of numbers. 0's (zeros) assign random " +
+             "ports. (Default: one random port)"
+    };
 
     return (
       <div>
@@ -33,11 +41,11 @@ var OptionalSettingsComponent = React.createClass({
           validator={appValidator}>
           <input
             pattern={appValidator.VALID_EXECUTOR_PATTERN}
-            title="Executor must be the string '//cmd', a string containing only single slashes ('/'), or blank." />
+            title={help.executor} />
         </FormGroupComponent>
         <FormGroupComponent
           attribute="ports"
-          help="Comma-separated list of numbers. 0's (zeros) assign random ports. (Default: one random port)"
+          help={help.ports}
           label="Ports"
           model={model}
           errors={errors}

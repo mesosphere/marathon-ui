@@ -89,7 +89,11 @@ var FormGroupComponent = React.createClass({
     if (errors.length > 0) {
       className += " has-error";
       errorBlock = errors.map(function (error, i) {
-        return <div key={i} className="help-block"><strong>{error.message}</strong></div>;
+        return (
+          <div key={i} className="help-block">
+            <strong>{error.message}</strong>
+          </div>
+        );
       });
     }
 

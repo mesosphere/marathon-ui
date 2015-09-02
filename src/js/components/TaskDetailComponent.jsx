@@ -27,7 +27,12 @@ var TaskDetailComponent = React.createClass({
     return (
       <p className="text-center text-danger">
         Error fetching task details.
-        Go to <Link to="app" params={{appId: encodeURIComponent(this.props.appId)}}>Task List</Link> to see the full list.
+        Go to
+        <Link to="app"
+            params={{appId: encodeURIComponent(this.props.appId)}}>
+          Task List
+        </Link>
+        to see the full list.
       </p>
     );
   },

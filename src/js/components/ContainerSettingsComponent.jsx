@@ -126,7 +126,8 @@ var ContainerSettingsComponent = React.createClass({
           </FormGroupComponent>
           <DuplicableRowControls
             handleAddRow={this.handleAddRow.bind(this, "portMappings", i)}
-            handleRemoveRow={this.handleRemoveRow.bind(this, "portMappings", i)} />
+            handleRemoveRow={this.handleRemoveRow.bind(this, "portMappings", i)}
+            />
         </div>
       </div>
     );
@@ -160,7 +161,8 @@ var ContainerSettingsComponent = React.createClass({
           </FormGroupComponent>
           <DuplicableRowControls
             handleAddRow={this.handleAddRow.bind(null, "parameters", i)}
-            handleRemoveRow={this.handleRemoveRow.bind(null, "parameters", i)} />
+            handleRemoveRow={this.handleRemoveRow.bind(null, "parameters", i)}
+            />
         </div>
       </div>
     );

@@ -82,7 +82,10 @@ var AppVersionListComponent = React.createClass({
       return;
     }
 
-    DialogActions.alert(`Could not update to chosen version: ${errorMessage.message || errorMessage}`);
+    DialogActions.alert(
+      "Could not update to chosen version:" +
+          (errorMessage.message || errorMessage)
+    );
   },
 
   handleRefresh: function () {

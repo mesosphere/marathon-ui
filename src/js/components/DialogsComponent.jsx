@@ -1,7 +1,8 @@
 var React = require("react/addons");
 
 var AlertModalComponent = require("../components/modals/AlertModalComponent");
-var ConfirmModalComponent = require("../components/modals/ConfirmModalComponent");
+var ConfirmModalComponent =
+  require("../components/modals/ConfirmModalComponent");
 var PromptModalComponent = require("../components/modals/PromptModalComponent");
 
 var DialogActions = require("../actions/DialogActions");
@@ -40,7 +41,9 @@ var DialogsComponent = React.createClass({
       DialogEvents.CONFIRM_SHOW,
       this.onDialogConfirmShow
     );
-    DialogStore.removeListener(DialogEvents.CONFIRM_DISMISS, this.onDialogClose);
+    DialogStore.removeListener(
+      DialogEvents.CONFIRM_DISMISS, this.onDialogClose
+    );
     DialogStore.removeListener(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
     DialogStore.removeListener(
       DialogEvents.PROMPT_SHOW,

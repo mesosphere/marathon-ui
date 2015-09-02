@@ -89,7 +89,8 @@ var Util = {
         if (obj[key][index] === undefined) {
           obj[key][index] = {};
         }
-        obj[key][index] = parsePath(obj[key][index], position + 1, tokens, value);
+        obj[key][index] =
+            parsePath(obj[key][index], position + 1, tokens, value);
       }
       return obj;
     };

@@ -68,8 +68,13 @@ var NavTabsComponent = React.createClass({
       );
     }, this);
 
+    var ulClassSet = classNames(
+      this.props.className,
+      "nav navbar navbar-static-top nav-tabs"
+    );
+
     return (
-      <ul className={this.props.className + " nav navbar navbar-static-top nav-tabs"}>
+      <ul className={ulClassSet}>
         {tabs}
       </ul>
     );
