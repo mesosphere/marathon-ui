@@ -25,9 +25,6 @@ var QueueActions = {
   resetDelay: function (appId) {
     this.request({
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
       url: `${config.apiURL}v2/queue/${appId}/delay`
     })
       .success(function () {

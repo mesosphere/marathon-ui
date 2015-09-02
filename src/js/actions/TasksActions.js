@@ -11,9 +11,6 @@ var TasksActions = {
       data: {
         "ids": taskIds
       },
-      headers: {
-        "Content-Type": "application/json"
-      },
       url: `${config.apiURL}v2/tasks/delete`
     })
       .success(function () {
@@ -35,9 +32,6 @@ var TasksActions = {
       method: "POST",
       data: {
         "ids": taskIds
-      },
-      headers: {
-        "Content-Type": "application/json"
       },
       url: `${config.apiURL}v2/tasks/delete?scale=true`
     })
