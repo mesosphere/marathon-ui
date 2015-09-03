@@ -41,6 +41,14 @@ describe("App Form", function () {
       FormActions.update("appId", "", 1);
     });
 
+    it("handles indexed grouped fields update", function (done) {
+      AppFormStore.once(FormEvents.CHANGE, function () {
+          expect(AppFormStore.app.env.get("ENV_KEY")).to.equal("ENV_VALUE");
+        }, done);
+      });
+
+      FormActions.update("env", {key: "ENV_KEY", value: "ENV_VALUE"}, 0);
+    });
   });
 
 });
