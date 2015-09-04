@@ -242,6 +242,25 @@ describe("Util", function () {
 
   });
 
+  describe("isEmptyString", function () {
+
+    it("handles bad input", function () {
+      expect(Util.isEmptyString({"Object": true})).to.be.false;
+      expect(Util.isEmptyString([1,2,3])).to.be.false;
+      expect(Util.isEmptyString(null)).to.be.false;
+    });
+
+    it("detects empty srting", function () {
+      expect(Util.isEmptyString("")).to.be.true;
+    });
+
+    it("detects a non-empty string", function () {
+      expect(Util.isEmptyString(" ")).to.be.false;
+      expect(Util.isEmptyString("not empty")).to.be.false;
+    });
+
+  });
+
   describe("compactArray", function () {
     it("compacts an array of objects", function () {
       var result = Util.compactArray([

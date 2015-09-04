@@ -112,6 +112,9 @@ var Util = {
   isString: function (obj) {
     return toString.call(obj) === "[object String]";
   },
+  isEmptyString: function (str) {
+    return this.isString(str) && (str == null || str === "");
+  },
   hasClass: function (element, className) {
     return element.className &&
       element.className.match(/\S+/g).indexOf(className) > -1;
