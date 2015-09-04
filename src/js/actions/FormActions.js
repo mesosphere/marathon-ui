@@ -2,7 +2,7 @@ var AppDispatcher = require("../AppDispatcher");
 var FormsEvents = require("../events/FormEvents");
 
 var FormActions = {
-  insert: function (fieldId, value = null, index = null) {
+  insert: function (fieldId, value, index = null) {
     AppDispatcher.dispatch({
       actionType: FormsEvents.INSERT,
       fieldId: fieldId,
