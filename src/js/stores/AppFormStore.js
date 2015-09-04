@@ -26,7 +26,7 @@ function isValidField(fieldId, value) {
   return validate == null || validate(value);
 }
 
-function insertField(fields, fieldId, value, index = null) {
+function insertField(fields, fieldId, index = null, value) {
   if (fieldId === "env") {
     if (fields.env === undefined) {
       fields.env = [];
@@ -39,7 +39,7 @@ function insertField(fields, fieldId, value, index = null) {
   }
 }
 
-function updateField(fields, fieldId, value, index = null) {
+function updateField(fields, fieldId, index = null, value) {
   if (fieldId === "env") {
     if (fields.env === undefined) {
       fields.env = [];
@@ -53,6 +53,12 @@ function updateField(fields, fieldId, value, index = null) {
   }
 }
 
+function deleteField(fields, fieldId, index) {
+  if (fieldId === "env") {
+    fields.env.splice(index, 1);
+  }
+}
+
 function getTransformedField(fieldId, value) {
   const transform = transformationRules[fieldId];
   if (transform == null) {
@@ -61,23 +67,12 @@ function getTransformedField(fieldId, value) {
   return transform(value);
 }
 
-function storeTransformedValueToModel(app, fieldId, value, index = null) {
+function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveMap[fieldId];
   if (key) {
-    let field = getTransformedField(fieldId, value);
-
-    if (key === "env") {
-      if (app.env === undefined) {
-        app.env = {};
-      }
-      app.env[Object.keys(field)[0]] = field[Object.keys(field)[0]];
-    } else {
-      app[key] = field;
-    }
-
-    return true;
+    let field = getTransformedField(fieldId, fields[fieldId]);
+    app[key] = field;
   }
-  return false;
 }
 
 var AppFormStore = lazy(EventEmitter.prototype).extend({
@@ -85,75 +80,40 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
   fields: {}
 }).value();
 
-AppDispatcher.register(function (action) {
+function executeAction(action, setFieldFunction) {
   const fieldId = action.fieldId;
   const value = action.value;
   const index = action.index;
 
+  // This is not a delete-action
+  if (value !== undefined || index == null) {
+    if (!isValidField(fieldId, value)) {
+      AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR, {
+        fieldId: fieldId,
+        value: value,
+        index: index
+      });
+      return;
+    }
+  }
+
+  setFieldFunction(AppFormStore.fields, fieldId, index, value);
+
+  rebuildModelFromFields(AppFormStore.app, AppFormStore.fields, fieldId);
+
+  AppFormStore.emit(FormEvents.CHANGE, fieldId);
+}
+
+AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case FormEvents.INSERT:
-      {
-        const isValid = isValidField(fieldId, value);
-        if (!isValid) {
-          AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR, {
-            fieldId: fieldId,
-            value: value,
-            index: index
-          });
-          break;
-        }
-
-        insertField(AppFormStore.fields, fieldId, value, index);
-
-        const isStored = storeTransformedValueToModel(AppFormStore.app,
-          fieldId,
-          value,
-          index
-        );
-        if (!isStored) {
-          AppFormStore.emit(FormEvents.CHANGE_ERROR, {
-            fieldId: fieldId,
-            value: value,
-            index: index
-          });
-          break;
-        }
-
-        AppFormStore.emit(FormEvents.CHANGE, fieldId);
-      }
+      executeAction(action, insertField);
       break;
     case FormEvents.UPDATE:
-      {
-        const isValid = isValidField(fieldId, value);
-        if (!isValid) {
-          AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR, {
-            fieldId: fieldId,
-            value: value,
-            index: index
-          });
-          break;
-        }
-
-        updateField(AppFormStore.fields, fieldId, value, index);
-
-        const isStored = storeTransformedValueToModel(AppFormStore.app,
-          fieldId,
-          value,
-          index
-        );
-        if (!isStored) {
-          AppFormStore.emit(FormEvents.CHANGE_ERROR, {
-            fieldId: fieldId,
-            value: value,
-            index: index
-          });
-          break;
-        }
-
-        AppFormStore.emit(FormEvents.CHANGE, fieldId);
-      }
+      executeAction(action, updateField);
       break;
     case FormEvents.DELETE:
+      executeAction(action, deleteField);
       break;
   }
 });
