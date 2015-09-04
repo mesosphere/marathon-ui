@@ -38,16 +38,6 @@ describe("App Form", function () {
         FormActions.update("appId", "/app-1");
       });
 
-      it("doesn't store unknown fields", function (done) {
-        AppFormStore.once(FormEvents.CHANGE_ERROR, function (data) {
-          expectAsync(function () {
-            expect(data.fieldId).to.equal("nonexistentField");
-          }, done);
-        });
-
-        FormActions.update("nonexistentField", "");
-      });
-
       describe("the env field", function () {
 
         it("inserts a key-value pair", function (done) {
@@ -149,6 +139,20 @@ describe("App Form", function () {
             0
           );
 
+        });
+
+        it("deletes a key-value pair at index", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.env.length).to.equal(1);
+              expect(AppFormStore.fields.env[0]).to.deep.equal({
+                key: "ENV_KEY_2",
+                value: "ENV_VALUE_1"
+              });
+            }, done);
+          });
+
+          FormActions.delete("env", 0);
         });
       });
     });
