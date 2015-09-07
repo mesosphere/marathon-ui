@@ -9,15 +9,33 @@ describe("App Form", function () {
 
   describe("on field update", function () {
 
-    it("handles AppFormStore field validation errors", function (done) {
-      AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
-        expectAsync(function () {
-          expect(AppFormStore.validationErrorIndices).to.have.property("appId");
-          expect(AppFormStore.validationErrorIndices.appId).to.equal(0);
-        }, done);
+    describe("handles AppFormStore field validation errors", function () {
+
+      it("returns the right error message index for empty app ID",
+          function (done) {
+        AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
+          expectAsync(function () {
+            expect(AppFormStore.validationErrorIndices).to.have.property("appId");
+            expect(AppFormStore.validationErrorIndices.appId).to.equal(0);
+          }, done);
+        });
+
+        FormActions.update("appId", "", 1);
       });
 
-      FormActions.update("appId", "", 1);
+      it("returns the right error message index for a different error",
+          function (done) {
+        AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
+          expectAsync(function () {
+            expect(AppFormStore.validationErrorIndices).to.have.property("appId");
+            expect(AppFormStore.validationErrorIndices.appId).to.equal(1);
+          }, done);
+        });
+
+        FormActions.update("appId", "/app id", 1);
+      });
+
+
     });
 
     describe("the model", function () {
