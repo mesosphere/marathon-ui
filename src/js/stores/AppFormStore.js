@@ -1,5 +1,6 @@
 var EventEmitter = require("events").EventEmitter;
 var lazy = require("lazy.js");
+var Util = require("../helpers/Util");
 
 var AppDispatcher = require("../AppDispatcher");
 var AppFormTransforms = require("./AppFormTransforms");
@@ -28,9 +29,7 @@ function isValidField(fieldId, value) {
 
 function insertField(fields, fieldId, index = null, value) {
   if (fieldId === "env") {
-    if (fields.env === undefined) {
-      fields.env = [];
-    }
+    Util.initKeyValue(fields, "env", []);
     if (index == null) {
       fields.env.push(value);
     } else {
@@ -41,9 +40,7 @@ function insertField(fields, fieldId, index = null, value) {
 
 function updateField(fields, fieldId, index = null, value) {
   if (fieldId === "env") {
-    if (fields.env === undefined) {
-      fields.env = [];
-    }
+    Util.initKeyValue(fields, "env", []);
 
     if (fields.env[index] !== undefined) {
       fields.env[index] = value;

@@ -90,6 +90,11 @@ var Util = {
     }
     return json;
   },
+  initKeyValue: function (obj, key, value) {
+    if (obj[key] === undefined) {
+      obj[key] = value;
+    }
+  },
   isArray: Array.isArray || function (obj) {
     return toString.call(obj) === "[object Array]";
   },

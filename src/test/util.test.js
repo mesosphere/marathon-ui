@@ -164,6 +164,17 @@ describe("Util", function () {
 
   });
 
+  describe("initKeyValue", function () {
+
+    it("initialises a value for a given key", function () {
+      let obj = {};
+      Util.initKeyValue(obj, "key", []);
+      expect(obj).to.have.property("key");
+      expect(obj.key).to.eql([]);
+    });
+
+  });
+
   describe("isArray", function () {
 
     it("array is an array", function () {
