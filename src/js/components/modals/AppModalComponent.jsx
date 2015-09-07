@@ -4,6 +4,7 @@ var Util = require("../../helpers/Util");
 
 var AppsActions = require("../../actions/AppsActions");
 var AppsEvents = require("../../events/AppsEvents");
+var AppFormStore = require("../../stores/AppFormStore");
 var appScheme = require("../../stores/appScheme");
 var AppsStore = require("../../stores/AppsStore");
 var appValidator = require("../../validators/appValidator");
@@ -63,6 +64,11 @@ var AppModalComponent = React.createClass({
       this.onCreateApp);
     AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR,
       this.onApplyAppError);
+  onApplyAppError: function (error, isEditing, status) {
+    if (!isEditing) {
+      return;
+    }
+    this.onCreateAppError(error, status);
   },
 
   onCreateApp: function () {
@@ -79,11 +85,6 @@ var AppModalComponent = React.createClass({
     }
   },
 
-  onApplyAppError: function (error, isEditing, status) {
-    if (!isEditing) {
-      return;
-    }
-    this.onCreateAppError(error, status);
   },
 
   destroy: function () {
