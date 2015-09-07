@@ -8,8 +8,11 @@ var AppFormValidators = require("./AppFormValidators");
 var FormEvents = require("../events/FormEvents");
 
 const validationRules = {
-  "appId": AppFormValidators.appId,
-  "env": AppFormValidators.env
+  "appId": [
+    AppFormValidators.appIdNotEmpty,
+    AppFormValidators.appIdNoWhitespaces
+  ],
+  "env": [AppFormValidators.env]
 };
 
 const transformationRules = {
@@ -22,9 +25,8 @@ const resolveMap = {
   env: "env"
 };
 
-function isValidField(fieldId, value) {
-  const validate = validationRules[fieldId];
-  return validate == null || validate(value);
+function getValidationErrorIndex(fieldId, value) {
+  return validationRules[fieldId].findIndex((isValid) =>!isValid(value));
 }
 
 function insertField(fields, fieldId, index = null, value) {
@@ -85,15 +87,14 @@ function executeAction(action, setFieldFunction) {
 
   // This is not a delete-action
   if (value !== undefined || index == null) {
-    if (!isValidField(fieldId, value)) {
-      // TODO
-      var errorIndex = 0;
+    let errorIndex = getValidationErrorIndex(fieldId, value);
+
+    if (errorIndex > -1) {
       AppFormStore.validationErrorIndices[fieldId] = errorIndex;
       AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
       return;
-    } else {
-      delete AppFormStore.validationErrorIndices[fieldId];
     }
+    delete AppFormStore.validationErrorIndices[fieldId];
   }
 
   setFieldFunction(AppFormStore.fields, fieldId, index, value);

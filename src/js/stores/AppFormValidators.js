@@ -1,7 +1,8 @@
 var Util = require("../helpers/Util");
 
 const AppFormValidators = {
-  appId: (str) => !Util.isEmptyString(str),
+  appIdNotEmpty: (str) => !Util.isEmptyString(str),
+  appIdNoWhitespaces: (str) => str.match(/ /g) == null,
   env: (obj) => !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value))
 };
 
