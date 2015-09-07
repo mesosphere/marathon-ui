@@ -10,12 +10,10 @@ describe("App Form", function () {
   describe("on field update", function () {
 
     it("handles AppFormStore field validation errors", function (done) {
-      AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR,
-          function (fieldId, value, index) {
+      AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
         expectAsync(function () {
-          expect(fieldId).to.equal("appId");
-          expect(value).to.equal("");
-          expect(index).to.equal(1);
+          expect(AppFormStore.validationErrorIndices).to.have.property("appId");
+          expect(AppFormStore.validationErrorIndices.appId).to.equal(0);
         }, done);
       });
 

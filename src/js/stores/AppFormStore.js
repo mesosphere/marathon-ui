@@ -74,7 +74,8 @@ function rebuildModelFromFields(app, fields, fieldId) {
 
 var AppFormStore = lazy(EventEmitter.prototype).extend({
   app: {},
-  fields: {}
+  fields: {},
+  validationErrorIndices: {}
 }).value();
 
 function executeAction(action, setFieldFunction) {
@@ -85,12 +86,13 @@ function executeAction(action, setFieldFunction) {
   // This is not a delete-action
   if (value !== undefined || index == null) {
     if (!isValidField(fieldId, value)) {
-      AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR,
-        fieldId,
-        value,
-        index
-      );
+      // TODO
+      var errorIndex = 0;
+      AppFormStore.validationErrorIndices[fieldId] = errorIndex;
+      AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
       return;
+    } else {
+      delete AppFormStore.validationErrorIndices[fieldId];
     }
   }
 
