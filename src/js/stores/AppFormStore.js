@@ -85,11 +85,11 @@ function executeAction(action, setFieldFunction) {
   // This is not a delete-action
   if (value !== undefined || index == null) {
     if (!isValidField(fieldId, value)) {
-      AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR, {
-        fieldId: fieldId,
-        value: value,
-        index: index
-      });
+      AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR,
+        fieldId,
+        value,
+        index
+      );
       return;
     }
   }
