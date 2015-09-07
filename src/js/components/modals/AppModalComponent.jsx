@@ -4,6 +4,7 @@ var Util = require("../../helpers/Util");
 
 var AppsActions = require("../../actions/AppsActions");
 var AppsEvents = require("../../events/AppsEvents");
+var AppFormErrorMessages = require("../../validators/AppFormErrorMessages");
 var AppFormStore = require("../../stores/AppFormStore");
 var appScheme = require("../../stores/appScheme");
 var AppsStore = require("../../stores/AppsStore");
@@ -12,12 +13,16 @@ var CollapsiblePanelComponent =
   require("../../components/CollapsiblePanelComponent");
 var ContainerSettingsComponent =
   require("../../components/ContainerSettingsComponent");
+var FormActions = require("../../actions/FormActions");
+var FormEvents = require("../../events/FormEvents");
 var FormGroupComponent = require("../../components/FormGroupComponent");
 var ModalComponent = require("../../components/ModalComponent");
 var OptionalEnvironmentComponent =
   require("../../components/OptionalEnviromentComponent");
 var OptionalSettingsComponent =
   require("../../components/OptionalSettingsComponent");
+var StoreFormGroupComponent =
+  require("../../components/StoreFormGroupComponent");
 var ValidationError = require("../../validators/ValidationError");
 
 var AppModalComponent = React.createClass({
@@ -44,7 +49,9 @@ var AppModalComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      errors: []
+      fields: AppFormStore.fields,
+      lastModifiedFieldId: null,
+      errorIndices: {}
     };
   },
 
@@ -53,6 +60,9 @@ var AppModalComponent = React.createClass({
     AppsStore.on(AppsEvents.CREATE_APP_ERROR, this.onCreateAppError);
     AppsStore.on(AppsEvents.APPLY_APP, this.onCreateApp);
     AppsStore.on(AppsEvents.APPLY_APP_ERROR, this.onApplyAppError);
+    AppFormStore.on(FormEvents.CHANGE, this.onFormChange);
+    AppFormStore.on(FormEvents.FIELD_VALIDATION_ERROR,
+      this.onFieldValidationError);
   },
 
   componentWillUnmount: function () {
@@ -64,6 +74,11 @@ var AppModalComponent = React.createClass({
       this.onCreateApp);
     AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR,
       this.onApplyAppError);
+    AppFormStore.removeListener(FormEvents.CHANGE, this.onFormChange);
+    AppFormStore.removeListener(FormEvents.FIELD_VALIDATION_ERROR,
+      this.onFieldValidationError);
+  },
+
   onApplyAppError: function (error, isEditing, status) {
     if (!isEditing) {
       return;
@@ -85,6 +100,16 @@ var AppModalComponent = React.createClass({
     }
   },
 
+  onFieldValidationError: function () {
+    this.setState({errorIndices: AppFormStore.validationErrorIndices});
+  },
+
+  onFormChange: function (fieldId) {
+    this.setState({
+      fields: AppFormStore.fields,
+      lastModifiedFieldId: fieldId,
+      errorIndices: AppFormStore.validationErrorIndices
+    });
   },
 
   destroy: function () {
@@ -95,6 +120,15 @@ var AppModalComponent = React.createClass({
 
   clearValidation: function () {
     this.setState({errors: []});
+  },
+
+  getErrorMessage: function (fieldId) {
+    var state = this.state;
+    var errorIndex = state.errorIndices[fieldId];
+    if (state.errorIndices[fieldId] != null) {
+      return AppFormErrorMessages.getMessage(fieldId, errorIndex);
+    }
+    return null;
   },
 
   validateResponse: function (response, status) {
@@ -131,6 +165,11 @@ var AppModalComponent = React.createClass({
     this.setState({errors: errors});
   },
 
+  handleChange: function (fieldId, value) {
+    FormActions.update(fieldId, value);
+  },
+
+  // TODO rename : handleSubmit
   onSubmit: function (event) {
     event.preventDefault();
 
@@ -245,19 +284,11 @@ var AppModalComponent = React.createClass({
   render: function () {
     var props = this.props;
     var model = this.props.attributes;
-    var errors = this.state.errors;
+    var state = this.state;
+    var errors = [];
 
-    var generalErrors = errors.filter(function (e) {
-        return (e.attribute === "general");
-      });
-
-    var errorBlock = generalErrors.map(function (error, i) {
-      return (
-        <p key={i} className="text-danger">
-          <strong>{error.message}</strong>
-        </p>
-      );
-    });
+    // TODO refactor global and field-related errors
+    var errorBlock = null;
 
     var modalTitle = "New Application";
     var submitButtonTitle = "+ Create";
@@ -293,14 +324,14 @@ var AppModalComponent = React.createClass({
             <h3 className="modal-title">{modalTitle}</h3>
           </div>
           <div className="modal-body reduced-padding">
-            <FormGroupComponent
-                attribute="id"
-                label="ID"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
+            <StoreFormGroupComponent
+                errorMessage={this.getErrorMessage("appId")}
+                fieldId="appId"
+                value={state.fields.appId}
+                onChange={this.handleChange}
+                label="ID">
               <input autoFocus required />
-            </FormGroupComponent>
+            </StoreFormGroupComponent>
             <div className="row">
               <div className="col-sm-3">
                 <FormGroupComponent
