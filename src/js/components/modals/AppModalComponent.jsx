@@ -4,6 +4,7 @@ var Util = require("../../helpers/Util");
 
 var AppsActions = require("../../actions/AppsActions");
 var AppsEvents = require("../../events/AppsEvents");
+var AppFormStore = require("../../stores/AppFormStore");
 var appScheme = require("../../stores/appScheme");
 var AppsStore = require("../../stores/AppsStore");
 var appValidator = require("../../validators/appValidator");
@@ -65,6 +66,13 @@ var AppModalComponent = React.createClass({
       this.onApplyAppError);
   },
 
+  onApplyAppError: function (error, status, isEditing) {
+    if (!isEditing) {
+      return;
+    }
+    this.onCreateAppError(error, status);
+  },
+
   onCreateApp: function () {
     this.clearValidation();
     this.destroy();
@@ -77,13 +85,6 @@ var AppModalComponent = React.createClass({
       this.clearValidation();
       this.destroy();
     }
-  },
-
-  onApplyAppError: function (error, status, isEditing) {
-    if (!isEditing) {
-      return;
-    }
-    this.onCreateAppError(error, status);
   },
 
   destroy: function () {
