@@ -13,7 +13,6 @@ var CollapsiblePanelComponent =
   require("../../components/CollapsiblePanelComponent");
 var ContainerSettingsComponent =
   require("../../components/ContainerSettingsComponent");
-var FormActions = require("../../actions/FormActions");
 var FormEvents = require("../../events/FormEvents");
 var FormGroupComponent = require("../../components/FormGroupComponent");
 var ModalComponent = require("../../components/ModalComponent");
@@ -163,10 +162,6 @@ var AppModalComponent = React.createClass({
     }
 
     this.setState({errors: errors});
-  },
-
-  handleChange: function (fieldId, value) {
-    FormActions.update(fieldId, value);
   },
 
   // TODO rename : handleSubmit
@@ -328,7 +323,6 @@ var AppModalComponent = React.createClass({
                 errorMessage={this.getErrorMessage("appId")}
                 fieldId="appId"
                 value={state.fields.appId}
-                onChange={this.handleChange}
                 label="ID">
               <input autoFocus required />
             </StoreFormGroupComponent>
