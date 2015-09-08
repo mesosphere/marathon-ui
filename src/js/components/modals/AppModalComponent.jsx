@@ -50,7 +50,6 @@ var AppModalComponent = React.createClass({
   getInitialState: function () {
     return {
       fields: AppFormStore.fields,
-      lastModifiedFieldId: null,
       errorIndices: {}
     };
   },
@@ -107,7 +106,6 @@ var AppModalComponent = React.createClass({
   onFormChange: function (fieldId) {
     this.setState({
       fields: AppFormStore.fields,
-      lastModifiedFieldId: fieldId,
       errorIndices: AppFormStore.validationErrorIndices
     });
   },
