@@ -43,10 +43,7 @@ function insertField(fields, fieldId, index = null, value) {
 function updateField(fields, fieldId, index = null, value) {
   if (fieldId === "env") {
     Util.initKeyValue(fields, "env", []);
-
-    if (fields.env[index] !== undefined) {
-      fields.env[index] = value;
-    }
+    fields.env[index] = value;
   } else {
     fields[fieldId] = value;
   }
@@ -90,7 +87,12 @@ function executeAction(action, setFieldFunction) {
     let errorIndex = getValidationErrorIndex(fieldId, value);
 
     if (errorIndex > -1) {
-      AppFormStore.validationErrorIndices[fieldId] = errorIndex;
+      if (index != null) {
+        Util.initKeyValue(AppFormStore.validationErrorIndices, fieldId, []);
+        AppFormStore.validationErrorIndices[fieldId][index] = errorIndex;
+      } else {
+        AppFormStore.validationErrorIndices[fieldId] = errorIndex;
+      }
       AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
       return;
     }
