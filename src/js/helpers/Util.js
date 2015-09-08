@@ -1,3 +1,5 @@
+var consecutiveNumber = 0;
+
 var Util = {
   param: function (obj) {
     if (typeof obj !== "object" ) {
@@ -149,6 +151,9 @@ var Util = {
     }).filter(function (item) {
       return item != null;
     });
+  },
+  getUniqueId: function () {
+    return ++consecutiveNumber;
   }
 };
 
