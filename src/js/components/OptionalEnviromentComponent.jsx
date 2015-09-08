@@ -1,6 +1,8 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
+var Util = require("../helpers/Util");
+
 var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
 var FormActions = require("../actions/FormActions");
@@ -15,26 +17,64 @@ var OptionalSettingsComponent = React.createClass({
     rows: React.PropTypes.array
   },
 
+  populateInitialConsecutiveKeys: function (rows) {
+    if (rows == null) {
+      return null;
+    }
+
+    return rows.map(function (row) {
+      return {
+        key: row.key,
+        value: row.value,
+        consecutiveKey: row.consecutiveKey != null
+          ? row.consecutiveKey
+          : Util.getUniqueId()
+      };
+    });
+  },
+
+  getInitialState: function () {
+    return {
+      rows: this.populateInitialConsecutiveKeys(this.props.rows)
+    };
+  },
+
+  enforceMinRows: function () {
+    if (this.state.rows == null || this.state.rows.length === 0) {
+      FormActions.insert("env", {
+        key: "",
+        value: "",
+        consecutiveKey: Util.getUniqueId()
+      });
+    }
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({
+      rows: this.populateInitialConsecutiveKeys(nextProps.rows)
+    }, this.enforceMinRows);
+  },
+
+  componentWillMount: function () {
+    this.enforceMinRows();
+  },
+
   handleAddRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
-    // Add a new empty line.
-    var env = this.state.env.concat({key: "", value: ""});
-    this.setState({env: env});
+    FormActions.insert("env", {
+        key: "",
+        value: "",
+        consecutiveKey: Util.getUniqueId()
+      },
+      position
+    );
   },
 
   handleRemoveRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
-    var env = this.state.env.slice();
-    env = env.map(function (value, index) {
-      return value && index !== position;
-    });
-    // If the array is empty we need to add a default object.
-    if (env.filter((exists) => exists).length === 0) {
-      env.push({key: "", value: ""});
-    }
-    this.setState({env: env});
+    FormActions.delete("env", position);
   },
 
   handleChange: function (i) {
@@ -42,7 +82,8 @@ var OptionalSettingsComponent = React.createClass({
 
     var row = {
       key: findDOMNode(this.refs[`envKey${i}`]).value,
-      value: findDOMNode(this.refs[`envValue${i}`]).value
+      value: findDOMNode(this.refs[`envValue${i}`]).value,
+      consecutiveKey: this.state.rows[i].consecutiveKey
     };
 
     FormActions.update("env", row, i);
@@ -65,7 +106,7 @@ var OptionalSettingsComponent = React.createClass({
     return null;
   },
 
-  getEnviromentRow: function (row, i) {
+  getEnviromentRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError(i);
 
     var errorClassSet = classNames({
@@ -73,7 +114,7 @@ var OptionalSettingsComponent = React.createClass({
     });
 
     return (
-      <div key={`env.${i}`} className={errorClassSet}>
+      <div key={row.consecutiveKey} className={errorClassSet}>
         <fieldset
             className="row duplicable-row"
             onChange={this.handleChange.bind(null, i)}>
@@ -93,7 +134,8 @@ var OptionalSettingsComponent = React.createClass({
               <input ref={`envValue${i}`} />
             </StoreFormGroupComponent>
             <DuplicableRowControls
-              handleAddRow={this.handleAddRow.bind(null, i)}
+              disableRemoveButton={disableRemoveButton}
+              handleAddRow={this.handleAddRow.bind(null, i + 1)}
               handleRemoveRow={this.handleRemoveRow.bind(null, i)} />
           </div>
         </fieldset>
@@ -103,14 +145,18 @@ var OptionalSettingsComponent = React.createClass({
   },
 
   getEnviromentRows: function () {
-    var rows = this.props.rows;
+    var rows = this.state.rows;
 
     if (rows == null) {
-      return this.getEnviromentRow({key: "", value: ""}, 0);
+      return null;
     }
 
+    let disableRemoveButton = (rows.length === 1 &&
+      Util.isEmptyString(rows[0].key) &&
+      Util.isEmptyString(rows[0].value));
+
     return rows.map((row, i) => {
-      return this.getEnviromentRow(row, i);
+      return this.getEnviromentRow(row, i, disableRemoveButton);
     });
   },
 
