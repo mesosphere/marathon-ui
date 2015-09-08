@@ -92,6 +92,16 @@ describe("App Form", function () {
           );
         });
 
+        it("deletes a key-value pair", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.env).to.not.have.property("ENV_VALUE_1A");
+            }, done);
+          });
+
+          FormActions.delete("env", 0);
+        });
+
       });
     });
 
