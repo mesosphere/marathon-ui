@@ -13,6 +13,7 @@ var CollapsiblePanelComponent =
   require("../../components/CollapsiblePanelComponent");
 var ContainerSettingsComponent =
   require("../../components/ContainerSettingsComponent");
+var FormActions = require("../../actions/FormActions");
 var FormEvents = require("../../events/FormEvents");
 var FormGroupComponent = require("../../components/FormGroupComponent");
 var ModalComponent = require("../../components/ModalComponent");
@@ -109,6 +110,10 @@ var AppModalComponent = React.createClass({
       lastModifiedFieldId: fieldId,
       errorIndices: AppFormStore.validationErrorIndices
     });
+  },
+
+  handleFieldUpdate: function (fieldId, value) {
+    FormActions.update(fieldId, value);
   },
 
   destroy: function () {
@@ -323,7 +328,8 @@ var AppModalComponent = React.createClass({
                 errorMessage={this.getErrorMessage("appId")}
                 fieldId="appId"
                 value={state.fields.appId}
-                label="ID">
+                label="ID"
+                onChange={this.handleFieldUpdate}>
               <input autoFocus required />
             </StoreFormGroupComponent>
             <div className="row">
@@ -384,7 +390,9 @@ var AppModalComponent = React.createClass({
             </div>
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="Environment variables">
-                <OptionalEnvironmentComponent model={model} errors={errors} />
+                <OptionalEnvironmentComponent
+                  errorIndices={state.errorIndices.env}
+                  rows={state.fields.env} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">

@@ -1,36 +1,18 @@
+var classNames = require("classnames");
 var React = require("react/addons");
 
-var FormGroupComponent = require("../components/FormGroupComponent");
+var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
+var FormActions = require("../actions/FormActions");
+var StoreFormGroupComponent =
+  require("../components/StoreFormGroupComponent");
 
 var OptionalSettingsComponent = React.createClass({
   displayName: "OptionalEnvironmentComponent",
 
   propTypes: {
-    errors: React.PropTypes.array,
-    model: React.PropTypes.object.isRequired
-  },
-
-  getInitialState: function () {
-    /*
-     * env is a representation of `model.env` which is normally an object.
-     * In this component we use an array of objects to represent every line
-     * of environment variables as a default the first line is set with an empty
-     * state of `[{key: "", value: ""}]`.
-     */
-    var env = this.props.model.env;
-    var state = {
-      env: Object.keys(env).map(function (key) {
-        return {
-          key: key,
-          value: env[key]
-        };
-      })
-    };
-    if (state.env.length === 0) {
-      state.env = [{key: "", value: ""}];
-    }
-    return state;
+    errorIndices: React.PropTypes.array,
+    rows: React.PropTypes.array
   },
 
   handleAddRow: function (position, event) {
@@ -55,49 +37,88 @@ var OptionalSettingsComponent = React.createClass({
     this.setState({env: env});
   },
 
-  render: function () {
-    var enviromentRows = this.state.env
-      .map(function (exists, index) {
-        return exists
-          ? this.getEnviromentRow(index)
-          : null;
-      }.bind(this));
+  handleChange: function (i) {
+    var findDOMNode = React.findDOMNode;
+
+    var row = {
+      key: findDOMNode(this.refs[`envKey${i}`]).value,
+      value: findDOMNode(this.refs[`envValue${i}`]).value
+    };
+
+    FormActions.update("env", row, i);
+  },
+
+  getError: function (index) {
+    var errorIndices = this.props.errorIndices;
+    if (errorIndices != null) {
+      let errorIndex = errorIndices[index];
+      if (errorIndex != null) {
+        return (
+          <div className="help-block">
+            <strong>
+              {AppFormErrorMessages.getMessage("env", errorIndex)}
+            </strong>
+          </div>
+        );
+      }
+    }
+    return null;
+  },
+
+  getEnviromentRow: function (row, i) {
+    var error = this.getError(i);
+
+    var errorClassSet = classNames({
+      "has-error": !!error
+    });
 
     return (
-      <div>
-        <div className="duplicable-list">
-            {enviromentRows}
-        </div>
+      <div key={`env.${i}`} className={errorClassSet}>
+        <fieldset
+            className="row duplicable-row"
+            onChange={this.handleChange.bind(null, i)}>
+          <div className="col-sm-6 add-colon">
+            <StoreFormGroupComponent
+              fieldId={`env.key.${i}`}
+              label="Key"
+              value={row.key}>
+              <input ref={`envKey${i}`} />
+            </StoreFormGroupComponent>
+          </div>
+          <div className="col-sm-6">
+            <StoreFormGroupComponent
+              fieldId={`env.value.${i}`}
+              label="Value"
+              value={row.value}>
+              <input ref={`envValue${i}`} />
+            </StoreFormGroupComponent>
+            <DuplicableRowControls
+              handleAddRow={this.handleAddRow.bind(null, i)}
+              handleRemoveRow={this.handleRemoveRow.bind(null, i)} />
+          </div>
+        </fieldset>
+        {error}
       </div>
     );
   },
 
-  getEnviromentRow: function (i = 0) {
-    var errors = this.props.errors;
-    var state = this.state;
+  getEnviromentRows: function () {
+    var rows = this.props.rows;
 
+    if (rows == null) {
+      return this.getEnviromentRow({key: "", value: ""}, 0);
+    }
+
+    return rows.map((row, i) => {
+      return this.getEnviromentRow(row, i);
+    });
+  },
+
+  render: function () {
     return (
-      <div key={`p-${i}`} className="row duplicable-row">
-        <div className="col-sm-6 add-colon">
-          <FormGroupComponent
-            attribute={`env[${i}].key`}
-            label="Key"
-            model={state}
-            errors={errors}>
-            <input />
-          </FormGroupComponent>
-        </div>
-        <div className="col-sm-6">
-          <FormGroupComponent
-            attribute={`env[${i}].value`}
-            label="Value"
-            model={state}
-            errors={errors}>
-            <input />
-          </FormGroupComponent>
-          <DuplicableRowControls
-            handleAddRow={this.handleAddRow.bind(null, i)}
-            handleRemoveRow={this.handleRemoveRow.bind(null, i)} />
+      <div>
+        <div className="duplicable-list">
+          {this.getEnviromentRows()}
         </div>
       </div>
     );

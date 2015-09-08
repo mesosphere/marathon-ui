@@ -1,8 +1,6 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
-var FormActions = require("../actions/FormActions");
-
 var StoreFormGroupComponent = React.createClass({
   displayName: "StoreFormGroupComponent",
 
@@ -12,11 +10,15 @@ var StoreFormGroupComponent = React.createClass({
     errorMessage: React.PropTypes.string,
     fieldId: React.PropTypes.string,
     help: React.PropTypes.string,
-    label: React.PropTypes.string
+    label: React.PropTypes.string,
+    onChange: React.PropTypes.func
   },
 
   handleChange: function (event) {
-    FormActions.update(this.props.fieldId, event.target.value);
+    var props = this.props;
+    if (props.onChange) {
+      props.onChange(this.props.fieldId, event.target.value);
+    }
   },
 
   getError: function () {
