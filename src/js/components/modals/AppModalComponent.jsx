@@ -100,7 +100,10 @@ var AppModalComponent = React.createClass({
   },
 
   onFieldValidationError: function () {
-    this.setState({errorIndices: AppFormStore.validationErrorIndices});
+    this.setState({
+      fields: AppFormStore.fields,
+      errorIndices: AppFormStore.validationErrorIndices
+    });
   },
 
   onFormChange: function (fieldId) {
