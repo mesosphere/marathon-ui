@@ -15,26 +15,27 @@ describe("App Form", function () {
           function (done) {
         AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.validationErrorIndices).to.have.property("appId");
+            expect(AppFormStore.validationErrorIndices)
+              .to.have.property("appId");
             expect(AppFormStore.validationErrorIndices.appId).to.equal(0);
           }, done);
         });
 
-        FormActions.update("appId", "", 1);
+        FormActions.update("appId", "");
       });
 
       it("returns the right error message index for a different error",
           function (done) {
         AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.validationErrorIndices).to.have.property("appId");
+            expect(AppFormStore.validationErrorIndices)
+              .to.have.property("appId");
             expect(AppFormStore.validationErrorIndices.appId).to.equal(1);
           }, done);
         });
 
-        FormActions.update("appId", "/app id", 1);
+        FormActions.update("appId", "/app id");
       });
-
 
     });
 
