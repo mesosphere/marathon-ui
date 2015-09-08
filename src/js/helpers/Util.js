@@ -1,3 +1,5 @@
+var consecutiveNumber = 0;
+
 var Util = {
   serializeArray: function (form) {
     var serialized = [];
@@ -136,6 +138,9 @@ var Util = {
     }).filter(function (item) {
       return item != null;
     });
+  },
+  getUniqueId: function () {
+    return ++consecutiveNumber;
   }
 };
 
