@@ -81,10 +81,11 @@ function executeAction(action, setFieldFunction) {
   const fieldId = action.fieldId;
   const value = action.value;
   const index = action.index;
+  let errorIndex;
 
   // This is not a delete-action
   if (value !== undefined || index == null) {
-    let errorIndex = getValidationErrorIndex(fieldId, value);
+    errorIndex = getValidationErrorIndex(fieldId, value);
 
     if (errorIndex > -1) {
       if (index != null) {
@@ -93,17 +94,19 @@ function executeAction(action, setFieldFunction) {
       } else {
         AppFormStore.validationErrorIndices[fieldId] = errorIndex;
       }
-      AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
-      return;
+    } else {
+      delete AppFormStore.validationErrorIndices[fieldId];
     }
-    delete AppFormStore.validationErrorIndices[fieldId];
   }
 
   setFieldFunction(AppFormStore.fields, fieldId, index, value);
 
-  rebuildModelFromFields(AppFormStore.app, AppFormStore.fields, fieldId);
-
-  AppFormStore.emit(FormEvents.CHANGE, fieldId);
+  if (errorIndex == null) {
+    rebuildModelFromFields(AppFormStore.app, AppFormStore.fields, fieldId);
+    AppFormStore.emit(FormEvents.CHANGE, fieldId);
+  } else {
+    AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
+  }
 }
 
 AppDispatcher.register(function (action) {
