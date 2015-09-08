@@ -81,7 +81,7 @@ function executeAction(action, setFieldFunction) {
   const fieldId = action.fieldId;
   const value = action.value;
   const index = action.index;
-  let errorIndex;
+  let errorIndex = -1;
 
   // This is not a delete-action
   if (value !== undefined || index == null) {
@@ -101,7 +101,7 @@ function executeAction(action, setFieldFunction) {
 
   setFieldFunction(AppFormStore.fields, fieldId, index, value);
 
-  if (errorIndex == null) {
+  if (errorIndex === -1) {
     rebuildModelFromFields(AppFormStore.app, AppFormStore.fields, fieldId);
     AppFormStore.emit(FormEvents.CHANGE, fieldId);
   } else {
