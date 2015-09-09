@@ -1,7 +1,9 @@
 var React = require("react/addons");
 
-var appValidator = require("../validators/appValidator");
-var FormGroupComponent = require("../components/FormGroupComponent");
+var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
+var FormActions = require("../actions/FormActions");
+var StoreFormGroupComponent =
+  require("../components/StoreFormGroupComponent");
 
 var OptionalSettingsComponent = React.createClass({
   displayName: "OptionalSettingsComponent",
@@ -11,19 +13,24 @@ var OptionalSettingsComponent = React.createClass({
     fields: React.PropTypes.object.isRequired
   },
 
-  render: function () {
-    var model = this.props.model;
-    var errors = this.props.errors;
-    var helpMessage = "Comma-separated list of valid constraints. " +
-      "Valid constraint format is \"field:operator[:value]\".";
-    var attr = {};
-
-    if (model.constraints != null) {
-      attr.constraints = model.constraints.map(function (constraint) {
-        return constraint.join(":");
-      });
+  getErrorMessage: function (fieldId) {
+    var props = this.props;
+    var errorIndex = props.errorIndices[fieldId];
+    if (props.errorIndices[fieldId] != null) {
+      return AppFormErrorMessages.getMessage(fieldId, errorIndex);
     }
+    return null;
+  },
 
+  handleFieldUpdate: function (fieldId, value) {
+    FormActions.update(fieldId, value);
+  },
+
+  render: function () {
+    var fields = this.props.fields;
+
+    var contraintsHelp = "Comma-separated list of valid constraints. " +
+      "Valid constraint format is \"field:operator[:value]\".";
     var executorHelp = "Executor must be the string '//cmd', a string " +
       "containing only single slashes ('/'), or blank.";
     var portsHelp = "Comma-separated list of numbers. 0's (zeros) assign " +
