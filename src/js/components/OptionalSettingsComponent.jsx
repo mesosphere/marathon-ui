@@ -64,16 +64,16 @@ var OptionalSettingsComponent = React.createClass({
             onChange={this.handleFieldUpdate}
             value={fields.uris}>
           <input />
-        </FormGroupComponent>
-        <FormGroupComponent
-          attribute="constraints"
-          help={helpMessage}
-          label="Constraints"
-          model={attr}
-          errors={errors}
-          validator={appValidator}>
+        </StoreFormGroupComponent>
+        <StoreFormGroupComponent
+            errorMessage={this.getErrorMessage("constraints")}
+            fieldId="constraints"
+            help={contraintsHelp}
+            label="Constraints"
+            onChange={this.handleFieldUpdate}
+            value={fields.constraints}>
           <input />
-        </FormGroupComponent>
+        </StoreFormGroupComponent>
       </div>
     );
   }
