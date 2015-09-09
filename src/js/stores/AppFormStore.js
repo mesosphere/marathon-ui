@@ -20,7 +20,6 @@ const validationRules = {
 };
 
 const transformationRules = {
-  "appId": AppFormTransforms.appId,
   "cpus": AppFormTransforms.cpus,
   "disk": AppFormTransforms.disk,
   "env": AppFormTransforms.env,
