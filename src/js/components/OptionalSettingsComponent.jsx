@@ -38,13 +38,13 @@ var OptionalSettingsComponent = React.createClass({
 
     return (
       <div>
-        <FormGroupComponent
-          attribute="executor"
-          label="Executor"
-          help={executorHelp}
-          model={model}
-          errors={errors}
-          validator={appValidator}>
+        <StoreFormGroupComponent
+            errorMessage={this.getErrorMessage("executor")}
+            fieldId="executor"
+            help={executorHelp}
+            label="Executor"
+            onChange={this.handleFieldUpdate}
+            value={fields.executor}>
           <input />
         </FormGroupComponent>
         <FormGroupComponent

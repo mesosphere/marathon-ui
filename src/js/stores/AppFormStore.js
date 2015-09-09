@@ -15,6 +15,7 @@ const validationRules = {
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
   "env": [AppFormValidators.env],
+  "executor": [AppFormValidators.executor],
   "instances": [AppFormValidators.instances],
   "mem": [AppFormValidators.mem]
 };
@@ -34,6 +35,7 @@ const resolveMap = {
   disk: "disk",
   instances: "instances",
   env: "env",
+  executor: "executor",
   mem: "mem"
 };
 
