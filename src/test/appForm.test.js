@@ -56,6 +56,43 @@ describe("App Form", function () {
         FormActions.update("appId", "/app-1");
       });
 
+      describe("the cpus field", function () {
+
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.cpus).to.equal(1.1);
+            }, done);
+          });
+
+          FormActions.update("cpus", 1.1);
+        });
+      });
+
+      describe("the disk field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.disk).to.equal(256);
+            }, done);
+          });
+
+          FormActions.update("disk", 256);
+        });
+      });
+
+      describe("the cmd field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.cmd).to.equal("sleep 1");
+            }, done);
+          });
+
+          FormActions.update("cmd", "sleep 1");
+        });
+      });
+
       describe("the env field", function () {
 
         it("inserts a key-value pair", function (done) {
@@ -103,6 +140,31 @@ describe("App Form", function () {
         });
 
       });
+
+      describe("the mem field", function () {
+
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.mem).to.equal(32);
+            }, done);
+          });
+
+          FormActions.update("mem", 32);
+        });
+      });
+
+      describe("the instances field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.instances).to.equal(2);
+            }, done);
+          });
+
+          FormActions.update("instances", 2);
+        });
+      });
     });
 
     describe("the form fields object", function () {
@@ -115,6 +177,45 @@ describe("App Form", function () {
         });
 
         FormActions.update("appId", "/app-1");
+      });
+
+      describe("the cpus field", function () {
+
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+
+              expect(AppFormStore.fields.cpus).to.equal(1.1);
+            }, done);
+          });
+
+          FormActions.update("cpus", 1.1);
+        });
+      });
+
+      describe("the disk field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.disk).to.equal(256);
+            }, done);
+          });
+
+          FormActions.update("disk", 256);
+        });
+      });
+
+      describe("the cmd field", function () {
+
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.cmd).to.equal("sleep 1");
+            }, done);
+          });
+
+          FormActions.update("cmd", "sleep 1");
+        });
       });
 
       describe("the env field", function () {
@@ -181,6 +282,31 @@ describe("App Form", function () {
           });
 
           FormActions.delete("env", 0);
+        });
+      });
+
+      describe("the mem field", function () {
+
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.mem).to.equal(32);
+            }, done);
+          });
+
+          FormActions.update("mem", 32);
+        });
+      });
+
+      describe("the instances field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.instances).to.equal(2);
+            }, done);
+          });
+
+          FormActions.update("instances", 2);
         });
       });
     });

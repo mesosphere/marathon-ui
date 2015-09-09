@@ -3,9 +3,11 @@ const AppFormErrorMessages = {
     "ID must not be empty",
     "ID cannot contain whitespaces"
   ],
-  env: [
-    "Key cannot be blank"
-  ],
+  cpus: ["CPUs must be a non-negative Number"],
+  disk: ["Disk Space must be a non-negative Number"],
+  env: ["Key cannot be blank"],
+  instances: ["Instances must be a non-negative Number"],
+  mem: ["Memory must be a non-negative Number"],
   getMessage: function (fieldId, index = 0) {
     if (this[fieldId] != null && this[fieldId][index] != null) {
       return this[fieldId][index];

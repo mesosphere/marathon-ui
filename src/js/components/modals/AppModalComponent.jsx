@@ -335,55 +335,55 @@ var AppModalComponent = React.createClass({
             </StoreFormGroupComponent>
             <div className="row">
               <div className="col-sm-3">
-                <FormGroupComponent
-                    attribute="cpus"
+                <StoreFormGroupComponent
+                    errorMessage={this.getErrorMessage("cpus")}
+                    fieldId="cpus"
                     label="CPUs"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
-                  <input min="0" step="any" type="number" required />
-                </FormGroupComponent>
+                    value={state.fields.cpus || 0.1}
+                    onChange={this.handleFieldUpdate}>
+                  <input  min="0" step="any" type="number" required />
+                </StoreFormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <FormGroupComponent
-                    attribute="mem"
+                <StoreFormGroupComponent
+                    fieldId="mem"
                     label="Memory (MB)"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
+                    errorMessage={this.getErrorMessage("mem")}
+                    value={state.fields.mem || 16}
+                    onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
-                </FormGroupComponent>
+                </StoreFormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <FormGroupComponent
-                    attribute="disk"
+                <StoreFormGroupComponent
+                    fieldId="disk"
                     label="Disk Space (MB)"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
+                    errorMessage={this.getErrorMessage("disk")}
+                    value={state.fields.disk}
+                    onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
-                </FormGroupComponent>
+                </StoreFormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <FormGroupComponent
-                    attribute="instances"
+                <StoreFormGroupComponent
+                    fieldId="instances"
                     label="Instances"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
+                    errorMessage={this.getErrorMessage("instances")}
+                    value={state.fields.instances}
+                    onChange={this.handleFieldUpdate}>
                   <input min="0" step="1" type="number" required />
-                </FormGroupComponent>
+                </StoreFormGroupComponent>
               </div>
             </div>
-            <FormGroupComponent
-              attribute="cmd"
+            <StoreFormGroupComponent
+              errorMessage={this.getErrorMessage("cmd")}
+              fieldId="cmd"
               label="Command"
               help="May be left blank if a container image is supplied"
-              model={model}
-              errors={errors}
-              validator={appValidator}>
+              value={state.fields.cmd}
+              onChange={this.handleFieldUpdate}>
               <textarea style={{resize: "vertical"}} />
-            </FormGroupComponent>
+            </StoreFormGroupComponent>
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="Docker container settings">
                 <ContainerSettingsComponent model={model} errors={errors} />
