@@ -4,7 +4,8 @@ const AppFormTransforms = {
       memo[row.key] = row.value;
       return memo;
     }, {});
-  }
+  },
+  mem: (value) => parseFloat(value)
 };
 
 module.exports = AppFormTransforms;
