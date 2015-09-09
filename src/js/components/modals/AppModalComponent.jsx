@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 var Util = require("../../helpers/Util");
@@ -281,6 +282,23 @@ var AppModalComponent = React.createClass({
     }
   },
 
+  getSubmitButton: function () {
+    var submitButtonTitle = this.props.edit
+      ? "Change and deploy configuration"
+      : "+ Create";
+
+    var classSet = classNames({
+      "btn btn-success": true,
+      "disabled": !!Object.keys(this.state.errorIndices).length
+    });
+
+    return (
+      <input type="submit"
+          className={classSet}
+          value={submitButtonTitle} />
+    );
+  },
+
   render: function () {
     var props = this.props;
     var model = this.props.attributes;
@@ -291,18 +309,11 @@ var AppModalComponent = React.createClass({
     var errorBlock = null;
 
     var modalTitle = "New Application";
-    var submitButtonTitle = "+ Create";
 
     if (props.edit) {
       modalTitle = "Edit Application";
-      submitButtonTitle = "Change and deploy configuration";
     }
 
-    var submitButton = (
-      <input type="submit"
-          className="btn btn-success"
-          value={submitButtonTitle} />
-      );
     var cancelButton = (
       <button className="btn btn-default"
           type="button"
@@ -405,7 +416,7 @@ var AppModalComponent = React.createClass({
             </div>
             <div className="modal-controls">
               {errorBlock}
-              {submitButton} {cancelButton}
+              {this.getSubmitButton()} {cancelButton}
             </div>
           </div>
         </form>
