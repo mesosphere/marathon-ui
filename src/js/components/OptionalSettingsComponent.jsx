@@ -46,14 +46,14 @@ var OptionalSettingsComponent = React.createClass({
             onChange={this.handleFieldUpdate}
             value={fields.executor}>
           <input />
-        </FormGroupComponent>
-        <FormGroupComponent
-          attribute="ports"
-          help={portsHelp}
-          label="Ports"
-          model={model}
-          errors={errors}
-          validator={appValidator}>
+        </StoreFormGroupComponent>
+        <StoreFormGroupComponent
+            errorMessage={this.getErrorMessage("ports")}
+            fieldId="ports"
+            help={portsHelp}
+            label="Ports"
+            onChange={this.handleFieldUpdate}
+            value={fields.ports}>
           <input />
         </FormGroupComponent>
         <FormGroupComponent

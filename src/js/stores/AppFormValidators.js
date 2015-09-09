@@ -15,7 +15,9 @@ const AppFormValidators = {
   instances: (value) =>
     !Util.isEmptyString(value) && value.toString().match(/^[0-9]+$/),
   mem: (value) =>
-    !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/)
+    !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/),
+  ports: (ports) => Util.isEmptyString(ports) ||
+    ports.toString().match(/^[0-9, ]+$/)
 };
 
 module.exports = AppFormValidators;
