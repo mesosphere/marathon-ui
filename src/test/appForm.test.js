@@ -141,6 +141,18 @@ describe("App Form", function () {
           FormActions.update("mem", 32);
         });
       });
+
+      describe("the instances field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.instances).to.equal(2);
+            }, done);
+          });
+
+          FormActions.update("instances", 2);
+        });
+      });
     });
 
     describe("the form fields object", function () {
@@ -257,6 +269,18 @@ describe("App Form", function () {
           });
 
           FormActions.update("mem", 32);
+        });
+      });
+
+      describe("the instances field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.instances).to.equal(2);
+            }, done);
+          });
+
+          FormActions.update("instances", 2);
         });
       });
     });
