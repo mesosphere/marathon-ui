@@ -335,14 +335,14 @@ var AppModalComponent = React.createClass({
             </StoreFormGroupComponent>
             <div className="row">
               <div className="col-sm-3">
-                <FormGroupComponent
-                    attribute="cpus"
+                <StoreFormGroupComponent
+                    errorMessage={this.getErrorMessage("cpus")}
+                    fieldId="cpus"
                     label="CPUs"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
-                  <input min="0" step="any" type="number" required />
-                </FormGroupComponent>
+                    value={state.fields.cpus || 0.1}
+                    onChange={this.handleFieldUpdate}>
+                  <input  min="0" step="any" type="number" required />
+                </StoreFormGroupComponent>
               </div>
               <div className="col-sm-3">
                 <FormGroupComponent
