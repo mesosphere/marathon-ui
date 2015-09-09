@@ -9,7 +9,7 @@ var FormActions = require("../actions/FormActions");
 var StoreFormGroupComponent =
   require("../components/StoreFormGroupComponent");
 
-var OptionalSettingsComponent = React.createClass({
+var OptionalEnvironmentComponent = React.createClass({
   displayName: "OptionalEnvironmentComponent",
 
   propTypes: {
@@ -171,4 +171,4 @@ var OptionalSettingsComponent = React.createClass({
   }
 });
 
-module.exports = OptionalSettingsComponent;
+module.exports = OptionalEnvironmentComponent;
