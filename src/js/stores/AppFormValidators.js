@@ -5,7 +5,8 @@ const AppFormValidators = {
   appIdNoWhitespaces: (str) => str.match(/ /g) == null,
   env: (obj) =>
     !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
-  mem: (value) => value != null && value.toString().match(/^[0-9]+$/)
+  mem: (value) =>
+    !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/)
 };
 
 module.exports = AppFormValidators;

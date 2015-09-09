@@ -6,7 +6,7 @@ const AppFormTransforms = {
       return memo;
     }, {});
   },
-  mem: (value) => parseInt(value)
+  mem: (value) => parseFloat(value)
 };
 
 module.exports = AppFormTransforms;
