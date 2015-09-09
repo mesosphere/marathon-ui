@@ -12,16 +12,19 @@ const validationRules = {
     AppFormValidators.appIdNotEmpty,
     AppFormValidators.appIdNoWhitespaces
   ],
+  "disk": [AppFormValidators.disk],
   "env": [AppFormValidators.env]
 };
 
 const transformationRules = {
   "appId": AppFormTransforms.appId,
+  "disk": AppFormTransforms.disk,
   "env": AppFormTransforms.env
 };
 
 const resolveMap = {
   appId: "id",
+  disk: "disk",
   env: "env"
 };
 
