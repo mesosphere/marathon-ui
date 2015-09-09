@@ -106,7 +106,7 @@ var AppModalComponent = React.createClass({
     });
   },
 
-  onFormChange: function (fieldId) {
+  onFormChange: function () {
     this.setState({
       fields: AppFormStore.fields,
       errorIndices: AppFormStore.validationErrorIndices
@@ -398,7 +398,9 @@ var AppModalComponent = React.createClass({
             </div>
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="Optional settings">
-                <OptionalSettingsComponent model={model} errors={errors} />
+                <OptionalSettingsComponent
+                  errorIndices={state.errorIndices}
+                  fields={state.fields} />
               </CollapsiblePanelComponent>
             </div>
             <div className="modal-controls">
