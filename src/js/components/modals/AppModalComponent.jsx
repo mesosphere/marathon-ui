@@ -355,14 +355,14 @@ var AppModalComponent = React.createClass({
                 </StoreFormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <FormGroupComponent
-                    attribute="disk"
+                <StoreFormGroupComponent
+                    fieldId="disk"
                     label="Disk Space (MB)"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
+                    errorMessage={this.getErrorMessage("disk")}
+                    value={state.fields.disk}
+                    onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
-                </FormGroupComponent>
+                </StoreFormGroupComponent>
               </div>
               <div className="col-sm-3">
                 <FormGroupComponent
