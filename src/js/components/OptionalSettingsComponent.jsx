@@ -7,8 +7,8 @@ var OptionalSettingsComponent = React.createClass({
   displayName: "OptionalSettingsComponent",
 
   propTypes: {
-    errors: React.PropTypes.array,
-    model: React.PropTypes.object.isRequired
+    errorIndices: React.PropTypes.object.isRequired,
+    fields: React.PropTypes.object.isRequired
   },
 
   render: function () {
