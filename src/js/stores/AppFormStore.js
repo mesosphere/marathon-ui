@@ -30,6 +30,7 @@ const transformationRules = {
 
 const resolveMap = {
   appId: "id",
+  cmd: "cmd",
   cpus: "cpus",
   disk: "disk",
   instances: "instances",

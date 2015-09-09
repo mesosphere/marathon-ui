@@ -81,6 +81,18 @@ describe("App Form", function () {
         });
       });
 
+      describe("the cmd field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.cmd).to.equal("sleep 1");
+            }, done);
+          });
+
+          FormActions.update("cmd", "sleep 1");
+        });
+      });
+
       describe("the env field", function () {
 
         it("inserts a key-value pair", function (done) {
@@ -172,6 +184,7 @@ describe("App Form", function () {
         it("updates correctly", function (done) {
           AppFormStore.once(FormEvents.CHANGE, function () {
             expectAsync(function () {
+
               expect(AppFormStore.fields.cpus).to.equal(1.1);
             }, done);
           });
@@ -189,6 +202,19 @@ describe("App Form", function () {
           });
 
           FormActions.update("disk", 256);
+        });
+      });
+
+      describe("the cmd field", function () {
+
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.cmd).to.equal("sleep 1");
+            }, done);
+          });
+
+          FormActions.update("cmd", "sleep 1");
         });
       });
 
