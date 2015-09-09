@@ -8,7 +8,7 @@ const AppFormValidators = {
     !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/),
   disk: (value) =>
     !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/),
-  constraints: (constraints) => { return constraints
+  constraints: (constraints) => constraints
     .split(",")
     .map((constraint) => constraint.split(":").map((value) => value.trim()))
     .every((p) => {
@@ -16,8 +16,7 @@ const AppFormValidators = {
         return false;
       }
       return ValidConstraints.indexOf(p[1].toLowerCase()) !== -1;
-    });
-  },
+    }),
   env: (obj) =>
     !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
   executor: (str) => Util.isString(str) &&
