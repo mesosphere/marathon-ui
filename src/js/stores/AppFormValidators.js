@@ -11,6 +11,8 @@ const AppFormValidators = {
     !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
   mem: (value) =>
     !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/),
+  disk: (value) =>
+    !Util.isEmptyString(value) && value.toString().match(/^[0-9]\.+$/)
 };
 
 module.exports = AppFormValidators;
