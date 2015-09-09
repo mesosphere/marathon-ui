@@ -26,6 +26,9 @@ const resolveMap = {
 };
 
 function getValidationErrorIndex(fieldId, value) {
+  if (validationRules[fieldId] == null) {
+    return -1;
+  }
   return validationRules[fieldId].findIndex((isValid) =>!isValid(value));
 }
 
