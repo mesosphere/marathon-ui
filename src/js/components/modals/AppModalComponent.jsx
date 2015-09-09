@@ -365,14 +365,14 @@ var AppModalComponent = React.createClass({
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <FormGroupComponent
-                    attribute="instances"
+                <StoreFormGroupComponent
+                    fieldId="instances"
                     label="Instances"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
+                    errorMessage={this.getErrorMessage("instances")}
+                    value={state.fields.instances}
+                    onChange={this.handleFieldUpdate}>
                   <input min="0" step="1" type="number" required />
-                </FormGroupComponent>
+                </StoreFormGroupComponent>
               </div>
             </div>
             <FormGroupComponent
