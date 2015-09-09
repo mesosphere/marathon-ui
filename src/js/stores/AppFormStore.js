@@ -22,6 +22,7 @@ const transformationRules = {
 
 const resolveMap = {
   appId: "id",
+  cmd: "cmd",
   env: "env"
 };
 
