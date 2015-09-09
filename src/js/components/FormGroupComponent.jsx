@@ -1,5 +1,5 @@
 var classNames = require("classnames");
-var objectPath = require("get-object-path");
+var objectPath = require("object-path");
 var React = require("react/addons");
 
 var FormGroupComponent = React.createClass({
@@ -82,7 +82,7 @@ var FormGroupComponent = React.createClass({
         onChange: this.onInputChange,
         defaultValue: child.props.defaultValue != null
           ? child.props.defaultValue
-          : objectPath(state.model, attribute)
+          : objectPath.get(state.model, attribute)
       }
     );
 
