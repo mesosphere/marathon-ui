@@ -27,6 +27,8 @@ const transformationRules = {
   "env": AppFormTransforms.env,
   "instances": AppFormTransforms.instances,
   "mem": AppFormTransforms.mem,
+  "ports": AppFormTransforms.ports,
+  "uris": AppFormTransforms.uris
 };
 
 const resolveMap = {
@@ -38,7 +40,8 @@ const resolveMap = {
   env: "env",
   executor: "executor",
   mem: "mem",
-  ports: "ports"
+  ports: "ports",
+  uris: "uris"
 };
 
 function getValidationErrorIndex(fieldId, value) {

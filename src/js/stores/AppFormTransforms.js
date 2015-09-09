@@ -12,7 +12,11 @@ const AppFormTransforms = {
   ports: (ports) => ports
     .split(",")
     .map((port) => parseInt(port, 10))
-    .filter(Number)
+    .filter(Number),
+  uris: (uris) => uris
+    .split(",")
+    .map((uri) => uri.trim())
+    .filter((uri) => uri != null && uri !== "")
 };
 
 module.exports = AppFormTransforms;
