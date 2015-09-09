@@ -170,7 +170,21 @@ var AppModalComponent = React.createClass({
     this.setState({errors: errors});
   },
 
-  // TODO rename : handleSubmit
+  handleSubmit: function () {
+    event.preventDefault();
+
+    if (!Object.keys(this.state.errorIndices).length) {
+      let app = AppFormStore.app;
+
+      if (this.props.edit) {
+        AppsActions.applySettingsOnApp(app.id, app, true);
+      } else {
+        AppsActions.createApp(app);
+      }
+    }
+  },
+
+  // TODO: delete this completely
   onSubmit: function (event) {
     event.preventDefault();
 
@@ -294,8 +308,8 @@ var AppModalComponent = React.createClass({
 
     return (
       <input type="submit"
-          className={classSet}
-          value={submitButtonTitle} />
+        className={classSet}
+        value={submitButtonTitle} />
     );
   },
 
@@ -328,7 +342,7 @@ var AppModalComponent = React.createClass({
         ref="modalComponent"
         size="md"
         onDestroy={this.props.onDestroy}>
-        <form method="post" role="form" onSubmit={this.onSubmit}>
+        <form method="post" role="form" onSubmit={this.handleSubmit}>
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>
