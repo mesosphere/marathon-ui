@@ -17,7 +17,8 @@ const validationRules = {
   "env": [AppFormValidators.env],
   "executor": [AppFormValidators.executor],
   "instances": [AppFormValidators.instances],
-  "mem": [AppFormValidators.mem]
+  "mem": [AppFormValidators.mem],
+  "ports": [AppFormValidators.ports]
 };
 
 const transformationRules = {
@@ -25,7 +26,7 @@ const transformationRules = {
   "disk": AppFormTransforms.disk,
   "env": AppFormTransforms.env,
   "instances": AppFormTransforms.instances,
-  "mem": AppFormTransforms.mem
+  "mem": AppFormTransforms.mem,
 };
 
 const resolveMap = {
@@ -36,7 +37,8 @@ const resolveMap = {
   instances: "instances",
   env: "env",
   executor: "executor",
-  mem: "mem"
+  mem: "mem",
+  ports: "ports"
 };
 
 function getValidationErrorIndex(fieldId, value) {

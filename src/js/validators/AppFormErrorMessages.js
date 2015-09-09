@@ -9,6 +9,7 @@ const AppFormErrorMessages = {
   executor: ["Invalid executor format"],
   instances: ["Instances must be a non-negative Number"],
   mem: ["Memory must be a non-negative Number"],
+  ports: ["Ports must be a comma-separated list of numbers"],
   getMessage: function (fieldId, index = 0) {
     if (this[fieldId] != null && this[fieldId][index] != null) {
       return this[fieldId][index];

@@ -8,7 +8,11 @@ const AppFormTransforms = {
     }, {});
   },
   instances: (value) => parseInt(value, 10),
-  mem: (value) => parseFloat(value)
+  mem: (value) => parseFloat(value),
+  ports: (ports) => ports
+    .split(",")
+    .map((port) => parseInt(port, 10))
+    .filter(Number)
 };
 
 module.exports = AppFormTransforms;
