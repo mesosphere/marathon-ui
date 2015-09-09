@@ -3,6 +3,9 @@ const AppFormErrorMessages = {
     "ID must not be empty",
     "ID cannot contain whitespaces"
   ],
+  cpus: [
+    "CPUs must be a non-negative Number"
+  ],
   env: [
     "Key cannot be blank"
   ],
