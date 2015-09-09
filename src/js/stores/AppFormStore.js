@@ -15,6 +15,7 @@ const validationRules = {
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
   "env": [AppFormValidators.env],
+  "instances": [AppFormValidators.instances],
   "mem": [AppFormValidators.mem]
 };
 
@@ -23,6 +24,7 @@ const transformationRules = {
   "cpus": AppFormTransforms.cpus,
   "disk": AppFormTransforms.disk,
   "env": AppFormTransforms.env,
+  "instances": AppFormTransforms.instances,
   "mem": AppFormTransforms.mem
 };
 
@@ -30,6 +32,7 @@ const resolveMap = {
   appId: "id",
   cpus: "cpus",
   disk: "disk",
+  instances: "instances",
   env: "env",
   mem: "mem"
 };
