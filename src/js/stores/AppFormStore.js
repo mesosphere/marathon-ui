@@ -12,29 +12,39 @@ const validationRules = {
     AppFormValidators.appIdNotEmpty,
     AppFormValidators.appIdNoWhitespaces
   ],
+  "constraints": [AppFormValidators.constraints],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
   "env": [AppFormValidators.env],
+  "executor": [AppFormValidators.executor],
   "instances": [AppFormValidators.instances],
-  "mem": [AppFormValidators.mem]
+  "mem": [AppFormValidators.mem],
+  "ports": [AppFormValidators.ports]
 };
 
 const transformationRules = {
+  "constraints": AppFormTransforms.constraints,
   "cpus": AppFormTransforms.cpus,
   "disk": AppFormTransforms.disk,
   "env": AppFormTransforms.env,
   "instances": AppFormTransforms.instances,
-  "mem": AppFormTransforms.mem
+  "mem": AppFormTransforms.mem,
+  "ports": AppFormTransforms.ports,
+  "uris": AppFormTransforms.uris
 };
 
 const resolveMap = {
   appId: "id",
   cmd: "cmd",
+  constraints: "constraints",
   cpus: "cpus",
   disk: "disk",
   instances: "instances",
   env: "env",
-  mem: "mem"
+  executor: "executor",
+  mem: "mem",
+  ports: "ports",
+  uris: "uris"
 };
 
 function getValidationErrorIndex(fieldId, value) {

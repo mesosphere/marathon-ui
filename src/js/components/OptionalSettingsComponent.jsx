@@ -1,73 +1,71 @@
 var React = require("react/addons");
 
-var appValidator = require("../validators/appValidator");
-var FormGroupComponent = require("../components/FormGroupComponent");
+var FormActions = require("../actions/FormActions");
+var StoreFormGroupComponent =
+  require("../components/StoreFormGroupComponent");
 
 var OptionalSettingsComponent = React.createClass({
   displayName: "OptionalSettingsComponent",
 
   propTypes: {
-    errors: React.PropTypes.array,
-    model: React.PropTypes.object.isRequired
+    errorIndices: React.PropTypes.object.isRequired,
+    fields: React.PropTypes.object.isRequired,
+    getErrorMessage: React.PropTypes.func.isRequired
+  },
+
+  handleFieldUpdate: function (fieldId, value) {
+    FormActions.update(fieldId, value);
   },
 
   render: function () {
-    var model = this.props.model;
-    var errors = this.props.errors;
-    var helpMessage = "Comma-separated list of valid constraints. " +
+    var props = this.props;
+    var fields = props.fields;
+
+    var contraintsHelp = "Comma-separated list of valid constraints. " +
       "Valid constraint format is \"field:operator[:value]\".";
-    var attr = {};
-
-    if (model.constraints != null) {
-      attr.constraints = model.constraints.map(function (constraint) {
-        return constraint.join(":");
-      });
-    }
-
-    var executorTitle = "Executor must be the string '//cmd', a string " +
+    var executorHelp = "Executor must be the string '//cmd', a string " +
       "containing only single slashes ('/'), or blank.";
     var portsHelp = "Comma-separated list of numbers. 0's (zeros) assign " +
       "random ports. (Default: one random port)";
 
     return (
       <div>
-        <FormGroupComponent
-          attribute="executor"
-          label="Executor"
-          model={model}
-          errors={errors}
-          validator={appValidator}>
-          <input
-            pattern={appValidator.VALID_EXECUTOR_PATTERN}
-            title={executorTitle} />
-        </FormGroupComponent>
-        <FormGroupComponent
-          attribute="ports"
-          help={portsHelp}
-          label="Ports"
-          model={model}
-          errors={errors}
-          validator={appValidator}>
+        <StoreFormGroupComponent
+            errorMessage={props.getErrorMessage("executor")}
+            fieldId="executor"
+            help={executorHelp}
+            label="Executor"
+            onChange={this.handleFieldUpdate}
+            value={fields.executor}>
           <input />
-        </FormGroupComponent>
-        <FormGroupComponent
-          attribute="uris"
-          help="Comma-separated list of valid URIs."
-          label="URIs"
-          model={model}
-          errors={errors}
-          validator={appValidator}>
+        </StoreFormGroupComponent>
+        <StoreFormGroupComponent
+            errorMessage={props.getErrorMessage("ports")}
+            fieldId="ports"
+            help={portsHelp}
+            label="Ports"
+            onChange={this.handleFieldUpdate}
+            value={fields.ports}>
           <input />
-        </FormGroupComponent>
-        <FormGroupComponent
-          attribute="constraints"
-          help={helpMessage}
-          label="Constraints"
-          model={attr}
-          errors={errors}
-          validator={appValidator}>
+        </StoreFormGroupComponent>
+        <StoreFormGroupComponent
+            errorMessage={props.getErrorMessage("uris")}
+            fieldId="uris"
+            help="Comma-separated list of valid URIs."
+            label="URIs"
+            onChange={this.handleFieldUpdate}
+            value={fields.uris}>
           <input />
-        </FormGroupComponent>
+        </StoreFormGroupComponent>
+        <StoreFormGroupComponent
+            errorMessage={props.getErrorMessage("constraints")}
+            fieldId="constraints"
+            help={contraintsHelp}
+            label="Constraints"
+            onChange={this.handleFieldUpdate}
+            value={fields.constraints}>
+          <input />
+        </StoreFormGroupComponent>
       </div>
     );
   }

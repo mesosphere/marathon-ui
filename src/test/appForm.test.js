@@ -165,6 +165,18 @@ describe("App Form", function () {
           FormActions.update("instances", 2);
         });
       });
+
+      describe("the executor field", function () {
+        it("doesn't update on invalid value", function (done) {
+          AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.executor).to.be.undefined;
+            }, done);
+          });
+
+          FormActions.update("executor", "/cmd/");
+        });
+      });
     });
 
     describe("the form fields object", function () {
@@ -307,6 +319,55 @@ describe("App Form", function () {
           });
 
           FormActions.update("instances", 2);
+        });
+      });
+
+      describe("the executor field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.executor).to.equal("//cmd");
+            }, done);
+          });
+
+          FormActions.update("executor", "//cmd");
+        });
+      });
+
+      describe("the ports field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.ports).to.equal("23, 24, 25");
+            }, done);
+          });
+
+          FormActions.update("ports", "23, 24, 25");
+        });
+      });
+
+      describe("the uris field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.uris).to.equal("abc, http://dcfe");
+            }, done);
+          });
+
+          FormActions.update("uris", "abc, http://dcfe");
+        });
+      });
+
+      describe("the constraints field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.contraints).to
+                .equal("hostname:UNIQUE, test:LIKE");
+            }, done);
+          });
+
+          FormActions.update("contraints", "hostname:UNIQUE, test:LIKE");
         });
       });
     });
