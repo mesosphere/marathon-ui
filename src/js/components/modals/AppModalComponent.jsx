@@ -399,7 +399,8 @@ var AppModalComponent = React.createClass({
               <CollapsiblePanelComponent title="Optional settings">
                 <OptionalSettingsComponent
                   errorIndices={state.errorIndices}
-                  fields={state.fields} />
+                  fields={state.fields}
+                  getErrorMessage={this.getErrorMessage} />
               </CollapsiblePanelComponent>
             </div>
             <div className="modal-controls">
