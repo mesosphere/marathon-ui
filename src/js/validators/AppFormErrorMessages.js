@@ -1,7 +1,14 @@
+const ValidConstraints = require("../constants/ValidConstraints");
+
 const AppFormErrorMessages = {
   appId: [
     "ID must not be empty",
     "ID cannot contain whitespaces"
+  ],
+  constraints: [
+    "Invalid constraints format or operator. Supported operators are " +
+    ValidConstraints.map((c) => `'${c}'`).join(", ") +
+    ". See https://mesosphere.github.io/marathon/docs/constraints.html."
   ],
   cpus: ["CPUs must be a non-negative Number"],
   disk: ["Disk Space must be a non-negative Number"],

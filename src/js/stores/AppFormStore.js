@@ -12,6 +12,7 @@ const validationRules = {
     AppFormValidators.appIdNotEmpty,
     AppFormValidators.appIdNoWhitespaces
   ],
+  "constraints": [AppFormValidators.constraints],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
   "env": [AppFormValidators.env],
@@ -22,6 +23,7 @@ const validationRules = {
 };
 
 const transformationRules = {
+  "constraints": AppFormTransforms.constraints,
   "cpus": AppFormTransforms.cpus,
   "disk": AppFormTransforms.disk,
   "env": AppFormTransforms.env,
@@ -34,6 +36,7 @@ const transformationRules = {
 const resolveMap = {
   appId: "id",
   cmd: "cmd",
+  constraints: "constraints",
   cpus: "cpus",
   disk: "disk",
   instances: "instances",

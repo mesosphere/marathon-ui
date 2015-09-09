@@ -1,6 +1,9 @@
 const AppFormTransforms = {
   cpus: (value) => parseFloat(value),
   disk: (value) => parseFloat(value),
+  constraints: (constraints) => constraints
+    .split(",")
+    .map((constraint) => constraint.split(":").map((value) => value.trim())),
   env: (rows) => {
     return rows.reduce((memo, row) => {
       memo[row.key] = row.value;
