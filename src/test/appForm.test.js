@@ -49,7 +49,7 @@ describe("App Form", function () {
       it("updates correctly", function (done) {
         AppFormStore.once(FormEvents.CHANGE, function () {
           expectAsync(function () {
-            expect(AppFormStore.app.id).to.equal("/app-1/transformed");
+            expect(AppFormStore.app.id).to.equal("/app-1");
           }, done);
         });
 
