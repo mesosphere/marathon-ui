@@ -345,14 +345,14 @@ var AppModalComponent = React.createClass({
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <FormGroupComponent
-                    attribute="mem"
+                <StoreFormGroupComponent
+                    fieldId="mem"
                     label="Memory (MB)"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
+                    errorMessage={this.getErrorMessage("mem")}
+                    value={state.fields.mem || 16}
+                    onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
-                </FormGroupComponent>
+                </StoreFormGroupComponent>
               </div>
               <div className="col-sm-3">
                 <FormGroupComponent

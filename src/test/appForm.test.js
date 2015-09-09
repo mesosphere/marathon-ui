@@ -103,6 +103,19 @@ describe("App Form", function () {
         });
 
       });
+
+      describe("the mem field", function () {
+
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.mem).to.equal(32);
+            }, done);
+          });
+
+          FormActions.update("mem", 32);
+        });
+      });
     });
 
     describe("the form fields object", function () {
@@ -181,6 +194,19 @@ describe("App Form", function () {
           });
 
           FormActions.delete("env", 0);
+        });
+      });
+
+      describe("the mem field", function () {
+
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.mem).to.equal(32);
+            }, done);
+          });
+
+          FormActions.update("mem", 32);
         });
       });
     });
