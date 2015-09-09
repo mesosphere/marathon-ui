@@ -165,6 +165,18 @@ describe("App Form", function () {
           FormActions.update("instances", 2);
         });
       });
+
+      describe("the executor field", function () {
+        it("doesn't update on invalid value", function (done) {
+          AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.executor).to.be.undefined;
+            }, done);
+          });
+
+          FormActions.update("executor", "/cmd/");
+        });
+      });
     });
 
     describe("the form fields object", function () {
