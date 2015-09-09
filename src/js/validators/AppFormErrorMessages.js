@@ -6,6 +6,9 @@ const AppFormErrorMessages = {
   env: [
     "Key cannot be blank"
   ],
+  mem: [
+    "Memory must be a non-negative Number"
+  ],
   getMessage: function (fieldId, index = 0) {
     if (this[fieldId] != null && this[fieldId][index] != null) {
       return this[fieldId][index];
