@@ -12,16 +12,19 @@ const validationRules = {
     AppFormValidators.appIdNotEmpty,
     AppFormValidators.appIdNoWhitespaces
   ],
+  "cpus": [AppFormValidators.cpus],
   "env": [AppFormValidators.env]
 };
 
 const transformationRules = {
   "appId": AppFormTransforms.appId,
+  "cpus": AppFormTransforms.cpus,
   "env": AppFormTransforms.env
 };
 
 const resolveMap = {
   appId: "id",
+  cpus: "cpus",
   env: "env"
 };
 
