@@ -13,20 +13,23 @@ const validationRules = {
     AppFormValidators.appIdNoWhitespaces
   ],
   "cpus": [AppFormValidators.cpus],
+  "disk": [AppFormValidators.disk],
   "env": [AppFormValidators.env],
   "mem": [AppFormValidators.mem]
 };
 
 const transformationRules = {
   "appId": AppFormTransforms.appId,
-  "env": AppFormTransforms.env,
   "cpus": AppFormTransforms.cpus,
+  "disk": AppFormTransforms.disk,
+  "env": AppFormTransforms.env,
   "mem": AppFormTransforms.mem
 };
 
 const resolveMap = {
   appId: "id",
   cpus: "cpus",
+  disk: "disk",
   env: "env",
   mem: "mem"
 };

@@ -69,6 +69,18 @@ describe("App Form", function () {
         });
       });
 
+      describe("the disk field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.disk).to.equal(256);
+            }, done);
+          });
+
+          FormActions.update("disk", 256);
+        });
+      });
+
       describe("the env field", function () {
 
         it("inserts a key-value pair", function (done) {
@@ -153,6 +165,18 @@ describe("App Form", function () {
           });
 
           FormActions.update("cpus", 1.1);
+        });
+      });
+
+      describe("the disk field", function () {
+        it("updates correctly", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.fields.disk).to.equal(256);
+            }, done);
+          });
+
+          FormActions.update("disk", 256);
         });
       });
 
