@@ -7,6 +7,7 @@ const AppFormTransforms = {
       return memo;
     }, {});
   },
+  instances: (value) => parseInt(value),
   mem: (value) => parseFloat(value)
 };
 

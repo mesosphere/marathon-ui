@@ -9,6 +9,8 @@ const AppFormValidators = {
     !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/),
   env: (obj) =>
     !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
+  instances: (value) =>
+    !Util.isEmptyString(value) && value.toString().match(/^[0-9]+$/),
   mem: (value) =>
     !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/)
 };
