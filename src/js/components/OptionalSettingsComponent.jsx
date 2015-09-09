@@ -1,6 +1,5 @@
 var React = require("react/addons");
 
-var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
 var FormActions = require("../actions/FormActions");
 var StoreFormGroupComponent =
   require("../components/StoreFormGroupComponent");
@@ -10,16 +9,8 @@ var OptionalSettingsComponent = React.createClass({
 
   propTypes: {
     errorIndices: React.PropTypes.object.isRequired,
-    fields: React.PropTypes.object.isRequired
-  },
-
-  getErrorMessage: function (fieldId) {
-    var props = this.props;
-    var errorIndex = props.errorIndices[fieldId];
-    if (props.errorIndices[fieldId] != null) {
-      return AppFormErrorMessages.getMessage(fieldId, errorIndex);
-    }
-    return null;
+    fields: React.PropTypes.object.isRequired,
+    getErrorMessage: React.PropTypes.func.isRequired
   },
 
   handleFieldUpdate: function (fieldId, value) {
@@ -27,7 +18,8 @@ var OptionalSettingsComponent = React.createClass({
   },
 
   render: function () {
-    var fields = this.props.fields;
+    var props = this.props;
+    var fields = props.fields;
 
     var contraintsHelp = "Comma-separated list of valid constraints. " +
       "Valid constraint format is \"field:operator[:value]\".";
@@ -39,7 +31,7 @@ var OptionalSettingsComponent = React.createClass({
     return (
       <div>
         <StoreFormGroupComponent
-            errorMessage={this.getErrorMessage("executor")}
+            errorMessage={props.getErrorMessage("executor")}
             fieldId="executor"
             help={executorHelp}
             label="Executor"
@@ -48,7 +40,7 @@ var OptionalSettingsComponent = React.createClass({
           <input />
         </StoreFormGroupComponent>
         <StoreFormGroupComponent
-            errorMessage={this.getErrorMessage("ports")}
+            errorMessage={props.getErrorMessage("ports")}
             fieldId="ports"
             help={portsHelp}
             label="Ports"
@@ -57,7 +49,7 @@ var OptionalSettingsComponent = React.createClass({
           <input />
         </StoreFormGroupComponent>
         <StoreFormGroupComponent
-            errorMessage={this.getErrorMessage("uris")}
+            errorMessage={props.getErrorMessage("uris")}
             fieldId="uris"
             help="Comma-separated list of valid URIs."
             label="URIs"
@@ -66,7 +58,7 @@ var OptionalSettingsComponent = React.createClass({
           <input />
         </StoreFormGroupComponent>
         <StoreFormGroupComponent
-            errorMessage={this.getErrorMessage("constraints")}
+            errorMessage={props.getErrorMessage("constraints")}
             fieldId="constraints"
             help={contraintsHelp}
             label="Constraints"
