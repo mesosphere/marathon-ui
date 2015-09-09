@@ -29,17 +29,6 @@ const validationRules = {
   "ports": [AppFormValidators.ports]
 };
 
-const transformationRules = {
-  "constraints": AppFormTransforms.constraints,
-  "cpus": AppFormTransforms.cpus,
-  "disk": AppFormTransforms.disk,
-  "env": AppFormTransforms.env,
-  "instances": AppFormTransforms.instances,
-  "mem": AppFormTransforms.mem,
-  "ports": AppFormTransforms.ports,
-  "uris": AppFormTransforms.uris
-};
-
 const resolveMap = {
   appId: "id",
   cmd: "cmd",
@@ -88,7 +77,7 @@ function deleteField(fields, fieldId, index) {
 }
 
 function getTransformedField(fieldId, value) {
-  const transform = transformationRules[fieldId];
+  const transform = AppFormTransforms[fieldId];
   if (transform == null) {
     return value;
   }
