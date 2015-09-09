@@ -24,7 +24,7 @@ var OptionalSettingsComponent = React.createClass({
       });
     }
 
-    var executorTitle = "Executor must be the string '//cmd', a string " +
+    var executorHelp = "Executor must be the string '//cmd', a string " +
       "containing only single slashes ('/'), or blank.";
     var portsHelp = "Comma-separated list of numbers. 0's (zeros) assign " +
       "random ports. (Default: one random port)";
@@ -34,12 +34,11 @@ var OptionalSettingsComponent = React.createClass({
         <FormGroupComponent
           attribute="executor"
           label="Executor"
+          help={executorHelp}
           model={model}
           errors={errors}
           validator={appValidator}>
-          <input
-            pattern={appValidator.VALID_EXECUTOR_PATTERN}
-            title={executorTitle} />
+          <input />
         </FormGroupComponent>
         <FormGroupComponent
           attribute="ports"
