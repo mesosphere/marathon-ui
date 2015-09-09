@@ -48,6 +48,8 @@ var AppModalComponent = React.createClass({
   },
 
   getInitialState: function () {
+    AppFormStore.initAndReset();
+
     return {
       fields: AppFormStore.fields,
       errorIndices: {}
@@ -363,7 +365,7 @@ var AppModalComponent = React.createClass({
                     errorMessage={this.getErrorMessage("cpus")}
                     fieldId="cpus"
                     label="CPUs"
-                    value={state.fields.cpus || 0.1}
+                    value={state.fields.cpus}
                     onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
                 </StoreFormGroupComponent>
@@ -373,7 +375,7 @@ var AppModalComponent = React.createClass({
                     fieldId="mem"
                     label="Memory (MB)"
                     errorMessage={this.getErrorMessage("mem")}
-                    value={state.fields.mem || 16}
+                    value={state.fields.mem}
                     onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
                 </StoreFormGroupComponent>

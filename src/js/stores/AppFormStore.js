@@ -7,6 +7,13 @@ var AppFormTransforms = require("./AppFormTransforms");
 var AppFormValidators = require("./AppFormValidators");
 var FormEvents = require("../events/FormEvents");
 
+const defaultFieldValues = Object.freeze({
+  cpus: 0.1,
+  mem: 16,
+  disk: 0,
+  instances: 1
+});
+
 const validationRules = {
   "appId": [
     AppFormValidators.appIdNotEmpty,
@@ -99,7 +106,17 @@ function rebuildModelFromFields(app, fields, fieldId) {
 var AppFormStore = lazy(EventEmitter.prototype).extend({
   app: {},
   fields: {},
-  validationErrorIndices: {}
+  validationErrorIndices: {},
+  initAndReset: function () {
+    this.app = {};
+    this.fields = {};
+    this.validationErrorIndices = {};
+
+    Object.keys(defaultFieldValues).forEach((fieldId) => {
+      this.fields[fieldId] = defaultFieldValues[fieldId];
+      rebuildModelFromFields(this.app, this.fields, fieldId);
+    });
+  }
 }).value();
 
 function executeAction(action, setFieldFunction) {
