@@ -15,7 +15,6 @@ var ContainerSettingsComponent =
   require("../../components/ContainerSettingsComponent");
 var FormActions = require("../../actions/FormActions");
 var FormEvents = require("../../events/FormEvents");
-var FormGroupComponent = require("../../components/FormGroupComponent");
 var ModalComponent = require("../../components/ModalComponent");
 var OptionalEnvironmentComponent =
   require("../../components/OptionalEnviromentComponent");
@@ -341,7 +340,7 @@ var AppModalComponent = React.createClass({
                     label="CPUs"
                     value={state.fields.cpus || 0.1}
                     onChange={this.handleFieldUpdate}>
-                  <input  min="0" step="any" type="number" required />
+                  <input min="0" step="any" type="number" required />
                 </StoreFormGroupComponent>
               </div>
               <div className="col-sm-3">
