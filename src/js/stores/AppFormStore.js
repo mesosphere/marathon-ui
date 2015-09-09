@@ -12,17 +12,20 @@ const validationRules = {
     AppFormValidators.appIdNotEmpty,
     AppFormValidators.appIdNoWhitespaces
   ],
-  "env": [AppFormValidators.env]
+  "env": [AppFormValidators.env],
+  "instances": [AppFormValidators.instances]
 };
 
 const transformationRules = {
   "appId": AppFormTransforms.appId,
-  "env": AppFormTransforms.env
+  "env": AppFormTransforms.env,
+  "instances": AppFormTransforms.instances
 };
 
 const resolveMap = {
   appId: "id",
-  env: "env"
+  env: "env",
+  instances: "instances"
 };
 
 function getValidationErrorIndex(fieldId, value) {
