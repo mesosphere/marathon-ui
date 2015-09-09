@@ -375,15 +375,15 @@ var AppModalComponent = React.createClass({
                 </StoreFormGroupComponent>
               </div>
             </div>
-            <FormGroupComponent
-              attribute="cmd"
+            <StoreFormGroupComponent
+              errorMessage={this.getErrorMessage("cmd")}
+              fieldId="cmd"
               label="Command"
               help="May be left blank if a container image is supplied"
-              model={model}
-              errors={errors}
-              validator={appValidator}>
+              value={state.fields.cmd}
+              onChange={this.handleFieldUpdate}>
               <textarea style={{resize: "vertical"}} />
-            </FormGroupComponent>
+            </StoreFormGroupComponent>
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="Docker container settings">
                 <ContainerSettingsComponent model={model} errors={errors} />
