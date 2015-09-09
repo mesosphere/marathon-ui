@@ -3380,10 +3380,6 @@
       "version": "2.0.3",
       "resolved": "https://registry.npmjs.org/flux/-/flux-2.0.3.tgz"
     },
-    "get-object-path": {
-      "version": "0.0.2",
-      "resolved": "https://registry.npmjs.org/get-object-path/-/get-object-path-0.0.2.tgz"
-    },
     "gulp": {
       "version": "3.9.0",
       "resolved": "https://registry.npmjs.org/gulp/-/gulp-3.9.0.tgz",
@@ -6388,15 +6384,15 @@
             },
             "inherits": {
               "version": "2.0.1",
-              "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
+              "resolved": "http://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
             },
             "minimatch": {
               "version": "0.2.14",
-              "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz",
+              "resolved": "http://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz",
               "dependencies": {
                 "lru-cache": {
-                  "version": "2.6.4",
-                  "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.6.4.tgz"
+                  "version": "2.6.5",
+                  "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.6.5.tgz"
                 },
                 "sigmund": {
                   "version": "1.0.1",
@@ -7297,6 +7293,10 @@
           "resolved": "https://registry.npmjs.org/string-template/-/string-template-0.2.1.tgz"
         }
       }
+    },
+    "object-path": {
+      "version": "0.9.2",
+      "resolved": "https://registry.npmjs.org/object-path/-/object-path-0.9.2.tgz"
     },
     "oboe": {
       "version": "2.1.2",
