@@ -237,6 +237,12 @@ AppsStore.on(AppsEvents.CREATE_APP_ERROR, function (data, status) {
 AppsStore.on(AppsEvents.APPLY_APP_ERROR, function (data, isEditing, status) {
   onAppsErrorResponse(data, status);
 });
+AppsStore.on(AppsEvents.CREATE_APP, function () {
+  AppFormStore.responseErrors = {};
+});
+AppsStore.on(AppsEvents.APPLY_APP, function () {
+  AppFormStore.responseErrors = {};
+});
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
