@@ -46,7 +46,7 @@ const validationRules = {
   "ports": [AppFormValidators.ports]
 };
 
-const resolveMap = {
+const resolveFieldIdToAppKeyMap = {
   appId: "id",
   cmd: "cmd",
   constraints: "constraints",
@@ -129,7 +129,7 @@ function getTransformedField(fieldId, value) {
 }
 
 function rebuildModelFromFields(app, fields, fieldId) {
-  const key = resolveMap[fieldId];
+  const key = resolveFieldIdToAppKeyMap[fieldId];
   if (key) {
     let field = getTransformedField(fieldId, fields[fieldId]);
     if (field != null) {
@@ -175,6 +175,17 @@ function processResponseErrors(responseErrors, response, statusCode) {
   }
 }
 
+function populateFieldsByModel(app, fields) {
+  Object.keys(app).forEach((appKey) => {
+    var fieldId = resolveAppKeyToFieldIdMap[appKey];
+    if (fieldId == null) {
+      fieldId = appKey;
+    }
+    fields[fieldId] = app[appKey];
+  });
+  console.log("f", fields);
+}
+
 var AppFormStore = lazy(EventEmitter.prototype).extend({
   app: {},
   fields: {},
@@ -189,6 +200,10 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
       this.fields[fieldId] = defaultFieldValues[fieldId];
       rebuildModelFromFields(this.app, this.fields, fieldId);
     });
+  },
+  populateFieldsFromAppDefinition: function (app) {
+    this.app = app;
+    populateFieldsByModel(app, this.fields);
   }
 }).value();
 
