@@ -93,7 +93,7 @@ var AppModalComponent = React.createClass({
   },
 
   onCreateAppError: function (data, status) {
-    // This is actually not an error
+    // All status below 300 are actually not an error
     if (status < 300) {
       this.onCreateApp();
 
