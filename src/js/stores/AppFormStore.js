@@ -1,5 +1,6 @@
 var EventEmitter = require("events").EventEmitter;
 var lazy = require("lazy.js");
+var objectPath = require("object-path");
 var Util = require("../helpers/Util");
 
 var AppDispatcher = require("../AppDispatcher");
@@ -88,7 +89,7 @@ function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveMap[fieldId];
   if (key) {
     let field = getTransformedField(fieldId, fields[fieldId]);
-    app[key] = field;
+    objectPath.set(app, key, field);
   }
 }
 
