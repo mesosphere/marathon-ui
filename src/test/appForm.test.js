@@ -3,7 +3,18 @@ var expect = require("chai").expect;
 var expectAsync = require("./helpers/expectAsync");
 var FormActions = require("../js/actions/FormActions");
 var FormEvents = require("../js/events/FormEvents");
+var AppsActions = require("../js/actions/AppsActions");
+var AppsEvents = require("../js/events/AppsEvents");
+var AppsStore = require("../js/stores/AppsStore");
+var AppFormErrorMessages = require("../js/validators/AppFormErrorMessages");
 var AppFormStore = require("../js/stores/AppFormStore");
+
+var config = require("../js/config/config");
+
+var HttpServer = require("./helpers/HttpServer").HttpServer;
+
+var server = new HttpServer(config.localTestserverURI);
+config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("App Form", function () {
 
@@ -629,6 +640,128 @@ describe("App Form", function () {
           FormActions.update("contraints", "hostname:UNIQUE, test:LIKE");
         });
       });
+    });
+
+  });
+
+  describe("on server response errors", function () {
+
+    before(function (done) {
+      this.server = server
+      .setup({}, 200)
+      .start(done);
+    });
+
+    after(function (done) {
+      this.server.stop(done);
+    });
+
+    describe("App form store", function () {
+
+      it("processes array of details on code 400", function (done) {
+        this.server.setup({
+          details: [{
+            "path": "/instances",
+            "errors": [
+              "error.expected.jsnumber"
+            ]
+          }]
+        }, 400);
+
+        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+          expectAsync(function () {
+            expect(AppFormStore.responseErrors.instances)
+              .to.equal("error.expected.jsnumber");
+          }, done);
+        });
+
+        AppsActions.createApp({
+          instances: "many"
+        });
+      });
+
+      it("processes array of errors on code 422", function (done) {
+        this.server.setup({
+          errors: [{
+            "attribute": "id",
+            "error": "error on id attribute"
+          }]
+        }, 422);
+
+        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+          expectAsync(function () {
+            expect(AppFormStore.responseErrors.appId)
+              .to.equal("error on id attribute");
+          }, done);
+        });
+
+        AppsActions.createApp({
+          id: "bad id"
+        });
+      });
+
+      it("processes error message on code 409", function (done) {
+        this.server.setup({
+          "message": "bad error"
+        }, 409);
+
+        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+          expectAsync(function () {
+            expect(AppFormStore.responseErrors.general)
+              .to.equal(`${AppFormErrorMessages.general[2]} bad error`);
+          }, done);
+        });
+
+        AppsActions.createApp({
+          "howdy": "partner"
+        });
+      });
+
+      it("sets general error on codes 300 to 499", function (done) {
+        this.server.setup("something strange", 315);
+
+        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+          expectAsync(function () {
+            expect(AppFormStore.responseErrors.general)
+              .to.equal(AppFormErrorMessages.general[0]);
+          }, done);
+        });
+
+        AppsActions.createApp({
+          "howdy": "partner"
+        });
+      });
+
+      it("sets unknown error on codes >= 500", function (done) {
+        this.server.setup("something strange with the server", 500);
+
+        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+          expectAsync(function () {
+            expect(AppFormStore.responseErrors.general)
+              .to.equal(AppFormErrorMessages.general[1]);
+          }, done);
+        });
+
+        AppsActions.createApp({
+          "howdy": "partner"
+        });
+      });
+
+      it("has no response errors on success", function (done) {
+        this.server.setup({id: "/app-1"}, 200);
+
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(Object.keys(AppFormStore.responseErrors).length)
+              .to.equal(0);
+          }, done);
+        });
+
+        AppsActions.createApp({
+          "id": "/app-1"
+        });
+      });
+
     });
 
   });
