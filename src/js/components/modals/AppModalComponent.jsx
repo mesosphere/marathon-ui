@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 var Util = require("../../helpers/Util");
@@ -47,6 +48,8 @@ var AppModalComponent = React.createClass({
   },
 
   getInitialState: function () {
+    AppFormStore.initAndReset();
+
     return {
       fields: AppFormStore.fields,
       errorIndices: {}
@@ -169,7 +172,21 @@ var AppModalComponent = React.createClass({
     this.setState({errors: errors});
   },
 
-  // TODO rename : handleSubmit
+  handleSubmit: function () {
+    event.preventDefault();
+
+    if (!Object.keys(this.state.errorIndices).length) {
+      let app = AppFormStore.app;
+
+      if (this.props.edit) {
+        AppsActions.applySettingsOnApp(app.id, app, true);
+      } else {
+        AppsActions.createApp(app);
+      }
+    }
+  },
+
+  // TODO: delete this completely
   onSubmit: function (event) {
     event.preventDefault();
 
@@ -281,6 +298,23 @@ var AppModalComponent = React.createClass({
     }
   },
 
+  getSubmitButton: function () {
+    var submitButtonTitle = this.props.edit
+      ? "Change and deploy configuration"
+      : "+ Create";
+
+    var classSet = classNames({
+      "btn btn-success": true,
+      "disabled": !!Object.keys(this.state.errorIndices).length
+    });
+
+    return (
+      <input type="submit"
+        className={classSet}
+        value={submitButtonTitle} />
+    );
+  },
+
   render: function () {
     var props = this.props;
     var model = this.props.attributes;
@@ -291,18 +325,11 @@ var AppModalComponent = React.createClass({
     var errorBlock = null;
 
     var modalTitle = "New Application";
-    var submitButtonTitle = "+ Create";
 
     if (props.edit) {
       modalTitle = "Edit Application";
-      submitButtonTitle = "Change and deploy configuration";
     }
 
-    var submitButton = (
-      <input type="submit"
-          className="btn btn-success"
-          value={submitButtonTitle} />
-      );
     var cancelButton = (
       <button className="btn btn-default"
           type="button"
@@ -317,7 +344,7 @@ var AppModalComponent = React.createClass({
         ref="modalComponent"
         size="md"
         onDestroy={this.props.onDestroy}>
-        <form method="post" role="form" onSubmit={this.onSubmit}>
+        <form method="post" role="form" onSubmit={this.handleSubmit}>
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>
@@ -338,7 +365,7 @@ var AppModalComponent = React.createClass({
                     errorMessage={this.getErrorMessage("cpus")}
                     fieldId="cpus"
                     label="CPUs"
-                    value={state.fields.cpus || 0.1}
+                    value={state.fields.cpus}
                     onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
                 </StoreFormGroupComponent>
@@ -348,7 +375,7 @@ var AppModalComponent = React.createClass({
                     fieldId="mem"
                     label="Memory (MB)"
                     errorMessage={this.getErrorMessage("mem")}
-                    value={state.fields.mem || 16}
+                    value={state.fields.mem}
                     onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
                 </StoreFormGroupComponent>
@@ -405,7 +432,7 @@ var AppModalComponent = React.createClass({
             </div>
             <div className="modal-controls">
               {errorBlock}
-              {submitButton} {cancelButton}
+              {this.getSubmitButton()} {cancelButton}
             </div>
           </div>
         </form>

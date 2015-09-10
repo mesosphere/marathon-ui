@@ -7,6 +7,13 @@ var AppFormTransforms = require("./AppFormTransforms");
 var AppFormValidators = require("./AppFormValidators");
 var FormEvents = require("../events/FormEvents");
 
+const defaultFieldValues = Object.freeze({
+  cpus: 0.1,
+  mem: 16,
+  disk: 0,
+  instances: 1
+});
+
 const validationRules = {
   "appId": [
     AppFormValidators.appIdNotEmpty,
@@ -20,17 +27,6 @@ const validationRules = {
   "instances": [AppFormValidators.instances],
   "mem": [AppFormValidators.mem],
   "ports": [AppFormValidators.ports]
-};
-
-const transformationRules = {
-  "constraints": AppFormTransforms.constraints,
-  "cpus": AppFormTransforms.cpus,
-  "disk": AppFormTransforms.disk,
-  "env": AppFormTransforms.env,
-  "instances": AppFormTransforms.instances,
-  "mem": AppFormTransforms.mem,
-  "ports": AppFormTransforms.ports,
-  "uris": AppFormTransforms.uris
 };
 
 const resolveMap = {
@@ -81,7 +77,7 @@ function deleteField(fields, fieldId, index) {
 }
 
 function getTransformedField(fieldId, value) {
-  const transform = transformationRules[fieldId];
+  const transform = AppFormTransforms[fieldId];
   if (transform == null) {
     return value;
   }
@@ -99,7 +95,17 @@ function rebuildModelFromFields(app, fields, fieldId) {
 var AppFormStore = lazy(EventEmitter.prototype).extend({
   app: {},
   fields: {},
-  validationErrorIndices: {}
+  validationErrorIndices: {},
+  initAndReset: function () {
+    this.app = {};
+    this.fields = {};
+    this.validationErrorIndices = {};
+
+    Object.keys(defaultFieldValues).forEach((fieldId) => {
+      this.fields[fieldId] = defaultFieldValues[fieldId];
+      rebuildModelFromFields(this.app, this.fields, fieldId);
+    });
+  }
 }).value();
 
 function executeAction(action, setFieldFunction) {
