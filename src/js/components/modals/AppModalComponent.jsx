@@ -28,26 +28,31 @@ var AppModalComponent = React.createClass({
   displayName: "AppModalComponent",
 
   propTypes: {
+    app: React.PropTypes.object,
     attributes: React.PropTypes.object,
-    edit: React.PropTypes.bool,
     onDestroy: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
+      app: null,
       attributes: lazy(appScheme).extend({
         cpus: 0.1,
         instances: 1,
         mem: 16.0,
         disk: 0.0
       }).value(),
-      edit: false,
       onDestroy: Util.noop
     };
   },
 
   getInitialState: function () {
+    var app = this.props.app;
     AppFormStore.initAndReset();
+
+    if (app != null) {
+      AppFormStore.populateFieldsFromAppDefinition(app);
+    }
 
     return {
       fields: AppFormStore.fields,
@@ -150,7 +155,7 @@ var AppModalComponent = React.createClass({
     if (!Object.keys(this.state.errorIndices).length) {
       let app = AppFormStore.app;
 
-      if (this.props.edit) {
+      if (this.props.app != null) {
         AppsActions.applySettingsOnApp(app.id, app, true);
       } else {
         AppsActions.createApp(app);
@@ -285,7 +290,7 @@ var AppModalComponent = React.createClass({
   },
 
   getSubmitButton: function () {
-    var submitButtonTitle = this.props.edit
+    var submitButtonTitle = this.props.app != null
       ? "Change and deploy configuration"
       : "+ Create";
 
@@ -307,7 +312,7 @@ var AppModalComponent = React.createClass({
 
     var modalTitle = "New Application";
 
-    if (props.edit) {
+    if (props.app != null) {
       modalTitle = "Edit Application";
     }
 
