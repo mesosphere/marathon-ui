@@ -23,7 +23,6 @@ var OptionalSettingsComponent =
   require("../../components/OptionalSettingsComponent");
 var StoreFormGroupComponent =
   require("../../components/StoreFormGroupComponent");
-var ValidationError = require("../../validators/ValidationError");
 
 var AppModalComponent = React.createClass({
   displayName: "AppModalComponent",
@@ -52,7 +51,8 @@ var AppModalComponent = React.createClass({
 
     return {
       fields: AppFormStore.fields,
-      errorIndices: {}
+      errorIndices: {},
+      responseErrorMessages: {}
     };
   },
 
@@ -93,11 +93,14 @@ var AppModalComponent = React.createClass({
   },
 
   onCreateAppError: function (data, status) {
-    this.validateResponse(data, status);
-
+    // This is actually not an error
     if (status < 300) {
-      this.clearValidation();
-      this.destroy();
+      this.onCreateApp();
+
+    } else {
+      this.setState({
+        responseErrorMessages: AppFormStore.responseErrors
+      });
     }
   },
 
@@ -135,44 +138,13 @@ var AppModalComponent = React.createClass({
     if (state.errorIndices[fieldId] != null) {
       return AppFormErrorMessages.getMessage(fieldId, errorIndex);
     }
+    if (state.responseErrorMessages[fieldId] != null) {
+      return state.responseErrorMessages[fieldId];
+    }
     return null;
   },
 
-  validateResponse: function (response, status) {
-    var errors;
-
-    if (status === 422 && response != null &&
-        Util.isArray(response.errors)) {
-      errors = response.errors.map(function (e) {
-        return new ValidationError(
-          // Errors that affect multiple attributes provide a blank string. In
-          // that case, count it as a "general" error.
-          e.attribute.length < 1 ? "general" : e.attribute,
-          e.error
-        );
-      });
-    } else if (status === 409 && response != null &&
-        response.message !== undefined) {
-      errors = [
-        new ValidationError("general", `Error: ${response.message}`)
-      ];
-    } else if (status >= 500) {
-      errors = [
-        new ValidationError("general", "Server error, could not create app.")
-      ];
-    } else {
-      errors = [
-        new ValidationError(
-          "general",
-          "App creation unsuccessful. Check your app settings and try again."
-        )
-      ];
-    }
-
-    this.setState({errors: errors});
-  },
-
-  handleSubmit: function () {
+  handleSubmit: function (event) {
     event.preventDefault();
 
     if (!Object.keys(this.state.errorIndices).length) {
@@ -298,6 +270,20 @@ var AppModalComponent = React.createClass({
     }
   },
 
+  getGeneralErrorBlock: function () {
+    var error = this.getErrorMessage("general");
+
+    if (error == null) {
+      return null;
+    }
+
+    return (
+      <p className="text-danger">
+        <strong>{error}</strong>
+      </p>
+    );
+  },
+
   getSubmitButton: function () {
     var submitButtonTitle = this.props.edit
       ? "Change and deploy configuration"
@@ -318,9 +304,6 @@ var AppModalComponent = React.createClass({
   render: function () {
     var props = this.props;
     var state = this.state;
-
-    // TODO refactor global and field-related errors
-    var errorBlock = null;
 
     var modalTitle = "New Application";
 
@@ -420,6 +403,7 @@ var AppModalComponent = React.createClass({
               <CollapsiblePanelComponent title="Environment variables">
                 <OptionalEnvironmentComponent
                   errorIndices={state.errorIndices.env}
+                  generalError={this.getErrorMessage("env")}
                   rows={state.fields.env} />
               </CollapsiblePanelComponent>
             </div>
@@ -432,7 +416,7 @@ var AppModalComponent = React.createClass({
               </CollapsiblePanelComponent>
             </div>
             <div className="modal-controls">
-              {errorBlock}
+              {this.getGeneralErrorBlock()}
               {this.getSubmitButton()} {cancelButton}
             </div>
           </div>
