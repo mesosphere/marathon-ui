@@ -9,7 +9,6 @@ var AppFormErrorMessages = require("../../validators/AppFormErrorMessages");
 var AppFormStore = require("../../stores/AppFormStore");
 var appScheme = require("../../stores/appScheme");
 var AppsStore = require("../../stores/AppsStore");
-var appValidator = require("../../validators/appValidator");
 var CollapsiblePanelComponent =
   require("../../components/CollapsiblePanelComponent");
 var ContainerSettingsComponent =
@@ -159,118 +158,6 @@ var AppModalComponent = React.createClass({
         AppsActions.applySettingsOnApp(app.id, app, true);
       } else {
         AppsActions.createApp(app);
-      }
-    }
-  },
-
-  // TODO: delete this completely
-  onSubmit: function (event) {
-    event.preventDefault();
-
-    var props = this.props;
-
-    // null-values must be treated as null to let the app model untouched.
-
-    var attrArray = Util.serializeArray(event.target)
-      .filter((key) => key.name !== "");
-
-    var modelAttrs = Util.serializedArrayToDictionary(attrArray);
-
-    // URIs should be an Array of Strings.
-    if ("uris" in modelAttrs) {
-      if (modelAttrs.uris === "") {
-        modelAttrs.uris = [];
-      } else {
-        modelAttrs.uris = lazy(modelAttrs.uris.split(",")).map(function (uri) {
-          return uri.trim();
-        }).compact().value();
-      }
-    }
-
-    // Constraints should be an Array of Strings.
-    if ("constraints" in modelAttrs) {
-      if (modelAttrs.constraints === "") {
-        modelAttrs.constraints = [];
-      } else {
-        let constraintsArray = modelAttrs.constraints.split(",");
-        modelAttrs.constraints = constraintsArray.map(function (constraint) {
-          return constraint.split(":").map(function (value) {
-            return value.trim();
-          });
-        });
-      }
-    }
-
-    // env should not be an array.
-    if ("env" in modelAttrs) {
-      modelAttrs.env = modelAttrs.env.reduce(function (memo, item) {
-        if (item.key != null && item.key !== "") {
-          memo[item.key] = item.value;
-        }
-        return memo;
-      }, {});
-    }
-
-    // Ports should always be an Array.
-    if ("ports" in modelAttrs) {
-      if (modelAttrs.ports === "") {
-        modelAttrs.ports = [];
-      } else {
-        let portStrings = modelAttrs.ports.split(",");
-        modelAttrs.ports = portStrings.map(function (p) {
-          var port = parseInt(p, 10);
-          return isNaN(port) ? p : port;
-        });
-      }
-    }
-
-    // Container arrays shouldn't have null-values
-    if ("container" in modelAttrs) {
-      let container = modelAttrs.container;
-      if ("docker" in container) {
-        if ("portMappings" in container.docker) {
-          container.docker.portMappings =
-            Util.compactArray(container.docker.portMappings);
-        }
-        if (container.docker.network === "") {
-          delete container.docker.network;
-        }
-        if (modelAttrs.cmd === "" && container.docker.image !== "") {
-          // An outstanding bug in Marathon (#2147) means that the cmd field
-          // can't be overridden with a blank string without failing validation
-          modelAttrs.cmd = " ";
-        }
-      }
-      if ("parameters" in container) {
-        container.parameters = Util.compactArray(container.parameters);
-      }
-      if ("volumes" in container) {
-        container.volumes = Util.compactArray(container.volumes);
-      }
-    }
-
-    // mem, cpus, and instances are all Numbers and should be parsed as such.
-    if ("mem" in modelAttrs) {
-      modelAttrs.mem = parseFloat(modelAttrs.mem);
-    }
-    if ("cpus" in modelAttrs) {
-      modelAttrs.cpus = parseFloat(modelAttrs.cpus);
-    }
-    if ("disk" in modelAttrs) {
-      modelAttrs.disk = parseFloat(modelAttrs.disk);
-    }
-    if ("instances" in modelAttrs) {
-      modelAttrs.instances = parseInt(modelAttrs.instances, 10);
-    }
-
-    var model = Util.extendObject(props.attributes, modelAttrs);
-
-    // Create app if validate() returns no errors
-    if (appValidator.validate(model) == null) {
-      if (props.edit) {
-        AppsActions.applySettingsOnApp(model.id, model, true);
-      } else {
-        AppsActions.createApp(model);
       }
     }
   },
