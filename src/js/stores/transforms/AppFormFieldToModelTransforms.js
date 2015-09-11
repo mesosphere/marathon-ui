@@ -45,4 +45,4 @@ const AppFormFieldToModelTransforms = {
     .filter((uri) => uri != null && uri !== "")
 };
 
-module.exports = AppFormFieldToModelTransforms;
+module.exports = Object.freeze(AppFormFieldToModelTransforms);

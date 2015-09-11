@@ -16,4 +16,4 @@ const AppFormModelToFieldTransforms = {
     .join(", ")
 };
 
-module.exports = AppFormModelToFieldTransforms;
+module.exports = Object.freeze(AppFormModelToFieldTransforms);
