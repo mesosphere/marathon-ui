@@ -128,7 +128,7 @@ function rebuildModelFromFields(app, fields, fieldId) {
   }
 }
 
-function populateFieldsByModel(app, fields) {
+function populateFieldsFromModel(app, fields) {
   Object.keys(app).forEach((appKey) => {
     var fieldId = resolveAppKeyToFieldIdMap[appKey];
     if (fieldId == null) {
@@ -252,7 +252,7 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
   },
   populateFieldsFromAppDefinition: function (app) {
     this.app = app;
-    populateFieldsByModel(app, this.fields);
+    populateFieldsFromModel(app, this.fields);
   }
 }).value();
 
