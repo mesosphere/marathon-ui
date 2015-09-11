@@ -25,6 +25,47 @@ describe("App Form Transform", function () {
         ]);
     });
 
+    it("container volumes to array of objects", function () {
+      expect(AppFormTransforms.containerVolumes([
+        {
+          containerPath: "/etc/a",
+          hostPath: "/var/data/a",
+          mode: "RO",
+          consecutiveKey: 1
+        }
+      ])).to.deep.equal([
+          {containerPath: "/etc/a", hostPath: "/var/data/a", mode: "RO"}
+      ]);
+    });
+
+    it("dockerPortMappings to array of objects", function () {
+      expect(AppFormTransforms.dockerPortMappings([
+        {
+          containerPort: 8000,
+          hostPort: 0,
+          servicePort: null,
+          protocol: "tcp",
+          consecutiveKey: 1
+        }
+      ])).to.deep.equal([
+        {
+          containerPort: 8000,
+          hostPort: 0,
+          protocol: "tcp"
+        }
+      ]);
+    });
+
+    it("dockerParameters to array of objects", function () {
+      expect(AppFormTransforms.dockerParameters([
+        {key: "a-docker-option", value: "xxx", consecutiveKey: 1},
+        {key: "b-docker-option", value: "yyy", consecutiveKey: 2}
+      ])).to.deep.equal([
+          {key: "a-docker-option", value: "xxx"},
+          {key: "b-docker-option", value: "yyy"}
+      ]);
+    });
+
     it("env to object with key-values", function () {
       expect(AppFormTransforms.env([
         {key: "key1", value: "value1"},

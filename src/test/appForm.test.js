@@ -230,6 +230,265 @@ describe("App Form", function () {
         });
       });
 
+      describe("the container settings", function () {
+
+        describe("the image field", function () {
+          it("updates correctly", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                expect(AppFormStore.fields.dockerImage).to.equal("/image");
+              }, done);
+            });
+
+            FormActions.update("dockerImage", "/image");
+          });
+        });
+
+        describe("the network field", function () {
+          it("updates correctly", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                expect(AppFormStore.fields.dockerNetwork).to.equal("BRIDGE");
+              }, done);
+            });
+
+            FormActions.update("dockerNetwork", "BRIDGE");
+          });
+        });
+
+        describe("the privileges field", function () {
+          it("updates correctly", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                expect(AppFormStore.fields.dockerPrivileged).to.equal(true);
+              }, done);
+            });
+
+            FormActions.update("dockerPrivileged", true);
+          });
+        });
+
+        describe("the port mappings fieldset", function () {
+
+          it("inserts a new row", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                expect(AppFormStore.fields.dockerPortMappings[0])
+                  .to.deep.equal({
+                    containerPort: 8000,
+                    hostPort: 8001,
+                    servicePort: 8002,
+                    protocol: "udp"
+                  });
+              }, done);
+            });
+
+            FormActions.insert("dockerPortMappings", {
+              containerPort: 8000,
+              hostPort: 8001,
+              servicePort: 8002,
+              protocol: "udp"
+            });
+          });
+
+          it("inserts another row", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                expect(AppFormStore.fields.dockerPortMappings[0])
+                  .to.deep.equal({
+                    containerPort: 8000,
+                    hostPort: 8001,
+                    servicePort: 8002,
+                    protocol: "udp"
+                  });
+
+                expect(AppFormStore.fields.dockerPortMappings[1])
+                  .to.deep.equal({
+                    containerPort: 9000,
+                    hostPort: 9001,
+                    servicePort: 9002,
+                    protocol: "tcp"
+                  });
+              }, done);
+            });
+
+            FormActions.insert("dockerPortMappings", {
+              containerPort: 9000,
+              hostPort: 9001,
+              servicePort: 9002,
+              protocol: "tcp"
+            });
+          });
+
+          it("updates a row at index", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                let row = AppFormStore.fields.dockerPortMappings[0];
+                expect(row.servicePort).to.equal(8101);
+              }, done);
+            });
+
+            FormActions.update("dockerPortMappings", {servicePort: 8101}, 0);
+          });
+
+          it("deletes a row at index", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                let row = AppFormStore.fields.dockerPortMappings[0];
+                expect(AppFormStore.fields.dockerPortMappings.length)
+                  .to.equal(1);
+                expect(row).to.deep.equal({
+                  containerPort: 9000,
+                  hostPort: 9001,
+                  servicePort: 9002,
+                  protocol: "tcp"
+                });
+              }, done);
+            });
+
+            FormActions.delete("dockerPortMappings", 0);
+          });
+
+        });
+
+        describe("the parameters fieldset", function () {
+
+          it("inserts a new row", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                expect(AppFormStore.fields.dockerParameters[0])
+                  .to.deep.equal({
+                    key: "DOCKER_KEY",
+                    value: "DOCKER_VALUE"
+                  });
+              }, done);
+            });
+
+            FormActions.insert("dockerParameters", {
+              key: "DOCKER_KEY",
+              value: "DOCKER_VALUE"
+            });
+          });
+
+          it("inserts another row", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+
+                expect(AppFormStore.fields.dockerParameters[1])
+                  .to.deep.equal({
+                    key: "DOCKER_KEY_1",
+                    value: "DOCKER_VALUE_1"
+                  });
+              }, done);
+            });
+
+            FormActions.insert("dockerParameters", {
+              key: "DOCKER_KEY_1",
+              value: "DOCKER_VALUE_1"
+            });
+          });
+
+          it("updates a row at index", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                let row = AppFormStore.fields.dockerParameters[0];
+                expect(row.key).to.equal("DOCKER_KEY_1A");
+              }, done);
+            });
+
+            FormActions.update("dockerParameters", {key: "DOCKER_KEY_1A"}, 0);
+          });
+
+          it("deletes a row at index", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                let row = AppFormStore.fields.dockerParameters[0];
+                expect(AppFormStore.fields.dockerParameters.length)
+                  .to.equal(1);
+                expect(row).to.deep.equal({
+                  key: "DOCKER_KEY_1",
+                  value: "DOCKER_VALUE_1"
+                });
+              }, done);
+            });
+
+            FormActions.delete("dockerParameters", 0);
+          });
+
+        });
+
+        describe("the volumes fieldset", function () {
+
+          it("inserts a new row", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                expect(AppFormStore.fields.containerVolumes[0])
+                  .to.deep.equal({
+                    containerPath: "/container-0",
+                    hostPath: "/host-0",
+                    mode: "RO"
+                  });
+              }, done);
+            });
+
+            FormActions.insert("containerVolumes", {
+              containerPath: "/container-0",
+              hostPath: "/host-0",
+              mode: "RO"
+            });
+          });
+
+          it("inserts another row", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+
+                expect(AppFormStore.fields.containerVolumes[1])
+                  .to.deep.equal({
+                    containerPath: "/container-1",
+                    hostPath: "/host-1",
+                    mode: "RW"
+                  });
+              }, done);
+            });
+
+            FormActions.insert("containerVolumes", {
+              containerPath: "/container-1",
+              hostPath: "/host-1",
+              mode: "RW"
+            });
+          });
+
+          it("updates a row at index", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                let row = AppFormStore.fields.containerVolumes[0];
+                expect(row.mode).to.equal("RW");
+              }, done);
+            });
+
+            FormActions.update("containerVolumes", {mode: "RW"}, 0);
+          });
+
+          it("deletes a row at index", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                let row = AppFormStore.fields.containerVolumes[0];
+                expect(AppFormStore.fields.containerVolumes.length)
+                  .to.equal(1);
+                expect(row).to.deep.equal({
+                  containerPath: "/container-1",
+                  hostPath: "/host-1",
+                  mode: "RW"
+                });
+              }, done);
+            });
+
+            FormActions.delete("containerVolumes", 0);
+          });
+        });
+
+      });
+
       describe("the env field", function () {
 
         it("inserts a key-value pair", function (done) {
