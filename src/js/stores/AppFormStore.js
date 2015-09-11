@@ -5,8 +5,7 @@ var Util = require("../helpers/Util");
 
 var AppDispatcher = require("../AppDispatcher");
 var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
-var AppFormFieldToModelTransforms = require("./AppFormFieldToModelTransforms");
-var AppFormModelToFieldTransforms = require("./AppFormModelToFieldTransforms");
+var AppFormTransforms = require("./transforms/AppFormTransforms");
 var AppFormValidators = require("./AppFormValidators");
 var AppsStore = require("./AppsStore");
 var AppsEvents = require("../events/AppsEvents");
@@ -119,7 +118,7 @@ function getValidationErrorIndex(fieldId, value) {
 function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveFieldIdToAppKeyMap[fieldId];
   if (key) {
-    const transform = AppFormFieldToModelTransforms[fieldId];
+    const transform = AppFormTransforms.FieldToModel[fieldId];
     if (transform == null) {
       app[key] = fields[fieldId];
     } else {
@@ -134,7 +133,7 @@ function populateFieldsFromModel(app, fields) {
     if (fieldId == null) {
       fieldId = appKey;
     }
-    const transform = AppFormModelToFieldTransforms[fieldId];
+    const transform = AppFormTransforms.ModelToField[fieldId];
     if (transform == null) {
       fields[fieldId] = app[appKey];
     } else {
