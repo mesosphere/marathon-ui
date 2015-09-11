@@ -317,9 +317,7 @@ var AppModalComponent = React.createClass({
 
   render: function () {
     var props = this.props;
-    var model = this.props.attributes;
     var state = this.state;
-    var errors = [];
 
     // TODO refactor global and field-related errors
     var errorBlock = null;
@@ -412,7 +410,10 @@ var AppModalComponent = React.createClass({
             </StoreFormGroupComponent>
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="Docker container settings">
-                <ContainerSettingsComponent model={model} errors={errors} />
+                <ContainerSettingsComponent
+                  errorIndices={state.errorIndices}
+                  fields={state.fields}
+                  getErrorMessage={this.getErrorMessage} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">
