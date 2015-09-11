@@ -5,8 +5,11 @@ function isValidPort(value) {
   if (value == null || Util.isEmptyString(value)) {
     return true;
   }
+  if (!Util.isEmptyString(value) && !/^[0-9]+$/.test(value.toString())) {
+    return false;
+  }
   var port = parseInt(value, 10);
-  return (Util.isNumber(port) && (port >= 0 && port <= 65535));
+  return (port >= 0 && port <= 65535);
 }
 
 function isValidPath(value) {
