@@ -44,6 +44,13 @@ const resolveMap = {
   uris: "uris"
 };
 
+const duplicableRowFields = [
+  "env",
+  "dockerPortMappings",
+  "dockerParameters",
+  "containerVolumes"
+];
+
 function getValidationErrorIndex(fieldId, value) {
   if (validationRules[fieldId] == null) {
     return -1;
@@ -52,28 +59,28 @@ function getValidationErrorIndex(fieldId, value) {
 }
 
 function insertField(fields, fieldId, index = null, value) {
-  if (fieldId === "env") {
-    Util.initKeyValue(fields, "env", []);
+  if (duplicableRowFields.indexOf(fieldId) !== -1) {
+    Util.initKeyValue(fields, fieldId, []);
     if (index == null) {
-      fields.env.push(value);
+      fields[fieldId].push(value);
     } else {
-      fields.env.splice(index, 0, value);
+      fields[fieldId].splice(index, 0, value);
     }
   }
 }
 
 function updateField(fields, fieldId, index = null, value) {
-  if (fieldId === "env") {
-    Util.initKeyValue(fields, "env", []);
-    fields.env[index] = value;
+  if (duplicableRowFields.indexOf(fieldId) !== -1) {
+    Util.initKeyValue(fields, fieldId, []);
+    fields[fieldId][index] = value;
   } else {
     fields[fieldId] = value;
   }
 }
 
 function deleteField(fields, fieldId, index) {
-  if (fieldId === "env") {
-    fields.env.splice(index, 1);
+  if (duplicableRowFields.indexOf(fieldId) !== -1) {
+    fields[fieldId].splice(index, 1);
   }
 }
 
@@ -89,7 +96,9 @@ function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveMap[fieldId];
   if (key) {
     let field = getTransformedField(fieldId, fields[fieldId]);
-    objectPath.set(app, key, field);
+    if (field != null) {
+      objectPath.set(app, key, field);
+    }
   }
 }
 
