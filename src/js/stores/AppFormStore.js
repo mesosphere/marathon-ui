@@ -21,8 +21,21 @@ const validationRules = {
     AppFormValidators.appIdNoWhitespaces
   ],
   "constraints": [AppFormValidators.constraints],
+  "containerVolumes": [
+    AppFormValidators.containerVolumesContainerPathIsValid,
+    AppFormValidators.containerVolumesHostPathIsValid,
+    AppFormValidators.containerVolumesModeNotEmpty
+  ],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
+  "dockerImage": [AppFormValidators.dockerImageNoWhitespaces],
+  "dockerParameters": [AppFormValidators.dockerParameters],
+  "dockerPortMappings": [
+    AppFormValidators.dockerPortMappingsContainerPortIsValid,
+    AppFormValidators.dockerPortMappingsHostPortIsValid,
+    AppFormValidators.dockerPortMappingsServicePortIsValid,
+    AppFormValidators.dockerPortMappingsProtocolNotEmpty
+  ],
   "env": [AppFormValidators.env],
   "executor": [AppFormValidators.executor],
   "instances": [AppFormValidators.instances],
@@ -34,8 +47,14 @@ const resolveMap = {
   appId: "id",
   cmd: "cmd",
   constraints: "constraints",
+  containerVolumes: "container.volumes",
   cpus: "cpus",
   disk: "disk",
+  dockerImage: "container.docker.image",
+  dockerNetwork: "container.docker.network",
+  dockerParameters: "container.docker.parameters",
+  dockerPortMappings: "container.docker.portMappings",
+  dockerPrivileged: "container.docker.privileged",
   instances: "instances",
   env: "env",
   executor: "executor",
