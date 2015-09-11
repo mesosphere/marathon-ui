@@ -109,19 +109,6 @@ var Util = {
   isEmptyString: function (str) {
     return this.isString(str) && (str == null || str === "");
   },
-  isValidPort: function (value) {
-    if (value == null || this.isEmptyString(value)) {
-      return true;
-    }
-    var port = parseInt(value, 10);
-    return (this.isNumber(port) && (port >= 0 && port <= 65535));
-  },
-  isValidPath: function (value) {
-    if (value == null || this.isEmptyString(value)) {
-      return true;
-    }
-    return value.match(/ /g) == null;
-  },
   hasClass: function (element, className) {
     return element.className &&
       element.className.match(/\S+/g).indexOf(className) > -1;

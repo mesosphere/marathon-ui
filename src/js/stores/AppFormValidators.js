@@ -1,6 +1,21 @@
 var Util = require("../helpers/Util");
 var ValidConstraints = require("../constants/ValidConstraints");
 
+function isValidPort(value) {
+  if (value == null || Util.isEmptyString(value)) {
+    return true;
+  }
+  var port = parseInt(value, 10);
+  return (Util.isNumber(port) && (port >= 0 && port <= 65535));
+}
+
+function isValidPath(value) {
+  if (value == null || Util.isEmptyString(value)) {
+    return true;
+  }
+  return value.match(/ /g) == null;
+}
+
 const AppFormValidators = {
   appIdNotEmpty: (str) => !Util.isEmptyString(str),
   appIdNoWhitespaces: (str) => str.match(/ /g) == null,
@@ -17,9 +32,8 @@ const AppFormValidators = {
       }
       return ValidConstraints.indexOf(p[1].toLowerCase()) !== -1;
     }),
-  containerVolumesContainerPathIsValid: (obj) =>
-    Util.isValidPath(obj.containerPath),
-  containerVolumesHostPathIsValid: (obj) => Util.isValidPath(obj.hostPath),
+  containerVolumesContainerPathIsValid: (obj) => isValidPath(obj.containerPath),
+  containerVolumesHostPathIsValid: (obj) => isValidPath(obj.hostPath),
   containerVolumesModeNotEmpty: (obj) => !Util.isEmptyString(obj.mode),
   env: (obj) =>
     !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
@@ -30,10 +44,9 @@ const AppFormValidators = {
   dockerParameters: (obj) =>
     !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
   dockerPortMappingsContainerPortIsValid: (obj) =>
-    Util.isValidPort(obj.containerPort),
-  dockerPortMappingsHostPortIsValid: (obj) => Util.isValidPort(obj.hostPort),
-  dockerPortMappingsServicePortIsValid: (obj) =>
-    Util.isValidPort(obj.servicePort),
+    isValidPort(obj.containerPort),
+  dockerPortMappingsHostPortIsValid: (obj) => isValidPort(obj.hostPort),
+  dockerPortMappingsServicePortIsValid: (obj) => isValidPort(obj.servicePort),
   dockerPortMappingsProtocolNotEmpty: (obj) =>
     !Util.isEmptyString(obj.protocol),
   instances: (value) =>
