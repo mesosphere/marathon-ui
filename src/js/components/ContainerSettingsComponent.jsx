@@ -79,19 +79,18 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getPopulatedRows: function (fields = this.props.fields) {
-    return duplicableRowFieldIds.reduce(function (memo, rowFieldId) {
+    return duplicableRowFieldIds.reduce((memo, rowFieldId) => {
       memo[rowFieldId] =
         this.populateInitialConsecutiveKeys(fields[rowFieldId]);
       return memo;
-    }.bind(this), {});
+    }, {});
   },
 
   enforceMinRows: function () {
     var state = this.state;
 
     duplicableRowFieldIds.forEach(function (fieldId) {
-      if (state.rows[fieldId] == null
-        || state.rows[fieldId].length === 0) {
+      if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
         FormActions.insert(fieldId, Util.extendObject(schemes[fieldId], {
           consecutiveKey: Util.getUniqueId()
         }));
@@ -122,7 +121,7 @@ var ContainerSettingsComponent = React.createClass({
     );
   },
 
-  handleChange: function (rowFieldId, i) {
+  handleChangeRow: function (rowFieldId, i) {
     var row = this.getDuplicableRowValues(rowFieldId, i);
     FormActions.update(rowFieldId, row, i);
   },
@@ -161,7 +160,7 @@ var ContainerSettingsComponent = React.createClass({
       "has-error": !!error
     });
 
-    var handleChange = this.handleChange.bind(null, "dockerPortMappings", i);
+    var handleChange = this.handleChangeRow.bind(null, "dockerPortMappings", i);
     var handleAddRow =
       this.handleAddRow.bind(null, "dockerPortMappings", i + 1);
     var handleRemoveRow =
@@ -242,7 +241,7 @@ var ContainerSettingsComponent = React.createClass({
     var errorClassSet = classNames({
       "has-error": !!error
     });
-    var handleChange = this.handleChange.bind(null, "dockerParameters", i);
+    var handleChange = this.handleChangeRow.bind(null, "dockerParameters", i);
     var handleAddRow = this.handleAddRow.bind(null, "dockerParameters", i + 1);
     var handleRemoveRow =
       this.handleRemoveRow.bind(null, "dockerParameters", i);
@@ -298,7 +297,7 @@ var ContainerSettingsComponent = React.createClass({
     var errorClassSet = classNames({
       "has-error": !!error
     });
-    var handleChange = this.handleChange.bind(null, "containerVolumes", i);
+    var handleChange = this.handleChangeRow.bind(null, "containerVolumes", i);
     var handleAddRow = this.handleAddRow.bind(null, "containerVolumes", i + 1);
     var handleRemoveRow =
       this.handleRemoveRow.bind(null, "containerVolumes", i);
