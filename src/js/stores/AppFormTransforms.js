@@ -1,21 +1,15 @@
-var Util = require("../helpers/Util");
+const dockerRowSchemes = require("./dockerRowSchemes");
 
-function trimDuplicableRows(rows) {
-  var trimmedRows = rows.map((row) => {
-    return Object.keys(row).reduce((memo, key) => {
-      if (row[key] != null
-        && key !== "consecutiveKey"
-        && !Util.isEmptyString(row[key])) {
-        memo[key] = row[key];
+function ensureObjectScheme(row, scheme) {
+  return Object.keys(row).reduce((obj, key) => {
+    if (scheme.hasOwnProperty(key)) {
+      obj = obj || {};
+      if (row[key] != null) {
+        obj[key] = row[key];
       }
-      return memo;
-    }, {});
-  }).filter((row) => Object.keys(row).length);
-
-  if (trimmedRows.length) {
-    return trimmedRows;
-  }
-  return null;
+    }
+    return obj;
+  }, null);
 }
 
 const AppFormTransforms = {
@@ -24,9 +18,15 @@ const AppFormTransforms = {
   constraints: (constraints) => constraints
     .split(",")
     .map((constraint) => constraint.split(":").map((value) => value.trim())),
-  containerVolumes: (rows) => trimDuplicableRows(rows),
-  dockerParameters: (rows) => trimDuplicableRows(rows),
-  dockerPortMappings: (rows) => trimDuplicableRows(rows),
+  containerVolumes: (rows) => rows
+    .map((row) => ensureObjectScheme(row, dockerRowSchemes.containerVolumes))
+    .filter((row) => row),
+  dockerParameters: (rows) => rows
+    .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))
+    .filter((row) => row),
+  dockerPortMappings: (rows) => rows
+    .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerPortMappings))
+    .filter((row) => row),
   env: (rows) => {
     return rows.reduce((memo, row) => {
       memo[row.key] = row.value;
