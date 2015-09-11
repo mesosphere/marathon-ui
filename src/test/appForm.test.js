@@ -658,7 +658,7 @@ describe("App Form", function () {
 
     describe("App form store", function () {
 
-      it("processes array of details on code 400", function (done) {
+      it("processes a 400 error response correctly", function (done) {
         this.server.setup({
           details: [{
             "path": "/instances",
@@ -680,7 +680,24 @@ describe("App Form", function () {
         });
       });
 
-      it("processes array of errors on code 422", function (done) {
+      it("processes a 409 error response message correctly", function (done) {
+        this.server.setup({
+          "message": "bad error"
+        }, 409);
+
+        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+          expectAsync(function () {
+            expect(AppFormStore.responseErrors.general)
+              .to.equal(`${AppFormErrorMessages.general[2]} bad error`);
+          }, done);
+        });
+
+        AppsActions.createApp({
+          "howdy": "partner"
+        });
+      });
+
+      it("processes a 422 error response correctly", function (done) {
         this.server.setup({
           errors: [{
             "attribute": "id",
@@ -700,24 +717,8 @@ describe("App Form", function () {
         });
       });
 
-      it("processes error message on code 409", function (done) {
-        this.server.setup({
-          "message": "bad error"
-        }, 409);
-
-        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
-          expectAsync(function () {
-            expect(AppFormStore.responseErrors.general)
-              .to.equal(`${AppFormErrorMessages.general[2]} bad error`);
-          }, done);
-        });
-
-        AppsActions.createApp({
-          "howdy": "partner"
-        });
-      });
-
-      it("sets general error on codes 300 to 499", function (done) {
+      it("processes error response codes 300 to 499 correctly",
+          function (done) {
         this.server.setup("something strange", 315);
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
@@ -732,7 +733,7 @@ describe("App Form", function () {
         });
       });
 
-      it("sets unknown error on codes >= 500", function (done) {
+      it("processes error response codes >= 500 correctly", function (done) {
         this.server.setup("something strange with the server", 500);
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
