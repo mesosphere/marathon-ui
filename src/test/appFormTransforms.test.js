@@ -1,8 +1,10 @@
 var expect = require("chai").expect;
 
 var AppFormTransforms = require("../js/stores/AppFormTransforms");
+var AppFormModelToFieldTransforms =
+  require("../js/stores/AppFormModelToFieldTransforms");
 
-describe("App Form Transform", function () {
+describe("App Form Field to Model Transform", function () {
 
   describe("transforms", function () {
 
@@ -68,8 +70,8 @@ describe("App Form Transform", function () {
 
     it("env to object with key-values", function () {
       expect(AppFormTransforms.env([
-        {key: "key1", value: "value1"},
-        {key: "key2", value: "value2"}
+        {key: "key1", value: "value1", consecutiveKey: 0},
+        {key: "key2", value: "value2", consecutiveKey: 1}
       ])).to.deep.equal({
         key1: "value1",
         key2: "value2"
@@ -97,6 +99,42 @@ describe("App Form Transform", function () {
         .to.deep.equal(["http://test.de/", "http://test.com"]);
       expect(AppFormTransforms.uris(""))
         .to.deep.equal([]);
+    });
+  });
+
+});
+
+describe("App Form Model To Field Transform", function () {
+
+  describe("transforms", function () {
+
+    it("constraints array to string", function () {
+      expect(AppFormModelToFieldTransforms.constraints([
+          ["hostname", "UNIQUE"],
+          ["atomic", "LIKE", "man"]
+        ]))
+        .to.equal("hostname:UNIQUE, atomic:LIKE:man");
+    });
+
+    it("env object to sorted array", function () {
+      expect(AppFormModelToFieldTransforms.env({
+        key1: "value1",
+        key2: "value2"
+      })).to.deep.equal([
+        {key: "key1", value: "value1", consecutiveKey: 0},
+        {key: "key2", value: "value2", consecutiveKey: 1}
+      ]);
+    });
+
+    it("ports array to string", function () {
+      expect(AppFormModelToFieldTransforms.ports([12233, 12244, 12255]))
+        .to.equal("12233, 12244, 12255");
+    });
+
+    it("uris string to an array of uris", function () {
+      expect(AppFormModelToFieldTransforms
+          .uris(["http://test.de/", "http://test.com"]))
+        .to.equal("http://test.de/, http://test.com");
     });
   });
 
