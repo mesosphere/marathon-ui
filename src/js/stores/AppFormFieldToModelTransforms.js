@@ -12,7 +12,7 @@ function ensureObjectScheme(row, scheme) {
   }, null);
 }
 
-const AppFormTransforms = {
+const AppFormFieldToModelTransforms = {
   cpus: (value) => parseFloat(value),
   disk: (value) => parseFloat(value),
   constraints: (constraints) => constraints
@@ -45,4 +45,4 @@ const AppFormTransforms = {
     .filter((uri) => uri != null && uri !== "")
 };
 
-module.exports = AppFormTransforms;
+module.exports = AppFormFieldToModelTransforms;
