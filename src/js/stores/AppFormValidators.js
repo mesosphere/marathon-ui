@@ -17,11 +17,25 @@ const AppFormValidators = {
       }
       return ValidConstraints.indexOf(p[1].toLowerCase()) !== -1;
     }),
+  containerVolumesContainerPathIsValid: (obj) =>
+    Util.isValidPath(obj.containerPath),
+  containerVolumesHostPathIsValid: (obj) => Util.isValidPath(obj.hostPath),
+  containerVolumesModeNotEmpty: (obj) => !Util.isEmptyString(obj.mode),
   env: (obj) =>
     !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
   executor: (str) => Util.isString(str) &&
     (new RegExp("^(|\\/\\/cmd|\\/?[^\\/]+(\\/[^\\/]+)*)$"))
       .test(str),
+  dockerImageNoWhitespaces: (str) => str.match(/ /g) == null,
+  dockerParameters: (obj) =>
+    !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
+  dockerPortMappingsContainerPortIsValid: (obj) =>
+    Util.isValidPort(obj.containerPort),
+  dockerPortMappingsHostPortIsValid: (obj) => Util.isValidPort(obj.hostPort),
+  dockerPortMappingsServicePortIsValid: (obj) =>
+    Util.isValidPort(obj.servicePort),
+  dockerPortMappingsProtocolNotEmpty: (obj) =>
+    !Util.isEmptyString(obj.protocol),
   instances: (value) =>
     !Util.isEmptyString(value) && value.toString().match(/^[0-9]+$/),
   mem: (value) =>
