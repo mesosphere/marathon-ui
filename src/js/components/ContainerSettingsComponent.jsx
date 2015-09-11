@@ -5,6 +5,7 @@ var Util = require("../helpers/Util");
 var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
 var ContainerConstants = require("../constants/ContainerConstants");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
+var dockerRowSchemes = require("../stores/dockerRowSchemes");
 var FormActions = require("../actions/FormActions");
 var StoreFormGroupComponent = require("../components/StoreFormGroupComponent");
 
@@ -13,24 +14,6 @@ const portInputAttributes = {
   max: 65535,
   step: 1,
   type: "number"
-};
-
-const schemes = {
-  dockerPortMappings: {
-    containerPort: null,
-    hostPort: null,
-    servicePort: null,
-    protocol: null
-  },
-  dockerParameters: {
-    key: null,
-    value: null
-  },
-  containerVolumes: {
-    containerPath: null,
-    hostPath: null,
-    mode: null
-  }
 };
 
 const duplicableRowFieldIds = [
@@ -91,7 +74,8 @@ var ContainerSettingsComponent = React.createClass({
 
     duplicableRowFieldIds.forEach(function (fieldId) {
       if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
-        FormActions.insert(fieldId, Util.extendObject(schemes[fieldId], {
+        FormActions.insert(fieldId,
+            Util.extendObject(dockerRowSchemes[fieldId], {
           consecutiveKey: Util.getUniqueId()
         }));
       }
@@ -114,7 +98,7 @@ var ContainerSettingsComponent = React.createClass({
   handleAddRow: function (fieldId, position, event) {
     event.target.blur();
     event.preventDefault();
-    FormActions.insert(fieldId, Util.extendObject(schemes[fieldId], {
+    FormActions.insert(fieldId, Util.extendObject(dockerRowSchemes[fieldId], {
         consecutiveKey: Util.getUniqueId()
       }),
       position
