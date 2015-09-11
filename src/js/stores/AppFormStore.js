@@ -178,8 +178,6 @@ function processResponseErrors(responseErrors, response, statusCode) {
 var AppFormStore = lazy(EventEmitter.prototype).extend({
   app: {},
   fields: {},
-  // If there is an app related response from the server that was unsuccessful,
-  // these error messages will be stored here by fieldId.
   responseErrors: {},
   validationErrorIndices: {},
   initAndReset: function () {
