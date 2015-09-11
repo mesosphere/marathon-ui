@@ -23,10 +23,10 @@ const AppFormValidators = {
   appIdNotEmpty: (str) => !Util.isEmptyString(str),
   appIdNoWhitespaces: (str) => str.match(/ /g) == null,
   cpus: (value) =>
-    !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/),
+    !Util.isEmptyString(value) && !!value.toString().match(/^[0-9\.]+$/),
   disk: (value) =>
-    !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/),
-  constraints: (constraints) => constraints
+    !Util.isEmptyString(value) && !!value.toString().match(/^[0-9\.]+$/),
+  constraints: (constraints) => Util.isEmptyString(constraints) || constraints
     .split(",")
     .map((constraint) => constraint.split(":").map((value) => value.trim()))
     .every((p) => {
@@ -38,7 +38,7 @@ const AppFormValidators = {
   containerVolumesContainerPathIsValid: (obj) => isValidPath(obj.containerPath),
   containerVolumesHostPathIsValid: (obj) => isValidPath(obj.hostPath),
   containerVolumesModeNotEmpty: (obj) => !Util.isEmptyString(obj.mode),
-  env: (obj) =>
+  env: (obj) => obj.hasOwnProperty("key") && obj.hasOwnProperty("value") &&
     !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
   executor: (str) => Util.isString(str) &&
     (new RegExp("^(|\\/\\/cmd|\\/?[^\\/]+(\\/[^\\/]+)*)$"))
@@ -53,11 +53,12 @@ const AppFormValidators = {
   dockerPortMappingsProtocolNotEmpty: (obj) =>
     !Util.isEmptyString(obj.protocol),
   instances: (value) =>
-    !Util.isEmptyString(value) && value.toString().match(/^[0-9]+$/),
+    !Util.isEmptyString(value) && !!value.toString().match(/^[0-9]+$/),
   mem: (value) =>
-    !Util.isEmptyString(value) && value.toString().match(/^[0-9\.]+$/),
+    !Util.isEmptyString(value) && !!value.toString().match(/^[0-9\.]+$/),
   ports: (ports) => Util.isEmptyString(ports) ||
-    ports.toString().match(/^[0-9, ]+$/)
+    ports.split(",")
+      .every((port) => port.toString().trim().match(/^[0-9]+$/))
 };
 
 module.exports = AppFormValidators;
