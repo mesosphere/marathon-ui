@@ -6,6 +6,7 @@ var Util = require("../helpers/Util");
 var AppDispatcher = require("../AppDispatcher");
 var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
 var AppFormTransforms = require("./AppFormTransforms");
+var AppFormModelToFieldTransforms = require("./AppFormModelToFieldTransforms");
 var AppFormValidators = require("./AppFormValidators");
 var AppsStore = require("./AppsStore");
 var AppsEvents = require("../events/AppsEvents");
@@ -18,6 +19,13 @@ const defaultFieldValues = Object.freeze({
   instances: 1
 });
 
+/**
+ * These validation rules apply on the form fields fieldIds.
+ * The array index of the rule is related to the error message index
+ * in AppFormErrorMessages.
+ *
+ * fieldIds that are not listed here always pass.
+ */
 const validationRules = {
   "appId": [
     AppFormValidators.appIdNotEmpty,
@@ -46,6 +54,11 @@ const validationRules = {
   "ports": [AppFormValidators.ports]
 };
 
+/**
+ * Translation of fieldId to the application model key.
+ *
+ * Not listed fieldIds are _excluded_ in the model.
+ */
 const resolveFieldIdToAppKeyMap = {
   appId: "id",
   cmd: "cmd",
@@ -87,11 +100,47 @@ const responseAttributeNameToFieldIdMap = {
   "/constraints": "constraints"
 };
 
+/**
+ * Translation of a model key to fieldId.
+ *
+ * Not listed keys are taken as they are.
+ */
+const resolveAppKeyToFieldIdMap = {
+  id: "appId"
+};
+
 function getValidationErrorIndex(fieldId, value) {
   if (validationRules[fieldId] == null) {
     return -1;
   }
   return validationRules[fieldId].findIndex((isValid) => !isValid(value));
+}
+
+function rebuildModelFromFields(app, fields, fieldId) {
+  const key = resolveFieldIdToAppKeyMap[fieldId];
+  if (key) {
+    const transform = AppFormTransforms[fieldId];
+    if (transform == null) {
+      app[key] = fields[fieldId];
+    } else {
+      app[key] = transform(fields[fieldId]);
+    }
+  }
+}
+
+function populateFieldsByModel(app, fields) {
+  Object.keys(app).forEach((appKey) => {
+    var fieldId = resolveAppKeyToFieldIdMap[appKey];
+    if (fieldId == null) {
+      fieldId = appKey;
+    }
+    const transform = AppFormModelToFieldTransforms[fieldId];
+    if (transform == null) {
+      fields[fieldId] = app[appKey];
+    } else {
+      fields[fieldId] = transform(app[appKey]);
+    }
+  });
 }
 
 function insertField(fields, fieldId, index = null, value) {
