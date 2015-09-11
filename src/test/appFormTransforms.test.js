@@ -1,6 +1,7 @@
 var expect = require("chai").expect;
 
-var AppFormTransforms = require("../js/stores/AppFormTransforms");
+var AppFormFieldToModelTransforms =
+  require("../js/stores/AppFormFieldToModelTransforms");
 var AppFormModelToFieldTransforms =
   require("../js/stores/AppFormModelToFieldTransforms");
 
@@ -9,18 +10,19 @@ describe("App Form Field to Model Transform", function () {
   describe("transforms", function () {
 
     it("cpus to float", function () {
-      expect(AppFormTransforms.cpus("434.55")).to.equal(434.55);
-      expect(AppFormTransforms.cpus("434.556633")).to.equal(434.556633);
+      expect(AppFormFieldToModelTransforms.cpus("434.55")).to.equal(434.55);
+      expect(AppFormFieldToModelTransforms.cpus("434.556633"))
+        .to.equal(434.556633);
     });
 
     it("disk to float", function () {
-      expect(AppFormTransforms.disk("33")).to.equal(33);
-      expect(AppFormTransforms.disk("33.23")).to.equal(33.23);
+      expect(AppFormFieldToModelTransforms.disk("33")).to.equal(33);
+      expect(AppFormFieldToModelTransforms.disk("33.23")).to.equal(33.23);
     });
 
     it("constraints to array with segements", function () {
       let constraints = "hostname:UNIQUE, atomic:LIKE:man";
-      expect(AppFormTransforms.constraints(constraints))
+      expect(AppFormFieldToModelTransforms.constraints(constraints))
         .to.deep.equal([
           ["hostname", "UNIQUE"],
           ["atomic", "LIKE", "man"]
@@ -69,7 +71,7 @@ describe("App Form Field to Model Transform", function () {
     });
 
     it("env to object with key-values", function () {
-      expect(AppFormTransforms.env([
+      expect(AppFormFieldToModelTransforms.env([
         {key: "key1", value: "value1", consecutiveKey: 0},
         {key: "key2", value: "value2", consecutiveKey: 1}
       ])).to.deep.equal({
@@ -79,25 +81,26 @@ describe("App Form Field to Model Transform", function () {
     });
 
     it("instances to integer", function () {
-      expect(AppFormTransforms.instances("2")).to.equal(2);
-      expect(AppFormTransforms.instances("4.5")).to.equal(4);
+      expect(AppFormFieldToModelTransforms.instances("2")).to.equal(2);
+      expect(AppFormFieldToModelTransforms.instances("4.5")).to.equal(4);
     });
 
     it("mem to float", function () {
-      expect(AppFormTransforms.mem("128.64")).to.equal(128.64);
+      expect(AppFormFieldToModelTransforms.mem("128.64")).to.equal(128.64);
     });
 
     it("ports string to an array of ports", function () {
-      expect(AppFormTransforms.ports("12233, 12244, 12255"))
+      expect(AppFormFieldToModelTransforms.ports("12233, 12244, 12255"))
         .to.deep.equal([12233, 12244, 12255]);
-      expect(AppFormTransforms.ports(""))
+      expect(AppFormFieldToModelTransforms.ports(""))
         .to.deep.equal([]);
     });
 
     it("uris string to an array of uris", function () {
-      expect(AppFormTransforms.uris("http://test.de/,http://test.com"))
+      expect(AppFormFieldToModelTransforms.
+          uris("http://test.de/,http://test.com"))
         .to.deep.equal(["http://test.de/", "http://test.com"]);
-      expect(AppFormTransforms.uris(""))
+      expect(AppFormFieldToModelTransforms.uris(""))
         .to.deep.equal([]);
     });
   });
