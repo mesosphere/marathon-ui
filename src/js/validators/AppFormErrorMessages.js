@@ -10,8 +10,21 @@ const AppFormErrorMessages = {
     ValidConstraints.map((c) => `'${c}'`).join(", ") +
     ". See https://mesosphere.github.io/marathon/docs/constraints.html."
   ],
+  containerVolumes: [
+    "Container Path must be a valid path",
+    "Host Path must be a valid path",
+    "Mode must not be empty"
+  ],
   cpus: ["CPUs must be a non-negative Number"],
   disk: ["Disk Space must be a non-negative Number"],
+  dockerImage: ["Image cannot  contain whitespaces"],
+  dockerParameters: ["Key cannot be blank"],
+  dockerPortMappings: [
+    "Container Port must be a valid port",
+    "Host Port must be a valid port",
+    "Service Port must be a valid port",
+    "Protocol must not be empty"
+  ],
   env: ["Key cannot be blank"],
   executor: ["Invalid executor format"],
   instances: ["Instances must be a non-negative Number"],
