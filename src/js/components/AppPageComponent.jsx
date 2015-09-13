@@ -157,7 +157,16 @@ var AppPageComponent = React.createClass({
     });
   },
 
-  onScaleAppError: function (errorMessage) {
+  onScaleAppError: function (errorMessage, statusCode, instances) {
+    if (statusCode === 409) {
+      var appId = this.state.appId;
+      const dialogId = DialogActions.
+        confirm("App scaling failed.Do you want to try forcing?");
+      DialogStore.handleUserResponse(dialogId, function () {
+        AppsActions.scaleApp(appId, instances, true);
+      });
+      return;
+    }
     DialogActions.alert(`Not scaling: ${errorMessage.message || errorMessage}`);
   },
 

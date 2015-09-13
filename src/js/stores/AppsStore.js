@@ -266,7 +266,8 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.SCALE_APP);
       break;
     case AppsEvents.SCALE_APP_ERROR:
-      AppsStore.emit(AppsEvents.SCALE_APP_ERROR, action.data.body);
+      AppsStore.emit(AppsEvents.SCALE_APP_ERROR, action.data.body,
+          action.data.status, action.instances);
       break;
     case AppsEvents.APPLY_APP_REQUEST:
       AppsStore.emit(AppsEvents.APPLY_APP_REQUEST, action.appId);
