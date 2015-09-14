@@ -4,8 +4,11 @@ var objectPath = require("object-path");
 var Util = require("../helpers/Util");
 
 var AppDispatcher = require("../AppDispatcher");
+var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
 var AppFormTransforms = require("./AppFormTransforms");
 var AppFormValidators = require("./AppFormValidators");
+var AppsStore = require("./AppsStore");
+var AppsEvents = require("../events/AppsEvents");
 var FormEvents = require("../events/FormEvents");
 
 const defaultFieldValues = Object.freeze({
@@ -70,11 +73,25 @@ const duplicableRowFields = [
   "containerVolumes"
 ];
 
+const responseAttributeNameToFieldIdMap = {
+  "id": "appId",
+  "/cmd": "cmd",
+  "/cpus": "cpus",
+  "/disk": "disk",
+  "/env": "env",
+  "/executor": "executor",
+  "/instances": "instances",
+  "/mem": "mem",
+  "/ports": "ports",
+  "/uris": "uris",
+  "/constraints": "constraints"
+};
+
 function getValidationErrorIndex(fieldId, value) {
   if (validationRules[fieldId] == null) {
     return -1;
   }
-  return validationRules[fieldId].findIndex((isValid) =>!isValid(value));
+  return validationRules[fieldId].findIndex((isValid) => !isValid(value));
 }
 
 function insertField(fields, fieldId, index = null, value) {
@@ -121,9 +138,47 @@ function rebuildModelFromFields(app, fields, fieldId) {
   }
 }
 
+function processResponseErrors(responseErrors, response, statusCode) {
+  if (statusCode >= 500) {
+    responseErrors.general = AppFormErrorMessages.general[1];
+
+  } else if (statusCode === 422 && response != null &&
+      Util.isArray(response.errors)) {
+
+    response.errors.forEach((error) => {
+      var fieldId = error.attribute.length
+        ? error.attribute
+        : "general";
+      fieldId = responseAttributeNameToFieldIdMap[fieldId] || fieldId;
+      responseErrors[fieldId] = error.error;
+    });
+
+  } else if (statusCode === 409 && response != null &&
+      response.message != null) {
+
+    responseErrors.general =
+      `${AppFormErrorMessages.general[2]} ${response.message}`;
+
+  } else if (statusCode === 400 && response != null &&
+      Util.isArray(response.details)) {
+
+    response.details.forEach((detail) => {
+      var fieldId = detail.path.length
+        ? detail.path
+        : "general";
+      fieldId = responseAttributeNameToFieldIdMap[fieldId] || fieldId;
+      responseErrors[fieldId] = detail.errors.join(", ");
+    });
+
+  } else if (statusCode >= 300) {
+    responseErrors.general = AppFormErrorMessages.general[0];
+  }
+}
+
 var AppFormStore = lazy(EventEmitter.prototype).extend({
   app: {},
   fields: {},
+  responseErrors: {},
   validationErrorIndices: {},
   initAndReset: function () {
     this.app = {};
@@ -168,6 +223,24 @@ function executeAction(action, setFieldFunction) {
     AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
   }
 }
+
+function onAppsErrorResponse(response, statusCode) {
+  AppFormStore.responseErrors = {};
+  processResponseErrors(AppFormStore.responseErrors, response, statusCode);
+}
+
+AppsStore.on(AppsEvents.CREATE_APP_ERROR, function (data, status) {
+  onAppsErrorResponse(data, status);
+});
+AppsStore.on(AppsEvents.APPLY_APP_ERROR, function (data, isEditing, status) {
+  onAppsErrorResponse(data, status);
+});
+AppsStore.on(AppsEvents.CREATE_APP, function () {
+  AppFormStore.responseErrors = {};
+});
+AppsStore.on(AppsEvents.APPLY_APP, function () {
+  AppFormStore.responseErrors = {};
+});
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {

@@ -14,6 +14,7 @@ var OptionalEnvironmentComponent = React.createClass({
 
   propTypes: {
     errorIndices: React.PropTypes.array,
+    generalError: React.PropTypes.string,
     rows: React.PropTypes.array
   },
 
@@ -106,6 +107,20 @@ var OptionalEnvironmentComponent = React.createClass({
     return null;
   },
 
+  getGeneralErrorBlock: function () {
+    var error = this.props.generalError;
+
+    if (error == null) {
+      return null;
+    }
+
+    return (
+      <p className="text-danger">
+        <strong>{error}</strong>
+      </p>
+    );
+  },
+
   getEnviromentRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError(i);
 
@@ -166,6 +181,7 @@ var OptionalEnvironmentComponent = React.createClass({
         <div className="duplicable-list">
           {this.getEnviromentRows()}
         </div>
+        {this.getGeneralErrorBlock()}
       </div>
     );
   }
