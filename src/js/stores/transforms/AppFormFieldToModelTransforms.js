@@ -1,4 +1,4 @@
-const dockerRowSchemes = require("./dockerRowSchemes");
+const dockerRowSchemes = require("../dockerRowSchemes");
 
 function ensureObjectScheme(row, scheme) {
   return Object.keys(row).reduce((obj, key) => {
