@@ -1,5 +1,6 @@
 var EventEmitter = require("events").EventEmitter;
 var lazy = require("lazy.js");
+var objectPath = require("object-path");
 var Util = require("../helpers/Util");
 
 var AppDispatcher = require("../AppDispatcher");
@@ -20,8 +21,21 @@ const validationRules = {
     AppFormValidators.appIdNoWhitespaces
   ],
   "constraints": [AppFormValidators.constraints],
+  "containerVolumes": [
+    AppFormValidators.containerVolumesContainerPathIsValid,
+    AppFormValidators.containerVolumesHostPathIsValid,
+    AppFormValidators.containerVolumesModeNotEmpty
+  ],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
+  "dockerImage": [AppFormValidators.dockerImageNoWhitespaces],
+  "dockerParameters": [AppFormValidators.dockerParameters],
+  "dockerPortMappings": [
+    AppFormValidators.dockerPortMappingsContainerPortIsValid,
+    AppFormValidators.dockerPortMappingsHostPortIsValid,
+    AppFormValidators.dockerPortMappingsServicePortIsValid,
+    AppFormValidators.dockerPortMappingsProtocolNotEmpty
+  ],
   "env": [AppFormValidators.env],
   "executor": [AppFormValidators.executor],
   "instances": [AppFormValidators.instances],
@@ -33,8 +47,14 @@ const resolveMap = {
   appId: "id",
   cmd: "cmd",
   constraints: "constraints",
+  containerVolumes: "container.volumes",
   cpus: "cpus",
   disk: "disk",
+  dockerImage: "container.docker.image",
+  dockerNetwork: "container.docker.network",
+  dockerParameters: "container.docker.parameters",
+  dockerPortMappings: "container.docker.portMappings",
+  dockerPrivileged: "container.docker.privileged",
   instances: "instances",
   env: "env",
   executor: "executor",
@@ -42,6 +62,13 @@ const resolveMap = {
   ports: "ports",
   uris: "uris"
 };
+
+const duplicableRowFields = [
+  "env",
+  "dockerPortMappings",
+  "dockerParameters",
+  "containerVolumes"
+];
 
 function getValidationErrorIndex(fieldId, value) {
   if (validationRules[fieldId] == null) {
@@ -51,28 +78,28 @@ function getValidationErrorIndex(fieldId, value) {
 }
 
 function insertField(fields, fieldId, index = null, value) {
-  if (fieldId === "env") {
-    Util.initKeyValue(fields, "env", []);
+  if (duplicableRowFields.indexOf(fieldId) !== -1) {
+    Util.initKeyValue(fields, fieldId, []);
     if (index == null) {
-      fields.env.push(value);
+      fields[fieldId].push(value);
     } else {
-      fields.env.splice(index, 0, value);
+      fields[fieldId].splice(index, 0, value);
     }
   }
 }
 
 function updateField(fields, fieldId, index = null, value) {
-  if (fieldId === "env") {
-    Util.initKeyValue(fields, "env", []);
-    fields.env[index] = value;
+  if (duplicableRowFields.indexOf(fieldId) !== -1) {
+    Util.initKeyValue(fields, fieldId, []);
+    fields[fieldId][index] = value;
   } else {
     fields[fieldId] = value;
   }
 }
 
 function deleteField(fields, fieldId, index) {
-  if (fieldId === "env") {
-    fields.env.splice(index, 1);
+  if (duplicableRowFields.indexOf(fieldId) !== -1) {
+    fields[fieldId].splice(index, 1);
   }
 }
 
@@ -88,7 +115,9 @@ function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveMap[fieldId];
   if (key) {
     let field = getTransformedField(fieldId, fields[fieldId]);
-    app[key] = field;
+    if (field != null) {
+      objectPath.set(app, key, field);
+    }
   }
 }
 
