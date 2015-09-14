@@ -89,10 +89,11 @@ var ContainerSettingsComponent = React.createClass({
       consecutiveKey: this.state.rows[rowFieldId][i].consecutiveKey
     };
 
-    return Object.keys(schemes[rowFieldId]).reduce(function (memo, key) {
-      memo[key] = findDOMNode(refs[`${key}${i}`]).value;
-      return memo;
-    }, row);
+    return Object.keys(dockerRowSchemes[rowFieldId])
+      .reduce(function (memo, key) {
+        memo[key] = findDOMNode(refs[`${key}${i}`]).value;
+        return memo;
+      }, row);
   },
 
   handleAddRow: function (fieldId, position, event) {

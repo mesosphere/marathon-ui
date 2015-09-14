@@ -28,7 +28,7 @@ describe("App Form Field to Model Transform", function () {
     });
 
     it("container volumes to array of objects", function () {
-      expect(AppFormTransforms.containerVolumes([
+      expect(AppFormTransforms.FieldToModel.containerVolumes([
         {
           containerPath: "/etc/a",
           hostPath: "/var/data/a",
@@ -41,7 +41,7 @@ describe("App Form Field to Model Transform", function () {
     });
 
     it("dockerPortMappings to array of objects", function () {
-      expect(AppFormTransforms.dockerPortMappings([
+      expect(AppFormTransforms.FieldToModel.dockerPortMappings([
         {
           containerPort: 8000,
           hostPort: 0,
@@ -59,7 +59,7 @@ describe("App Form Field to Model Transform", function () {
     });
 
     it("dockerParameters to array of objects", function () {
-      expect(AppFormTransforms.dockerParameters([
+      expect(AppFormTransforms.FieldToModel.dockerParameters([
         {key: "a-docker-option", value: "xxx", consecutiveKey: 1},
         {key: "b-docker-option", value: "yyy", consecutiveKey: 2}
       ])).to.deep.equal([

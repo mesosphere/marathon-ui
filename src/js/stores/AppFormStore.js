@@ -120,9 +120,9 @@ function rebuildModelFromFields(app, fields, fieldId) {
   if (key) {
     const transform = AppFormTransforms.FieldToModel[fieldId];
     if (transform == null) {
-      app[key] = fields[fieldId];
+      objectPath.set(app, key, fields[fieldId]);
     } else {
-      app[key] = transform(fields[fieldId]);
+      objectPath.set(app, key, transform(fields[fieldId]));
     }
   }
 }
@@ -168,24 +168,6 @@ function deleteField(fields, fieldId, index) {
   }
 }
 
-function getTransformedField(fieldId, value) {
-  const transform = AppFormTransforms[fieldId];
-  if (transform == null) {
-    return value;
-  }
-  return transform(value);
-}
-
-function rebuildModelFromFields(app, fields, fieldId) {
-  const key = resolveFieldIdToAppKeyMap[fieldId];
-  if (key) {
-    let field = getTransformedField(fieldId, fields[fieldId]);
-    if (field != null) {
-      objectPath.set(app, key, field);
-    }
-  }
-}
-
 function processResponseErrors(responseErrors, response, statusCode) {
   if (statusCode >= 500) {
     responseErrors.general = AppFormErrorMessages.general[1];
@@ -221,17 +203,6 @@ function processResponseErrors(responseErrors, response, statusCode) {
   } else if (statusCode >= 300) {
     responseErrors.general = AppFormErrorMessages.general[0];
   }
-}
-
-function populateFieldsByModel(app, fields) {
-  Object.keys(app).forEach((appKey) => {
-    var fieldId = resolveAppKeyToFieldIdMap[appKey];
-    if (fieldId == null) {
-      fieldId = appKey;
-    }
-    fields[fieldId] = app[appKey];
-  });
-  console.log("f", fields);
 }
 
 var AppFormStore = lazy(EventEmitter.prototype).extend({
