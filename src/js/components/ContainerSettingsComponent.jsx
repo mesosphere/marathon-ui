@@ -192,8 +192,7 @@ var ContainerSettingsComponent = React.createClass({
                 </option>
               </select>
             </StoreFormGroupComponent>
-            <DuplicableRowControls
-              disableRemoveButton={disableRemoveButton}
+            <DuplicableRowControls disableRemoveButton={disableRemoveButton}
               handleAddRow={handleAddRow}
               handleRemoveRow={handleRemoveRow} />
           </div>
@@ -210,7 +209,7 @@ var ContainerSettingsComponent = React.createClass({
       return null;
     }
 
-    let disableRemoveButton = (rows.length === 1 &&
+    var disableRemoveButton = (rows.length === 1 &&
       Util.isEmptyString(rows[0].containerPort) &&
       Util.isEmptyString(rows[0].hostPort) &&
       Util.isEmptyString(rows[0].servicePort));
@@ -232,25 +231,22 @@ var ContainerSettingsComponent = React.createClass({
 
     return (
       <div key={row.consecutiveKey} className={errorClassSet}>
-        <fieldset className="row duplicable-row"
-                  onChange={handleChange}>
+        <fieldset className="row duplicable-row" onChange={handleChange}>
           <div className="col-sm-6 add-colon">
             <StoreFormGroupComponent
               fieldId={`dockerParameters.${i}.key`}
               label="Key"
               value={row.key}>
-              <input ref={`key${i}`}/>
+              <input ref={`key${i}`} />
             </StoreFormGroupComponent>
           </div>
           <div className="col-sm-6">
-            <StoreFormGroupComponent
-              fieldId={`dockerParameters.${i}.value`}
+            <StoreFormGroupComponent fieldId={`dockerParameters.${i}.value`}
               label="Value"
               value={row.value}>
-              <input ref={`value${i}`}/>
+              <input ref={`value${i}`} />
             </StoreFormGroupComponent>
-            <DuplicableRowControls
-              disableRemoveButton={disableRemoveButton}
+            <DuplicableRowControls disableRemoveButton={disableRemoveButton}
               handleAddRow={handleAddRow}
               handleRemoveRow={handleRemoveRow} />
           </div>
@@ -267,9 +263,9 @@ var ContainerSettingsComponent = React.createClass({
       return null;
     }
 
-    let disableRemoveButton = (rows.length === 1 &&
-    Util.isEmptyString(rows[0].key) &&
-    Util.isEmptyString(rows[0].value));
+    var disableRemoveButton = (rows.length === 1 &&
+      Util.isEmptyString(rows[0].key) &&
+      Util.isEmptyString(rows[0].value));
 
     return rows.map((row, i) => {
       return this.getParametersRow(row, i, disableRemoveButton);
@@ -278,9 +274,7 @@ var ContainerSettingsComponent = React.createClass({
 
   getVolumesRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError("containerVolumes", i);
-    var errorClassSet = classNames({
-      "has-error": !!error
-    });
+    var errorClassSet = classNames({"has-error": !!error});
     var handleChange = this.handleChangeRow.bind(null, "containerVolumes", i);
     var handleAddRow = this.handleAddRow.bind(null, "containerVolumes", i + 1);
     var handleRemoveRow =
@@ -295,20 +289,18 @@ var ContainerSettingsComponent = React.createClass({
               fieldId={`containerVolumes.${i}.containerPath`}
               label="Container Path"
               value={row.containerPath}>
-              <input ref={`containerPath${i}`}/>
+              <input ref={`containerPath${i}`} />
             </StoreFormGroupComponent>
           </div>
           <div className="col-sm-4">
-            <StoreFormGroupComponent
-              fieldId={`containerVolumes.${i}.hostPath`}
+            <StoreFormGroupComponent fieldId={`containerVolumes.${i}.hostPath`}
               label="Host Path"
               value={row.hostPath}>
               <input ref={`hostPath${i}`} />
             </StoreFormGroupComponent>
           </div>
           <div className="col-sm-4">
-            <StoreFormGroupComponent
-              fieldId={`containerVolumes.${i}.mode`}
+            <StoreFormGroupComponent fieldId={`containerVolumes.${i}.mode`}
               label="Mode"
               value={row.mode}>
               <select defaultValue="" ref={`mode${i}`}>
@@ -321,8 +313,7 @@ var ContainerSettingsComponent = React.createClass({
                 </option>
               </select>
             </StoreFormGroupComponent>
-            <DuplicableRowControls
-              disableRemoveButton={disableRemoveButton}
+            <DuplicableRowControls disableRemoveButton={disableRemoveButton}
               handleAddRow={handleAddRow}
               handleRemoveRow={handleRemoveRow} />
           </div>
@@ -339,7 +330,7 @@ var ContainerSettingsComponent = React.createClass({
       return null;
     }
 
-    let disableRemoveButton = (rows.length === 1 &&
+    var disableRemoveButton = (rows.length === 1 &&
       Util.isEmptyString(rows[0].containerPath) &&
       Util.isEmptyString(rows[0].hostPath) &&
       Util.isEmptyString(rows[0].mode));
@@ -366,8 +357,7 @@ var ContainerSettingsComponent = React.createClass({
             </StoreFormGroupComponent>
           </div>
           <div className="col-sm-6">
-            <StoreFormGroupComponent
-              fieldId="dockerNetwork"
+            <StoreFormGroupComponent fieldId="dockerNetwork"
               label="Network"
               value={props.fields.dockerNetwork}
               onChange={this.handleFieldUpdate}>
@@ -384,8 +374,7 @@ var ContainerSettingsComponent = React.createClass({
           </div>
         </div>
         <h4>Privileges</h4>
-        <StoreFormGroupComponent
-          fieldId="dockerPrivileged"
+        <StoreFormGroupComponent fieldId="dockerPrivileged"
           className="checkbox-form-group"
           label="Extend runtime privileges to this container"
           help="Select to give this container access to all devices on the host"
@@ -394,17 +383,11 @@ var ContainerSettingsComponent = React.createClass({
           <input type="checkbox" />
         </StoreFormGroupComponent>
         <h4>Port Mappings</h4>
-        <div className="duplicable-list">
-            {this.getPortMappingRows()}
-        </div>
+        <div className="duplicable-list">{this.getPortMappingRows()}</div>
         <h4>Parameters</h4>
-        <div className="duplicable-list">
-          {this.getParametersRows()}
-        </div>
+        <div className="duplicable-list">{this.getParametersRows()}</div>
         <h4>Volumes</h4>
-        <div className="duplicable-list">
-          {this.getVolumesRows()}
-        </div>
+        <div className="duplicable-list">{this.getVolumesRows()}</div>
       </div>
     );
   }
