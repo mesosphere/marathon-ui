@@ -5,7 +5,7 @@ var Util = require("../helpers/Util");
 
 var AppDispatcher = require("../AppDispatcher");
 var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
-var AppFormTransforms = require("./AppFormTransforms");
+var AppFormTransforms = require("./transforms/AppFormTransforms");
 var AppFormValidators = require("./AppFormValidators");
 var AppsStore = require("./AppsStore");
 var AppsEvents = require("../events/AppsEvents");
@@ -18,6 +18,13 @@ const defaultFieldValues = Object.freeze({
   instances: 1
 });
 
+/**
+ * These validation rules apply on the form fields fieldIds.
+ * The array index of the rule is related to the error message index
+ * in AppFormErrorMessages.
+ *
+ * fieldIds that are not listed here always pass.
+ */
 const validationRules = {
   "appId": [
     AppFormValidators.appIdNotEmpty,
@@ -46,7 +53,12 @@ const validationRules = {
   "ports": [AppFormValidators.ports]
 };
 
-const resolveMap = {
+/**
+ * Translation of fieldId to the application model key.
+ *
+ * Not listed fieldIds are _excluded_ in the model.
+ */
+const resolveFieldIdToAppKeyMap = {
   appId: "id",
   cmd: "cmd",
   constraints: "constraints",
@@ -87,11 +99,47 @@ const responseAttributeNameToFieldIdMap = {
   "/constraints": "constraints"
 };
 
+/**
+ * Translation of a model key to fieldId.
+ *
+ * Not listed keys are taken as they are.
+ */
+const resolveAppKeyToFieldIdMap = {
+  id: "appId"
+};
+
 function getValidationErrorIndex(fieldId, value) {
   if (validationRules[fieldId] == null) {
     return -1;
   }
   return validationRules[fieldId].findIndex((isValid) => !isValid(value));
+}
+
+function rebuildModelFromFields(app, fields, fieldId) {
+  const key = resolveFieldIdToAppKeyMap[fieldId];
+  if (key) {
+    const transform = AppFormTransforms.FieldToModel[fieldId];
+    if (transform == null) {
+      objectPath.set(app, key, fields[fieldId]);
+    } else {
+      objectPath.set(app, key, transform(fields[fieldId]));
+    }
+  }
+}
+
+function populateFieldsFromModel(app, fields) {
+  Object.keys(app).forEach((appKey) => {
+    var fieldId = resolveAppKeyToFieldIdMap[appKey];
+    if (fieldId == null) {
+      fieldId = appKey;
+    }
+    const transform = AppFormTransforms.ModelToField[fieldId];
+    if (transform == null) {
+      fields[fieldId] = app[appKey];
+    } else {
+      fields[fieldId] = transform(app[appKey]);
+    }
+  });
 }
 
 function insertField(fields, fieldId, index = null, value) {
@@ -117,24 +165,6 @@ function updateField(fields, fieldId, index = null, value) {
 function deleteField(fields, fieldId, index) {
   if (duplicableRowFields.indexOf(fieldId) !== -1) {
     fields[fieldId].splice(index, 1);
-  }
-}
-
-function getTransformedField(fieldId, value) {
-  const transform = AppFormTransforms[fieldId];
-  if (transform == null) {
-    return value;
-  }
-  return transform(value);
-}
-
-function rebuildModelFromFields(app, fields, fieldId) {
-  const key = resolveMap[fieldId];
-  if (key) {
-    let field = getTransformedField(fieldId, fields[fieldId]);
-    if (field != null) {
-      objectPath.set(app, key, field);
-    }
   }
 }
 
@@ -189,6 +219,10 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
       this.fields[fieldId] = defaultFieldValues[fieldId];
       rebuildModelFromFields(this.app, this.fields, fieldId);
     });
+  },
+  populateFieldsFromAppDefinition: function (app) {
+    this.app = app;
+    populateFieldsFromModel(app, this.fields);
   }
 }).value();
 
