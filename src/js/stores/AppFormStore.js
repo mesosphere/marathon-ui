@@ -85,9 +85,36 @@ const duplicableRowFields = [
   "containerVolumes"
 ];
 
-const responseAttributeNameToFieldIdMap = {
+/**
+ * Translation map for server-side validation error responses.
+ *
+ * Resolves an attribute/path to the corresponding form fieldId.
+ */
+const responseAttributePathToFieldIdMap = {
   "id": "appId",
   "/cmd": "cmd",
+  "/constraints": "constraints",
+  "/container/docker/image": "dockerImage",
+  "/container/docker/network": "dockerNetwork",
+  "/container/docker/privileged": "dockerPrivileged",
+  "/container/docker/parameters({INDEX})/key":
+    "dockerParameters.{INDEX}.key",
+  "/container/docker/parameters({INDEX})/value":
+    "dockerParameters.{INDEX}.value",
+  "/container/docker/portMappings({INDEX})/containerPort":
+    "dockerPortMappings.{INDEX}.containerPort",
+  "/container/docker/portMappings({INDEX})/hostPort":
+    "dockerPortMappings.{INDEX}.hostPort",
+  "/container/docker/portMappings({INDEX})/servicePort":
+    "dockerPortMappings.{INDEX}.servicePort",
+  "/container/docker/portMappings({INDEX})/protocol":
+    "dockerPortMappings.{INDEX}.protocol",
+  "/container/volumes({INDEX})/containerPath":
+    "containerVolumes.{INDEX}.containerPath",
+  "/container/volumes({INDEX})/hostPath":
+    "containerVolumes.{INDEX}.hostPath",
+  "/container/volumes({INDEX})/mode":
+    "containerVolumes.{INDEX}.mode",
   "/cpus": "cpus",
   "/disk": "disk",
   "/env": "env",
@@ -95,8 +122,7 @@ const responseAttributeNameToFieldIdMap = {
   "/instances": "instances",
   "/mem": "mem",
   "/ports": "ports",
-  "/uris": "uris",
-  "/constraints": "constraints"
+  "/uris": "uris"
 };
 
 /**
@@ -125,6 +151,24 @@ function rebuildModelFromFields(app, fields, fieldId) {
       objectPath.set(app, key, transform(fields[fieldId]));
     }
   }
+}
+
+function resolveResponseAttributePathToFieldId(attributePath) {
+  var fieldId;
+  // Check if attributePath contains an index like path(0)/attribute
+  // Matches as defined: [0] : "(0)", [1]: "0"
+  var matches = attributePath.match(/\(([0-9]+)\)/);
+  if (matches != null) {
+    let resolvePath = responseAttributePathToFieldIdMap[
+      attributePath.replace(matches[0], "({INDEX})")
+    ];
+    if (resolvePath != null) {
+      fieldId = resolvePath.replace("{INDEX}", matches[1]);
+    }
+  } else {
+    fieldId = responseAttributePathToFieldIdMap[attributePath];
+  }
+  return fieldId;
 }
 
 function populateFieldsFromModel(app, fields) {
@@ -176,10 +220,11 @@ function processResponseErrors(responseErrors, response, statusCode) {
       Util.isArray(response.errors)) {
 
     response.errors.forEach((error) => {
-      var fieldId = error.attribute.length
+      var attributePath = error.attribute.length
         ? error.attribute
         : "general";
-      fieldId = responseAttributeNameToFieldIdMap[fieldId] || fieldId;
+      var fieldId = resolveResponseAttributePathToFieldId(attributePath) ||
+        attributePath;
       responseErrors[fieldId] = error.error;
     });
 
@@ -193,10 +238,11 @@ function processResponseErrors(responseErrors, response, statusCode) {
       Util.isArray(response.details)) {
 
     response.details.forEach((detail) => {
-      var fieldId = detail.path.length
+      var attributePath = detail.path.length
         ? detail.path
         : "general";
-      fieldId = responseAttributeNameToFieldIdMap[fieldId] || fieldId;
+      var fieldId = resolveResponseAttributePathToFieldId(attributePath) ||
+        attributePath;
       responseErrors[fieldId] = detail.errors.join(", ");
     });
 
