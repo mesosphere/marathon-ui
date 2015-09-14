@@ -26,7 +26,15 @@ const AppFormFieldToModelTransforms = {
     .filter((row) => row),
   dockerPortMappings: (rows) => rows
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerPortMappings))
-    .filter((row) => row),
+    .filter((row) => row)
+    .map((row) => {
+      return {
+        containerPort: parseInt(row.containerPort, 10),
+        hostPort: parseInt(row.hostPort, 10),
+        servicePort: parseInt(row.servicePort, 10),
+        protocol: row.protocol
+      };
+    }),
   env: (rows) => {
     return rows.reduce((memo, row) => {
       memo[row.key] = row.value;
