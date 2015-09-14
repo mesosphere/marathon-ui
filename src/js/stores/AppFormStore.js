@@ -18,12 +18,19 @@ const defaultFieldValues = Object.freeze({
   instances: 1
 });
 
+const duplicableRowFields = [
+  "env",
+  "dockerPortMappings",
+  "dockerParameters",
+  "containerVolumes"
+];
+
 /**
- * These validation rules apply on the form fields fieldIds.
+ * Validation rules for individual fields and fieldsets (duplicable rows).
  * The array index of the rule is related to the error message index
  * in AppFormErrorMessages.
  *
- * fieldIds that are not listed here always pass.
+ * fieldIds not listed here are considered valid by default.
  */
 const validationRules = {
   "appId": [
@@ -56,7 +63,7 @@ const validationRules = {
 /**
  * Translation of fieldId to the application model key.
  *
- * Not listed fieldIds are _excluded_ in the model.
+ * fieldIds not listed here are not set in the model.
  */
 const resolveFieldIdToAppKeyMap = {
   appId: "id",
@@ -77,13 +84,6 @@ const resolveFieldIdToAppKeyMap = {
   ports: "ports",
   uris: "uris"
 };
-
-const duplicableRowFields = [
-  "env",
-  "dockerPortMappings",
-  "dockerParameters",
-  "containerVolumes"
-];
 
 /**
  * Translation map for server-side validation error responses.
