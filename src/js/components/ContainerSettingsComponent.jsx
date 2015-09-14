@@ -31,6 +31,12 @@ var ContainerSettingsComponent = React.createClass({
     getErrorMessage: React.PropTypes.func
   },
 
+  getInitialState: function () {
+    return {
+      rows: this.getPopulatedRows()
+    };
+  },
+
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       rows: this.getPopulatedRows(nextProps.fields)
@@ -53,12 +59,6 @@ var ContainerSettingsComponent = React.createClass({
           : Util.getUniqueId()
       });
     });
-  },
-
-  getInitialState: function () {
-    return {
-      rows: this.getPopulatedRows()
-    };
   },
 
   getPopulatedRows: function (fields = this.props.fields) {
@@ -140,17 +140,14 @@ var ContainerSettingsComponent = React.createClass({
 
   getPortMappingRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError("dockerPortMappings", i);
-
-    var errorClassSet = classNames({
-      "has-error": !!error
-    });
-
+    var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, "dockerPortMappings", i);
     var handleAddRow =
       this.handleAddRow.bind(null, "dockerPortMappings", i + 1);
     var handleRemoveRow =
       this.handleRemoveRow.bind(null, "dockerPortMappings", i);
+
     return (
       <div key={row.consecutiveKey} className={errorClassSet}>
         <fieldset className="row duplicable-row"
@@ -235,9 +232,7 @@ var ContainerSettingsComponent = React.createClass({
 
   getParametersRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError("dockerParameters", i);
-    var errorClassSet = classNames({
-      "has-error": !!error
-    });
+    var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, "dockerParameters", i);
     var handleAddRow = this.handleAddRow.bind(null, "dockerParameters", i + 1);
