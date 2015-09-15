@@ -40,12 +40,23 @@ describe("App Form Field to Model Transform", function () {
       ]);
     });
 
-    it("dockerPortMappings to array of objects", function () {
+    it("container volumes to empty array", function () {
+      expect(AppFormTransforms.FieldToModel.containerVolumes([
+        {
+          containerPath: "",
+          hostPath: "",
+          mode: "",
+          consecutiveKey: 1
+        }
+      ])).to.deep.equal([]);
+    });
+
+    it("dockerPortMappings to array of one object", function () {
       expect(AppFormTransforms.FieldToModel.dockerPortMappings([
         {
           containerPort: 8000,
           hostPort: 0,
-          servicePort: null,
+          servicePort: "",
           protocol: "tcp",
           consecutiveKey: 1
         }
@@ -58,6 +69,84 @@ describe("App Form Field to Model Transform", function () {
       ]);
     });
 
+    it("dockerPortMappings to empty array", function () {
+      expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+        {
+          containerPort: "",
+          hostPort: "",
+          servicePort: "",
+          protocol: "",
+          consecutiveKey: 1
+        }
+      ])).to.deep.equal([]);
+    });
+
+    it("dockerPortMappings to empty array also with protocol set", function () {
+      expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+        {
+          containerPort: "",
+          hostPort: "",
+          servicePort: "",
+          protocol: "tcp",
+          consecutiveKey: 1
+        }
+      ])).to.deep.equal([]);
+    });
+
+    it("dockerPortMappings to array of multiple objects", function () {
+      expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+        {
+          containerPort: "123",
+          hostPort: "123",
+          servicePort: "     ",
+          protocol: "tcp",
+          consecutiveKey: 1
+        },
+        {
+          containerPort: "",
+          hostPort: "",
+          servicePort: "",
+          protocol: "tcp",
+          consecutiveKey: 2
+        },
+        {
+          containerPort: "456",
+          hostPort: "",
+          servicePort: "456",
+          protocol: "udp",
+          consecutiveKey: 3
+        }
+      ])).to.deep.equal([
+          {
+            containerPort: 123,
+            hostPort: 123,
+            protocol: "tcp"
+          },
+          {
+            containerPort: 456,
+            servicePort: 456,
+            protocol: "udp"
+          }
+      ]);
+    });
+
+    it("dockerPortMappings to object with no protocol", function () {
+      expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+        {
+          containerPort: "123",
+          hostPort: "123",
+          servicePort: "      ",
+          protocol: "",
+          consecutiveKey: 1
+        }
+      ])).to.deep.equal([
+          {
+            containerPort: 123,
+            hostPort: 123
+          }
+        ]);
+    });
+
     it("dockerParameters to array of objects", function () {
       expect(AppFormTransforms.FieldToModel.dockerParameters([
         {key: "a-docker-option", value: "xxx", consecutiveKey: 1},
@@ -66,6 +155,24 @@ describe("App Form Field to Model Transform", function () {
           {key: "a-docker-option", value: "xxx"},
           {key: "b-docker-option", value: "yyy"}
       ]);
+    });
+
+    it("dockerParameters to empty array", function () {
+      expect(AppFormTransforms.FieldToModel.dockerParameters([
+        {
+          key: "",
+          value: "",
+          consecutiveKey: 1
+        }
+      ])).to.deep.equal([]);
+    });
+
+
+    it("dockerPrivileged is checked", function () {
+      expect(AppFormTransforms.FieldToModel.dockerPrivileged(true))
+        .to.be.true;
+      expect(AppFormTransforms.FieldToModel.dockerPrivileged())
+        .to.be.false;
     });
 
     it("env to object with key-values", function () {

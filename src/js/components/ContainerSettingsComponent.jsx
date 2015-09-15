@@ -31,6 +31,12 @@ var ContainerSettingsComponent = React.createClass({
     getErrorMessage: React.PropTypes.func
   },
 
+  getInitialState: function () {
+    return {
+      rows: this.getPopulatedRows()
+    };
+  },
+
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       rows: this.getPopulatedRows(nextProps.fields)
@@ -53,12 +59,6 @@ var ContainerSettingsComponent = React.createClass({
           : Util.getUniqueId()
       });
     });
-  },
-
-  getInitialState: function () {
-    return {
-      rows: this.getPopulatedRows()
-    };
   },
 
   getPopulatedRows: function (fields = this.props.fields) {
@@ -140,22 +140,23 @@ var ContainerSettingsComponent = React.createClass({
 
   getPortMappingRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError("dockerPortMappings", i);
-
-    var errorClassSet = classNames({
-      "has-error": !!error
-    });
-
+    var errorClassSet = classNames({"has-error": !!error});
+    var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, "dockerPortMappings", i);
     var handleAddRow =
       this.handleAddRow.bind(null, "dockerPortMappings", i + 1);
     var handleRemoveRow =
       this.handleRemoveRow.bind(null, "dockerPortMappings", i);
+
     return (
       <div key={row.consecutiveKey} className={errorClassSet}>
         <fieldset className="row duplicable-row"
           onChange={handleChange}>
           <div className="col-sm-3">
             <StoreFormGroupComponent
+              errorMessage={
+                getErrorMessage(`dockerPortMappings.${i}.containerPort`)
+              }
               fieldId={`dockerPortMappings.${i}.containerPort`}
               label="Container Port"
               value={row.containerPort}>
@@ -164,6 +165,9 @@ var ContainerSettingsComponent = React.createClass({
           </div>
           <div className="col-sm-3">
             <StoreFormGroupComponent
+              errorMessage={
+                getErrorMessage(`dockerPortMappings.${i}.hostPort`)
+              }
               fieldId={`dockerPortMappings.${i}.hostPort`}
               label="Host Port"
               value={row.hostPort}>
@@ -172,6 +176,9 @@ var ContainerSettingsComponent = React.createClass({
           </div>
           <div className="col-sm-2">
             <StoreFormGroupComponent
+              errorMessage={
+                getErrorMessage(`dockerPortMappings.${i}.servicePort`)
+              }
               fieldId={`dockerPortMappings.${i}.servicePort`}
               label="Service Port"
               value={row.servicePort}>
@@ -180,11 +187,14 @@ var ContainerSettingsComponent = React.createClass({
           </div>
           <div className="col-sm-4">
             <StoreFormGroupComponent
+              errorMessage={
+                getErrorMessage(`dockerPortMappings.${i}.protocol`)
+              }
               fieldId={`dockerPortMappings.${i}.protocol`}
               label="Protocol"
               value={row.protocol}>
-              <select defaultValue="" ref={`protocol${i}`}>
-                <option value="" disabled="disabled">Select</option>
+              <select defaultValue={row.protocol} ref={`protocol${i}`}>
+                <option value="">Select</option>
                 <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
                   {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
                 </option>
@@ -222,9 +232,8 @@ var ContainerSettingsComponent = React.createClass({
 
   getParametersRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError("dockerParameters", i);
-    var errorClassSet = classNames({
-      "has-error": !!error
-    });
+    var errorClassSet = classNames({"has-error": !!error});
+    var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, "dockerParameters", i);
     var handleAddRow = this.handleAddRow.bind(null, "dockerParameters", i + 1);
     var handleRemoveRow =
@@ -235,6 +244,7 @@ var ContainerSettingsComponent = React.createClass({
         <fieldset className="row duplicable-row" onChange={handleChange}>
           <div className="col-sm-6 add-colon">
             <StoreFormGroupComponent
+              errorMessage={getErrorMessage(`dockerParameters.${i}.key`)}
               fieldId={`dockerParameters.${i}.key`}
               label="Key"
               value={row.key}>
@@ -242,7 +252,9 @@ var ContainerSettingsComponent = React.createClass({
             </StoreFormGroupComponent>
           </div>
           <div className="col-sm-6">
-            <StoreFormGroupComponent fieldId={`dockerParameters.${i}.value`}
+            <StoreFormGroupComponent
+              errorMessage={getErrorMessage(`dockerParameters.${i}.value`)}
+              fieldId={`dockerParameters.${i}.value`}
               label="Value"
               value={row.value}>
               <input ref={`value${i}`} />
@@ -276,6 +288,7 @@ var ContainerSettingsComponent = React.createClass({
   getVolumesRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError("containerVolumes", i);
     var errorClassSet = classNames({"has-error": !!error});
+    var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, "containerVolumes", i);
     var handleAddRow = this.handleAddRow.bind(null, "containerVolumes", i + 1);
     var handleRemoveRow =
@@ -287,6 +300,9 @@ var ContainerSettingsComponent = React.createClass({
           onChange={handleChange}>
           <div className="col-sm-4">
             <StoreFormGroupComponent
+              errorMessage={
+                getErrorMessage(`containerVolumes.${i}.containerPath`)
+              }
               fieldId={`containerVolumes.${i}.containerPath`}
               label="Container Path"
               value={row.containerPath}>
@@ -294,18 +310,22 @@ var ContainerSettingsComponent = React.createClass({
             </StoreFormGroupComponent>
           </div>
           <div className="col-sm-4">
-            <StoreFormGroupComponent fieldId={`containerVolumes.${i}.hostPath`}
+            <StoreFormGroupComponent
+              errorMessage={getErrorMessage(`containerVolumes.${i}.hostPath`)}
+              fieldId={`containerVolumes.${i}.hostPath`}
               label="Host Path"
               value={row.hostPath}>
               <input ref={`hostPath${i}`} />
             </StoreFormGroupComponent>
           </div>
           <div className="col-sm-4">
-            <StoreFormGroupComponent fieldId={`containerVolumes.${i}.mode`}
+            <StoreFormGroupComponent
+              errorMessage={getErrorMessage(`containerVolumes.${i}.mode`)}
+              fieldId={`containerVolumes.${i}.mode`}
               label="Mode"
               value={row.mode}>
               <select defaultValue="" ref={`mode${i}`}>
-                <option value="" disabled="disabled">Select</option>
+                <option value="">Select</option>
                 <option value={ContainerConstants.VOLUMES.MODE.RO}>
                   Read Only
                 </option>
@@ -358,12 +378,14 @@ var ContainerSettingsComponent = React.createClass({
             </StoreFormGroupComponent>
           </div>
           <div className="col-sm-6">
-            <StoreFormGroupComponent fieldId="dockerNetwork"
+            <StoreFormGroupComponent
+              errorMessage={props.getErrorMessage("dockerNetwork")}
+              fieldId="dockerNetwork"
               label="Network"
               value={props.fields.dockerNetwork}
               onChange={this.handleFieldUpdate}>
               <select defaultValue="">
-                <option value="" disabled="disabled">Select</option>
+                <option value="">Select</option>
                 <option value={ContainerConstants.NETWORK.HOST}>
                   Host
                 </option>
@@ -375,10 +397,11 @@ var ContainerSettingsComponent = React.createClass({
           </div>
         </div>
         <h4>Privileges</h4>
-        <StoreFormGroupComponent fieldId="dockerPrivileged"
-          className="checkbox-form-group"
-          label="Extend runtime privileges to this container"
+        <StoreFormGroupComponent className="checkbox-form-group"
+          errorMessage={props.getErrorMessage("dockerPrivileged")}
+          fieldId="dockerPrivileged"
           help="Select to give this container access to all devices on the host"
+          label="Extend runtime privileges to this container"
           value={props.fields.dockerPrivileged}
           onChange={this.handleFieldUpdate}>
           <input type="checkbox" />
