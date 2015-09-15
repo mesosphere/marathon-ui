@@ -47,10 +47,13 @@ const AppFormValidators = {
   disk: (value) => !Util.isEmptyString(value) &&
     !!value.toString().match(/^[0-9\.]+$/),
 
-  dockerImageNoWhitespaces: (str) => str.match(/ /g) == null,
+  dockerImageNoWhitespaces: (str) => !Util.isEmptyString(str) &&
+    str.match(/ /g) == null,
 
-  dockerParameters: (obj) =>
-    !(Util.isEmptyString(obj.key) && !Util.isEmptyString(obj.value)),
+  dockerParameters: (obj) => obj.hasOwnProperty("key") &&
+    obj.hasOwnProperty("value") &&
+    !(Util.isEmptyString(obj.key) &&
+    !Util.isEmptyString(obj.value)),
 
   dockerPortMappingsContainerPortIsValid: (obj) =>
     isValidPort(obj.containerPort),
@@ -59,8 +62,9 @@ const AppFormValidators = {
 
   dockerPortMappingsServicePortIsValid: (obj) => isValidPort(obj.servicePort),
 
-  dockerPortMappingsProtocolNotEmpty: (obj) =>
-    !Util.isEmptyString(obj.protocol),
+  dockerPortMappingsProtocolValidType: (obj) =>
+    !Util.isEmptyString(obj.protocol) &&
+    (obj.protocol === "tcp" || obj.protocol === "udp"),
 
   env: (obj) => obj.hasOwnProperty("key") &&
     obj.hasOwnProperty("value") &&

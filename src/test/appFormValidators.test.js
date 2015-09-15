@@ -75,6 +75,176 @@ describe("App Form Validators", function () {
       });
     });
 
+    describe("docker container settings", function () {
+
+      describe("image", function () {
+        it("is not empty", function () {
+          let isValid = this.v.dockerImageNoWhitespaces;
+
+          expect(isValid("notEmpty")).to.be.true;
+          expect(isValid("")).to.be.false;
+        });
+
+        it("has no whitespaces", function () {
+          let isValid = this.v.dockerImageNoWhitespaces;
+
+          expect(isValid("dockerImage")).to.be.true;
+          expect(isValid("docker Image")).to.be.false;
+        });
+      });
+
+      describe("the port mappings", function () {
+
+        describe("container port", function () {
+
+          it("looks like an integer and is in port range", function () {
+            let isValidPort = this.v.dockerPortMappingsContainerPortIsValid;
+
+            expect(isValidPort({containerPort: "NaN 666"})).to.be.false;
+            expect(isValidPort({containerPort: -5})).to.be.false;
+            expect(isValidPort({containerPort: 0.1})).to.be.false;
+            expect(isValidPort({containerPort: "0.0001"})).to.be.false;
+            expect(isValidPort({containerPort: "70000"})).to.be.false;
+            expect(isValidPort({containerPort: 0})).to.be.true;
+            expect(isValidPort({containerPort: "2"})).to.be.true;
+            expect(isValidPort({containerPort: ""})).to.be.true;
+          });
+
+        });
+
+        describe("host port", function () {
+
+          it("looks like an integer and is in port range", function () {
+            let isValidPort = this.v.dockerPortMappingsHostPortIsValid;
+
+            expect(isValidPort({hostPort: "NaN 666"})).to.be.false;
+            expect(isValidPort({hostPort: -5})).to.be.false;
+            expect(isValidPort({hostPort: 0.1})).to.be.false;
+            expect(isValidPort({hostPort: "0.0001"})).to.be.false;
+            expect(isValidPort({hostPort: "70000"})).to.be.false;
+            expect(isValidPort({hostPort: 0})).to.be.true;
+            expect(isValidPort({hostPort: "2"})).to.be.true;
+            expect(isValidPort({hostPort: ""})).to.be.true;
+          });
+
+        });
+
+        describe("service port", function () {
+
+          it("looks like an integer and is in port range", function () {
+            let isValidPort = this.v.dockerPortMappingsServicePortIsValid;
+
+            expect(isValidPort({servicePort: "NaN 666"})).to.be.false;
+            expect(isValidPort({servicePort: -5})).to.be.false;
+            expect(isValidPort({servicePort: 0.1})).to.be.false;
+            expect(isValidPort({servicePort: "0.0001"})).to.be.false;
+            expect(isValidPort({servicePort: "70000"})).to.be.false;
+            expect(isValidPort({servicePort: 0})).to.be.true;
+            expect(isValidPort({servicePort: "2"})).to.be.true;
+            expect(isValidPort({servicePort: ""})).to.be.true;
+          });
+
+        });
+
+         describe("protocol", function () {
+
+          it("is not empty and correct type", function () {
+            let isValid = this.v.dockerPortMappingsProtocolValidType;
+
+            expect(isValid({protocol: ""})).to.be.false;
+            expect(isValid({protocol: "ipx"})).to.be.false;
+            expect(isValid({protocol: "tcp"})).to.be.true;
+            expect(isValid({protocol: "udp"})).to.be.true;
+          });
+
+        });
+      });
+
+      describe("parameters row (single)", function () {
+
+        it("has correct object format", function () {
+          expect(this.v.dockerParameters({
+            key: "key1",
+            value: "value1"
+          })).to.be.true;
+        });
+
+        it("doesn't care about additonal object keys", function () {
+          expect(this.v.dockerParameters({
+            key: "key1",
+            value: "value1",
+            consecutiveKey: 2
+          })).to.be.true;
+        });
+
+        it("detects incorrect object format", function () {
+          expect(this.v.dockerParameters({
+            key: "key1",
+            val: "value1"
+          })).to.be.false;
+        });
+
+        it("detects empty key", function () {
+          expect(this.v.dockerParameters({
+            key: "",
+            value: "value1"
+          })).to.be.false;
+        });
+
+        it("treats empty value as correct", function () {
+          expect(this.v.dockerParameters({
+            key: "key1",
+            value: ""
+          })).to.be.true;
+        });
+
+      });
+
+      describe("volumes", function () {
+
+        describe("container path", function () {
+          it("is empty", function () {
+            let isValid = this.v.containerVolumesContainerPathIsValid;
+
+            expect(isValid({containerPath: ""})).to.be.true;
+          });
+
+          it("has no whitespaces", function () {
+            let isValid = this.v.containerVolumesContainerPathIsValid;
+
+            expect(isValid({containerPath: "containerPath"})).to.be.true;
+            expect(isValid({containerPath: "container path"})).to.be.false;
+          });
+        });
+
+        describe("host path", function () {
+          it("is empty", function () {
+            let isValid = this.v.containerVolumesHostPathIsValid;
+
+            expect(isValid({hostPath: ""})).to.be.true;
+          });
+
+          it("has no whitespaces", function () {
+            let isValid = this.v.containerVolumesHostPathIsValid;
+
+            expect(isValid({hostPath: "hostPath"})).to.be.true;
+            expect(isValid({hostPath: "host path"})).to.be.false;
+          });
+        });
+
+        describe("volumes mode", function () {
+          it("is not empty", function () {
+            let isValid = this.v.containerVolumesModeNotEmpty;
+
+            expect(isValid({mode: ""})).to.be.false;
+            expect(isValid({mode: "RO"})).to.be.true;
+          });
+        });
+
+      });
+
+    });
+
     describe("env row (single)", function () {
 
       it("has correct object format", function () {

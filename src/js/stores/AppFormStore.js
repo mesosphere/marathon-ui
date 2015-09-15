@@ -51,7 +51,7 @@ const validationRules = {
     AppFormValidators.dockerPortMappingsContainerPortIsValid,
     AppFormValidators.dockerPortMappingsHostPortIsValid,
     AppFormValidators.dockerPortMappingsServicePortIsValid,
-    AppFormValidators.dockerPortMappingsProtocolNotEmpty
+    AppFormValidators.dockerPortMappingsProtocolValidType
   ],
   "env": [AppFormValidators.env],
   "executor": [AppFormValidators.executor],
