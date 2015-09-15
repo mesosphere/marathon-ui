@@ -1,5 +1,6 @@
 const dockerRowSchemes = require("../dockerRowSchemes");
 var Util = require("../../helpers/Util");
+var lazy = require("lazy.js");
 
 function ensureObjectScheme(row, scheme) {
   return Object.keys(row).reduce((obj, key) => {
@@ -25,21 +26,28 @@ const AppFormFieldToModelTransforms = {
   dockerParameters: (rows) => rows
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))
     .filter((row) => row),
-  dockerPortMappings: (rows) => rows
+  dockerPortMappings: (rows) => lazy(rows)
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerPortMappings))
-    .filter((row) => row)
+    .compact()
     .map((row) => {
-      return Object.keys(row).reduce((memo, key) => {
-        if (Util.isEmptyString(row[key])) {
-          memo[key] = null;
-        } else if (/^\d+$/.test(row[key])) {
-          memo[key] = parseInt(row[key], 10);
-        } else {
-          memo[key] = row[key];
+      var obj = {};
+
+      ["containerPort", "hostPort", "servicePort"].forEach((key) => {
+        if (row[key] != null &&
+            !Util.isEmptyString(row[key].toString().trim())) {
+          obj[key] = parseInt(row[key], 10);
         }
-        return memo;
-      }, {});
-    }),
+      });
+
+      if (Object.keys(obj).length) {
+        if (!Util.isEmptyString(row.protocol)) {
+          obj.protocol = row.protocol;
+        }
+        return obj;
+      }
+    })
+    .compact()
+    .value(),
   env: (rows) => {
     return rows.reduce((memo, row) => {
       memo[row.key] = row.value;
