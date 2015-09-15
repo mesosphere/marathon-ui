@@ -1,4 +1,5 @@
 const dockerRowSchemes = require("../dockerRowSchemes");
+var Util = require("../../helpers/Util");
 
 function ensureObjectScheme(row, scheme) {
   return Object.keys(row).reduce((obj, key) => {
@@ -29,7 +30,9 @@ const AppFormFieldToModelTransforms = {
     .filter((row) => row)
     .map((row) => {
       return Object.keys(row).reduce((memo, key) => {
-        if (/^\d+$/.test(row[key])) {
+        if (Util.isEmptyString(row[key])) {
+          memo[key] = null;
+        } else if (/^\d+$/.test(row[key])) {
           memo[key] = parseInt(row[key], 10);
         } else {
           memo[key] = row[key];
