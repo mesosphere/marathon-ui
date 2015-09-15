@@ -102,7 +102,11 @@ var AppsActions = {
         });
       });
   },
-  scaleApp: function (appId, instances) {
+  scaleApp: function (appId, instances, force = false) {
+    var url = `${config.apiURL}v2/apps/${appId}`;
+    if (force) {
+      url = url + "?force=true";
+    }
     this.request({
       method: "PUT",
       data: {
@@ -111,7 +115,7 @@ var AppsActions = {
       headers: {
         "Content-Type": "application/json"
       },
-      url: `${config.apiURL}v2/apps/${appId}`
+      url: url
     })
       .success(function (app) {
         AppDispatcher.dispatch({
@@ -123,7 +127,8 @@ var AppsActions = {
       .error(function (error) {
         AppDispatcher.dispatch({
           actionType: AppsEvents.SCALE_APP_ERROR,
-          data: error
+          data: error,
+          instances: instances
         });
       });
   },
