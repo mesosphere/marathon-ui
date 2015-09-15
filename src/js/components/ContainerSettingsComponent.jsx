@@ -193,7 +193,7 @@ var ContainerSettingsComponent = React.createClass({
               fieldId={`dockerPortMappings.${i}.protocol`}
               label="Protocol"
               value={row.protocol}>
-              <select defaultValue="" ref={`protocol${i}`}>
+              <select defaultValue={row.protocol} ref={`protocol${i}`}>
                 <option value="" disabled="disabled">Select</option>
                 <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
                   {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
