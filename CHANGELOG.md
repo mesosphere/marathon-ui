@@ -1,4 +1,8 @@
 ## Unversioned
+### Added
+- \#2244 - Ability to scale an application forcefully if there is a deployment
+  running
+
 ### Fixed
 - \#2157 - Row is off-centre if upper row is empty in lists
 
