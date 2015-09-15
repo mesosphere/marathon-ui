@@ -23,7 +23,7 @@ const AppFormErrorMessages = {
     "Container Port must be a valid port",
     "Host Port must be a valid port",
     "Service Port must be a valid port",
-    "Protocol must not be empty"
+    "Protocol must be of type 'tcp' or 'udp'"
   ],
   env: ["Key cannot be blank"],
   executor: ["Invalid executor format"],
