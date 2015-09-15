@@ -63,8 +63,10 @@ const AppFormValidators = {
   dockerPortMappingsServicePortIsValid: (obj) => isValidPort(obj.servicePort),
 
   dockerPortMappingsProtocolValidType: (obj) =>
-    !Util.isEmptyString(obj.protocol) &&
-    (obj.protocol === "tcp" || obj.protocol === "udp"),
+    obj.protocol == null ||
+    Util.isEmptyString(obj.protocol) ||
+    (obj.protocol != null &&
+      (obj.protocol === "tcp" || obj.protocol === "udp")),
 
   env: (obj) => obj.hasOwnProperty("key") &&
     obj.hasOwnProperty("value") &&
