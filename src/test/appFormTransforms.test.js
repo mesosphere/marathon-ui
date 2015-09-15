@@ -146,6 +146,13 @@ describe("App Form Field to Model Transform", function () {
       ]);
     });
 
+    it("dockerPrivileged is checked", function () {
+      expect(AppFormTransforms.FieldToModel.dockerPrivileged(true))
+        .to.be.true;
+      expect(AppFormTransforms.FieldToModel.dockerPrivileged())
+        .to.be.false;
+    });
+
     it("env to object with key-values", function () {
       expect(AppFormTransforms.FieldToModel.env([
         {key: "key1", value: "value1", consecutiveKey: 0},
