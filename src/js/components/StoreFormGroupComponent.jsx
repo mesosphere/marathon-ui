@@ -17,7 +17,11 @@ var StoreFormGroupComponent = React.createClass({
   handleChange: function (event) {
     var props = this.props;
     if (props.onChange) {
-      props.onChange(this.props.fieldId, event.target.value);
+      let value = event.target.type !== "checkbox"
+        ? event.target.value
+        : event.target.checked;
+
+      props.onChange(this.props.fieldId, value);
     }
   },
 
