@@ -3,7 +3,7 @@ const dockerRowSchemes = {
     containerPort: null,
     hostPort: null,
     servicePort: null,
-    protocol: "tcp"
+    protocol: null
   },
   dockerParameters: {
     key: null,
