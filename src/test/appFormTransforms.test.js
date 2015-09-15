@@ -40,6 +40,17 @@ describe("App Form Field to Model Transform", function () {
       ]);
     });
 
+    it("container volumes to empty array", function () {
+      expect(AppFormTransforms.FieldToModel.containerVolumes([
+        {
+          containerPath: "",
+          hostPath: "",
+          mode: "",
+          consecutiveKey: 1
+        }
+      ])).to.deep.equal([]);
+    });
+
     it("dockerPortMappings to array of one object", function () {
       expect(AppFormTransforms.FieldToModel.dockerPortMappings([
         {
@@ -145,6 +156,17 @@ describe("App Form Field to Model Transform", function () {
           {key: "b-docker-option", value: "yyy"}
       ]);
     });
+
+    it("dockerParameters to empty array", function () {
+      expect(AppFormTransforms.FieldToModel.dockerParameters([
+        {
+          key: "",
+          value: "",
+          consecutiveKey: 1
+        }
+      ])).to.deep.equal([]);
+    });
+
 
     it("dockerPrivileged is checked", function () {
       expect(AppFormTransforms.FieldToModel.dockerPrivileged(true))

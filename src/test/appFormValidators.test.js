@@ -148,10 +148,11 @@ describe("App Form Validators", function () {
 
          describe("protocol", function () {
 
-          it("is not empty and correct type", function () {
+          it("if not empty is of correct type", function () {
             let isValid = this.v.dockerPortMappingsProtocolValidType;
 
-            expect(isValid({protocol: ""})).to.be.false;
+            expect(isValid({protocol: ""})).to.be.true;
+            expect(isValid({protocol: null})).to.be.true;
             expect(isValid({protocol: "ipx"})).to.be.false;
             expect(isValid({protocol: "tcp"})).to.be.true;
             expect(isValid({protocol: "udp"})).to.be.true;
