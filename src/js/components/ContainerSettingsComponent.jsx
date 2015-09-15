@@ -194,7 +194,7 @@ var ContainerSettingsComponent = React.createClass({
               label="Protocol"
               value={row.protocol}>
               <select defaultValue={row.protocol} ref={`protocol${i}`}>
-                <option value="" disabled="disabled">Select</option>
+                <option value="">Select</option>
                 <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
                   {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
                 </option>
@@ -325,7 +325,7 @@ var ContainerSettingsComponent = React.createClass({
               label="Mode"
               value={row.mode}>
               <select defaultValue="" ref={`mode${i}`}>
-                <option value="" disabled="disabled">Select</option>
+                <option value="">Select</option>
                 <option value={ContainerConstants.VOLUMES.MODE.RO}>
                   Read Only
                 </option>
@@ -385,7 +385,7 @@ var ContainerSettingsComponent = React.createClass({
               value={props.fields.dockerNetwork}
               onChange={this.handleFieldUpdate}>
               <select defaultValue="">
-                <option value="" disabled="disabled">Select</option>
+                <option value="">Select</option>
                 <option value={ContainerConstants.NETWORK.HOST}>
                   Host
                 </option>
