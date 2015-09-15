@@ -335,11 +335,19 @@ describe("App Form", function () {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
                 let row = AppFormStore.fields.dockerPortMappings[0];
+                expect(row.containerPort).to.equal(9000);
+                expect(row.hostPort).to.equal(9001);
                 expect(row.servicePort).to.equal(8101);
+                expect(row.protocol).to.equal("tcp");
               }, done);
             });
 
-            FormActions.update("dockerPortMappings", {servicePort: 8101}, 0);
+            FormActions.update("dockerPortMappings", {
+              containerPort: 9000,
+              hostPort: 9001,
+              servicePort: 8101,
+              protocol: "tcp"
+            }, 0);
           });
 
           it("deletes a row at index", function (done) {
@@ -404,10 +412,13 @@ describe("App Form", function () {
               expectAsync(function () {
                 let row = AppFormStore.fields.dockerParameters[0];
                 expect(row.key).to.equal("DOCKER_KEY_1A");
+                expect(row.value).to.equal("DOCKER_VALUE_1");
               }, done);
             });
 
-            FormActions.update("dockerParameters", {key: "DOCKER_KEY_1A"}, 0);
+            FormActions.update("dockerParameters", {
+              key: "DOCKER_KEY_1A", value: "DOCKER_VALUE_1"
+            }, 0);
           });
 
           it("deletes a row at index", function (done) {
