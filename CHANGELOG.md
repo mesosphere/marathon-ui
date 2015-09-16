@@ -3,8 +3,18 @@
 - \#2244 - Ability to scale an application forcefully if there is a deployment
   running
 
+### Changed
+- \#2105 - Refactor the application create/edit modal data handling
+  * Separate the data-layer from the view-layer
+  * Add form to model transformers
+  * Add model to form transformers
+  * Add proper per-field validation
+  * Add support for server-side validation errors on individual fields
+
 ### Fixed
 - \#2157 - Row is off-centre if upper row is empty in lists
+- \#1985 - Docker container settings dialog needs better error handling
+- \#2262 - Better error handling on application configuration change/creation
 
 ## 0.11.0 - 2015-09-02
 ### Added
