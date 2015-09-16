@@ -275,8 +275,8 @@ describe("App Form Model To Field Transform", function () {
       ]);
     });
 
-    it("dockerVolumes to array with consecutiveKey", function () {
-      expect(AppFormTransforms.ModelToField.dockerVolumes([
+    it("containerVolumes to array with consecutiveKey", function () {
+      expect(AppFormTransforms.ModelToField.containerVolumes([
         {containerPath: "/a/b", hostPath: "/c", mode: "RO"},
         {containerPath: "/e/f", hostPath: "/g/h", mode: "RW"}
       ])).to.deep.equal([
