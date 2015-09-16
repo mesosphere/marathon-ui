@@ -223,10 +223,10 @@ var ContainerSettingsComponent = React.createClass({
     }
 
     var disableRemoveButton = (rows.length === 1 &&
-      (rows[0].containerPort == null ||
-        Util.isEmptyString(rows[0].containerPort)) &&
-      (rows[0].hostPort == null || Util.isEmptyString(rows[0].hostPort)) &&
-      (rows[0].servicePort == null || Util.isEmptyString(rows[0].servicePort)));
+      Util.isEmptyString(rows[0].containerPort) &&
+      Util.isEmptyString(rows[0].hostPort) &&
+      Util.isEmptyString(rows[0].servicePort) &&
+      (rows[0].protocol == null || Util.isEmptyString(rows[0].protocol)));
 
     return rows.map((row, i) => {
       return this.getPortMappingRow(row, i, disableRemoveButton);
@@ -280,8 +280,8 @@ var ContainerSettingsComponent = React.createClass({
     }
 
     var disableRemoveButton = (rows.length === 1 &&
-      (rows[0].key == null || Util.isEmptyString(rows[0].key)) &&
-      (rows[0].value == null || Util.isEmptyString(rows[0].value)));
+      Util.isEmptyString(rows[0].key) &&
+      Util.isEmptyString(rows[0].value));
 
     return rows.map((row, i) => {
       return this.getParametersRow(row, i, disableRemoveButton);
@@ -355,9 +355,8 @@ var ContainerSettingsComponent = React.createClass({
     }
 
     var disableRemoveButton = (rows.length === 1 &&
-      (rows[0].containerPath == null ||
-        Util.isEmptyString(rows[0].containerPath)) &&
-      (rows[0].hostPath == null || Util.isEmptyString(rows[0].hostPath)) &&
+      Util.isEmptyString(rows[0].containerPath) &&
+      Util.isEmptyString(rows[0].hostPath) &&
       (rows[0].mode == null || Util.isEmptyString(rows[0].mode)));
 
     return rows.map((row, i) => {
