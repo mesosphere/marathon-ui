@@ -157,6 +157,30 @@ var Util = {
   },
   getUniqueId: function () {
     return ++consecutiveNumber;
+  },
+  detectPathsInObject: function (obj, startKey) {
+    var paths = [];
+
+    var detect = (o, p) => {
+      if (!this.isObject(o)) {
+        paths.push(p);
+      } else {
+        Object.keys(o).forEach((key) => {
+          let path = p != null
+            ? `${p}.${key}`
+            : key;
+          detect(o[key], path);
+        });
+      }
+    };
+
+    if (startKey != null) {
+      detect(obj[startKey], startKey);
+    } else {
+      detect(obj);
+    }
+
+    return paths;
   }
 };
 
