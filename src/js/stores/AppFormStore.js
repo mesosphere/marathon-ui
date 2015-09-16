@@ -280,26 +280,40 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
   }
 }).value();
 
-function executeAction(action, setFieldFunction) {
-  const fieldId = action.fieldId;
-  const value = action.value;
-  const index = action.index;
-  let errorIndex = -1;
+function deleteErrorIndices(errorIndices, fieldId, consecutiveKey) {
+  if (errorIndices[fieldId] && consecutiveKey != null) {
+    delete errorIndices[fieldId][consecutiveKey];
+    if (Object.keys(errorIndices[fieldId]).length === 0) {
+      delete errorIndices[fieldId];
+    }
+  } else {
+    delete errorIndices[fieldId];
+  }
+}
 
-  // This is not a delete-action
-  if (value !== undefined || index == null) {
+function executeAction(action, setFieldFunction) {
+  var actionType = action.actionType;
+  var fieldId = action.fieldId;
+  var value = action.value;
+  var index = action.index;
+  var errorIndices = AppFormStore.validationErrorIndices;
+  var errorIndex = -1;
+
+  if (actionType === FormEvents.INSERT || actionType === FormEvents.UPDATE) {
     errorIndex = getValidationErrorIndex(fieldId, value);
 
     if (errorIndex > -1) {
-      if (index != null) {
-        Util.initKeyValue(AppFormStore.validationErrorIndices, fieldId, []);
-        AppFormStore.validationErrorIndices[fieldId][index] = errorIndex;
+      if (value.consecutiveKey != null) {
+        Util.initKeyValue(errorIndices, fieldId, []);
+        errorIndices[fieldId][value.consecutiveKey] = errorIndex;
       } else {
-        AppFormStore.validationErrorIndices[fieldId] = errorIndex;
+        errorIndices[fieldId] = errorIndex;
       }
     } else {
-      delete AppFormStore.validationErrorIndices[fieldId];
+      deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
     }
+  } else if (actionType === FormEvents.DELETE ) {
+    deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
   }
 
   setFieldFunction(AppFormStore.fields, fieldId, index, value);
