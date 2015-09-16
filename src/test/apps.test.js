@@ -23,7 +23,6 @@ var AppHealthComponent = require("../js/components/AppHealthComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
 var AppStatusComponent = require("../js/components/AppStatusComponent");
 var appScheme = require("../js/stores/appScheme");
-var appValidator = require("../js/validators/appValidator");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
 var AppStatus = require("../js/constants/AppStatus");
@@ -751,88 +750,6 @@ describe("App Health component", function () {
     expect(content).to.equal("unscheduled");
   });
 
-});
-
-describe("App validator", function () {
-  beforeEach(function () {
-    this.model = {
-      cmd: "cmd 1",
-      constraints: [["hostname", "UNIQUE"]],
-      cpus: 2,
-      executor: "",
-      id: "app-1",
-      instances: 1,
-      mem: 16,
-      disk: 24,
-      ports: [0],
-      uris: []
-    };
-  });
-
-  it("should pass the app model without exception", function () {
-    var errors = appValidator.validate(this.model);
-    expect(errors).to.be.undefined;
-  });
-
-  it("should have invalid constraints", function () {
-    this.model.constraints = [["hostname", "INVALID"]];
-    var errors = appValidator.validate(this.model);
-    expect(errors[0].attribute).to.equal("constraints");
-  });
-
-  it("should have invalid cpus", function () {
-    this.model.cpus = "invalid string";
-    var errors = appValidator.validate(this.model);
-    expect(errors[0].attribute).to.equal("cpus");
-  });
-
-  it("should have invalid memory", function () {
-    this.model.mem = "invalid string";
-    var errors = appValidator.validate(this.model);
-    expect(errors[0].attribute).to.equal("mem");
-  });
-
-  it("should have invalid disk", function () {
-    this.model.disk = "invalid string";
-    var errors = appValidator.validate(this.model);
-    expect(errors[0].attribute).to.equal("disk");
-  });
-
-  it("should have invalid instances", function () {
-    this.model.instances = "invalid string";
-    var errors = appValidator.validate(this.model);
-    expect(errors[0].attribute).to.equal("instances");
-  });
-
-  it("should have invalid ports if string passed", function () {
-    this.model.ports = "invalid string";
-    var errors = appValidator.validate(this.model);
-    expect(errors[0].attribute).to.equal("ports");
-  });
-
-  it("should have invalid ports on wrong numbers", function () {
-    this.model.ports = [2000, -1200];
-    var errors = appValidator.validate(this.model);
-    expect(errors[0].attribute).to.equal("ports");
-  });
-
-  it("should have invalid id", function () {
-    this.model.id = null;
-    var errors = appValidator.validate(this.model);
-    expect(errors[0].attribute).to.equal("id");
-  });
-
-  it("should collect errors", function () {
-    this.model.cpus = "invalid string";
-    this.model.mem = "invalid string";
-    this.model.disk = "invalid string";
-
-    var errors = appValidator.validate(this.model);
-    expect(errors).to.have.length(3);
-    expect(errors[0].attribute).to.equal("mem");
-    expect(errors[1].attribute).to.equal("cpus");
-    expect(errors[2].attribute).to.equal("disk");
-  });
 });
 
 describe("App Page component", function () {
