@@ -145,7 +145,7 @@ var Util = {
   getUniqueId: function () {
     return ++consecutiveNumber;
   },
-  detectPathsInObject: function (obj, startKey) {
+  detectPathsInObject: function (obj, startKey, excludePaths = []) {
     var paths = [];
 
     var detect = (o, p) => {
@@ -156,7 +156,11 @@ var Util = {
           let path = p != null
             ? `${p}.${key}`
             : key;
-          detect(o[key], path);
+          if (excludePaths.indexOf(path) === -1) {
+            detect(o[key], path);
+          } else {
+            paths.push(path);
+          }
         });
       }
     };

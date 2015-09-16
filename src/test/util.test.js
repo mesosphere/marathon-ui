@@ -318,6 +318,24 @@ describe("Util", function () {
         "obj1.string2"
       ]);
     });
+
+    it("excludes an object for parsing", function () {
+      var obj = {
+        obj1: {
+          obj2: {
+            string3: "string3",
+          },
+          string2: "string2"
+        },
+        string1: "don't see me"
+      };
+
+      expect(Util.detectPathsInObject(obj, "obj1", ["obj1.obj2"]))
+          .to.deep.equal([
+        "obj1.obj2",
+        "obj1.string2"
+      ]);
+    });
   });
 
 });
