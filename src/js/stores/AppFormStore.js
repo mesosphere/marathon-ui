@@ -141,6 +141,17 @@ function getValidationErrorIndex(fieldId, value) {
   return validationRules[fieldId].findIndex((isValid) => !isValid(value));
 }
 
+function deleteErrorIndices(errorIndices, fieldId, consecutiveKey) {
+  if (errorIndices[fieldId] && consecutiveKey != null) {
+    delete errorIndices[fieldId][consecutiveKey];
+    if (Object.keys(errorIndices[fieldId]).length === 0) {
+      delete errorIndices[fieldId];
+    }
+  } else {
+    delete errorIndices[fieldId];
+  }
+}
+
 function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveFieldIdToAppKeyMap[fieldId];
   if (key) {
@@ -271,17 +282,6 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
     populateFieldsFromModel(app, this.fields);
   }
 }).value();
-
-function deleteErrorIndices(errorIndices, fieldId, consecutiveKey) {
-  if (errorIndices[fieldId] && consecutiveKey != null) {
-    delete errorIndices[fieldId][consecutiveKey];
-    if (Object.keys(errorIndices[fieldId]).length === 0) {
-      delete errorIndices[fieldId];
-    }
-  } else {
-    delete errorIndices[fieldId];
-  }
-}
 
 function executeAction(action, setFieldFunction) {
   var actionType = action.actionType;
