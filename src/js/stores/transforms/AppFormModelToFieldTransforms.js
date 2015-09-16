@@ -15,6 +15,12 @@ const AppFormModelToFieldTransforms = {
       return row;
     });
   },
+  dockerVolumes: (volumes) => { return volumes
+    .map((row, i) => {
+      row.consecutiveKey = i;
+      return row;
+    });
+  },
   env: (rows) => { return Object.keys(rows)
     .map((rowKey, i) => {
       return {
