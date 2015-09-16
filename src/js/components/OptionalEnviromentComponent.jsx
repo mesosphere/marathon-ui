@@ -3,7 +3,7 @@ var React = require("react/addons");
 
 var Util = require("../helpers/Util");
 
-var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
+var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
 var FormActions = require("../actions/FormActions");
 var FormGroupComponent =
