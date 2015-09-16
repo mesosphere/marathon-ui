@@ -246,8 +246,13 @@ describe("Util", function () {
       expect(Util.isObject([])).to.be.false;
     });
 
-    it("string is not an object", function () {
+    it("primitives are not objects", function () {
+      expect(Util.isObject(new Number(1))).to.be.false;
+      expect(Util.isObject(2)).to.be.false;
+      expect(Util.isObject(true)).to.be.false;
+      expect(Util.isObject(new String("string"))).to.be.false;
       expect(Util.isObject("")).to.be.false;
+      expect(Util.isObject(Symbol("unique"))).to.be.false;
     });
 
   });
