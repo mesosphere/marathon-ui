@@ -178,7 +178,8 @@ function resolveResponseAttributePathToFieldId(attributePath) {
 }
 
 function populateFieldsFromModel(app, fields) {
-  var paths = Util.detectPathsInObject(app, null, ["env"]);
+  // The env-object should be treated as an object itself, so it's excluded.
+  var paths = Util.detectObjectPaths(app, null, ["env"]);
 
   paths.forEach((appKey) => {
     var fieldId = resolveAppKeyToFieldIdMap[appKey];
