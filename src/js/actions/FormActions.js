@@ -18,10 +18,11 @@ var FormActions = {
       index: index
     });
   },
-  delete: function (fieldId, index = null) {
+  delete: function (fieldId, value, index = null) {
     AppDispatcher.dispatch({
       actionType: FormsEvents.DELETE,
       fieldId: fieldId,
+      value: value,
       index: index
     });
   }
