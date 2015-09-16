@@ -72,6 +72,7 @@ var OptionalEnvironmentComponent = React.createClass({
   handleAddRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
+
     FormActions.insert("env", {
         key: "",
         value: "",
@@ -94,10 +95,10 @@ var OptionalEnvironmentComponent = React.createClass({
     FormActions.update("env", row, position);
   },
 
-  getError: function (index) {
+  getError: function (consecutiveKey) {
     var errorIndices = this.props.errorIndices;
     if (errorIndices != null) {
-      let errorIndex = errorIndices[index];
+      let errorIndex = errorIndices[consecutiveKey];
       if (errorIndex != null) {
         return (
           <div className="help-block">
