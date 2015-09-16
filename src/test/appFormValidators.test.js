@@ -78,12 +78,6 @@ describe("App Form Validators", function () {
     describe("docker container settings", function () {
 
       describe("image", function () {
-        it("is not empty", function () {
-          let isValid = this.v.dockerImageNoWhitespaces;
-
-          expect(isValid("notEmpty")).to.be.true;
-          expect(isValid("")).to.be.false;
-        });
 
         it("has no whitespaces", function () {
           let isValid = this.v.dockerImageNoWhitespaces;
