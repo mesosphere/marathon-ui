@@ -4,9 +4,9 @@ var objectPath = require("object-path");
 var Util = require("../helpers/Util");
 
 var AppDispatcher = require("../AppDispatcher");
-var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
+var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
 var AppFormTransforms = require("./transforms/AppFormTransforms");
-var AppFormValidators = require("./AppFormValidators");
+var AppFormValidators = require("./validators/AppFormValidators");
 var AppsStore = require("./AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 var FormEvents = require("../events/FormEvents");

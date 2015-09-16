@@ -1,5 +1,5 @@
-var Util = require("../helpers/Util");
-var ValidConstraints = require("../constants/ValidConstraints");
+var Util = require("../../helpers/Util");
+var ValidConstraints = require("../../constants/ValidConstraints");
 
 function isValidPort(value) {
   if (value == null || Util.isEmptyString(value)) {

@@ -4,7 +4,7 @@ var Util = require("../../helpers/Util");
 
 var AppsActions = require("../../actions/AppsActions");
 var AppsEvents = require("../../events/AppsEvents");
-var AppFormErrorMessages = require("../../validators/AppFormErrorMessages");
+var AppFormErrorMessages = require("../../constants/AppFormErrorMessages");
 var AppFormStore = require("../../stores/AppFormStore");
 var AppsStore = require("../../stores/AppsStore");
 var CollapsiblePanelComponent =
