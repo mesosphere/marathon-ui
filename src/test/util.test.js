@@ -289,7 +289,7 @@ describe("Util", function () {
         array1: [1, 2]
       };
 
-      expect(Util.detectPathsInObject(obj)).to.deep.equal([
+      expect(Util.detectObjectPaths(obj)).to.deep.equal([
         "obj1.string2",
         "obj1.number2",
         "obj1.obj2.string3",
@@ -313,7 +313,7 @@ describe("Util", function () {
         string1: "don't see me"
       };
 
-      expect(Util.detectPathsInObject(obj, "obj1")).to.deep.equal([
+      expect(Util.detectObjectPaths(obj, "obj1")).to.deep.equal([
         "obj1.obj2.string3",
         "obj1.string2"
       ]);
@@ -330,7 +330,7 @@ describe("Util", function () {
         string1: "don't see me"
       };
 
-      expect(Util.detectPathsInObject(obj, "obj1", ["obj1.obj2"]))
+      expect(Util.detectObjectPaths(obj, "obj1", ["obj1.obj2"]))
           .to.deep.equal([
         "obj1.obj2",
         "obj1.string2"
