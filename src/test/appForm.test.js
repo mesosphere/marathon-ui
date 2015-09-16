@@ -6,7 +6,7 @@ var FormEvents = require("../js/events/FormEvents");
 var AppsActions = require("../js/actions/AppsActions");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
-var AppFormErrorMessages = require("../js/validators/AppFormErrorMessages");
+var AppFormErrorMessages = require("../js/constants/AppFormErrorMessages");
 var AppFormStore = require("../js/stores/AppFormStore");
 
 var config = require("../js/config/config");

@@ -2,7 +2,7 @@ var classNames = require("classnames");
 var React = require("react/addons");
 var Util = require("../helpers/Util");
 
-var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
+var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
 var ContainerConstants = require("../constants/ContainerConstants");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
 var dockerRowSchemes = require("../stores/dockerRowSchemes");

@@ -1,4 +1,4 @@
-const ValidConstraints = require("../constants/ValidConstraints");
+const ValidConstraints = require("./ValidConstraints");
 
 const AppFormErrorMessages = {
   appId: [

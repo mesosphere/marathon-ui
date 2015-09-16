@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 
-var AppFormValidators = require("../js/stores/AppFormValidators");
+var AppFormValidators = require("../js/stores/validators/AppFormValidators");
 
 describe("App Form Validators", function () {
 
