@@ -47,8 +47,7 @@ const AppFormValidators = {
   disk: (value) => !Util.isEmptyString(value) &&
     !!value.toString().match(/^[0-9\.]+$/),
 
-  dockerImageNoWhitespaces: (str) => !Util.isEmptyString(str) &&
-    str.match(/ /g) == null,
+  dockerImageNoWhitespaces: (str) => str.match(/ /g) == null,
 
   dockerParameters: (obj) => obj.hasOwnProperty("key") &&
     obj.hasOwnProperty("value") &&
