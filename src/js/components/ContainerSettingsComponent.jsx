@@ -118,7 +118,9 @@ var ContainerSettingsComponent = React.createClass({
   handleRemoveRow: function (fieldId, position, event) {
     event.target.blur();
     event.preventDefault();
-    FormActions.delete(fieldId, position);
+    var row = this.getDuplicableRowValues(fieldId, position);
+
+    FormActions.delete(fieldId, row, position);
   },
 
   getError: function (fieldId, index) {
@@ -139,7 +141,7 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getPortMappingRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError("dockerPortMappings", i);
+    var error = this.getError("dockerPortMappings", row.consecutiveKey);
     var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, "dockerPortMappings", i);
@@ -231,7 +233,7 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getParametersRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError("dockerParameters", i);
+    var error = this.getError("dockerParameters", row.consecutiveKey);
     var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, "dockerParameters", i);
@@ -286,7 +288,7 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getVolumesRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError("containerVolumes", i);
+    var error = this.getError("containerVolumes", row.consecutiveKey);
     var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, "containerVolumes", i);
