@@ -224,6 +224,47 @@ describe("App Form Model To Field Transform", function () {
         .to.equal("hostname:UNIQUE, atomic:LIKE:man");
     });
 
+    it("dockerPortMappings to array with consecutiveKey", function () {
+      expect(AppFormTransforms.ModelToField.dockerPortMappings([
+        {
+          containerPort: 1,
+          hostPort: 1,
+          protocol: "tcp"
+        },
+        {
+          containerPort: 2,
+          servicePort: 2,
+          protocol: "udp"
+        },
+        {
+          containerPort: 3,
+          hostPort: 3,
+          servicePort: 3,
+          protocol: "tcp"
+        },
+      ])).to.deep.equal([
+        {
+          containerPort: 1,
+          hostPort: 1,
+          protocol: "tcp",
+          consecutiveKey: 0
+        },
+        {
+          containerPort: 2,
+          servicePort: 2,
+          protocol: "udp",
+          consecutiveKey: 1
+        },
+        {
+          containerPort: 3,
+          hostPort: 3,
+          servicePort: 3,
+          protocol: "tcp",
+          consecutiveKey: 2
+        }
+      ]);
+    });
+
     it("env object to sorted array", function () {
       expect(AppFormTransforms.ModelToField.env({
         key1: "value1",
