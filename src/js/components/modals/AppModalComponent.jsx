@@ -139,7 +139,7 @@ var AppModalComponent = React.createClass({
   getErrorMessage: function (fieldId) {
     var state = this.state;
     var errorIndex = state.errorIndices[fieldId];
-    if (state.errorIndices[fieldId] != null) {
+    if (errorIndex != null && !Util.isArray(errorIndex)) {
       return AppFormErrorMessages.getMessage(fieldId, errorIndex);
     }
     if (state.responseErrorMessages[fieldId] != null) {
