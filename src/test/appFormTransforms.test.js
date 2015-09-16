@@ -265,6 +265,16 @@ describe("App Form Model To Field Transform", function () {
       ]);
     });
 
+    it("dockerParameters to array with consecutiveKey", function () {
+      expect(AppFormTransforms.ModelToField.dockerParameters([
+        {key: "key1", value: "value1"},
+        {key: "key2", value: "value2"}
+      ])).to.deep.equal([
+        {key: "key1", value: "value1", consecutiveKey: 0},
+        {key: "key2", value: "value2", consecutiveKey: 1}
+      ]);
+    });
+
     it("env object to sorted array", function () {
       expect(AppFormTransforms.ModelToField.env({
         key1: "value1",

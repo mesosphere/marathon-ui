@@ -9,6 +9,12 @@ const AppFormModelToFieldTransforms = {
       return row;
     });
   },
+  dockerParameters: (parameters) => { return parameters
+    .map((row, i) => {
+      row.consecutiveKey = i;
+      return row;
+    });
+  },
   env: (rows) => { return Object.keys(rows)
     .map((rowKey, i) => {
       return {
