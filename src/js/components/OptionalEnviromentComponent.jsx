@@ -6,8 +6,8 @@ var Util = require("../helpers/Util");
 var AppFormErrorMessages = require("../validators/AppFormErrorMessages");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
 var FormActions = require("../actions/FormActions");
-var StoreFormGroupComponent =
-  require("../components/StoreFormGroupComponent");
+var FormGroupComponent =
+  require("../components/FormGroupComponent");
 
 var OptionalEnvironmentComponent = React.createClass({
   displayName: "OptionalEnvironmentComponent",
@@ -139,20 +139,20 @@ var OptionalEnvironmentComponent = React.createClass({
             className="row duplicable-row"
             onChange={this.handleChange.bind(null, i)}>
           <div className="col-sm-6 add-colon">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               fieldId={`env.key.${i}`}
               label="Key"
               value={row.key}>
               <input ref={`envKey${i}`} />
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
           </div>
           <div className="col-sm-6">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               fieldId={`env.value.${i}`}
               label="Value"
               value={row.value}>
               <input ref={`envValue${i}`} />
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
             <DuplicableRowControls
               disableRemoveButton={disableRemoveButton}
               handleAddRow={this.handleAddRow.bind(null, i + 1)}

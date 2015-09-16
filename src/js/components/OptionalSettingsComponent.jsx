@@ -1,8 +1,8 @@
 var React = require("react/addons");
 
 var FormActions = require("../actions/FormActions");
-var StoreFormGroupComponent =
-  require("../components/StoreFormGroupComponent");
+var FormGroupComponent =
+  require("../components/FormGroupComponent");
 
 var OptionalSettingsComponent = React.createClass({
   displayName: "OptionalSettingsComponent",
@@ -30,7 +30,7 @@ var OptionalSettingsComponent = React.createClass({
 
     return (
       <div>
-        <StoreFormGroupComponent
+        <FormGroupComponent
             errorMessage={props.getErrorMessage("executor")}
             fieldId="executor"
             help={executorHelp}
@@ -38,8 +38,8 @@ var OptionalSettingsComponent = React.createClass({
             onChange={this.handleFieldUpdate}
             value={fields.executor}>
           <input />
-        </StoreFormGroupComponent>
-        <StoreFormGroupComponent
+        </FormGroupComponent>
+        <FormGroupComponent
             errorMessage={props.getErrorMessage("ports")}
             fieldId="ports"
             help={portsHelp}
@@ -47,8 +47,8 @@ var OptionalSettingsComponent = React.createClass({
             onChange={this.handleFieldUpdate}
             value={fields.ports}>
           <input />
-        </StoreFormGroupComponent>
-        <StoreFormGroupComponent
+        </FormGroupComponent>
+        <FormGroupComponent
             errorMessage={props.getErrorMessage("uris")}
             fieldId="uris"
             help="Comma-separated list of valid URIs."
@@ -56,8 +56,8 @@ var OptionalSettingsComponent = React.createClass({
             onChange={this.handleFieldUpdate}
             value={fields.uris}>
           <input />
-        </StoreFormGroupComponent>
-        <StoreFormGroupComponent
+        </FormGroupComponent>
+        <FormGroupComponent
             errorMessage={props.getErrorMessage("constraints")}
             fieldId="constraints"
             help={contraintsHelp}
@@ -65,7 +65,7 @@ var OptionalSettingsComponent = React.createClass({
             onChange={this.handleFieldUpdate}
             value={fields.constraints}>
           <input />
-        </StoreFormGroupComponent>
+        </FormGroupComponent>
       </div>
     );
   }

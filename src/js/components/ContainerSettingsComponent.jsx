@@ -7,7 +7,7 @@ var ContainerConstants = require("../constants/ContainerConstants");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
 var dockerRowSchemes = require("../stores/dockerRowSchemes");
 var FormActions = require("../actions/FormActions");
-var StoreFormGroupComponent = require("../components/StoreFormGroupComponent");
+var FormGroupComponent = require("../components/FormGroupComponent");
 
 const portInputAttributes = {
   min: 0,
@@ -155,7 +155,7 @@ var ContainerSettingsComponent = React.createClass({
         <fieldset className="row duplicable-row"
           onChange={handleChange}>
           <div className="col-sm-3">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={
                 getErrorMessage(`dockerPortMappings.${i}.containerPort`)
               }
@@ -163,10 +163,10 @@ var ContainerSettingsComponent = React.createClass({
               label="Container Port"
               value={row.containerPort}>
               <input ref={`containerPort${i}`} {...portInputAttributes}/>
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
           </div>
           <div className="col-sm-3">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={
                 getErrorMessage(`dockerPortMappings.${i}.hostPort`)
               }
@@ -174,10 +174,10 @@ var ContainerSettingsComponent = React.createClass({
               label="Host Port"
               value={row.hostPort}>
               <input ref={`hostPort${i}`} {...portInputAttributes}/>
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
           </div>
           <div className="col-sm-2">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={
                 getErrorMessage(`dockerPortMappings.${i}.servicePort`)
               }
@@ -185,10 +185,10 @@ var ContainerSettingsComponent = React.createClass({
               label="Service Port"
               value={row.servicePort}>
               <input ref={`servicePort${i}`} {...portInputAttributes}/>
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
           </div>
           <div className="col-sm-4">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={
                 getErrorMessage(`dockerPortMappings.${i}.protocol`)
               }
@@ -204,7 +204,7 @@ var ContainerSettingsComponent = React.createClass({
                   {ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}
                 </option>
               </select>
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
             <DuplicableRowControls disableRemoveButton={disableRemoveButton}
               handleAddRow={handleAddRow}
               handleRemoveRow={handleRemoveRow} />
@@ -245,22 +245,22 @@ var ContainerSettingsComponent = React.createClass({
       <div key={row.consecutiveKey} className={errorClassSet}>
         <fieldset className="row duplicable-row" onChange={handleChange}>
           <div className="col-sm-6 add-colon">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={getErrorMessage(`dockerParameters.${i}.key`)}
               fieldId={`dockerParameters.${i}.key`}
               label="Key"
               value={row.key}>
               <input ref={`key${i}`} />
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
           </div>
           <div className="col-sm-6">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={getErrorMessage(`dockerParameters.${i}.value`)}
               fieldId={`dockerParameters.${i}.value`}
               label="Value"
               value={row.value}>
               <input ref={`value${i}`} />
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
             <DuplicableRowControls disableRemoveButton={disableRemoveButton}
               handleAddRow={handleAddRow}
               handleRemoveRow={handleRemoveRow} />
@@ -301,7 +301,7 @@ var ContainerSettingsComponent = React.createClass({
         <fieldset className="row duplicable-row"
           onChange={handleChange}>
           <div className="col-sm-4">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={
                 getErrorMessage(`containerVolumes.${i}.containerPath`)
               }
@@ -309,19 +309,19 @@ var ContainerSettingsComponent = React.createClass({
               label="Container Path"
               value={row.containerPath}>
               <input ref={`containerPath${i}`} />
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
           </div>
           <div className="col-sm-4">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={getErrorMessage(`containerVolumes.${i}.hostPath`)}
               fieldId={`containerVolumes.${i}.hostPath`}
               label="Host Path"
               value={row.hostPath}>
               <input ref={`hostPath${i}`} />
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
           </div>
           <div className="col-sm-4">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={getErrorMessage(`containerVolumes.${i}.mode`)}
               fieldId={`containerVolumes.${i}.mode`}
               label="Mode"
@@ -335,7 +335,7 @@ var ContainerSettingsComponent = React.createClass({
                   Read and Write
                 </option>
               </select>
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
             <DuplicableRowControls disableRemoveButton={disableRemoveButton}
               handleAddRow={handleAddRow}
               handleRemoveRow={handleRemoveRow} />
@@ -370,17 +370,17 @@ var ContainerSettingsComponent = React.createClass({
       <div>
         <div className="row">
           <div className="col-sm-6">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={props.getErrorMessage("dockerImage")}
               fieldId="dockerImage"
               label="Image"
               value={props.fields.dockerImage}
               onChange={this.handleFieldUpdate}>
               <input />
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
           </div>
           <div className="col-sm-6">
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={props.getErrorMessage("dockerNetwork")}
               fieldId="dockerNetwork"
               label="Network"
@@ -395,11 +395,11 @@ var ContainerSettingsComponent = React.createClass({
                   Bridged
                 </option>
               </select>
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
           </div>
         </div>
         <h4>Privileges</h4>
-        <StoreFormGroupComponent className="checkbox-form-group"
+        <FormGroupComponent className="checkbox-form-group"
           errorMessage={props.getErrorMessage("dockerPrivileged")}
           fieldId="dockerPrivileged"
           help="Select to give this container access to all devices on the host"
@@ -407,7 +407,7 @@ var ContainerSettingsComponent = React.createClass({
           value={props.fields.dockerPrivileged}
           onChange={this.handleFieldUpdate}>
           <input type="checkbox" />
-        </StoreFormGroupComponent>
+        </FormGroupComponent>
         <h4>Port Mappings</h4>
         <div className="duplicable-list">{this.getPortMappingRows()}</div>
         <h4>Parameters</h4>
