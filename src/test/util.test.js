@@ -304,4 +304,55 @@ describe("Util", function () {
     });
   });
 
+  describe("detectPathsInObject", function () {
+    it("detects all non object paths in an object recursively", function () {
+      var obj = {
+        obj1: {
+          string2: "string2",
+          number2: 2,
+          obj2: {
+            string3: "string3",
+            number3: 3,
+            obj3: {
+              array2: ["a", "b"],
+              number3: 3
+            }
+          }
+        },
+        string1: "string1",
+        number1: 1,
+        array1: [1, 2]
+      };
+
+      expect(Util.detectPathsInObject(obj)).to.deep.equal([
+        "obj1.string2",
+        "obj1.number2",
+        "obj1.obj2.string3",
+        "obj1.obj2.number3",
+        "obj1.obj2.obj3.array2",
+        "obj1.obj2.obj3.number3",
+        "string1",
+        "number1",
+        "array1"
+      ]);
+    });
+
+    it("detects all non object paths in an prefixed object", function () {
+      var obj = {
+        obj1: {
+          obj2: {
+            string3: "string3",
+          },
+          string2: "string2"
+        },
+        string1: "don't see me"
+      };
+
+      expect(Util.detectPathsInObject(obj, "obj1")).to.deep.equal([
+        "obj1.obj2.string3",
+        "obj1.string2"
+      ]);
+    });
+  });
+
 });
