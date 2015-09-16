@@ -18,8 +18,8 @@ var OptionalEnvironmentComponent =
   require("../../components/OptionalEnviromentComponent");
 var OptionalSettingsComponent =
   require("../../components/OptionalSettingsComponent");
-var StoreFormGroupComponent =
-  require("../../components/StoreFormGroupComponent");
+var FormGroupComponent =
+  require("../../components/FormGroupComponent");
 
 var AppModalComponent = React.createClass({
   displayName: "AppModalComponent",
@@ -210,57 +210,57 @@ var AppModalComponent = React.createClass({
             <h3 className="modal-title">{modalTitle}</h3>
           </div>
           <div className="modal-body reduced-padding">
-            <StoreFormGroupComponent
+            <FormGroupComponent
                 errorMessage={this.getErrorMessage("appId")}
                 fieldId="appId"
                 value={state.fields.appId}
                 label="ID"
                 onChange={this.handleFieldUpdate}>
               <input autoFocus required />
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
             <div className="row">
               <div className="col-sm-3">
-                <StoreFormGroupComponent
+                <FormGroupComponent
                     errorMessage={this.getErrorMessage("cpus")}
                     fieldId="cpus"
                     label="CPUs"
                     value={state.fields.cpus}
                     onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
-                </StoreFormGroupComponent>
+                </FormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <StoreFormGroupComponent
+                <FormGroupComponent
                     fieldId="mem"
                     label="Memory (MB)"
                     errorMessage={this.getErrorMessage("mem")}
                     value={state.fields.mem}
                     onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
-                </StoreFormGroupComponent>
+                </FormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <StoreFormGroupComponent
+                <FormGroupComponent
                     fieldId="disk"
                     label="Disk Space (MB)"
                     errorMessage={this.getErrorMessage("disk")}
                     value={state.fields.disk}
                     onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number" required />
-                </StoreFormGroupComponent>
+                </FormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <StoreFormGroupComponent
+                <FormGroupComponent
                     fieldId="instances"
                     label="Instances"
                     errorMessage={this.getErrorMessage("instances")}
                     value={state.fields.instances}
                     onChange={this.handleFieldUpdate}>
                   <input min="0" step="1" type="number" required />
-                </StoreFormGroupComponent>
+                </FormGroupComponent>
               </div>
             </div>
-            <StoreFormGroupComponent
+            <FormGroupComponent
               errorMessage={this.getErrorMessage("cmd")}
               fieldId="cmd"
               label="Command"
@@ -268,7 +268,7 @@ var AppModalComponent = React.createClass({
               value={state.fields.cmd}
               onChange={this.handleFieldUpdate}>
               <textarea style={{resize: "vertical"}} />
-            </StoreFormGroupComponent>
+            </FormGroupComponent>
             <div className="row full-bleed">
               <CollapsiblePanelComponent title="Docker container settings">
                 <ContainerSettingsComponent

@@ -1,8 +1,8 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
-var StoreFormGroupComponent = React.createClass({
-  displayName: "StoreFormGroupComponent",
+var FormGroupComponent = React.createClass({
+  displayName: "FormGroupComponent",
 
   propTypes: {
     children: React.PropTypes.node.isRequired,
@@ -78,4 +78,4 @@ var StoreFormGroupComponent = React.createClass({
   }
 });
 
-module.exports = StoreFormGroupComponent;
+module.exports = FormGroupComponent;
