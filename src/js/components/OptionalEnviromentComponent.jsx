@@ -60,6 +60,15 @@ var OptionalEnvironmentComponent = React.createClass({
     this.enforceMinRows();
   },
 
+  getDuplicableRowValues: function (position) {
+    var findDOMNode = React.findDOMNode;
+    return {
+      key: findDOMNode(this.refs[`envKey${position}`]).value,
+      value: findDOMNode(this.refs[`envValue${position}`]).value,
+      consecutiveKey: this.state.rows[position].consecutiveKey
+    };
+  },
+
   handleAddRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
@@ -75,19 +84,14 @@ var OptionalEnvironmentComponent = React.createClass({
   handleRemoveRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
-    FormActions.delete("env", position);
+    var row = this.getDuplicableRowValues(position);
+
+    FormActions.delete("env", row, position);
   },
 
-  handleChange: function (i) {
-    var findDOMNode = React.findDOMNode;
-
-    var row = {
-      key: findDOMNode(this.refs[`envKey${i}`]).value,
-      value: findDOMNode(this.refs[`envValue${i}`]).value,
-      consecutiveKey: this.state.rows[i].consecutiveKey
-    };
-
-    FormActions.update("env", row, i);
+  handleChange: function (position) {
+    var row = this.getDuplicableRowValues(position);
+    FormActions.update("env", row, position);
   },
 
   getError: function (index) {
@@ -122,7 +126,7 @@ var OptionalEnvironmentComponent = React.createClass({
   },
 
   getEnviromentRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError(i);
+    var error = this.getError(row.consecutiveKey);
 
     var errorClassSet = classNames({
       "has-error": !!error
