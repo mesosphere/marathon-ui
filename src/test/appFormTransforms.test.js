@@ -275,6 +275,16 @@ describe("App Form Model To Field Transform", function () {
       ]);
     });
 
+    it("dockerVolumes to array with consecutiveKey", function () {
+      expect(AppFormTransforms.ModelToField.dockerVolumes([
+        {containerPath: "/a/b", hostPath: "/c", mode: "RO"},
+        {containerPath: "/e/f", hostPath: "/g/h", mode: "RW"}
+      ])).to.deep.equal([
+        {containerPath: "/a/b", hostPath: "/c", mode: "RO", consecutiveKey: 0},
+        {containerPath: "/e/f", hostPath: "/g/h", mode: "RW", consecutiveKey: 1}
+      ]);
+    });
+
     it("env object to sorted array", function () {
       expect(AppFormTransforms.ModelToField.env({
         key1: "value1",
