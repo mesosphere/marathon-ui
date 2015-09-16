@@ -201,6 +201,22 @@ describe("Util", function () {
 
   });
 
+  describe("isObject", function () {
+
+    it("object is an object", function () {
+      expect(Util.isObject({})).to.be.true;
+    });
+
+    it("array is not an object", function () {
+      expect(Util.isObject([])).to.be.false;
+    });
+
+    it("string is not an object", function () {
+      expect(Util.isObject("")).to.be.false;
+    });
+
+  });
+
   describe("isString", function () {
 
     it("detects strings", function () {

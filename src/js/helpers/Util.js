@@ -106,6 +106,9 @@ var Util = {
   isString: function (obj) {
     return toString.call(obj) === "[object String]";
   },
+  isObject: function (obj) {
+    return toString.call(obj) === "[object Object]";
+  },
   isEmptyString: function (str) {
     return this.isString(str) && (str == null || str === "");
   },
