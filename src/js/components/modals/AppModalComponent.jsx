@@ -1,5 +1,4 @@
 var classNames = require("classnames");
-var lazy = require("lazy.js");
 var React = require("react/addons");
 var Util = require("../../helpers/Util");
 
@@ -7,7 +6,6 @@ var AppsActions = require("../../actions/AppsActions");
 var AppsEvents = require("../../events/AppsEvents");
 var AppFormErrorMessages = require("../../validators/AppFormErrorMessages");
 var AppFormStore = require("../../stores/AppFormStore");
-var appScheme = require("../../stores/appScheme");
 var AppsStore = require("../../stores/AppsStore");
 var CollapsiblePanelComponent =
   require("../../components/CollapsiblePanelComponent");
@@ -28,19 +26,12 @@ var AppModalComponent = React.createClass({
 
   propTypes: {
     app: React.PropTypes.object,
-    attributes: React.PropTypes.object,
     onDestroy: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
       app: null,
-      attributes: lazy(appScheme).extend({
-        cpus: 0.1,
-        instances: 1,
-        mem: 16.0,
-        disk: 0.0
-      }).value(),
       onDestroy: Util.noop
     };
   },
@@ -58,6 +49,12 @@ var AppModalComponent = React.createClass({
       errorIndices: {},
       responseErrorMessages: {}
     };
+  },
+
+  destroy: function () {
+    // This will also call `this.props.onDestroy` since it is passed as the
+    // callback for the modal's `onDestroy` prop.
+    this.refs.modalComponent.destroy();
   },
 
   componentWillMount: function () {
@@ -92,7 +89,6 @@ var AppModalComponent = React.createClass({
   },
 
   onCreateApp: function () {
-    this.clearValidation();
     this.destroy();
   },
 
@@ -126,28 +122,6 @@ var AppModalComponent = React.createClass({
     FormActions.update(fieldId, value);
   },
 
-  destroy: function () {
-    // This will also call `this.props.onDestroy` since it is passed as the
-    // callback for the modal's `onDestroy` prop.
-    this.refs.modalComponent.destroy();
-  },
-
-  clearValidation: function () {
-    this.setState({errors: []});
-  },
-
-  getErrorMessage: function (fieldId) {
-    var state = this.state;
-    var errorIndex = state.errorIndices[fieldId];
-    if (errorIndex != null && !Util.isArray(errorIndex)) {
-      return AppFormErrorMessages.getMessage(fieldId, errorIndex);
-    }
-    if (state.responseErrorMessages[fieldId] != null) {
-      return state.responseErrorMessages[fieldId];
-    }
-    return null;
-  },
-
   handleSubmit: function (event) {
     event.preventDefault();
 
@@ -160,6 +134,18 @@ var AppModalComponent = React.createClass({
         AppsActions.createApp(app);
       }
     }
+  },
+
+  getErrorMessage: function (fieldId) {
+    var state = this.state;
+    var errorIndex = state.errorIndices[fieldId];
+    if (errorIndex != null && !Util.isArray(errorIndex)) {
+      return AppFormErrorMessages.getMessage(fieldId, errorIndex);
+    }
+    if (state.responseErrorMessages[fieldId] != null) {
+      return state.responseErrorMessages[fieldId];
+    }
+    return null;
   },
 
   getGeneralErrorBlock: function () {
