@@ -119,6 +119,9 @@ var Util = {
   isString: function (obj) {
     return toString.call(obj) === "[object String]";
   },
+  isObject: function (obj) {
+    return toString.call(obj) === "[object Object]";
+  },
   isEmptyString: function (str) {
     return this.isString(str) && (str == null || str === "");
   },
@@ -154,6 +157,34 @@ var Util = {
   },
   getUniqueId: function () {
     return ++consecutiveNumber;
+  },
+  detectObjectPaths: function (obj, startKey, excludePaths = []) {
+    var paths = [];
+
+    var detect = (o, p) => {
+      if (!this.isObject(o)) {
+        paths.push(p);
+      } else {
+        Object.keys(o).forEach((key) => {
+          let path = p != null
+            ? `${p}.${key}`
+            : key;
+          if (excludePaths.indexOf(path) === -1) {
+            detect(o[key], path);
+          } else {
+            paths.push(path);
+          }
+        });
+      }
+    };
+
+    if (startKey != null) {
+      detect(obj[startKey], startKey);
+    } else {
+      detect(obj);
+    }
+
+    return paths;
   }
 };
 

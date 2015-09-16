@@ -224,6 +224,67 @@ describe("App Form Model To Field Transform", function () {
         .to.equal("hostname:UNIQUE, atomic:LIKE:man");
     });
 
+    it("dockerPortMappings to array with consecutiveKey", function () {
+      expect(AppFormTransforms.ModelToField.dockerPortMappings([
+        {
+          containerPort: 1,
+          hostPort: 1,
+          protocol: "tcp"
+        },
+        {
+          containerPort: 2,
+          servicePort: 2,
+          protocol: "udp"
+        },
+        {
+          containerPort: 3,
+          hostPort: 3,
+          servicePort: 3,
+          protocol: "tcp"
+        },
+      ])).to.deep.equal([
+        {
+          containerPort: 1,
+          hostPort: 1,
+          protocol: "tcp",
+          consecutiveKey: 0
+        },
+        {
+          containerPort: 2,
+          servicePort: 2,
+          protocol: "udp",
+          consecutiveKey: 1
+        },
+        {
+          containerPort: 3,
+          hostPort: 3,
+          servicePort: 3,
+          protocol: "tcp",
+          consecutiveKey: 2
+        }
+      ]);
+    });
+
+    it("dockerParameters to array with consecutiveKey", function () {
+      expect(AppFormTransforms.ModelToField.dockerParameters([
+        {key: "key1", value: "value1"},
+        {key: "key2", value: "value2"}
+      ])).to.deep.equal([
+        {key: "key1", value: "value1", consecutiveKey: 0},
+        {key: "key2", value: "value2", consecutiveKey: 1}
+      ]);
+    });
+
+    it("containerVolumes to array with consecutiveKey", function () {
+      expect(AppFormTransforms.ModelToField.containerVolumes([
+        {containerPath: "/a/b", hostPath: "/c", mode: "RO"},
+        {containerPath: "/e/f", hostPath: "/g/h", mode: "RW"}
+      ])).to.deep.equal([
+        {containerPath: "/a/b", hostPath: "/c", mode: "RO", consecutiveKey: 0},
+        {containerPath: "/e/f", hostPath: "/g/h", mode: "RW", consecutiveKey: 1}
+      ]);
+    });
+
     it("env object to sorted array", function () {
       expect(AppFormTransforms.ModelToField.env({
         key1: "value1",

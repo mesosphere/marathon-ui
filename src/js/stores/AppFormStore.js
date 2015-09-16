@@ -131,7 +131,13 @@ const responseAttributePathToFieldIdMap = {
  * Not listed keys are taken as they are.
  */
 const resolveAppKeyToFieldIdMap = {
-  id: "appId"
+  id: "appId",
+  "container.docker.image": "dockerImage",
+  "container.docker.network": "dockerNetwork",
+  "container.docker.portMappings": "dockerPortMappings",
+  "container.docker.parameters": "dockerParameters",
+  "container.docker.privileged": "dockerPrivileged",
+  "container.volumes": "containerVolumes"
 };
 
 function getValidationErrorIndex(fieldId, value) {
@@ -172,16 +178,19 @@ function resolveResponseAttributePathToFieldId(attributePath) {
 }
 
 function populateFieldsFromModel(app, fields) {
-  Object.keys(app).forEach((appKey) => {
+  // The env-object should be treated as an object itself, so it's excluded.
+  var paths = Util.detectObjectPaths(app, null, ["env"]);
+
+  paths.forEach((appKey) => {
     var fieldId = resolveAppKeyToFieldIdMap[appKey];
     if (fieldId == null) {
       fieldId = appKey;
     }
     const transform = AppFormTransforms.ModelToField[fieldId];
     if (transform == null) {
-      fields[fieldId] = app[appKey];
+      fields[fieldId] = objectPath.get(app, appKey);
     } else {
-      fields[fieldId] = transform(app[appKey]);
+      fields[fieldId] = transform(objectPath.get(app, appKey));
     }
   });
 }

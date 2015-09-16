@@ -236,6 +236,27 @@ describe("Util", function () {
 
   });
 
+  describe("isObject", function () {
+
+    it("object is an object", function () {
+      expect(Util.isObject({})).to.be.true;
+    });
+
+    it("array is not an object", function () {
+      expect(Util.isObject([])).to.be.false;
+    });
+
+    it("primitives are not objects", function () {
+      expect(Util.isObject(new Number(1))).to.be.false;
+      expect(Util.isObject(2)).to.be.false;
+      expect(Util.isObject(true)).to.be.false;
+      expect(Util.isObject(new String("string"))).to.be.false;
+      expect(Util.isObject("")).to.be.false;
+      expect(Util.isObject(Symbol("unique"))).to.be.false;
+    });
+
+  });
+
   describe("isString", function () {
 
     it("detects strings", function () {
@@ -284,6 +305,75 @@ describe("Util", function () {
         {b: 1, c: "some value"},
         {b: 0},
         {b: false}
+      ]);
+    });
+  });
+
+  describe("detectPathsInObject", function () {
+    it("detects all non object paths in an object recursively", function () {
+      var obj = {
+        obj1: {
+          string2: "string2",
+          number2: 2,
+          obj2: {
+            string3: "string3",
+            number3: 3,
+            obj3: {
+              array2: ["a", "b"],
+              number3: 3
+            }
+          }
+        },
+        string1: "string1",
+        number1: 1,
+        array1: [1, 2]
+      };
+
+      expect(Util.detectObjectPaths(obj)).to.deep.equal([
+        "obj1.string2",
+        "obj1.number2",
+        "obj1.obj2.string3",
+        "obj1.obj2.number3",
+        "obj1.obj2.obj3.array2",
+        "obj1.obj2.obj3.number3",
+        "string1",
+        "number1",
+        "array1"
+      ]);
+    });
+
+    it("detects all non object paths in an prefixed object", function () {
+      var obj = {
+        obj1: {
+          obj2: {
+            string3: "string3",
+          },
+          string2: "string2"
+        },
+        string1: "don't see me"
+      };
+
+      expect(Util.detectObjectPaths(obj, "obj1")).to.deep.equal([
+        "obj1.obj2.string3",
+        "obj1.string2"
+      ]);
+    });
+
+    it("excludes an object for parsing", function () {
+      var obj = {
+        obj1: {
+          obj2: {
+            string3: "string3",
+          },
+          string2: "string2"
+        },
+        string1: "don't see me"
+      };
+
+      expect(Util.detectObjectPaths(obj, "obj1", ["obj1.obj2"]))
+          .to.deep.equal([
+        "obj1.obj2",
+        "obj1.string2"
       ]);
     });
   });
