@@ -106,9 +106,9 @@ var ContainerSettingsComponent = React.createClass({
     );
   },
 
-  handleChangeRow: function (rowFieldId, i) {
-    var row = this.getDuplicableRowValues(rowFieldId, i);
-    FormActions.update(rowFieldId, row, i);
+  handleChangeRow: function (fieldId, position) {
+    var row = this.getDuplicableRowValues(fieldId, position);
+    FormActions.update(fieldId, row, position);
   },
 
   handleFieldUpdate: function (fieldId, value) {
@@ -123,10 +123,10 @@ var ContainerSettingsComponent = React.createClass({
     FormActions.delete(fieldId, row, position);
   },
 
-  getError: function (fieldId, index) {
+  getError: function (fieldId, consecutiveKey) {
     var errorIndices = this.props.errorIndices[fieldId];
     if (errorIndices != null) {
-      let errorIndex = errorIndices[index];
+      let errorIndex = errorIndices[consecutiveKey];
       if (errorIndex != null) {
         return (
           <div className="help-block">
