@@ -385,4 +385,14 @@ describe("Task Mesos Url component", function () {
 "http://leader1.dcos.io:5050/#/slaves/20150720-125149-3839899402-5050-\
 16758-S1/frameworks/framework1/executors/task-123");
   });
+  it("has the correct mesos task url when mesosUrl has trailing slash", function () {
+    InfoStore.info.marathon_config.mesos_leader_ui_url = "http://leader1.dcos.io:5050/";
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<TaskMesosUrlComponent task={this.model}/>);
+    this.component = this.renderer.getRenderOutput();
+    var url = this.component.props.href;
+    expect(url).to.equal(
+"http://leader1.dcos.io:5050/#/slaves/20150720-125149-3839899402-5050-\
+16758-S1/frameworks/framework1/executors/task-123");
+  });
 });
