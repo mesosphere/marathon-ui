@@ -55,7 +55,8 @@ var FormGroupComponent = React.createClass({
         className: "form-control",
         id: fieldId,
         onChange: this.handleChange,
-        defaultValue: props.value
+        defaultValue: props.value,
+        checked: (child.props.type === "checkbox" && props.value)
       }
     );
 
