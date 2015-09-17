@@ -34,10 +34,7 @@ const AppFormFieldToModelTransforms = {
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))
     .compact()
     .filter((row) => {
-      return ["key", "value"].every((key) => {
-        return (row[key] != null &&
-          !Util.isEmptyString(row[key].toString().trim()));
-      });
+      return row.key != null && !Util.isEmptyString(row.key.toString().trim());
     })
     .value(),
   dockerPortMappings: (rows) => lazy(rows)
