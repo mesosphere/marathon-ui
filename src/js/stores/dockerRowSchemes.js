@@ -1,17 +1,17 @@
 const dockerRowSchemes = {
   dockerPortMappings: {
-    containerPort: null,
-    hostPort: null,
-    servicePort: null,
+    containerPort: "",
+    hostPort: "",
+    servicePort: "",
     protocol: null
   },
   dockerParameters: {
-    key: null,
-    value: null
+    key: "",
+    value: ""
   },
   containerVolumes: {
-    containerPath: null,
-    hostPath: null,
+    containerPath: "",
+    hostPath: "",
     mode: null
   }
 };
