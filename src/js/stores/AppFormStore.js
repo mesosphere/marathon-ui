@@ -6,6 +6,7 @@ var Util = require("../helpers/Util");
 var AppDispatcher = require("../AppDispatcher");
 var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
 var AppFormTransforms = require("./transforms/AppFormTransforms");
+var AppFormModelPostProcess = require("./transforms/AppFormModelPostProcess");
 var AppFormValidators = require("./validators/AppFormValidators");
 var AppsStore = require("./AppsStore");
 var AppsEvents = require("../events/AppsEvents");
@@ -168,6 +169,13 @@ function rebuildModelFromFields(app, fields, fieldId) {
       objectPath.set(app, key, transform(fields[fieldId]));
     }
   }
+
+  Object.keys(app).forEach((appKey) => {
+    var postProcessor = AppFormModelPostProcess[appKey];
+    if (postProcessor != null) {
+      postProcessor(app);
+    }
+  });
 }
 
 function resolveResponseAttributePathToFieldId(attributePath) {
