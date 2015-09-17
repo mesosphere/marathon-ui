@@ -12,6 +12,7 @@ var AppVersionListComponent = require("../components/AppVersionListComponent");
 var DialogActions = require("../actions/DialogActions");
 var DialogStore = require("../stores/DialogStore");
 var HealthStatus = require("../constants/HealthStatus");
+var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
@@ -151,9 +152,11 @@ var AppPageComponent = React.createClass({
     }
   },
 
-  onAppRequestError: function () {
+  onAppRequestError: function (message, statusCode) {
     this.setState({
-      fetchState: States.STATE_ERROR
+      fetchState: statusCode !== 401
+        ? States.STATE_ERROR
+        : States.STATE_UNAUTHORIZED
     });
   },
 
@@ -167,22 +170,32 @@ var AppPageComponent = React.createClass({
       DialogStore.handleUserResponse(dialogId, function () {
         AppsActions.scaleApp(appId, instances, true);
       });
+    } else if (statusCode === 401) {
+      DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
     } else {
       DialogActions.alert(`Not scaling:
           ${errorMessage.message || errorMessage}`);
     }
   },
 
-  onRestartAppError: function (errorMessage) {
-    DialogActions.alert(
-      `Error restarting app: ${errorMessage.message || errorMessage}`
-    );
+  onRestartAppError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
+      DialogActions.alert(`Error restarting app: ${Messages.UNAUTHORIZED}`);
+    } else {
+      DialogActions.alert(
+        `Error restarting app: ${errorMessage.message || errorMessage}`
+      );
+    }
   },
 
-  onDeleteAppError: function (errorMessage) {
-    DialogActions.alert(
-      `Error destroying app: ${errorMessage.message || errorMessage}`
-    );
+  onDeleteAppError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
+      DialogActions.alert(`Error destroying app: ${Messages.UNAUTHORIZED}`);
+    } else {
+      DialogActions.alert(
+        `Error destroying app: ${errorMessage.message || errorMessage}`
+      );
+    }
   },
 
   onDeleteAppSuccess: function () {
@@ -193,10 +206,15 @@ var AppPageComponent = React.createClass({
     DialogActions.alert("Delay reset succesfully");
   },
 
-  onResetDelayError: function (errorMessage) {
-    DialogActions.alert(
-      `Error resetting delay on app: ${errorMessage.message || errorMessage}`
-    );
+  onResetDelayError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
+      DialogActions.alert(`Error resetting delay on app:
+        ${Messages.UNAUTHORIZED}`);
+    } else {
+      DialogActions.alert(
+        `Error resetting delay on app: ${errorMessage.message || errorMessage}`
+      );
+    }
   },
 
   handleTabClick: function (id) {

@@ -46,9 +46,11 @@ var DeploymentListComponent = React.createClass({
     });
   },
 
-  onRequestError: function () {
+  onRequestError: function (message, statusCode) {
     this.setState({
-      fetchState: States.STATE_ERROR
+      fetchState: statusCode !== 401
+        ? States.STATE_ERROR
+        : States.STATE_UNAUTHORIZED
     });
   },
 
@@ -116,8 +118,13 @@ var DeploymentListComponent = React.createClass({
       "hidden": state.fetchState !== States.STATE_ERROR
     });
 
+    var unauthorizedClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_UNAUTHORIZED
+    });
+
     var noDeploymentsClassSet = classNames({
-      "hidden": pageIsLoading || state.deployments.length !== 0
+      "hidden": pageIsLoading || state.deployments.length !== 0 ||
+        state.fetchState === States.STATE_UNAUTHORIZED
     });
 
     var errorMessageClassSet = classNames({
@@ -182,6 +189,11 @@ var DeploymentListComponent = React.createClass({
           <tr className={errorClassSet}>
             <td className="text-center text-danger" colSpan="5">
               Error fetching deployments. Refresh to try again.
+            </td>
+          </tr>
+          <tr className={unauthorizedClassSet}>
+            <td className="text-center text-danger" colSpan="6">
+              Error fetching deployments. Unauthorized access.
             </td>
           </tr>
           {this.getDeploymentNodes()}
