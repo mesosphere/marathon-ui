@@ -1,21 +1,25 @@
 var Util = require("../../helpers/Util");
 
+function hasOnlyEmptyValues(obj) {
+  return Util.isObject(obj) &&
+    Object.values(obj)
+    .every((element) => {
+      return element == null ||
+        (Util.isArray(element) && element.length === 0) ||
+        Util.isEmptyString(element);
+    });
+}
+
 const AppFormModelPostProcess = {
   container: (app) => {
     var container = app.container;
 
-    var empty = Util.isArray(container.volumes) &&
-      container.volumes.length === 0;
+    var isEmpty = (Util.isArray(container.volumes) &&
+        container.volumes.length === 0 ||
+        container.volumes == null) &&
+      hasOnlyEmptyValues(container.docker);
 
-    empty = empty || Util.isObject(container.docker) &&
-      Object.values(container.docker)
-      .every((element) => {
-        return element == null ||
-          (Util.isArray(element) && element.length === 0) ||
-          Util.isEmptyString(element);
-      });
-
-    if (empty) {
+    if (isEmpty) {
       app.container = {};
     }
   }
