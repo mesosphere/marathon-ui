@@ -77,28 +77,6 @@ var Util = {
   extendObject: function (...sources) {
     return Object.assign({}, ...sources);
   },
-  // TODO: delete after #2105
-  compactArray: function (arr) {
-    if (!Util.isArray(arr)) {
-      return arr;
-    }
-    return arr.map(function (item) {
-      let compactedItem = {};
-      for (let key in item) {
-        if (item.hasOwnProperty(key)) {
-          let val = item[key];
-          if (val != null && val !== "") {
-            compactedItem[key] = val;
-          }
-        }
-      }
-      if (Object.keys(compactedItem).length > 0) {
-        return compactedItem;
-      }
-    }).filter(function (item) {
-      return item != null;
-    });
-  },
   getUniqueId: function () {
     return ++consecutiveNumber;
   },
