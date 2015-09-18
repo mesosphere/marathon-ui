@@ -194,11 +194,29 @@ describe("App Form Field to Model Transform", function () {
       expect(AppFormTransforms.FieldToModel.mem("128.64")).to.equal(128.64);
     });
 
-    it("ports string to an array of ports", function () {
-      expect(AppFormTransforms.FieldToModel.ports("12233, 12244, 12255"))
-        .to.deep.equal([12233, 12244, 12255]);
-      expect(AppFormTransforms.FieldToModel.ports(""))
-        .to.deep.equal([]);
+    describe("ports string", function () {
+      it("to an array of ports", function () {
+        expect(AppFormTransforms.FieldToModel.ports("12233, 12244, 12255"))
+          .to.deep.equal([12233, 12244, 12255]);
+        expect(AppFormTransforms.FieldToModel.ports(""))
+          .to.deep.equal([]);
+      });
+      it("including 0s", function () {
+        expect(AppFormTransforms.FieldToModel.ports("0"))
+          .to.deep.equal([0]);
+        expect(AppFormTransforms.FieldToModel.ports("0, 0"))
+          .to.deep.equal([0, 0]);
+        expect(AppFormTransforms.FieldToModel.ports("12345, 0, 54321"))
+          .to.deep.equal([12345, 0, 54321]);
+      });
+      it("omitting NaNs", function () {
+        expect(AppFormTransforms.FieldToModel.ports("12345, fish, 0"))
+          .to.deep.equal([12345, 0]);
+      });
+      it("omitting negative numbers", function () {
+        expect(AppFormTransforms.FieldToModel.ports("12345, -99, 0"))
+          .to.deep.equal([12345, 0]);
+      });
     });
 
     it("uris string to an array of uris", function () {
