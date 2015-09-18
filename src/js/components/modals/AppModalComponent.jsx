@@ -216,7 +216,7 @@ var AppModalComponent = React.createClass({
                 value={state.fields.appId}
                 label="ID"
                 onChange={this.handleFieldUpdate}>
-              <input autoFocus required />
+              <input autoFocus />
             </FormGroupComponent>
             <div className="row">
               <div className="col-sm-3">
@@ -226,7 +226,7 @@ var AppModalComponent = React.createClass({
                     label="CPUs"
                     value={state.fields.cpus}
                     onChange={this.handleFieldUpdate}>
-                  <input min="0" step="any" type="number" required />
+                  <input min="0" step="any" type="number" />
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
@@ -236,7 +236,7 @@ var AppModalComponent = React.createClass({
                     errorMessage={this.getErrorMessage("mem")}
                     value={state.fields.mem}
                     onChange={this.handleFieldUpdate}>
-                  <input min="0" step="any" type="number" required />
+                  <input min="0" step="any" type="number" />
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
@@ -246,7 +246,7 @@ var AppModalComponent = React.createClass({
                     errorMessage={this.getErrorMessage("disk")}
                     value={state.fields.disk}
                     onChange={this.handleFieldUpdate}>
-                  <input min="0" step="any" type="number" required />
+                  <input min="0" step="any" type="number"/>
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
@@ -256,7 +256,7 @@ var AppModalComponent = React.createClass({
                     errorMessage={this.getErrorMessage("instances")}
                     value={state.fields.instances}
                     onChange={this.handleFieldUpdate}>
-                  <input min="0" step="1" type="number" required />
+                  <input min="0" step="1" type="number" />
                 </FormGroupComponent>
               </div>
             </div>
