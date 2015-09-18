@@ -70,7 +70,10 @@ const AppFormFieldToModelTransforms = {
   mem: (value) => parseFloat(value),
   ports: (ports) => lazy(ports.split(","))
     .map((port) => parseInt(port, 10))
-    .filter(Number)
+    .filter((port) => {
+      port = Number(port);
+      return !isNaN(port) && port >= 0;
+    })
     .value(),
   uris: (uris) => lazy(uris.split(","))
     .map((uri) => uri.trim())
