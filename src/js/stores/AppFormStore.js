@@ -254,7 +254,8 @@ function processResponseErrors(responseErrors, response, statusCode) {
         : "general";
       var fieldId = resolveResponseAttributePathToFieldId(attributePath) ||
         attributePath;
-      responseErrors[fieldId] = error.error;
+      responseErrors[fieldId] =
+        AppFormErrorMessages.lookupServerResponseMessage(error.error);
     });
 
   } else if (statusCode === 409 && response != null &&
@@ -272,7 +273,9 @@ function processResponseErrors(responseErrors, response, statusCode) {
         : "general";
       var fieldId = resolveResponseAttributePathToFieldId(attributePath) ||
         attributePath;
-      responseErrors[fieldId] = detail.errors.join(", ");
+      responseErrors[fieldId] = detail.errors.map((error) => {
+        return AppFormErrorMessages.lookupServerResponseMessage(error);
+      }).join(", ");
     });
 
   } else if (statusCode >= 300) {

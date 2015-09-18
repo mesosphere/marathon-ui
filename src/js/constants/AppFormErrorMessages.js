@@ -35,11 +35,21 @@ const AppFormErrorMessages = {
   instances: ["Instances must be a non-negative Number"],
   mem: ["Memory must be a non-negative Number"],
   ports: ["Ports must be a comma-separated list of numbers"],
+
+  // Those are mappings to server side error messages
+  "error.path.missing": ["Please provide a path"],
+
   getMessage: function (fieldId, index = 0) {
     if (this[fieldId] != null && this[fieldId][index] != null) {
       return this[fieldId][index];
     }
     return "General error";
+  },
+  lookupServerResponseMessage: function (serverMessage) {
+    if (this[serverMessage] != null && this[serverMessage][0] != null) {
+      return this[serverMessage][0];
+    }
+    return serverMessage;
   }
 };
 
