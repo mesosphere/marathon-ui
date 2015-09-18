@@ -93,6 +93,7 @@ const resolveFieldIdToAppKeyMap = {
  */
 const responseAttributePathToFieldIdMap = {
   "id": "appId",
+  "/id": "appId",
   "/cmd": "cmd",
   "/constraints": "constraints",
   "/container/docker/image": "dockerImage",
