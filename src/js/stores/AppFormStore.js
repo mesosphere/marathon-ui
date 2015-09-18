@@ -36,7 +36,9 @@ const duplicableRowFields = [
 const validationRules = {
   "appId": [
     AppFormValidators.appIdNotEmpty,
-    AppFormValidators.appIdNoWhitespaces
+    AppFormValidators.appIdNoWhitespaces,
+    AppFormValidators.appIdValidChars,
+    AppFormValidators.appIdWellFormedPath
   ],
   "constraints": [AppFormValidators.constraints],
   "containerVolumes": [

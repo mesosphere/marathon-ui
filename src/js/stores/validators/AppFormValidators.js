@@ -24,6 +24,13 @@ const AppFormValidators = {
 
   appIdNoWhitespaces: (str) => str.match(/ /g) == null,
 
+  appIdValidChars: (str) => str.match(/[^a-z0-9\-_\.\/]/g) == null,
+
+  appIdWellFormedPath: (str) => {
+    return !!str.match(/[a-z0-9\-_]\.+[a-z0-9\-_]/g) ||
+      !str.match(/[^\/\.]\.|\.[^\/\.]|\.{3,}/g);
+  },
+
   containerVolumesContainerPathIsValid: (obj) => isValidPath(obj.containerPath),
 
   containerVolumesHostPathIsValid: (obj) => isValidPath(obj.hostPath),
