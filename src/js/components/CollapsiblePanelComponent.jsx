@@ -6,22 +6,36 @@ var CollapsiblePanelComponent = React.createClass({
 
   propTypes: {
     children: React.PropTypes.node,
-    initiallyOpen: React.PropTypes.bool,
+    isOpen: React.PropTypes.bool,
     title: React.PropTypes.string.isRequired
+  },
+
+  getDefaultProps: function () {
+    return {
+      isOpen: false
+    };
   },
 
   getInitialState: function () {
     return {
-      open: !!this.props.initiallyOpen
+      isOpen: !!this.props.isOpen
     };
   },
 
+  componentWillReceiveProps: function (nextProps) {
+    if (nextProps.isOpen) {
+      this.setState({
+        isOpen: nextProps.isOpen
+      });
+    }
+  },
+
   handleToggle: function () {
-    this.setState({open: !this.state.open});
+    this.setState({isOpen: !this.state.isOpen});
   },
 
   getPanelBody: function () {
-    if (this.state.open) {
+    if (this.state.isOpen) {
       return (
         <div className="panel-body">
           {this.props.children}
@@ -34,7 +48,7 @@ var CollapsiblePanelComponent = React.createClass({
   render: function () {
     var classes = classNames({
       "clickable panel-title": true,
-      "open": this.state.open
+      "open": this.state.isOpen
     });
 
     return (
