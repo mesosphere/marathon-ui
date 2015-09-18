@@ -129,12 +129,13 @@ var OptionalEnvironmentComponent = React.createClass({
   getEnviromentRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError(row.consecutiveKey);
 
-    var errorClassSet = classNames({
-      "has-error": !!error
+    var rowClassSet = classNames({
+      "has-error": !!error,
+      "duplicable-row": true
     });
 
     return (
-      <div key={row.consecutiveKey} className={errorClassSet}>
+      <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset
             className="row duplicable-row"
             onChange={this.handleChange.bind(null, i)}>

@@ -154,7 +154,6 @@ var ContainerSettingsComponent = React.createClass({
   getPortMappingRow: function (row, i, disableRemoveButton = false) {
     var fieldsetId = ContainerSettingsComponent.fieldIds.dockerPortMappings;
     var error = this.getError(fieldsetId, row.consecutiveKey);
-    var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
     var handleAddRow =
@@ -162,8 +161,13 @@ var ContainerSettingsComponent = React.createClass({
     var handleRemoveRow =
       this.handleRemoveRow.bind(null, fieldsetId, i);
 
+    var rowClassSet = classNames({
+      "has-error": !!error,
+      "duplicable-row": true
+    });
+
     return (
-      <div key={row.consecutiveKey} className={errorClassSet}>
+      <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset className="row duplicable-row"
           onChange={handleChange}>
           <div className="col-sm-3">
@@ -248,15 +252,19 @@ var ContainerSettingsComponent = React.createClass({
   getParametersRow: function (row, i, disableRemoveButton = false) {
     var fieldsetId = ContainerSettingsComponent.fieldIds.dockerParameters;
     var error = this.getError(fieldsetId, row.consecutiveKey);
-    var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
     var handleAddRow = this.handleAddRow.bind(null, fieldsetId, i + 1);
     var handleRemoveRow =
       this.handleRemoveRow.bind(null, fieldsetId, i);
 
+    var rowClassSet = classNames({
+      "has-error": !!error,
+      "duplicable-row": true
+    });
+
     return (
-      <div key={row.consecutiveKey} className={errorClassSet}>
+      <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset className="row duplicable-row" onChange={handleChange}>
           <div className="col-sm-6 add-colon">
             <FormGroupComponent
@@ -304,15 +312,19 @@ var ContainerSettingsComponent = React.createClass({
   getVolumesRow: function (row, i, disableRemoveButton = false) {
     var fieldsetId = ContainerSettingsComponent.fieldIds.containerVolumes;
     var error = this.getError(fieldsetId, row.consecutiveKey);
-    var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
     var handleAddRow = this.handleAddRow.bind(null, fieldsetId, i + 1);
     var handleRemoveRow =
       this.handleRemoveRow.bind(null, fieldsetId, i);
 
+    var rowClassSet = classNames({
+      "has-error": !!error,
+      "duplicable-row": true
+    });
+
     return (
-      <div key={row.consecutiveKey} className={errorClassSet}>
+      <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset className="row duplicable-row"
           onChange={handleChange}>
           <div className="col-sm-4">
