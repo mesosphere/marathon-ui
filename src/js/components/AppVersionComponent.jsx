@@ -172,13 +172,18 @@ var AppVersionComponent = React.createClass({
 
     var portsNode = (appVersion.ports.length === 0)
       ? <UnspecifiedNodeComponent />
-      : <dd>{appVersion.ports.join(",")}</dd>;
+      : <dd>{appVersion.ports.join(", ")}</dd>;
 
     var urisNode = (appVersion.uris.length === 0)
       ? <UnspecifiedNodeComponent />
       : appVersion.uris.map(function (u) {
         return <dd key={u}>{u}</dd>;
       });
+
+    var acceptedResourceRoles = (appVersion.acceptedResourceRoles == null ||
+        appVersion.acceptedResourceRoles.length === 0)
+      ? <UnspecifiedNodeComponent />
+      : <dd>{appVersion.acceptedResourceRoles.join(", ")}</dd>;
 
     return (
       <div>
@@ -193,6 +198,8 @@ var AppVersionComponent = React.createClass({
           {dependenciesNode}
           <dt>Labels</dt>
           {labelsNode}
+          <dt>Resource Roles</dt>
+          {acceptedResourceRoles}
           <dt>Container</dt>
           {containerNode}
           <dt>CPUs</dt>

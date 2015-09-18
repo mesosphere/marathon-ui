@@ -4,6 +4,7 @@
   running
 - \#2283 - Expose the application labels field in the configuration tab
 - \#2284 - Expose the application dependencies field in the configuration tab
+- \#2263 - UI doesn't expose roles
 
 ### Fixed
 - \#2157 - Row is off-centre if upper row is empty in lists

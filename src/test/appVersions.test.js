@@ -275,67 +275,71 @@ describe("App Version component", function () {
     expect(this.table[7].type.displayName).to.equal("UnspecifiedNodeComponent");
   });
 
-  it("has correct container", function () {
+  it("has correct accepted resource roles", function () {
     expect(this.table[9].type.displayName).to.equal("UnspecifiedNodeComponent");
   });
 
+  it("has correct container", function () {
+    expect(this.table[11].type.displayName).to.equal("UnspecifiedNodeComponent");
+  });
+
   it("has correct cpus", function () {
-    expect(this.table[11].props.children[0]).to.equal(0.1);
+    expect(this.table[13].props.children[0]).to.equal(0.1);
   });
 
   it("has correct environment", function () {
-    expect(this.table[13].type.displayName).to.equal("UnspecifiedNodeComponent");
-  });
-
-  it("has correct executor", function () {
     expect(this.table[15].type.displayName).to.equal("UnspecifiedNodeComponent");
   });
 
+  it("has correct executor", function () {
+    expect(this.table[17].type.displayName).to.equal("UnspecifiedNodeComponent");
+  });
+
   it("has correct health checks", function () {
-    var healthChecks = this.table[17].props.children.props.children;
+    var healthChecks = this.table[19].props.children.props.children;
     expect(healthChecks).to.equal(
       JSON.stringify(this.model.healthChecks, null, 2)
     );
   });
 
   it("has correct number of instances", function () {
-    expect(this.table[19].props.children[0]).to.equal(14);
+    expect(this.table[21].props.children[0]).to.equal(14);
   });
 
   it("has correct amount of memory", function () {
-    expect(this.table[21].props.children[0]).to.equal(16.0);
-    expect(this.table[21].props.children[2]).to.equal("MB");
-  });
-
-  it("has correct amount of disk space", function () {
-    expect(this.table[23].props.children[0]).to.equal(0.0);
+    expect(this.table[23].props.children[0]).to.equal(16.0);
     expect(this.table[23].props.children[2]).to.equal("MB");
   });
 
+  it("has correct amount of disk space", function () {
+    expect(this.table[25].props.children[0]).to.equal(0.0);
+    expect(this.table[25].props.children[2]).to.equal("MB");
+  });
+
   it("has correct ports", function () {
-    expect(this.table[25].props.children).to.equal("10000,10001");
+    expect(this.table[27].props.children).to.equal("10000,10001");
   });
 
   it("has correct backoff factor", function () {
-    expect(this.table[27].props.children[0]).to.equal(1.15);
+    expect(this.table[29].props.children[0]).to.equal(1.15);
   });
 
   it("has correct backoff", function () {
-    expect(this.table[29].props.children[0]).to.equal(1);
-    expect(this.table[29].props.children[2]).to.equal("seconds");
-  });
-
-  it("has correct max launch delay", function () {
-    expect(this.table[31].props.children[0]).to.equal(3600);
+    expect(this.table[31].props.children[0]).to.equal(1);
     expect(this.table[31].props.children[2]).to.equal("seconds");
   });
 
+  it("has correct max launch delay", function () {
+    expect(this.table[33].props.children[0]).to.equal(3600);
+    expect(this.table[33].props.children[2]).to.equal("seconds");
+  });
+
   it("has correct URIs", function () {
-    expect(this.table[33].type.displayName).to.equal("UnspecifiedNodeComponent");
+    expect(this.table[35].type.displayName).to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct version", function () {
-    expect(this.table[35].props.children[0]).to.equal("2015-06-29T12:57:02.269Z");
+    expect(this.table[37].props.children[0]).to.equal("2015-06-29T12:57:02.269Z");
   });
 
 });

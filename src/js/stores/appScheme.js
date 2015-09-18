@@ -3,6 +3,7 @@ var AppStatus = require("../constants/AppStatus");
 var appScheme = {
   cmd: null,
   constraints: [],
+  acceptedResourceRoles: [],
   container: null,
   cpus: null,
   dependencies: [],
