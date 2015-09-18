@@ -31,6 +31,17 @@ var ContainerSettingsComponent = React.createClass({
     getErrorMessage: React.PropTypes.func
   },
 
+  statics: {
+    fieldIds: Object.freeze({
+      containerVolumes: "containerVolumes",
+      dockerImage: "dockerImage",
+      dockerNetwork: "dockerNetwork",
+      dockerParameters: "dockerParameters",
+      dockerPortMappings: "dockerPortMappings",
+      dockerPrivileged: "dockerPrivileged"
+    })
+  },
+
   getInitialState: function () {
     return {
       rows: this.getPopulatedRows()
@@ -141,14 +152,15 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getPortMappingRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError("dockerPortMappings", row.consecutiveKey);
+    var fieldsetId = ContainerSettingsComponent.fieldIds.dockerPortMappings;
+    var error = this.getError(fieldsetId, row.consecutiveKey);
     var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
-    var handleChange = this.handleChangeRow.bind(null, "dockerPortMappings", i);
+    var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
     var handleAddRow =
-      this.handleAddRow.bind(null, "dockerPortMappings", i + 1);
+      this.handleAddRow.bind(null, fieldsetId, i + 1);
     var handleRemoveRow =
-      this.handleRemoveRow.bind(null, "dockerPortMappings", i);
+      this.handleRemoveRow.bind(null, fieldsetId, i);
 
     return (
       <div key={row.consecutiveKey} className={errorClassSet}>
@@ -157,9 +169,9 @@ var ContainerSettingsComponent = React.createClass({
           <div className="col-sm-3">
             <FormGroupComponent
               errorMessage={
-                getErrorMessage(`dockerPortMappings.${i}.containerPort`)
+                getErrorMessage(`${fieldsetId}.${i}.containerPort`)
               }
-              fieldId={`dockerPortMappings.${i}.containerPort`}
+              fieldId={`${fieldsetId}.${i}.containerPort`}
               label="Container Port"
               value={row.containerPort}>
               <input ref={`containerPort${i}`} {...portInputAttributes}/>
@@ -168,9 +180,9 @@ var ContainerSettingsComponent = React.createClass({
           <div className="col-sm-3">
             <FormGroupComponent
               errorMessage={
-                getErrorMessage(`dockerPortMappings.${i}.hostPort`)
+                getErrorMessage(`${fieldsetId}.${i}.hostPort`)
               }
-              fieldId={`dockerPortMappings.${i}.hostPort`}
+              fieldId={`${fieldsetId}.${i}.hostPort`}
               label="Host Port"
               value={row.hostPort}>
               <input ref={`hostPort${i}`} {...portInputAttributes}/>
@@ -179,9 +191,9 @@ var ContainerSettingsComponent = React.createClass({
           <div className="col-sm-2">
             <FormGroupComponent
               errorMessage={
-                getErrorMessage(`dockerPortMappings.${i}.servicePort`)
+                getErrorMessage(`${fieldsetId}.${i}.servicePort`)
               }
-              fieldId={`dockerPortMappings.${i}.servicePort`}
+              fieldId={`${fieldsetId}.${i}.servicePort`}
               label="Service Port"
               value={row.servicePort}>
               <input ref={`servicePort${i}`} {...portInputAttributes}/>
@@ -190,9 +202,9 @@ var ContainerSettingsComponent = React.createClass({
           <div className="col-sm-4">
             <FormGroupComponent
               errorMessage={
-                getErrorMessage(`dockerPortMappings.${i}.protocol`)
+                getErrorMessage(`${fieldsetId}.${i}.protocol`)
               }
-              fieldId={`dockerPortMappings.${i}.protocol`}
+              fieldId={`${fieldsetId}.${i}.protocol`}
               label="Protocol"
               value={row.protocol}>
               <select defaultValue={row.protocol} ref={`protocol${i}`}>
@@ -234,21 +246,22 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getParametersRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError("dockerParameters", row.consecutiveKey);
+    var fieldsetId = ContainerSettingsComponent.fieldIds.dockerParameters;
+    var error = this.getError(fieldsetId, row.consecutiveKey);
     var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
-    var handleChange = this.handleChangeRow.bind(null, "dockerParameters", i);
-    var handleAddRow = this.handleAddRow.bind(null, "dockerParameters", i + 1);
+    var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
+    var handleAddRow = this.handleAddRow.bind(null, fieldsetId, i + 1);
     var handleRemoveRow =
-      this.handleRemoveRow.bind(null, "dockerParameters", i);
+      this.handleRemoveRow.bind(null, fieldsetId, i);
 
     return (
       <div key={row.consecutiveKey} className={errorClassSet}>
         <fieldset className="row duplicable-row" onChange={handleChange}>
           <div className="col-sm-6 add-colon">
             <FormGroupComponent
-              errorMessage={getErrorMessage(`dockerParameters.${i}.key`)}
-              fieldId={`dockerParameters.${i}.key`}
+              errorMessage={getErrorMessage(`${fieldsetId}.${i}.key`)}
+              fieldId={`${fieldsetId}.${i}.key`}
               label="Key"
               value={row.key}>
               <input ref={`key${i}`} />
@@ -256,8 +269,8 @@ var ContainerSettingsComponent = React.createClass({
           </div>
           <div className="col-sm-6">
             <FormGroupComponent
-              errorMessage={getErrorMessage(`dockerParameters.${i}.value`)}
-              fieldId={`dockerParameters.${i}.value`}
+              errorMessage={getErrorMessage(`${fieldsetId}.${i}.value`)}
+              fieldId={`${fieldsetId}.${i}.value`}
               label="Value"
               value={row.value}>
               <input ref={`value${i}`} />
@@ -289,13 +302,14 @@ var ContainerSettingsComponent = React.createClass({
   },
 
   getVolumesRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError("containerVolumes", row.consecutiveKey);
+    var fieldsetId = ContainerSettingsComponent.fieldIds.containerVolumes;
+    var error = this.getError(fieldsetId, row.consecutiveKey);
     var errorClassSet = classNames({"has-error": !!error});
     var getErrorMessage = this.props.getErrorMessage;
-    var handleChange = this.handleChangeRow.bind(null, "containerVolumes", i);
-    var handleAddRow = this.handleAddRow.bind(null, "containerVolumes", i + 1);
+    var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
+    var handleAddRow = this.handleAddRow.bind(null, fieldsetId, i + 1);
     var handleRemoveRow =
-      this.handleRemoveRow.bind(null, "containerVolumes", i);
+      this.handleRemoveRow.bind(null, fieldsetId, i);
 
     return (
       <div key={row.consecutiveKey} className={errorClassSet}>
@@ -304,9 +318,9 @@ var ContainerSettingsComponent = React.createClass({
           <div className="col-sm-4">
             <FormGroupComponent
               errorMessage={
-                getErrorMessage(`containerVolumes.${i}.containerPath`)
+                getErrorMessage(`${fieldsetId}.${i}.containerPath`)
               }
-              fieldId={`containerVolumes.${i}.containerPath`}
+              fieldId={`${fieldsetId}.${i}.containerPath`}
               label="Container Path"
               value={row.containerPath}>
               <input ref={`containerPath${i}`} />
@@ -314,8 +328,8 @@ var ContainerSettingsComponent = React.createClass({
           </div>
           <div className="col-sm-4">
             <FormGroupComponent
-              errorMessage={getErrorMessage(`containerVolumes.${i}.hostPath`)}
-              fieldId={`containerVolumes.${i}.hostPath`}
+              errorMessage={getErrorMessage(`${fieldsetId}.${i}.hostPath`)}
+              fieldId={`${fieldsetId}.${i}.hostPath`}
               label="Host Path"
               value={row.hostPath}>
               <input ref={`hostPath${i}`} />
@@ -323,8 +337,8 @@ var ContainerSettingsComponent = React.createClass({
           </div>
           <div className="col-sm-4">
             <FormGroupComponent
-              errorMessage={getErrorMessage(`containerVolumes.${i}.mode`)}
-              fieldId={`containerVolumes.${i}.mode`}
+              errorMessage={getErrorMessage(`${fieldsetId}.${i}.mode`)}
+              fieldId={`${fieldsetId}.${i}.mode`}
               label="Mode"
               value={row.mode}>
               <select defaultValue="" ref={`mode${i}`}>
@@ -366,26 +380,27 @@ var ContainerSettingsComponent = React.createClass({
 
   render: function () {
     var props = this.props;
+    var fieldIds = ContainerSettingsComponent.fieldIds;
 
     return (
       <div>
         <div className="row">
           <div className="col-sm-6">
             <FormGroupComponent
-              errorMessage={props.getErrorMessage("dockerImage")}
-              fieldId="dockerImage"
+              errorMessage={props.getErrorMessage(fieldIds.dockerImage)}
+              fieldId={fieldIds.dockerImage}
               label="Image"
-              value={props.fields.dockerImage}
+              value={props.fields[fieldIds.dockerImage]}
               onChange={this.handleFieldUpdate}>
               <input />
             </FormGroupComponent>
           </div>
           <div className="col-sm-6">
             <FormGroupComponent
-              errorMessage={props.getErrorMessage("dockerNetwork")}
-              fieldId="dockerNetwork"
+              errorMessage={props.getErrorMessage(fieldIds.dockerNetwork)}
+              fieldId={fieldIds.dockerNetwork}
               label="Network"
-              value={props.fields.dockerNetwork}
+              value={props.fields[fieldIds.dockerNetwork]}
               onChange={this.handleFieldUpdate}>
               <select defaultValue="">
                 <option value="">Select</option>
@@ -401,11 +416,11 @@ var ContainerSettingsComponent = React.createClass({
         </div>
         <h4>Privileges</h4>
         <FormGroupComponent className="checkbox-form-group"
-          errorMessage={props.getErrorMessage("dockerPrivileged")}
-          fieldId="dockerPrivileged"
+          errorMessage={props.getErrorMessage(fieldIds.dockerPrivileged)}
+          fieldId={fieldIds.dockerPrivileged}
           help="Select to give this container access to all devices on the host"
           label="Extend runtime privileges to this container"
-          value={props.fields.dockerPrivileged}
+          value={props.fields[fieldIds.dockerPrivileged]}
           onChange={this.handleFieldUpdate}>
           <input type="checkbox" />
         </FormGroupComponent>

@@ -13,6 +13,15 @@ var OptionalSettingsComponent = React.createClass({
     getErrorMessage: React.PropTypes.func.isRequired
   },
 
+  statics: {
+    fieldIds: Object.freeze({
+      executor: "executor",
+      ports: "ports",
+      uris: "uris",
+      constraints: "constraints"
+    })
+  },
+
   handleFieldUpdate: function (fieldId, value) {
     FormActions.update(fieldId, value);
   },
@@ -20,6 +29,7 @@ var OptionalSettingsComponent = React.createClass({
   render: function () {
     var props = this.props;
     var fields = props.fields;
+    var fieldIds = OptionalSettingsComponent.fieldIds;
 
     var contraintsHelp = "Comma-separated list of valid constraints. " +
       "Valid constraint format is \"field:operator[:value]\".";
@@ -31,39 +41,39 @@ var OptionalSettingsComponent = React.createClass({
     return (
       <div>
         <FormGroupComponent
-            errorMessage={props.getErrorMessage("executor")}
-            fieldId="executor"
+            errorMessage={props.getErrorMessage(fieldIds.executor)}
+            fieldId={fieldIds.executor}
             help={executorHelp}
             label="Executor"
             onChange={this.handleFieldUpdate}
-            value={fields.executor}>
+            value={fields[fieldIds.executor]}>
           <input />
         </FormGroupComponent>
         <FormGroupComponent
-            errorMessage={props.getErrorMessage("ports")}
-            fieldId="ports"
+            errorMessage={props.getErrorMessage(fieldIds.ports)}
+            fieldId={fieldIds.ports}
             help={portsHelp}
             label="Ports"
             onChange={this.handleFieldUpdate}
-            value={fields.ports}>
+            value={fields[fieldIds.ports]}>
           <input />
         </FormGroupComponent>
         <FormGroupComponent
-            errorMessage={props.getErrorMessage("uris")}
-            fieldId="uris"
+            errorMessage={props.getErrorMessage(fieldIds.uris)}
+            fieldId={fieldIds.uris}
             help="Comma-separated list of valid URIs."
             label="URIs"
             onChange={this.handleFieldUpdate}
-            value={fields.uris}>
+            value={fields[fieldIds.uris]}>
           <input />
         </FormGroupComponent>
         <FormGroupComponent
-            errorMessage={props.getErrorMessage("constraints")}
-            fieldId="constraints"
+            errorMessage={props.getErrorMessage(fieldIds.constraints)}
+            fieldId={fieldIds.constraints}
             help={contraintsHelp}
             label="Constraints"
             onChange={this.handleFieldUpdate}
-            value={fields.constraints}>
+            value={fields[fieldIds.constraints]}>
           <input />
         </FormGroupComponent>
       </div>
