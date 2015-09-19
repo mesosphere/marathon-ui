@@ -27,8 +27,17 @@ const AppFormValidators = {
   appIdValidChars: (str) => str.match(/[^a-z0-9\-_\.\/]/g) == null,
 
   appIdWellFormedPath: (str) => {
-    return !!str.match(/[a-z0-9\-_]\.+[a-z0-9\-_]/g) ||
-      !str.match(/[^\/\.]\.|\.[^\/\.]|\.{3,}/g);
+    // This RegExp is taken from the ID field explanation described here:
+    // https://mesosphere.github.io/marathon/docs/rest-api.html#post-v2-apps
+    var idMatchRegExp = "^(([a-z0-9]|[a-z0-9][a-z0-9\-]*" +
+      "[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$";
+
+    return str.split("/").every((pathSegement) => {
+      return Util.isEmptyString(pathSegement) ||
+        pathSegement === "." ||
+        pathSegement === ".." ||
+        !!pathSegement.match(idMatchRegExp);
+    });
   },
 
   containerVolumesContainerPathIsValid: (obj) => isValidPath(obj.containerPath),

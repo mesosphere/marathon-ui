@@ -39,24 +39,32 @@ describe("App Form Validators", function () {
 
       it("has well-formed path", function () {
         expect(this.v.appIdWellFormedPath("app.1")).to.be.true;
-        expect(this.v.appIdWellFormedPath("app......1")).to.be.true;
+        expect(this.v.appIdWellFormedPath("/app.1")).to.be.true;
+        expect(this.v.appIdWellFormedPath("/app.1/app-2")).to.be.true;
+        expect(this.v.appIdWellFormedPath("/app.1/app-2/")).to.be.true;
+
         expect(this.v.appIdWellFormedPath(".")).to.be.true;
         expect(this.v.appIdWellFormedPath("..")).to.be.true;
         expect(this.v.appIdWellFormedPath("../")).to.be.true;
-        expect(this.v.appIdWellFormedPath("./app-1/../app-1a/")).to.be.true;
-        expect(this.v.appIdWellFormedPath("../app-1/./app-1a")).to.be.true;
         expect(this.v.appIdWellFormedPath("app-1/..")).to.be.true;
         expect(this.v.appIdWellFormedPath("app-1/.")).to.be.true;
+        expect(this.v.appIdWellFormedPath("./app-1/../app-1a/")).to.be.true;
+        expect(this.v.appIdWellFormedPath("../app-1/./app-1a")).to.be.true;
         expect(this.v.appIdWellFormedPath("/app-1/.")).to.be.true;
       });
 
       it("has non-well-formed path", function () {
-        expect(this.v.appIdWellFormedPath("./app-1../app-1a/")).to.be.false;
+        expect(this.v.appIdWellFormedPath("App1")).to.be.false;
+        expect(this.v.appIdWellFormedPath("-app.1")).to.be.false;
+        expect(this.v.appIdWellFormedPath("app.1-")).to.be.false;
+        expect(this.v.appIdWellFormedPath("/-app.1")).to.be.false;
+        expect(this.v.appIdWellFormedPath("app......1")).to.be.false;
         expect(this.v.appIdWellFormedPath("/app-1.")).to.be.false;
         expect(this.v.appIdWellFormedPath("app-1..")).to.be.false;
         expect(this.v.appIdWellFormedPath(".app-1")).to.be.false;
         expect(this.v.appIdWellFormedPath("..app-1/")).to.be.false;
         expect(this.v.appIdWellFormedPath("..../app-1")).to.be.false;
+        expect(this.v.appIdWellFormedPath("./app-1../app-1a/")).to.be.false;
         expect(this.v.appIdWellFormedPath("/app-1/........")).to.be.false;
       });
     });
