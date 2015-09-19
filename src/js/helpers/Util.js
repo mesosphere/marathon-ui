@@ -1,4 +1,5 @@
 var consecutiveNumber = 0;
+var objectPath = require("object-path");
 
 var Util = {
   param: function (obj) {
@@ -72,6 +73,15 @@ var Util = {
     }
 
     return paths;
+  },
+  objectPathSet: function (obj, path, value) {
+    var [initialKey] = path.split(".");
+
+    if (obj[initialKey] == null) {
+      obj[initialKey] = {};
+    }
+
+    objectPath.set(obj, path, value);
   }
 };
 

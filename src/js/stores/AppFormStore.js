@@ -167,9 +167,9 @@ function rebuildModelFromFields(app, fields, fieldId) {
   if (key) {
     const transform = AppFormTransforms.FieldToModel[fieldId];
     if (transform == null) {
-      objectPath.set(app, key, fields[fieldId]);
+      Util.objectPathSet(app, key, fields[fieldId]);
     } else {
-      objectPath.set(app, key, transform(fields[fieldId]));
+      Util.objectPathSet(app, key, transform(fields[fieldId]));
     }
   }
 

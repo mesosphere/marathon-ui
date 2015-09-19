@@ -206,4 +206,22 @@ describe("Util", function () {
     });
   });
 
+  describe("objectPathSet", function () {
+    it("should work on inital null-values", function () {
+      var obj = {
+        a: null
+      };
+
+      Util.objectPathSet(obj, "a.b.c", "true");
+
+      expect(obj).to.deep.equal({
+        a: {
+          b: {
+            c: "true"
+          }
+        }
+      });
+    });
+  });
+
 });
