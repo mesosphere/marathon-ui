@@ -14,6 +14,7 @@ var appScheme = {
   healthWeight: 0,
   id: null,
   instances: 0,
+  labels: {},
   lastTaskFailure: null,
   status: AppStatus.SUSPENDED,
   mem: null,

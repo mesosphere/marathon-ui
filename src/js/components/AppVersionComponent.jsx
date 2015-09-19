@@ -162,6 +162,14 @@ var AppVersionComponent = React.createClass({
       ? <UnspecifiedNodeComponent />
       : <dd><pre>{JSON.stringify(appVersion.healthChecks, null, 2)}</pre></dd>;
 
+    var labelsNode = (appVersion.labels == null ||
+        Object.keys(appVersion.labels).length === 0)
+      ? <UnspecifiedNodeComponent />
+      // Print labels as key value pairs like "key=value"
+      : Object.keys(appVersion.labels).map(function (k) {
+        return <dd key={k}>{k + "=" + appVersion.labels[k]}</dd>;
+      });
+
     var portsNode = (appVersion.ports.length === 0)
       ? <UnspecifiedNodeComponent />
       : <dd>{appVersion.ports.join(",")}</dd>;
@@ -183,6 +191,8 @@ var AppVersionComponent = React.createClass({
           {constraintsNode}
           <dt>Dependencies</dt>
           {dependenciesNode}
+          <dt>Labels</dt>
+          {labelsNode}
           <dt>Container</dt>
           {containerNode}
           <dt>CPUs</dt>
