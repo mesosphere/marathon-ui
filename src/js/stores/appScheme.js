@@ -5,6 +5,7 @@ var appScheme = {
   constraints: [],
   container: null,
   cpus: null,
+  dependencies: [],
   deployments: [],
   env: {},
   executor: "",
