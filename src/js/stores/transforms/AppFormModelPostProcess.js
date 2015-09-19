@@ -21,6 +21,12 @@ const AppFormModelPostProcess = {
 
     if (isEmpty) {
       app.container = {};
+    } else {
+      // Remove this hack, if there is a solution available.
+      // https://github.com/mesosphere/marathon/issues/2147
+      if (Util.isEmptyString(app.cmd)) {
+        app.cmd = " ";
+      }
     }
   }
 };
