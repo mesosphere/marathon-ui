@@ -85,7 +85,10 @@ var AppTaskStatsComponent = React.createClass({
     }
 
     return Object.keys(stats.counts).reduce(function (memo, key) {
-      return memo + stats.counts[key];
+      if (key === "running" || key === "staged") {
+        return memo + stats.counts[key];
+      }
+      return memo;
     }, 0);
   },
 

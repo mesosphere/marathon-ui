@@ -6,6 +6,7 @@
 ### Fixed
 - \#2157 - Row is off-centre if upper row is empty in lists
 - \#2266 - Link "Mesos details" is broken
+- \#2252 - Wrong task number in Debug Tab
 
 ## 0.11.0 - 2015-09-02
 ### Added
