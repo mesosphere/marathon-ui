@@ -1,17 +1,4 @@
 var Util = {
-  param: function (obj) {
-    if (typeof obj !== "object" ) {
-      return obj;
-    }
-    try {
-      return Object.keys(obj).reduce(function (a, k) {
-        a.push(k + "=" + encodeURIComponent(obj[k]));
-        return a;
-      }, []).join("&");
-    } catch (e) {
-      return obj;
-    }
-  },
   serializeArray: function (form) {
     var serialized = [];
     // https://github.com/jquery/jquery/blob/2.1-stable/src/serialize.js#L12
