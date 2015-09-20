@@ -244,7 +244,7 @@ describe("App Version component", function () {
         "maximumOverCapacity": 1.0
       },
       "labels": {},
-      "acceptedResourceRoles": null,
+      "acceptedResourceRoles": [],
       "version": "2015-06-29T12:57:02.269Z"
     };
 
@@ -317,7 +317,7 @@ describe("App Version component", function () {
   });
 
   it("has correct ports", function () {
-    expect(this.table[27].props.children).to.equal("10000,10001");
+    expect(this.table[27].props.children).to.equal("10000, 10001");
   });
 
   it("has correct backoff factor", function () {
