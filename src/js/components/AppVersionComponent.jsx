@@ -1,4 +1,5 @@
 var classNames = require("classnames");
+var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppsActions = require("../actions/AppsActions");
@@ -134,6 +135,16 @@ var AppVersionComponent = React.createClass({
       ? <UnspecifiedNodeComponent />
       : <dd><pre>{JSON.stringify(appVersion.container, null, 2)}</pre></dd>;
 
+    var dependenciesNode = (appVersion.dependencies.length === 0)
+      ? <UnspecifiedNodeComponent />
+      : appVersion.dependencies.map(function (d) {
+        return (
+          <dd key={d}>
+            <Link to="app" params={{appId: encodeURIComponent(d)}}>{d}</Link>
+          </dd>
+        );
+      });
+
     var envNode = (appVersion.env == null ||
         Object.keys(appVersion.env).length === 0)
       ? <UnspecifiedNodeComponent />
@@ -150,6 +161,14 @@ var AppVersionComponent = React.createClass({
         || appVersion.healthChecks.length === 0)
       ? <UnspecifiedNodeComponent />
       : <dd><pre>{JSON.stringify(appVersion.healthChecks, null, 2)}</pre></dd>;
+
+    var labelsNode = (appVersion.labels == null ||
+        Object.keys(appVersion.labels).length === 0)
+      ? <UnspecifiedNodeComponent />
+      // Print labels as key value pairs like "key=value"
+      : Object.keys(appVersion.labels).map(function (k) {
+        return <dd key={k}>{k + "=" + appVersion.labels[k]}</dd>;
+      });
 
     var portsNode = (appVersion.ports.length === 0)
       ? <UnspecifiedNodeComponent />
@@ -170,6 +189,10 @@ var AppVersionComponent = React.createClass({
           {invalidateValue(appVersion.cmd)}
           <dt>Constraints</dt>
           {constraintsNode}
+          <dt>Dependencies</dt>
+          {dependenciesNode}
+          <dt>Labels</dt>
+          {labelsNode}
           <dt>Container</dt>
           {containerNode}
           <dt>CPUs</dt>
