@@ -180,8 +180,7 @@ var AppVersionComponent = React.createClass({
         return <dd key={u}>{u}</dd>;
       });
 
-    var acceptedResourceRoles = (appVersion.acceptedResourceRoles == null ||
-        appVersion.acceptedResourceRoles.length === 0)
+    var acceptedResourceRoles = (appVersion.acceptedResourceRoles.length === 0)
       ? <UnspecifiedNodeComponent />
       : <dd>{appVersion.acceptedResourceRoles.join(", ")}</dd>;
 
