@@ -179,6 +179,16 @@ var AppModalComponent = React.createClass({
     );
   },
 
+  fieldsHaveError: function (fieldIds) {
+    var state = this.state;
+    var errorIndices = state.errorIndices;
+    var responseMessages = state.responseErrorMessages;
+
+    return !!Object.values(fieldIds).find((fieldId) => {
+      return errorIndices[fieldId] != null || responseMessages[fieldId] != null;
+    });
+  },
+
   render: function () {
     var props = this.props;
     var state = this.state;
@@ -270,7 +280,10 @@ var AppModalComponent = React.createClass({
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="Docker container settings">
+              <CollapsiblePanelComponent
+                  isOpen=
+                    {this.fieldsHaveError(ContainerSettingsComponent.fieldIds)}
+                  title="Docker container settings">
                 <ContainerSettingsComponent
                   errorIndices={state.errorIndices}
                   fields={state.fields}
@@ -278,7 +291,9 @@ var AppModalComponent = React.createClass({
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="Environment variables">
+              <CollapsiblePanelComponent
+                  isOpen={this.fieldsHaveError({env: "env"})}
+                  title="Environment variables">
                 <OptionalEnvironmentComponent
                   errorIndices={state.errorIndices.env}
                   generalError={this.getErrorMessage("env")}
@@ -286,7 +301,10 @@ var AppModalComponent = React.createClass({
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="Optional settings">
+              <CollapsiblePanelComponent
+                  isOpen=
+                    {this.fieldsHaveError(OptionalSettingsComponent.fieldIds)}
+                  title="Optional settings">
                 <OptionalSettingsComponent
                   errorIndices={state.errorIndices}
                   fields={state.fields}
