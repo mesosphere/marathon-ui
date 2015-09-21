@@ -113,7 +113,13 @@ var AppVersionComponent = React.createClass({
   render: function () {
     var appVersion = this.props.appVersion;
 
-    var constraintsNode = (appVersion.constraints.length < 1)
+    var acceptedResourceRoles = (appVersion.acceptedResourceRoles == null ||
+        appVersion.acceptedResourceRoles.length === 0)
+      ? <UnspecifiedNodeComponent />
+      : <dd>{appVersion.acceptedResourceRoles.join(", ")}</dd>;
+
+    var constraintsNode = (appVersion.constraints == null ||
+        appVersion.constraints.length < 1)
       ? <UnspecifiedNodeComponent />
       : appVersion.constraints.map(function (c) {
 
@@ -153,7 +159,8 @@ var AppVersionComponent = React.createClass({
         return <dd key={k}>{k + "=" + appVersion.env[k]}</dd>;
       });
 
-    var executorNode = (appVersion.executor === "")
+    var executorNode = (appVersion.executor == null ||
+        appVersion.executor === "")
       ? <UnspecifiedNodeComponent />
       : <dd>{appVersion.executor}</dd>;
 
@@ -170,19 +177,15 @@ var AppVersionComponent = React.createClass({
         return <dd key={k}>{k + "=" + appVersion.labels[k]}</dd>;
       });
 
-    var portsNode = (appVersion.ports.length === 0)
+    var portsNode = (appVersion.ports == null || appVersion.ports.length === 0)
       ? <UnspecifiedNodeComponent />
       : <dd>{appVersion.ports.join(", ")}</dd>;
 
-    var urisNode = (appVersion.uris.length === 0)
+    var urisNode = (appVersion.uris == null || appVersion.uris.length === 0)
       ? <UnspecifiedNodeComponent />
       : appVersion.uris.map(function (u) {
         return <dd key={u}>{u}</dd>;
       });
-
-    var acceptedResourceRoles = (appVersion.acceptedResourceRoles.length === 0)
-      ? <UnspecifiedNodeComponent />
-      : <dd>{appVersion.acceptedResourceRoles.join(", ")}</dd>;
 
     return (
       <div>
