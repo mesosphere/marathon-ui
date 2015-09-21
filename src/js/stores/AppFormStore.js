@@ -266,6 +266,11 @@ function processResponseErrors(responseErrors, response, statusCode) {
     responseErrors.general =
       `${AppFormErrorMessages.general[2]} ${response.message}`;
 
+  } else if (statusCode === 401 && response != null &&
+      response.message != null) {
+
+    responseErrors.general = AppFormErrorMessages.general[3];
+
   } else if (statusCode === 400 && response != null &&
       Util.isArray(response.details)) {
 

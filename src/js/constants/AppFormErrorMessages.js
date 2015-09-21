@@ -33,7 +33,8 @@ const AppFormErrorMessages = {
   general: [
     "App creation unsuccessful. Check your app settings and try again.",
     "Unknown server error, could not create or apply app.",
-    "Error:"
+    "Error:",
+    "App creation unsuccessful. Unauthorized access."
   ],
   instances: ["Instances must be a non-negative Number"],
   mem: ["Memory must be a non-negative Number"],
