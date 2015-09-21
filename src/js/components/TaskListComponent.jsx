@@ -97,8 +97,6 @@ var TaskListComponent = React.createClass({
     var hasError = props.fetchState === States.STATE_ERROR;
     var isUnauthorized = props.fetchState === States.STATE_UNAUTHORIZED;
 
-    console.log(isUnauthorized);
-
     var headerClassSet = classNames({
       "clickable": true,
       "dropup": !this.state.sortDescending
@@ -136,7 +134,7 @@ var TaskListComponent = React.createClass({
         </div>
         <div className={unauthorizedClassSet}>
           <p className="text-center text-danger">
-            Unauthorized access. Error fetching tasks.
+            Error fetching tasks. Unauthorized access.
           </p>
         </div>
         <table className="table table-unstyled">
