@@ -1,286 +1,421 @@
+var classNames = require("classnames");
 var React = require("react/addons");
+var Util = require("../helpers/Util");
 
-var appValidator = require("../validators/appValidator");
+var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
 var ContainerConstants = require("../constants/ContainerConstants");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
+var dockerRowSchemes = require("../stores/dockerRowSchemes");
+var FormActions = require("../actions/FormActions");
 var FormGroupComponent = require("../components/FormGroupComponent");
+
+const portInputAttributes = {
+  min: 0,
+  max: 65535,
+  step: 1,
+  type: "number"
+};
+
+const duplicableRowFieldIds = [
+  "dockerPortMappings",
+  "dockerParameters",
+  "containerVolumes"
+];
 
 var ContainerSettingsComponent = React.createClass({
   displayName: "ContainerSettingsComponent",
 
   propTypes: {
-    errors: React.PropTypes.array,
-    model: React.PropTypes.object.isRequired
+    errorIndices: React.PropTypes.object,
+    fields: React.PropTypes.object,
+    getErrorMessage: React.PropTypes.func
+  },
+
+  statics: {
+    fieldIds: Object.freeze({
+      containerVolumes: "containerVolumes",
+      dockerImage: "dockerImage",
+      dockerNetwork: "dockerNetwork",
+      dockerParameters: "dockerParameters",
+      dockerPortMappings: "dockerPortMappings",
+      dockerPrivileged: "dockerPrivileged"
+    })
   },
 
   getInitialState: function () {
-    var container = this.props.model.container;
-
-    var portMappingsCount = 1;
-    var parametersCount = 1;
-    var volumesCount = 1;
-
-    if (container != null) {
-      if (container.docker != null && container.docker.portMappings != null) {
-        portMappingsCount = container.docker.portMappings.length || 1;
-      }
-      if (container.parameters != null) {
-        parametersCount = container.parameters.length || 1;
-      }
-      if (container.volumes != null) {
-        volumesCount = container.volumes.length || 1;
-      }
-    }
-
     return {
-      rows: {
-        portMappings:
-          Array(portMappingsCount).fill(true),
-        parameters: Array(parametersCount).fill(true),
-        volumes: Array(volumesCount).fill(true)
-      }
+      rows: this.getPopulatedRows()
     };
   },
 
-  handleAddRow: function (rowKey, position, event) {
-    event.target.blur();
-    event.preventDefault();
-    var rows = React.addons.update(
-      this.state.rows, {[rowKey]: {$push: [true]}}
-    );
-    this.setState({rows: rows});
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({
+      rows: this.getPopulatedRows(nextProps.fields)
+    }, this.enforceMinRows);
   },
 
-  handleRemoveRow: function (rowKey, position, event) {
-    /* Each array represents a list of duplicable rows, in order to keep track
-     * of which rows have been deleted by the user. A value of false signifies
-     * a deleted row.
-     * The form submits values infered directly from the DOM.
-     */
-    event.target.blur();
-    event.preventDefault();
-    var rows = React.addons.update(
-      this.state.rows, {[rowKey]: {[position]: {$set: false}}}
-    );
-    if (rows[rowKey].filter((exists) => exists).length === 0) {
-      rows[rowKey].push(true);
-    }
-    this.setState({rows: rows});
+  componentWillMount: function () {
+    this.enforceMinRows();
   },
 
-  getPortMappingRow: function (i = 0) {
-    var props = this.props;
-    var model = props.model;
-    var errors = props.errors;
-
-    return (
-      <div key={`pm-${i}`} className="row duplicable-row">
-        <div className="col-sm-3">
-          <FormGroupComponent
-            attribute={`container.docker.portMappings[${i}].containerPort`}
-            label="Container Port"
-            model={model}
-            errors={errors}
-            validator={appValidator}>
-            <input type="number" step="1" min="0" max="65535"/>
-          </FormGroupComponent>
-        </div>
-        <div className="col-sm-3">
-          <FormGroupComponent
-            attribute={`container.docker.portMappings[${i}].hostPort`}
-            label="Host Port"
-            model={model}
-            errors={errors}
-            validator={appValidator}>
-            <input type="number" step="1" min="0" max="65535"/>
-          </FormGroupComponent>
-        </div>
-        <div className="col-sm-2">
-          <FormGroupComponent
-            attribute={`container.docker.portMappings[${i}].servicePort`}
-            label="Service Port"
-            model={model}
-            errors={errors}
-            validator={appValidator}>
-            <input type="number" step="1" min="0" max="65535"/>
-          </FormGroupComponent>
-        </div>
-        <div className="col-sm-4">
-          <FormGroupComponent
-            attribute={`container.docker.portMappings[${i}].protocol`}
-            label="Protocol"
-            model={model}
-            errors={errors}
-            validator={appValidator}>
-            <select defaultValue="">
-              <option value="" disabled="disabled">
-                Select
-              </option>
-              <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
-                {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
-              </option>
-              <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}>
-                {ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}
-              </option>
-            </select>
-          </FormGroupComponent>
-          <DuplicableRowControls
-            handleAddRow={this.handleAddRow.bind(this, "portMappings", i)}
-            handleRemoveRow={this.handleRemoveRow.bind(this, "portMappings", i)}
-            />
-        </div>
-      </div>
-    );
-  },
-
-  getParameterRow: function (i = 0) {
-    var props = this.props;
-    var model = props.model;
-    var errors = props.errors;
-
-    return (
-      <div key={`p-${i}`} className="row duplicable-row">
-        <div className="col-sm-6 add-colon">
-          <FormGroupComponent
-            attribute={`container.parameters[${i}].key`}
-            label="Key"
-            model={model}
-            errors={errors}
-            validator={appValidator}>
-            <input />
-          </FormGroupComponent>
-        </div>
-        <div className="col-sm-6">
-          <FormGroupComponent
-            attribute={`container.parameters[${i}].value`}
-            label="Value"
-            model={model}
-            errors={errors}
-            validator={appValidator}>
-            <input />
-          </FormGroupComponent>
-          <DuplicableRowControls
-            handleAddRow={this.handleAddRow.bind(null, "parameters", i)}
-            handleRemoveRow={this.handleRemoveRow.bind(null, "parameters", i)}
-            />
-        </div>
-      </div>
-    );
-  },
-
-  getVolumeRow: function (i = 0) {
-    var props = this.props;
-    var model = props.model;
-    var errors = props.errors;
-    var mode;
-
-    try {
-      mode = model.container.volumes[i].mode;
-    } catch (e) {
-      mode = "";
+  populateInitialConsecutiveKeys: function (rows) {
+    if (rows == null) {
+      return null;
     }
 
+    return rows.map(function (row) {
+      return Util.extendObject(row, {
+        consecutiveKey: row.consecutiveKey != null
+          ? row.consecutiveKey
+          : Util.getUniqueId()
+      });
+    });
+  },
+
+  getPopulatedRows: function (fields = this.props.fields) {
+    return duplicableRowFieldIds.reduce((memo, rowFieldId) => {
+      memo[rowFieldId] =
+        this.populateInitialConsecutiveKeys(fields[rowFieldId]);
+      return memo;
+    }, {});
+  },
+
+  enforceMinRows: function () {
+    var state = this.state;
+
+    duplicableRowFieldIds.forEach(function (fieldId) {
+      if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
+        FormActions.insert(fieldId,
+            Util.extendObject(dockerRowSchemes[fieldId], {
+          consecutiveKey: Util.getUniqueId()
+        }));
+      }
+    });
+  },
+
+  getDuplicableRowValues: function (rowFieldId, i) {
+    var findDOMNode = React.findDOMNode;
+    var refs = this.refs;
+    const row = {
+      consecutiveKey: this.state.rows[rowFieldId][i].consecutiveKey
+    };
+
+    return Object.keys(dockerRowSchemes[rowFieldId])
+      .reduce(function (memo, key) {
+        memo[key] = findDOMNode(refs[`${key}${i}`]).value;
+        return memo;
+      }, row);
+  },
+
+  handleAddRow: function (fieldId, position, event) {
+    event.target.blur();
+    event.preventDefault();
+    FormActions.insert(fieldId, Util.extendObject(dockerRowSchemes[fieldId], {
+        consecutiveKey: Util.getUniqueId()
+      }),
+      position
+    );
+  },
+
+  handleChangeRow: function (fieldId, position) {
+    var row = this.getDuplicableRowValues(fieldId, position);
+    FormActions.update(fieldId, row, position);
+  },
+
+  handleFieldUpdate: function (fieldId, value) {
+    FormActions.update(fieldId, value);
+  },
+
+  handleRemoveRow: function (fieldId, position, event) {
+    event.target.blur();
+    event.preventDefault();
+    var row = this.getDuplicableRowValues(fieldId, position);
+
+    FormActions.delete(fieldId, row, position);
+  },
+
+  getError: function (fieldId, consecutiveKey) {
+    var errorIndices = this.props.errorIndices[fieldId];
+    if (errorIndices != null) {
+      let errorIndex = errorIndices[consecutiveKey];
+      if (errorIndex != null) {
+        return (
+          <div className="help-block">
+            <strong>
+              {AppFormErrorMessages.getMessage(fieldId, errorIndex)}
+            </strong>
+          </div>
+        );
+      }
+    }
+    return null;
+  },
+
+  getPortMappingRow: function (row, i, disableRemoveButton = false) {
+    var fieldsetId = ContainerSettingsComponent.fieldIds.dockerPortMappings;
+    var error = this.getError(fieldsetId, row.consecutiveKey);
+    var getErrorMessage = this.props.getErrorMessage;
+    var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
+    var handleAddRow =
+      this.handleAddRow.bind(null, fieldsetId, i + 1);
+    var handleRemoveRow =
+      this.handleRemoveRow.bind(null, fieldsetId, i);
+
+    var rowClassSet = classNames({
+      "has-error": !!error,
+      "duplicable-row": true
+    });
+
     return (
-      <div key={`v-${i}`} className="row duplicable-row">
-        <div className="col-sm-4">
-          <FormGroupComponent
-            attribute={`container.volumes[${i}].containerPath`}
-            label="Container Path"
-            model={model}
-            errors={errors}
-            validator={appValidator}>
-            <input />
-          </FormGroupComponent>
-        </div>
-        <div className="col-sm-4">
-          <FormGroupComponent
-            attribute={`container.volumes[${i}].hostPath`}
-            label="Host Path"
-            model={model}
-            errors={errors}
-            validator={appValidator}>
-            <input />
-          </FormGroupComponent>
-        </div>
-        <div className="col-sm-4">
-          <FormGroupComponent
-            attribute={`container.volumes[${i}].mode`}
-            label="Mode"
-            model={model}
-            errors={errors}
-            validator={appValidator}>
-            <select defaultValue={mode}>
-              <option value="" disabled="disabled">Select</option>
-              <option value={ContainerConstants.VOLUMES.MODE.RO}>
-                Read Only
-              </option>
-              <option value={ContainerConstants.VOLUMES.MODE.RW}>
-                Read and Write
-              </option>
-            </select>
-          </FormGroupComponent>
-          <DuplicableRowControls
-            handleAddRow={this.handleAddRow.bind(null, "volumes", i)}
-            handleRemoveRow={this.handleRemoveRow.bind(null, "volumes", i)} />
-        </div>
+      <div key={row.consecutiveKey} className={rowClassSet}>
+        <fieldset className="row duplicable-row"
+          onChange={handleChange}>
+          <div className="col-sm-3">
+            <FormGroupComponent
+              errorMessage={
+                getErrorMessage(`${fieldsetId}.${i}.containerPort`)
+              }
+              fieldId={`${fieldsetId}.${i}.containerPort`}
+              label="Container Port"
+              value={row.containerPort}>
+              <input ref={`containerPort${i}`} {...portInputAttributes}/>
+            </FormGroupComponent>
+          </div>
+          <div className="col-sm-3">
+            <FormGroupComponent
+              errorMessage={
+                getErrorMessage(`${fieldsetId}.${i}.hostPort`)
+              }
+              fieldId={`${fieldsetId}.${i}.hostPort`}
+              label="Host Port"
+              value={row.hostPort}>
+              <input ref={`hostPort${i}`} {...portInputAttributes}/>
+            </FormGroupComponent>
+          </div>
+          <div className="col-sm-2">
+            <FormGroupComponent
+              errorMessage={
+                getErrorMessage(`${fieldsetId}.${i}.servicePort`)
+              }
+              fieldId={`${fieldsetId}.${i}.servicePort`}
+              label="Service Port"
+              value={row.servicePort}>
+              <input ref={`servicePort${i}`} {...portInputAttributes}/>
+            </FormGroupComponent>
+          </div>
+          <div className="col-sm-4">
+            <FormGroupComponent
+              errorMessage={
+                getErrorMessage(`${fieldsetId}.${i}.protocol`)
+              }
+              fieldId={`${fieldsetId}.${i}.protocol`}
+              label="Protocol"
+              value={row.protocol}>
+              <select defaultValue={row.protocol} ref={`protocol${i}`}>
+                <option value="">Select</option>
+                <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
+                  {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
+                </option>
+                <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}>
+                  {ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}
+                </option>
+              </select>
+            </FormGroupComponent>
+            <DuplicableRowControls disableRemoveButton={disableRemoveButton}
+              handleAddRow={handleAddRow}
+              handleRemoveRow={handleRemoveRow} />
+          </div>
+        </fieldset>
+        {error}
       </div>
     );
+  },
+
+  getPortMappingRows: function () {
+    var rows = this.state.rows.dockerPortMappings;
+
+    if (rows == null) {
+      return null;
+    }
+
+    var disableRemoveButton = (rows.length === 1 &&
+      Util.isEmptyString(rows[0].containerPort) &&
+      Util.isEmptyString(rows[0].hostPort) &&
+      Util.isEmptyString(rows[0].servicePort) &&
+      (rows[0].protocol == null || Util.isEmptyString(rows[0].protocol)));
+
+    return rows.map((row, i) => {
+      return this.getPortMappingRow(row, i, disableRemoveButton);
+    });
+  },
+
+  getParametersRow: function (row, i, disableRemoveButton = false) {
+    var fieldsetId = ContainerSettingsComponent.fieldIds.dockerParameters;
+    var error = this.getError(fieldsetId, row.consecutiveKey);
+    var getErrorMessage = this.props.getErrorMessage;
+    var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
+    var handleAddRow = this.handleAddRow.bind(null, fieldsetId, i + 1);
+    var handleRemoveRow =
+      this.handleRemoveRow.bind(null, fieldsetId, i);
+
+    var rowClassSet = classNames({
+      "has-error": !!error,
+      "duplicable-row": true
+    });
+
+    return (
+      <div key={row.consecutiveKey} className={rowClassSet}>
+        <fieldset className="row duplicable-row" onChange={handleChange}>
+          <div className="col-sm-6 add-colon">
+            <FormGroupComponent
+              errorMessage={getErrorMessage(`${fieldsetId}.${i}.key`)}
+              fieldId={`${fieldsetId}.${i}.key`}
+              label="Key"
+              value={row.key}>
+              <input ref={`key${i}`} />
+            </FormGroupComponent>
+          </div>
+          <div className="col-sm-6">
+            <FormGroupComponent
+              errorMessage={getErrorMessage(`${fieldsetId}.${i}.value`)}
+              fieldId={`${fieldsetId}.${i}.value`}
+              label="Value"
+              value={row.value}>
+              <input ref={`value${i}`} />
+            </FormGroupComponent>
+            <DuplicableRowControls disableRemoveButton={disableRemoveButton}
+              handleAddRow={handleAddRow}
+              handleRemoveRow={handleRemoveRow} />
+          </div>
+        </fieldset>
+        {error}
+      </div>
+    );
+  },
+
+  getParametersRows: function () {
+    var rows = this.state.rows.dockerParameters;
+
+    if (rows == null) {
+      return null;
+    }
+
+    var disableRemoveButton = (rows.length === 1 &&
+      Util.isEmptyString(rows[0].key) &&
+      Util.isEmptyString(rows[0].value));
+
+    return rows.map((row, i) => {
+      return this.getParametersRow(row, i, disableRemoveButton);
+    });
+  },
+
+  getVolumesRow: function (row, i, disableRemoveButton = false) {
+    var fieldsetId = ContainerSettingsComponent.fieldIds.containerVolumes;
+    var error = this.getError(fieldsetId, row.consecutiveKey);
+    var getErrorMessage = this.props.getErrorMessage;
+    var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
+    var handleAddRow = this.handleAddRow.bind(null, fieldsetId, i + 1);
+    var handleRemoveRow =
+      this.handleRemoveRow.bind(null, fieldsetId, i);
+
+    var rowClassSet = classNames({
+      "has-error": !!error,
+      "duplicable-row": true
+    });
+
+    return (
+      <div key={row.consecutiveKey} className={rowClassSet}>
+        <fieldset className="row duplicable-row"
+          onChange={handleChange}>
+          <div className="col-sm-4">
+            <FormGroupComponent
+              errorMessage={
+                getErrorMessage(`${fieldsetId}.${i}.containerPath`)
+              }
+              fieldId={`${fieldsetId}.${i}.containerPath`}
+              label="Container Path"
+              value={row.containerPath}>
+              <input ref={`containerPath${i}`} />
+            </FormGroupComponent>
+          </div>
+          <div className="col-sm-4">
+            <FormGroupComponent
+              errorMessage={getErrorMessage(`${fieldsetId}.${i}.hostPath`)}
+              fieldId={`${fieldsetId}.${i}.hostPath`}
+              label="Host Path"
+              value={row.hostPath}>
+              <input ref={`hostPath${i}`} />
+            </FormGroupComponent>
+          </div>
+          <div className="col-sm-4">
+            <FormGroupComponent
+              errorMessage={getErrorMessage(`${fieldsetId}.${i}.mode`)}
+              fieldId={`${fieldsetId}.${i}.mode`}
+              label="Mode"
+              value={row.mode}>
+              <select defaultValue="" ref={`mode${i}`}>
+                <option value="">Select</option>
+                <option value={ContainerConstants.VOLUMES.MODE.RO}>
+                  Read Only
+                </option>
+                <option value={ContainerConstants.VOLUMES.MODE.RW}>
+                  Read and Write
+                </option>
+              </select>
+            </FormGroupComponent>
+            <DuplicableRowControls disableRemoveButton={disableRemoveButton}
+              handleAddRow={handleAddRow}
+              handleRemoveRow={handleRemoveRow} />
+          </div>
+        </fieldset>
+        {error}
+      </div>
+    );
+  },
+
+  getVolumesRows: function () {
+    var rows = this.state.rows.containerVolumes;
+
+    if (rows == null) {
+      return null;
+    }
+
+    var disableRemoveButton = (rows.length === 1 &&
+      Util.isEmptyString(rows[0].containerPath) &&
+      Util.isEmptyString(rows[0].hostPath) &&
+      (rows[0].mode == null || Util.isEmptyString(rows[0].mode)));
+
+    return rows.map((row, i) => {
+      return this.getVolumesRow(row, i, disableRemoveButton);
+    });
   },
 
   render: function () {
-    var state = this.state;
-    var model = this.props.model;
-    var errors = this.props.errors;
-    var network;
-
-    try {
-      network = model.container.docker.network;
-    } catch (e) {
-      network = "";
-    }
-
-    var portMappingRows = state.rows.portMappings
-      .map(function (exists, index) {
-        return exists
-          ? this.getPortMappingRow(index)
-          : null;
-      }.bind(this));
-
-    var parameterRows = state.rows.parameters
-      .map(function (exists, index) {
-        return exists
-          ? this.getParameterRow(index)
-          : null;
-      }.bind(this));
-
-    var volumeRows = state.rows.volumes.map(function (exists, index) {
-      return exists
-        ? this.getVolumeRow(index)
-        : null;
-    }.bind(this));
+    var props = this.props;
+    var fieldIds = ContainerSettingsComponent.fieldIds;
 
     return (
       <div>
         <div className="row">
           <div className="col-sm-6">
             <FormGroupComponent
-              attribute="container.docker.image"
+              errorMessage={props.getErrorMessage(fieldIds.dockerImage)}
+              fieldId={fieldIds.dockerImage}
               label="Image"
-              model={model}
-              errors={errors}
-              validator={appValidator}>
+              value={props.fields[fieldIds.dockerImage]}
+              onChange={this.handleFieldUpdate}>
               <input />
             </FormGroupComponent>
           </div>
           <div className="col-sm-6">
             <FormGroupComponent
-              attribute="container.docker.network"
+              errorMessage={props.getErrorMessage(fieldIds.dockerNetwork)}
+              fieldId={fieldIds.dockerNetwork}
               label="Network"
-              model={model}
-              errors={errors}
-              validator={appValidator}>
-              <select defaultValue={network}>
-                <option value="" disabled="disabled">Select</option>
+              value={props.fields[fieldIds.dockerNetwork]}
+              onChange={this.handleFieldUpdate}>
+              <select defaultValue="">
+                <option value="">Select</option>
                 <option value={ContainerConstants.NETWORK.HOST}>
                   Host
                 </option>
@@ -292,28 +427,21 @@ var ContainerSettingsComponent = React.createClass({
           </div>
         </div>
         <h4>Privileges</h4>
-        <FormGroupComponent
-          attribute="container.docker.privileged"
-          className="checkbox-form-group"
-          label="Extend runtime privileges to this container"
+        <FormGroupComponent className="checkbox-form-group"
+          errorMessage={props.getErrorMessage(fieldIds.dockerPrivileged)}
+          fieldId={fieldIds.dockerPrivileged}
           help="Select to give this container access to all devices on the host"
-          model={model}
-          errors={errors}
-          validator={appValidator}>
+          label="Extend runtime privileges to this container"
+          value={props.fields[fieldIds.dockerPrivileged]}
+          onChange={this.handleFieldUpdate}>
           <input type="checkbox" />
         </FormGroupComponent>
         <h4>Port Mappings</h4>
-        <div className="duplicable-list">
-            {portMappingRows}
-        </div>
+        <div className="duplicable-list">{this.getPortMappingRows()}</div>
         <h4>Parameters</h4>
-        <div className="duplicable-list">
-            {parameterRows}
-        </div>
+        <div className="duplicable-list">{this.getParametersRows()}</div>
         <h4>Volumes</h4>
-        <div className="duplicable-list">
-            {volumeRows}
-        </div>
+        <div className="duplicable-list">{this.getVolumesRows()}</div>
       </div>
     );
   }

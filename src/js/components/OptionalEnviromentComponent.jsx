@@ -1,107 +1,196 @@
+var classNames = require("classnames");
 var React = require("react/addons");
 
-var FormGroupComponent = require("../components/FormGroupComponent");
-var DuplicableRowControls = require("../components/DuplicableRowControls");
+var Util = require("../helpers/Util");
 
-var OptionalSettingsComponent = React.createClass({
+var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
+var DuplicableRowControls = require("../components/DuplicableRowControls");
+var FormActions = require("../actions/FormActions");
+var FormGroupComponent =
+  require("../components/FormGroupComponent");
+
+var OptionalEnvironmentComponent = React.createClass({
   displayName: "OptionalEnvironmentComponent",
 
   propTypes: {
-    errors: React.PropTypes.array,
-    model: React.PropTypes.object.isRequired
+    errorIndices: React.PropTypes.array,
+    generalError: React.PropTypes.string,
+    rows: React.PropTypes.array
+  },
+
+  populateInitialConsecutiveKeys: function (rows) {
+    if (rows == null) {
+      return null;
+    }
+
+    return rows.map(function (row) {
+      return {
+        key: row.key,
+        value: row.value,
+        consecutiveKey: row.consecutiveKey != null
+          ? row.consecutiveKey
+          : Util.getUniqueId()
+      };
+    });
   },
 
   getInitialState: function () {
-    /*
-     * env is a representation of `model.env` which is normally an object.
-     * In this component we use an array of objects to represent every line
-     * of environment variables as a default the first line is set with an empty
-     * state of `[{key: "", value: ""}]`.
-     */
-    var env = this.props.model.env;
-    var state = {
-      env: Object.keys(env).map(function (key) {
-        return {
-          key: key,
-          value: env[key]
-        };
-      })
+    return {
+      rows: this.populateInitialConsecutiveKeys(this.props.rows)
     };
-    if (state.env.length === 0) {
-      state.env = [{key: "", value: ""}];
+  },
+
+  enforceMinRows: function () {
+    if (this.state.rows == null || this.state.rows.length === 0) {
+      FormActions.insert("env", {
+        key: "",
+        value: "",
+        consecutiveKey: Util.getUniqueId()
+      });
     }
-    return state;
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({
+      rows: this.populateInitialConsecutiveKeys(nextProps.rows)
+    }, this.enforceMinRows);
+  },
+
+  componentWillMount: function () {
+    this.enforceMinRows();
+  },
+
+  getDuplicableRowValues: function (position) {
+    var findDOMNode = React.findDOMNode;
+    return {
+      key: findDOMNode(this.refs[`envKey${position}`]).value,
+      value: findDOMNode(this.refs[`envValue${position}`]).value,
+      consecutiveKey: this.state.rows[position].consecutiveKey
+    };
   },
 
   handleAddRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
-    // Add a new empty line.
-    var env = this.state.env.concat({key: "", value: ""});
-    this.setState({env: env});
+
+    FormActions.insert("env", {
+        key: "",
+        value: "",
+        consecutiveKey: Util.getUniqueId()
+      },
+      position
+    );
   },
 
   handleRemoveRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
-    var env = this.state.env.slice();
-    env = env.map(function (value, index) {
-      return value && index !== position;
-    });
-    // If the array is empty we need to add a default object.
-    if (env.filter((exists) => exists).length === 0) {
-      env.push({key: "", value: ""});
-    }
-    this.setState({env: env});
+    var row = this.getDuplicableRowValues(position);
+
+    FormActions.delete("env", row, position);
   },
 
-  render: function () {
-    var enviromentRows = this.state.env
-      .map(function (exists, index) {
-        return exists
-          ? this.getEnviromentRow(index)
-          : null;
-      }.bind(this));
+  handleChange: function (position) {
+    var row = this.getDuplicableRowValues(position);
+    FormActions.update("env", row, position);
+  },
+
+  getError: function (consecutiveKey) {
+    var errorIndices = this.props.errorIndices;
+    if (errorIndices != null) {
+      let errorIndex = errorIndices[consecutiveKey];
+      if (errorIndex != null) {
+        return (
+          <div className="help-block">
+            <strong>
+              {AppFormErrorMessages.getMessage("env", errorIndex)}
+            </strong>
+          </div>
+        );
+      }
+    }
+    return null;
+  },
+
+  getGeneralErrorBlock: function () {
+    var error = this.props.generalError;
+
+    if (error == null) {
+      return null;
+    }
 
     return (
-      <div>
-        <div className="duplicable-list">
-            {enviromentRows}
-        </div>
+      <p className="text-danger">
+        <strong>{error}</strong>
+      </p>
+    );
+  },
+
+  getEnviromentRow: function (row, i, disableRemoveButton = false) {
+    var error = this.getError(row.consecutiveKey);
+
+    var rowClassSet = classNames({
+      "has-error": !!error,
+      "duplicable-row": true
+    });
+
+    return (
+      <div key={row.consecutiveKey} className={rowClassSet}>
+        <fieldset
+            className="row duplicable-row"
+            onChange={this.handleChange.bind(null, i)}>
+          <div className="col-sm-6 add-colon">
+            <FormGroupComponent
+              fieldId={`env.key.${i}`}
+              label="Key"
+              value={row.key}>
+              <input ref={`envKey${i}`} />
+            </FormGroupComponent>
+          </div>
+          <div className="col-sm-6">
+            <FormGroupComponent
+              fieldId={`env.value.${i}`}
+              label="Value"
+              value={row.value}>
+              <input ref={`envValue${i}`} />
+            </FormGroupComponent>
+            <DuplicableRowControls
+              disableRemoveButton={disableRemoveButton}
+              handleAddRow={this.handleAddRow.bind(null, i + 1)}
+              handleRemoveRow={this.handleRemoveRow.bind(null, i)} />
+          </div>
+        </fieldset>
+        {error}
       </div>
     );
   },
 
-  getEnviromentRow: function (i = 0) {
-    var errors = this.props.errors;
-    var state = this.state;
+  getEnviromentRows: function () {
+    var rows = this.state.rows;
 
+    if (rows == null) {
+      return null;
+    }
+
+    let disableRemoveButton = (rows.length === 1 &&
+      Util.isEmptyString(rows[0].key) &&
+      Util.isEmptyString(rows[0].value));
+
+    return rows.map((row, i) => {
+      return this.getEnviromentRow(row, i, disableRemoveButton);
+    });
+  },
+
+  render: function () {
     return (
-      <div key={`p-${i}`} className="row duplicable-row">
-        <div className="col-sm-6 add-colon">
-          <FormGroupComponent
-            attribute={`env[${i}].key`}
-            label="Key"
-            model={state}
-            errors={errors}>
-            <input />
-          </FormGroupComponent>
+      <div>
+        <div className="duplicable-list">
+          {this.getEnviromentRows()}
         </div>
-        <div className="col-sm-6">
-          <FormGroupComponent
-            attribute={`env[${i}].value`}
-            label="Value"
-            model={state}
-            errors={errors}>
-            <input />
-          </FormGroupComponent>
-          <DuplicableRowControls
-            handleAddRow={this.handleAddRow.bind(null, i)}
-            handleRemoveRow={this.handleRemoveRow.bind(null, i)} />
-        </div>
+        {this.getGeneralErrorBlock()}
       </div>
     );
   }
 });
 
-module.exports = OptionalSettingsComponent;
+module.exports = OptionalEnvironmentComponent;

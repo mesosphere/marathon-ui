@@ -1,50 +1,60 @@
-var lazy = require("lazy.js");
+var classNames = require("classnames");
 var React = require("react/addons");
 var Util = require("../../helpers/Util");
 
 var AppsActions = require("../../actions/AppsActions");
 var AppsEvents = require("../../events/AppsEvents");
-var appScheme = require("../../stores/appScheme");
+var AppFormErrorMessages = require("../../constants/AppFormErrorMessages");
+var AppFormStore = require("../../stores/AppFormStore");
 var AppsStore = require("../../stores/AppsStore");
-var appValidator = require("../../validators/appValidator");
 var CollapsiblePanelComponent =
   require("../../components/CollapsiblePanelComponent");
 var ContainerSettingsComponent =
   require("../../components/ContainerSettingsComponent");
-var FormGroupComponent = require("../../components/FormGroupComponent");
+var FormActions = require("../../actions/FormActions");
+var FormEvents = require("../../events/FormEvents");
 var ModalComponent = require("../../components/ModalComponent");
 var OptionalEnvironmentComponent =
   require("../../components/OptionalEnviromentComponent");
 var OptionalSettingsComponent =
   require("../../components/OptionalSettingsComponent");
-var ValidationError = require("../../validators/ValidationError");
+var FormGroupComponent =
+  require("../../components/FormGroupComponent");
 
 var AppModalComponent = React.createClass({
   displayName: "AppModalComponent",
 
   propTypes: {
-    attributes: React.PropTypes.object,
-    edit: React.PropTypes.bool,
+    app: React.PropTypes.object,
     onDestroy: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
-      attributes: lazy(appScheme).extend({
-        cpus: 0.1,
-        instances: 1,
-        mem: 16.0,
-        disk: 0.0
-      }).value(),
-      edit: false,
+      app: null,
       onDestroy: Util.noop
     };
   },
 
   getInitialState: function () {
+    var app = this.props.app;
+    AppFormStore.initAndReset();
+
+    if (app != null) {
+      AppFormStore.populateFieldsFromAppDefinition(app);
+    }
+
     return {
-      errors: []
+      fields: AppFormStore.fields,
+      errorIndices: {},
+      responseErrorMessages: {}
     };
+  },
+
+  destroy: function () {
+    // This will also call `this.props.onDestroy` since it is passed as the
+    // callback for the modal's `onDestroy` prop.
+    this.refs.modalComponent.destroy();
   },
 
   componentWillMount: function () {
@@ -52,6 +62,9 @@ var AppModalComponent = React.createClass({
     AppsStore.on(AppsEvents.CREATE_APP_ERROR, this.onCreateAppError);
     AppsStore.on(AppsEvents.APPLY_APP, this.onCreateApp);
     AppsStore.on(AppsEvents.APPLY_APP_ERROR, this.onApplyAppError);
+    AppFormStore.on(FormEvents.CHANGE, this.onFormChange);
+    AppFormStore.on(FormEvents.FIELD_VALIDATION_ERROR,
+      this.onFieldValidationError);
   },
 
   componentWillUnmount: function () {
@@ -63,214 +76,129 @@ var AppModalComponent = React.createClass({
       this.onCreateApp);
     AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR,
       this.onApplyAppError);
+    AppFormStore.removeListener(FormEvents.CHANGE, this.onFormChange);
+    AppFormStore.removeListener(FormEvents.FIELD_VALIDATION_ERROR,
+      this.onFieldValidationError);
   },
 
-  onCreateApp: function () {
-    this.clearValidation();
-    this.destroy();
-  },
-
-  onCreateAppError: function (data, status) {
-    this.validateResponse(data, status);
-
-    if (status < 300) {
-      this.clearValidation();
-      this.destroy();
-    }
-  },
-
-  onApplyAppError: function (error, status, isEditing) {
+  onApplyAppError: function (error, isEditing, status) {
     if (!isEditing) {
       return;
     }
     this.onCreateAppError(error, status);
   },
 
-  destroy: function () {
-    // This will also call `this.props.onDestroy` since it is passed as the
-    // callback for the modal's `onDestroy` prop.
-    this.refs.modalComponent.destroy();
+  onCreateApp: function () {
+    this.destroy();
   },
 
-  clearValidation: function () {
-    this.setState({errors: []});
-  },
+  onCreateAppError: function (data, status) {
+    // All status below 300 are actually not an error
+    if (status < 300) {
+      this.onCreateApp();
 
-  validateResponse: function (response, status) {
-    var errors;
-
-    if (status === 422 && response != null &&
-        Util.isArray(response.errors)) {
-      errors = response.errors.map(function (e) {
-        return new ValidationError(
-          // Errors that affect multiple attributes provide a blank string. In
-          // that case, count it as a "general" error.
-          e.attribute.length < 1 ? "general" : e.attribute,
-          e.error
-        );
-      });
-    } else if (status === 409 && response != null &&
-        response.message !== undefined) {
-      errors = [
-        new ValidationError("general", `Error: ${response.message}`)
-      ];
-    } else if (status >= 500) {
-      errors = [
-        new ValidationError("general", "Server error, could not create app.")
-      ];
     } else {
-      errors = [
-        new ValidationError(
-          "general",
-          "App creation unsuccessful. Check your app settings and try again."
-        )
-      ];
+      this.setState({
+        responseErrorMessages: AppFormStore.responseErrors
+      });
     }
-
-    this.setState({errors: errors});
   },
 
-  onSubmit: function (event) {
+  onFieldValidationError: function () {
+    this.setState({
+      fields: AppFormStore.fields,
+      errorIndices: AppFormStore.validationErrorIndices
+    });
+  },
+
+  onFormChange: function () {
+    this.setState({
+      fields: AppFormStore.fields,
+      errorIndices: AppFormStore.validationErrorIndices
+    });
+  },
+
+  handleFieldUpdate: function (fieldId, value) {
+    FormActions.update(fieldId, value);
+  },
+
+  handleSubmit: function (event) {
     event.preventDefault();
 
-    var props = this.props;
+    if (!Object.keys(this.state.errorIndices).length) {
+      let app = AppFormStore.app;
 
-    // null-values must be treated as null to let the app model untouched.
-
-    var attrArray = Util.serializeArray(event.target)
-      .filter((key) => key.name !== "");
-
-    var modelAttrs = Util.serializedArrayToDictionary(attrArray);
-
-    // URIs should be an Array of Strings.
-    if ("uris" in modelAttrs) {
-      if (modelAttrs.uris === "") {
-        modelAttrs.uris = [];
+      if (this.props.app != null) {
+        AppsActions.applySettingsOnApp(app.id, app, true);
       } else {
-        modelAttrs.uris = lazy(modelAttrs.uris.split(",")).map(function (uri) {
-          return uri.trim();
-        }).compact().value();
+        AppsActions.createApp(app);
       }
     }
+  },
 
-    // Constraints should be an Array of Strings.
-    if ("constraints" in modelAttrs) {
-      if (modelAttrs.constraints === "") {
-        modelAttrs.constraints = [];
-      } else {
-        let constraintsArray = modelAttrs.constraints.split(",");
-        modelAttrs.constraints = constraintsArray.map(function (constraint) {
-          return constraint.split(":").map(function (value) {
-            return value.trim();
-          });
-        });
-      }
+  getErrorMessage: function (fieldId) {
+    var state = this.state;
+    var errorIndex = state.errorIndices[fieldId];
+    if (errorIndex != null && !Util.isArray(errorIndex)) {
+      return AppFormErrorMessages.getMessage(fieldId, errorIndex);
     }
+    if (state.responseErrorMessages[fieldId] != null) {
+      return state.responseErrorMessages[fieldId];
+    }
+    return null;
+  },
 
-    // env should not be an array.
-    if ("env" in modelAttrs) {
-      modelAttrs.env = modelAttrs.env.reduce(function (memo, item) {
-        if (item.key != null && item.key !== "") {
-          memo[item.key] = item.value;
-        }
-        return memo;
-      }, {});
+  getGeneralErrorBlock: function () {
+    var error = this.getErrorMessage("general");
+
+    if (error == null) {
+      return null;
     }
 
-    // Ports should always be an Array.
-    if ("ports" in modelAttrs) {
-      if (modelAttrs.ports === "") {
-        modelAttrs.ports = [];
-      } else {
-        let portStrings = modelAttrs.ports.split(",");
-        modelAttrs.ports = portStrings.map(function (p) {
-          var port = parseInt(p, 10);
-          return isNaN(port) ? p : port;
-        });
-      }
-    }
+    return (
+      <p className="text-danger">
+        <strong>{error}</strong>
+      </p>
+    );
+  },
 
-    // Container arrays shouldn't have null-values
-    if ("container" in modelAttrs) {
-      let container = modelAttrs.container;
-      if ("docker" in container) {
-        if ("portMappings" in container.docker) {
-          container.docker.portMappings =
-            Util.compactArray(container.docker.portMappings);
-        }
-        if (container.docker.network === "") {
-          delete container.docker.network;
-        }
-        if (modelAttrs.cmd === "" && container.docker.image !== "") {
-          // An outstanding bug in Marathon (#2147) means that the cmd field
-          // can't be overridden with a blank string without failing validation
-          modelAttrs.cmd = " ";
-        }
-      }
-      if ("parameters" in container) {
-        container.parameters = Util.compactArray(container.parameters);
-      }
-      if ("volumes" in container) {
-        container.volumes = Util.compactArray(container.volumes);
-      }
-    }
+  getSubmitButton: function () {
+    var submitButtonTitle = this.props.app != null
+      ? "Change and deploy configuration"
+      : "+ Create";
 
-    // mem, cpus, and instances are all Numbers and should be parsed as such.
-    if ("mem" in modelAttrs) {
-      modelAttrs.mem = parseFloat(modelAttrs.mem);
-    }
-    if ("cpus" in modelAttrs) {
-      modelAttrs.cpus = parseFloat(modelAttrs.cpus);
-    }
-    if ("disk" in modelAttrs) {
-      modelAttrs.disk = parseFloat(modelAttrs.disk);
-    }
-    if ("instances" in modelAttrs) {
-      modelAttrs.instances = parseInt(modelAttrs.instances, 10);
-    }
+    var classSet = classNames({
+      "btn btn-success": true,
+      "disabled": !!Object.keys(this.state.errorIndices).length
+    });
 
-    var model = Util.extendObject(props.attributes, modelAttrs);
+    return (
+      <input type="submit"
+        className={classSet}
+        value={submitButtonTitle} />
+    );
+  },
 
-    // Create app if validate() returns no errors
-    if (appValidator.validate(model) == null) {
-      if (props.edit) {
-        AppsActions.applySettingsOnApp(model.id, model, true);
-      } else {
-        AppsActions.createApp(model);
-      }
-    }
+  fieldsHaveError: function (fieldIds) {
+    var state = this.state;
+    var errorIndices = state.errorIndices;
+    var responseMessages = state.responseErrorMessages;
+
+    return !!Object.values(fieldIds).find((fieldId) => {
+      return errorIndices[fieldId] != null || responseMessages[fieldId] != null;
+    });
   },
 
   render: function () {
     var props = this.props;
-    var model = this.props.attributes;
-    var errors = this.state.errors;
-
-    var generalErrors = errors.filter(function (e) {
-        return (e.attribute === "general");
-      });
-
-    var errorBlock = generalErrors.map(function (error, i) {
-      return (
-        <p key={i} className="text-danger">
-          <strong>{error.message}</strong>
-        </p>
-      );
-    });
+    var state = this.state;
 
     var modalTitle = "New Application";
-    var submitButtonTitle = "+ Create";
 
-    if (props.edit) {
+    if (props.app != null) {
       modalTitle = "Edit Application";
-      submitButtonTitle = "Change and deploy configuration";
     }
 
-    var submitButton = (
-      <input type="submit"
-          className="btn btn-success"
-          value={submitButtonTitle} />
-      );
     var cancelButton = (
       <button className="btn btn-default"
           type="button"
@@ -285,7 +213,7 @@ var AppModalComponent = React.createClass({
         ref="modalComponent"
         size="md"
         onDestroy={this.props.onDestroy}>
-        <form method="post" role="form" onSubmit={this.onSubmit}>
+        <form method="post" role="form" onSubmit={this.handleSubmit}>
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>
@@ -293,82 +221,99 @@ var AppModalComponent = React.createClass({
           </div>
           <div className="modal-body reduced-padding">
             <FormGroupComponent
-                attribute="id"
+                errorMessage={this.getErrorMessage("appId")}
+                fieldId="appId"
+                value={state.fields.appId}
                 label="ID"
-                model={model}
-                errors={errors}
-                validator={appValidator}>
-              <input autoFocus required />
+                onChange={this.handleFieldUpdate}>
+              <input autoFocus />
             </FormGroupComponent>
             <div className="row">
               <div className="col-sm-3">
                 <FormGroupComponent
-                    attribute="cpus"
+                    errorMessage={this.getErrorMessage("cpus")}
+                    fieldId="cpus"
                     label="CPUs"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
-                  <input min="0" step="any" type="number" required />
+                    value={state.fields.cpus}
+                    onChange={this.handleFieldUpdate}>
+                  <input min="0" step="any" type="number" />
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
                 <FormGroupComponent
-                    attribute="mem"
+                    fieldId="mem"
                     label="Memory (MB)"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
-                  <input min="0" step="any" type="number" required />
+                    errorMessage={this.getErrorMessage("mem")}
+                    value={state.fields.mem}
+                    onChange={this.handleFieldUpdate}>
+                  <input min="0" step="any" type="number" />
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
                 <FormGroupComponent
-                    attribute="disk"
+                    fieldId="disk"
                     label="Disk Space (MB)"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
-                  <input min="0" step="any" type="number" required />
+                    errorMessage={this.getErrorMessage("disk")}
+                    value={state.fields.disk}
+                    onChange={this.handleFieldUpdate}>
+                  <input min="0" step="any" type="number"/>
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
                 <FormGroupComponent
-                    attribute="instances"
+                    fieldId="instances"
                     label="Instances"
-                    model={model}
-                    errors={errors}
-                    validator={appValidator}>
-                  <input min="0" step="1" type="number" required />
+                    errorMessage={this.getErrorMessage("instances")}
+                    value={state.fields.instances}
+                    onChange={this.handleFieldUpdate}>
+                  <input min="0" step="1" type="number" />
                 </FormGroupComponent>
               </div>
             </div>
             <FormGroupComponent
-              attribute="cmd"
+              errorMessage={this.getErrorMessage("cmd")}
+              fieldId="cmd"
               label="Command"
               help="May be left blank if a container image is supplied"
-              model={model}
-              errors={errors}
-              validator={appValidator}>
+              value={state.fields.cmd}
+              onChange={this.handleFieldUpdate}>
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="Docker container settings">
-                <ContainerSettingsComponent model={model} errors={errors} />
+              <CollapsiblePanelComponent
+                  isOpen=
+                    {this.fieldsHaveError(ContainerSettingsComponent.fieldIds)}
+                  title="Docker container settings">
+                <ContainerSettingsComponent
+                  errorIndices={state.errorIndices}
+                  fields={state.fields}
+                  getErrorMessage={this.getErrorMessage} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="Environment variables">
-                <OptionalEnvironmentComponent model={model} errors={errors} />
+              <CollapsiblePanelComponent
+                  isOpen={this.fieldsHaveError({env: "env"})}
+                  title="Environment variables">
+                <OptionalEnvironmentComponent
+                  errorIndices={state.errorIndices.env}
+                  generalError={this.getErrorMessage("env")}
+                  rows={state.fields.env} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">
-              <CollapsiblePanelComponent title="Optional settings">
-                <OptionalSettingsComponent model={model} errors={errors} />
+              <CollapsiblePanelComponent
+                  isOpen=
+                    {this.fieldsHaveError(OptionalSettingsComponent.fieldIds)}
+                  title="Optional settings">
+                <OptionalSettingsComponent
+                  errorIndices={state.errorIndices}
+                  fields={state.fields}
+                  getErrorMessage={this.getErrorMessage} />
               </CollapsiblePanelComponent>
             </div>
             <div className="modal-controls">
-              {errorBlock}
-              {submitButton} {cancelButton}
+              {this.getGeneralErrorBlock()}
+              {this.getSubmitButton()} {cancelButton}
             </div>
           </div>
         </form>

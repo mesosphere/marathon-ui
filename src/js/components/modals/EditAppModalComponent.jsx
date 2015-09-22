@@ -25,7 +25,7 @@ var EditAppModalComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      attributes: null
+      app: null
     };
   },
 
@@ -62,12 +62,12 @@ var EditAppModalComponent = React.createClass({
       return null;
     }
 
-    let attributes = Object.assign({},
+    let app = Object.assign({},
       AppVersionsStore.getAppVersion(props.appId, props.appVersion)
     );
 
     this.setState({
-      attributes: attributes
+      app: app
     });
   },
 
@@ -81,14 +81,13 @@ var EditAppModalComponent = React.createClass({
   render: function () {
     var state = this.state;
 
-    if (state.attributes == null) {
+    if (state.app == null) {
       return null;
     }
 
     return (
       <AppModalComponent
-        attributes={state.attributes}
-        edit={true}
+        app={state.app}
         onDestroy={this.props.onDestroy} />
     );
   }
