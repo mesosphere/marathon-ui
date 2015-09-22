@@ -2,19 +2,6 @@ var consecutiveNumber = 0;
 var objectPath = require("object-path");
 
 var Util = {
-  param: function (obj) {
-    if (typeof obj !== "object" ) {
-      return obj;
-    }
-    try {
-      return Object.keys(obj).reduce(function (a, k) {
-        a.push(k + "=" + encodeURIComponent(obj[k]));
-        return a;
-      }, []).join("&");
-    } catch (e) {
-      return obj;
-    }
-  },
   initKeyValue: function (obj, key, value) {
     if (obj[key] === undefined) {
       obj[key] = value;
