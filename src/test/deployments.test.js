@@ -62,6 +62,18 @@ describe("Deployments", function () {
       DeploymentActions.requestDeployments();
     });
 
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      DeploymentStore.once(DeploymentEvents.REQUEST_ERROR,
+          function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
+        }, done);
+      });
+
+      DeploymentActions.requestDeployments();
+    });
   });
 
   describe("on revert (rollback)", function () {
@@ -101,6 +113,19 @@ describe("Deployments", function () {
       DeploymentActions.revertDeployment("deployment-to-revert");
     });
 
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      DeploymentStore.once(DeploymentEvents.REVERT_ERROR,
+          function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
+        }, done);
+      });
+
+      DeploymentActions.revertDeployment("deployment-to-revert");
+    });
+
   });
 
   describe("on stop", function () {
@@ -131,6 +156,18 @@ describe("Deployments", function () {
       DeploymentActions.stopDeployment();
     });
 
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      DeploymentStore.once(DeploymentEvents.STOP_ERROR,
+          function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
+        }, done);
+      });
+
+      DeploymentActions.stopDeployment();
+    });
   });
 
 });
