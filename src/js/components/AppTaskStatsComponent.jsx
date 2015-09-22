@@ -1,5 +1,6 @@
 var classNames = require("classnames");
 var React = require("react/addons");
+var Moment = require("moment");
 
 var AppTaskStatsComponent = React.createClass({
   displayName: "AppTaskStatsComponent",
@@ -51,12 +52,24 @@ var AppTaskStatsComponent = React.createClass({
 
     let lifeTime = stats.lifeTime;
 
+    var averageSecondsHumanReadable =
+      Moment.duration(parseInt(lifeTime.averageSeconds), "seconds").humanize();
+
+    var medianSecondsHumanReadable =
+      Moment.duration(parseInt(lifeTime.medianSeconds), "seconds").humanize();
+
     return (
       <dl className="dl-horizontal dl-unstyled">
         <dt>Average</dt>
-        <dd>{lifeTime.averageSeconds} seconds</dd>
+        <dd>
+          {parseFloat(lifeTime.averageSeconds).toFixed(2)} seconds
+          ({averageSecondsHumanReadable})
+        </dd>
         <dt>Median</dt>
-        <dd>{lifeTime.medianSeconds} seconds</dd>
+        <dd>
+          {parseFloat(lifeTime.medianSeconds).toFixed(2)} seconds
+          ({medianSecondsHumanReadable})
+        </dd>
       </dl>
     );
   },
