@@ -15,6 +15,9 @@
   * Add proper per-field validation
   * Add support for server-side validation errors on individual fields
 
+### Changed
+- \#2223 - Display life time duration as other durations in UI
+
 ### Fixed
 - \#2157 - Row is off-centre if upper row is empty in lists
 - \#2266 - Link "Mesos details" is broken
