@@ -98,6 +98,19 @@ describe("Apps", function () {
       AppsActions.requestApps();
     });
 
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.REQUEST_APPS_ERROR,
+          function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
+        }, done);
+      });
+
+      AppsActions.requestApps();
+    });
+
     describe("App", function () {
       beforeEach(function () {
         this.server.setup({
@@ -217,6 +230,19 @@ describe("Apps", function () {
       AppsStore.once(AppsEvents.REQUEST_APP_ERROR, function (error) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
+
+      AppsActions.requestApp("/non-existing-app");
+    });
+
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.REQUEST_APP_ERROR,
+          function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
         }, done);
       });
 
@@ -405,6 +431,18 @@ describe("Apps", function () {
       });
     });
 
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
+        }, done);
+      });
+
+      AppsActions.createApp({id: "app 1"});
+    });
+
   });
 
   describe("on app deletion", function () {
@@ -442,6 +480,18 @@ describe("Apps", function () {
       });
 
       AppsActions.deleteApp("/non-existing-app");
+    });
+
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.DELETE_APP_ERROR, function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
+        }, done);
+      });
+
+      AppsActions.deleteApp("/app-1");
     });
 
   });
@@ -486,6 +536,19 @@ describe("Apps", function () {
         expectAsync(function () {
           expect(AppsStore.apps).to.have.length(2);
           expect(error.message).to.equal("app locked by deployment");
+        }, done);
+      });
+
+      AppsActions.restartApp("/app-1");
+    });
+
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.RESTART_APP_ERROR,
+          function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
         }, done);
       });
 
