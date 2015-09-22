@@ -3,7 +3,7 @@ const ValidConstraints = require("./ValidConstraints");
 const AppFormErrorMessages = {
   appId: [
     "ID must not be empty",
-    "Path cannot contain whitespaces",
+    "Path must not contain whitespace",
     "Path contains invalid characters " +
       "(allowed: lowercase letters, digits, hyphens, \".\", \"..\")",
     "Path is not well-formed"
