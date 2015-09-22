@@ -33,8 +33,11 @@ AppDispatcher.register(function (action) {
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REQUEST_ERROR:
-      DeploymentStore.emit(DeploymentEvents.REQUEST_ERROR,
-        action.data.body);
+      DeploymentStore.emit(
+        DeploymentEvents.REQUEST_ERROR,
+        action.data.body,
+        action.data.status
+      );
       break;
     case DeploymentEvents.REVERT:
       DeploymentStore.deployments =
@@ -42,7 +45,11 @@ AppDispatcher.register(function (action) {
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REVERT_ERROR:
-      DeploymentStore.emit(DeploymentEvents.REVERT_ERROR, action.data.body);
+      DeploymentStore.emit(
+        DeploymentEvents.REVERT_ERROR,
+        action.data.body,
+        action.data.status
+      );
       break;
     case DeploymentEvents.STOP:
       DeploymentStore.deployments =
@@ -50,7 +57,11 @@ AppDispatcher.register(function (action) {
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.STOP_ERROR:
-      DeploymentStore.emit(DeploymentEvents.STOP_ERROR, action.data.body);
+      DeploymentStore.emit(
+        DeploymentEvents.STOP_ERROR,
+        action.data.body,
+        action.data.status
+      );
       break;
   }
 });

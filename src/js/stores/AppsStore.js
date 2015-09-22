@@ -226,7 +226,11 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APPS_ERROR:
-      AppsStore.emit(AppsEvents.REQUEST_APPS_ERROR, action.data.body);
+      AppsStore.emit(
+        AppsEvents.REQUEST_APPS_ERROR,
+        action.data.body,
+        action.data.status
+      );
       break;
     case AppsEvents.REQUEST_APP:
       AppsStore.currentApp = processApp(action.data.body.app);
@@ -234,7 +238,10 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APP_ERROR:
-      AppsStore.emit(AppsEvents.REQUEST_APP_ERROR, action.data.body);
+      AppsStore.emit(
+        AppsEvents.REQUEST_APP_ERROR,
+        action.data.body,
+        action.data.status);
       break;
     case AppsEvents.CREATE_APP:
       AppsStore.apps.push(processApp(action.data.body));
@@ -254,13 +261,21 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.DELETE_APP);
       break;
     case AppsEvents.DELETE_APP_ERROR:
-      AppsStore.emit(AppsEvents.DELETE_APP_ERROR, action.data.body);
+      AppsStore.emit(
+        AppsEvents.DELETE_APP_ERROR,
+        action.data.body,
+        action.data.status
+      );
       break;
     case AppsEvents.RESTART_APP:
       AppsStore.emit(AppsEvents.RESTART_APP);
       break;
     case AppsEvents.RESTART_APP_ERROR:
-      AppsStore.emit(AppsEvents.RESTART_APP_ERROR, action.data.body);
+      AppsStore.emit(
+        AppsEvents.RESTART_APP_ERROR,
+        action.data.body,
+        action.data.status
+      );
       break;
     case AppsEvents.SCALE_APP:
       AppsStore.emit(AppsEvents.SCALE_APP);
@@ -293,7 +308,11 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case TasksEvents.DELETE_ERROR:
-      AppsStore.emit(TasksEvents.DELETE_ERROR, action.data.body);
+      AppsStore.emit(
+        TasksEvents.DELETE_ERROR,
+        action.data.body,
+        action.data.status
+      );
       break;
   }
 });

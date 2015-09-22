@@ -30,7 +30,7 @@ var AppStatus = require("../js/constants/AppStatus");
 var HealthStatus = require("../js/constants/HealthStatus");
 var QueueActions = require("../js/actions/QueueActions");
 var QueueStore = require("../js/stores/QueueStore");
-
+var States = require("../js/constants/States");
 var config = require("../js/config/config");
 
 var expectAsync = require("./helpers/expectAsync");
@@ -92,6 +92,19 @@ describe("Apps", function () {
       AppsStore.once(AppsEvents.REQUEST_APPS_ERROR, function (error) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
+
+      AppsActions.requestApps();
+    });
+
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.REQUEST_APPS_ERROR,
+          function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
         }, done);
       });
 
@@ -217,6 +230,19 @@ describe("Apps", function () {
       AppsStore.once(AppsEvents.REQUEST_APP_ERROR, function (error) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
+        }, done);
+      });
+
+      AppsActions.requestApp("/non-existing-app");
+    });
+
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.REQUEST_APP_ERROR,
+          function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
         }, done);
       });
 
@@ -405,6 +431,18 @@ describe("Apps", function () {
       });
     });
 
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
+        }, done);
+      });
+
+      AppsActions.createApp({id: "app 1"});
+    });
+
   });
 
   describe("on app deletion", function () {
@@ -442,6 +480,18 @@ describe("Apps", function () {
       });
 
       AppsActions.deleteApp("/non-existing-app");
+    });
+
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.DELETE_APP_ERROR, function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
+        }, done);
+      });
+
+      AppsActions.deleteApp("/app-1");
     });
 
   });
@@ -486,6 +536,19 @@ describe("Apps", function () {
         expectAsync(function () {
           expect(AppsStore.apps).to.have.length(2);
           expect(error.message).to.equal("app locked by deployment");
+        }, done);
+      });
+
+      AppsActions.restartApp("/app-1");
+    });
+
+    it("handles unauthorized errors gracefully", function (done) {
+      this.server.setup({message: "Unauthorized access"}, 401);
+
+      AppsStore.once(AppsEvents.RESTART_APP_ERROR,
+          function (error, statusCode) {
+        expectAsync(function () {
+          expect(statusCode).to.equal(401);
         }, done);
       });
 
@@ -925,6 +988,31 @@ describe("App Page component", function () {
     AppsStore.apps = [app];
     var msg = this.element.getTaskHealthMessage("test-task-1");
     expect(msg).to.equal("Healthy");
+  });
+
+  describe("on unauthorized access error", function () {
+    beforeEach(function () {
+      this.server = server
+        .setup({"message": "Unauthorized access"}, 401)
+        .start();
+    });
+
+    afterEach(function (done) {
+      this.server.stop(done);
+    });
+
+    it("has the correct fetchState", function () {
+
+      AppsStore.once(AppsEvents.REQUEST_APPS_ERROR, function () {
+        expectAsync(function () {
+          expect(this.element.state.fetchState)
+            .to.equal(States.STATE_UNAUTHORIZED);
+        }, done);
+      });
+
+      AppsActions.requestApps();
+    });
+
   });
 });
 

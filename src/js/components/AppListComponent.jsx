@@ -50,9 +50,11 @@ var AppListComponent = React.createClass({
     });
   },
 
-  onAppsRequestError: function () {
+  onAppsRequestError: function (message, statusCode) {
     this.setState({
-      fetchState: States.STATE_ERROR
+      fetchState: statusCode !== 401
+        ? States.STATE_ERROR
+        : States.STATE_UNAUTHORIZED
     });
   },
 
@@ -112,7 +114,8 @@ var AppListComponent = React.createClass({
     });
 
     var noAppsClassSet = classNames({
-      "hidden": pageIsLoading || pageHasApps
+      "hidden": pageIsLoading || pageHasApps ||
+        state.fetchState === States.STATE_UNAUTHORIZED
     });
 
     var noRunningAppsClassSet = classNames({
@@ -121,6 +124,10 @@ var AppListComponent = React.createClass({
 
     var errorClassSet = classNames({
       "hidden": state.fetchState !== States.STATE_ERROR
+    });
+
+    var unauthorizedClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_UNAUTHORIZED
     });
 
     var headerClassSet = classNames({
@@ -202,6 +209,11 @@ var AppListComponent = React.createClass({
           <tr className={errorClassSet}>
             <td className="text-center text-danger" colSpan="6">
               Error fetching apps. Refresh to try again.
+            </td>
+          </tr>
+          <tr className={unauthorizedClassSet}>
+            <td className="text-center text-danger" colSpan="6">
+              Error fetching apps. Unauthorized access.
             </td>
           </tr>
           {appNodes}

@@ -91,9 +91,11 @@ var TaskListComponent = React.createClass({
   },
 
   render: function () {
-    var tasksLength = this.props.tasks.length;
-    var hasHealth = !!this.props.hasHealth;
-    var hasError = this.props.fetchState === States.STATE_ERROR;
+    var props = this.props;
+    var tasksLength = props.tasks.length;
+    var hasHealth = !!props.hasHealth;
+    var hasError = props.fetchState === States.STATE_ERROR;
+    var isUnauthorized = props.fetchState === States.STATE_UNAUTHORIZED;
 
     var headerClassSet = classNames({
       "clickable": true,
@@ -101,16 +103,21 @@ var TaskListComponent = React.createClass({
     });
 
     var loadingClassSet = classNames({
-      "hidden": this.props.fetchState !== States.STATE_LOADING
+      "hidden": props.fetchState !== States.STATE_LOADING
     });
 
     var noTasksClassSet = classNames({
-      "hidden": tasksLength !== 0 || hasError
+      "hidden": tasksLength !== 0 || hasError || isUnauthorized
     });
 
     var errorClassSet = classNames({
       "fluid-container": true,
       "hidden": !hasError
+    });
+
+    var unauthorizedClassSet = classNames({
+      "fluid-container": true,
+      "hidden": !isUnauthorized
     });
 
     var hasHealthClassSet = classNames({
@@ -125,6 +132,11 @@ var TaskListComponent = React.createClass({
             Error fetching tasks. Refresh the list to try again.
           </p>
         </div>
+        <div className={unauthorizedClassSet}>
+          <p className="text-center text-danger">
+            Error fetching tasks. Unauthorized access.
+          </p>
+        </div>
         <table className="table table-unstyled">
           <thead>
             <tr>
@@ -135,7 +147,7 @@ var TaskListComponent = React.createClass({
                 <input type="checkbox"
                   checked={this.allTasksSelected(tasksLength)}
                   disabled={tasksLength === 0}
-                  onChange={this.props.toggleAllTasks} />
+                  onChange={props.toggleAllTasks} />
               </th>
               <th>
                 <span onClick={this.sortBy.bind(null, "id")}
