@@ -52,9 +52,11 @@ var AppTaskStatsComponent = React.createClass({
 
     let lifeTime = stats.lifeTime;
 
+    var averageSeconds = Number(parseFloat(lifeTime.averageSeconds).toFixed(2));
     var averageSecondsHumanReadable =
       Moment.duration(parseInt(lifeTime.averageSeconds), "seconds").humanize();
 
+    var medianSeconds = Number(parseFloat(lifeTime.medianSeconds).toFixed(2));
     var medianSecondsHumanReadable =
       Moment.duration(parseInt(lifeTime.medianSeconds), "seconds").humanize();
 
@@ -62,13 +64,13 @@ var AppTaskStatsComponent = React.createClass({
       <dl className="dl-horizontal dl-unstyled">
         <dt>Average</dt>
         <dd>
-          {parseFloat(lifeTime.averageSeconds).toFixed(2)} seconds
-          ({averageSecondsHumanReadable})
+          {`${averageSeconds.toLocaleString()} seconds ` +
+          `(${averageSecondsHumanReadable})`}
         </dd>
         <dt>Median</dt>
         <dd>
-          {parseFloat(lifeTime.medianSeconds).toFixed(2)} seconds
-          ({medianSecondsHumanReadable})
+          {`${medianSeconds.toLocaleString()} seconds ` +
+          `(${medianSecondsHumanReadable})`}
         </dd>
       </dl>
     );
