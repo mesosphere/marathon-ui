@@ -6,6 +6,9 @@
 - \#2284 - Expose the application dependencies field in the configuration tab
 - \#2263 - UI doesn't expose roles
 
+### Changed
+- \#2223 - Display life time duration as other durations in UI
+
 ### Fixed
 - \#2157 - Row is off-centre if upper row is empty in lists
 - \#2266 - Link "Mesos details" is broken
