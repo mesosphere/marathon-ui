@@ -361,6 +361,8 @@ fieldset[disabled] .btn-info.active {
   padding-bottom: 12px;
   padding-top: 11px;
   padding-left: 0;
+  text-align: center;
+  width: 187px; /* sidebar 202px - .container-fluid 15px padding-left */
 }
 
 .panel-group {
@@ -905,3 +907,44 @@ fieldset[disabled] .btn-info.active {
     padding: .8em 1em; /* this would be "10px 0" otherwise */
   }
 }
+
+.tab-pane.active.flex-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .wrapper {
+    display: flex;
+    flex: 1;
+
+    main {
+      flex: 1;
+      padding-left: 15px;
+    }
+
+    nav {
+      background: #2A2D30;
+      min-height: 100vh;
+      /* compensate .navbar padding-bottom and .container-fluid padding left*/
+      margin: -20px 0 0 -15px;
+      order: -1;
+      padding: 16px;
+      width: 202px;
+
+      .btn-success {
+        width: 100%;
+      }
+
+      h2 {
+        color: #5E646C;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 16px;
+        margin: 16px 0;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
