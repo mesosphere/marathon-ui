@@ -1,5 +1,7 @@
 var Util = require("../../helpers/Util");
 
+var ContainerConstants = require("../../constants/ContainerConstants");
+
 function hasOnlyEmptyValues(obj) {
   return Util.isObject(obj) &&
     Object.values(obj)
@@ -13,6 +15,15 @@ function hasOnlyEmptyValues(obj) {
 const AppFormModelPostProcess = {
   container: (app) => {
     var container = app.container;
+
+    if (container.docker != null) {
+      if (container.docker.network === ContainerConstants.NETWORK.HOST) {
+        // If host networking is set, remove all port mappings.
+        if (Util.isArray(container.docker.portMappings)) {
+          container.docker.portMappings = [];
+        }
+      }
+    }
 
     var isEmpty = (Util.isArray(container.volumes) &&
         container.volumes.length === 0 ||

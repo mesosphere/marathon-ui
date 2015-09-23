@@ -238,6 +238,14 @@ var ContainerSettingsComponent = React.createClass({
       return null;
     }
 
+    if (this.props.fields.dockerNetwork === ContainerConstants.NETWORK.HOST) {
+      return (
+        <div className="help-block">
+         Use the ports field to assign ports in host network mode.
+        </div>
+      );
+    }
+
     var disableRemoveButton = (rows.length === 1 &&
       Util.isEmptyString(rows[0].containerPort) &&
       Util.isEmptyString(rows[0].hostPort) &&

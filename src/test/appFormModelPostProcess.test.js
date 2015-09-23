@@ -5,7 +5,7 @@ var AppFormModelPostProcess =
 
 describe("App Form Model Post Process", function () {
 
-  describe("processes", function () {
+  describe("container", function () {
 
     it("empty container values to empty object", function () {
       var app = {
@@ -39,6 +39,97 @@ describe("App Form Model Post Process", function () {
       AppFormModelPostProcess.container(app);
 
       expect(app).to.deep.equal(app);
+    });
+
+    it("removes Docker port mappings on selected host networking", function () {
+      var app = {
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            network: "HOST",
+            portMappings: [{
+              containerPort: 55,
+              hostPort: 56,
+              protocol: "tcp",
+              servicePort: 57
+            }],
+            parameters: []
+          }
+        }
+      };
+
+      AppFormModelPostProcess.container(app);
+
+      expect(app).to.deep.equal({
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            network: "HOST",
+            portMappings: [],
+            parameters: []
+          }
+        }
+      });
+    });
+
+    it("does not remove Docker port mappings on bridged networking",
+        function () {
+      var app = {
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            network: "BRIDGE",
+            portMappings: [{
+              containerPort: 55,
+              hostPort: 56,
+              protocol: "tcp",
+              servicePort: 57
+            }],
+            parameters: []
+          }
+        }
+      };
+
+      AppFormModelPostProcess.container(app);
+
+      expect(app).to.deep.equal({
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            network: "BRIDGE",
+            portMappings: [{
+              containerPort: 55,
+              hostPort: 56,
+              protocol: "tcp",
+              servicePort: 57
+            }],
+            parameters: []
+          }
+        }
+      });
+    });
+
+    it("sets an empty space on the cmd field if cmd is empty and container set",
+        function () {
+      var app = {
+        cmd: "",
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            portMappings: [],
+            parameters: []
+          }
+        }
+      };
+
+      AppFormModelPostProcess.container(app);
+
+      expect(app.cmd).to.equal(" ");
     });
 
   });

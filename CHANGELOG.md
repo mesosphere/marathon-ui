@@ -14,6 +14,7 @@
   * Add model to form transformers
   * Add proper per-field validation
   * Add support for server-side validation errors on individual fields
+- \#2248 - Docker: port mappings do not make sense when host network is used
 
 ### Changed
 - \#2223 - Display life time duration as other durations in UI
