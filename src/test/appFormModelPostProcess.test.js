@@ -5,7 +5,7 @@ var AppFormModelPostProcess =
 
 describe("App Form Model Post Process", function () {
 
-  describe("processes", function () {
+  describe("container", function () {
 
     it("empty container values to empty object", function () {
       var app = {
@@ -111,6 +111,25 @@ describe("App Form Model Post Process", function () {
           }
         }
       });
+    });
+
+    it("sets an empty space on the cmd field if cmd is empty and container set",
+        function () {
+      var app = {
+        cmd: "",
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            portMappings: [],
+            parameters: []
+          }
+        }
+      };
+
+      AppFormModelPostProcess.container(app);
+
+      expect(app.cmd).to.equal(" ");
     });
 
   });
