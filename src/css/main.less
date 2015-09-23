@@ -1,6 +1,7 @@
 @import (inline) "bootstrap-3.1.0.css";
 @import (inline) "ionicons.css";
 @import (inline) "vendor/tooltip.less";
+@import "variables.less";
 
 @font-face {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -251,8 +252,8 @@ a,
 }
 
 .btn-success {
-  background-color: #1D4CF3;
-  border-color: #1D4CF3;
+  background-color: @brand-primary;
+  border-color: @brand-primary;
 }
 
 .btn-success:hover,
@@ -260,8 +261,8 @@ a,
 .btn-success:active,
 .btn-success.active,
 .open .dropdown-toggle.btn-success {
-  background-color: #3F7AF7;
-  border-color: #3F7AF7;
+  background-color: lighten(@brand-primary, 10%);
+  border-color: lighten(@brand-primary, 10%);
 }
 
 .btn-danger {
@@ -359,7 +360,7 @@ fieldset[disabled] .btn-info.active {
   padding-top: 11px;
   padding-left: 0;
   text-align: center;
-  width: 187px; /* sidebar 202px - .container-fluid 15px padding-left */
+  width: calc(@sidebar-width - @container-fluid-padding);
 }
 
 .panel-group {
@@ -936,29 +937,27 @@ fieldset[disabled] .btn-info.active {
 
     main {
       flex: 1;
-      padding-left: 15px;
+      padding-left: @container-fluid-padding;
     }
 
     nav {
-      background: #2A2D30;
+      background: @sidebar-bg;
       min-height: 100vh;
-      /* compensate .navbar padding-bottom and .container-fluid padding left*/
-      margin: -20px 0 0 -15px;
+      margin: -@navbar-padding-bottom 0 0 -@container-fluid-padding;
       order: -1;
-      padding: 16px;
-      width: 202px;
+      padding: @sidebar-padding;
+      width: @sidebar-width;
 
       .btn-success {
         width: 100%;
       }
 
       h2 {
-        color: #5E646C;
+        color: @sidebar-heading-color;
         font-weight: bold;
         font-size: 14px;
-        line-height: 16px;
-        margin: 16px 0;
-        text-transform: uppercase;
+        line-height: @sidebar-padding;
+        margin: @sidebar-padding 0;
       }
     }
   }
