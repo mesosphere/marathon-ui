@@ -241,9 +241,7 @@ var ContainerSettingsComponent = React.createClass({
     if (this.props.fields.dockerNetwork === ContainerConstants.NETWORK.HOST) {
       return (
         <div className="help-block">
-          While host networking is selected you cannot define port mappings.
-          <br />
-          Consider to modify the applications port configuration.
+         Use the ports field to assign ports in host network mode.
         </div>
       );
     }
