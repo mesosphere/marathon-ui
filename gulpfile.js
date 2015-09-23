@@ -22,7 +22,8 @@ var dirs = {
   styles: "./src/css",
   img: "./src/img",
   imgDist: "img",
-  fonts: "./src/fonts",
+  sourceSansPro: "./node_modules/source-sans-pro/WOFF/OTF",
+  ionicons: "./node_modules/ionicons/fonts",
   fontsDist: "fonts",
   release: "./release"
 };
@@ -32,7 +33,8 @@ var files = {
   mainJsDist: "main",
   mainLess: "main",
   mainCssDist: "main",
-  index: "index.html"
+  index: "index.html",
+  sourceSansLight: "SourceSansPro-Light.otf.woff"
 };
 
 var webpackConfig = {
@@ -141,8 +143,10 @@ gulp.task("images", function () {
 });
 
 gulp.task("fonts", function () {
-  return gulp.src(dirs.fonts + "/**/*.*")
-    .pipe(gulp.dest(dirs.dist + "/" + dirs.fontsDist));
+  return gulp.src([
+      dirs.ionicons + "/**/*.*",
+      dirs.sourceSansPro + "/" + files.sourceSansLight
+    ]).pipe(gulp.dest(dirs.dist + "/" + dirs.fontsDist));
 });
 
 gulp.task("index", function () {
