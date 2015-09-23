@@ -47,18 +47,24 @@ var TabPanesComponent = React.createClass({
 
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
-                              className="container-fluid">
-        <TabPaneComponent id={tabs[0].id}>
-          <div className="app-list-controls">
-            <Link
-              to={path}
-              query={{modal: "new-app"}}
-              className="btn btn-success pull-right">
-                  + New App
-            </Link>
-            <AppListFilterComponent onChange={this.updateFilterText}/>
+          className="container-fluid content">
+        <TabPaneComponent id={tabs[0].id} className={"flex-container"}>
+          <div className="wrapper">
+            <main>
+                <div className="app-list-controls">
+                  <AppListFilterComponent onChange={this.updateFilterText}/>
+                </div>
+                <AppListComponent filterText={this.state.filterText} />
+            </main>
+            <nav>
+              <Link to={path}
+                query={{modal: "new-app"}}
+                className="btn btn-success">
+                Create
+              </Link>
+              <h2>Status</h2>
+            </nav>
           </div>
-          <AppListComponent filterText={this.state.filterText}/>
         </TabPaneComponent>
         <TabPaneComponent id={tabs[1].id}>
           <DeploymentsListComponent />
