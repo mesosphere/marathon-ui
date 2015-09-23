@@ -6,6 +6,7 @@ var TabPaneComponent = React.createClass({
 
   propTypes: {
     children: React.PropTypes.node,
+    className: React.PropTypes.string,
     isActive: React.PropTypes.bool,
     onActivate: React.PropTypes.func
   },
@@ -27,7 +28,7 @@ var TabPaneComponent = React.createClass({
     var classSet = classNames({
       "active": this.props.isActive,
       "tab-pane": true
-    });
+    }, this.props.className);
 
     return (
       <div className={classSet}>
