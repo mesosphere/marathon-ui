@@ -41,6 +41,78 @@ describe("App Form Model Post Process", function () {
       expect(app).to.deep.equal(app);
     });
 
+    it("removes Docker port mappings on selected host networking", function () {
+      var app = {
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            network: "HOST",
+            portMappings: [{
+              containerPort: 55,
+              hostPort: 56,
+              protocol: "tcp",
+              servicePort: 57
+            }],
+            parameters: []
+          }
+        }
+      };
+
+      AppFormModelPostProcess.container(app);
+
+      expect(app).to.deep.equal({
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            network: "HOST",
+            portMappings: [],
+            parameters: []
+          }
+        }
+      });
+    });
+
+    it("does not remove Docker port mappings on bridged networking",
+        function () {
+      var app = {
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            network: "BRIDGE",
+            portMappings: [{
+              containerPort: 55,
+              hostPort: 56,
+              protocol: "tcp",
+              servicePort: 57
+            }],
+            parameters: []
+          }
+        }
+      };
+
+      AppFormModelPostProcess.container(app);
+
+      expect(app).to.deep.equal({
+        container: {
+          volumes: [],
+          docker: {
+            image: "group/image",
+            network: "BRIDGE",
+            portMappings: [{
+              containerPort: 55,
+              hostPort: 56,
+              protocol: "tcp",
+              servicePort: 57
+            }],
+            parameters: []
+          }
+        }
+      });
+    });
+
   });
 
 });
