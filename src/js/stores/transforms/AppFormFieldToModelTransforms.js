@@ -77,6 +77,9 @@ const AppFormFieldToModelTransforms = {
       return memo;
     }, {});
   },
+  healthChecks: (rows) => {
+    return [];
+  },
   instances: (value) => parseInt(value, 10),
   labels: (rows) => {
     return rows.reduce((memo, row) => {

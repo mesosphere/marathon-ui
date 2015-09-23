@@ -50,6 +50,13 @@ const AppFormModelToFieldTransforms = {
         };
       });
   },
+  healthChecks: (healthChecks) => {
+    return healthChecks
+      .map((row, i) => {
+        row.consecutiveKey = i;
+        return row;
+      });
+  },
   ports: (ports) => ports
     .join(", "),
   uris: (uris) => uris
