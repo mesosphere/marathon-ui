@@ -6334,6 +6334,10 @@
         }
       }
     },
+    "ionicons": {
+      "version": "2.0.1",
+      "resolved": "https://registry.npmjs.org/ionicons/-/ionicons-2.0.1.tgz"
+    },
     "json-loader": {
       "version": "0.5.2",
       "resolved": "https://registry.npmjs.org/json-loader/-/json-loader-0.5.2.tgz"
@@ -6382,11 +6386,11 @@
             },
             "minimatch": {
               "version": "0.2.14",
-              "resolved": "http://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz",
+              "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz",
               "dependencies": {
                 "lru-cache": {
-                  "version": "2.6.5",
-                  "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.6.5.tgz"
+                  "version": "2.6.4",
+                  "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.6.4.tgz"
                 },
                 "sigmund": {
                   "version": "1.0.1",
@@ -7533,6 +7537,10 @@
           }
         }
       }
+    },
+    "source-sans-pro": {
+      "version": "2.0.10",
+      "resolved": "https://registry.npmjs.org/source-sans-pro/-/source-sans-pro-2.0.10.tgz"
     },
     "transform-loader": {
       "version": "0.2.2",
