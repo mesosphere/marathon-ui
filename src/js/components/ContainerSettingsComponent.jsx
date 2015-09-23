@@ -238,6 +238,16 @@ var ContainerSettingsComponent = React.createClass({
       return null;
     }
 
+    if (this.props.fields.dockerNetwork === ContainerConstants.NETWORK.HOST) {
+      return (
+        <div className="help-block">
+          While host networking is selected you cannot define port mappings.
+          <br />
+          Consider to modify the applications port configuration.
+        </div>
+      );
+    }
+
     var disableRemoveButton = (rows.length === 1 &&
       Util.isEmptyString(rows[0].containerPort) &&
       Util.isEmptyString(rows[0].hostPort) &&
