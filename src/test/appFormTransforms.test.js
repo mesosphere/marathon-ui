@@ -385,6 +385,38 @@ describe("App Form Model To Field Transform", function () {
       ]);
     });
 
+    describe("healthChecks", function () {
+      it("command object to string", function () {
+        var healthCheck = {
+          "path": "/",
+          "protocol": "COMMAND",
+          "portIndex": 0,
+          "command": {
+            "value": "true"
+          },
+          "gracePeriodSeconds": 300,
+          "intervalSeconds": 60,
+          "timeoutSeconds": 20,
+          "maxConsecutiveFailures": 3,
+          "ignoreHttp1xx": false
+        };
+
+        expect(AppFormTransforms.ModelToField.healthChecks([healthCheck]))
+          .to.deep.equal([{
+            "consecutiveKey": 0,
+            "path": "/",
+            "protocol": "COMMAND",
+            "portIndex": 0,
+            "command": "true",
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 20,
+            "maxConsecutiveFailures": 3,
+            "ignoreHttp1xx": false
+          }]);
+      });
+    });
+
     it("ports array to string", function () {
       expect(AppFormTransforms.ModelToField.ports([12233, 12244, 12255]))
         .to.equal("12233, 12244, 12255");
