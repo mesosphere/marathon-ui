@@ -15,7 +15,11 @@ function hasOnlyEmptyValues(obj) {
 const AppFormModelPostProcess = {
   container: (app) => {
     var container = app.container;
-
+    
+    if (container == null) {
+      return;
+    }
+    
     if (container.docker != null) {
       if (container.docker.network === ContainerConstants.NETWORK.HOST) {
         // If host networking is set, remove all port mappings.
@@ -25,7 +29,7 @@ const AppFormModelPostProcess = {
       }
     }
 
-    var isEmpty = (Util.isArray(container.volumes) &&
+    let isEmpty = (Util.isArray(container.volumes) &&
         container.volumes.length === 0 ||
         container.volumes == null) &&
       hasOnlyEmptyValues(container.docker);
