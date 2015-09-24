@@ -62,7 +62,7 @@ a:focus {
 a,
 .btn {
   transition: all 0.2s ease-in-out;
-  padding: @h2-font-size * 0.5 15px;
+  padding: (@base-font-size * 0.5) (@base-spacing-unit * 2);
 }
 
 .caret {
@@ -364,7 +364,7 @@ fieldset[disabled] .btn-info.active {
   padding-top: 11px;
   padding-left: 0;
   text-align: center;
-  width: @sidebar-width - @container-fluid-padding;
+  width: @sidebar-width - (@base-spacing-unit * 2);
 }
 
 .panel-group {
@@ -922,15 +922,15 @@ fieldset[disabled] .btn-info.active {
 
     main {
       flex: 1;
-      padding-left: @container-fluid-padding;
+      padding-left: (@base-spacing-unit * 2);
     }
 
     nav {
       background: @sidebar-bg;
       min-height: 100vh;
-      margin: -@navbar-padding-bottom 0 0 -@container-fluid-padding;
+      margin: -(@base-spacing-unit * 2.5) 0 0 -(@base-spacing-unit * 2);
       order: -1;
-      padding: @sidebar-padding;
+      padding: (@base-spacing-unit * 2);
       width: @sidebar-width;
 
       .btn-success {
@@ -941,9 +941,9 @@ fieldset[disabled] .btn-info.active {
       h2 {
         color: @sidebar-heading-color;
         font-weight: bold;
-        font-size: @h2-font-size;
-        line-height: @sidebar-padding;
-        margin: @sidebar-padding 0;
+        font-size: @base-font-size;
+        line-height: (@base-spacing-unit * 2);
+        margin: (@base-spacing-unit * 2) 0;
       }
     }
   }
