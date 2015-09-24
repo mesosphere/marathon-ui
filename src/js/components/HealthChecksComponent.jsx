@@ -304,13 +304,20 @@ var HealthChecksComponent = React.createClass({
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-sm-2">
+          <div className="row duplicable-row">
+            <div className="col-sm-4">
               <DuplicableRowControls disableRemoveButton={disableRemoveButton}
                 handleAddRow={handleAddRow}
                 handleRemoveRow={handleRemoveRow} />
             </div>
           </div>
+
+          <div className="row">
+            <div className="col-sm-1">
+              <br />
+            </div>
+          </div>
+
         </fieldset>
         {error}
       </div>
