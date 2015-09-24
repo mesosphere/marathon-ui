@@ -11,6 +11,8 @@
 - \#2309 - Accepted resource roles schould be setable in the application form
 - \#2127 - Add optional field for "user" in app definition
 - \#2135 - Reflect application list filters in the URL
+- \#2131 - Create a health checks panel in the application
+  creation/edit modal dialog
 
 ### Changed
 - \#2105 - Refactor the application create/edit modal data handling
