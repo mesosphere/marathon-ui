@@ -158,8 +158,7 @@ var HealthChecksComponent = React.createClass({
       this.handleRemoveRow.bind(null, fieldsetId, i);
 
     var rowClassSet = classNames({
-      "has-error": !!error,
-      "duplicable-row": true
+      "has-error": !!error
     });
 
     var commandClassSet = classNames({
@@ -331,18 +330,8 @@ var HealthChecksComponent = React.createClass({
       return null;
     }
 
-    var disableRemoveButton = false;
-
-    /*
-    (rows.length === 1 &&
-      Util.isEmptyString(rows[0].containerPort) &&
-      Util.isEmptyString(rows[0].hostPort) &&
-      Util.isEmptyString(rows[0].servicePort) &&
-      (rows[0].protocol == null || Util.isEmptyString(rows[0].protocol)));
-  */
-
     return rows.map((row, i) => {
-      return this.getRow(row, i, disableRemoveButton);
+      return this.getRow(row, i, false);
     });
   },
 
