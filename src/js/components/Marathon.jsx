@@ -254,7 +254,7 @@ var Marathon = React.createClass({
               <li>
                 <a href="https://mesosphere.github.io/marathon/docs/"
                     target="_blank">
-                  Docs ⇗
+                  Documentation
                 </a>
               </li>
             </ul>
