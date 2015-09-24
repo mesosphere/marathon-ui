@@ -51,10 +51,10 @@ var TabPanesComponent = React.createClass({
         <TabPaneComponent id={tabs[0].id} className={"flex-container"}>
           <div className="wrapper">
             <main>
-                <div className="app-list-controls">
-                  <AppListFilterComponent onChange={this.updateFilterText}/>
-                </div>
-                <AppListComponent filterText={this.state.filterText} />
+              <div className="app-list-controls">
+                <AppListFilterComponent onChange={this.updateFilterText}/>
+              </div>
+              <AppListComponent filterText={this.state.filterText} />
             </main>
             <nav>
               <Link to={path}
