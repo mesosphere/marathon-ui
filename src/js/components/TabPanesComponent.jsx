@@ -60,8 +60,13 @@ var TabPanesComponent = React.createClass({
               <h2>Status</h2>
             </nav>
             <main>
-              <div className="app-list-controls">
-                <AppListFilterComponent onChange={this.updateFilterText}/>
+              <div className="contextual-bar">
+                <div className="breadcrumbs">
+                  <h2>My Applications</h2>
+                </div>
+                <div className="app-list-controls">
+                  <AppListFilterComponent onChange={this.updateFilterText}/>
+                </div>
               </div>
               <AppListComponent filterText={this.state.filterText} />
             </main>
