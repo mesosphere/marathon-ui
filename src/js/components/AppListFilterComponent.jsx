@@ -68,7 +68,6 @@ var AppListFilterComponent = React.createClass({
     var filterBoxClassSet = {
       "input-group": true,
       "filter-box": true,
-      "pull-right": true,
       "filter-box-activated": !!state.activated
     };
 
