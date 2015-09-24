@@ -50,21 +50,21 @@ var TabPanesComponent = React.createClass({
           className="container-fluid content">
         <TabPaneComponent id={tabs[0].id} className={"flex-container"}>
           <div className="wrapper">
+            <nav>
+              <Link to={path}
+                    query={{modal: "new-app"}}
+                    activeClassName={null}
+                    className="btn btn-success">
+                Create
+              </Link>
+              <h2>Status</h2>
+            </nav>
             <main>
               <div className="app-list-controls">
                 <AppListFilterComponent onChange={this.updateFilterText}/>
               </div>
               <AppListComponent filterText={this.state.filterText} />
             </main>
-            <nav>
-              <Link to={path}
-                query={{modal: "new-app"}}
-                activeClassName={null}
-                className="btn btn-success">
-                Create
-              </Link>
-              <h2>Status</h2>
-            </nav>
           </div>
         </TabPaneComponent>
         <TabPaneComponent id={tabs[1].id}>
