@@ -144,4 +144,44 @@ describe("App Form Model Post Process", function () {
 
   });
 
+  describe("health checks", function () {
+
+    it("is empty on spefific object", function () {
+      var app = {healthChecks: [{
+          "path": null,
+          "protocol": "HTTP",
+          "portIndex": 0,
+          "gracePeriodSeconds": 300,
+          "intervalSeconds": 60,
+          "timeoutSeconds": 20,
+          "maxConsecutiveFailures": 3,
+          "ignoreHttp1xx": false
+        }]
+      };
+
+      AppFormModelPostProcess.healthChecks(app);
+
+      expect(app.healthChecks).to.deep.equal([]);
+    });
+
+    it("is untouched on given path", function () {
+      var app = {healthChecks: [{
+          "path": "/",
+          "protocol": "HTTP",
+          "portIndex": 0,
+          "gracePeriodSeconds": 300,
+          "intervalSeconds": 60,
+          "timeoutSeconds": 20,
+          "maxConsecutiveFailures": 3,
+          "ignoreHttp1xx": false
+        }]
+      };
+
+      AppFormModelPostProcess.healthChecks(app);
+
+      expect(app.healthChecks).to.deep.equal(app.healthChecks);
+    });
+
+  });
+
 });

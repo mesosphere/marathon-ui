@@ -1,6 +1,9 @@
 var Util = require("../../helpers/Util");
 
 var ContainerConstants = require("../../constants/ContainerConstants");
+var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
+
+const healthChecksRowScheme = require("../healthChecksRowScheme");
 
 function hasOnlyEmptyValues(obj) {
   return Util.isObject(obj) &&
@@ -51,6 +54,29 @@ const AppFormModelPostProcess = {
       if (Util.isEmptyString(app.cmd)) {
         app.cmd = " ";
       }
+    }
+  },
+  healthChecks: (app) => {
+    var healthChecks = app.healthChecks;
+
+    if (healthChecks == null || healthChecks.length !== 1) {
+      return;
+    }
+
+    let hc = healthChecks[0];
+
+    let isEmpty = hc.protocol === HealthCheckProtocols.HTTP &&
+      hc.path == null || Util.isEmptyString(healthChecks.path) &&
+      ["portIndex",
+      "gracePeriodSeconds",
+      "intervalSeconds",
+      "timeoutSeconds",
+      "maxConsecutiveFailures",
+      "ignoreHttp1xx"]
+        .every((key) => hc[key] === healthChecksRowScheme[key]);
+
+    if (isEmpty) {
+      app.healthChecks = [];
     }
   }
 };
