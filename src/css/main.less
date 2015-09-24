@@ -333,7 +333,7 @@ fieldset[disabled] .btn-info.active {
 
 .navbar-inverse {
   background-color: #222426;
-  border-color: transparent;
+  border: none;
 }
 
 .navbar-inverse .navbar-nav > li > a {
@@ -469,20 +469,22 @@ fieldset[disabled] .btn-info.active {
 }
 
 .nav-tabs > li > a {
-  color: #8e929b;
+  color: @navbar-inactive-color;
   border-top: none;
   border-left: none;
   border-right: none;
   border-radius: 0;
+  min-width: @navbar-min-width;
   padding-bottom: 13px;
   padding-top: 15px;
+  text-align: center;
   border-bottom: 3px solid transparent;
   line-height: 19px;
 }
 
 .nav-tabs > li > a:hover,
 .nav-tabs > li > a:focus {
-  color: #f6f6f6;
+  color: @navbar-active-color;
   border-color: transparent;
 }
 
@@ -490,7 +492,7 @@ fieldset[disabled] .btn-info.active {
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
   background-color: transparent;
-  color: #f6f6f6;
+  color: @navbar-active-color;
 }
 
 .nav-tabs > li.active > a,
@@ -499,7 +501,7 @@ fieldset[disabled] .btn-info.active {
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 3px solid #00b482;
+  border-bottom: 3px solid @brand-primary;
 }
 
 .header-btn {
