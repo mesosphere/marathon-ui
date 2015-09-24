@@ -314,13 +314,13 @@ var HealthChecksComponent = React.createClass({
           </div>
 
           <div className="row">
-            <div className="col-sm-1">
+            <div className="col-sm-12">
+              {error}
               <br />
             </div>
           </div>
 
         </fieldset>
-        {error}
       </div>
     );
   },
