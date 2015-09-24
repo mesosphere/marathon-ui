@@ -93,6 +93,12 @@ const AppFormValidators = {
     (new RegExp("^(|\\/\\/cmd|\\/?[^\\/]+(\\/[^\\/]+)*)$"))
       .test(str),
 
+  healthChecksProtocol: (obj) => {
+    return !!Object.values(HealthCheckProtocols).find((protocol) => {
+      return protocol === obj.protocol;
+    });
+  },
+
   healthChecksCommandNotEmpty: (obj) => {
     return obj.protocol !== HealthCheckProtocols.COMMAND ||
       !Util.isEmptyString(obj.command);

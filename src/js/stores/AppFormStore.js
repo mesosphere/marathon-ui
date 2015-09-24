@@ -61,6 +61,7 @@ const validationRules = {
   "env": [AppFormValidators.env],
   "executor": [AppFormValidators.executor],
   "healthChecks": [
+    AppFormValidators.healthChecksProtocol,
     AppFormValidators.healthChecksCommandNotEmpty,
     AppFormValidators.healthChecksPathNotEmpty,
     AppFormValidators.healthChecksPortIndex,

@@ -31,6 +31,7 @@ const AppFormErrorMessages = {
   env: ["Key cannot be blank"],
   executor: ["Invalid executor format"],
   healthChecks: [
+    "Incorrect protocol given",
     "Command must not be emtpy",
     "Path must not be emtpy",
     "Port Index must be a non-negative number",
