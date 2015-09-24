@@ -66,6 +66,16 @@ var TabPanesComponent = React.createClass({
                 </div>
                 <div className="app-list-controls">
                   <AppListFilterComponent onChange={this.updateFilterText}/>
+                  <div className="btn-group toggle-list-view">
+                    <button className="btn btn-default"
+                      type="button">
+                      <i className="icon ion-navicon" /> List
+                    </button>
+                    <button className="btn btn-default"
+                      type="button">
+                      <i className="icon ion-navicon" /> Tree
+                    </button>
+                  </div>
                 </div>
               </div>
               <AppListComponent filterText={this.state.filterText} />
