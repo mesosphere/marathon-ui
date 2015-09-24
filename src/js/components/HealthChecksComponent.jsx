@@ -8,9 +8,10 @@ var FormActions = require("../actions/FormActions");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var HealthCheckProtocols = require("../constants/HealthCheckProtocols");
 
-const portInputAttributes = {
+const healthChecksRowScheme = require("../stores/healthChecksRowScheme");
+
+const numberInputAttributes = {
   min: 0,
-  max: 65535,
   step: 1,
   type: "number"
 };
@@ -18,18 +19,6 @@ const portInputAttributes = {
 const duplicableRowFieldIds = [
   "healthChecks"
 ];
-
-const rowScheme = {
-  protocol: HealthCheckProtocols.COMMAND,
-  command: null,
-  path: null,
-  portIndex: 0,
-  gracePeriodSeconds: 300,
-  intervalSeconds: 60,
-  timeoutSeconds: 20,
-  maxConsecutiveFailures: 3,
-  ignoreHttp1xx: false
-};
 
 var HealthChecksComponent = React.createClass({
   displayName: "HealthChecksComponent",
@@ -90,7 +79,7 @@ var HealthChecksComponent = React.createClass({
     duplicableRowFieldIds.forEach(function (fieldId) {
       if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
         FormActions.insert(fieldId,
-            Util.extendObject(rowScheme, {
+            Util.extendObject(healthChecksRowScheme, {
           consecutiveKey: Util.getUniqueId()
         }));
       }
@@ -104,9 +93,12 @@ var HealthChecksComponent = React.createClass({
       consecutiveKey: this.state.rows[rowFieldId][i].consecutiveKey
     };
 
-    return Object.keys(rowScheme)
+    return Object.keys(healthChecksRowScheme)
       .reduce(function (memo, key) {
-        memo[key] = findDOMNode(refs[`${key}${i}`]).value;
+        var input = findDOMNode(refs[`${key}${i}`]);
+        memo[key] = input.type !== "checkbox"
+          ? input.value
+          : input.checked;
         return memo;
       }, row);
   },
@@ -114,7 +106,7 @@ var HealthChecksComponent = React.createClass({
   handleAddRow: function (fieldId, position, event) {
     event.target.blur();
     event.preventDefault();
-    FormActions.insert(fieldId, Util.extendObject(rowScheme, {
+    FormActions.insert(fieldId, Util.extendObject(healthChecksRowScheme, {
         consecutiveKey: Util.getUniqueId()
       }),
       position
@@ -258,7 +250,7 @@ var HealthChecksComponent = React.createClass({
                 fieldId={`${fieldsetId}.${i}.portIndex`}
                 label="Port Index"
                 value={row.portIndex}>
-                <input ref={`portIndex${i}`} />
+                <input ref={`portIndex${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
           </div>
@@ -273,7 +265,8 @@ var HealthChecksComponent = React.createClass({
                 label="Grace Period"
                 help="seconds"
                 value={row.gracePeriodSeconds}>
-                <input ref={`gracePeriodSeconds${i}`} />
+                <input ref={`gracePeriodSeconds${i}`}
+                  {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
             <div className="col-sm-2">
@@ -285,7 +278,7 @@ var HealthChecksComponent = React.createClass({
                 label="Interval"
                 help="seconds"
                 value={row.intervalSeconds}>
-                <input ref={`intervalSeconds${i}`} />
+                <input ref={`intervalSeconds${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
             <div className="col-sm-2">
@@ -297,7 +290,7 @@ var HealthChecksComponent = React.createClass({
                 label="Timeout"
                 help="seconds"
                 value={row.timeoutSeconds}>
-                <input ref={`timeoutSeconds${i}`} />
+                <input ref={`timeoutSeconds${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
             <div className="col-sm-4">
@@ -308,9 +301,12 @@ var HealthChecksComponent = React.createClass({
                 fieldId={`${fieldsetId}.${i}.maxConsecutiveFailures`}
                 label="Max. Consecutive Failures"
                 value={row.maxConsecutiveFailures}>
-                <input ref={`maxConsecutiveFailures${i}`} />
+                <input ref={`maxConsecutiveFailures${i}`}
+                  {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
+          </div>
+          <div className="row">
             <div className="col-sm-2">
               <DuplicableRowControls disableRemoveButton={disableRemoveButton}
                 handleAddRow={handleAddRow}
