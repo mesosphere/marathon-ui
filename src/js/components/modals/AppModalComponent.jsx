@@ -318,7 +318,7 @@ var AppModalComponent = React.createClass({
               <CollapsiblePanelComponent
                   isOpen=
                     {this.fieldsHaveError(HealthChecksComponent.fieldIds)}
-                  title="Health Checks">
+                  title="Health checks">
                 <HealthChecksComponent
                   errorIndices={state.errorIndices}
                   fields={state.fields}
