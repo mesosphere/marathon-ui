@@ -351,6 +351,126 @@ describe("App Form Validators", function () {
 
     });
 
+    describe("health checks", function () {
+
+      it("protocol exists", function () {
+        expect(this.v.healthChecksProtocol({protocol: "HTTP"})).to.be.true;
+        expect(this.v.healthChecksProtocol({protocol: "TCP"})).to.be.true;
+        expect(this.v.healthChecksProtocol({protocol: "COMMAND"})).to.be.true;
+      });
+
+      it("protocol does not exists", function () {
+        expect(this.v.healthChecksProtocol({protocol: "TTY"})).to.be.false;
+      });
+
+      it("command is not empty", function () {
+        expect(this.v.healthChecksCommandNotEmpty({
+          protocol: "COMMAND",
+          command: "command"
+        }))
+          .to.be.true;
+        expect(this.v.healthChecksCommandNotEmpty({
+          protocol: "COMMAND",
+          command: ""
+        }))
+          .to.be.false;
+        expect(this.v.healthChecksCommandNotEmpty({
+          protocol: "TCP",
+          command: ""
+        }))
+          .to.be.true;
+      });
+
+      it("path is not empty", function () {
+        expect(this.v.healthChecksPathNotEmpty({
+          protocol: "HTTP",
+          path: "path"
+        }))
+          .to.be.true;
+        expect(this.v.healthChecksPathNotEmpty({
+          protocol: "HTTP",
+          path: ""
+        }))
+          .to.be.false;
+        expect(this.v.healthChecksPathNotEmpty({
+          protocol: "TCP",
+          path: ""
+        }))
+          .to.be.true;
+      });
+
+      it("port index to be valid", function () {
+        expect(this.v.healthChecksPortIndex({
+          protocol: "TCP",
+          portIndex: 1
+        }))
+          .to.be.true;
+        expect(this.v.healthChecksPortIndex({
+          protocol: "HTTP",
+          portIndex: 0
+        }))
+          .to.be.true;
+        expect(this.v.healthChecksPortIndex({
+          protocol: "HTTP",
+          portIndex: "abc"
+        }))
+          .to.be.false;
+        expect(this.v.healthChecksPortIndex({
+          protocol: "TCP",
+          portIndex: 0.5
+        }))
+          .to.be.false;
+        expect(this.v.healthChecksPortIndex({
+          protocol: "COMMAND",
+          portIndex: "abc"
+        }))
+          .to.be.true;
+      });
+
+      it("grace period to be valid", function () {
+        expect(this.v.healthChecksGracePeriod({gracePeriodSeconds: 1}))
+          .to.be.true;
+        expect(this.v.healthChecksGracePeriod({gracePeriodSeconds: 0.5}))
+          .to.be.false;
+        expect(this.v.healthChecksGracePeriod({gracePeriodSeconds: "abc"}))
+          .to.be.false;
+      });
+
+      it("interval to be valid", function () {
+        expect(this.v.healthChecksInterval({intervalSeconds: 1}))
+          .to.be.true;
+        expect(this.v.healthChecksInterval({intervalSeconds: 0.5}))
+          .to.be.false;
+        expect(this.v.healthChecksInterval({intervalSeconds: "abc"}))
+          .to.be.false;
+      });
+
+      it("timeout to be valid", function () {
+        expect(this.v.healthChecksTimeout({timeoutSeconds: 1}))
+          .to.be.true;
+        expect(this.v.healthChecksTimeout({timeoutSeconds: 0.5}))
+          .to.be.false;
+        expect(this.v.healthChecksTimeout({timeoutSeconds: "abc"}))
+          .to.be.false;
+      });
+
+      it("max consecutive failures to be valid", function () {
+        expect(this.v.healthChecksMaxConsecutiveFailures({
+            maxConsecutiveFailures: 1
+          }))
+          .to.be.true;
+        expect(this.v.healthChecksMaxConsecutiveFailures({
+            maxConsecutiveFailures: 0.5
+          }))
+          .to.be.false;
+        expect(this.v.healthChecksMaxConsecutiveFailures({
+            maxConsecutiveFailures: "abc"
+          }))
+          .to.be.false;
+      });
+
+    });
+
     describe("instances", function () {
 
       it("is not an empty string", function () {
