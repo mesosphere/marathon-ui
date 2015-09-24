@@ -234,8 +234,8 @@ a,
 
 .btn-default {
   background-color: transparent;
-  border-color: #f6f6f6;
-  color: #f6f6f6;
+  border-color: @btn-default-text-color;
+  color: @btn-default-text-color;
 }
 
 .btn-default.disabled,
@@ -248,8 +248,9 @@ a,
 .btn-default:active,
 .btn-default.active,
 .open .dropdown-toggle.btn-default {
-  background-color: #f6f6f6;
-  color: #323539;
+  background-color: @btn-default-active-bg-color;
+  border-color: @btn-default-active-bg-color;
+  color: @btn-default-active-text-color;
 }
 
 .btn-success {
