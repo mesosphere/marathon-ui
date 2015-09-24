@@ -945,7 +945,15 @@ fieldset[disabled] .btn-info.active {
         padding: 16px 0;
 
         .app-list-controls {
+          align-items: center;
+          display: flex;
+          flex-direction: row;
           flex: 1;
+          justify-content: flex-end;
+
+          .toggle-list-view {
+            margin-left: @base-spacing-unit * 2;
+          }
         }
 
         .breadcrumbs {
