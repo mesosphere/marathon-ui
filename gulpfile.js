@@ -34,7 +34,7 @@ var files = {
   mainLess: "main",
   mainCssDist: "main",
   index: "index.html",
-  sourceSansLight: "SourceSansPro-Light.otf.woff"
+  sourceSansPro: "SourceSansPro-Regular.otf.woff"
 };
 
 var webpackConfig = {
@@ -145,7 +145,7 @@ gulp.task("images", function () {
 gulp.task("fonts", function () {
   return gulp.src([
       dirs.ionicons + "/**/*.*",
-      dirs.sourceSansPro + "/" + files.sourceSansLight
+      dirs.sourceSansPro + "/" + files.sourceSansPro
     ]).pipe(gulp.dest(dirs.dist + "/" + dirs.fontsDist));
 });
 
