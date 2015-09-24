@@ -206,6 +206,7 @@ var HealthChecksComponent = React.createClass({
                 }
                 fieldId={`${fieldsetId}.${i}.path`}
                 label="Path"
+                help={`Example: "/path/to/health".`}
                 value={row.path}>
                 <input ref={`path${i}`} />
               </FormGroupComponent>
@@ -220,6 +221,7 @@ var HealthChecksComponent = React.createClass({
                 }
                 fieldId={`${fieldsetId}.${i}.command`}
                 label="Command"
+                help={`Example: "curl -f -X GET http://$HOST:$PORT0/health"`}
                 value={row.command}>
                 <input ref={`command${i}`} />
               </FormGroupComponent>
@@ -296,7 +298,7 @@ var HealthChecksComponent = React.createClass({
                   `${fieldsetId}.${i}.ignoreHttp1xx`
                   )}
                 fieldId={`${fieldsetId}.${i}.ignoreHttp1xx`}
-                label="Ignore HTTP-1xx-codes"
+                label="Ignore HTTP informational status codes 100 to 199."
                 value={row.ignoreHttp1xx}>
                 <input ref={`ignoreHttp1xx${i}`} type="checkbox" />
               </FormGroupComponent>
