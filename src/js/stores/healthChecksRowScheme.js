@@ -1,7 +1,7 @@
 var HealthCheckProtocols = require("../constants/HealthCheckProtocols");
 
 const healthChecksRowScheme = {
-  protocol: HealthCheckProtocols.COMMAND,
+  protocol: HealthCheckProtocols.HTTP,
   command: null,
   path: null,
   portIndex: 0,
