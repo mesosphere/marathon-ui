@@ -279,11 +279,13 @@ var AppPageComponent = React.createClass({
       if (healthCheck && !healthCheck.alive) {
         var failedCheck = this.state.app.healthChecks[index];
 
-        var protocol = failedCheck.protocol
+        var protocol = failedCheck != null && failedCheck.protocol
           ? `${failedCheck.protocol} `
           : "";
         var host = this.state.app.host || "";
-        var path = failedCheck.path || "";
+        var path = failedCheck != null && failedCheck.path
+          ? failedCheck.path
+          : "";
         var lastFailureCause = healthCheck.lastFailureCause
           ? `returned with status: '${healthCheck.lastFailureCause}'`
           : "failed";
