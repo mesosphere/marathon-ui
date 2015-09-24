@@ -1,3 +1,6 @@
+var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
+var Util = require("../../helpers/Util");
+
 const AppFormModelToFieldTransforms = {
   acceptedResourceRoles: (acceptedResourceRoles) => {
     return acceptedResourceRoles != null
@@ -54,6 +57,13 @@ const AppFormModelToFieldTransforms = {
     return healthChecks
       .map((row, i) => {
         row.consecutiveKey = i;
+
+        if (row.protocol === HealthCheckProtocols.COMMAND) {
+          if (Util.isObject(row.command)) {
+            row.command = row.command.value;
+          }
+        }
+
         return row;
       });
   },
