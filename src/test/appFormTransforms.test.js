@@ -199,6 +199,36 @@ describe("App Form Field to Model Transform", function () {
       ])).to.deep.equal({key2: "value2"});
     });
 
+    describe("healthChecks", function () {
+      it("command string to object", function () {
+        var healthCheck = {
+          "consecutiveKey": 0,
+          "path": "/",
+          "protocol": "COMMAND",
+          "portIndex": "0",
+          "command": "true",
+          "gracePeriodSeconds": "300",
+          "intervalSeconds": "60",
+          "timeoutSeconds": "20",
+          "maxConsecutiveFailures": "3",
+          "ignoreHttp1xx": false
+        };
+
+        expect(AppFormTransforms.FieldToModel.healthChecks([healthCheck]))
+          .to.deep.equal([{
+            "protocol": "COMMAND",
+            "command": {
+              "value": "true"
+            },
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 20,
+            "maxConsecutiveFailures": 3,
+            "ignoreHttp1xx": false
+          }]);
+      });
+    });
+
     it("instances to integer", function () {
       expect(AppFormTransforms.FieldToModel.instances("2")).to.equal(2);
       expect(AppFormTransforms.FieldToModel.instances("4.5")).to.equal(4);
