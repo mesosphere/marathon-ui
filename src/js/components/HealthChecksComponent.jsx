@@ -173,7 +173,7 @@ var HealthChecksComponent = React.createClass({
     });
 
     var portIndexClassSet = classNames({
-      "row": true,
+      "col-sm-2": true,
       "hidden": row.protocol === HealthCheckProtocols.COMMAND
     });
 
@@ -195,20 +195,6 @@ var HealthChecksComponent = React.createClass({
                   <option value={HealthCheckProtocols.HTTP}>HTTP</option>
                   <option value={HealthCheckProtocols.TCP}>TCP</option>
                 </select>
-              </FormGroupComponent>
-            </div>
-          </div>
-
-          <div className={pathClassSet}>
-            <div className="col-sm-12">
-              <FormGroupComponent className="checkbox-form-group"
-                errorMessage={getErrorMessage(
-                  `${fieldsetId}.${i}.ignoreHttp1xx`
-                  )}
-                fieldId={`${fieldsetId}.${i}.ignoreHttp1xx`}
-                label="Ignore HTTP-1xx-codes"
-                value={row.ignoreHttp1xx}>
-                <input ref={`ignoreHttp1xx${i}`} type="checkbox" />
               </FormGroupComponent>
             </div>
           </div>
@@ -237,20 +223,6 @@ var HealthChecksComponent = React.createClass({
                 label="Command"
                 value={row.command}>
                 <input ref={`command${i}`} />
-              </FormGroupComponent>
-            </div>
-          </div>
-
-          <div className={portIndexClassSet}>
-            <div className="col-sm-2">
-              <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.portIndex`)
-                }
-                fieldId={`${fieldsetId}.${i}.portIndex`}
-                label="Port Index"
-                value={row.portIndex}>
-                <input ref={`portIndex${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
           </div>
@@ -305,7 +277,33 @@ var HealthChecksComponent = React.createClass({
                   {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
+            <div className={portIndexClassSet}>
+              <FormGroupComponent
+                errorMessage={
+                  getErrorMessage(`${fieldsetId}.${i}.portIndex`)
+                }
+                fieldId={`${fieldsetId}.${i}.portIndex`}
+                label="Port Index"
+                value={row.portIndex}>
+                <input ref={`portIndex${i}`} {...numberInputAttributes} />
+              </FormGroupComponent>
+            </div>
           </div>
+
+          <div className={pathClassSet}>
+            <div className="col-sm-12">
+              <FormGroupComponent className="checkbox-form-group"
+                errorMessage={getErrorMessage(
+                  `${fieldsetId}.${i}.ignoreHttp1xx`
+                  )}
+                fieldId={`${fieldsetId}.${i}.ignoreHttp1xx`}
+                label="Ignore HTTP-1xx-codes"
+                value={row.ignoreHttp1xx}>
+                <input ref={`ignoreHttp1xx${i}`} type="checkbox" />
+              </FormGroupComponent>
+            </div>
+          </div>
+
           <div className="row">
             <div className="col-sm-2">
               <DuplicableRowControls disableRemoveButton={disableRemoveButton}
