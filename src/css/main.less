@@ -663,11 +663,6 @@ fieldset[disabled] .btn-info.active {
   }
 }
 
-.app-list-controls {
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-
 .filter-box {
   max-width: 240px;
 
@@ -926,6 +921,24 @@ fieldset[disabled] .btn-info.active {
     main {
       flex: 1;
       padding-left: (@base-spacing-unit * 2);
+
+      .contextual-bar {
+        align-items: center;
+        display: flex;
+
+        .breadcrumbs {
+          flex: 1;
+
+          h2 {
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+          }
+        }
+        .app-list-controls {
+          flex: 1;
+        }
+      }
     }
 
     nav.sidebar {
