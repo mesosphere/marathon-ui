@@ -67,6 +67,12 @@ const AppFormFieldToModelTransforms = {
     }, {});
   },
   instances: (value) => parseInt(value, 10),
+  labels: (rows) => {
+    return rows.reduce((memo, row) => {
+      memo[row.key] = row.value;
+      return memo;
+    }, {});
+  },
   mem: (value) => parseFloat(value),
   ports: (ports) => lazy(ports.split(","))
     .map((port) => parseInt(port, 10))
