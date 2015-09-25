@@ -57,7 +57,7 @@ var TabPanesComponent = React.createClass({
                 className="btn btn-success">
                 Create
               </Link>
-              <h2>Status</h2>
+              <h3>Status</h3>
             </nav>
             <main>
               <div className="contextual-bar">
