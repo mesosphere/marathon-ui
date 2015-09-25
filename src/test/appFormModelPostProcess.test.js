@@ -5,6 +5,16 @@ var AppFormModelPostProcess =
 
 describe("App Form Model Post Process", function () {
 
+  it("empty accepted resource roles defaults to '*'", function () {
+    var app = {
+      acceptedResourceRoles: []
+    };
+
+    AppFormModelPostProcess.acceptedResourceRoles(app);
+
+    expect(app).to.deep.equal({acceptedResourceRoles: ["*"]});
+  });
+
   describe("container", function () {
 
     it("empty container values to empty object", function () {

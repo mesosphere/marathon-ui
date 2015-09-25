@@ -70,6 +70,7 @@ const validationRules = {
  */
 const resolveFieldIdToAppKeyMap = {
   appId: "id",
+  acceptedResourceRoles: "acceptedResourceRoles",
   cmd: "cmd",
   constraints: "constraints",
   containerVolumes: "container.volumes",
@@ -96,6 +97,7 @@ const resolveFieldIdToAppKeyMap = {
 const responseAttributePathToFieldIdMap = {
   "id": "appId",
   "/id": "appId",
+  "/acceptedResourceRoles": "acceptedResourceRoles",
   "/cmd": "cmd",
   "/constraints": "constraints",
   "/container/docker/image": "dockerImage",

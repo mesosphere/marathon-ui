@@ -15,6 +15,10 @@ function ensureObjectScheme(row, scheme) {
 }
 
 const AppFormFieldToModelTransforms = {
+  acceptedResourceRoles: (roles) => lazy(roles.split(","))
+    .map((role) => role.trim())
+    .filter((role) => role != null && role !== "")
+    .value(),
   cpus: (value) => parseFloat(value),
   disk: (value) => parseFloat(value),
   constraints: (constraints) => constraints

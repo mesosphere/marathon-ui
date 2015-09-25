@@ -18,7 +18,8 @@ var OptionalSettingsComponent = React.createClass({
       executor: "executor",
       ports: "ports",
       uris: "uris",
-      constraints: "constraints"
+      constraints: "constraints",
+      acceptedResourceRoles: "acceptedResourceRoles"
     })
   },
 
@@ -31,6 +32,9 @@ var OptionalSettingsComponent = React.createClass({
     var fields = props.fields;
     var fieldIds = OptionalSettingsComponent.fieldIds;
 
+    var acceptedResourceRolesHelp = "Comma-separated list of resource roles. " +
+      "Marathon considers only resource offers with roles in this list for " +
+      "launching tasks of this app.";
     var contraintsHelp = "Comma-separated list of valid constraints. " +
       "Valid constraint format is \"field:operator[:value]\".";
     var executorHelp = "Executor must be the string '//cmd', a string " +
@@ -74,6 +78,15 @@ var OptionalSettingsComponent = React.createClass({
             label="Constraints"
             onChange={this.handleFieldUpdate}
             value={fields[fieldIds.constraints]}>
+          <input />
+        </FormGroupComponent>
+        <FormGroupComponent
+            errorMessage={props.getErrorMessage(fieldIds.acceptedResourceRoles)}
+            fieldId={fieldIds.acceptedResourceRoles}
+            help={acceptedResourceRolesHelp}
+            label="Accepted Resource Roles"
+            onChange={this.handleFieldUpdate}
+            value={fields[fieldIds.acceptedResourceRoles]}>
           <input />
         </FormGroupComponent>
       </div>

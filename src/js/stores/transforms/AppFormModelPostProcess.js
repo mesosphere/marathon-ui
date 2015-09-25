@@ -13,13 +13,22 @@ function hasOnlyEmptyValues(obj) {
 }
 
 const AppFormModelPostProcess = {
+  acceptedResourceRoles: (app) => {
+    var acceptedResourceRoles = app.acceptedResourceRoles;
+
+    if (acceptedResourceRoles != null &&
+        Util.isArray(acceptedResourceRoles) &&
+        acceptedResourceRoles.length === 0) {
+      app.acceptedResourceRoles = ["*"];
+    }
+  },
   container: (app) => {
     var container = app.container;
-    
+
     if (container == null) {
       return;
     }
-    
+
     if (container.docker != null) {
       if (container.docker.network === ContainerConstants.NETWORK.HOST) {
         // If host networking is set, remove all port mappings.

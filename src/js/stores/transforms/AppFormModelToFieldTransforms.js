@@ -1,4 +1,6 @@
 const AppFormModelToFieldTransforms = {
+  acceptedResourceRoles: (acceptedResourceRoles) => acceptedResourceRoles
+    .join(", "),
   constraints: (constraints) => {
     return constraints
       .map((constraint) => constraint.join(":"))

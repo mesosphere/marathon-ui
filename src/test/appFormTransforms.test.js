@@ -7,6 +7,14 @@ describe("App Form Field to Model Transform", function () {
 
   describe("transforms", function () {
 
+    it("accepted resource roles string to an array of roles", function () {
+      expect(AppFormTransforms.FieldToModel.
+          acceptedResourceRoles("*,test1"))
+        .to.deep.equal(["*", "test1"]);
+      expect(AppFormTransforms.FieldToModel.acceptedResourceRoles(""))
+        .to.deep.equal([]);
+    });
+
     it("cpus to float", function () {
       expect(AppFormTransforms.FieldToModel.cpus("434.55")).to.equal(434.55);
       expect(AppFormTransforms.FieldToModel.cpus("434.556633"))
@@ -167,7 +175,6 @@ describe("App Form Field to Model Transform", function () {
       ])).to.deep.equal([]);
     });
 
-
     it("dockerPrivileged is checked", function () {
       expect(AppFormTransforms.FieldToModel.dockerPrivileged(true))
         .to.be.true;
@@ -226,6 +233,7 @@ describe("App Form Field to Model Transform", function () {
       expect(AppFormTransforms.FieldToModel.uris(""))
         .to.deep.equal([]);
     });
+
   });
 
 });
@@ -233,6 +241,12 @@ describe("App Form Field to Model Transform", function () {
 describe("App Form Model To Field Transform", function () {
 
   describe("transforms", function () {
+
+    it("accepted resource roles string to an array of roles", function () {
+      expect(AppFormTransforms.ModelToField
+          .acceptedResourceRoles(["*", "test1"]))
+        .to.equal("*, test1");
+    });
 
     it("constraints array to string", function () {
       expect(AppFormTransforms.ModelToField.constraints([
@@ -259,7 +273,7 @@ describe("App Form Model To Field Transform", function () {
           hostPort: 3,
           servicePort: 3,
           protocol: "tcp"
-        },
+        }
       ])).to.deep.equal([
         {
           containerPort: 1,
@@ -323,6 +337,7 @@ describe("App Form Model To Field Transform", function () {
           .uris(["http://test.de/", "http://test.com"]))
         .to.equal("http://test.de/, http://test.com");
     });
+
   });
 
 });
