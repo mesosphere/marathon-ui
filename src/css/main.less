@@ -62,7 +62,7 @@ a:focus {
 a,
 .btn {
   transition: all 0.2s ease-in-out;
-  padding: (@base-font-size * 0.5) (@base-spacing-unit * 2);
+  padding: @base-font-size*0.5 @base-spacing-unit*2;
 }
 
 .caret {
@@ -367,7 +367,7 @@ fieldset[disabled] .btn-info.active {
   padding-top: 11px;
   padding-left: 0;
   text-align: center;
-  width: @sidebar-width - (@base-spacing-unit * 2);
+  width: @sidebar-width - @base-spacing-unit*2;
 }
 
 .panel-group {
@@ -677,10 +677,10 @@ fieldset[disabled] .btn-info.active {
     .icon {
       font-size: 1.4em;
     }
-    padding: (@base-font-size * 0.5) (@base-spacing-unit * 2);
+    padding: @base-font-size*0.5 @base-spacing-unit*2;
   }
   .form-control {
-    padding: (@base-font-size * 0.5) (@base-spacing-unit * 2);
+    padding: @base-font-size*0.5 @base-spacing-unit*2;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     color: #f6f6f6;
     background: transparent;
@@ -922,12 +922,12 @@ fieldset[disabled] .btn-info.active {
 
     main {
       flex: 1;
-      padding-left: @base-spacing-unit * 2;
+      padding-left: @base-spacing-unit*2;
 
       .contextual-bar {
         align-items: center;
         display: flex;
-        padding: (@base-spacing-unit * 2) 0;
+        padding: @base-spacing-unit*2 0;
 
         .app-list-controls {
           align-items: center;
@@ -937,7 +937,7 @@ fieldset[disabled] .btn-info.active {
           justify-content: flex-end;
 
           .toggle-list-view {
-            margin-left: @base-spacing-unit * 2;
+            margin-left: @base-spacing-unit*2;
           }
         }
 
@@ -957,8 +957,8 @@ fieldset[disabled] .btn-info.active {
     nav.sidebar {
       background: @sidebar-bg-color;
       min-height: 100vh;
-      margin: 0 0 0 -(@base-spacing-unit * 2);
-      padding: (@base-spacing-unit * 2);
+      margin: 0 0 0 -@base-spacing-unit*2;
+      padding: @base-spacing-unit*2;
       width: @sidebar-width;
 
       .btn-success {
@@ -970,8 +970,8 @@ fieldset[disabled] .btn-info.active {
         color: @sidebar-heading-color;
         font-weight: bold;
         font-size: @font-size-h3;
-        line-height: (@base-spacing-unit * 2);
-        margin: (@base-spacing-unit * 2) 0;
+        line-height: @base-spacing-unit*2;
+        margin: @base-spacing-unit*2 0;
       }
     }
   }
