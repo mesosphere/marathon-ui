@@ -209,8 +209,6 @@ var AppModalComponent = React.createClass({
       </button>
     );
 
-    console.log("f", state.fields);
-
     return (
       <ModalComponent
         dismissOnClickOutside={false}

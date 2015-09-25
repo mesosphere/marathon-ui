@@ -134,8 +134,6 @@ var OptionalLabelsComponent = React.createClass({
       "duplicable-row": true
     });
 
-    console.log("i", i, row.consecutiveKey);
-
     return (
       <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset
@@ -169,8 +167,6 @@ var OptionalLabelsComponent = React.createClass({
 
   getLabelRows: function () {
     var rows = this.state.rows;
-
-    console.log("r", rows);
 
     if (rows == null) {
       return null;
