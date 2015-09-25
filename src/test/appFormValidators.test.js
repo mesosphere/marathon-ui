@@ -367,6 +367,46 @@ describe("App Form Validators", function () {
 
     });
 
+    describe("labels row (single)", function () {
+
+      it("has correct object format", function () {
+        expect(this.v.labels({
+          key: "key1",
+          value: "value1"
+        })).to.be.true;
+      });
+
+      it("doesn't care about additonal object keys", function () {
+        expect(this.v.labels({
+          key: "key1",
+          value: "value1",
+          consecutiveKey: 2
+        })).to.be.true;
+      });
+
+      it("detects incorrect object format", function () {
+        expect(this.v.labels({
+          key: "key1",
+          val: "value1"
+        })).to.be.false;
+      });
+
+      it("detects empty key", function () {
+        expect(this.v.labels({
+          key: "",
+          value: "value1"
+        })).to.be.false;
+      });
+
+      it("treats empty value as correct", function () {
+        expect(this.v.labels({
+          key: "key1",
+          value: ""
+        })).to.be.true;
+      });
+
+    });
+
     describe("mem", function () {
       it("is not an empty string", function () {
         expect(this.v.mem("")).to.be.false;
