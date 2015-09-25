@@ -48,13 +48,13 @@ var TabPanesComponent = React.createClass({
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
           className="container-fluid content">
-        <TabPaneComponent id={tabs[0].id} className={"flex-container"}>
+        <TabPaneComponent id={tabs[0].id} className="flex-container">
           <div className="wrapper">
             <nav className="sidebar">
               <Link to={path}
-                    query={{modal: "new-app"}}
-                    activeClassName={null}
-                    className="btn btn-success">
+                query={{modal: "new-app"}}
+                activeClassName={null}
+                className="btn btn-success">
                 Create
               </Link>
               <h2>Status</h2>
