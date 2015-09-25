@@ -47,18 +47,40 @@ var TabPanesComponent = React.createClass({
 
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
-                              className="container-fluid">
-        <TabPaneComponent id={tabs[0].id}>
-          <div className="app-list-controls">
-            <Link
-              to={path}
-              query={{modal: "new-app"}}
-              className="btn btn-success pull-right">
-                  + New App
-            </Link>
-            <AppListFilterComponent onChange={this.updateFilterText}/>
+          className="container-fluid content">
+        <TabPaneComponent id={tabs[0].id} className="flex-container">
+          <div className="wrapper">
+            <nav className="sidebar">
+              <Link to={path}
+                query={{modal: "new-app"}}
+                activeClassName={null}
+                className="btn btn-success">
+                Create
+              </Link>
+              <h3>Status</h3>
+            </nav>
+            <main>
+              <div className="contextual-bar">
+                <div className="breadcrumbs">
+                  <h2>My Applications</h2>
+                </div>
+                <div className="app-list-controls">
+                  <AppListFilterComponent onChange={this.updateFilterText}/>
+                  <div className="btn-group toggle-list-view">
+                    <button className="btn btn-default"
+                      type="button">
+                      <i className="icon ion-navicon" /> List
+                    </button>
+                    <button className="btn btn-default"
+                      type="button">
+                      <i className="icon ion-navicon" /> Tree
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <AppListComponent filterText={this.state.filterText} />
+            </main>
           </div>
-          <AppListComponent filterText={this.state.filterText}/>
         </TabPaneComponent>
         <TabPaneComponent id={tabs[1].id}>
           <DeploymentsListComponent />
