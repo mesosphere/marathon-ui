@@ -22,6 +22,7 @@ var appScheme = {
   disk: null,
   ports: [0],
   uris: [],
+  user: null,
   tasks: [],
   tasksRunning: 0,
   taskStats: {}

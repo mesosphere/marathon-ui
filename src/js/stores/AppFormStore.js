@@ -86,7 +86,8 @@ const resolveFieldIdToAppKeyMap = {
   executor: "executor",
   mem: "mem",
   ports: "ports",
-  uris: "uris"
+  uris: "uris",
+  user: "user"
 };
 
 /**
@@ -128,7 +129,8 @@ const responseAttributePathToFieldIdMap = {
   "/instances": "instances",
   "/mem": "mem",
   "/ports": "ports",
-  "/uris": "uris"
+  "/uris": "uris",
+  "/user": "user"
 };
 
 /**
