@@ -6,6 +6,7 @@
 - \#2284 - Expose the application dependencies field in the configuration tab
 - \#2263 - UI doesn't expose roles
 - \#2194 - Handle Auth Errors in UI
+- \#2309 - Accepted resource roles schould be setable in the application form
 
 ### Changed
 - \#2105 - Refactor the application create/edit modal data handling
