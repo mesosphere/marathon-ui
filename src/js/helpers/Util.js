@@ -31,7 +31,7 @@ var Util = {
     return Object.assign({}, ...sources);
   },
   getUniqueId: function () {
-    return ++consecutiveNumber;
+    return (++consecutiveNumber).toString() + (new Date()).getTime();
   },
   detectObjectPaths: function (obj, startKey, excludePaths = []) {
     var paths = [];
