@@ -50,7 +50,7 @@ var TabPanesComponent = React.createClass({
           className="container-fluid content">
         <TabPaneComponent id={tabs[0].id} className={"flex-container"}>
           <div className="wrapper">
-            <nav>
+            <nav className="sidebar">
               <Link to={path}
                     query={{modal: "new-app"}}
                     activeClassName={null}
