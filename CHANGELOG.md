@@ -16,8 +16,6 @@
   * Add proper per-field validation
   * Add support for server-side validation errors on individual fields
 - \#2248 - Docker: port mappings do not make sense when host network is used
-
-### Changed
 - \#2223 - Display life time duration as other durations in UI
 
 ### Fixed
@@ -26,6 +24,7 @@
 - \#2252 - Wrong task number in Debug Tab
 - \#1985 - Docker container settings dialog needs better error handling
 - \#2262 - Better error handling on application configuration change/creation
+- \#2270 - Overlapping text in Deployment view
 
 ## 0.11.0 - 2015-09-02
 ### Added
