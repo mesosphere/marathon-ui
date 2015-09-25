@@ -192,6 +192,13 @@ describe("App Form Field to Model Transform", function () {
       });
     });
 
+    it("env ignores empty key-values", function () {
+      expect(AppFormTransforms.FieldToModel.env([
+        {key: "", value: "", consecutiveKey: 0},
+        {key: "key2", value: "value2", consecutiveKey: 1}
+      ])).to.deep.equal({key2: "value2"});
+    });
+
     it("instances to integer", function () {
       expect(AppFormTransforms.FieldToModel.instances("2")).to.equal(2);
       expect(AppFormTransforms.FieldToModel.instances("4.5")).to.equal(4);

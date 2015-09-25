@@ -66,7 +66,9 @@ const AppFormFieldToModelTransforms = {
   dockerPrivileged: (isChecked) => !!isChecked,
   env: (rows) => {
     return rows.reduce((memo, row) => {
-      memo[row.key] = row.value;
+      if (!Util.isEmptyString(row.key) || !Util.isEmptyString(row.value)) {
+        memo[row.key] = row.value;
+      }
       return memo;
     }, {});
   },
