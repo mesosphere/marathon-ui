@@ -167,7 +167,6 @@ describe("App Form Field to Model Transform", function () {
       ])).to.deep.equal([]);
     });
 
-
     it("dockerPrivileged is checked", function () {
       expect(AppFormTransforms.FieldToModel.dockerPrivileged(true))
         .to.be.true;
@@ -193,7 +192,8 @@ describe("App Form Field to Model Transform", function () {
     it("labels to object with key-values", function () {
       expect(AppFormTransforms.FieldToModel.labels([
         {key: "key1", value: "value1", consecutiveKey: 0},
-        {key: "key2", value: "value2", consecutiveKey: 1}
+        {key: "key2", value: "value2", consecutiveKey: 1},
+        {key: "", value: "", consecutiveKey: 2}
       ])).to.deep.equal({
         key1: "value1",
         key2: "value2"
