@@ -57,11 +57,26 @@ var TabPanesComponent = React.createClass({
                 className="btn btn-success">
                 Create
               </Link>
-              <h2>Status</h2>
+              <h3>Status</h3>
             </nav>
             <main>
-              <div className="app-list-controls">
-                <AppListFilterComponent onChange={this.updateFilterText}/>
+              <div className="contextual-bar">
+                <div className="breadcrumbs">
+                  <h2>My Applications</h2>
+                </div>
+                <div className="app-list-controls">
+                  <AppListFilterComponent onChange={this.updateFilterText}/>
+                  <div className="btn-group toggle-list-view">
+                    <button className="btn btn-default"
+                      type="button">
+                      <i className="icon ion-navicon" /> List
+                    </button>
+                    <button className="btn btn-default"
+                      type="button">
+                      <i className="icon ion-navicon" /> Tree
+                    </button>
+                  </div>
+                </div>
               </div>
               <AppListComponent filterText={this.state.filterText} />
             </main>
