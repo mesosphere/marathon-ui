@@ -228,6 +228,8 @@ var AppVersionComponent = React.createClass({
           {invalidateValue(appVersion.maxLaunchDelaySeconds, "seconds")}
           <dt>URIs</dt>
           {urisNode}
+          <dt>User</dt>
+          {invalidateValue(appVersion.user)}
           <dt>Version</dt>
           {invalidateValue(appVersion.version)}
         </dl>
