@@ -58,6 +58,43 @@ var TabPanesComponent = React.createClass({
                 Create
               </Link>
               <h3>Status</h3>
+              <ul className="list-group checked-list-box filters">
+                <li className="checkbox">
+                  <input type="checkbox" id="filter-cb-1"/>
+                  <label htmlFor="filter-cb-1">Running</label>
+                </li>
+                <li className="checkbox">
+                  <input type="checkbox" checked id="filter-cb-2"/>
+                  <label htmlFor="filter-cb-2">Deploying</label>
+                </li>
+                <li className="checkbox">
+                  <input type="checkbox" id="filter-cb-3"/>
+                  <label htmlFor="filter-cb-3">Inactive</label>
+                </li>
+                <li className="checkbox">
+                  <input type="checkbox" id="filter-cb-4"/>
+                  <label htmlFor="filter-cb-4">Waiting</label>
+                </li>
+                <li className="checkbox">
+                  <input type="checkbox" id="filter-cb-5"/>
+                  <label htmlFor="filter-cb-5">Delayed</label>
+                </li>
+              </ul>
+              <h3>Application Type</h3>
+              <ul className="list-group checked-list-box filters">
+                <li className="checkbox">
+                  <input type="checkbox" id="filter-cb-6"/>
+                  <label htmlFor="filter-cb-6">Docker</label>
+                </li>
+                <li className="checkbox">
+                  <input type="checkbox" checked id="filter-cb-7"/>
+                  <label htmlFor="filter-cb-7">Rocket</label>
+                </li>
+                <li className="checkbox">
+                  <input type="checkbox" id="filter-cb-8"/>
+                  <label htmlFor="filter-cb-8">Cgroup</label>
+                </li>
+              </ul>
             </nav>
             <main>
               <div className="contextual-bar">
