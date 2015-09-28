@@ -7,7 +7,8 @@ var AppVersionsActions = require("../js/actions/AppVersionsActions");
 var AppVersionsEvents = require("../js/events/AppVersionsEvents");
 var AppVersionsStore = require("../js/stores/AppVersionsStore");
 var AppVersionComponent = require("../js/components/AppVersionComponent");
-var AppVersionListComponent = require("../js/components/AppVersionListComponent");
+var AppVersionListComponent =
+  require("../js/components/AppVersionListComponent");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -212,7 +213,7 @@ describe("App Version component", function () {
       "id": "/sleep10",
       "cmd": "sleep 10",
       "args": null,
-      "user": null,
+      "user": "testuser",
       "env": {},
       "instances": 14,
       "cpus": 0.1,
@@ -335,11 +336,17 @@ describe("App Version component", function () {
   });
 
   it("has correct URIs", function () {
-    expect(this.table[35].type.displayName).to.equal("UnspecifiedNodeComponent");
+    expect(this.table[35].type.displayName)
+      .to.equal("UnspecifiedNodeComponent");
+  });
+
+  it("has correct User", function () {
+    expect(this.table[37].props.children[0]).to.equal("testuser");
   });
 
   it("has correct version", function () {
-    expect(this.table[37].props.children[0]).to.equal("2015-06-29T12:57:02.269Z");
+    expect(this.table[39].props.children[0])
+      .to.equal("2015-06-29T12:57:02.269Z");
   });
 
 });

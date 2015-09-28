@@ -19,7 +19,8 @@ var OptionalSettingsComponent = React.createClass({
       ports: "ports",
       uris: "uris",
       constraints: "constraints",
-      acceptedResourceRoles: "acceptedResourceRoles"
+      acceptedResourceRoles: "acceptedResourceRoles",
+      user: "user"
     })
   },
 
@@ -87,6 +88,14 @@ var OptionalSettingsComponent = React.createClass({
             label="Accepted Resource Roles"
             onChange={this.handleFieldUpdate}
             value={fields[fieldIds.acceptedResourceRoles]}>
+          <input />
+        </FormGroupComponent>
+        <FormGroupComponent
+            errorMessage={props.getErrorMessage(fieldIds.user)}
+            fieldId={fieldIds.user}
+            label="User"
+            onChange={this.handleFieldUpdate}
+            value={fields[fieldIds.user]}>
           <input />
         </FormGroupComponent>
       </div>

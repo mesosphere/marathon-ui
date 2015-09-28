@@ -7,6 +7,7 @@
 - \#2263 - UI doesn't expose roles
 - \#2194 - Handle Auth Errors in UI
 - \#2309 - Accepted resource roles schould be setable in the application form
+- \#2127 - Add optional field for "user" in app definition
 
 ### Changed
 - \#2105 - Refactor the application create/edit modal data handling
