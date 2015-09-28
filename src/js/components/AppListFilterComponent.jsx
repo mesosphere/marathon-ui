@@ -1,9 +1,12 @@
-var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppListFilterComponent = React.createClass({
   displayName: "AppListFilterComponent",
+
+  contextTypes: {
+    router: React.PropTypes.func
+  },
 
   propTypes: {
     onChange: React.PropTypes.func.isRequired
@@ -17,60 +20,64 @@ var AppListFilterComponent = React.createClass({
     };
   },
 
-  updateFilterText: function (event) {
+  componentDidMount: function () {
+    this.updateFilterText();
+  },
+
+  componentWillReceiveProps: function () {
+    this.updateFilterText();
+  },
+
+  setQueryParam: function (filterText) {
+    var router = this.context.router;
+
+    var queryParams = router.getCurrentQuery();
+
+    if (filterText != null && filterText !== "") {
+      Object.assign(queryParams, {
+        filterText: encodeURIComponent(filterText)
+      });
+    } else {
+      delete queryParams.filterText;
+    }
+
+    router.transitionTo(router.getCurrentPathname(), {}, queryParams);
+  },
+
+  updateFilterText: function () {
+    var router = this.context.router;
+    var filterText = router.getCurrentQuery().filterText;
+
+    if (filterText == null) {
+      filterText = "";
+    } else {
+      filterText = decodeURIComponent(filterText);
+    }
+
+    if (filterText !== this.state.filterText) {
+      this.setState({
+        filterText: filterText,
+        activated: filterText !== "" || this.state.focused
+      });
+      this.props.onChange(filterText);
+    }
+  },
+
+  handleClearFilterText: function () {
+    this.setQueryParam("");
+  },
+
+  handleFilterTextChange: function (event) {
     var filterText = event.target.value;
-    this.setState({
-      filterText: filterText,
-      activated: filterText !== "" || this.state.focused
-    }, this.fireChangeEvent);
+
+    this.setQueryParam(filterText);
   },
 
-  fireChangeEvent: _.debounce(function () {
-    this.props.onChange(this.state.filterText);
-  }, 100),
-
-  clearFilterText: function () {
-    this.setState({
-      filterText: "",
-      activated: false
-    });
-    this.props.onChange("");
-  },
-
-  getFilterBox: function () {
-    var state = this.state;
-
-    var filterBoxClassSet = classNames({
-      "input-group": true,
-      "filter-box": true,
-      "filter-box-activated": !!state.activated
-    });
-
-    var clearIconClassSet = classNames({
-      "icon ion-close-circled clickable filter-box-clear": true,
-      "hidden": this.state.filterText === ""
-    });
-
-    return (
-      <div className={filterBoxClassSet}>
-        <span className="input-group-addon search-icon-container"
-            ref="iconContainer">
-          <i className="icon ion-search"></i>
-        </span>
-        <input className="form-control"
-               type="text"
-               onChange={this.updateFilterText}
-               value={this.state.filterText}
-               placeholder="Filter list"
-               onFocus={this.focusInputGroup}
-               onBlur={this.blurInputGroup}
-               onKeyDown={this.handleKeyDown} />
-        <span className="input-group-addon" ref="clearContainer">
-          <i className={clearIconClassSet}
-             onClick={this.clearFilterText}></i>
-        </span>
-      </div>
-    );
+  handleKeyDown: function (event) {
+    if (event.key === "Escape") {
+      event.target.blur();
+      this.handleClearFilterText();
+    }
   },
 
   focusInputGroup: function () {
@@ -87,11 +94,39 @@ var AppListFilterComponent = React.createClass({
     });
   },
 
-  handleKeyDown: function (event) {
-    if (event.key === "Escape") {
-      event.target.blur();
-      this.clearFilterText();
-    }
+  getFilterBox: function () {
+    var state = this.state;
+
+    var filterBoxClassSet = classNames({
+      "input-group": true,
+      "filter-box": true,
+      "filter-box-activated": !!state.activated
+    });
+
+    var clearIconClassSet = classNames({
+      "icon ion-close-circled clickable filter-box-clear": true,
+      "hidden": state.filterText === ""
+    });
+
+    return (
+      <div className={filterBoxClassSet}>
+        <span className="input-group-addon search-icon-container">
+          <i className="icon ion-search"></i>
+        </span>
+        <input className="form-control"
+          onBlur={this.blurInputGroup}
+          onChange={this.handleFilterTextChange}
+          onFocus={this.focusInputGroup}
+          onKeyDown={this.handleKeyDown}
+          placeholder="Filter list"
+          type="text"
+          value={state.filterText} />
+        <span className="input-group-addon">
+          <i className={clearIconClassSet}
+            onClick={this.handleClearFilterText}></i>
+        </span>
+      </div>
+    );
   },
 
   render: function () {
