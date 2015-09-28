@@ -40,14 +40,19 @@ var AppListFilterComponent = React.createClass({
   getFilterBox: function () {
     var state = this.state;
 
-    var filterBoxClassSet = {
+    var filterBoxClassSet = classNames({
       "input-group": true,
       "filter-box": true,
       "filter-box-activated": !!state.activated
-    };
+    });
+
+    var clearIconClassSet = classNames({
+      "icon ion-close-circled clickable filter-box-clear": true,
+      "hidden": this.state.filterText === ""
+    });
 
     return (
-      <div className={classNames(filterBoxClassSet)}>
+      <div className={filterBoxClassSet}>
         <span className="input-group-addon search-icon-container"
             ref="iconContainer">
           <i className="icon ion-search"></i>
@@ -61,7 +66,7 @@ var AppListFilterComponent = React.createClass({
                onBlur={this.blurInputGroup}
                onKeyDown={this.handleKeyDown} />
         <span className="input-group-addon" ref="clearContainer">
-          <i className="icon ion-close-circled clickable filter-box-clear"
+          <i className={clearIconClassSet}
              onClick={this.clearFilterText}></i>
         </span>
       </div>
