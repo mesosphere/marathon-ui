@@ -16,6 +16,8 @@ var FormEvents = require("../../events/FormEvents");
 var ModalComponent = require("../../components/ModalComponent");
 var OptionalEnvironmentComponent =
   require("../../components/OptionalEnviromentComponent");
+var OptionalLabelsComponent =
+  require("../../components/OptionalLabelsComponent");
 var OptionalSettingsComponent =
   require("../../components/OptionalSettingsComponent");
 var FormGroupComponent =
@@ -298,6 +300,16 @@ var AppModalComponent = React.createClass({
                   errorIndices={state.errorIndices.env}
                   generalError={this.getErrorMessage("env")}
                   rows={state.fields.env} />
+              </CollapsiblePanelComponent>
+            </div>
+            <div className="row full-bleed">
+              <CollapsiblePanelComponent
+                  isOpen={this.fieldsHaveError({env: "labels"})}
+                  title="Labels">
+                <OptionalLabelsComponent
+                  errorIndices={state.errorIndices.labels}
+                  generalError={this.getErrorMessage("labels")}
+                  rows={state.fields.labels} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">

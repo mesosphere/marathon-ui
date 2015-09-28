@@ -40,6 +40,16 @@ const AppFormModelToFieldTransforms = {
         };
       });
   },
+  labels: (rows) => {
+    return Object.keys(rows)
+      .map((rowKey, i) => {
+        return {
+          key: rowKey,
+          value: rows[rowKey],
+          consecutiveKey: i
+        };
+      });
+  },
   ports: (ports) => ports
     .join(", "),
   uris: (uris) => uris

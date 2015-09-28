@@ -23,7 +23,8 @@ const duplicableRowFields = [
   "env",
   "dockerPortMappings",
   "dockerParameters",
-  "containerVolumes"
+  "containerVolumes",
+  "labels"
 ];
 
 /**
@@ -59,6 +60,7 @@ const validationRules = {
   "env": [AppFormValidators.env],
   "executor": [AppFormValidators.executor],
   "instances": [AppFormValidators.instances],
+  "labels": [AppFormValidators.labels],
   "mem": [AppFormValidators.mem],
   "ports": [AppFormValidators.ports]
 };
@@ -84,6 +86,7 @@ const resolveFieldIdToAppKeyMap = {
   instances: "instances",
   env: "env",
   executor: "executor",
+  labels: "labels",
   mem: "mem",
   ports: "ports",
   uris: "uris",
@@ -128,6 +131,7 @@ const responseAttributePathToFieldIdMap = {
   "/executor": "executor",
   "/instances": "instances",
   "/mem": "mem",
+  "/labels": "labels",
   "/ports": "ports",
   "/uris": "uris",
   "/user": "user"
@@ -204,8 +208,9 @@ function resolveResponseAttributePathToFieldId(attributePath) {
 }
 
 function populateFieldsFromModel(app, fields) {
-  // The env-object should be treated as an object itself, so it's excluded.
-  var paths = Util.detectObjectPaths(app, null, ["env"]);
+  // The env/labels-object should be treated as an object itself,
+  // so it's excluded.
+  var paths = Util.detectObjectPaths(app, null, ["env", "labels"]);
 
   paths.forEach((appKey) => {
     var fieldId = resolveAppKeyToFieldIdMap[appKey];

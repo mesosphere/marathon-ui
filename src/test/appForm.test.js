@@ -152,6 +152,55 @@ describe("App Form", function () {
 
       });
 
+      describe("the labels field", function () {
+
+        it("inserts a key-value pair", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.labels.L_KEY_1).to.equal("L_VALUE_1");
+            }, done);
+          });
+
+          FormActions.insert("labels", {key: "L_KEY_1", value: "L_VALUE_1"});
+        });
+
+        it("inserts another key-value pair", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.labels.L_KEY_1).to.equal("L_VALUE_1");
+              expect(AppFormStore.app.labels.L_KEY_2).to.equal("L_VALUE_2");
+            }, done);
+          });
+
+          FormActions.insert("labels", {key: "L_KEY_2", value: "L_VALUE_2"});
+        });
+
+        it("updates a key-value pair", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.labels.L_KEY_1).to.equal("L_VALUE_1A");
+            }, done);
+          });
+
+          FormActions.update("labels",
+            {key: "L_KEY_1", value: "L_VALUE_1A"},
+            0
+          );
+        });
+
+        it("deletes a key-value pair", function (done) {
+          AppFormStore.once(FormEvents.CHANGE, function () {
+            expectAsync(function () {
+              expect(AppFormStore.app.labels)
+                .to.not.have.property("L_VALUE_1A");
+            }, done);
+          });
+
+          FormActions.delete("labels", 0);
+        });
+
+      });
+
       describe("the mem field", function () {
 
         it("updates correctly", function (done) {

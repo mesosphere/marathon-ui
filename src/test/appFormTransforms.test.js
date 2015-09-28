@@ -204,6 +204,17 @@ describe("App Form Field to Model Transform", function () {
       expect(AppFormTransforms.FieldToModel.instances("4.5")).to.equal(4);
     });
 
+    it("labels to object with key-values", function () {
+      expect(AppFormTransforms.FieldToModel.labels([
+        {key: "key1", value: "value1", consecutiveKey: 0},
+        {key: "key2", value: "value2", consecutiveKey: 1},
+        {key: "", value: "", consecutiveKey: 2}
+      ])).to.deep.equal({
+        key1: "value1",
+        key2: "value2"
+      });
+    });
+
     it("mem to float", function () {
       expect(AppFormTransforms.FieldToModel.mem("128.64")).to.equal(128.64);
     });
@@ -326,6 +337,16 @@ describe("App Form Model To Field Transform", function () {
 
     it("env object to sorted array", function () {
       expect(AppFormTransforms.ModelToField.env({
+        key1: "value1",
+        key2: "value2"
+      })).to.deep.equal([
+        {key: "key1", value: "value1", consecutiveKey: 0},
+        {key: "key2", value: "value2", consecutiveKey: 1}
+      ]);
+    });
+
+    it("labels object to sorted array", function () {
+      expect(AppFormTransforms.ModelToField.labels({
         key1: "value1",
         key2: "value2"
       })).to.deep.equal([

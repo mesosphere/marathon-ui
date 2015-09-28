@@ -2,6 +2,8 @@
 ### Added
 - \#2244 - Ability to scale an application forcefully if there is a deployment
   running
+- \#1055 - Add app labels to UI
+  * Ability of modifing the app labels in the application modal form.
 - \#2283 - Expose the application labels field in the configuration tab
 - \#2284 - Expose the application dependencies field in the configuration tab
 - \#2263 - UI doesn't expose roles
