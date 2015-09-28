@@ -46,7 +46,9 @@ var AppListFilterComponent = React.createClass({
 
   updateFilterText: function () {
     var router = this.context.router;
-    var filterText = router.getCurrentQuery().filterText;
+    var queryParams = router.getCurrentQuery();
+    
+    var filterText = queryParams.filterText;
 
     if (filterText == null) {
       filterText = "";
