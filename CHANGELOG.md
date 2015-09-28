@@ -25,11 +25,14 @@
 ### Fixed
 - \#2157 - Row is off-centre if upper row is empty in lists
 - \#2266 - Link "Mesos details" is broken
-- \#2252 - Wrong task number in Debug Tab
 - \#1985 - Docker container settings dialog needs better error handling
 - \#2262 - Better error handling on application configuration change/creation
 - \#2270 - Overlapping text in Deployment view
 - \#2216 - Do not show (x) in keyword search input until user begins typing
+
+## 0.11.1 - 2015-09-28
+### Fixed
+- \#2252 - Wrong task number in Debug Tab
 
 ## 0.11.0 - 2015-09-02
 ### Added
