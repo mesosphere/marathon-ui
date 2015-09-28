@@ -979,6 +979,66 @@ fieldset[disabled] .btn-info.active {
         text-transform: uppercase;
         margin: @base-spacing-unit*2 0;
       }
+
+      ul.filters {
+        list-style: none;
+
+        .checkbox {
+          height: @base-spacing-unit*4;
+          margin: 0;
+          padding: 0;
+
+          input[type="checkbox"]{
+            margin: 0;
+            opacity: 0;
+            z-index: 1;
+          }
+
+          input[type="checkbox"]:checked + label::after {
+            color: #fff;
+            content: "\f383";
+            font-family: "Ionicons";
+            font-size: 12px;
+            line-height: @base-spacing-unit*2;
+            padding: 0 0 0 3px;
+          }
+
+          input[type="checkbox"]:checked + label::before {
+            background-color: @brand-primary;
+            border-color: @brand-primary;
+          }
+
+          input[type="checkbox"]:focus + label::before {
+            outline: none;
+          }
+
+          label {
+            display: inline-block;
+            margin: 0 0 0 @horizontal-spacing-unit*2;
+            position: relative;
+            vertical-align: middle;
+          }
+
+          label::after, label::before {
+            background-color: transparent;
+            border-radius: 2px;
+            bottom: 0;
+            display: inline-block;
+            height: @base-spacing-unit*2;
+            left: -@horizontal-spacing-unit*4;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            width: @base-spacing-unit*2;
+          }
+
+          label::before {
+            border: 1px solid @btn-default-text-color;
+            content: "";
+            transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+          }
+        }
+      }
     }
   }
 }
