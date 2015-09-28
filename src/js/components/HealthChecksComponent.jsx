@@ -181,7 +181,7 @@ var HealthChecksComponent = React.createClass({
       <div key={row.consecutiveKey} className={rowClassSet}>
         <button type="button" className="close"
           aria-hidden="true" onClick={handleRemoveRow}>&times;</button>
-        <h4>Health Check {i}</h4>
+        <h4>Health Check {i+1} - {row.protocol}</h4>
 
         <fieldset onChange={handleChange}>
 
