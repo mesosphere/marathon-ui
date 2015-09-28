@@ -107,7 +107,7 @@ describe("Dialog store", function () {
     });
 
     it("show sends correct default value", function (done) {
-      var id = DialogActions.prompt("test prompt", "test value");
+      DialogActions.prompt("test prompt", "test value");
 
       DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value) {
         expectAsync(function () {
