@@ -147,7 +147,7 @@ var HealthChecksComponent = React.createClass({
     return null;
   },
 
-  getRow: function (row, i, disableRemoveButton = false) {
+  getRow: function (row, i) {
     var fieldsetId = HealthChecksComponent.fieldIds.healthChecks;
     var error = this.getError(fieldsetId, row.consecutiveKey);
     var getErrorMessage = this.props.getErrorMessage;
@@ -179,6 +179,10 @@ var HealthChecksComponent = React.createClass({
 
     return (
       <div key={row.consecutiveKey} className={rowClassSet}>
+        <button type="button" className="close"
+          aria-hidden="true" onClick={handleRemoveRow}>&times;</button>
+        <h4>Health Check {i}</h4>
+
         <fieldset onChange={handleChange}>
 
           <div className="row">
@@ -306,18 +310,20 @@ var HealthChecksComponent = React.createClass({
             </div>
           </div>
 
-          <div className="row duplicable-row">
-            <div className="col-sm-4">
-              <DuplicableRowControls disableRemoveButton={disableRemoveButton}
-                handleAddRow={handleAddRow}
-                handleRemoveRow={handleRemoveRow} />
-            </div>
-          </div>
-
           <div className="row">
             <div className="col-sm-12">
               {error}
               <br />
+            </div>
+          </div>
+
+          <div className="row duplicable-row">
+            <div className="col-sm-4">
+              <button className="btn btn-default"
+                  type="button"
+                  onClick={handleAddRow}>
+                Add Health Check
+              </button>
             </div>
           </div>
 
@@ -334,7 +340,7 @@ var HealthChecksComponent = React.createClass({
     }
 
     return rows.map((row, i) => {
-      return this.getRow(row, i, false);
+      return this.getRow(row, i);
     });
   },
 
