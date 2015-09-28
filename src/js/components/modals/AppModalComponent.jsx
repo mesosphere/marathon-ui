@@ -314,7 +314,7 @@ var AppModalComponent = React.createClass({
                   rows={state.fields.labels} />
               </CollapsiblePanelComponent>
             </div>
-            <div className="row full-bleed">
+            <div className="row full-bleed reduced-padding">
               <CollapsiblePanelComponent
                   isOpen=
                     {this.fieldsHaveError(HealthChecksComponent.fieldIds)}

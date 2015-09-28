@@ -46,7 +46,7 @@ var CollapsiblePanelComponent = React.createClass({
   },
 
   render: function () {
-    var classes = classNames({
+    var classSet = classNames({
       "clickable panel-title": true,
       "open": this.state.isOpen
     });
@@ -55,7 +55,7 @@ var CollapsiblePanelComponent = React.createClass({
       <div className="panel panel-inverse collapsible-panel">
         <div className="panel-heading clickable"
           onClick={this.handleToggle}>
-          <div className={classes}>
+          <div className={classSet}>
             {this.props.title}
           </div>
         </div>
