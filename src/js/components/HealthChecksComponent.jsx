@@ -158,6 +158,7 @@ var HealthChecksComponent = React.createClass({
       this.handleRemoveRow.bind(null, fieldsetId, i);
 
     var rowClassSet = classNames({
+      "field-row": true,
       "has-error": !!error
     });
 
