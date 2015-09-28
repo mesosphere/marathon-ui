@@ -12,6 +12,15 @@
        url('fonts/SourceSansPro-Regular.otf.woff') format('woff');
 }
 
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: bold;
+  src: local('Source Sans Pro Bold'),
+  local('SourceSansPro-Bold'),
+  url('fonts/SourceSansPro-Bold.otf.woff') format('woff');
+}
+
 /* ==============
  * Base
  * ==============
@@ -967,6 +976,7 @@ fieldset[disabled] .btn-info.active {
         font-weight: bold;
         font-size: @font-size-h3;
         line-height: @base-spacing-unit*2;
+        text-transform: uppercase;
         margin: @base-spacing-unit*2 0;
       }
     }
