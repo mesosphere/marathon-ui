@@ -108,7 +108,7 @@ var DeploymentComponent = React.createClass({
             {model.currentActions.map(function (action) {
               let appId = encodeURIComponent(action.app);
               return (
-                <li key={action.app}>
+                <li key={action.app} className="overflow-ellipsis">
                   <Link to="app" params={{appId: appId}}>{action.app}</Link>
                 </li>
               );
