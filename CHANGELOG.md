@@ -1,3 +1,7 @@
+## 0.11.1 - 2015-09-28
+### Fixed
+- \#2252 - Wrong task number in Debug Tab
+
 ## 0.11.0 - 2015-09-02
 ### Added
 - \#1204 - Please add a search bar to the applications overview to filter the
