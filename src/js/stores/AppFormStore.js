@@ -20,10 +20,11 @@ const defaultFieldValues = Object.freeze({
 });
 
 const duplicableRowFields = [
-  "env",
+  "containerVolumes",
   "dockerPortMappings",
   "dockerParameters",
-  "containerVolumes",
+  "env",
+  "healthChecks",
   "labels"
 ];
 
@@ -59,6 +60,16 @@ const validationRules = {
   ],
   "env": [AppFormValidators.env],
   "executor": [AppFormValidators.executor],
+  "healthChecks": [
+    AppFormValidators.healthChecksProtocol,
+    AppFormValidators.healthChecksCommandNotEmpty,
+    AppFormValidators.healthChecksPathNotEmpty,
+    AppFormValidators.healthChecksPortIndex,
+    AppFormValidators.healthChecksGracePeriod,
+    AppFormValidators.healthChecksInterval,
+    AppFormValidators.healthChecksTimeout,
+    AppFormValidators.healthChecksMaxConsecutiveFailures
+  ],
   "instances": [AppFormValidators.instances],
   "labels": [AppFormValidators.labels],
   "mem": [AppFormValidators.mem],
@@ -83,6 +94,7 @@ const resolveFieldIdToAppKeyMap = {
   dockerParameters: "container.docker.parameters",
   dockerPortMappings: "container.docker.portMappings",
   dockerPrivileged: "container.docker.privileged",
+  healthChecks: "healthChecks",
   instances: "instances",
   env: "env",
   executor: "executor",
@@ -129,6 +141,20 @@ const responseAttributePathToFieldIdMap = {
   "/disk": "disk",
   "/env": "env",
   "/executor": "executor",
+  "/healthChecks({INDEX})/command/value":
+    "healthChecks.{INDEX}.command",
+  "/healthChecks({INDEX})/path":
+    "healthChecks.{INDEX}.path",
+  "/healthChecks({INDEX})/intervalSeconds":
+    "healthChecks.{INDEX}.intervalSeconds",
+  "/healthChecks({INDEX})/portIndex":
+    "healthChecks.{INDEX}.portIndex",
+  "/healthChecks({INDEX})/timeoutSeconds":
+    "healthChecks.{INDEX}.timeoutSeconds",
+  "/healthChecks({INDEX})/gracePeriodSeconds":
+    "healthChecks.{INDEX}.gracePeriodSeconds",
+  "/healthChecks({INDEX})/maxConsecutiveFailures":
+    "healthChecks.{INDEX}.maxConsecutiveFailures",
   "/instances": "instances",
   "/mem": "mem",
   "/labels": "labels",
@@ -149,7 +175,8 @@ const resolveAppKeyToFieldIdMap = {
   "container.docker.portMappings": "dockerPortMappings",
   "container.docker.parameters": "dockerParameters",
   "container.docker.privileged": "dockerPrivileged",
-  "container.volumes": "containerVolumes"
+  "container.volumes": "containerVolumes",
+  "healthChecks": "healthChecks"
 };
 
 function getValidationErrorIndex(fieldId, value) {

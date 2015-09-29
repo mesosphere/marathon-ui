@@ -13,6 +13,8 @@ var ContainerSettingsComponent =
   require("../../components/ContainerSettingsComponent");
 var FormActions = require("../../actions/FormActions");
 var FormEvents = require("../../events/FormEvents");
+var HealthChecksComponent =
+  require("../../components/HealthChecksComponent");
 var ModalComponent = require("../../components/ModalComponent");
 var OptionalEnvironmentComponent =
   require("../../components/OptionalEnviromentComponent");
@@ -315,6 +317,17 @@ var AppModalComponent = React.createClass({
                   errorIndices={state.errorIndices.labels}
                   generalError={this.getErrorMessage("labels")}
                   rows={state.fields.labels} />
+              </CollapsiblePanelComponent>
+            </div>
+            <div className="row full-bleed reduced-padding">
+              <CollapsiblePanelComponent
+                  isOpen=
+                    {this.fieldsHaveError(HealthChecksComponent.fieldIds)}
+                  title="Health checks">
+                <HealthChecksComponent
+                  errorIndices={state.errorIndices}
+                  fields={state.fields}
+                  getErrorMessage={this.getErrorMessage} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">

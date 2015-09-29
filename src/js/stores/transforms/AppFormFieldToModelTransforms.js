@@ -1,4 +1,8 @@
+var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
+
 const dockerRowSchemes = require("../dockerRowSchemes");
+const healthChecksRowScheme = require("../healthChecksRowScheme");
+
 var Util = require("../../helpers/Util");
 var lazy = require("lazy.js");
 
@@ -76,6 +80,43 @@ const AppFormFieldToModelTransforms = {
       }
       return memo;
     }, {});
+  },
+  healthChecks: (rows) => { return lazy(rows)
+    .map((row) => ensureObjectScheme(row, healthChecksRowScheme))
+    .compact()
+    .map((row) => {
+      if (row.protocol === HealthCheckProtocols.COMMAND) {
+        delete row.path;
+        delete row.portIndex;
+
+        row.command = {
+          value: row.command
+        };
+
+      } else if (row.protocol === HealthCheckProtocols.HTTP) {
+        delete row.command;
+        delete row.ignoreHttp1xx;
+      } else if (row.protocol === HealthCheckProtocols.TCP) {
+        delete row.command;
+        delete row.path;
+        delete row.ignoreHttp1xx;
+      }
+
+      ["gracePeriodSeconds",
+      "intervalSeconds",
+      "maxConsecutiveFailures",
+      "timeoutSeconds",
+      "portIndex"]
+        .forEach((key) => {
+          if (row[key] != null &&
+              !Util.isEmptyString(row[key].toString().trim())) {
+            row[key] = parseInt(row[key], 10);
+          }
+        });
+
+      return row;
+    })
+    .value();
   },
   instances: (value) => parseInt(value, 10),
   labels: (rows) => {

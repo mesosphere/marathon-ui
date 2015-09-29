@@ -18,8 +18,8 @@ const AppFormErrorMessages = {
     "Host Path must be a valid path",
     "Mode must not be empty"
   ],
-  cpus: ["CPUs must be a non-negative Number"],
-  disk: ["Disk Space must be a non-negative Number"],
+  cpus: ["CPUs must be a non-negative number"],
+  disk: ["Disk Space must be a non-negative number"],
   dockerImage: ["Image cannot  contain whitespaces"],
   dockerParameters: ["Key cannot be blank"],
   dockerPortMappings: [
@@ -30,6 +30,16 @@ const AppFormErrorMessages = {
   ],
   env: ["Key cannot be blank"],
   executor: ["Invalid executor format"],
+  healthChecks: [
+    "Incorrect protocol given",
+    "Command must not be emtpy",
+    "Path must not be emtpy",
+    "Port Index must be a non-negative number",
+    "Grace Period must be a non-negative number",
+    "Interval must be a non-negative number",
+    "Timeout must be a non-negative number",
+    "Maximal Consecutive Failures must be a non-negative number"
+  ],
   general: [
     "App creation unsuccessful. Check your app settings and try again.",
     "Unknown server error, could not create or apply app.",

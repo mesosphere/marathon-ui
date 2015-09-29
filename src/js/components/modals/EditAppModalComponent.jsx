@@ -73,7 +73,7 @@ var EditAppModalComponent = React.createClass({
 
   onRequestAppVersionError: function () {
     var props = this.props;
-    DialogActions.alert(`Could not fetch app '${props.appId}' version` +
+    DialogActions.alert(`Could not fetch app '${props.appId}' version ` +
       `for editing: ${props.appVersion}`);
     props.onDestroy();
   },

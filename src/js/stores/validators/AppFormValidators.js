@@ -1,4 +1,5 @@
 var Util = require("../../helpers/Util");
+var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
 var ValidConstraints = require("../../constants/ValidConstraints");
 
 function isValidPort(value) {
@@ -91,6 +92,44 @@ const AppFormValidators = {
   executor: (str) => Util.isString(str) &&
     (new RegExp("^(|\\/\\/cmd|\\/?[^\\/]+(\\/[^\\/]+)*)$"))
       .test(str),
+
+  healthChecksProtocol: (obj) => {
+    return !!Object.values(HealthCheckProtocols).find((protocol) => {
+      return protocol === obj.protocol;
+    });
+  },
+
+  healthChecksCommandNotEmpty: (obj) => {
+    return obj.protocol !== HealthCheckProtocols.COMMAND ||
+      !Util.isEmptyString(obj.command);
+  },
+
+  healthChecksPathNotEmpty: (obj) => {
+    return obj.protocol !== HealthCheckProtocols.HTTP ||
+      !Util.isEmptyString(obj.path);
+  },
+
+  healthChecksPortIndex: (obj) => {
+    return obj.protocol !== HealthCheckProtocols.HTTP &&
+        obj.protocol !== HealthCheckProtocols.TCP ||
+      !!obj.portIndex.toString().match(/^[0-9]+$/);
+  },
+
+  healthChecksGracePeriod: (obj) => {
+    return !!obj.gracePeriodSeconds.toString().match(/^[0-9]+$/);
+  },
+
+  healthChecksInterval: (obj) => {
+    return !!obj.intervalSeconds.toString().match(/^[0-9]+$/);
+  },
+
+  healthChecksTimeout: (obj) => {
+    return !!obj.timeoutSeconds.toString().match(/^[0-9]+$/);
+  },
+
+  healthChecksMaxConsecutiveFailures: (obj) => {
+    return !!obj.maxConsecutiveFailures.toString().match(/^[0-9]+$/);
+  },
 
   instances: (value) => !Util.isEmptyString(value) &&
     !!value.toString().match(/^[0-9]+$/),
