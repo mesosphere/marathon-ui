@@ -57,8 +57,8 @@ var TabPanesComponent = React.createClass({
                 className="btn btn-success">
                 Create
               </Link>
-              <div className="flex-row heading">
-                <h3>Status</h3>
+              <div className="flex-row">
+                <h3 className="small-caps">Status</h3>
                 <a href="#">Clear</a>
               </div>
               <ul className="list-group checked-list-box filters">
@@ -83,8 +83,8 @@ var TabPanesComponent = React.createClass({
                   <label htmlFor="filter-cb-5">Delayed</label>
                 </li>
               </ul>
-              <div className="flex-row heading">
-                <h3>Application Type</h3>
+              <div className="flex-row">
+                <h3 className="small-caps">Application Type</h3>
               </div>
               <ul className="list-group checked-list-box filters">
                 <li className="checkbox">
@@ -103,8 +103,8 @@ var TabPanesComponent = React.createClass({
                   <a href="#">Show more</a>
                 </li>
               </ul>
-              <div className="flex-row heading">
-                <h3>Label</h3>
+              <div className="flex-row">
+                <h3 className="small-caps">Label</h3>
               </div>
               <div className="dropdown">
                 <button className="btn btn-default dropdown-toggle"
@@ -149,8 +149,8 @@ var TabPanesComponent = React.createClass({
                   </li>
                 </ul>
               </div>
-              <div className="flex-row heading">
-                <h3>Resources</h3>
+              <div className="flex-row">
+                <h3 className="small-caps">Resources</h3>
               </div>
               <div className="range-input">
                 <p className="legend">CPU</p>
