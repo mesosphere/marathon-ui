@@ -40,6 +40,9 @@ const AppFormErrorMessages = {
   labels: ["Key cannot be blank"],
   mem: ["Memory must be a non-negative Number"],
   ports: ["Ports must be a comma-separated list of numbers"],
+  appLocked: ["Error: App is currently locked by one or more deployments. " +
+    "Pressing the button again will forcefully change and deploy " +
+    "the new configuration."],
 
   // Those are mappings to server side error messages
   "error.path.missing": ["Please provide a path"],

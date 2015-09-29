@@ -101,8 +101,7 @@ var AppModalComponent = React.createClass({
       this.onCreateApp();
     } else if (status === 409) {
       this.setState({
-        responseErrorMessages: {general: `Failed to change and deploy the new
-          configuration. Press the button again to force the operation.`},
+        responseErrorMessages: {general: AppFormErrorMessages.appLocked[0]},
           force: true
       });
     } else {
