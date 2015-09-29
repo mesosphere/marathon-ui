@@ -746,7 +746,7 @@ describe("App Form", function () {
         }, 409);
 
         var expectedMessage =
-          `${AppFormErrorMessages.getGeneralError("errorPrefix")} bad error`;
+          `${AppFormErrorMessages.getGeneralMessage("errorPrefix")} bad error`;
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
@@ -787,7 +787,7 @@ describe("App Form", function () {
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
             expect(AppFormStore.responseErrors.general)
-              .to.equal(AppFormErrorMessages.getGeneralError("appCreation"));
+              .to.equal(AppFormErrorMessages.getGeneralMessage("appCreation"));
           }, done);
         });
 
@@ -803,7 +803,7 @@ describe("App Form", function () {
           expectAsync(function () {
             expect(AppFormStore.responseErrors.general)
               .to.equal(
-                AppFormErrorMessages.getGeneralError("unknownServerError")
+                AppFormErrorMessages.getGeneralMessage("unknownServerError")
               );
           }, done);
         });
@@ -843,9 +843,9 @@ describe("App Form Error Messages", function () {
     });
   });
 
-  describe("#getGeneralError", function () {
+  describe("#getGeneralMessage", function () {
     it("returns correct message on given key", function () {
-      expect(AppFormErrorMessages.getGeneralError("unknownServerError"))
+      expect(AppFormErrorMessages.getGeneralMessage("unknownServerError"))
         .to.be.equal("Unknown server error, could not create or apply app.");
     });
   });

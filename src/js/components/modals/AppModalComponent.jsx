@@ -104,7 +104,7 @@ var AppModalComponent = React.createClass({
     } else if (status === 409) {
       this.setState({
         responseErrorMessages: {
-          general: AppFormErrorMessages.getGeneralError("appLocked")
+          general: AppFormErrorMessages.getGeneralMessage("appLocked")
         },
         force: true
       });

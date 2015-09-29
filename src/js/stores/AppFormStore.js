@@ -282,7 +282,7 @@ function deleteField(fields, fieldId, index) {
 function processResponseErrors(responseErrors, response, statusCode) {
   if (statusCode >= 500) {
     responseErrors.general =
-      AppFormErrorMessages.getGeneralError("unknownServerError");
+      AppFormErrorMessages.getGeneralMessage("unknownServerError");
 
   } else if (statusCode === 422 && response != null &&
       Util.isArray(response.errors)) {
@@ -301,14 +301,14 @@ function processResponseErrors(responseErrors, response, statusCode) {
       response.message != null) {
 
     responseErrors.general =
-      AppFormErrorMessages.getGeneralError("errorPrefix") + " " +
+      AppFormErrorMessages.getGeneralMessage("errorPrefix") + " " +
       response.message;
 
   } else if (statusCode === 401 && response != null &&
       response.message != null) {
 
     responseErrors.general =
-      AppFormErrorMessages.getGeneralError("unauthorizedAccess");
+      AppFormErrorMessages.getGeneralMessage("unauthorizedAccess");
 
   } else if (statusCode === 400 && response != null &&
       Util.isArray(response.details)) {
@@ -326,7 +326,7 @@ function processResponseErrors(responseErrors, response, statusCode) {
 
   } else if (statusCode >= 300) {
     responseErrors.general =
-      AppFormErrorMessages.getGeneralError("appCreation");
+      AppFormErrorMessages.getGeneralMessage("appCreation");
   }
 }
 

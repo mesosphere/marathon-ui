@@ -70,7 +70,7 @@ const AppFormErrorMessages = {
     return "Undefined error";
   },
 
-  getGeneralError: function (key) {
+  getGeneralMessage: function (key) {
     if (generalErrors[key] != null) {
       return generalErrors[key];
     }
