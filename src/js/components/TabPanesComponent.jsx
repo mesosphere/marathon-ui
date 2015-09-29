@@ -103,6 +103,49 @@ var TabPanesComponent = React.createClass({
                   <a href="#">Show more</a>
                 </li>
               </ul>
+              <div className="heading">
+                <h3>Label</h3>
+              </div>
+              <div className="dropdown">
+                <button className="btn btn-default dropdown-toggle"
+                  type="button"
+                  id="dropdownMenu1"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="true"
+                  onClick={() => {
+                    this.setState({
+                      expandedDropdown: !this.state.expandedDropdown
+                    });
+                  }}>
+                  Select
+                  <span className="caret"></span>
+                </button>
+                <ul className="dropdown-menu list-group checked-list-box filters"
+                  style={{
+                    display: this.state.expandedDropdown
+                      ? "block"
+                      : "none"
+                  }}
+                  aria-labelledby="dropdownMenu1">
+                  <li className="checkbox">
+                    <input type="checkbox" id="label-cb-1"/>
+                    <label htmlFor="label-cb-1">corgi:happy</label>
+                  </li>
+                  <li className="checkbox">
+                    <input type="checkbox" id="label-cb-2"/>
+                    <label htmlFor="label-cb-2">dachshund:psycho</label>
+                  </li>
+                  <li className="checkbox">
+                    <input type="checkbox" id="label-cb-3"/>
+                    <label htmlFor="label-cb-3">setter:majestic</label>
+                  </li>
+                  <li className="checkbox">
+                    <input type="checkbox" id="label-cb-4"/>
+                    <label htmlFor="label-cb-4">pitbull:overweight</label>
+                  </li>
+                </ul>
+              </div>
             </nav>
             <main>
               <div className="contextual-bar">
