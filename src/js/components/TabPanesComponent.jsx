@@ -99,6 +99,9 @@ var TabPanesComponent = React.createClass({
                   <input type="checkbox" id="filter-cb-8"/>
                   <label htmlFor="filter-cb-8">Cgroup</label>
                 </li>
+                <li className="show-more">
+                  <a href="#">Show more</a>
+                </li>
               </ul>
             </nav>
             <main>
