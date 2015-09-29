@@ -1119,12 +1119,24 @@ fieldset[disabled] .btn-info.active {
   border-radius: 2px;
 
   .checkbox {
-    padding: 0 @horizontal-spacing-unit;
+    padding: 0 @base-spacing-unit;
     border-bottom: 1px solid @dropdown-separator-color;
+
+    label {
+      color: @sidebar-heading-color;
+    }
   }
 
-  label {
-    color: @sidebar-heading-color;
+  .search {
+    padding: @horizontal-spacing-unit @base-spacing-unit;
+
+    input[type=text] {
+      color: @sidebar-heading-color;
+      padding: @horizontal-spacing-unit;
+      width: 100%;
+    }
   }
+
+
 }
 
