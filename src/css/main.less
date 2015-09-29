@@ -967,6 +967,7 @@ fieldset[disabled] .btn-info.active {
       width: @sidebar-width;
 
       .btn-success {
+        margin: 0 0 @base-spacing-unit 0;
         text-align: left;
         width: 100%;
       }
@@ -977,7 +978,7 @@ fieldset[disabled] .btn-info.active {
         font-size: @font-size-h3;
         line-height: @base-spacing-unit*2;
         text-transform: uppercase;
-        margin: @base-spacing-unit*2 0;
+        margin: @base-spacing-unit 0;
       }
 
       .filters {
@@ -988,6 +989,8 @@ fieldset[disabled] .btn-info.active {
 }
 
 .checkbox {
+  display: flex;
+  align-items: center;
   height: @base-spacing-unit*4;
   margin: 0;
   padding: 0;
