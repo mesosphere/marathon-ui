@@ -128,6 +128,9 @@ var TabPanesComponent = React.createClass({
                       : "none"
                   }}
                   aria-labelledby="dropdownMenu1">
+                  <li className="search">
+                    <input type="text" />
+                  </li>
                   <li className="checkbox">
                     <input type="checkbox" id="label-cb-1"/>
                     <label htmlFor="label-cb-1">corgi:happy</label>
