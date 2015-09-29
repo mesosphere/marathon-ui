@@ -57,7 +57,10 @@ var TabPanesComponent = React.createClass({
                 className="btn btn-success">
                 Create
               </Link>
-              <h3>Status</h3>
+              <div className="heading">
+                <h3>Status</h3>
+                <a href="#0">Clear</a>
+              </div>
               <ul className="list-group checked-list-box filters">
                 <li className="checkbox">
                   <input type="checkbox" id="filter-cb-1"/>
@@ -80,7 +83,9 @@ var TabPanesComponent = React.createClass({
                   <label htmlFor="filter-cb-5">Delayed</label>
                 </li>
               </ul>
-              <h3>Application Type</h3>
+              <div className="heading">
+                <h3>Application Type</h3>
+              </div>
               <ul className="list-group checked-list-box filters">
                 <li className="checkbox">
                   <input type="checkbox" id="filter-cb-6"/>
