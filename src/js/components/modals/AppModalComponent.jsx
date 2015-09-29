@@ -49,7 +49,8 @@ var AppModalComponent = React.createClass({
     return {
       fields: AppFormStore.fields,
       errorIndices: {},
-      responseErrorMessages: {}
+      responseErrorMessages: {},
+      force: false
     };
   },
 
@@ -98,7 +99,11 @@ var AppModalComponent = React.createClass({
     // All status below 300 are actually not an error
     if (status < 300) {
       this.onCreateApp();
-
+    } else if (status === 409) {
+      this.setState({
+        responseErrorMessages: {general: AppFormErrorMessages.appLocked[0]},
+          force: true
+      });
     } else {
       this.setState({
         responseErrorMessages: AppFormStore.responseErrors
@@ -131,7 +136,7 @@ var AppModalComponent = React.createClass({
       let app = AppFormStore.app;
 
       if (this.props.app != null) {
-        AppsActions.applySettingsOnApp(app.id, app, true);
+        AppsActions.applySettingsOnApp(app.id, app, true, this.state.force);
       } else {
         AppsActions.createApp(app);
       }

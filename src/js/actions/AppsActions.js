@@ -132,7 +132,8 @@ var AppsActions = {
         });
       });
   },
-  applySettingsOnApp: function (appId, settings, isEditing = false) {
+  applySettingsOnApp: function (appId, settings, isEditing = false,
+      force = false) {
     // Version key is not allowed and not needed on settings object
     var clonedSettings = Object.assign({}, settings);
     delete clonedSettings.version;
@@ -143,10 +144,15 @@ var AppsActions = {
       appId: appId
     });
 
+    var url = `${config.apiURL}v2/apps/${appId}`;
+    if (force) {
+      url = url + "?force=true";
+    }
+
     this.request({
       method: "PUT",
       data: clonedSettings,
-      url: `${config.apiURL}v2/apps/${appId}`
+      url: url
     })
       .success(function (app) {
         AppDispatcher.dispatch({
