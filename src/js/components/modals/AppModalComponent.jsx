@@ -306,9 +306,9 @@ var AppModalComponent = React.createClass({
                   isOpen={this.fieldsHaveError({env: "env"})}
                   title="Environment variables">
                 <OptionalEnvironmentComponent
-                  errorIndices={state.errorIndices.env}
-                  generalError={this.getErrorMessage("env")}
-                  rows={state.fields.env} />
+                  errorIndices={state.errorIndices}
+                  getErrorMessage={this.getErrorMessage}
+                  fields={state.fields} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed">
