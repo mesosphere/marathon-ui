@@ -3,7 +3,7 @@ var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
 var DeploymentEvents = require("../events/DeploymentEvents");
-var deploymentScheme = require("./deploymentScheme");
+var deploymentScheme = require("./schemes/deploymentScheme");
 
 function processDeployments(deployments) {
   return lazy(deployments).map(function (deployment) {
