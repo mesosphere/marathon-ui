@@ -1,6 +1,6 @@
 var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
 
-const dockerRowSchemes = require("../dockerRowSchemes");
+const dockerRowSchemes = require("../schemes/dockerRowSchemes");
 const healthChecksRowScheme = require("../healthChecksRowScheme");
 
 var Util = require("../../helpers/Util");
