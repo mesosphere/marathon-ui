@@ -176,7 +176,10 @@ var TabPanesComponent = React.createClass({
             <main>
               <div className="contextual-bar">
                 <div className="breadcrumbs">
-                  <h2>My Applications</h2>
+                  <a href="">My Applications</a>
+                  <a href="">Tiki Cocktails</a>
+                  <a href="">Piña Coladas</a>
+                  <a href="">Cherries</a>
                 </div>
                 <div className="app-list-controls">
                   <AppListFilterComponent onChange={this.updateFilterText}/>
