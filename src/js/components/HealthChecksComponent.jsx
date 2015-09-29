@@ -1,9 +1,7 @@
 var classNames = require("classnames");
 var React = require("react/addons");
-var Util = require("../helpers/Util");
 
-var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
-var FormActions = require("../actions/FormActions");
+var DuplicableRowsMixin = require("../mixins/DuplicableRowsMixin");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var HealthCheckProtocols = require("../constants/HealthCheckProtocols");
 
@@ -15,139 +13,40 @@ const numberInputAttributes = {
   type: "number"
 };
 
-const duplicableRowFieldIds = [
-  "healthChecks"
-];
-
 var HealthChecksComponent = React.createClass({
   displayName: "HealthChecksComponent",
 
+  mixins: [DuplicableRowsMixin],
+
+  duplicableRowsScheme: {
+    healthChecks: healthChecksRowScheme
+  },
+
   propTypes: {
-    errorIndices: React.PropTypes.object,
-    fields: React.PropTypes.object,
-    getErrorMessage: React.PropTypes.func
-  },
-
-  statics: {
-    fieldIds: Object.freeze({
-      healthChecks: "healthChecks"
-    })
-  },
-
-  getInitialState: function () {
-    return {
-      rows: this.getPopulatedRows()
-    };
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    this.setState({
-      rows: this.getPopulatedRows(nextProps.fields)
-    }, this.enforceMinRows);
-  },
-
-  componentWillMount: function () {
-    this.enforceMinRows();
-  },
-
-  populateInitialConsecutiveKeys: function (rows) {
-    if (rows == null) {
-      return null;
-    }
-
-    return rows.map(function (row) {
-      return Util.extendObject(row, {
-        consecutiveKey: row.consecutiveKey != null
-          ? row.consecutiveKey
-          : Util.getUniqueId()
-      });
-    });
-  },
-
-  getPopulatedRows: function (fields = this.props.fields) {
-    return duplicableRowFieldIds.reduce((memo, rowFieldId) => {
-      memo[rowFieldId] =
-        this.populateInitialConsecutiveKeys(fields[rowFieldId]);
-      return memo;
-    }, {});
-  },
-
-  enforceMinRows: function () {
-    var state = this.state;
-
-    duplicableRowFieldIds.forEach(function (fieldId) {
-      if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
-        FormActions.insert(fieldId,
-            Util.extendObject(healthChecksRowScheme, {
-          consecutiveKey: Util.getUniqueId()
-        }));
-      }
-    });
-  },
-
-  getDuplicableRowValues: function (rowFieldId, i) {
-    var findDOMNode = React.findDOMNode;
-    var refs = this.refs;
-    const row = {
-      consecutiveKey: this.state.rows[rowFieldId][i].consecutiveKey
-    };
-
-    return Object.keys(healthChecksRowScheme)
-      .reduce(function (memo, key) {
-        var input = findDOMNode(refs[`${key}${i}`]);
-        memo[key] = input.type !== "checkbox"
-          ? input.value
-          : input.checked;
-        return memo;
-      }, row);
+    getErrorMessage: React.PropTypes.func.isRequired
   },
 
   handleAddRow: function (fieldId, position, event) {
     event.target.blur();
     event.preventDefault();
-    FormActions.insert(fieldId, Util.extendObject(healthChecksRowScheme, {
-        consecutiveKey: Util.getUniqueId()
-      }),
-      position
-    );
+
+    this.addRow(fieldId, position);
   },
 
   handleChangeRow: function (fieldId, position) {
-    var row = this.getDuplicableRowValues(fieldId, position);
-    FormActions.update(fieldId, row, position);
-  },
-
-  handleFieldUpdate: function (fieldId, value) {
-    FormActions.update(fieldId, value);
+    this.updateRow(fieldId, position);
   },
 
   handleRemoveRow: function (fieldId, position, event) {
     event.target.blur();
     event.preventDefault();
-    var row = this.getDuplicableRowValues(fieldId, position);
 
-    FormActions.delete(fieldId, row, position);
-  },
-
-  getError: function (fieldId, consecutiveKey) {
-    var errorIndices = this.props.errorIndices[fieldId];
-    if (errorIndices != null) {
-      let errorIndex = errorIndices[consecutiveKey];
-      if (errorIndex != null) {
-        return (
-          <div className="help-block">
-            <strong>
-              {AppFormErrorMessages.getMessage(fieldId, errorIndex)}
-            </strong>
-          </div>
-        );
-      }
-    }
-    return null;
+    this.removeRow(fieldId, position);
   },
 
   getRow: function (row, i) {
-    var fieldsetId = HealthChecksComponent.fieldIds.healthChecks;
+    var fieldsetId = "healthChecks";
+
     var error = this.getError(fieldsetId, row.consecutiveKey);
     var getErrorMessage = this.props.getErrorMessage;
     var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
