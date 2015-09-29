@@ -56,12 +56,13 @@ dd {
 }
 
 a {
-  color: #00b482;
+  color: @link-color;
 }
 
 a:hover,
 a:focus {
-  color: #00da9d;
+  color: darken(@link-color, 20%);
+  text-decoration: none;
 }
 
 a,
