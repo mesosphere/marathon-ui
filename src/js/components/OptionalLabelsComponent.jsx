@@ -103,7 +103,7 @@ var OptionalLabelsComponent = React.createClass({
         return (
           <div className="help-block">
             <strong>
-              {AppFormErrorMessages.getMessage("labels", errorIndex)}
+              {AppFormErrorMessages.getFieldMessage("labels", errorIndex)}
             </strong>
           </div>
         );

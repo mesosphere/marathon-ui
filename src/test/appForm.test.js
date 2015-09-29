@@ -745,10 +745,13 @@ describe("App Form", function () {
           "message": "bad error"
         }, 409);
 
+        var expectedMessage =
+          `${AppFormErrorMessages.getGeneralError("errorPrefix")} bad error`;
+
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
             expect(AppFormStore.responseErrors.general)
-              .to.equal(`${AppFormErrorMessages.general[2]} bad error`);
+              .to.equal(expectedMessage);
           }, done);
         });
 
@@ -784,7 +787,7 @@ describe("App Form", function () {
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
             expect(AppFormStore.responseErrors.general)
-              .to.equal(AppFormErrorMessages.general[0]);
+              .to.equal(AppFormErrorMessages.getGeneralError("appCreation"));
           }, done);
         });
 
@@ -799,7 +802,9 @@ describe("App Form", function () {
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
             expect(AppFormStore.responseErrors.general)
-              .to.equal(AppFormErrorMessages.general[1]);
+              .to.equal(
+                AppFormErrorMessages.getGeneralError("unknownServerError")
+              );
           }, done);
         });
 
@@ -825,6 +830,33 @@ describe("App Form", function () {
 
     });
 
+  });
+
+});
+
+describe("App Form Error Messages", function () {
+
+  describe("#getFieldMessage", function () {
+    it("returns correct message on given fieldId and index", function () {
+      expect(AppFormErrorMessages.getFieldMessage("containerVolumes", 2))
+        .to.be.equal("Mode must not be empty");
+    });
+  });
+
+  describe("#getGeneralError", function () {
+    it("returns correct message on given key", function () {
+      expect(AppFormErrorMessages.getGeneralError("unknownServerError"))
+        .to.be.equal("Unknown server error, could not create or apply app.");
+    });
+  });
+
+  describe("#lookupServerResponseMessage", function () {
+    it("returns correct message on given server message", function () {
+      expect(
+        AppFormErrorMessages.lookupServerResponseMessage("error.path.missing")
+      )
+        .to.be.equal("Please provide a path");
+    });
   });
 
 });
