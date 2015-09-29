@@ -1,133 +1,43 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
-var Util = require("../helpers/Util");
-
-var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
-var FormActions = require("../actions/FormActions");
+var DuplicableRowsMixin = require("../mixins/DuplicableRowsMixin");
 var FormGroupComponent =
   require("../components/FormGroupComponent");
 
 var OptionalLabelsComponent = React.createClass({
   displayName: "OptionalLabelsComponent",
 
-  propTypes: {
-    errorIndices: React.PropTypes.array,
-    generalError: React.PropTypes.string,
-    rows: React.PropTypes.array
-  },
+  mixins: [DuplicableRowsMixin],
 
-  populateInitialConsecutiveKeys: function (rows) {
-    if (rows == null) {
-      return null;
+  duplicableRowsScheme: {
+    labels: {
+      key: "",
+      value: ""
     }
-
-    return rows.map(function (row) {
-      return {
-        key: row.key,
-        value: row.value,
-        consecutiveKey: row.consecutiveKey != null
-          ? row.consecutiveKey
-          : Util.getUniqueId()
-      };
-    });
-  },
-
-  getInitialState: function () {
-    return {
-      rows: this.populateInitialConsecutiveKeys(this.props.rows)
-    };
-  },
-
-  enforceMinRows: function () {
-    if (this.state.rows == null || this.state.rows.length === 0) {
-      FormActions.insert("labels", {
-        key: "",
-        value: "",
-        consecutiveKey: Util.getUniqueId()
-      });
-    }
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    this.setState({
-      rows: this.populateInitialConsecutiveKeys(nextProps.rows)
-    }, this.enforceMinRows);
-  },
-
-  componentWillMount: function () {
-    this.enforceMinRows();
-  },
-
-  getDuplicableRowValues: function (position) {
-    var findDOMNode = React.findDOMNode;
-    return {
-      key: findDOMNode(this.refs[`labelsKey${position}`]).value,
-      value: findDOMNode(this.refs[`labelsValue${position}`]).value,
-      consecutiveKey: this.state.rows[position].consecutiveKey
-    };
   },
 
   handleAddRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
 
-    FormActions.insert("labels", {
-        key: "",
-        value: "",
-        consecutiveKey: Util.getUniqueId()
-      },
-      position
-    );
+    this.addRow("labels", position);
   },
 
   handleRemoveRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
-    var row = this.getDuplicableRowValues(position);
 
-    FormActions.delete("labels", row, position);
+    this.removeRow("labels", position);
   },
 
   handleChange: function (position) {
-    var row = this.getDuplicableRowValues(position);
-    FormActions.update("labels", row, position);
-  },
-
-  getError: function (consecutiveKey) {
-    var errorIndices = this.props.errorIndices;
-    if (errorIndices != null) {
-      let errorIndex = errorIndices[consecutiveKey];
-      if (errorIndex != null) {
-        return (
-          <div className="help-block">
-            <strong>
-              {AppFormErrorMessages.getFieldMessage("labels", errorIndex)}
-            </strong>
-          </div>
-        );
-      }
-    }
-    return null;
-  },
-
-  getGeneralErrorBlock: function () {
-    var error = this.props.generalError;
-
-    if (error == null) {
-      return null;
-    }
-
-    return (
-      <p className="text-danger">
-        <strong>{error}</strong>
-      </p>
-    );
+    this.updateRow("labels", position);
   },
 
   getLabelRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError(row.consecutiveKey);
+    var error = this.getError("labels", row.consecutiveKey);
 
     var rowClassSet = classNames({
       "has-error": !!error,
@@ -144,7 +54,7 @@ var OptionalLabelsComponent = React.createClass({
               fieldId={`labels.key.${i}`}
               label="Key"
               value={row.key}>
-              <input ref={`labelsKey${i}`} />
+              <input ref={`key${i}`} />
             </FormGroupComponent>
           </div>
           <div className="col-sm-6">
@@ -152,7 +62,7 @@ var OptionalLabelsComponent = React.createClass({
               fieldId={`labels.value.${i}`}
               label="Value"
               value={row.value}>
-              <input ref={`labelsValue${i}`} />
+              <input ref={`value${i}`} />
             </FormGroupComponent>
             <DuplicableRowControls
               disableRemoveButton={disableRemoveButton}
@@ -166,15 +76,13 @@ var OptionalLabelsComponent = React.createClass({
   },
 
   getLabelRows: function () {
-    var rows = this.state.rows;
+    var rows = this.state.rows.labels;
 
     if (rows == null) {
       return null;
     }
 
-    let disableRemoveButton = (rows.length === 1 &&
-      Util.isEmptyString(rows[0].key) &&
-      Util.isEmptyString(rows[0].value));
+    let disableRemoveButton = this.hasOnlyOneSingleEmptyRow("labels");
 
     return rows.map((row, i) => {
       return this.getLabelRow(row, i, disableRemoveButton);
@@ -187,7 +95,7 @@ var OptionalLabelsComponent = React.createClass({
         <div className="duplicable-list">
           {this.getLabelRows()}
         </div>
-        {this.getGeneralErrorBlock()}
+        {this.getGeneralErrorBlock("labels")}
       </div>
     );
   }

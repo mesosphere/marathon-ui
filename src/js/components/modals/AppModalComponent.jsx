@@ -313,12 +313,12 @@ var AppModalComponent = React.createClass({
             </div>
             <div className="row full-bleed">
               <CollapsiblePanelComponent
-                  isOpen={this.fieldsHaveError({env: "labels"})}
+                  isOpen={this.fieldsHaveError({labels: "labels"})}
                   title="Labels">
                 <OptionalLabelsComponent
-                  errorIndices={state.errorIndices.labels}
-                  generalError={this.getErrorMessage("labels")}
-                  rows={state.fields.labels} />
+                  errorIndices={state.errorIndices}
+                  getErrorMessage={this.getErrorMessage}
+                  fields={state.fields} />
               </CollapsiblePanelComponent>
             </div>
             <div className="row full-bleed reduced-padding">
