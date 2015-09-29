@@ -3,7 +3,7 @@ var Util = require("../../helpers/Util");
 var ContainerConstants = require("../../constants/ContainerConstants");
 var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
 
-const healthChecksRowScheme = require("../healthChecksRowScheme");
+const healthChecksRowScheme = require("../schemes/healthChecksRowScheme");
 
 function hasOnlyEmptyValues(obj) {
   return Util.isObject(obj) &&

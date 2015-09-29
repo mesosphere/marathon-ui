@@ -1,4 +1,4 @@
-var HealthCheckProtocols = require("../constants/HealthCheckProtocols");
+var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
 
 const healthChecksRowScheme = {
   protocol: HealthCheckProtocols.HTTP,
