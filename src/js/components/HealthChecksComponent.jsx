@@ -3,7 +3,6 @@ var React = require("react/addons");
 var Util = require("../helpers/Util");
 
 var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
-var DuplicableRowControls = require("../components/DuplicableRowControls");
 var FormActions = require("../actions/FormActions");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var HealthCheckProtocols = require("../constants/HealthCheckProtocols");
@@ -181,10 +180,8 @@ var HealthChecksComponent = React.createClass({
       <div key={row.consecutiveKey} className={rowClassSet}>
         <button type="button" className="close"
           aria-hidden="true" onClick={handleRemoveRow}>&times;</button>
-        <h4>Health Check {i+1} - {row.protocol}</h4>
-
+        <h4>Health Check {i + 1} - {row.protocol}</h4>
         <fieldset onChange={handleChange}>
-
           <div className="row">
             <div className="col-sm-3">
               <FormGroupComponent
@@ -202,7 +199,6 @@ var HealthChecksComponent = React.createClass({
               </FormGroupComponent>
             </div>
           </div>
-
           <div className={pathClassSet}>
             <div className="col-sm-12">
               <FormGroupComponent
@@ -217,7 +213,6 @@ var HealthChecksComponent = React.createClass({
               </FormGroupComponent>
             </div>
           </div>
-
           <div className={commandClassSet}>
             <div className="col-sm-12">
               <FormGroupComponent
@@ -232,7 +227,6 @@ var HealthChecksComponent = React.createClass({
               </FormGroupComponent>
             </div>
           </div>
-
           <div className="row">
             <div className="col-sm-2">
               <FormGroupComponent
@@ -295,7 +289,6 @@ var HealthChecksComponent = React.createClass({
               </FormGroupComponent>
             </div>
           </div>
-
           <div className={pathClassSet}>
             <div className="col-sm-12">
               <FormGroupComponent className="checkbox-form-group"
@@ -309,14 +302,12 @@ var HealthChecksComponent = React.createClass({
               </FormGroupComponent>
             </div>
           </div>
-
           <div className="row">
             <div className="col-sm-12">
               {error}
               <br />
             </div>
           </div>
-
           <div className="row duplicable-row">
             <div className="col-sm-4">
               <button className="btn btn-default"
@@ -326,7 +317,6 @@ var HealthChecksComponent = React.createClass({
               </button>
             </div>
           </div>
-
         </fieldset>
       </div>
     );
