@@ -986,7 +986,7 @@ fieldset[disabled] .btn-info.active {
       padding: @base-spacing-unit*2;
       width: @sidebar-width;
 
-      .btn-success {
+      .btn-success, .dropdown-toggle, .dropdown-menu {
         margin: 0 0 @base-spacing-unit 0;
         text-align: left;
         width: 100%;
@@ -1104,6 +1104,27 @@ fieldset[disabled] .btn-info.active {
     border: 1px solid @btn-default-text-color;
     content: "";
     transition: border @transition-fast ease-in-out, color @transition-fast ease-in-out;
+  }
+}
+
+.dropdown-toggle {
+  align-items: center;
+  color: @link-color;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropdown-menu {
+  border-color: @dropdown-bg-color;
+  border-radius: 2px;
+
+  .checkbox {
+    padding: 0 @horizontal-spacing-unit;
+    border-bottom: 1px solid @dropdown-separator-color;
+  }
+
+  label {
+    color: @sidebar-heading-color;
   }
 }
 
