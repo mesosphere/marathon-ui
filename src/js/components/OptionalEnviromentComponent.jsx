@@ -103,7 +103,7 @@ var OptionalEnvironmentComponent = React.createClass({
         return (
           <div className="help-block">
             <strong>
-              {AppFormErrorMessages.getMessage("env", errorIndex)}
+              {AppFormErrorMessages.getFieldMessage("env", errorIndex)}
             </strong>
           </div>
         );

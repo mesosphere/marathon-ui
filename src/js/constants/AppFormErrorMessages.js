@@ -1,6 +1,6 @@
 const ValidConstraints = require("./ValidConstraints");
 
-const AppFormErrorMessages = {
+const applicationFieldValidationErrors = Object.freeze({
   appId: [
     "ID must not be empty",
     "Path must not contain whitespace",
@@ -40,32 +40,46 @@ const AppFormErrorMessages = {
     "Timeout must be a non-negative number",
     "Maximal Consecutive Failures must be a non-negative number"
   ],
-  general: [
-    "App creation unsuccessful. Check your app settings and try again.",
-    "Unknown server error, could not create or apply app.",
-    "Error:",
-    "App creation unsuccessful. Unauthorized access."
-  ],
   instances: ["Instances must be a non-negative Number"],
   labels: ["Key cannot be blank"],
   mem: ["Memory must be a non-negative Number"],
-  ports: ["Ports must be a comma-separated list of numbers"],
-  appLocked: ["Error: App is currently locked by one or more deployments. " +
+  ports: ["Ports must be a comma-separated list of numbers"]
+});
+
+const generalErrors = Object.freeze({
+  appCreation:
+    "App creation unsuccessful. Check your app settings and try again.",
+  appLocked: "App is currently locked by one or more deployments. " +
     "Pressing the button again will forcefully change and deploy " +
-    "the new configuration."],
+    "the new configuration.",
+  unknownServerError: "Unknown server error, could not create or apply app.",
+  unauthorizedAccess: "App creation unsuccessful. Unauthorized access.",
+  errorPrefix: "Error:"
+});
 
-  // Those are mappings to server side error messages
-  "error.path.missing": ["Please provide a path"],
+const serverResponseMappings = Object.freeze({
+  "error.path.missing": "Please provide a path"
+});
 
-  getMessage: function (fieldId, index = 0) {
-    if (this[fieldId] != null && this[fieldId][index] != null) {
-      return this[fieldId][index];
+const AppFormErrorMessages = {
+  getFieldMessage: function (fieldId, index = 0) {
+    if (applicationFieldValidationErrors[fieldId] != null &&
+        applicationFieldValidationErrors[fieldId][index] != null) {
+      return applicationFieldValidationErrors[fieldId][index];
+    }
+    return "Undefined error";
+  },
+
+  getGeneralMessage: function (key) {
+    if (generalErrors[key] != null) {
+      return generalErrors[key];
     }
     return "General error";
   },
+
   lookupServerResponseMessage: function (serverMessage) {
-    if (this[serverMessage] != null && this[serverMessage][0] != null) {
-      return this[serverMessage][0];
+    if (serverResponseMappings[serverMessage] != null) {
+      return serverResponseMappings[serverMessage];
     }
     return serverMessage;
   }

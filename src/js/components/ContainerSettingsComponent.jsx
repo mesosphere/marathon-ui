@@ -142,7 +142,7 @@ var ContainerSettingsComponent = React.createClass({
         return (
           <div className="help-block">
             <strong>
-              {AppFormErrorMessages.getMessage(fieldId, errorIndex)}
+              {AppFormErrorMessages.getFieldMessage(fieldId, errorIndex)}
             </strong>
           </div>
         );

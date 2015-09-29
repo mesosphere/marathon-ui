@@ -103,8 +103,10 @@ var AppModalComponent = React.createClass({
       this.onCreateApp();
     } else if (status === 409) {
       this.setState({
-        responseErrorMessages: {general: AppFormErrorMessages.appLocked[0]},
-          force: true
+        responseErrorMessages: {
+          general: AppFormErrorMessages.getGeneralMessage("appLocked")
+        },
+        force: true
       });
     } else {
       this.setState({
@@ -149,7 +151,7 @@ var AppModalComponent = React.createClass({
     var state = this.state;
     var errorIndex = state.errorIndices[fieldId];
     if (errorIndex != null && !Util.isArray(errorIndex)) {
-      return AppFormErrorMessages.getMessage(fieldId, errorIndex);
+      return AppFormErrorMessages.getFieldMessage(fieldId, errorIndex);
     }
     if (state.responseErrorMessages[fieldId] != null) {
       return state.responseErrorMessages[fieldId];
