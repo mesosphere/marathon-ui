@@ -121,7 +121,7 @@ var TabPanesComponent = React.createClass({
                   Select
                   <span className="caret"></span>
                 </button>
-                <ul className="dropdown-menu list-group checked-list-box filters"
+                <ul className="dropdown-menu list-group filters"
                   style={{
                     display: this.state.expandedDropdown
                       ? "block"
