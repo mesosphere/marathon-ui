@@ -324,7 +324,7 @@ var AppModalComponent = React.createClass({
             <div className="row full-bleed reduced-padding">
               <CollapsiblePanelComponent
                   isOpen=
-                    {this.fieldsHaveError(HealthChecksComponent.fieldIds)}
+                    {this.fieldsHaveError({healthChecks: "healthChecks"})}
                   title="Health checks">
                 <HealthChecksComponent
                   errorIndices={state.errorIndices}
