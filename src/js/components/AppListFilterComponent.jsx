@@ -65,12 +65,6 @@ var AppListFilterComponent = React.createClass({
       filterText = decodeURIComponent(filterText);
     }
 
-    var filterBoxClassSet = {
-      "input-group": true,
-      "filter-box": true,
-      "filter-box-activated": !!state.activated
-    };
-
     if (filterText !== this.state.filterText) {
       this.setState({
         filterText: filterText,
