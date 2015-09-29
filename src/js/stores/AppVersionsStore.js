@@ -2,7 +2,7 @@ var EventEmitter = require("events").EventEmitter;
 var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
-var appScheme = require("../stores/appScheme");
+var appScheme = require("../stores/schemes/appScheme");
 var AppVersionsEvents = require("../events/AppVersionsEvents");
 
 function processAppVersion(appVersion) {
