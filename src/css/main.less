@@ -974,9 +974,6 @@ fieldset[disabled] .btn-info.active {
       }
 
       .heading {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
 
         h3 {
           color: @sidebar-heading-color;
@@ -986,40 +983,16 @@ fieldset[disabled] .btn-info.active {
           text-transform: uppercase;
           margin: @base-spacing-unit 0;
         }
-
-        .show-more {
-          align-items: center;
-          display: flex;
-          height: @base-spacing-unit*4;
-          margin: 0;
-          padding: 0;
-
-          a {
-            display: inline-block;
-            margin: 0 0 0 @horizontal-spacing-unit*4;
-            padding: 0;
-            position: relative;
-            vertical-align: middle;
-          }
-
-          a::before {
-            background-color: transparent;
-            border-radius: 2px;
-            content: "\f217";
-            display: inline-block;
-            font-family: "Ionicons";
-            height: @base-spacing-unit*2;
-            left: -@horizontal-spacing-unit*4;
-            position: absolute;
-            text-align: center;
-            top: 0;
-            width: @base-spacing-unit*2;
-          }
-        }
       }
 
       .filters {
         list-style: none;
+      }
+
+      .flex-row {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
       }
     }
   }
@@ -1110,7 +1083,6 @@ fieldset[disabled] .btn-info.active {
         color: @sidebar-heading-color;
       }
     }
-  }
 
     .search {
       padding: @horizontal-spacing-unit @base-spacing-unit;
@@ -1124,6 +1096,46 @@ fieldset[disabled] .btn-info.active {
   }
 }
 
+.show-more {
+  height: @base-spacing-unit*4;
+  margin: 0;
+  padding: 0;
 
+  a {
+    display: inline-block;
+    margin: 0 0 0 @horizontal-spacing-unit*4;
+    padding: 0;
+    position: relative;
+    vertical-align: middle;
+  }
+
+  a::before {
+    background-color: transparent;
+    border-radius: 2px;
+    content: "\f217";
+    display: inline-block;
+    font-family: "Ionicons";
+    height: @base-spacing-unit*2;
+    left: -@horizontal-spacing-unit*4;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: @base-spacing-unit*2;
+  }
 }
 
+.range-input {
+  margin: 0 0 @base-spacing-unit 0;
+
+  input[type=text] {
+    background-color: transparent;
+    width: @base-spacing-unit*8;
+  }
+
+  .legend {
+    color: @sidebar-heading-color;
+    line-height: @base-spacing-unit*4;
+    margin: 0;
+    padding: 0;
+  }
+}
