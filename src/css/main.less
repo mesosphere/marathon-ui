@@ -992,13 +992,49 @@ fieldset[disabled] .btn-info.active {
         width: 100%;
       }
 
-      h3 {
-        color: @sidebar-heading-color;
-        font-weight: bold;
-        font-size: @font-size-h3;
-        line-height: @base-spacing-unit*2;
-        text-transform: uppercase;
-        margin: @base-spacing-unit 0;
+      .heading {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+
+        h3 {
+          color: @sidebar-heading-color;
+          font-weight: bold;
+          font-size: @font-size-h3;
+          line-height: @base-spacing-unit*2;
+          text-transform: uppercase;
+          margin: @base-spacing-unit 0;
+        }
+
+        .show-more {
+          align-items: center;
+          display: flex;
+          height: @base-spacing-unit*4;
+          margin: 0;
+          padding: 0;
+
+          a {
+            display: inline-block;
+            margin: 0 0 0 @horizontal-spacing-unit*4;
+            padding: 0;
+            position: relative;
+            vertical-align: middle;
+          }
+
+          a::before {
+            background-color: transparent;
+            border-radius: 2px;
+            content: "\f217";
+            display: inline-block;
+            font-family: "Ionicons";
+            height: @base-spacing-unit*2;
+            left: -@horizontal-spacing-unit*4;
+            position: absolute;
+            text-align: center;
+            top: 0;
+            width: @base-spacing-unit*2;
+          }
+        }
       }
 
       .filters {
