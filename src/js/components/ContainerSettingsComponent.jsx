@@ -1,10 +1,9 @@
 var classNames = require("classnames");
 var React = require("react/addons");
-var Util = require("../helpers/Util");
 
-var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
 var ContainerConstants = require("../constants/ContainerConstants");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
+var DuplicableRowsMixin = require("../mixins/DuplicableRowsMixin");
 var dockerRowSchemes = require("../stores/dockerRowSchemes");
 var FormActions = require("../actions/FormActions");
 var FormGroupComponent = require("../components/FormGroupComponent");
@@ -16,20 +15,12 @@ const portInputAttributes = {
   type: "number"
 };
 
-const duplicableRowFieldIds = [
-  "dockerPortMappings",
-  "dockerParameters",
-  "containerVolumes"
-];
-
 var ContainerSettingsComponent = React.createClass({
   displayName: "ContainerSettingsComponent",
 
-  propTypes: {
-    errorIndices: React.PropTypes.object,
-    fields: React.PropTypes.object,
-    getErrorMessage: React.PropTypes.func
-  },
+  mixins: [DuplicableRowsMixin],
+
+  duplicableRowsScheme: dockerRowSchemes,
 
   statics: {
     fieldIds: Object.freeze({
@@ -42,113 +33,31 @@ var ContainerSettingsComponent = React.createClass({
     })
   },
 
-  getInitialState: function () {
-    return {
-      rows: this.getPopulatedRows()
-    };
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    this.setState({
-      rows: this.getPopulatedRows(nextProps.fields)
-    }, this.enforceMinRows);
-  },
-
-  componentWillMount: function () {
-    this.enforceMinRows();
-  },
-
-  populateInitialConsecutiveKeys: function (rows) {
-    if (rows == null) {
-      return null;
-    }
-
-    return rows.map(function (row) {
-      return Util.extendObject(row, {
-        consecutiveKey: row.consecutiveKey != null
-          ? row.consecutiveKey
-          : Util.getUniqueId()
-      });
-    });
-  },
-
-  getPopulatedRows: function (fields = this.props.fields) {
-    return duplicableRowFieldIds.reduce((memo, rowFieldId) => {
-      memo[rowFieldId] =
-        this.populateInitialConsecutiveKeys(fields[rowFieldId]);
-      return memo;
-    }, {});
-  },
-
-  enforceMinRows: function () {
-    var state = this.state;
-
-    duplicableRowFieldIds.forEach(function (fieldId) {
-      if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
-        FormActions.insert(fieldId,
-            Util.extendObject(dockerRowSchemes[fieldId], {
-          consecutiveKey: Util.getUniqueId()
-        }));
-      }
-    });
-  },
-
-  getDuplicableRowValues: function (rowFieldId, i) {
-    var findDOMNode = React.findDOMNode;
-    var refs = this.refs;
-    const row = {
-      consecutiveKey: this.state.rows[rowFieldId][i].consecutiveKey
-    };
-
-    return Object.keys(dockerRowSchemes[rowFieldId])
-      .reduce(function (memo, key) {
-        memo[key] = findDOMNode(refs[`${key}${i}`]).value;
-        return memo;
-      }, row);
+  propTypes: {
+    fields: React.PropTypes.object.isRequired,
+    getErrorMessage: React.PropTypes.func.isRequired
   },
 
   handleAddRow: function (fieldId, position, event) {
     event.target.blur();
     event.preventDefault();
-    FormActions.insert(fieldId, Util.extendObject(dockerRowSchemes[fieldId], {
-        consecutiveKey: Util.getUniqueId()
-      }),
-      position
-    );
+
+    this.addRow(fieldId, position);
   },
 
   handleChangeRow: function (fieldId, position) {
-    var row = this.getDuplicableRowValues(fieldId, position);
-    FormActions.update(fieldId, row, position);
-  },
-
-  handleFieldUpdate: function (fieldId, value) {
-    FormActions.update(fieldId, value);
+    this.updateRow(fieldId, position);
   },
 
   handleRemoveRow: function (fieldId, position, event) {
     event.target.blur();
     event.preventDefault();
-    var row = this.getDuplicableRowValues(fieldId, position);
 
-    FormActions.delete(fieldId, row, position);
+    this.removeRow(fieldId, position);
   },
 
-  getError: function (fieldId, consecutiveKey) {
-    var errorIndices = this.props.errorIndices[fieldId];
-    if (errorIndices != null) {
-      let errorIndex = errorIndices[consecutiveKey];
-      if (errorIndex != null) {
-        return (
-          <div className="help-block">
-            <strong>
-              {AppFormErrorMessages.getFieldMessage(fieldId, errorIndex)}
-            </strong>
-          </div>
-        );
-      }
-    }
-    return null;
+  handleSingleFieldUpdate: function (fieldId, value) {
+    FormActions.update(fieldId, value);
   },
 
   getPortMappingRow: function (row, i, disableRemoveButton = false) {
@@ -246,11 +155,8 @@ var ContainerSettingsComponent = React.createClass({
       );
     }
 
-    var disableRemoveButton = (rows.length === 1 &&
-      Util.isEmptyString(rows[0].containerPort) &&
-      Util.isEmptyString(rows[0].hostPort) &&
-      Util.isEmptyString(rows[0].servicePort) &&
-      (rows[0].protocol == null || Util.isEmptyString(rows[0].protocol)));
+    let disableRemoveButton =
+      this.hasOnlyOneSingleEmptyRow("dockerPortMappings");
 
     return rows.map((row, i) => {
       return this.getPortMappingRow(row, i, disableRemoveButton);
@@ -308,9 +214,7 @@ var ContainerSettingsComponent = React.createClass({
       return null;
     }
 
-    var disableRemoveButton = (rows.length === 1 &&
-      Util.isEmptyString(rows[0].key) &&
-      Util.isEmptyString(rows[0].value));
+    let disableRemoveButton = this.hasOnlyOneSingleEmptyRow("dockerParameters");
 
     return rows.map((row, i) => {
       return this.getParametersRow(row, i, disableRemoveButton);
@@ -388,10 +292,7 @@ var ContainerSettingsComponent = React.createClass({
       return null;
     }
 
-    var disableRemoveButton = (rows.length === 1 &&
-      Util.isEmptyString(rows[0].containerPath) &&
-      Util.isEmptyString(rows[0].hostPath) &&
-      (rows[0].mode == null || Util.isEmptyString(rows[0].mode)));
+    let disableRemoveButton = this.hasOnlyOneSingleEmptyRow("containerVolumes");
 
     return rows.map((row, i) => {
       return this.getVolumesRow(row, i, disableRemoveButton);
@@ -411,7 +312,7 @@ var ContainerSettingsComponent = React.createClass({
               fieldId={fieldIds.dockerImage}
               label="Image"
               value={props.fields[fieldIds.dockerImage]}
-              onChange={this.handleFieldUpdate}>
+              onChange={this.handleSingleFieldUpdate}>
               <input />
             </FormGroupComponent>
           </div>
@@ -421,7 +322,7 @@ var ContainerSettingsComponent = React.createClass({
               fieldId={fieldIds.dockerNetwork}
               label="Network"
               value={props.fields[fieldIds.dockerNetwork]}
-              onChange={this.handleFieldUpdate}>
+              onChange={this.handleSingleFieldUpdate}>
               <select defaultValue="">
                 <option value="">Select</option>
                 <option value={ContainerConstants.NETWORK.HOST}>
@@ -441,7 +342,7 @@ var ContainerSettingsComponent = React.createClass({
           help="Select to give this container access to all devices on the host"
           label="Extend runtime privileges to this container"
           value={props.fields[fieldIds.dockerPrivileged]}
-          onChange={this.handleFieldUpdate}>
+          onChange={this.handleSingleFieldUpdate}>
           <input type="checkbox" />
         </FormGroupComponent>
         <h4>Port Mappings</h4>
