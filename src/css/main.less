@@ -1107,35 +1107,41 @@ fieldset[disabled] .btn-info.active {
   }
 }
 
-.dropdown-toggle {
-  align-items: center;
-  color: @link-color;
-  display: flex;
-  justify-content: space-between;
+.dropdown {
+  margin: 0 0 @base-spacing-unit*2 0;
+
+  .dropdown-toggle {
+    align-items: center;
+    color: @link-color;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .dropdown-menu {
+    border-color: @dropdown-bg-color;
+    border-radius: 2px;
+
+    .checkbox {
+      padding: 0 @base-spacing-unit;
+      border-bottom: 1px solid @dropdown-separator-color;
+
+      label {
+        color: @sidebar-heading-color;
+      }
+    }
+  }
+
+    .search {
+      padding: @horizontal-spacing-unit @base-spacing-unit;
+
+      input[type=text] {
+        color: @sidebar-heading-color;
+        padding: @horizontal-spacing-unit;
+        width: 100%;
+      }
+    }
+  }
 }
-
-.dropdown-menu {
-  border-color: @dropdown-bg-color;
-  border-radius: 2px;
-
-  .checkbox {
-    padding: 0 @base-spacing-unit;
-    border-bottom: 1px solid @dropdown-separator-color;
-
-    label {
-      color: @sidebar-heading-color;
-    }
-  }
-
-  .search {
-    padding: @horizontal-spacing-unit @base-spacing-unit;
-
-    input[type=text] {
-      color: @sidebar-heading-color;
-      padding: @horizontal-spacing-unit;
-      width: 100%;
-    }
-  }
 
 
 }
