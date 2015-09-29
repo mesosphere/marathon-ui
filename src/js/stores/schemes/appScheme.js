@@ -1,4 +1,4 @@
-var AppStatus = require("../constants/AppStatus");
+var AppStatus = require("../../constants/AppStatus");
 
 var appScheme = {
   cmd: null,

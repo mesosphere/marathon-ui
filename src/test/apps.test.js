@@ -1,7 +1,7 @@
 var _ = require("underscore");
 var expect = require("chai").expect;
 var React = require("react/addons");
-var ReactContext = require('react/lib/ReactContext');
+var ReactContext = require("react/lib/ReactContext");
 var TestUtils = React.addons.TestUtils;
 var Util = require("../js/helpers/Util");
 
@@ -22,7 +22,7 @@ var AppComponent = require("../js/components/AppComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
 var AppStatusComponent = require("../js/components/AppStatusComponent");
-var appScheme = require("../js/stores/appScheme");
+var appScheme = require("../js/stores/schemes/appScheme");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
 var AppStatus = require("../js/constants/AppStatus");
