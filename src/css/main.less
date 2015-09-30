@@ -162,17 +162,6 @@ a,
   color: #ff7d64;
 }
 
-.breadcrumb {
-  margin-top: -20px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  background-color: #2a2d2f;
-}
-
-.breadcrumb > li + li:before {
-  content:"\0FF1E";
-}
-
 .table > thead > tr > th,
 .table > tbody > tr > th,
 .table > tfoot > tr > th,
@@ -965,40 +954,6 @@ fieldset[disabled] .btn-info.active {
             margin-left: @base-spacing-unit*2;
           }
         }
-
-        .breadcrumbs {
-          color: @breadcrumb-text-color;
-          display: flex;
-          flex: 1;
-          margin: 0;
-          padding: 0;
-
-          a {
-            font-size: @font-size-h2;
-            margin: 0 @horizontal-spacing-unit 0 0;
-            padding: 0;
-
-            &::after {
-              color: darken(@link-color, 40%);
-              content: "\f125";
-              cursor: default;
-              font-family: "Ionicons";
-              font-size: @small-font-size;
-              height: @base-spacing-unit*2;
-              margin: 0 0 0 @base-spacing-unit;
-              width: @base-spacing-unit*2;
-            }
-
-            &:last-child {
-              color: darken(@link-color, 40%);
-              cursor: default;
-
-              &::after {
-                opacity: 0;
-              }
-            }
-          }
-        }
       }
     }
 
@@ -1023,6 +978,56 @@ fieldset[disabled] .btn-info.active {
         align-items: center;
         display: flex;
         justify-content: space-between;
+      }
+    }
+  }
+}
+
+.breadcrumb {
+  background-color: transparent;
+  color: @breadcrumb-text-color;
+  display: flex;
+  flex: 1;
+  font-size: @font-size-h2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin: 0 @horizontal-spacing-unit 0 0;
+
+    + li::before {
+      display: none; /* override Bootstrap */
+    }
+
+    &::after {
+      color: darken(@link-color, 40%);
+      content: "\f125";
+      cursor: default;
+      font-family: "Ionicons";
+      font-size: @small-font-size;
+      height: @base-spacing-unit*2;
+      margin: 0 0 0 @base-spacing-unit;
+      width: @base-spacing-unit*2;
+    }
+
+    &:last-child {
+      &::after {
+        opacity: 0;
+      }
+
+      a {
+        color: darken(@link-color, 40%);
+        cursor: default;
+      }
+    }
+
+    a {
+      color: @link-color;
+      padding: 0;
+
+      &:hover {
+        color: darken(@link-color, 40%);
       }
     }
   }
