@@ -82,6 +82,8 @@ var Util = {
         this.deepFreeze(value);
       });
     }
+
+    return obj;
   }
 };
 
