@@ -1,4 +1,4 @@
-var deploymentScheme = {
+const deploymentScheme = {
   affectedApps: [],
   currentStep: null,
   currentActions: [],
@@ -8,4 +8,4 @@ var deploymentScheme = {
   version: null
 };
 
-module.exports = deploymentScheme;
+module.exports = Object.freeze(deploymentScheme);

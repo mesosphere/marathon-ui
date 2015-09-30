@@ -1,6 +1,6 @@
-var queueScheme = {
+const queueScheme = {
   app: {},
   delay: {}
 };
 
-module.exports = queueScheme;
+module.exports = Object.freeze(queueScheme);

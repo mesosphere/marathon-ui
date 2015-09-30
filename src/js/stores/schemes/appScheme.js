@@ -1,6 +1,6 @@
 var AppStatus = require("../../constants/AppStatus");
 
-var appScheme = {
+const appScheme = {
   cmd: null,
   constraints: [],
   acceptedResourceRoles: [],
@@ -28,4 +28,4 @@ var appScheme = {
   taskStats: {}
 };
 
-module.exports = appScheme;
+module.exports = Object.freeze(appScheme);
