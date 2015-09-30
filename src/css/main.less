@@ -350,7 +350,7 @@ fieldset[disabled] .btn-info.active {
 }
 
 .navbar-inverse .navbar-nav > li > a {
-  color: #8e929b;
+  color: darken(@link-color, 40%);
 }
 
 .navbar-inverse .navbar-nav > .active > a,
@@ -968,12 +968,35 @@ fieldset[disabled] .btn-info.active {
 
         .breadcrumbs {
           color: @breadcrumb-text-color;
+          display: flex;
           flex: 1;
+          margin: 0;
+          padding: 0;
 
-          h2 {
-            margin: 0;
-            padding: 0;
+          a {
             font-size: @font-size-h2;
+            margin: 0 @horizontal-spacing-unit 0 0;
+            padding: 0;
+
+            &::after {
+              color: darken(@link-color, 40%);
+              content: "\f125";
+              cursor: default;
+              font-family: "Ionicons";
+              font-size: @small-font-size;
+              height: @base-spacing-unit*2;
+              margin: 0 0 0 @base-spacing-unit;
+              width: @base-spacing-unit*2;
+            }
+
+            &:last-child {
+              color: darken(@link-color, 40%);
+              cursor: default;
+
+              &::after {
+                opacity: 0;
+              }
+            }
           }
         }
       }
