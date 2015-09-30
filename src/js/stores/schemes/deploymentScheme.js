@@ -1,3 +1,5 @@
+var Util = require("../../helpers/Util");
+
 const deploymentScheme = {
   affectedApps: [],
   currentStep: null,
@@ -8,4 +10,4 @@ const deploymentScheme = {
   version: null
 };
 
-module.exports = Object.freeze(deploymentScheme);
+module.exports = Util.deepFreeze(deploymentScheme);
