@@ -175,12 +175,12 @@ var TabPanesComponent = React.createClass({
             </nav>
             <main>
               <div className="contextual-bar">
-                <div className="breadcrumbs">
-                  <a href="">My Applications</a>
-                  <a href="">Tiki Cocktails</a>
-                  <a href="">Piña Coladas</a>
-                  <a href="">Cherries</a>
-                </div>
+                <ol className="breadcrumb">
+                  <li><a href="#">My Applications</a></li>
+                  <li><a href="#">Tiki Cocktails</a></li>
+                  <li><a href="#">Piña Coladas</a></li>
+                  <li><a href="#">Cherries</a></li>
+                </ol>
                 <div className="app-list-controls">
                   <AppListFilterComponent onChange={this.updateFilterText}/>
                   <div className="btn-group toggle-list-view">
