@@ -69,6 +69,19 @@ var Util = {
     }
 
     objectPath.set(obj, path, value);
+  },
+  deepFreeze: function (obj) {
+    Object.freeze(obj);
+
+    if (this.isObject(obj)) {
+      Object.keys(obj).forEach((key) => {
+        this.deepFreeze(obj[key]);
+      });
+    } else if (this.isArray(obj)) {
+      obj.forEach((value) => {
+        this.deepFreeze(value);
+      });
+    }
   }
 };
 
