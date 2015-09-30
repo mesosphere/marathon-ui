@@ -1,3 +1,5 @@
+var Util = require("../../helpers/Util");
+
 var AppStatus = require("../../constants/AppStatus");
 
 const appScheme = {
@@ -28,4 +30,4 @@ const appScheme = {
   taskStats: {}
 };
 
-module.exports = Object.freeze(appScheme);
+module.exports = Util.deepFreeze(appScheme);

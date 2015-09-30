@@ -1,3 +1,5 @@
+var Util = require("../helpers/Util");
+
 const ContainerConstants = {
   NETWORK: {
     BRIDGE: "BRIDGE",
@@ -20,4 +22,4 @@ const ContainerConstants = {
   }
 };
 
-module.exports = Object.freeze(ContainerConstants);
+module.exports = Util.deepFreeze(ContainerConstants);
