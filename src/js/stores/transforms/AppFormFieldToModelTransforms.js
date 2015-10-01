@@ -1,7 +1,7 @@
 var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
 
-const dockerRowSchemes = require("../dockerRowSchemes");
-const healthChecksRowScheme = require("../healthChecksRowScheme");
+const dockerRowSchemes = require("../schemes/dockerRowSchemes");
+const healthChecksRowScheme = require("../schemes/healthChecksRowScheme");
 
 var Util = require("../../helpers/Util");
 var lazy = require("lazy.js");

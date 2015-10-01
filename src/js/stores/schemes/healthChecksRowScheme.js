@@ -1,4 +1,6 @@
-var HealthCheckProtocols = require("../constants/HealthCheckProtocols");
+var Util = require("../../helpers/Util");
+
+var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
 
 const healthChecksRowScheme = {
   protocol: HealthCheckProtocols.HTTP,
@@ -12,4 +14,4 @@ const healthChecksRowScheme = {
   ignoreHttp1xx: false
 };
 
-module.exports = Object.freeze(healthChecksRowScheme);
+module.exports = Util.deepFreeze(healthChecksRowScheme);
