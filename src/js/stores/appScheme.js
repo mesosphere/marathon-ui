@@ -1,8 +1,6 @@
-var Util = require("../../helpers/Util");
+var AppStatus = require("../constants/AppStatus");
 
-var AppStatus = require("../../constants/AppStatus");
-
-const appScheme = {
+var appScheme = {
   cmd: null,
   constraints: [],
   acceptedResourceRoles: [],
@@ -30,4 +28,4 @@ const appScheme = {
   taskStats: {}
 };
 
-module.exports = Util.deepFreeze(appScheme);
+module.exports = appScheme;

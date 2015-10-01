@@ -5,7 +5,7 @@ var Util = require("../helpers/Util");
 var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
 var ContainerConstants = require("../constants/ContainerConstants");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
-var dockerRowSchemes = require("../stores/schemes/dockerRowSchemes");
+var dockerRowSchemes = require("../stores/dockerRowSchemes");
 var FormActions = require("../actions/FormActions");
 var FormGroupComponent = require("../components/FormGroupComponent");
 

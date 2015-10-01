@@ -3,7 +3,7 @@ var lazy = require("lazy.js");
 
 var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
-var appScheme = require("../stores/schemes/appScheme");
+var appScheme = require("../stores/appScheme");
 var AppStatus = require("../constants/AppStatus");
 var HealthStatus = require("../constants/HealthStatus");
 var TasksEvents = require("../events/TasksEvents");

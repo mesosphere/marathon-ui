@@ -1,8 +1,6 @@
-var Util = require("../helpers/Util");
-
 const ValidConstraints = require("./ValidConstraints");
 
-const applicationFieldValidationErrors = Util.deepFreeze({
+const applicationFieldValidationErrors = Object.freeze({
   appId: [
     "ID must not be empty",
     "Path must not contain whitespace",
@@ -48,7 +46,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   ports: ["Ports must be a comma-separated list of numbers"]
 });
 
-const generalErrors = Util.deepFreeze({
+const generalErrors = Object.freeze({
   appCreation:
     "App creation unsuccessful. Check your app settings and try again.",
   appLocked: "App is currently locked by one or more deployments. " +
@@ -59,7 +57,7 @@ const generalErrors = Util.deepFreeze({
   errorPrefix: "Error:"
 });
 
-const serverResponseMappings = Util.deepFreeze({
+const serverResponseMappings = Object.freeze({
   "error.path.missing": "Please provide a path"
 });
 
@@ -87,4 +85,4 @@ const AppFormErrorMessages = {
   }
 };
 
-module.exports = Util.deepFreeze(AppFormErrorMessages);
+module.exports = Object.freeze(AppFormErrorMessages);

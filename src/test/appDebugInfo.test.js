@@ -4,7 +4,7 @@ var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
 var Util = require("../js/helpers/Util");
-var appScheme = require("../js/stores/schemes/appScheme");
+var appScheme = require("../js/stores/appScheme");
 var InfoStore = require("../js/stores/InfoStore");
 var AppsStore = require("../js/stores/AppsStore");
 var AppDebugInfoComponent = require("../js/components/AppDebugInfoComponent");

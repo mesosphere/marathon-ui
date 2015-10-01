@@ -7,8 +7,7 @@ var FormActions = require("../actions/FormActions");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var HealthCheckProtocols = require("../constants/HealthCheckProtocols");
 
-const healthChecksRowScheme =
-  require("../stores/schemes/healthChecksRowScheme");
+const healthChecksRowScheme = require("../stores/healthChecksRowScheme");
 
 const numberInputAttributes = {
   min: 0,

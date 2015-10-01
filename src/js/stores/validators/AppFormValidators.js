@@ -147,4 +147,4 @@ const AppFormValidators = {
       .every((port) => port.toString().trim().match(/^[0-9]+$/))
 };
 
-module.exports = Object.freeze(AppFormValidators);
+module.exports = AppFormValidators;
