@@ -2,7 +2,7 @@ var EventEmitter = require("events").EventEmitter;
 
 var AppDispatcher = require("../AppDispatcher");
 var QueueEvents = require("../events/QueueEvents");
-var queueScheme = require("./queueScheme");
+var queueScheme = require("./schemes/queueScheme");
 
 var Util = require("../helpers/Util");
 

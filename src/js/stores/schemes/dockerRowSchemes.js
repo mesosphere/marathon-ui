@@ -1,3 +1,5 @@
+var Util = require("../../helpers/Util");
+
 const dockerRowSchemes = {
   dockerPortMappings: {
     containerPort: "",
@@ -16,4 +18,4 @@ const dockerRowSchemes = {
   }
 };
 
-module.exports = Object.freeze(dockerRowSchemes);
+module.exports = Util.deepFreeze(dockerRowSchemes);

@@ -4,7 +4,7 @@ var React = require("react/addons");
 var ContainerConstants = require("../constants/ContainerConstants");
 var DuplicableRowControls = require("../components/DuplicableRowControls");
 var DuplicableRowsMixin = require("../mixins/DuplicableRowsMixin");
-var dockerRowSchemes = require("../stores/dockerRowSchemes");
+var dockerRowSchemes = require("../stores/schemes/dockerRowSchemes");
 var FormActions = require("../actions/FormActions");
 var FormGroupComponent = require("../components/FormGroupComponent");
 
