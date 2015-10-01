@@ -954,6 +954,16 @@ fieldset[disabled] .btn-info.active {
             margin-left: @base-spacing-unit*2;
           }
         }
+
+        .breadcrumb {
+          background-color: transparent;
+          font-size: @font-size-h2;
+          padding: 0;
+
+          li {
+            line-height: @font-size-h2;
+          }
+        }
       }
     }
 
@@ -984,16 +994,18 @@ fieldset[disabled] .btn-info.active {
 }
 
 .breadcrumb {
-  background-color: transparent;
+  background-color: @sidebar-bg-color;
   color: @breadcrumb-text-color;
   display: flex;
   flex: 1;
-  font-size: @font-size-h2;
+  font-size: @base-font-size;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 16px;
 
   li {
+    height: @base-spacing-unit*2;
+    line-height: @base-spacing-unit*2;
     margin: 0 @horizontal-spacing-unit 0 0;
 
     + li::before {
