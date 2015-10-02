@@ -370,8 +370,8 @@ var AppPageComponent = React.createClass({
           Restart
         </button>
         <button className="btn btn-default"
-          onClick={this.handleSuspendApp}
-          disabled={state.app.instances < 1}>
+            onClick={this.handleSuspendApp}
+            disabled={state.app.instances < 1}>
           Suspend
         </button>
         <button className="btn btn-danger" onClick={this.handleDestroyApp}>
