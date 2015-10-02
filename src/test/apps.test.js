@@ -966,7 +966,7 @@ describe("App Status component", function () {
 
     it("has correct status description", function () {
       var statusDescription = this.component.props.children;
-      expect(statusDescription).to.equal("Delayed");
+      expect(statusDescription[1]).to.equal("Delayed");
     });
 
     it("has correct title", function () {
@@ -1000,7 +1000,7 @@ describe("App Status component", function () {
 
     it("has correct status description", function () {
       var statusDescription = this.component.props.children;
-      expect(statusDescription).to.equal("Running");
+      expect(statusDescription[1]).to.equal("Running");
     });
   });
 
