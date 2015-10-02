@@ -134,6 +134,32 @@ a,
   border-bottom: none;
   margin-top: 0;
   margin-bottom: 0;
+  padding: @base-spacing-unit*3 0;
+
+  h1 {
+    margin: 0 0 @base-spacing-unit 0;
+    padding: 0;
+    line-height: @base-spacing-unit*4;
+  }
+}
+
+.app-status {
+  display: flex;
+  align-items: center;
+
+  > i {
+    display: inline-block;
+    font-size: @font-size-icon;
+    line-height: 16px;
+    margin-right: @horizontal-spacing-unit;
+    text-align: center;
+    width: 16px;
+  }
+
+  > span.tasks-summary {
+    color: @navbar-inactive-color;
+    margin-left: @horizontal-spacing-unit;
+  }
 }
 
 .page-header .btn + .btn {
