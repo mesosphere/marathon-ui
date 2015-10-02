@@ -17,7 +17,7 @@ describe("App Form Model Post Process", function () {
 
   describe("container", function () {
 
-    it("empty container values to empty object", function () {
+    it("empty container values to null", function () {
       var app = {
         container: {
           type: "DOCKER",
@@ -31,7 +31,7 @@ describe("App Form Model Post Process", function () {
 
       AppFormModelPostProcess.container(app);
 
-      expect(app).to.deep.equal({container: {}});
+      expect(app.container).to.equal(null);
     });
 
     it("doesn't touch non-empty containers", function () {

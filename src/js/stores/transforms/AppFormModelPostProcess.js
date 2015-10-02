@@ -6,10 +6,11 @@ var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
 const healthChecksRowScheme = require("../schemes/healthChecksRowScheme");
 
 function hasOnlyEmptyValues(obj) {
-  return Util.isObject(obj) &&
+  return obj == null || Util.isObject(obj) &&
     Object.values(obj)
     .every((element) => {
       return element == null ||
+        element === false ||
         (Util.isArray(element) && element.length === 0) ||
         Util.isEmptyString(element);
     });
@@ -47,7 +48,7 @@ const AppFormModelPostProcess = {
       hasOnlyEmptyValues(container.docker);
 
     if (isEmpty) {
-      app.container = {};
+      app.container = null;
     } else {
       // Remove this hack, if there is a solution available.
       // https://github.com/mesosphere/marathon/issues/2147
