@@ -17,7 +17,21 @@ var AppStatusComponent = React.createClass({
   displayName: "AppStatusComponent",
 
   propTypes: {
-    model: React.PropTypes.object.isRequired
+    model: React.PropTypes.object.isRequired,
+    showSummary: React.PropTypes.bool
+  },
+
+  getTasksSummary: function () {
+    if (this.props.showSummary !== true) {
+      return null;
+    }
+
+    let props = this.props;
+    return (
+      <span className="tasks-summary">
+        {`(${props.model.tasksRunning} of ${props.model.instances} tasks)`}
+      </span>
+    );
   },
 
   getStatusTitle: function () {
@@ -46,13 +60,16 @@ var AppStatusComponent = React.createClass({
     var model = this.props.model;
 
     var statusClassSet = classNames({
+      "app-status": true,
       "text-warning": this.isWarningStatus(),
       "text-danger": model.status === AppStatus.DELAYED
     });
 
     return (
       <span className={statusClassSet} title={this.getStatusTitle()}>
+        <i className="ion-android-radio-button-off"></i>
         {statusNameMapping[model.status]}
+        {this.getTasksSummary()}
       </span>
     );
   }
