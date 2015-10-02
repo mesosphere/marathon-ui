@@ -344,7 +344,7 @@ describe("Task List component", function () {
 
   it("has correct TaskListItemComponents keys", function () {
     var tasklistitems =
-      this.component.props.children[2].props.children[1].props.children[2];
+      this.component.props.children[3].props.children[1].props.children[2];
 
     expect(tasklistitems[0].key).to.equal("task-1");
     expect(tasklistitems[1].key).to.equal("task-2");

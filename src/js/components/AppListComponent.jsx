@@ -51,10 +51,19 @@ var AppListComponent = React.createClass({
   },
 
   onAppsRequestError: function (message, statusCode) {
+    var fetchState = States.STATE_ERROR;
+
+    switch (statusCode) {
+      case 401:
+        fetchState = States.STATE_UNAUTHORIZED;
+        break;
+      case 403:
+        fetchState = States.STATE_FORBIDDEN;
+        break;
+    }
+
     this.setState({
-      fetchState: statusCode !== 401
-        ? States.STATE_ERROR
-        : States.STATE_UNAUTHORIZED
+      fetchState: fetchState
     });
   },
 
@@ -115,7 +124,8 @@ var AppListComponent = React.createClass({
 
     var noAppsClassSet = classNames({
       "hidden": pageIsLoading || pageHasApps ||
-        state.fetchState === States.STATE_UNAUTHORIZED
+        state.fetchState === States.STATE_UNAUTHORIZED ||
+        state.fetchState === States.STATE_FORBIDDEN
     });
 
     var noRunningAppsClassSet = classNames({
@@ -128,6 +138,10 @@ var AppListComponent = React.createClass({
 
     var unauthorizedClassSet = classNames({
       "hidden": state.fetchState !== States.STATE_UNAUTHORIZED
+    });
+
+    var forbiddenClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_FORBIDDEN
     });
 
     var headerClassSet = classNames({
@@ -214,6 +228,11 @@ var AppListComponent = React.createClass({
           <tr className={unauthorizedClassSet}>
             <td className="text-center text-danger" colSpan="6">
               Error fetching apps. Unauthorized access.
+            </td>
+          </tr>
+          <tr className={forbiddenClassSet}>
+            <td className="text-center text-danger" colSpan="6">
+              Error fetching apps. Access forbidden.
             </td>
           </tr>
           {appNodes}

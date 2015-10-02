@@ -47,10 +47,19 @@ var DeploymentListComponent = React.createClass({
   },
 
   onRequestError: function (message, statusCode) {
+    var fetchState = States.STATE_ERROR;
+
+    switch (statusCode) {
+      case 401:
+        fetchState = States.STATE_UNAUTHORIZED;
+        break;
+      case 403:
+        fetchState = States.STATE_FORBIDDEN;
+        break;
+    }
+
     this.setState({
-      fetchState: statusCode !== 401
-        ? States.STATE_ERROR
-        : States.STATE_UNAUTHORIZED
+      fetchState: fetchState
     });
   },
 
@@ -122,9 +131,14 @@ var DeploymentListComponent = React.createClass({
       "hidden": state.fetchState !== States.STATE_UNAUTHORIZED
     });
 
+    var forbiddenClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_FORBIDDEN
+    });
+
     var noDeploymentsClassSet = classNames({
       "hidden": pageIsLoading || state.deployments.length !== 0 ||
-        state.fetchState === States.STATE_UNAUTHORIZED
+        state.fetchState === States.STATE_UNAUTHORIZED ||
+        state.fetchState === States.STATE_FORBIDDEN
     });
 
     var errorMessageClassSet = classNames({
@@ -194,6 +208,11 @@ var DeploymentListComponent = React.createClass({
           <tr className={unauthorizedClassSet}>
             <td className="text-center text-danger" colSpan="6">
               Error fetching deployments. Unauthorized access.
+            </td>
+          </tr>
+          <tr className={forbiddenClassSet}>
+            <td className="text-center text-danger" colSpan="6">
+              Error fetching deployments. Access forbidden.
             </td>
           </tr>
           {this.getDeploymentNodes()}

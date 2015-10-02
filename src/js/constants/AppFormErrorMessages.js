@@ -56,6 +56,7 @@ const generalErrors = Util.deepFreeze({
     "the new configuration.",
   unknownServerError: "Unknown server error, could not create or apply app.",
   unauthorizedAccess: "App creation unsuccessful. Unauthorized access.",
+  forbiddenAccess: "App creation unsuccessful. Access forbidden.",
   errorPrefix: "Error:"
 });
 
