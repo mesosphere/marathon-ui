@@ -235,7 +235,7 @@ describe("Util", function () {
 
       Util.deepFreeze(obj);
 
-      expect(() => {
+      expect(function () {
         obj.a.b = "modified";
       }).to.throw(TypeError);
     });
@@ -250,7 +250,7 @@ describe("Util", function () {
 
       Util.deepFreeze(obj);
 
-      expect(() => {
+      expect(function () {
         obj.a[1] = "modified";
       }).to.throw(TypeError);
     });
@@ -262,7 +262,7 @@ describe("Util", function () {
 
       Util.deepFreeze(obj);
 
-      expect(() => {
+      expect(function () {
         obj.a = 8;
       }).to.throw(TypeError);
     });
@@ -272,7 +272,7 @@ describe("Util", function () {
 
       Util.deepFreeze(number);
 
-      expect(() => {
+      expect(function () {
         number = 8;
       }).to.not.throw(TypeError);
 
