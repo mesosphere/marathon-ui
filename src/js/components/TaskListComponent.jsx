@@ -96,6 +96,7 @@ var TaskListComponent = React.createClass({
     var hasHealth = !!props.hasHealth;
     var hasError = props.fetchState === States.STATE_ERROR;
     var isUnauthorized = props.fetchState === States.STATE_UNAUTHORIZED;
+    var isForbidden = props.fetchState === States.STATE_FORBIDDEN;
 
     var headerClassSet = classNames({
       "clickable": true,
@@ -107,7 +108,7 @@ var TaskListComponent = React.createClass({
     });
 
     var noTasksClassSet = classNames({
-      "hidden": tasksLength !== 0 || hasError || isUnauthorized
+      "hidden": tasksLength !== 0 || hasError || isUnauthorized || isForbidden
     });
 
     var errorClassSet = classNames({
@@ -118,6 +119,11 @@ var TaskListComponent = React.createClass({
     var unauthorizedClassSet = classNames({
       "fluid-container": true,
       "hidden": !isUnauthorized
+    });
+
+    var forbiddenClassSet = classNames({
+      "fluid-container": true,
+      "hidden": !isForbidden
     });
 
     var hasHealthClassSet = classNames({
@@ -135,6 +141,11 @@ var TaskListComponent = React.createClass({
         <div className={unauthorizedClassSet}>
           <p className="text-center text-danger">
             Error fetching tasks. Unauthorized access.
+          </p>
+        </div>
+        <div className={forbiddenClassSet}>
+          <p className="text-center text-danger">
+            Error fetching tasks. Access forbidden.
           </p>
         </div>
         <table className="table table-unstyled">

@@ -304,6 +304,12 @@ function processResponseErrors(responseErrors, response, statusCode) {
       AppFormErrorMessages.getGeneralMessage("errorPrefix") + " " +
       response.message;
 
+  } else if (statusCode === 403 && response != null &&
+      response.message != null) {
+
+    responseErrors.general =
+      AppFormErrorMessages.getGeneralMessage("forbiddenAccess");
+
   } else if (statusCode === 401 && response != null &&
       response.message != null) {
 

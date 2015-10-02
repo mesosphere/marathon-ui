@@ -153,10 +153,19 @@ var AppPageComponent = React.createClass({
   },
 
   onAppRequestError: function (message, statusCode) {
+    var fetchState = States.STATE_ERROR;
+
+    switch (statusCode) {
+      case 401:
+        fetchState = States.STATE_UNAUTHORIZED;
+        break;
+      case 403:
+        fetchState = States.STATE_FORBIDDEN;
+        break;
+    }
+
     this.setState({
-      fetchState: statusCode !== 401
-        ? States.STATE_ERROR
-        : States.STATE_UNAUTHORIZED
+      fetchState: fetchState
     });
   },
 
@@ -172,6 +181,8 @@ var AppPageComponent = React.createClass({
       });
     } else if (statusCode === 401) {
       DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Not scaling: ${Messages.FORBIDDEN}`);
     } else {
       DialogActions.alert(`Not scaling:
           ${errorMessage.message || errorMessage}`);
@@ -181,6 +192,8 @@ var AppPageComponent = React.createClass({
   onRestartAppError: function (errorMessage, statusCode) {
     if (statusCode === 401) {
       DialogActions.alert(`Error restarting app: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Error restarting app: ${Messages.FORBIDDEN}`);
     } else {
       DialogActions.alert(
         `Error restarting app: ${errorMessage.message || errorMessage}`
@@ -191,6 +204,8 @@ var AppPageComponent = React.createClass({
   onDeleteAppError: function (errorMessage, statusCode) {
     if (statusCode === 401) {
       DialogActions.alert(`Error destroying app: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Error destroying app: ${Messages.FORBIDDEN}`);
     } else {
       DialogActions.alert(
         `Error destroying app: ${errorMessage.message || errorMessage}`
@@ -210,6 +225,9 @@ var AppPageComponent = React.createClass({
     if (statusCode === 401) {
       DialogActions.alert(`Error resetting delay on app:
         ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Error resetting delay on app:
+        ${Messages.FORBIDDEN}`);
     } else {
       DialogActions.alert(
         `Error resetting delay on app: ${errorMessage.message || errorMessage}`
