@@ -22,11 +22,11 @@ var AppStatusComponent = React.createClass({
   },
 
   getTasksSummary: function () {
-    if (this.props.showSummary !== true) {
+    var props = this.props;
+    if (props.showSummary !== true) {
       return null;
     }
 
-    let props = this.props;
     return (
       <span className="tasks-summary">
         {`(${props.model.tasksRunning} of ${props.model.instances} tasks)`}
