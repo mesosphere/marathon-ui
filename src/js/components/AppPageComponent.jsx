@@ -345,22 +345,19 @@ var AppPageComponent = React.createClass({
 
     return (
       <div className="header-btn">
-        <button className="btn btn-sm btn-default"
+        <button className="btn btn-success" onClick={this.handleScaleApp}>
+          Scale Application
+        </button>
+        <button className="btn btn-default" onClick={this.handleRestartApp}>
+          Restart
+        </button>
+        <button className="btn btn-default"
             onClick={this.handleSuspendApp}
             disabled={state.app.instances < 1}>
           Suspend
         </button>
-        <button className="btn btn-sm btn-default"
-            onClick={this.handleScaleApp}>
-          Scale
-        </button>
-        <button className="btn btn-sm btn-danger pull-right"
-            onClick={this.handleDestroyApp}>
-          Destroy App
-        </button>
-        <button className="btn btn-sm btn-default pull-right"
-            onClick={this.handleRestartApp}>
-          Restart App
+        <button className="btn btn-danger" onClick={this.handleDestroyApp}>
+          Destroy
         </button>
         {this.getResetDelayButton()}
       </div>
@@ -432,12 +429,8 @@ var AppPageComponent = React.createClass({
           appId={state.appId} />
         <div className="container-fluid">
           <div className="page-header">
-            <span className="h3 modal-title">{state.appId}</span>
-            <ul className="list-inline list-inline-subtext">
-              <li>
-                <AppStatusComponent model={model} />
-              </li>
-            </ul>
+            <h1>{state.appId}</h1>
+            <AppStatusComponent model={model} showSummary={true} />
             {this.getControls()}
           </div>
           {content}
