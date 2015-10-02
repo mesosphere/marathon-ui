@@ -672,10 +672,10 @@ fieldset[disabled] .btn-info.active {
     .icon {
       font-size: 1.4em;
     }
-    padding: @base-font-size*0.5 @base-spacing-unit*2;
+    padding: @base-font-size*0.5 @base-spacing-unit;
   }
   .form-control {
-    padding: @base-font-size*0.5 @base-spacing-unit*2;
+    padding: @base-font-size*0.5 0;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     color: #f6f6f6;
     background: transparent;
@@ -699,17 +699,17 @@ fieldset[disabled] .btn-info.active {
 
 .filter-box-activated {
   .form-control {
-    border-color: #00b482;
+    border-color: @brand-primary;
   }
   .input-group-addon {
     transition: border-color ease-in-out .15s;
-    color: #00b482;
-    border-color: #00b482;
+    color: @brand-primary;
+    border-color: @brand-primary;
   }
   .filter-box-clear {
     display: inline;
     &:hover {
-      color: #00b482;
+      color: @brand-primary;
     }
   }
 }
