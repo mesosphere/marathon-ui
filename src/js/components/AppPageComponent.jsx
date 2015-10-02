@@ -432,12 +432,8 @@ var AppPageComponent = React.createClass({
           appId={state.appId} />
         <div className="container-fluid">
           <div className="page-header">
-            <span className="h3 modal-title">{state.appId}</span>
-            <ul className="list-inline list-inline-subtext">
-              <li>
-                <AppStatusComponent model={model} />
-              </li>
-            </ul>
+            <h1>{state.appId}</h1>
+            <AppStatusComponent model={model} showSummary={true} />
             {this.getControls()}
           </div>
           {content}
