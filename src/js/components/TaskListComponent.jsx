@@ -2,6 +2,7 @@ var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 
+var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var TaskListItemComponent = require("../components/TaskListItemComponent");
 
@@ -140,7 +141,7 @@ var TaskListComponent = React.createClass({
         </div>
         <div className={unauthorizedClassSet}>
           <p className="text-center text-danger">
-            Error fetching tasks. Unauthorized access.
+            Error fetching tasks. {Messages.UNAUTHORIZED}
           </p>
         </div>
         <div className={forbiddenClassSet}>

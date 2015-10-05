@@ -1,3 +1,4 @@
+var Messages = require("../constants/Messages");
 var Util = require("../helpers/Util");
 
 const ValidConstraints = require("./ValidConstraints");
@@ -55,7 +56,7 @@ const generalErrors = Util.deepFreeze({
     "Pressing the button again will forcefully change and deploy " +
     "the new configuration.",
   unknownServerError: "Unknown server error, could not create or apply app.",
-  unauthorizedAccess: "App creation unsuccessful. Unauthorized access.",
+  unauthorizedAccess: `App creation unsuccessful. ${Messages.UNAUTHORIZED}`,
   forbiddenAccess: "App creation unsuccessful. Access forbidden.",
   errorPrefix: "Error:"
 });

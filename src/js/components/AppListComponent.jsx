@@ -2,6 +2,7 @@ var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 
+var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var AppComponent = require("../components/AppComponent");
 
@@ -227,7 +228,7 @@ var AppListComponent = React.createClass({
           </tr>
           <tr className={unauthorizedClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching apps. Unauthorized access.
+              Error fetching apps. {Messages.UNAUTHORIZED}
             </td>
           </tr>
           <tr className={forbiddenClassSet}>

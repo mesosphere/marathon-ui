@@ -2,6 +2,7 @@ var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 
+var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 
 var DeploymentComponent = require("../components/DeploymentComponent");
@@ -207,7 +208,7 @@ var DeploymentListComponent = React.createClass({
           </tr>
           <tr className={unauthorizedClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching deployments. Unauthorized access.
+              Error fetching deployments. {Messages.UNAUTHORIZED}
             </td>
           </tr>
           <tr className={forbiddenClassSet}>
