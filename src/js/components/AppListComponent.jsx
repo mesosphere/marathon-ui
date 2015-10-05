@@ -233,7 +233,7 @@ var AppListComponent = React.createClass({
           </tr>
           <tr className={forbiddenClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching apps. Access forbidden.
+              Error fetching apps. {Messages.FORBIDDEN}
             </td>
           </tr>
           {appNodes}

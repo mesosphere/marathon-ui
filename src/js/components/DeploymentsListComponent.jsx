@@ -213,7 +213,7 @@ var DeploymentListComponent = React.createClass({
           </tr>
           <tr className={forbiddenClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching deployments. Access forbidden.
+              Error fetching deployments. {Messages.FORBIDDEN}
             </td>
           </tr>
           {this.getDeploymentNodes()}

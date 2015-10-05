@@ -146,7 +146,7 @@ var TaskListComponent = React.createClass({
         </div>
         <div className={forbiddenClassSet}>
           <p className="text-center text-danger">
-            Error fetching tasks. Access forbidden.
+            Error fetching tasks. {Messages.FORBIDDEN}
           </p>
         </div>
         <table className="table table-unstyled">
