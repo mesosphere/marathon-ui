@@ -22,7 +22,7 @@ var AppComponent = React.createClass({
       return null;
     }
 
-    let nodes = Object.keys(labels).sort().map(function (key) {
+    let nodes = Object.keys(labels).sort().map(function (key, i) {
       if (key == null || Util.isEmptyString(key)) {
         return null;
       }
@@ -33,7 +33,7 @@ var AppComponent = React.createClass({
       }
 
       return (
-        <span className="label label-default">{labelText}</span>
+        <span key={i} className="label label-default">{labelText}</span>
       );
     });
 
