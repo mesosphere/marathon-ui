@@ -703,7 +703,7 @@ describe("App component", function () {
   });
 
   it("has the correct app id", function () {
-    var cellContent = this.component.props.children[0].props.children;
+    var cellContent = this.component.props.children[0].props.children[0];
     expect(cellContent).to.equal("app-123");
   });
 

@@ -207,6 +207,27 @@ a,
   padding: 0 0 5px 5px;
 }
 
+/* Application ID cell */
+.table > tbody > tr > td.appid {
+  display: flex;
+
+  .labels {
+    .label {
+      margin-left: @horizontal-spacing-unit;
+    }
+  }
+}
+
+.label.label-default {
+  background-color: @sidebar-bg-color;
+  border-radius: @base-spacing-unit*2;
+  color: @navbar-inactive-color;
+  font-size: @small-font-size;
+  font-weight: normal;
+  padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
+  padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
+}
+
 .list-inline-subtext {
   color: #6f757D;
   display: inline-block;
