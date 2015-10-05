@@ -223,7 +223,7 @@ var AppListComponent = React.createClass({
           </tr>
           <tr className={errorClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching apps. Refresh to try again.
+              Error fetching apps. {Messages.RETRY_REFRESH}
             </td>
           </tr>
           <tr className={unauthorizedClassSet}>

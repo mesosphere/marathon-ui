@@ -203,7 +203,7 @@ var DeploymentListComponent = React.createClass({
           </tr>
           <tr className={errorClassSet}>
             <td className="text-center text-danger" colSpan="5">
-              Error fetching deployments. Refresh to try again.
+              Error fetching deployments. {Messages.RETRY_REFRESH}
             </td>
           </tr>
           <tr className={unauthorizedClassSet}>
