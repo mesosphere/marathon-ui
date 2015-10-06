@@ -130,7 +130,7 @@ var AppVersionListItemComponent = React.createClass({
             Loading version details...
           </p>
           <p className={errorClassSet}>
-            Error fetching version details. {Messages.RETRY_REFRESH}
+            {`Error fetching version details. ${Messages.RETRY_REFRESH}`}
           </p>
           {this.getAppVersionComponent()}
         </div>

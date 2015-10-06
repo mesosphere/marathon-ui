@@ -203,17 +203,17 @@ var DeploymentListComponent = React.createClass({
           </tr>
           <tr className={errorClassSet}>
             <td className="text-center text-danger" colSpan="5">
-              Error fetching deployments. {Messages.RETRY_REFRESH}
+              {`Error fetching deployments. ${Messages.RETRY_REFRESH}`}
             </td>
           </tr>
           <tr className={unauthorizedClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching deployments. {Messages.UNAUTHORIZED}
+              {`Error fetching deployments. ${Messages.UNAUTHORIZED}`}
             </td>
           </tr>
           <tr className={forbiddenClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching deployments. {Messages.FORBIDDEN}
+              {`Error fetching deployments. ${Messages.FORBIDDEN}`}
             </td>
           </tr>
           {this.getDeploymentNodes()}

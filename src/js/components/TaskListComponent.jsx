@@ -136,17 +136,17 @@ var TaskListComponent = React.createClass({
       <div>
         <div className={errorClassSet}>
           <p className="text-center text-danger">
-            Error fetching tasks. {Messages.UNAUTHORIZED}
+            {`Error fetching tasks. ${Messages.UNAUTHORIZED}`}
           </p>
         </div>
         <div className={unauthorizedClassSet}>
           <p className="text-center text-danger">
-            Error fetching tasks. {Messages.UNAUTHORIZED}
+            {`Error fetching tasks. ${Messages.UNAUTHORIZED}`}
           </p>
         </div>
         <div className={forbiddenClassSet}>
           <p className="text-center text-danger">
-            Error fetching tasks. {Messages.FORBIDDEN}
+            {`Error fetching tasks. ${Messages.FORBIDDEN}`}
           </p>
         </div>
         <table className="table table-unstyled">

@@ -223,17 +223,17 @@ var AppListComponent = React.createClass({
           </tr>
           <tr className={errorClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching apps. {Messages.RETRY_REFRESH}
+              {`Error fetching apps. ${Messages.RETRY_REFRESH}`}
             </td>
           </tr>
           <tr className={unauthorizedClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching apps. {Messages.UNAUTHORIZED}
+              {`Error fetching apps. ${Messages.UNAUTHORIZED}`}
             </td>
           </tr>
           <tr className={forbiddenClassSet}>
             <td className="text-center text-danger" colSpan="6">
-              Error fetching apps. {Messages.FORBIDDEN}
+              {`Error fetching apps. ${Messages.FORBIDDEN}`}
             </td>
           </tr>
           {appNodes}
