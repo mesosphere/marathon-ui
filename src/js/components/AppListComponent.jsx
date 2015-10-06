@@ -144,75 +144,61 @@ var AppListComponent = React.createClass({
 
     return (
       <table className={tableClassSet}>
-        <colgroup>
-          <col style={{width: "28%"}} />
-          <col style={{width: "14%"}} />
-          <col style={{width: "14%"}} />
-          <col style={{width: "14%"}} />
-          <col style={{width: "14%"}} />
-          <col style={{width: "16%"}} />
-        </colgroup>
         <thead>
           <tr>
             <th>
               <span onClick={this.sortBy.bind(null, "id")}
                   className={headerClassSet}>
-                ID {this.getCaret("id")}
+                Name {this.getCaret("id")}
               </span>
             </th>
             <th className="text-right">
               <span onClick={this.sortBy.bind(null, "totalMem")}
                   className={headerClassSet}>
-                {this.getCaret("totalMem")} Memory (MB)
+                {this.getCaret("totalMem")} Memory
               </span>
             </th>
             <th className="text-right">
               <span onClick={this.sortBy.bind(null, "totalCpus")}
                   className={headerClassSet}>
-                {this.getCaret("totalCpus")} CPUs
-              </span>
-            </th>
-            <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "instances")}
-                  className={headerClassSet}>
-                {this.getCaret("instances")} Tasks / Instances
-              </span>
-            </th>
-            <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "healthWeight")}
-                  className={headerClassSet}>
-                {this.getCaret("healthWeight")} Health
+                {this.getCaret("totalCpus")} CPU
               </span>
             </th>
             <th className="text-right">
               <span onClick={this.sortBy.bind(null, "status")}
-                  className={headerClassSet}>
+                    className={headerClassSet}>
                 {this.getCaret("status")} Status
+              </span>
+            </th>
+            <th className="text-right" colSpan="3">
+              <span onClick={this.sortBy.bind(null, "instances")}
+                  className={headerClassSet}>
+                {this.getCaret("instances")} Running Tasks
               </span>
             </th>
           </tr>
         </thead>
         <tbody>
           <tr className={loadingClassSet}>
-            <td className="text-center text-muted" colSpan="6">
+            <td className="text-center text-muted" colSpan="5">
               Loading apps...
             </td>
           </tr>
           <tr className={noAppsClassSet}>
-            <td className="text-center" colSpan="6">No running apps.</td>
+            <td className="text-center" colSpan="5">No running apps.</td>
           </tr>
           <tr className={noRunningAppsClassSet}>
-            <td className="text-center" colSpan="6">
+            <td className="text-center" colSpan="5">
               No apps match your query.
             </td>
           </tr>
           <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan="6">
+            <td className="text-center text-danger" colSpan="5">
               Error fetching apps. Refresh to try again.
             </td>
           </tr>
           <tr className={unauthorizedClassSet}>
-            <td className="text-center text-danger" colSpan="6">
+            <td className="text-center text-danger" colSpan="5">
               Error fetching apps. Unauthorized access.
             </td>
           </tr>
