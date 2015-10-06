@@ -70,6 +70,9 @@ var AppComponent = React.createClass({
         <td className="text-right total cpu">
           {model.totalCpus}
         </td>
+        <td className="text-right">
+          <AppStatusComponent model={model} />
+        </td>
         <td className="text-right running tak">
           <span className={runningTasksClassSet}>
             {model.tasksRunning}
@@ -79,7 +82,7 @@ var AppComponent = React.createClass({
           <AppHealthComponent model={model} />
         </td>
         <td className="text-right">
-          <AppStatusComponent model={model} />
+          ...
         </td>
       </tr>
     );
