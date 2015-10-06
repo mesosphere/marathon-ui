@@ -5,6 +5,7 @@ var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppVersionsEvents = require("../events/AppVersionsEvents");
 var AppVersionsStore = require("../stores/AppVersionsStore");
 var AppVersionComponent = require("../components/AppVersionComponent");
+var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 
 var AppVersionListItemComponent = React.createClass({
@@ -129,7 +130,7 @@ var AppVersionListItemComponent = React.createClass({
             Loading version details...
           </p>
           <p className={errorClassSet}>
-            Error fetching version details. Refresh the list to try again.
+            {`Error fetching version details. ${Messages.RETRY_REFRESH}`}
           </p>
           {this.getAppVersionComponent()}
         </div>
