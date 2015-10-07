@@ -238,7 +238,9 @@ var AppListLabelsFilterComponent = React.createClass({
         <li className="checkbox" key={i}>
           <input {...checkboxProps}
             onChange={this.handleChange.bind(this, label)} />
-          <label htmlFor={`label-${optionText}-${i}`}>{optionText}</label>
+          <label htmlFor={`label-${optionText}-${i}`} title={optionText}>
+            <span>{optionText}</span>
+          </label>
         </li>
       );
     });
