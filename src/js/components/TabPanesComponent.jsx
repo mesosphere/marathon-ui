@@ -35,7 +35,7 @@ var TabPanesComponent = React.createClass({
   updateFilterLabels: function (filterLabels) {
     this.setState({
       filterLabels: filterLabels
-    }, console.log(filterLabels));
+    });
   },
 
   getTabId: function () {
