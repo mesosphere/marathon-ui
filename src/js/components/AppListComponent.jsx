@@ -204,13 +204,13 @@ var AppListComponent = React.createClass({
                 {this.getCaret("totalCpus")} CPU
               </span>
             </th>
-            <th className="text-right">
+            <th className="text-left">
               <span onClick={this.sortBy.bind(null, "status")}
                     className={headerClassSet}>
                 {this.getCaret("status")} Status
               </span>
             </th>
-            <th className="text-right" colSpan="3">
+            <th className="text-left" colSpan="3">
               <span onClick={this.sortBy.bind(null, "instances")}
                   className={headerClassSet}>
                 {this.getCaret("instances")} Running Tasks
