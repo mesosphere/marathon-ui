@@ -2,6 +2,8 @@ var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppListFilterComponent = require("../components/AppListFilterComponent");
+var AppListLabelsFilterComponent =
+  require("../components/AppListLabelsFilterComponent");
 var AppListComponent = require("../components/AppListComponent");
 var DeploymentsListComponent =
   require("../components/DeploymentsListComponent");
@@ -19,7 +21,8 @@ var TabPanesComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      filterText: ""
+      filterText: "",
+      filterLabels: []
     };
   },
 
@@ -27,7 +30,12 @@ var TabPanesComponent = React.createClass({
     this.setState({
       filterText: filterText
     });
+  },
 
+  updateFilterLabels: function (filterLabels) {
+    this.setState({
+      filterLabels: filterLabels
+    }, console.log(filterLabels));
   },
 
   getTabId: function () {
@@ -106,49 +114,8 @@ var TabPanesComponent = React.createClass({
               <div className="flex-row">
                 <h3 className="small-caps">Label</h3>
               </div>
-              <div className="dropdown">
-                <button className="btn btn-default dropdown-toggle"
-                  type="button"
-                  id="dropdownMenu1"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="true"
-                  onClick={() => {
-                    this.setState({
-                      expandedDropdown: !this.state.expandedDropdown
-                    });
-                  }}>
-                  Select
-                  <span className="caret"></span>
-                </button>
-                <ul className="dropdown-menu list-group filters"
-                  style={{
-                    display: this.state.expandedDropdown
-                      ? "block"
-                      : "none"
-                  }}
-                  aria-labelledby="dropdownMenu1">
-                  <li className="search">
-                    <input type="text" />
-                  </li>
-                  <li className="checkbox">
-                    <input type="checkbox" id="label-cb-1"/>
-                    <label htmlFor="label-cb-1">corgi:happy</label>
-                  </li>
-                  <li className="checkbox">
-                    <input type="checkbox" id="label-cb-2"/>
-                    <label htmlFor="label-cb-2">dachshund:psycho</label>
-                  </li>
-                  <li className="checkbox">
-                    <input type="checkbox" checked id="label-cb-3"/>
-                    <label htmlFor="label-cb-3">setter:majestic</label>
-                  </li>
-                  <li className="checkbox">
-                    <input type="checkbox" id="label-cb-4"/>
-                    <label htmlFor="label-cb-4">pitbull:overweight</label>
-                  </li>
-                </ul>
-              </div>
+              <AppListLabelsFilterComponent
+                onChange={this.updateFilterLabels} />
               <div className="flex-row">
                 <h3 className="small-caps">Resources</h3>
               </div>
@@ -195,7 +162,8 @@ var TabPanesComponent = React.createClass({
                   </div>
                 </div>
               </div>
-              <AppListComponent filterText={this.state.filterText} />
+              <AppListComponent filterText={this.state.filterText}
+                filterLabels={this.state.filterLabels} />
             </main>
           </div>
         </TabPaneComponent>
