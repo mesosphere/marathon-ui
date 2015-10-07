@@ -199,12 +199,12 @@ var AppListLabelsFilterComponent = React.createClass({
     }
 
     return (
-      <button className="btn btn-default dropdown-toggle"
+      <div className="btn btn-default dropdown-toggle"
           type="button"
           onClick={this.toggleActivatedState}>
         <div>{selectedLabelsText}</div>
         <span className="caret" />
-      </button>
+      </div>
     );
   },
 
