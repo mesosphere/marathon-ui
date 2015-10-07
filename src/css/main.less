@@ -228,13 +228,57 @@ a,
   padding: 0 0 5px 5px;
 }
 
-/* Application ID cell */
-.table > tbody > tr > td.appid {
-  display: flex;
+/* App list columns */
+.table > colgroup > col {
 
-  .labels {
-    .label {
-      margin-left: @horizontal-spacing-unit;
+  &.appid {
+    width: auto;
+  }
+
+  &.ram {
+    width: 96px;
+  }
+
+  &.cpu {
+    width: 80px;
+  }
+
+  &.status {
+    width: 216px;
+  }
+
+  &.tasks {
+    width: 48px;
+  }
+
+  &.health {
+    width: 6%;
+  }
+
+  &.actions {
+    width: 64px;
+  }
+}
+
+/* App list cells */
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+
+  &.status {
+    padding-left: 50px;
+  }
+
+  &.appid {
+    display: flex;
+
+    .labels {
+      .label {
+        margin-left: @horizontal-spacing-unit;
+      }
     }
   }
 }
