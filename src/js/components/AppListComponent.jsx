@@ -144,6 +144,15 @@ var AppListComponent = React.createClass({
 
     return (
       <table className={tableClassSet}>
+        <colgroup>
+          <col style={{width: "49%"}} />
+          <col style={{width: "8%"}} />
+          <col style={{width: "8%"}} />
+          <col style={{width: "11%"}} />
+          <col style={{width: "6%"}} />
+          <col style={{width: "6%"}} />
+          <col style={{width: "6%"}} />
+        </colgroup>
         <thead>
           <tr>
             <th>
