@@ -1196,6 +1196,14 @@ fieldset[disabled] .btn-info.active {
         &::before {
           border: 1px solid @breadcrumb-text-color;
         }
+
+        > span {
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: @sidebar-width*0.5;
+          white-space: nowrap;
+        }
       }
     }
 
