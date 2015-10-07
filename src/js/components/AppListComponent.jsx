@@ -14,6 +14,7 @@ var AppListComponent = React.createClass({
 
   propTypes: {
     filterLabels: React.PropTypes.array,
+    filterStatus: React.PropTypes.array,
     filterText: React.PropTypes.string
   },
 
@@ -103,6 +104,20 @@ var AppListComponent = React.createClass({
         return lazy(props.filterLabels).some(function (label) {
           let [key, value] = lazy(label).toArray()[0];
           return labels[key] === value;
+        });
+      });
+    }
+
+    if (props.filterStatus != null && props.filterStatus.length > 0) {
+      appsSequence = appsSequence.filter(function (app) {
+        if (app.status == null) {
+          return false;
+        }
+        let appStatus = app.status.toString();
+
+        /* Use .every for an INTERSECTION instead of UNION */
+        return lazy(props.filterStatus).some(function (status) {
+          return appStatus === status;
         });
       });
     }
