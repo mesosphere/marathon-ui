@@ -718,12 +718,12 @@ describe("App component", function () {
   });
 
   it("has correct number of tasks running", function () {
-    var tasksRunning = this.component.props.children[3].props.children[0].props.children;
+    var tasksRunning = this.component.props.children[4].props.children[0].props.children;
     expect(tasksRunning).to.equal(4);
   });
 
   it("has correct number of instances", function () {
-    var totalSteps = this.component.props.children[3].props.children[2];
+    var totalSteps = this.component.props.children[4].props.children[2];
     expect(totalSteps).to.equal(5);
   });
 
