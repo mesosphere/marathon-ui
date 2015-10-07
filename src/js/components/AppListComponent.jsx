@@ -176,41 +176,41 @@ var AppListComponent = React.createClass({
     return (
       <table className={tableClassSet}>
         <colgroup>
-          <col style={{width: "49%"}} />
-          <col style={{width: "8%"}} />
-          <col style={{width: "8%"}} />
-          <col style={{width: "11%"}} />
-          <col style={{width: "6%"}} />
-          <col style={{width: "6%"}} />
-          <col style={{width: "6%"}} />
+          <col className="appid" />
+          <col className="ram" />
+          <col className="cpu" />
+          <col className="status" />
+          <col className="tasks" />
+          <col className="health" />
+          <col className="actions" />
         </colgroup>
         <thead>
           <tr>
-            <th>
+            <th className="text-left appid">
               <span onClick={this.sortBy.bind(null, "id")}
                   className={headerClassSet}>
                 Name {this.getCaret("id")}
               </span>
             </th>
-            <th className="text-right">
+            <th className="text-right ram">
               <span onClick={this.sortBy.bind(null, "totalMem")}
                   className={headerClassSet}>
                 {this.getCaret("totalMem")} Memory
               </span>
             </th>
-            <th className="text-right">
+            <th className="text-right cpu">
               <span onClick={this.sortBy.bind(null, "totalCpus")}
                   className={headerClassSet}>
                 {this.getCaret("totalCpus")} CPU
               </span>
             </th>
-            <th className="text-left">
+            <th className="status">
               <span onClick={this.sortBy.bind(null, "status")}
                     className={headerClassSet}>
                 {this.getCaret("status")} Status
               </span>
             </th>
-            <th className="text-left" colSpan="3">
+            <th className="tasks" colSpan="3">
               <span onClick={this.sortBy.bind(null, "instances")}
                   className={headerClassSet}>
                 {this.getCaret("instances")} Running Tasks

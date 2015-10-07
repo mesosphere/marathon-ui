@@ -70,10 +70,10 @@ var AppComponent = React.createClass({
         <td className="text-right total cpu">
           {model.totalCpus}
         </td>
-        <td className="text-right">
+        <td className="text-right status">
           <AppStatusComponent model={model} />
         </td>
-        <td className="text-right running tak">
+        <td className="text-left running tak">
           <span className={runningTasksClassSet}>
             {model.tasksRunning}
           </span> / {model.instances}
@@ -81,7 +81,7 @@ var AppComponent = React.createClass({
         <td className="text-right health-bar-column">
           <AppHealthComponent model={model} />
         </td>
-        <td className="text-right">
+        <td className="text-right actions">
           ...
         </td>
       </tr>
