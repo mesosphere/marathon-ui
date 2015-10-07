@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var lazy = require("lazy.js");
 var OnClickOutsideMixin = require("react-onclickoutside");
 var React = require("react/addons");
@@ -245,14 +246,12 @@ var AppListLabelsFilterComponent = React.createClass({
       );
     });
 
+    let dropdownClassSet = classNames({
+        "hidden": !this.state.activated
+    }, "dropdown-menu list-group filters");
+
     return (
-      <ul className="dropdown-menu list-group filters"
-          style={{
-              display: this.state.activated
-                ? "block"
-                : "none"
-            }}
-          aria-labelledby="dropdownMenu1">
+      <ul className={dropdownClassSet}>
         <li className="search">
           <input type="text"
             value={state.filterText}
