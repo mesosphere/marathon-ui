@@ -220,15 +220,15 @@ var AppListComponent = React.createClass({
         </thead>
         <tbody>
           <tr className={loadingClassSet}>
-            <td className="text-center text-muted" colSpan="5">
+            <td className="text-center text-muted" colSpan="7">
               Loading apps...
             </td>
           </tr>
           <tr className={noAppsClassSet}>
-            <td className="text-center" colSpan="5">No running apps.</td>
+            <td className="text-center" colSpan="7">No running apps.</td>
           </tr>
           <tr className={noRunningAppsClassSet}>
-            <td className="text-center" colSpan="5">
+            <td className="text-center" colSpan="7">
               No apps match your query.
             </td>
           </tr>
