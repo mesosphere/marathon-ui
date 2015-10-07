@@ -13,6 +13,7 @@ var AppListComponent = React.createClass({
   displayName: "AppListComponent",
 
   propTypes: {
+    filterLabels: React.PropTypes.array,
     filterText: React.PropTypes.string
   },
 
@@ -89,6 +90,21 @@ var AppListComponent = React.createClass({
         .filter(function (app) {
           return app.id.indexOf(props.filterText) !== -1;
         });
+    }
+
+    if (props.filterLabels != null && props.filterLabels.length > 0) {
+      appsSequence = appsSequence.filter(function (app) {
+        let labels = app.labels;
+        if (labels == null || Object.keys(labels).length === 0) {
+          return false;
+        }
+
+        /* Use .every for an INTERSECTION instead of UNION */
+        return lazy(props.filterLabels).some(function (label) {
+          let [key, value] = lazy(label).toArray()[0];
+          return labels[key] === value;
+        });
+      });
     }
 
     return appsSequence
