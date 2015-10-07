@@ -1027,6 +1027,11 @@ fieldset[disabled] .btn-info.active {
         margin: 0 0 @base-spacing-unit 0;
         text-align: left;
         width: 100%;
+
+        > div {
+          overflow-x: hidden;
+          text-overflow: ellipsis;
+        }
       }
 
       .filters {
@@ -1037,6 +1042,10 @@ fieldset[disabled] .btn-info.active {
         align-items: center;
         display: flex;
         justify-content: space-between;
+
+        > a {
+          padding: 0; /* "Clear" filter links */
+        }
       }
     }
   }
@@ -1165,11 +1174,20 @@ fieldset[disabled] .btn-info.active {
     color: @link-color;
     display: flex;
     justify-content: space-between;
+
+    &:active, &:focus, &:hover {
+      background-color: transparent;
+    }
+
+    &:active, &:focus {
+      border-color: @brand-primary;
+    }
   }
 
   .dropdown-menu {
     border-color: @dropdown-bg-color;
     border-radius: 2px;
+    display: block;
 
     .checkbox {
       padding: 0 @base-spacing-unit;
@@ -1177,6 +1195,18 @@ fieldset[disabled] .btn-info.active {
 
       label {
         color: @sidebar-heading-color;
+
+        &::before {
+          border: 1px solid @breadcrumb-text-color;
+        }
+
+        > span {
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: @sidebar-width*0.5;
+          white-space: nowrap;
+        }
       }
     }
 
