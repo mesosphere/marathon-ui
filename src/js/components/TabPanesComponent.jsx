@@ -76,7 +76,7 @@ var TabPanesComponent = React.createClass({
               </Link>
               <div className="flex-row">
                 <h3 className="small-caps">Status</h3>
-                <a href="#">Clear</a>
+                <a href="#" className="hidden">Clear</a>
               </div>
               <AppListStatusFilterComponent
                 onChange={this.updateFilterStatus} />
