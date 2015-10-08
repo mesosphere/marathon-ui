@@ -68,7 +68,7 @@ var AppComponent = React.createClass({
           {model.totalCpus}
         </td>
         <td className="text-right total ram">
-          {model.totalMem}
+          {`${model.totalMem}MB`}
         </td>
         <td className="text-right status">
           <AppStatusComponent model={model} />
