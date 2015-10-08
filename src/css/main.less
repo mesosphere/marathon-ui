@@ -196,6 +196,7 @@ a,
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
+  color: @table-text-color;
   border-top: none;
   border-bottom: 1px solid @table-border-color;
   line-height: inherit;
@@ -282,7 +283,7 @@ a,
 
     &.name {
       display: flex;
-
+      color: inherit;
       .labels {
         .label {
           margin-left: @horizontal-spacing-unit;
