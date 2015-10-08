@@ -4,6 +4,8 @@ var React = require("react/addons");
 var AppListFilterComponent = require("../components/AppListFilterComponent");
 var AppListLabelsFilterComponent =
   require("../components/AppListLabelsFilterComponent");
+var AppListStatusFilterComponent =
+  require("../components/AppListStatusFilterComponent");
 var AppListComponent = require("../components/AppListComponent");
 var DeploymentsListComponent =
   require("../components/DeploymentsListComponent");
@@ -22,7 +24,8 @@ var TabPanesComponent = React.createClass({
   getInitialState: function () {
     return {
       filterText: "",
-      filterLabels: []
+      filterLabels: [],
+      filterStatus: []
     };
   },
 
@@ -35,6 +38,12 @@ var TabPanesComponent = React.createClass({
   updateFilterLabels: function (filterLabels) {
     this.setState({
       filterLabels: filterLabels
+    });
+  },
+
+  updateFilterStatus: function (filterStatus) {
+    this.setState({
+      filterStatus: filterStatus
     });
   },
 
@@ -67,30 +76,10 @@ var TabPanesComponent = React.createClass({
               </Link>
               <div className="flex-row">
                 <h3 className="small-caps">Status</h3>
-                <a href="#">Clear</a>
+                <a href="#" className="hidden">Clear</a>
               </div>
-              <ul className="list-group checked-list-box filters">
-                <li className="checkbox">
-                  <input type="checkbox" id="filter-cb-1"/>
-                  <label htmlFor="filter-cb-1">Running</label>
-                </li>
-                <li className="checkbox">
-                  <input type="checkbox" checked id="filter-cb-2"/>
-                  <label htmlFor="filter-cb-2">Deploying</label>
-                </li>
-                <li className="checkbox">
-                  <input type="checkbox" id="filter-cb-3"/>
-                  <label htmlFor="filter-cb-3">Inactive</label>
-                </li>
-                <li className="checkbox">
-                  <input type="checkbox" id="filter-cb-4"/>
-                  <label htmlFor="filter-cb-4">Waiting</label>
-                </li>
-                <li className="checkbox">
-                  <input type="checkbox" id="filter-cb-5"/>
-                  <label htmlFor="filter-cb-5">Delayed</label>
-                </li>
-              </ul>
+              <AppListStatusFilterComponent
+                onChange={this.updateFilterStatus} />
               <div className="flex-row">
                 <h3 className="small-caps">Application Type</h3>
               </div>
@@ -163,7 +152,8 @@ var TabPanesComponent = React.createClass({
                 </div>
               </div>
               <AppListComponent filterText={this.state.filterText}
-                filterLabels={this.state.filterLabels} />
+                filterLabels={this.state.filterLabels}
+                filterStatus={this.state.filterStatus} />
             </main>
           </div>
         </TabPaneComponent>
