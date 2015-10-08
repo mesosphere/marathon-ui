@@ -51,11 +51,6 @@ var AppComponent = React.createClass({
 
   render: function () {
     var model = this.props.model;
-
-    var runningTasksClassSet = classNames({
-      "text-warning": model.tasksRunning !== model.instances
-    });
-
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
@@ -74,9 +69,9 @@ var AppComponent = React.createClass({
           <AppStatusComponent model={model} />
         </td>
         <td className="text-left running tak">
-          <span className={runningTasksClassSet}>
+          <span>
             {model.tasksRunning}
-          </span> / {model.instances}
+          </span> of {model.instances}
         </td>
         <td className="text-right health-bar-column">
           <AppHealthComponent model={model} />
