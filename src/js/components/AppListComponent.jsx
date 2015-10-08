@@ -145,7 +145,7 @@ var AppListComponent = React.createClass({
     return (
       <table className={tableClassSet}>
         <colgroup>
-          <col className="appid" />
+          <col className="name" />
           <col className="ram" />
           <col className="cpu" />
           <col className="status" />
