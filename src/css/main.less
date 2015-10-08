@@ -228,56 +228,64 @@ a,
   padding: 0 0 5px 5px;
 }
 
-/* App list columns */
-.table > colgroup > col {
+/* ==============
+ * App List (Table)
+ * ==============
+ */
+.table.app-list {
 
-  &.appid {
-    width: auto;
+  /* Columns */
+  & > colgroup > col {
+
+    &.appid {
+      width: auto;
+    }
+
+    &.ram {
+      width: @base-spacing-unit*12;
+    }
+
+    &.cpu {
+      width: @base-spacing-unit*10;
+    }
+
+    &.status {
+      width: @base-spacing-unit*27;
+    }
+
+    &.tasks {
+      width: @base-spacing-unit*6;
+    }
+
+    &.health {
+      width: 6%;
+    }
+
+    &.actions {
+      width: @base-spacing-unit*8;
+    }
+
   }
 
-  &.ram {
-    width: @base-spacing-unit*12;
-  }
+  /* Cells */
+  & > thead > tr > th,
+  & > tbody > tr > th,
+  & > tfoot > tr > th,
+  & > thead > tr > td,
+  & > tbody > tr > td,
+  & > tfoot > tr > td {
 
-  &.cpu {
-    width: @base-spacing-unit*10;
-  }
+    &.status {
+      padding-left: @base-spacing-unit*8;
+    }
 
-  &.status {
-    width: @base-spacing-unit*27;
-  }
+    &.appid {
+      display: flex;
 
-  &.tasks {
-    width: @base-spacing-unit*6;
-  }
-
-  &.health {
-    width: 6%;
-  }
-
-  &.actions {
-    width: @base-spacing-unit*8;
-  }
-}
-
-/* App list cells */
-.table > thead > tr > th,
-.table > tbody > tr > th,
-.table > tfoot > tr > th,
-.table > thead > tr > td,
-.table > tbody > tr > td,
-.table > tfoot > tr > td {
-
-  &.status {
-    padding-left: @base-spacing-unit*8;
-  }
-
-  &.appid {
-    display: flex;
-
-    .labels {
-      .label {
-        margin-left: @horizontal-spacing-unit;
+      .labels {
+        .label {
+          margin-left: @horizontal-spacing-unit;
+        }
       }
     }
   }
