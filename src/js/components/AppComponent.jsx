@@ -64,11 +64,11 @@ var AppComponent = React.createClass({
           {model.id}
           {this.getLabels()}
         </td>
-        <td className="text-right total ram">
-          {model.totalMem}
-        </td>
         <td className="text-right total cpu">
           {model.totalCpus}
+        </td>
+        <td className="text-right total ram">
+          {model.totalMem}
         </td>
         <td className="text-right status">
           <AppStatusComponent model={model} />
