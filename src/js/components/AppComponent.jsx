@@ -1,4 +1,3 @@
-var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
