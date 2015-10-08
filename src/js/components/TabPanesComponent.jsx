@@ -6,6 +6,8 @@ var AppListLabelsFilterComponent =
   require("../components/AppListLabelsFilterComponent");
 var AppListStatusFilterComponent =
   require("../components/AppListStatusFilterComponent");
+var AppListTypeFilterComponent =
+  require("../components/AppListTypeFilterComponent");
 var AppListComponent = require("../components/AppListComponent");
 var DeploymentsListComponent =
   require("../components/DeploymentsListComponent");
@@ -25,7 +27,8 @@ var TabPanesComponent = React.createClass({
     return {
       filterText: "",
       filterLabels: [],
-      filterStatus: []
+      filterStatus: [],
+      filterTypes: []
     };
   },
 
@@ -44,6 +47,12 @@ var TabPanesComponent = React.createClass({
   updateFilterStatus: function (filterStatus) {
     this.setState({
       filterStatus: filterStatus
+    });
+  },
+
+  updateFilterTypes: function (filterTypes) {
+    this.setState({
+      filterTypes: filterTypes
     });
   },
 
@@ -83,23 +92,7 @@ var TabPanesComponent = React.createClass({
               <div className="flex-row">
                 <h3 className="small-caps">Application Type</h3>
               </div>
-              <ul className="list-group checked-list-box filters">
-                <li className="checkbox">
-                  <input type="checkbox" id="filter-cb-6"/>
-                  <label htmlFor="filter-cb-6">Docker</label>
-                </li>
-                <li className="checkbox">
-                  <input type="checkbox" checked id="filter-cb-7"/>
-                  <label htmlFor="filter-cb-7">Rocket</label>
-                </li>
-                <li className="checkbox">
-                  <input type="checkbox" id="filter-cb-8"/>
-                  <label htmlFor="filter-cb-8">Cgroup</label>
-                </li>
-                <li className="flex-row show-more">
-                  <a href="#">Show more</a>
-                </li>
-              </ul>
+              <AppListTypeFilterComponent onChange={this.updateFilterTypes} />
               <div className="flex-row">
                 <h3 className="small-caps">Label</h3>
               </div>
@@ -153,6 +146,7 @@ var TabPanesComponent = React.createClass({
               </div>
               <AppListComponent filterText={this.state.filterText}
                 filterLabels={this.state.filterLabels}
+                filterTypes={this.state.filterTypes}
                 filterStatus={this.state.filterStatus} />
             </main>
           </div>
