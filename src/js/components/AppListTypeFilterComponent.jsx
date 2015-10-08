@@ -2,11 +2,6 @@ var React = require("react/addons");
 
 var AppTypes = require("../constants/AppTypes");
 
-const appTypesNameMapping = {
-  "DEFAULT": "Default",
-  "DOCKER": "Docker"
-};
-
 var AppListTypeFilterComponent = React.createClass({
   displayName: "AppListTypeFilterComponent",
 
@@ -107,9 +102,7 @@ var AppListTypeFilterComponent = React.createClass({
         <li className="checkbox" key={i}>
           <input {...checkboxProps}
             onChange={this.handleChange.bind(this, type)} />
-          <label htmlFor={`type-${type}-${i}`}>
-            {appTypesNameMapping[type]}
-          </label>
+          <label htmlFor={`type-${type}-${i}`}>{type}</label>
         </li>
       );
     });
