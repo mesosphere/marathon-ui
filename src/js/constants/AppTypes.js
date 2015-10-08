@@ -5,4 +5,4 @@ const AppTypes = ["DEFAULT"].concat(
     .map((typeKey) => ContainerConstants.TYPE[typeKey])
   );
 
-module.exports = AppTypes;
+module.exports = Object.freeze(AppTypes);
