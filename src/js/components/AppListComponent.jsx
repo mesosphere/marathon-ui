@@ -182,7 +182,7 @@ var AppListComponent = React.createClass({
     });
 
     var tableClassSet = classNames({
-      "table table-fixed": true,
+      "table table-fixed app-list": true,
       "table-hover table-selectable":
         state.apps.length !== 0 &&
         state.fetchState !== States.STATE_LOADING
