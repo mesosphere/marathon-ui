@@ -60,7 +60,7 @@ var AppComponent = React.createClass({
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
       <tr onClick={this.onClick}>
-        <td className="overflow-ellipsis appid" title={model.id}>
+        <td className="overflow-ellipsis name" title={model.id}>
           {model.id}
           {this.getLabels()}
         </td>
