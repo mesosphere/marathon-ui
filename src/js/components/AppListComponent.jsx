@@ -192,8 +192,8 @@ var AppListComponent = React.createClass({
       <table className={tableClassSet}>
         <colgroup>
           <col className="name" />
-          <col className="ram" />
           <col className="cpu" />
+          <col className="ram" />
           <col className="status" />
           <col className="tasks" />
           <col className="health" />
@@ -207,16 +207,16 @@ var AppListComponent = React.createClass({
                 Name {this.getCaret("id")}
               </span>
             </th>
-            <th className="text-right ram">
-              <span onClick={this.sortBy.bind(null, "totalMem")}
-                  className={headerClassSet}>
-                {this.getCaret("totalMem")} Memory
-              </span>
-            </th>
             <th className="text-right cpu">
               <span onClick={this.sortBy.bind(null, "totalCpus")}
                   className={headerClassSet}>
                 {this.getCaret("totalCpus")} CPU
+              </span>
+            </th>
+            <th className="text-right ram">
+              <span onClick={this.sortBy.bind(null, "totalMem")}
+                    className={headerClassSet}>
+                {this.getCaret("totalMem")} Memory
               </span>
             </th>
             <th className="status">
