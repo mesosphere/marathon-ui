@@ -708,12 +708,12 @@ describe("App component", function () {
   });
 
   it("has the correct amount of total memory", function () {
-    var cellContent = this.component.props.children[1].props.children;
-    expect(cellContent).to.equal(500);
+    var cellContent = this.component.props.children[2].props.children;
+    expect(cellContent).to.equal("500MB");
   });
 
   it("has the correct amount of total cpus", function () {
-    var cellContent = this.component.props.children[2].props.children;
+    var cellContent = this.component.props.children[1].props.children;
     expect(cellContent).to.equal(20);
   });
 
