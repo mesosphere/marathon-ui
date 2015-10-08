@@ -75,9 +75,7 @@ var AppComponent = React.createClass({
         <td className="text-right health-bar-column">
           <AppHealthComponent model={model} />
         </td>
-        <td className="text-right actions">
-          ...
-        </td>
+        <td className="text-right actions">&hellip;</td>
       </tr>
     );
   }
