@@ -67,7 +67,7 @@ var AppComponent = React.createClass({
         <td className="text-right status">
           <AppStatusComponent model={model} />
         </td>
-        <td className="text-left running tasks">
+        <td className="text-right running tasks">
           <span>
             {model.tasksRunning}
           </span> of {model.instances}
