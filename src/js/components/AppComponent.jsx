@@ -2,6 +2,7 @@ var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
+var MemoryFieldComponent = require("../components/MemoryFieldComponent");
 var Util = require("../helpers/Util");
 
 var AppComponent = React.createClass({
@@ -62,7 +63,7 @@ var AppComponent = React.createClass({
           {model.totalCpus}
         </td>
         <td className="text-right total ram">
-          {`${model.totalMem}MB`}
+          <MemoryFieldComponent megabytes={model.totalMem} />
         </td>
         <td className="text-right status">
           <AppStatusComponent model={model} />
