@@ -22,6 +22,7 @@ var AppComponent = require("../js/components/AppComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
 var AppStatusComponent = require("../js/components/AppStatusComponent");
+var MemoryFieldComponent = require("../js/components/MemoryFieldComponent");
 var appScheme = require("../js/stores/schemes/appScheme");
 var AppsEvents = require("../js/events/AppsEvents");
 var AppsStore = require("../js/stores/AppsStore");
@@ -707,11 +708,6 @@ describe("App component", function () {
     expect(cellContent).to.equal("app-123");
   });
 
-  it("has the correct amount of total memory", function () {
-    var cellContent = this.component.props.children[2].props.children;
-    expect(cellContent).to.equal("500MB");
-  });
-
   it("has the correct amount of total cpus", function () {
     var cellContent = this.component.props.children[1].props.children;
     expect(cellContent).to.equal(20);
@@ -727,6 +723,32 @@ describe("App component", function () {
     expect(totalSteps).to.equal(5);
   });
 
+});
+
+describe("Memory field component", function () {
+
+  beforeEach(function () {
+    var megabytes = 1030;
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<MemoryFieldComponent megabytes={megabytes} />);
+    this.component = this.renderer.getRenderOutput();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("has the correct amount of total memory", function () {
+    var content = this.component.props.children;
+    console.log(content);
+    expect(content).to.equal("1GB");
+  });
+
+  it("has the correct title", function () {
+    var title = this.component.props.title;
+    console.log(title);
+    expect(title).to.equal("1030MB");
+  });
 });
 
 describe("App Health component", function () {
