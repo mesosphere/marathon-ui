@@ -282,21 +282,24 @@ a,
       }
     }
   }
+
+  .label.label-default {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 101px;
+    white-space: nowrap;
+    padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
+    background-color: @sidebar-bg-color;
+    border-radius: @base-spacing-unit*2;
+    color: @navbar-inactive-color;
+    font-size: @small-font-size;
+    font-weight: normal;
+  }
+
 }
 
-.label.label-default {
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 101px;
-  white-space: nowrap;
-  padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
-  background-color: @sidebar-bg-color;
-  border-radius: @base-spacing-unit*2;
-  color: @navbar-inactive-color;
-  font-size: @small-font-size;
-  font-weight: normal;
-}
+
 
 .list-inline-subtext {
   color: #6f757D;
