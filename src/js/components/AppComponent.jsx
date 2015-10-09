@@ -32,7 +32,9 @@ var AppComponent = React.createClass({
       }
 
       return (
-        <span key={i} className="label label-default">{labelText}</span>
+        <span key={i} className="label label-default" title={labelText}>
+          {labelText}
+        </span>
       );
     });
 
