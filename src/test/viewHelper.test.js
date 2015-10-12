@@ -26,7 +26,7 @@ describe("ViewHelper", function () {
     });
 
     it("handles undefined values correctly", function () {
-      expect(ViewHelper.convertMegabytesToString(null)).to.equal("0MB");
+      expect(ViewHelper.convertMegabytesToString(undefined)).to.equal("0MB");
     });
 
   });
