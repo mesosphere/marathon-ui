@@ -702,8 +702,8 @@ describe("App component", function () {
     this.renderer.unmount();
   });
 
-  it("has the correct app id", function () {
-    var cellContent = this.component.props.children[0].props.children[0];
+  it.only("has the correct app id", function () {
+    var cellContent = this.component.props.children[0].props.children[0].props.children;
     expect(cellContent).to.equal("app-123");
   });
 
