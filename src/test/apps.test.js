@@ -688,7 +688,7 @@ describe("App component", function () {
       tasksRunning: 4,
       instances: 5,
       mem: 100,
-      totalMem: 500,
+      totalMem: 1030,
       cpus: 4,
       totalCpus: 20,
       status: 0
@@ -707,14 +707,19 @@ describe("App component", function () {
     expect(cellContent).to.equal("app-123");
   });
 
-  it("has the correct amount of total memory", function () {
-    var cellContent = this.component.props.children[2].props.children;
-    expect(cellContent).to.equal("500MB");
-  });
-
   it("has the correct amount of total cpus", function () {
     var cellContent = this.component.props.children[1].props.children;
     expect(cellContent).to.equal(20);
+  });
+
+  it("has the correct amount of total memory", function () {
+    var cellContent = this.component.props.children[2].props.children.props.title;
+    expect(cellContent).to.equal("1030MB");
+  });
+
+  it("displays the correct amount memory", function () {
+    var cellContent = this.component.props.children[2].props.children.props.children;
+    expect(cellContent).to.equal("1GB");
   });
 
   it("has correct number of tasks running", function () {
