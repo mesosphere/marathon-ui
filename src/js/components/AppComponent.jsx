@@ -58,7 +58,7 @@ var AppComponent = React.createClass({
       // cells will reveal their full contents.
       <tr onClick={this.onClick}>
         <td className="overflow-ellipsis name" title={model.id}>
-          {model.id}
+          <span>{model.id}</span>
           {this.getLabels()}
         </td>
         <td className="text-right total cpu">
