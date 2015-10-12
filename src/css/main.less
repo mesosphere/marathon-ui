@@ -294,10 +294,10 @@ a,
   }
 
   .label.label-default {
-    display: inline-block;
+    display: none;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 101px;
+    max-width: @app-list-label-width;
     white-space: nowrap;
     padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
     background-color: @sidebar-bg-color;
@@ -306,6 +306,17 @@ a,
     font-size: @small-font-size;
     font-weight: normal;
   }
+
+  .label-loop(@i) when (@i > 0) {
+    @breakpoint: (@app-list-labels-breakpoint + @i * @app-list-label-width);
+    @media only screen and (min-width:  @breakpoint) {
+      .label.label-default:nth-child(@{i}) {
+        display: inline-block;
+      }
+    }
+    .label-loop(@i - 1);
+  }
+  .label-loop(10);
 
 }
 
