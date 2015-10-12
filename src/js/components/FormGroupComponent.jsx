@@ -73,6 +73,14 @@ var FormGroupComponent = React.createClass({
     // Assume there is a single child of either <input> or <textarea>, and add
     // the needed props to make it an input for this attribute.
     var child = React.Children.only(props.children);
+    var isCheckbox = child.props.type === "checkbox";
+    var value = child.props.defaultValue != null
+        ? child.props.defaultValue
+        : objectPath(state.model, attribute);
+    var checked = child.props.defaultChecked != null
+        ? child.props.defaultChecked
+        : objectPath(state.model, attribute);
+
     var formControlChild = React.cloneElement(
       child,
       {
@@ -80,9 +88,8 @@ var FormGroupComponent = React.createClass({
         id: fieldId,
         name: attribute,
         onChange: this.onInputChange,
-        defaultValue: child.props.defaultValue != null
-          ? child.props.defaultValue
-          : objectPath(state.model, attribute)
+        defaultValue: !isCheckbox ? value : null,
+        defaultChecked: isCheckbox ? checked : null
       }
     );
 

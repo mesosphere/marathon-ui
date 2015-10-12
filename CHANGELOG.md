@@ -1,3 +1,10 @@
+## Unversioned
+### Fixed
+- \#2338 - Parameters in the Docker container settings are not taken into
+  account
+- \#2398 - Blank docker image is created in app modal
+- \#2402 - Runtime privilege checkbox does not work
+
 ## 0.11.1 - 2015-09-28
 ### Fixed
 - \#2252 - Wrong task number in Debug Tab
