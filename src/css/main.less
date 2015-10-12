@@ -273,8 +273,18 @@ a,
     }
 
     &.name {
+
       display: flex;
       color: inherit;
+
+      & > span {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: @app-list-name-width;
+        white-space: nowrap;
+      }
+
       .labels {
         .label {
           margin-left: @horizontal-spacing-unit;
@@ -282,16 +292,32 @@ a,
       }
     }
   }
-}
 
-.label.label-default {
-  background-color: @sidebar-bg-color;
-  border-radius: @base-spacing-unit*2;
-  color: @navbar-inactive-color;
-  font-size: @small-font-size;
-  font-weight: normal;
-  padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
-  padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
+  .label.label-default {
+    display: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: @app-list-label-width;
+    white-space: nowrap;
+    padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
+    background-color: @sidebar-bg-color;
+    border-radius: @base-spacing-unit*2;
+    color: @navbar-inactive-color;
+    font-size: @small-font-size;
+    font-weight: normal;
+  }
+
+  .label-loop(@i) when (@i > 0) {
+    @breakpoint: (@app-list-labels-breakpoint + @i * @app-list-label-width);
+    @media only screen and (min-width:  @breakpoint) {
+      .label.label-default:nth-child(@{i}) {
+        display: inline-block;
+      }
+    }
+    .label-loop(@i - 1);
+  }
+  .label-loop(10);
+
 }
 
 .list-inline-subtext {

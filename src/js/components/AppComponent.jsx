@@ -33,7 +33,9 @@ var AppComponent = React.createClass({
       }
 
       return (
-        <span key={i} className="label label-default">{labelText}</span>
+        <span key={i} className="label label-default" title={labelText}>
+          {labelText}
+        </span>
       );
     });
 
@@ -56,7 +58,7 @@ var AppComponent = React.createClass({
       // cells will reveal their full contents.
       <tr onClick={this.onClick}>
         <td className="overflow-ellipsis name" title={model.id}>
-          {model.id}
+          <span>{model.id}</span>
           {this.getLabels()}
         </td>
         <td className="text-right total cpu">
