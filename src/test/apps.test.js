@@ -734,7 +734,6 @@ describe("App component", function () {
 
 });
 
-
 describe("App Health component", function () {
 
   beforeEach(function () {
