@@ -193,13 +193,14 @@ var AppModalComponent = React.createClass({
     // Container arrays shouldn't have null-values
     if ("container" in modelAttrs) {
       let container = modelAttrs.container;
-      if ("parameters" in container) {
-        container.parameters = Util.compactArray(container.parameters);
-      }
       if ("volumes" in container) {
         container.volumes = Util.compactArray(container.volumes);
       }
       if ("docker" in container) {
+        if ("parameters" in container.docker) {
+          container.docker.parameters =
+            Util.compactArray(container.docker.parameters);
+        }
         if ("portMappings" in container.docker) {
           container.docker.portMappings =
             Util.compactArray(container.docker.portMappings);

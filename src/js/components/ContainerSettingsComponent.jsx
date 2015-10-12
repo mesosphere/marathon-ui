@@ -24,8 +24,8 @@ var ContainerSettingsComponent = React.createClass({
       if (container.docker != null && container.docker.portMappings != null) {
         portMappingsCount = container.docker.portMappings.length || 1;
       }
-      if (container.parameters != null) {
-        parametersCount = container.parameters.length || 1;
+      if (container.docker != null && container.docker.parameters != null) {
+        parametersCount = container.docker.parameters.length || 1;
       }
       if (container.volumes != null) {
         volumesCount = container.volumes.length || 1;
@@ -141,7 +141,7 @@ var ContainerSettingsComponent = React.createClass({
       <div key={`p-${i}`} className="row duplicable-row">
         <div className="col-sm-6 add-colon">
           <FormGroupComponent
-            attribute={`container.parameters[${i}].key`}
+            attribute={`container.docker.parameters[${i}].key`}
             label="Key"
             model={model}
             errors={errors}
@@ -151,7 +151,7 @@ var ContainerSettingsComponent = React.createClass({
         </div>
         <div className="col-sm-6">
           <FormGroupComponent
-            attribute={`container.parameters[${i}].value`}
+            attribute={`container.docker.parameters[${i}].value`}
             label="Value"
             model={model}
             errors={errors}
