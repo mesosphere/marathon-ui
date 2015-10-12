@@ -273,8 +273,18 @@ a,
     }
 
     &.name {
+
       display: flex;
       color: inherit;
+
+      & > span {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: @app-list-name-width;
+        white-space: nowrap;
+      }
+
       .labels {
         .label {
           margin-left: @horizontal-spacing-unit;
