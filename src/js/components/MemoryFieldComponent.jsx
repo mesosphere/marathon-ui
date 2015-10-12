@@ -17,7 +17,6 @@ var MemoryFieldComponent = React.createClass({
       index = Math.floor(Math.log(megabytes) / Math.log(factor));
       value = Math.round(megabytes / Math.pow(factor, index));
     }
-    console.log(value, index);
     return (
       <span title={`${megabytes}MB`}>{`${value}${units[index]}`}</span>
     );
