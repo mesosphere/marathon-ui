@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- \#2422 - Handle apps error response attribute on HTTP 422
+
 ## 0.12.0 - 2015-10-02
 ### Added
 - \#2244 - Ability to scale an application forcefully if there is a deployment
