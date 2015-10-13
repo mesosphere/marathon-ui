@@ -11,6 +11,7 @@ var AppModalComponent = require("../components/modals/AppModalComponent");
 var DialogsComponent = require("../components/DialogsComponent");
 var EditAppModalComponent =
   require("../components/modals/EditAppModalComponent");
+var HelpModalComponent = require("../components/modals/HelpModalComponent");
 var NavTabsComponent = require("../components/NavTabsComponent");
 
 var AppsActions = require("../actions/AppsActions");
@@ -72,6 +73,10 @@ var Marathon = React.createClass({
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "about"});
     });
 
+    Mousetrap.bind("shift+?", function () {
+      router.transitionTo(router.getCurrentPathname(), {}, {modal: "help"});
+    });
+
     this.startPolling();
   },
 
@@ -91,6 +96,8 @@ var Marathon = React.createClass({
       modal = this.getNewAppModal();
     } else if (modalQuery === "about") {
       modal = this.getAboutModal();
+    } else if (modalQuery === "help") {
+      modal = this.getHelpModal();
     } else if (modalQuery != null && modalQuery.indexOf("edit-app--") > -1) {
       let [, appId, appVersion] = modalQuery.split("--");
       modal = this.getEditAppModal(decodeURIComponent(appId), appVersion);
@@ -185,6 +192,13 @@ var Marathon = React.createClass({
   getAboutModal: function () {
     return (
       <AboutModalComponent
+        onDestroy={this.handleModalDestroy} />
+    );
+  },
+
+  getHelpModal: function () {
+    return (
+      <HelpModalComponent
         onDestroy={this.handleModalDestroy} />
     );
   },
