@@ -112,6 +112,7 @@ const resolveFieldIdToAppKeyMap = {
  */
 const responseAttributePathToFieldIdMap = {
   "id": "appId",
+  "apps": "appId",
   "/id": "appId",
   "/acceptedResourceRoles": "acceptedResourceRoles",
   "/cmd": "cmd",
