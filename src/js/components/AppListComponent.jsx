@@ -4,10 +4,29 @@ var React = require("react/addons");
 
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
-var AppComponent = require("../components/AppComponent");
+var AppListItemComponent = require("./AppListItemComponent");
 
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
+
+function createGroup(groupId, app) {
+  return {
+    id: groupId,
+    instances: app.instances,
+    tasksRunning: app.tasksRunning,
+    totalCpus: app.totalCpus,
+    totalMem: app.totalMem,
+    isGroup: true
+  };
+}
+
+function updateGroup(group, app) {
+  group.instances += app.instances;
+  group.tasksRunning += app.tasksRunning;
+  group.totalCpus += app.totalCpus;
+  group.totalMem += app.totalMem;
+  return group;
+}
 
 var AppListComponent = React.createClass({
   displayName: "AppListComponent",
@@ -29,6 +48,7 @@ var AppListComponent = React.createClass({
 
     return {
       apps: apps,
+      currentGroup: "/",
       fetchState: fetchState,
       sortKey: "id",
       sortDescending: false
@@ -80,12 +100,45 @@ var AppListComponent = React.createClass({
     });
   },
 
+  getAppsInContext: function () {
+    var apps = this.state.apps;
+    var currentGroup = this.state.currentGroup;
+    if (!currentGroup.endsWith("/")) {
+      currentGroup += "/";
+    }
+
+    return lazy(apps)
+      .filter((app) => app.id.startsWith(currentGroup))
+      .reduce((memo, app) => {
+        let relativePath = app.id.substring(currentGroup.length);
+        let pathParts = relativePath.split("/");
+        let isGroup = pathParts.length > 1;
+
+        if (!isGroup) {
+          memo.push(app);
+        } else {
+          let groupId = currentGroup + pathParts[0];
+          let group = memo.find((item) => {
+            return item.id === groupId;
+          });
+
+          if (group == null) {
+            group = createGroup(groupId, app);
+            memo.unshift(group);
+          } else {
+            updateGroup(group, app);
+          }
+        }
+        return memo;
+      }, []);
+  },
+
   getAppNodes: function () {
     var state = this.state;
     var sortKey = state.sortKey;
     var props = this.props;
 
-    var appsSequence = lazy(state.apps);
+    var appsSequence = lazy(this.getAppsInContext());
 
     if (props.filterText != null && props.filterText !== "") {
       appsSequence = appsSequence
@@ -134,9 +187,9 @@ var AppListComponent = React.createClass({
         return app[sortKey];
       }, state.sortDescending)
       .map(function (app) {
-        return (
-          <AppComponent key={app.id} model={app} />
-        );
+            return (
+              <AppListItemComponent key={app.id} model={app} />
+            );
       })
       .value();
   },
