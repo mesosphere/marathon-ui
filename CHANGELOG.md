@@ -1,5 +1,6 @@
 ## Unversioned
 ### Fixed
+- \#2421 - Error: Invalid calling object (Win 8 IE10, Win 7 IE11)
 - \#2422 - Handle apps error response attribute on HTTP 422
 
 ## 0.12.0 - 2015-10-02
