@@ -136,7 +136,7 @@ var TaskListComponent = React.createClass({
       <div>
         <div className={errorClassSet}>
           <p className="text-center text-danger">
-            {`Error fetching tasks. ${Messages.UNAUTHORIZED}`}
+            {`Error fetching tasks. ${Messages.RETRY_REFRESH}`}
           </p>
         </div>
         <div className={unauthorizedClassSet}>
