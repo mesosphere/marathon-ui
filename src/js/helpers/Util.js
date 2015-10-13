@@ -1,6 +1,6 @@
 var consecutiveNumber = 0;
 var objectPath = require("object-path");
-
+var toString = Object.prototype.toString;
 var Util = {
   initKeyValue: function (obj, key, value) {
     if (obj[key] === undefined) {
