@@ -18,7 +18,9 @@ TooltipMixin.getNewTooltip = _.noop;
 TooltipMixin.tip_destroyAllTips = _.noop;
 
 var AppsActions = require("../js/actions/AppsActions");
-var AppComponent = require("../js/components/AppComponent");
+var AppDispatcher = require("../js/AppDispatcher");
+var AppListComponent = require("../js/components/AppListComponent");
+var AppListItemComponent = require("../js/components/AppListItemComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
 var AppStatusComponent = require("../js/components/AppStatusComponent");
@@ -701,6 +703,47 @@ describe("Apps", function () {
 
 });
 
+describe("Groups", function () {
+
+  beforeEach(function () {
+    var apps = [
+      {id: "/app-1", instances: 1, mem: 16, cpus: 1},
+      {id: "/app-2", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-1/app-3", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-1/app-4", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-2/app-5", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-2/app-6", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-1/group-3/app-7", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-1/group-3/app-8", instances: 1, mem: 16, cpus: 1}
+    ];
+
+    AppDispatcher.dispatch({
+      actionType: AppsEvents.REQUEST_APPS,
+      data: {body: {apps: apps}}
+    });
+
+    this.renderer = TestUtils.createRenderer();
+    this.renderer.render(<AppListComponent />);
+    this.component = this.renderer.getRenderOutput();
+
+    var tbody = this.component.props.children[2];
+    var trs = tbody.props.children;
+    this.appNodes = trs[trs.length - 1];
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("are extrapolated from app IDs", function () {
+    var appNodeKeys = this.appNodes.map((app) => app.key);
+    expect(appNodeKeys).to.deep.equal([
+      "/app-1", "/app-2", "/group-1", "/group-2"
+    ]);
+  });
+
+});
+
 describe("App component", function () {
 
   beforeEach(function () {
@@ -716,7 +759,7 @@ describe("App component", function () {
       status: 0
     };
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppComponent model={model} />);
+    this.renderer.render(<AppListItemComponent model={model} />);
     this.component = this.renderer.getRenderOutput();
   });
 
