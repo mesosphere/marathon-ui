@@ -755,7 +755,7 @@ describe("App component", function () {
       mem: 100,
       totalMem: 1030,
       cpus: 4,
-      totalCpus: 20,
+      totalCpus: 20.0000001,
       status: 0
     };
     this.renderer = TestUtils.createRenderer();
@@ -774,7 +774,7 @@ describe("App component", function () {
 
   it("has the correct amount of total cpus", function () {
     var cellContent = this.component.props.children[1].props.children;
-    expect(cellContent).to.equal(20);
+    expect(cellContent).to.equal("20.0");
   });
 
   it("has the correct amount of total memory", function () {
