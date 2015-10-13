@@ -39,7 +39,7 @@ var HelpModalComponent = React.createClass({
             <dd>Go to UI Version dialog</dd>
             <dt>shift + ,</dt>
             <dd>Go to About modal</dd>
-            <dt>shift + ?</dt>
+            <dt>?</dt>
             <dd>Go to Help modal</dd>
           </dl>
         </div>

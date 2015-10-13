@@ -73,7 +73,7 @@ var Marathon = React.createClass({
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "about"});
     });
 
-    Mousetrap.bind("shift+?", function () {
+    Mousetrap.bind("?", function () {
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "help"});
     });
 
