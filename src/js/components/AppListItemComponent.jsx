@@ -5,8 +5,8 @@ var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
 var ViewHelper = require("../helpers/ViewHelper");
 
-var AppComponent = React.createClass({
-  displayName: "AppComponent",
+var AppListItemComponent = React.createClass({
+  displayName: "AppListItemComponent",
 
   contextTypes: {
     router: React.PropTypes.func
@@ -51,12 +51,42 @@ var AppComponent = React.createClass({
       .transitionTo("app", {appId: encodeURIComponent(this.props.model.id)});
   },
 
+  getHealthBar: function () {
+    var model = this.props.model;
+    return (
+      <td className="text-right health-bar-column">
+        <AppHealthComponent model={model} />
+      </td>
+    );
+  },
+
+  getStatus: function () {
+    var model = this.props.model;
+    return (
+      <td className="text-right status">
+        <AppStatusComponent model={model} />
+      </td>
+    );
+  },
+
   render: function () {
     var model = this.props.model;
+    var status = null;
+    var healthBar = null;
+    var colSpan = 3;
+    var className = "group";
+
+    if (model.isGroup !== true) {
+      className = "app";
+      status = this.getStatus();
+      healthBar = this.getHealthBar();
+      colSpan = 1;
+    }
+
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
-      <tr onClick={this.onClick}>
+      <tr onClick={this.onClick} className={className}>
         <td className="overflow-ellipsis name" title={model.id}>
           <span>{model.id}</span>
           {this.getLabels()}
@@ -69,21 +99,17 @@ var AppComponent = React.createClass({
             {`${ViewHelper.convertMegabytesToString(model.totalMem)}`}
           </span>
         </td>
-        <td className="text-right status">
-          <AppStatusComponent model={model} />
-        </td>
-        <td className="text-right running tasks">
+        {status}
+        <td className="text-right running tasks" colSpan={colSpan}>
           <span>
             {model.tasksRunning}
           </span> of {model.instances}
         </td>
-        <td className="text-right health-bar-column">
-          <AppHealthComponent model={model} />
-        </td>
+        {healthBar}
         <td className="text-right actions">&hellip;</td>
       </tr>
     );
   }
 });
 
-module.exports = AppComponent;
+module.exports = AppListItemComponent;

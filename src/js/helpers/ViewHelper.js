@@ -11,6 +11,12 @@ var ViewHelpers = {
       value = Math.round(megabytes / Math.pow(factor, index));
     }
     return `${value}${units[index]}`;
+  },
+  getRelativePath(id, currentGroup) {
+    if (!currentGroup.endsWith("/")) {
+      currentGroup += "/";
+    }
+    return id.substring(currentGroup.length);
   }
 };
 
