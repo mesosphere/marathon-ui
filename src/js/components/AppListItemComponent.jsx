@@ -92,7 +92,7 @@ var AppListItemComponent = React.createClass({
           {this.getLabels()}
         </td>
         <td className="text-right total cpu">
-          {model.totalCpus}
+          {parseFloat(model.totalCpus).toFixed(1)}
         </td>
         <td className="text-right total ram">
           <span title={`${model.totalMem}MB`}>
