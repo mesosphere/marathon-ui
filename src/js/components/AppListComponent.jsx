@@ -3,7 +3,6 @@ var lazy = require("lazy.js");
 var React = require("react/addons");
 
 var Messages = require("../constants/Messages");
-var AppTypes = require("../constants/AppTypes");
 var States = require("../constants/States");
 var AppComponent = require("../components/AppComponent");
 
@@ -126,17 +125,9 @@ var AppListComponent = React.createClass({
 
     if (props.filterTypes != null && props.filterTypes.length > 0) {
       appsSequence = appsSequence.filter(function (app) {
-        let appTypeIndex = 0;
-        if (app.container != null && app.container.type != null) {
-          appTypeIndex = AppTypes.indexOf(app.container.type);
-          if (appTypeIndex === -1) {
-            return false;
-          }
-        }
-
         /* Use .every for an INTERSECTION instead of UNION */
         return lazy(props.filterTypes).some(function (type) {
-          return AppTypes[appTypeIndex] === type;
+          return app.type === type;
         });
       });
     }
