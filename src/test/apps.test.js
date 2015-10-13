@@ -115,6 +115,17 @@ describe("Apps", function () {
         this.server.setup({
           "apps": [{
             id: "/app-1",
+            container: {
+              type: "DOCKER"
+            },
+            tasksHealthy: 2,
+            tasksUnhealthy: 2,
+            tasksRunning: 5,
+            tasksStaged: 2,
+            instances: 10
+          },
+          {
+            id: "/app-2",
             tasksHealthy: 2,
             tasksUnhealthy: 2,
             tasksRunning: 5,
@@ -128,6 +139,17 @@ describe("Apps", function () {
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].healthWeight).to.equal(47);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+
+      it("has the correct app type", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].type).to.equal("DOCKER");
+            expect(AppsStore.apps[1].type).to.equal("DEFAULT");
           }, done);
         });
 
