@@ -4,7 +4,6 @@ var AppTypes = require("../constants/AppTypes");
 
 var AppListTypeFilterComponent = React.createClass({
   displayName: "AppListTypeFilterComponent",
-  types: [],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -18,12 +17,6 @@ var AppListTypeFilterComponent = React.createClass({
     return {
       selectedTypes: []
     };
-  },
-
-  componentWillMount: function () {
-    this.types = Object.keys(AppTypes).map((key) => {
-      return AppTypes[key];
-    });
   },
 
   componentDidMount: function () {
@@ -74,7 +67,6 @@ var AppListTypeFilterComponent = React.createClass({
   updateFilterType: function () {
     var router = this.context.router;
     var state = this.state;
-    var types = this.types;
     var queryParams = router.getCurrentQuery();
     var selectedTypes = queryParams.filterType;
     var stringify = JSON.stringify;
@@ -85,8 +77,7 @@ var AppListTypeFilterComponent = React.createClass({
       selectedTypes = decodeURIComponent(selectedTypes)
         .split(",")
         .filter((type) => {
-          let existingType = types.indexOf(type);
-          return existingType !== -1;
+          return Object.values(AppTypes).indexOf(type) !== -1;
         });
     }
 
@@ -99,8 +90,7 @@ var AppListTypeFilterComponent = React.createClass({
 
   getTypeNodes: function () {
     var state = this.state;
-    var types = this.types;
-    return types.map((type, i) => {
+    return Object.values(AppTypes).map((type, i) => {
       let checkboxProps = {
         type: "checkbox",
         id: `type-${type}-${i}`,
