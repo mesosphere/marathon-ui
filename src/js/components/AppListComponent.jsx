@@ -113,7 +113,7 @@ var AppListComponent = React.createClass({
     });
   },
 
-  getAppsInContext: function () {
+  getAppsInGroup: function () {
     var apps = this.state.apps;
     var currentGroup = this.props.currentGroup;
 
@@ -148,7 +148,7 @@ var AppListComponent = React.createClass({
     var sortKey = state.sortKey;
     var props = this.props;
 
-    var appsSequence = lazy(this.getAppsInContext());
+    var appsSequence = lazy(this.getAppsInGroup());
 
     if (props.filterText != null && props.filterText !== "") {
       appsSequence = appsSequence
