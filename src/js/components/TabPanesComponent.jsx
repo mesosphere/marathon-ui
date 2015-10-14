@@ -13,6 +13,7 @@ var DeploymentsListComponent =
   require("../components/DeploymentsListComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
+var AppListViewTypes = require("../constants/AppListViewTypes");
 
 var tabs = require("../constants/tabs");
 
@@ -93,7 +94,8 @@ var TabPanesComponent = React.createClass({
       filterText: state.filterText,
       filterLabels: state.filterLabels,
       filterTypes: state.filterTypes,
-      filterStatus: state.filterStatus
+      filterStatus: state.filterStatus,
+      viewType: AppListViewTypes.LIST
     };
 
     return (

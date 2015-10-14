@@ -9,7 +9,7 @@ var AppListItemComponent = require("./AppListItemComponent");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
-var ViewTypes = require("../constants/AppListViewTypes");
+var AppListViewTypes = require("../constants/AppListViewTypes");
 
 function createGroup(groupId, app) {
   return {
@@ -43,12 +43,12 @@ var AppListComponent = React.createClass({
     filterStatus: React.PropTypes.array,
     filterText: React.PropTypes.string,
     filterType: React.PropTypes.array,
-    viewType: React.PropTypes.oneOf(ViewTypes)
+    viewType: React.PropTypes.oneOf(Object.values(AppListViewTypes))
   },
 
   getDefaultProps: function () {
     return {
-      viewType: ViewTypes[0]
+      viewType: AppListViewTypes.LIST
     };
   },
 
@@ -198,7 +198,7 @@ var AppListComponent = React.createClass({
       }, state.sortDescending)
       .map((app) => {
         switch (props.viewType) {
-          case "List":
+          case AppListViewTypes.LIST:
             return (
               <AppListItemComponent key={app.id}
                 model={app}
