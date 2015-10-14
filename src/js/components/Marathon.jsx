@@ -38,44 +38,9 @@ var Marathon = React.createClass({
   },
 
   componentDidMount: function () {
-    var router = this.context.router;
-
     this.onRouteChange();
 
-    Mousetrap.bindGlobal("esc", function () {
-      if (this.state.modal != null) {
-        this.handleModalDestroy();
-      }
-      DialogActions.dismissLatest();
-    }.bind(this));
-
-    Mousetrap.bind("c", function () {
-      router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-app"});
-    }, "keyup");
-
-    Mousetrap.bind("g a", function () {
-      if (this.state.modal == null) {
-        router.transitionTo("apps");
-      }
-    }.bind(this));
-
-    Mousetrap.bind("g d", function () {
-      if (this.state.modal == null) {
-        router.transitionTo("deployments");
-      }
-    }.bind(this));
-
-    Mousetrap.bind("g v", function () {
-      DialogActions.alert(`The UI version is ${config.version}`);
-    });
-
-    Mousetrap.bind("shift+,", function () {
-      router.transitionTo(router.getCurrentPathname(), {}, {modal: "about"});
-    });
-
-    Mousetrap.bind("?", function () {
-      router.transitionTo(router.getCurrentPathname(), {}, {modal: "help"});
-    });
+    this.bindKeyboardShortcuts();
 
     this.startPolling();
   },
@@ -142,6 +107,45 @@ var Marathon = React.createClass({
 
   componentWillUnmount: function () {
     this.stopPolling();
+  },
+
+  bindKeyboardShortcuts: function () {
+    var router = this.context.router;
+
+    Mousetrap.bindGlobal("esc", function () {
+      if (this.state.modal != null) {
+        this.handleModalDestroy();
+      }
+      DialogActions.dismissLatest();
+    }.bind(this));
+
+    Mousetrap.bind("c", function () {
+      router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-app"});
+    }, "keyup");
+
+    Mousetrap.bind("g a", function () {
+      if (this.state.modal == null) {
+        router.transitionTo("apps");
+      }
+    }.bind(this));
+
+    Mousetrap.bind("g d", function () {
+      if (this.state.modal == null) {
+        router.transitionTo("deployments");
+      }
+    }.bind(this));
+
+    Mousetrap.bind("g v", function () {
+      DialogActions.alert(`The UI version is ${config.version}`);
+    });
+
+    Mousetrap.bind("shift+,", function () {
+      router.transitionTo(router.getCurrentPathname(), {}, {modal: "about"});
+    });
+
+    Mousetrap.bind("?", function () {
+      router.transitionTo(router.getCurrentPathname(), {}, {modal: "help"});
+    });
   },
 
   handleModalDestroy: function () {
