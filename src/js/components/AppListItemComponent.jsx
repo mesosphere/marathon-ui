@@ -83,7 +83,7 @@ var AppListItemComponent = React.createClass({
     var className = "group";
     var name = ViewHelper.getRelativePath(model.id, this.props.currentGroup);
 
-    if (model.isGroup !== true) {
+    if (!model.isGroup) {
       className = "app";
       status = this.getStatus();
       healthBar = this.getHealthBar();
