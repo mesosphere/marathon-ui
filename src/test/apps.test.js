@@ -723,12 +723,6 @@ describe("Groups", function () {
     });
 
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppListComponent />);
-    this.component = this.renderer.getRenderOutput();
-
-    var tbody = this.component.props.children[2];
-    var trs = tbody.props.children;
-    this.appNodes = trs[trs.length - 1];
   });
 
   afterEach(function () {
@@ -736,9 +730,28 @@ describe("Groups", function () {
   });
 
   it("are extrapolated from app IDs", function () {
+    this.renderer.render(<AppListComponent currentGroup="/" />);
+    this.component = this.renderer.getRenderOutput();
+    var tbody = this.component.props.children[2];
+    var trs = tbody.props.children;
+    this.appNodes = trs[trs.length - 1];
+
     var appNodeKeys = this.appNodes.map((app) => app.key);
     expect(appNodeKeys).to.deep.equal([
       "/app-1", "/app-2", "/group-1", "/group-2"
+    ]);
+  });
+
+  it("correctly renders in group context", function () {
+    this.renderer.render(<AppListComponent currentGroup="/group-1/" />);
+    this.component = this.renderer.getRenderOutput();
+    var tbody = this.component.props.children[2];
+    var trs = tbody.props.children;
+    this.appNodes = trs[trs.length - 1];
+
+    var appNodeKeys = this.appNodes.map((app) => app.key);
+    expect(appNodeKeys).to.deep.equal([
+      "/group-1/app-3", "/group-1/app-4", "/group-1/group-3"
     ]);
   });
 
@@ -748,7 +761,7 @@ describe("App component", function () {
 
   beforeEach(function () {
     var model = {
-      id: "app-123",
+      id: "/app-123",
       deployments: [],
       tasksRunning: 4,
       instances: 5,
@@ -759,7 +772,9 @@ describe("App component", function () {
       status: 0
     };
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppListItemComponent model={model} />);
+    this.renderer.render(
+      <AppListItemComponent model={model} currentGroup="/" />
+    );
     this.component = this.renderer.getRenderOutput();
   });
 
