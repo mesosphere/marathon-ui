@@ -101,7 +101,6 @@ var AppListComponent = React.createClass({
           return false;
         }
 
-        /* Use .every for an INTERSECTION instead of UNION */
         return lazy(props.filterLabels).some(function (label) {
           let [key, value] = lazy(label).toArray()[0];
           return labels[key] === value;
@@ -116,7 +115,6 @@ var AppListComponent = React.createClass({
         }
         let appStatus = app.status.toString();
 
-        /* Use .every for an INTERSECTION instead of UNION */
         return lazy(props.filterStatus).some(function (status) {
           return appStatus === status;
         });
@@ -125,7 +123,6 @@ var AppListComponent = React.createClass({
 
     if (props.filterTypes != null && props.filterTypes.length > 0) {
       appsSequence = appsSequence.filter(function (app) {
-        /* Use .every for an INTERSECTION instead of UNION */
         return lazy(props.filterTypes).some(function (type) {
           return app.type === type;
         });
