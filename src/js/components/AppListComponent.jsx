@@ -33,7 +33,12 @@ function updateGroup(group, app) {
 var AppListComponent = React.createClass({
   displayName: "AppListComponent",
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   propTypes: {
+    currentGroup: React.PropTypes.string.isRequired,
     filterLabels: React.PropTypes.array,
     filterStatus: React.PropTypes.array,
     filterText: React.PropTypes.string,
@@ -57,7 +62,6 @@ var AppListComponent = React.createClass({
 
     return {
       apps: apps,
-      currentGroup: "/",
       fetchState: fetchState,
       sortKey: "id",
       sortDescending: false
@@ -111,10 +115,7 @@ var AppListComponent = React.createClass({
 
   getAppsInContext: function () {
     var apps = this.state.apps;
-    var currentGroup = this.state.currentGroup;
-    if (!currentGroup.endsWith("/")) {
-      currentGroup += "/";
-    }
+    var currentGroup = this.props.currentGroup;
 
     return lazy(apps)
       .filter((app) => app.id.startsWith(currentGroup))
@@ -192,14 +193,16 @@ var AppListComponent = React.createClass({
     }
 
     return appsSequence
-      .sortBy(function (app) {
+      .sortBy((app) => {
         return app[sortKey];
       }, state.sortDescending)
-      .map(function (app) {
+      .map((app) => {
         switch (props.viewType) {
           case "List":
             return (
-              <AppListItemComponent key={app.id} model={app} />
+              <AppListItemComponent key={app.id}
+                model={app}
+                currentGroup={props.currentGroup} />
             );
           default:
             return null;
