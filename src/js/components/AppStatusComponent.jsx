@@ -65,9 +65,12 @@ var AppStatusComponent = React.createClass({
       "text-danger": model.status === AppStatus.DELAYED
     });
 
+    var iconClassSet = classNames("icon", "icon-mini",
+      `icon-${statusNameMapping[model.status].toLowerCase()}`);
+
     return (
       <span className={statusClassSet} title={this.getStatusTitle()}>
-        <i className="ion-android-radio-button-off"></i>
+        <i className={iconClassSet}></i>
         {statusNameMapping[model.status]}
         {this.getTasksSummary()}
       </span>
