@@ -5,6 +5,7 @@ var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
 var appScheme = require("../stores/schemes/appScheme");
 var AppTypes = require("../constants/AppTypes");
+var ContainerConstants = require("../constants/ContainerConstants");
 var AppStatus = require("../constants/AppStatus");
 var HealthStatus = require("../constants/HealthStatus");
 var TasksEvents = require("../events/TasksEvents");
@@ -117,11 +118,11 @@ function getAppHealthWeight(health) {
 }
 
 function getAppType(app) {
-  var appTypeIndex = 0;
-  if (app.container != null && app.container.type != null) {
-    appTypeIndex = AppTypes.indexOf(app.container.type) || appTypeIndex;
+  if (app.container != null &&
+      app.container.type === ContainerConstants.TYPE.DOCKER) {
+    return AppTypes.DOCKER;
   }
-  return AppTypes[appTypeIndex];
+  return AppTypes.DEFAULT;
 }
 
 function calculateTotalResources(app) {
