@@ -1,5 +1,9 @@
-var consecutiveNumber = 0;
 var objectPath = require("object-path");
+
+var consecutiveNumber = 0;
+// Use ``Object.prototype.toString``, as the *global* ``window.toString``
+// method can't be *call*ed on different objects in IE.
+var toString = Object.prototype.toString;
 
 var Util = {
   initKeyValue: function (obj, key, value) {
