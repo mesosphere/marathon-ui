@@ -13,6 +13,7 @@ var AppListItemComponent = React.createClass({
   },
 
   propTypes: {
+    currentGroup: React.PropTypes.string.isRequired,
     model: React.PropTypes.object.isRequired
   },
 
@@ -47,8 +48,14 @@ var AppListItemComponent = React.createClass({
   },
 
   onClick: function () {
-    this.context.router
-      .transitionTo("app", {appId: encodeURIComponent(this.props.model.id)});
+    var model = this.props.model;
+    if (model.isGroup) {
+      this.context.router
+        .transitionTo("group", {groupId: encodeURIComponent(model.id)});
+    } else {
+      this.context.router
+        .transitionTo("app", {appId: encodeURIComponent(model.id)});
+    }
   },
 
   getHealthBar: function () {
@@ -75,6 +82,7 @@ var AppListItemComponent = React.createClass({
     var healthBar = null;
     var colSpan = 3;
     var className = "group";
+    var name = ViewHelper.getRelativePath(model.id, this.props.currentGroup);
 
     if (model.isGroup !== true) {
       className = "app";
@@ -88,7 +96,7 @@ var AppListItemComponent = React.createClass({
       // cells will reveal their full contents.
       <tr onClick={this.onClick} className={className}>
         <td className="overflow-ellipsis name" title={model.id}>
-          <span>{model.id}</span>
+          <span>{name}</span>
           {this.getLabels()}
         </td>
         <td className="text-right total cpu">

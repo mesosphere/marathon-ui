@@ -25,11 +25,27 @@ var TabPanesComponent = React.createClass({
 
   getInitialState: function () {
     return {
+      currentGroup: "/",
       filterText: "",
       filterLabels: [],
       filterStatus: [],
       filterTypes: []
     };
+  },
+
+  componentWillReceiveProps: function () {
+    var {groupId} = this.context.router.getCurrentParams();
+    if (groupId == null) {
+      groupId = "/";
+    }
+    groupId = decodeURIComponent(groupId);
+    if (!groupId.endsWith("/")) {
+      groupId += "/";
+    }
+
+    this.setState({
+      currentGroup: groupId
+    });
   },
 
   updateFilterText: function (filterText) {
@@ -70,6 +86,15 @@ var TabPanesComponent = React.createClass({
 
   render: function () {
     var path = this.context.router.getCurrentPathname();
+    var state = this.state;
+
+    var appListProps = {
+      currentGroup: state.currentGroup,
+      filterText: state.filterText,
+      filterLabels: state.filterLabels,
+      filterTypes: state.filterTypes,
+      filterStatus: state.filterStatus
+    };
 
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
@@ -144,10 +169,7 @@ var TabPanesComponent = React.createClass({
                   </div>
                 </div>
               </div>
-              <AppListComponent filterText={this.state.filterText}
-                filterLabels={this.state.filterLabels}
-                filterTypes={this.state.filterTypes}
-                filterStatus={this.state.filterStatus} />
+              <AppListComponent {...appListProps} />
             </main>
           </div>
         </TabPaneComponent>
