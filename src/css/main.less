@@ -145,25 +145,6 @@ a,
   }
 }
 
-.app-status {
-  display: flex;
-  align-items: center;
-
-  > i {
-    display: inline-block;
-    font-size: @font-size-icon;
-    line-height: @base-spacing-unit*2;
-    margin-right: @horizontal-spacing-unit;
-    text-align: center;
-    width: @base-spacing-unit*2;
-  }
-
-  > span.tasks-summary {
-    color: @navbar-inactive-color;
-    margin-left: @horizontal-spacing-unit;
-  }
-}
-
 .page-header .btn + .btn {
   margin-left: 5px;
   margin-bottom: 0;
@@ -441,6 +422,49 @@ a,
 
 .text-muted {
   color: #8e929b;
+}
+
+/* ==============
+ * App Status
+ * ==============
+ */
+.app-status {
+  display: flex;
+  align-items: center;
+
+  > i {
+    display: inline-block;
+    font-size: @font-size-icon;
+    line-height: @base-spacing-unit*2;
+    margin-right: @horizontal-spacing-unit;
+    text-align: center;
+    width: @base-spacing-unit*2;
+  }
+
+  &.running {
+    color:@app-status-running-color;
+  }
+
+  &.deploying {
+    color:@app-status-deploying-color;
+  }
+
+  &.suspended {
+    color:@app-status-suspended-color;
+  }
+
+  &.delayed {
+    color:@app-status-delayed-color;
+  }
+
+  &.waiting {
+    color:@app-status-waiting-color;
+  }
+
+  > span.tasks-summary {
+    color: @navbar-inactive-color;
+    margin-left: @horizontal-spacing-unit;
+  }
 }
 
 /* ==============
