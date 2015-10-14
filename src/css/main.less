@@ -366,6 +366,11 @@ a,
 
   }
 
+  & tr td:first-child,
+  & tr th:first-child
+  {
+    padding-left: @base-spacing-unit*2;
+  }
   /* Cells */
   & > thead > tr > th,
   & > tbody > tr > th,
@@ -389,6 +394,16 @@ a,
         text-overflow: ellipsis;
         max-width: @app-list-name-width;
         white-space: nowrap;
+
+        // App/directory icons
+        &:before {
+          color: @link-color;
+          cursor: default;
+          font-family: "Ionicons";
+          height: @base-spacing-unit*2;
+          margin: 0 @base-spacing-unit 0 0;
+          width: @base-spacing-unit*2;
+        }
       }
 
       .labels {
@@ -423,6 +438,14 @@ a,
     .label-loop(@i - 1);
   }
   .label-loop(10);
+
+  .group .name > span:before {
+    content: "\f38a";
+  }
+  .app .name > span:before {
+    // 'android-expand' makes a good placeholder
+    content: "\f386";
+  }
 
 }
 
@@ -1181,12 +1204,11 @@ fieldset[disabled] .btn-info.active {
 
     main {
       flex: 1;
-      padding-left: @base-spacing-unit*2;
 
       .contextual-bar {
         align-items: center;
         display: flex;
-        padding: @base-spacing-unit*2 0;
+        padding: @base-spacing-unit*2;
 
         .app-list-controls {
           align-items: center;
