@@ -49,12 +49,11 @@ var AppListItemComponent = React.createClass({
 
   onClick: function () {
     var model = this.props.model;
+    var router = this.context.router;
     if (model.isGroup) {
-      this.context.router
-        .transitionTo("group", {groupId: encodeURIComponent(model.id)});
+      router.transitionTo("group", {groupId: encodeURIComponent(model.id)});
     } else {
-      this.context.router
-        .transitionTo("app", {appId: encodeURIComponent(model.id)});
+      router.transitionTo("app", {appId: encodeURIComponent(model.id)});
     }
   },
 
