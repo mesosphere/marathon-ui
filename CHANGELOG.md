@@ -1,4 +1,7 @@
 ## Unversioned
+### Added
+- \#2031 - Make keyboard shortcuts discoverable
+
 ### Fixed
 - \#2422 - Handle apps error response attribute on HTTP 422
 
