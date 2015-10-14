@@ -59,11 +59,8 @@ var AppStatusComponent = React.createClass({
   render: function () {
     var model = this.props.model;
 
-    var statusClassSet = classNames({
-      "app-status": true,
-      "text-warning": this.isWarningStatus(),
-      "text-danger": model.status === AppStatus.DELAYED
-    });
+    var statusClassSet = classNames("app-status",
+      statusNameMapping[model.status].toLowerCase());
 
     var iconClassSet = classNames("icon", "icon-mini",
       `icon-${statusNameMapping[model.status].toLowerCase()}`);
