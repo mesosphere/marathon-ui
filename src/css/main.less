@@ -288,16 +288,6 @@ a,
         text-overflow: ellipsis;
         max-width: @app-list-name-width;
         white-space: nowrap;
-
-        // App/directory icons
-        &:before {
-          color: @link-color;
-          cursor: default;
-          font-family: "Ionicons";
-          height: @base-spacing-unit*2;
-          margin: 0 @base-spacing-unit 0 0;
-          width: @base-spacing-unit*2;
-        }
       }
 
       .labels {
@@ -332,14 +322,6 @@ a,
     .label-loop(@i - 1);
   }
   .label-loop(10);
-
-  .group .name > span:before {
-    content: "\f38a";
-  }
-  .app .name > span:before {
-    // 'android-expand' makes a good placeholder
-    content: "\f386";
-  }
 
 }
 
