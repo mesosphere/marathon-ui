@@ -77,8 +77,7 @@ var AppListTypeFilterComponent = React.createClass({
       selectedTypes = decodeURIComponent(selectedTypes)
         .split(",")
         .filter((type) => {
-          let existingType = AppTypes.indexOf(type);
-          return existingType !== -1;
+          return Object.values(AppTypes).indexOf(type) !== -1;
         });
     }
 
@@ -91,7 +90,7 @@ var AppListTypeFilterComponent = React.createClass({
 
   getTypeNodes: function () {
     var state = this.state;
-    return AppTypes.map((type, i) => {
+    return Object.values(AppTypes).map((type, i) => {
       let checkboxProps = {
         type: "checkbox",
         id: `type-${type}-${i}`,
