@@ -41,6 +41,13 @@
 - \#2270 - Overlapping text in Deployment view
 - \#2216 - Do not show (x) in keyword search input until user begins typing
 
+## 0.11.2 - 2015-10-12
+### Fixed
+- \#2338 - Parameters in the Docker container settings are not taken into
+  account
+- \#2398 - Blank docker image is created in app modal
+- \#2402 - Runtime privilege checkbox does not work
+
 ## 0.11.1 - 2015-09-28
 ### Fixed
 - \#2252 - Wrong task number in Debug Tab
