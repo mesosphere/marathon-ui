@@ -4,6 +4,7 @@ var React = require("react/addons");
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
+var ViewHelper = require("../helpers/ViewHelper");
 
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
