@@ -4,7 +4,6 @@ var React = require("react/addons");
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
-var ViewHelper = require("../helpers/ViewHelper");
 
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
@@ -105,8 +104,8 @@ var AppListItemComponent = React.createClass({
           {parseFloat(model.totalCpus).toFixed(1)}
         </td>
         <td className="text-right total ram">
-          <span title={`${model.totalMem}MB`}>
-            {`${ViewHelper.convertMegabytesToString(model.totalMem)}`}
+          <span title={`${model.totalMem} MiB`}>
+            {`${Util.filesize(model.totalMem * Math.pow(1024, 2))}`}
           </span>
         </td>
         {this.getStatus()}
