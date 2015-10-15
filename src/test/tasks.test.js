@@ -263,7 +263,7 @@ describe("Task Detail component", function () {
   });
 
   it("has the correct endpoints", function () {
-    var list = this.taskDetails.props.children[5].props.children;
+    var list = this.taskDetails.props.children[5]
     var endpoints = [
       ShallowUtils.getText(list.props.children[0].props.children),
       ShallowUtils.getText(list.props.children[1].props.children),
