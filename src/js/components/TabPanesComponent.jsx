@@ -9,6 +9,7 @@ var AppListStatusFilterComponent =
 var AppListTypeFilterComponent =
   require("../components/AppListTypeFilterComponent");
 var AppListComponent = require("../components/AppListComponent");
+var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var DeploymentsListComponent =
   require("../components/DeploymentsListComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
@@ -158,12 +159,7 @@ var TabPanesComponent = React.createClass({
             </nav>
             <main>
               <div className="contextual-bar">
-                <ol className="breadcrumb">
-                  <li><a href="#">My Applications</a></li>
-                  <li><a href="#">Tiki Cocktails</a></li>
-                  <li><a href="#">Piña Coladas</a></li>
-                  <li><a href="#">Cherries</a></li>
-                </ol>
+                <BreadcrumbComponent group={state.currentGroup} />
                 <div className="app-list-controls">
                   <AppListFilterComponent onChange={this.updateFilterText}/>
                   <div className="btn-group toggle-list-view">
