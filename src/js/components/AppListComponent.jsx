@@ -4,19 +4,52 @@ var React = require("react/addons");
 
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
-var AppComponent = require("../components/AppComponent");
+var AppListItemComponent = require("./AppListItemComponent");
 
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
+var AppListViewTypes = require("../constants/AppListViewTypes");
+
+function initGroupNode(groupId, app) {
+  return {
+    id: groupId,
+    instances: app.instances,
+    tasksRunning: app.tasksRunning,
+    totalCpus: app.totalCpus,
+    totalMem: app.totalMem,
+    isGroup: true
+  };
+}
+
+function updateGroupNode(group, app) {
+  group.instances += app.instances;
+  group.tasksRunning += app.tasksRunning;
+  group.totalCpus += app.totalCpus;
+  group.totalMem += app.totalMem;
+  return group;
+}
+
 var AppListComponent = React.createClass({
   displayName: "AppListComponent",
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   propTypes: {
+    currentGroup: React.PropTypes.string.isRequired,
     filterLabels: React.PropTypes.array,
     filterStatus: React.PropTypes.array,
     filterText: React.PropTypes.string,
-    filterType: React.PropTypes.array
+    filterType: React.PropTypes.array,
+    viewType: React.PropTypes.oneOf(Object.values(AppListViewTypes))
+  },
+
+  getDefaultProps: function () {
+    return {
+      viewType: AppListViewTypes.LIST
+    };
   },
 
   getInitialState: function () {
@@ -80,12 +113,42 @@ var AppListComponent = React.createClass({
     });
   },
 
+  getGroupedNodes: function () {
+    var apps = this.state.apps;
+    var currentGroup = this.props.currentGroup;
+
+    return lazy(apps)
+      .filter((app) => app.id.startsWith(currentGroup))
+      .reduce((memo, app) => {
+        let relativePath = app.id.substring(currentGroup.length);
+        let pathParts = relativePath.split("/");
+        let isGroup = pathParts.length > 1;
+
+        if (!isGroup) {
+          memo.push(app);
+        } else {
+          let groupId = currentGroup + pathParts[0];
+          let group = memo.find((item) => {
+            return item.id === groupId;
+          });
+
+          if (group == null) {
+            group = initGroupNode(groupId, app);
+            memo.push(group);
+          } else {
+            updateGroupNode(group, app);
+          }
+        }
+        return memo;
+      }, []);
+  },
+
   getAppNodes: function () {
     var state = this.state;
     var sortKey = state.sortKey;
     var props = this.props;
 
-    var appsSequence = lazy(state.apps);
+    var appsSequence = lazy(this.getGroupedNodes());
 
     if (props.filterText != null && props.filterText !== "") {
       appsSequence = appsSequence
@@ -130,13 +193,20 @@ var AppListComponent = React.createClass({
     }
 
     return appsSequence
-      .sortBy(function (app) {
+      .sortBy((app) => {
         return app[sortKey];
       }, state.sortDescending)
-      .map(function (app) {
-        return (
-          <AppComponent key={app.id} model={app} />
-        );
+      .map((app) => {
+        switch (props.viewType) {
+          case AppListViewTypes.LIST:
+            return (
+              <AppListItemComponent key={app.id}
+                model={app}
+                currentGroup={props.currentGroup} />
+            );
+          default:
+            return null;
+        }
       })
       .value();
   },

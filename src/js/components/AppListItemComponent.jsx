@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
@@ -5,14 +6,15 @@ var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
 var ViewHelper = require("../helpers/ViewHelper");
 
-var AppComponent = React.createClass({
-  displayName: "AppComponent",
+var AppListItemComponent = React.createClass({
+  displayName: "AppListItemComponent",
 
   contextTypes: {
     router: React.PropTypes.func
   },
 
   propTypes: {
+    currentGroup: React.PropTypes.string.isRequired,
     model: React.PropTypes.object.isRequired
   },
 
@@ -47,43 +49,77 @@ var AppComponent = React.createClass({
   },
 
   onClick: function () {
-    this.context.router
-      .transitionTo("app", {appId: encodeURIComponent(this.props.model.id)});
+    var model = this.props.model;
+    var router = this.context.router;
+    if (model.isGroup) {
+      router.transitionTo("group", {groupId: encodeURIComponent(model.id)});
+    } else {
+      router.transitionTo("app", {appId: encodeURIComponent(model.id)});
+    }
+  },
+
+  getHealthBar: function () {
+    var model = this.props.model;
+    if (model.isGroup) {
+      return null;
+    }
+
+    return (
+      <td className="text-right health-bar-column">
+        <AppHealthComponent model={model} />
+      </td>
+    );
+  },
+
+  getStatus: function () {
+    var model = this.props.model;
+    if (model.isGroup) {
+      return null;
+    }
+
+    return (
+      <td className="text-right status">
+        <AppStatusComponent model={model} />
+      </td>
+    );
   },
 
   render: function () {
     var model = this.props.model;
+    var className = classNames({
+      "group": model.isGroup,
+      "app": !model.isGroup
+    });
+    var colSpan = model.isGroup ? 3 : 1;
+    var name = ViewHelper.getRelativePath(model.id, this.props.currentGroup);
+
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
-      <tr onClick={this.onClick}>
+      <tr onClick={this.onClick} className={className}>
         <td className="overflow-ellipsis name" title={model.id}>
-          <span>{model.id}</span>
+          <span>{name}</span>
           {this.getLabels()}
         </td>
         <td className="text-right total cpu">
-          {model.totalCpus}
+          {parseFloat(model.totalCpus).toFixed(1)}
         </td>
         <td className="text-right total ram">
           <span title={`${model.totalMem}MB`}>
             {`${ViewHelper.convertMegabytesToString(model.totalMem)}`}
           </span>
         </td>
-        <td className="text-right status">
-          <AppStatusComponent model={model} />
-        </td>
-        <td className="text-right running tasks">
+        {this.getStatus()}
+        <td className="text-right running tasks" colSpan={colSpan}>
           <span>
             {model.tasksRunning}
           </span> of {model.instances}
         </td>
-        <td className="text-right health-bar-column">
-          <AppHealthComponent model={model} />
-        </td>
+        {this.getHealthBar()}
         <td className="text-right actions">&hellip;</td>
       </tr>
     );
   }
 });
 
-module.exports = AppComponent;
+module.exports = AppListItemComponent;
