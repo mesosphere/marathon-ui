@@ -105,8 +105,8 @@ var AppListItemComponent = React.createClass({
           {parseFloat(model.totalCpus).toFixed(1)}
         </td>
         <td className="text-right total ram">
-          <span title={`${model.totalMem}MB`}>
-            {`${ViewHelper.convertMegabytesToString(model.totalMem)}`}
+          <span title={`${model.totalMem} MiB`}>
+            {`${Util.filesize(model.totalMem * Math.pow(1024, 2), 0)}`}
           </span>
         </td>
         {this.getStatus()}
