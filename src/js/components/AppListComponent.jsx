@@ -11,7 +11,7 @@ var AppsEvents = require("../events/AppsEvents");
 
 var AppListViewTypes = require("../constants/AppListViewTypes");
 
-function createGroup(groupId, app) {
+function initGroupNode(groupId, app) {
   return {
     id: groupId,
     instances: app.instances,
@@ -22,7 +22,7 @@ function createGroup(groupId, app) {
   };
 }
 
-function updateGroup(group, app) {
+function updateGroupNode(group, app) {
   group.instances += app.instances;
   group.tasksRunning += app.tasksRunning;
   group.totalCpus += app.totalCpus;
@@ -113,7 +113,7 @@ var AppListComponent = React.createClass({
     });
   },
 
-  getAppsInGroup: function () {
+  getGroupedNodes: function () {
     var apps = this.state.apps;
     var currentGroup = this.props.currentGroup;
 
@@ -133,10 +133,10 @@ var AppListComponent = React.createClass({
           });
 
           if (group == null) {
-            group = createGroup(groupId, app);
-            memo.unshift(group);
+            group = initGroupNode(groupId, app);
+            memo.push(group);
           } else {
-            updateGroup(group, app);
+            updateGroupNode(group, app);
           }
         }
         return memo;
@@ -148,7 +148,7 @@ var AppListComponent = React.createClass({
     var sortKey = state.sortKey;
     var props = this.props;
 
-    var appsSequence = lazy(this.getAppsInGroup());
+    var appsSequence = lazy(this.getGroupedNodes());
 
     if (props.filterText != null && props.filterText !== "") {
       appsSequence = appsSequence
