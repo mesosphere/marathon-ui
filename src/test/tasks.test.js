@@ -245,6 +245,7 @@ describe("Task Detail component", function () {
       hasHealth={false}
       task={this.model} />);
     this.component = this.renderer.getRenderOutput();
+    this.taskDetails = this.component.props.children[1].props.children[0];
   });
 
   afterEach(function () {
@@ -252,46 +253,39 @@ describe("Task Detail component", function () {
   });
 
   it("has the correct host", function () {
-    var content =
-      ShallowUtils.getText(
-        this.component.props.children[2].props.children[0].props.children[1]
-      );
-
+    var content = ShallowUtils.getText(this.taskDetails.props.children[1]);
     expect(content).to.equal("host-1");
   });
 
   it("has the correct ports", function () {
-    var content =
-      ShallowUtils.getText(
-        this.component.props.children[2].props.children[0].props.children[3]
-      );
-
+    var content = ShallowUtils.getText(this.taskDetails.props.children[3]);
     expect(content).to.equal("[1,2,3]");
   });
 
-  it("has the correct status", function () {
-    var content =
-      ShallowUtils.getText(
-        this.component.props.children[2].props.children[0].props.children[5]
-      );
+  it("has the correct endpoints", function () {
+    var list = this.taskDetails.props.children[5].props.children;
+    var endpoints = [
+      ShallowUtils.getText(list.props.children[0].props.children),
+      ShallowUtils.getText(list.props.children[1].props.children),
+      ShallowUtils.getText(list.props.children[2].props.children)
+    ];
+    expect(endpoints).to.deep.equal(["host-1:1", "host-1:2", "host-1:3"]);
+  });
 
+  it("has the correct status", function () {
+    var content = ShallowUtils.getText(this.taskDetails.props.children[7]);
     expect(content).to.equal("status-0");
   });
 
   it("has the correct timefields", function () {
-    var stagedAt =
-        this.component.props.children[2].props.children[0].props.children[6][0].props;
-    var startedAt =
-        this.component.props.children[2].props.children[0].props.children[6][1].props;
-
+    var stagedAt = this.taskDetails.props.children[8][0].props;
+    var startedAt = this.taskDetails.props.children[8][1].props;
     expect(stagedAt.time).to.equal("2015-06-29T14:11:58.709Z");
     expect(startedAt.time).to.equal("2015-06-29T14:11:58.709Z");
   });
 
   it("has the correct version", function () {
-    var version =
-        this.component.props.children[2].props.children[0].props.children[8].props.children.props;
-
+    var version = this.taskDetails.props.children[10].props.children.props;
     expect(version.dateTime).to.equal("2015-06-29T13:54:24.171Z");
   });
 
