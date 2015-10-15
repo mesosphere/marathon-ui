@@ -89,8 +89,8 @@ var Util = {
 
     return obj;
   },
-  filesize: function (size, decimals, threshold, multiplier, units) {
-    size = size || 0;
+  filesize: function (bytes, decimals, threshold, multiplier, units) {
+    bytes = bytes || 0;
     if (decimals == null) {
       decimals = 2;
     }
@@ -106,7 +106,7 @@ var Util = {
         factorize = Math.pow(multiplier, unitIndex);
       }
 
-      if (size < multiplier * factorize && size < threshold * factorize) {
+      if (bytes < multiplier * factorize && bytes < threshold * factorize) {
         break;
       }
     }
@@ -115,7 +115,7 @@ var Util = {
       unitIndex = units.length - 1;
     }
 
-    var filesize = size / factorize;
+    var filesize = bytes / factorize;
 
     filesize = filesize.toFixed(decimals);
 
