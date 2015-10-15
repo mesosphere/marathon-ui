@@ -98,11 +98,11 @@ var AppListItemComponent = React.createClass({
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
       <tr onClick={this.onClick} className={className}>
-        <td className="overflow-ellipsis name" title={model.id}>
+        <td className="overflow-ellipsis name-cell" title={model.id}>
           <span>{name}</span>
           {this.getLabels()}
         </td>
-        <td className="text-right total cpu">
+        <td className="text-right total cpu-cell">
           {parseFloat(model.totalCpus).toFixed(1)}
         </td>
         <td className="text-right total ram">
@@ -111,13 +111,13 @@ var AppListItemComponent = React.createClass({
           </span>
         </td>
         {this.getStatus()}
-        <td className="text-right instances" colSpan={colSpan}>
+        <td className="text-right instances-cell" colSpan={colSpan}>
           <span>
             {model.tasksRunning}
           </span> of {model.instances}
         </td>
         {this.getHealthBar()}
-        <td className="text-right actions">&hellip;</td>
+        <td className="text-right actions-cell">&hellip;</td>
       </tr>
     );
   }

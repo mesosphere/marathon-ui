@@ -332,31 +332,31 @@ a:focus {
   /* Columns */
   & > colgroup > col {
 
-    &.name {
+    &.name-col {
       width: auto;
     }
 
-    &.ram {
+    &.ram-col {
       width: @base-spacing-unit*12;
     }
 
-    &.cpu {
+    &.cpu-col {
       width: @base-spacing-unit*10;
     }
 
-    &.status {
+    &.status-col {
       width: @base-spacing-unit*27;
     }
 
-    &.instances {
+    &.instances-col {
       width: 8%;
     }
 
-    &.health {
+    &.health-col {
       width: 6%;
     }
 
-    &.actions {
+    &.actions-col {
       width: @base-spacing-unit*8;
     }
 
@@ -375,11 +375,11 @@ a:focus {
   & > tbody > tr > td,
   & > tfoot > tr > td {
 
-    &.status {
+    &.status-cell {
       padding-left: @base-spacing-unit*8;
     }
 
-    &.name {
+    &.name-cell {
       display: flex;
       color: inherit;
 
@@ -416,8 +416,6 @@ a:focus {
       display: inline-block;
     }
   }
-
-
 
   .label-loop(@i) when (@i > 0) {
     @breakpoint: (@app-list-labels-breakpoint + @i * @app-list-label-width);
