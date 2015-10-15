@@ -145,25 +145,6 @@ a,
   }
 }
 
-.app-status {
-  display: flex;
-  align-items: center;
-
-  > i {
-    display: inline-block;
-    font-size: @font-size-icon;
-    line-height: @base-spacing-unit*2;
-    margin-right: @horizontal-spacing-unit;
-    text-align: center;
-    width: @base-spacing-unit*2;
-  }
-
-  > span.tasks-summary {
-    color: @navbar-inactive-color;
-    margin-left: @horizontal-spacing-unit;
-  }
-}
-
 .page-header .btn + .btn {
   margin-left: 5px;
   margin-bottom: 0;
@@ -249,27 +230,27 @@ a,
 
     // Temporary icon styling as discussed in #2392 will be removed
     // if we have the SVGs in place.
-    &.icon-running {
+    &.running {
       background-image: url("img/icons/icon-mini-running-color.png");
       background-size: contain;
     }
 
-    &.icon-deploying {
+    &.deploying {
       background-image: url("img/icons/icon-mini-deploying-color.png");
       background-size: contain;
     }
 
-    &.icon-suspended {
+    &.suspended {
       background-image: url("img/icons/icon-mini-inactive-color.png");
       background-size: contain;
     }
 
-    &.icon-delayed {
+    &.delayed {
       background-image: url("img/icons/icon-mini-delayed-color.png");
       background-size: contain;
     }
 
-    &.icon-waiting {
+    &.waiting {
       background-image: url("img/icons/icon-mini-waiting-color.png");
       background-size: contain;
     }
@@ -446,6 +427,49 @@ a,
 
 .text-muted {
   color: #8e929b;
+}
+
+/* ==============
+ * App Status
+ * ==============
+ */
+.app-status {
+  display: flex;
+  align-items: center;
+
+  > i {
+    display: inline-block;
+    font-size: @font-size-icon;
+    line-height: @base-spacing-unit*2;
+    margin-right: @horizontal-spacing-unit;
+    text-align: center;
+    width: @base-spacing-unit*2;
+  }
+
+  &.running {
+    color:@app-status-running-color;
+  }
+
+  &.deploying {
+    color:@app-status-deploying-color;
+  }
+
+  &.suspended {
+    color:@app-status-suspended-color;
+  }
+
+  &.delayed {
+    color:@app-status-delayed-color;
+  }
+
+  &.waiting {
+    color:@app-status-waiting-color;
+  }
+
+  > span.tasks-summary {
+    color: @navbar-inactive-color;
+    margin-left: @horizontal-spacing-unit;
+  }
 }
 
 /* ==============

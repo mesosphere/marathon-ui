@@ -5,6 +5,14 @@ var React = require("react/addons");
 var AppStatus = require("../constants/AppStatus");
 var QueueStore = require("../stores/QueueStore");
 
+var statusClassNameMapping = {
+  [AppStatus.RUNNING]: "running",
+  [AppStatus.DEPLOYING]: "deploying",
+  [AppStatus.SUSPENDED]: "suspended",
+  [AppStatus.DELAYED]: "delayed",
+  [AppStatus.WAITING]: "waiting"
+};
+
 var statusNameMapping = {
   [AppStatus.RUNNING]: "Running",
   [AppStatus.DEPLOYING]: "Deploying",
@@ -49,24 +57,14 @@ var AppStatusComponent = React.createClass({
     return null;
   },
 
-  isWarningStatus: function () {
-    var model = this.props.model;
-
-    return model.status === AppStatus.DEPLOYING
-      || model.status === AppStatus.WAITING;
-  },
-
   render: function () {
     var model = this.props.model;
 
-    var statusClassSet = classNames({
-      "app-status": true,
-      "text-warning": this.isWarningStatus(),
-      "text-danger": model.status === AppStatus.DELAYED
-    });
+    var statusClassSet = classNames("app-status",
+      statusClassNameMapping[model.status]);
 
     var iconClassSet = classNames("icon", "icon-mini",
-      `icon-${statusNameMapping[model.status].toLowerCase()}`);
+      statusClassNameMapping[model.status]);
 
     return (
       <span className={statusClassSet} title={this.getStatusTitle()}>
