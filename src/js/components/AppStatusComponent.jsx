@@ -59,7 +59,6 @@ var AppStatusComponent = React.createClass({
 
   isWarningStatus: function () {
     var model = this.props.model;
-
     return model.status === AppStatus.DEPLOYING
       || model.status === AppStatus.WAITING;
   },
@@ -71,7 +70,7 @@ var AppStatusComponent = React.createClass({
       statusClassNameMapping[model.status]);
 
     var iconClassSet = classNames("icon", "icon-mini",
-      `icon-${statusClassNameMapping[model.status]}`);
+      statusClassNameMapping[model.status]);
 
     return (
       <span className={statusClassSet} title={this.getStatusTitle()}>
