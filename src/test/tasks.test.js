@@ -263,11 +263,11 @@ describe("Task Detail component", function () {
   });
 
   it("has the correct endpoints", function () {
-    var list = this.taskDetails.props.children[5]
+    var list = this.taskDetails.props.children[5];
     var endpoints = [
-      ShallowUtils.getText(list.props.children[0].props.children),
-      ShallowUtils.getText(list.props.children[1].props.children),
-      ShallowUtils.getText(list.props.children[2].props.children)
+      ShallowUtils.getText(list[0].props.children),
+      ShallowUtils.getText(list[1].props.children),
+      ShallowUtils.getText(list[2].props.children)
     ];
     expect(endpoints).to.deep.equal(["host-1:1", "host-1:2", "host-1:3"]);
   });
