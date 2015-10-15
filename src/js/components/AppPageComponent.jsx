@@ -3,7 +3,7 @@ var React = require("react/addons");
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
-var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
+var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
@@ -441,7 +441,7 @@ var AppPageComponent = React.createClass({
 
     return (
       <div>
-        <AppBreadcrumbsComponent
+        <BreadcrumbComponent
           activeTaskId={state.activeTaskId}
           activeViewIndex={state.activeViewIndex}
           appId={state.appId} />
