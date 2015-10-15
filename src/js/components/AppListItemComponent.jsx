@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
@@ -59,6 +60,10 @@ var AppListItemComponent = React.createClass({
 
   getHealthBar: function () {
     var model = this.props.model;
+    if (model.isGroup) {
+      return null;
+    }
+
     return (
       <td className="text-right health-bar-column">
         <AppHealthComponent model={model} />
@@ -68,6 +73,10 @@ var AppListItemComponent = React.createClass({
 
   getStatus: function () {
     var model = this.props.model;
+    if (model.isGroup) {
+      return null;
+    }
+
     return (
       <td className="text-right status">
         <AppStatusComponent model={model} />
@@ -77,18 +86,12 @@ var AppListItemComponent = React.createClass({
 
   render: function () {
     var model = this.props.model;
-    var status = null;
-    var healthBar = null;
-    var colSpan = 3;
-    var className = "group";
+    var className = classNames({
+      "group": model.isGroup,
+      "app": !model.isGroup
+    });
+    var colSpan = model.isGroup ? 3 : 1;
     var name = ViewHelper.getRelativePath(model.id, this.props.currentGroup);
-
-    if (!model.isGroup) {
-      className = "app";
-      status = this.getStatus();
-      healthBar = this.getHealthBar();
-      colSpan = 1;
-    }
 
     return (
       // Set `title` on cells that potentially overflow so hovering on the
@@ -106,13 +109,13 @@ var AppListItemComponent = React.createClass({
             {`${ViewHelper.convertMegabytesToString(model.totalMem)}`}
           </span>
         </td>
-        {status}
+        {this.getStatus()}
         <td className="text-right running tasks" colSpan={colSpan}>
           <span>
             {model.tasksRunning}
           </span> of {model.instances}
         </td>
-        {healthBar}
+        {this.getHealthBar()}
         <td className="text-right actions">&hellip;</td>
       </tr>
     );
