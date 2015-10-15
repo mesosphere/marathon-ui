@@ -107,7 +107,7 @@ var TaskDetailComponent = React.createClass({
 
     return (
       <div>
-        <dl className="dl-horizontal">
+        <dl className="dl-horizontal task-details">
           <dt>Host</dt>
           <dd>{task.host}</dd>
           <dt>Ports</dt>
@@ -145,7 +145,6 @@ var TaskDetailComponent = React.createClass({
 
     return (
       <div className="page-body page-body-no-top">
-        <h5>Task Details</h5>
         {this.getErrorMessage(hasError)}
         {this.getTaskDetails()}
       </div>
