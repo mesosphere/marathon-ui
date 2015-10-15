@@ -107,9 +107,7 @@ var TaskDetailComponent = React.createClass({
           <dt>Ports</dt>
           <dd>[{task.ports.toString()}]</dd>
           <dt>Endpoints</dt>
-          <dd>
-            {this.getTaskEndpoints()}
-          </dd>
+          {this.getTaskEndpoints()}
           <dt>Status</dt>
           <dd>{task.status}</dd>
           {timeFields}
