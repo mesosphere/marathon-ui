@@ -1,7 +1,7 @@
 var React = require("react/addons");
 
-var AppBreadcrumbsComponent = React.createClass({
-  displayName: "AppBreadcrumbsComponent",
+var BreadcrumbComponent = React.createClass({
+  displayName: "BreadcrumbComponent",
 
   propTypes: {
     activeTaskId: React.PropTypes.string,
@@ -68,4 +68,4 @@ var AppBreadcrumbsComponent = React.createClass({
   }
 });
 
-module.exports = AppBreadcrumbsComponent;
+module.exports = BreadcrumbComponent;
