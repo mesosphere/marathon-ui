@@ -38,6 +38,29 @@ var TaskDetailComponent = React.createClass({
     );
   },
 
+  getTaskEndpoints: function () {
+    var props = this.props;
+    var task = props.task;
+    if (!task.ports) {
+      return "None";
+    }
+
+    let endpoints = task.ports.map((port) => {
+      let endpoint = `${task.host}:${port}`;
+      return (
+        <li key={endpoint} className="overflow-ellipsis">
+          <a href={endpoint} target="_blank">{endpoint}</a>
+        </li>
+      );
+    });
+
+    return (
+      <ul className="list-unstyled">
+        {endpoints}
+      </ul>
+    );
+  },
+
   getTaskHealthComponent: function () {
     var props = this.props;
     var task = props.task;
@@ -89,6 +112,10 @@ var TaskDetailComponent = React.createClass({
           <dd>{task.host}</dd>
           <dt>Ports</dt>
           <dd>[{task.ports.toString()}]</dd>
+          <dt>Endpoints</dt>
+          <dd>
+            {this.getTaskEndpoints()}
+          </dd>
           <dt>Status</dt>
           <dd>{task.status}</dd>
           {timeFields}
