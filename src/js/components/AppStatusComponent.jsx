@@ -57,12 +57,6 @@ var AppStatusComponent = React.createClass({
     return null;
   },
 
-  isWarningStatus: function () {
-    var model = this.props.model;
-    return model.status === AppStatus.DEPLOYING
-      || model.status === AppStatus.WAITING;
-  },
-
   render: function () {
     var model = this.props.model;
 
