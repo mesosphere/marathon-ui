@@ -41,24 +41,18 @@ var TaskDetailComponent = React.createClass({
   getTaskEndpoints: function () {
     var props = this.props;
     var task = props.task;
-    if (!task.ports) {
-      return "None";
+    if (task.ports == null || task.ports.length === 0) {
+      return (<dd>None</dd>);
     }
 
-    let endpoints = task.ports.map((port) => {
+    return task.ports.map((port) => {
       let endpoint = `${task.host}:${port}`;
       return (
-        <li key={endpoint} className="overflow-ellipsis">
+        <dd key={endpoint} className="overflow-ellipsis">
           <a href={endpoint} target="_blank">{endpoint}</a>
-        </li>
+        </dd>
       );
     });
-
-    return (
-      <ul className="list-unstyled">
-        {endpoints}
-      </ul>
-    );
   },
 
   getTaskHealthComponent: function () {
