@@ -79,7 +79,6 @@ var TabPanesComponent = React.createClass({
             <nav className="sidebar">
               <Link to={path}
                 query={{modal: "new-app"}}
-                activeClassName={null}
                 className="btn btn-success">
                 Create
               </Link>
