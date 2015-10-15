@@ -35,6 +35,14 @@ var TabPanesComponent = React.createClass({
   },
 
   componentWillReceiveProps: function () {
+    this.updateCurrentGroup();
+  },
+
+  componentWillMount: function () {
+    this.updateCurrentGroup();
+  },
+
+  updateCurrentGroup: function () {
     var {groupId} = this.context.router.getCurrentParams();
     if (groupId == null) {
       groupId = "/";
