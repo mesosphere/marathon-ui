@@ -786,32 +786,32 @@ describe("App component", function () {
   });
 
   it("has the correct app id", function () {
-    var cellContent = this.component.props.children[0].props.children[0].props.children;
+    var cellContent = this.component.props.children[1].props.children[0].props.children;
     expect(cellContent).to.equal("app-123");
   });
 
   it("has the correct amount of total cpus", function () {
-    var cellContent = this.component.props.children[1].props.children;
+    var cellContent = this.component.props.children[2].props.children;
     expect(cellContent).to.equal("20.0");
   });
 
   it("has the correct amount of total memory", function () {
-    var cellContent = this.component.props.children[2].props.children.props.title;
+    var cellContent = this.component.props.children[3].props.children.props.title;
     expect(cellContent).to.equal("1030 MiB");
   });
 
   it("displays the correct amount memory", function () {
-    var cellContent = this.component.props.children[2].props.children.props.children;
+    var cellContent = this.component.props.children[3].props.children.props.children;
     expect(cellContent).to.equal("1 GiB");
   });
 
   it("has correct number of tasks running", function () {
-    var tasksRunning = this.component.props.children[4].props.children[0].props.children;
+    var tasksRunning = this.component.props.children[5].props.children[0].props.children;
     expect(tasksRunning).to.equal(4);
   });
 
   it("has correct number of instances", function () {
-    var totalSteps = this.component.props.children[4].props.children[2];
+    var totalSteps = this.component.props.children[5].props.children[2];
     expect(totalSteps).to.equal(5);
   });
 
