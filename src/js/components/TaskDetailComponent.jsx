@@ -49,7 +49,7 @@ var TaskDetailComponent = React.createClass({
       let endpoint = `${task.host}:${port}`;
       return (
         <dd key={endpoint} className="overflow-ellipsis">
-          <a href={endpoint} target="_blank">{endpoint}</a>
+          <a href={`//${endpoint}`} target="_blank">{endpoint}</a>
         </dd>
       );
     });
