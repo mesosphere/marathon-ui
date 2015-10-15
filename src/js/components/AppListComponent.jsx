@@ -268,6 +268,7 @@ var AppListComponent = React.createClass({
     return (
       <table className={tableClassSet}>
         <colgroup>
+          <col className="icon-col" />
           <col className="name-col" />
           <col className="cpu-col" />
           <col className="ram-col" />
@@ -313,30 +314,30 @@ var AppListComponent = React.createClass({
         </thead>
         <tbody>
           <tr className={loadingClassSet}>
-            <td className="text-center text-muted" colSpan="7">
+            <td className="text-center text-muted" colSpan="8">
               Loading apps...
             </td>
           </tr>
           <tr className={noAppsClassSet}>
-            <td className="text-center" colSpan="7">No running apps.</td>
+            <td className="text-center" colSpan="8">No running apps.</td>
           </tr>
           <tr className={noRunningAppsClassSet}>
-            <td className="text-center" colSpan="7">
+            <td className="text-center" colSpan="8">
               No apps match your query.
             </td>
           </tr>
           <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan="7">
+            <td className="text-center text-danger" colSpan="8">
               {`Error fetching apps. ${Messages.RETRY_REFRESH}`}
             </td>
           </tr>
           <tr className={unauthorizedClassSet}>
-            <td className="text-center text-danger" colSpan="7">
+            <td className="text-center text-danger" colSpan="8">
               {`Error fetching apps. ${Messages.UNAUTHORIZED}`}
             </td>
           </tr>
           <tr className={forbiddenClassSet}>
-            <td className="text-center text-danger" colSpan="7">
+            <td className="text-center text-danger" colSpan="8">
               {`Error fetching apps. ${Messages.FORBIDDEN}`}
             </td>
           </tr>
