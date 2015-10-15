@@ -22,7 +22,7 @@ var AppListItemComponent = React.createClass({
   getIcon: function () {
     var model = this.props.model;
     if (model.isGroup) {
-      return (<i className="icon icon-small folder"></i>);
+      return (<i className="icon icon-small group"></i>);
     }
     if (model.type === AppTypes.DOCKER) {
       return (<i className="icon icon-small docker"></i>);
