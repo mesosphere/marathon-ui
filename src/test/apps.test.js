@@ -19,6 +19,7 @@ TooltipMixin.tip_destroyAllTips = _.noop;
 
 var AppsActions = require("../js/actions/AppsActions");
 var AppDispatcher = require("../js/AppDispatcher");
+var BreadcrumbComponent = require("../js/components/BreadcrumbComponent.jsx");
 var AppListComponent = require("../js/components/AppListComponent");
 var AppListItemComponent = require("../js/components/AppListItemComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
@@ -947,7 +948,7 @@ describe("App Page component", function () {
   });
 
   it("has the correct app id", function () {
-    var appId = this.component.props.children[0].props.appId;
+    var appId = this.component.props.children[0].props.app;
     expect(appId).to.equal("/test-app-1");
   });
 
@@ -1090,3 +1091,69 @@ describe("App Status component", function () {
   });
 
 });
+
+describe("Breadcrumb Component", function () {
+  before(function () {
+    this.renderComponent = (group, app, task) => {
+      var renderer = TestUtils.createRenderer();
+      renderer.render(
+        <BreadcrumbComponent group={group} app={app} task={task} />
+      );
+      return renderer.getRenderOutput();
+    };
+  });
+
+  it("shows root path by default", function () {
+    var component = this.renderComponent();
+    var rootLink = component.props.children[0].props.children;
+    expect(rootLink.props.to).to.equal("apps");
+    expect(rootLink.props.children).to.equal("Applications");
+  });
+
+  it("renders group names correctly", function () {
+    var component = this.renderComponent("/group-a/group-b/group-c/");
+    var groupItems = component.props.children[1];
+    var linkText = groupItems
+      .filter((li) => !!li)
+      .map((li) => li.props.children.props.children);
+
+    expect(linkText).to.deep.equal([
+      "group-a", "group-b", "group-c"
+    ]);
+  });
+
+  it("renders group links correctly", function () {
+    var component = this.renderComponent("/group-a/group-b/group-c/");
+    var groupItems = component.props.children[1];
+    var linkTargets = groupItems
+      .filter((li) => !!li)
+      .map((li) => li.props.children.props.params.groupId);
+
+    // routes must be URIEncoded
+    expect(linkTargets).to.deep.equal([
+      "%2Fgroup-a%2F",
+      "%2Fgroup-a%2Fgroup-b%2F",
+      "%2Fgroup-a%2Fgroup-b%2Fgroup-c%2F"
+    ]);
+  });
+
+  it("shows the application, if supplied", function () {
+    var component = this.renderComponent("/group-a/", "/group-a/app-1");
+    var appLink = component.props.children[2].props.children;
+    expect(appLink.props.to).to.equal("app");
+    expect(appLink.props.params.appId).to.equal("%2Fgroup-a%2Fapp-1");
+    expect(appLink.props.children).to.equal("app-1");
+  });
+
+  it("shows the task, if supplied", function () {
+    var component =
+      this.renderComponent("/group-a/", "/group-a/app-1", "task-1");
+    var taskLink = component.props.children[3].props.children;
+    expect(taskLink.props.to).to.equal("appView");
+    expect(taskLink.props.params.appId).to.equal("%2Fgroup-a%2Fapp-1");
+    expect(taskLink.props.params.view).to.equal("task-1");
+    expect(taskLink.props.children).to.equal("task-1");
+  });
+
+});
+

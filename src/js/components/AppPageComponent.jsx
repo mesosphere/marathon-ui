@@ -19,6 +19,7 @@ var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
+var ViewHelper = require("../helpers/ViewHelper");
 var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
 var QueueStore = require("../stores/QueueStore");
@@ -439,12 +440,14 @@ var AppPageComponent = React.createClass({
       content = this.getTaskDetailComponent();
     }
 
+    var group = ViewHelper.getGroupFromAppId(state.appId);
+
     return (
       <div>
         <BreadcrumbComponent
-          activeTaskId={state.activeTaskId}
-          activeViewIndex={state.activeViewIndex}
-          appId={state.appId} />
+          group={group}
+          app={state.appId}
+          task={state.activeTaskId} />
         <div className="container-fluid">
           <div className="page-header">
             <h1>{state.appId}</h1>

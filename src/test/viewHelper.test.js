@@ -8,4 +8,10 @@ describe("ViewHelper", function () {
         .to.equal("app");
     });
   });
+  describe("getGroupFromAppId", function () {
+    it("trims the app from the group name", function () {
+      expect(ViewHelper.getGroupFromAppId("/test/group/app-1"))
+        .to.equal("/test/group/");
+    });
+  });
 });
