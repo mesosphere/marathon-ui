@@ -1,57 +1,72 @@
 var React = require("react/addons");
+var Link = require("react-router").Link;
+
+var ViewHelper = require("../helpers/ViewHelper");
 
 var BreadcrumbComponent = React.createClass({
   displayName: "BreadcrumbComponent",
 
   propTypes: {
-    activeTaskId: React.PropTypes.string,
-    activeViewIndex: React.PropTypes.number.isRequired,
-    appId: React.PropTypes.string.isRequired
+    app: React.PropTypes.string,
+    group: React.PropTypes.string,
+    task: React.PropTypes.string
   },
 
-  getDefaultProps: function () {
-    return {
-      activeViewIndex: 0
-    };
-  },
-
-  getAppName: function () {
-    var props = this.props;
-    var activeViewIndex = props.activeViewIndex;
-    var appName = props.appId;
-    var appUri = "#apps/" + encodeURIComponent(props.appId);
-
-    if (activeViewIndex === 1) {
-      return (
-        <li>
-          <a href={appUri}>
-            {appName}
-          </a>
-        </li>
-      );
+  getGroupLinks: function () {
+    var group = this.props.group;
+    if (group == null) {
+      return null;
     }
 
+    var pathParts = group.split("/").slice(0, -1);
+    return pathParts.map((name, i) => {
+      var id = pathParts.slice(0, i + 1).join("/") + "/";
+      return (
+        <li key={id}>
+          <Link to="group" params={{groupId: encodeURIComponent(id)}}>
+            {name}
+          </Link>
+        </li>
+      );
+    }).slice(1);
+  },
+
+  getAppLink: function () {
+    var app = this.props.app;
+    var group = this.props.group;
+    if (app == null || group == null) {
+      return null;
+    }
+    var name = ViewHelper.getRelativePath(app, group);
+
     return (
-      <li className="active">
-        {appName}
+      <li>
+        <Link to="app" params={{appId: encodeURIComponent(app)}}>
+          {name}
+        </Link>
       </li>
     );
   },
 
-  getTaskName: function () {
-    var props = this.props;
-    var activeViewIndex = props.activeViewIndex;
-
-    if (activeViewIndex === 0) {
+  getTaskLink: function () {
+    var app = this.props.app;
+    var group = this.props.group;
+    var task = this.props.task;
+    if (task == null || app == null || group == null) {
       return null;
     }
 
-    let taskName;
-    if (activeViewIndex === 1 && props.activeTaskId != null) {
-      taskName = props.activeTaskId;
-    }
+    var params = {
+      appId: encodeURIComponent(app),
+      view: encodeURIComponent(task)
+    };
+
     return (
-      <li className="active">{taskName}</li>
+      <li>
+        <Link to="appView" params={params}>
+          {task}
+        </Link>
+      </li>
     );
   },
 
@@ -59,10 +74,11 @@ var BreadcrumbComponent = React.createClass({
     return (
       <ol className="breadcrumb">
         <li>
-          <a href="#apps">Apps</a>
+          <Link to="apps">Applications</Link>
         </li>
-        {this.getAppName()}
-        {this.getTaskName()}
+        {this.getGroupLinks()}
+        {this.getAppLink()}
+        {this.getTaskLink()}
       </ol>
     );
   }
