@@ -1033,7 +1033,7 @@ fieldset[disabled] .btn-info.active {
     background: transparent;
   }
   .panel-heading {
-    color: #00b482;
+    color: @link-color;
   }
   background-color: #222426;
   border-radius: 0;
@@ -1044,13 +1044,14 @@ fieldset[disabled] .btn-info.active {
     font-size: 1.1em;
   }
   .panel-title:before {
+    font-family: "Ionicons";
     display: inline-block;
     font-size: 0.8em;
-    content: "▶";
+    content: "\f125";
     width: 1.2em;
   }
   .panel-title.open:before{
-    content: "▼";
+    content: "\f123";
   }
 
   .panel-body {
@@ -1138,7 +1139,7 @@ fieldset[disabled] .btn-info.active {
         outline: none;
       }
       &.add {
-        color: rgb(36, 220, 159);
+        color: @brand-primary;
       }
       &.remove {
         color: rgb(246, 246, 246);
