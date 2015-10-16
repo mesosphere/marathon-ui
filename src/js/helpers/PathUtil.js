@@ -1,4 +1,4 @@
-var ViewHelpers = {
+var PathUtil = {
   getRelativePath(id, currentGroup) {
     if (!currentGroup.endsWith("/")) {
       currentGroup += "/";
@@ -13,4 +13,4 @@ var ViewHelpers = {
   }
 };
 
-module.exports = ViewHelpers;
+module.exports = PathUtil;

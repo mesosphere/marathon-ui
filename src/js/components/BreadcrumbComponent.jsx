@@ -1,7 +1,7 @@
 var React = require("react/addons");
 var Link = require("react-router").Link;
 
-var ViewHelper = require("../helpers/ViewHelper");
+var PathUtil = require("../helpers/PathUtil");
 
 var BreadcrumbComponent = React.createClass({
   displayName: "BreadcrumbComponent",
@@ -43,7 +43,7 @@ var BreadcrumbComponent = React.createClass({
     if (appId == null || groupId == null) {
       return null;
     }
-    var name = ViewHelper.getRelativePath(appId, groupId);
+    var name = PathUtil.getRelativePath(appId, groupId);
 
     return (
       <li>
