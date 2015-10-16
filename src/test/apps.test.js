@@ -950,7 +950,7 @@ describe("App Page component", function () {
   });
 
   it("has the correct app id", function () {
-    var appId = this.component.props.children[0].props.app;
+    var appId = this.component.props.children[0].props.appId;
     expect(appId).to.equal("/test-app-1");
   });
 
@@ -1099,7 +1099,7 @@ describe("Breadcrumb Component", function () {
     this.renderComponent = (group, app, task) => {
       var renderer = TestUtils.createRenderer();
       renderer.render(
-        <BreadcrumbComponent group={group} app={app} task={task} />
+        <BreadcrumbComponent groupId={group} appId={app} taskId={task} />
       );
       var component = renderer.getRenderOutput();
       renderer.unmount();

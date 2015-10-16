@@ -440,13 +440,13 @@ var AppPageComponent = React.createClass({
       content = this.getTaskDetailComponent();
     }
 
-    var group = ViewHelper.getGroupFromAppId(state.appId);
+    var groupId = ViewHelper.getGroupFromAppId(state.appId);
 
     return (
       <div>
-        <BreadcrumbComponent group={group}
-          app={state.appId}
-          task={state.activeTaskId} />
+        <BreadcrumbComponent groupId={groupId}
+          appId={state.appId}
+          taskId={state.activeTaskId} />
         <div className="container-fluid">
           <div className="page-header">
             <h1>{state.appId}</h1>

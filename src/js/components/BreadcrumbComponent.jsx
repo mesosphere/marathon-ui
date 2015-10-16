@@ -7,18 +7,18 @@ var BreadcrumbComponent = React.createClass({
   displayName: "BreadcrumbComponent",
 
   propTypes: {
-    app: React.PropTypes.string,
-    group: React.PropTypes.string,
-    task: React.PropTypes.string
+    appId: React.PropTypes.string,
+    groupId: React.PropTypes.string,
+    taskId: React.PropTypes.string
   },
 
   getGroupLinks: function () {
-    var group = this.props.group;
-    if (group == null) {
+    var groupId = this.props.groupId;
+    if (groupId == null) {
       return null;
     }
 
-    var pathParts = group.split("/").slice(0, -1);
+    var pathParts = groupId.split("/").slice(0, -1);
     return pathParts.map((name, i) => {
       var id = pathParts.slice(0, i + 1).join("/") + "/";
       return (
@@ -32,16 +32,16 @@ var BreadcrumbComponent = React.createClass({
   },
 
   getAppLink: function () {
-    var app = this.props.app;
-    var group = this.props.group;
-    if (app == null || group == null) {
+    var appId = this.props.appId;
+    var groupId = this.props.groupId;
+    if (appId == null || groupId == null) {
       return null;
     }
-    var name = ViewHelper.getRelativePath(app, group);
+    var name = ViewHelper.getRelativePath(appId, groupId);
 
     return (
       <li>
-        <Link to="app" params={{appId: encodeURIComponent(app)}}>
+        <Link to="app" params={{appId: encodeURIComponent(appId)}}>
           {name}
         </Link>
       </li>
@@ -49,22 +49,22 @@ var BreadcrumbComponent = React.createClass({
   },
 
   getTaskLink: function () {
-    var app = this.props.app;
-    var group = this.props.group;
-    var task = this.props.task;
-    if (task == null || app == null || group == null) {
+    var appId = this.props.appId;
+    var groupId = this.props.groupId;
+    var taskId = this.props.taskId;
+    if (taskId == null || appId == null || groupId == null) {
       return null;
     }
 
     var params = {
-      appId: encodeURIComponent(app),
-      view: encodeURIComponent(task)
+      appId: encodeURIComponent(appId),
+      view: encodeURIComponent(taskId)
     };
 
     return (
       <li>
         <Link to="appView" params={params}>
-          {task}
+          {taskId}
         </Link>
       </li>
     );

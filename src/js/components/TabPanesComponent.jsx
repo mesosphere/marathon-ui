@@ -159,7 +159,7 @@ var TabPanesComponent = React.createClass({
             </nav>
             <main>
               <div className="contextual-bar">
-                <BreadcrumbComponent group={state.currentGroup} />
+                <BreadcrumbComponent groupId={state.currentGroup} />
                 <div className="app-list-controls">
                   <AppListFilterComponent onChange={this.updateFilterText}/>
                   <div className="btn-group toggle-list-view">
