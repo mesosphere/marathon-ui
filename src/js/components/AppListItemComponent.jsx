@@ -20,7 +20,7 @@ var AppListItemComponent = React.createClass({
 
   getLabels: function () {
     var labels = this.props.model.labels;
-    if (labels == null || !Object.keys(labels).length) {
+    if (labels == null || Object.keys(labels).length === 0) {
       return null;
     }
 
