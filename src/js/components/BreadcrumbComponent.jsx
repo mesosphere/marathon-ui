@@ -50,9 +50,8 @@ var BreadcrumbComponent = React.createClass({
 
   getTaskLink: function () {
     var appId = this.props.appId;
-    var groupId = this.props.groupId;
     var taskId = this.props.taskId;
-    if (taskId == null || appId == null || groupId == null) {
+    if (taskId == null || appId == null) {
       return null;
     }
 
