@@ -1,5 +1,5 @@
 var tabs = [
-  {id: "/apps", text: "Apps"},
+  {id: "/apps", text: "Applications"},
   {id: "/deployments", text: "Deployments"}
 ];
 
