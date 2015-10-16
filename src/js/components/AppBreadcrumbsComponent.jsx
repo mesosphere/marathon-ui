@@ -1,4 +1,3 @@
-var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppBreadcrumbsComponent = React.createClass({
@@ -16,45 +15,54 @@ var AppBreadcrumbsComponent = React.createClass({
     };
   },
 
-  render: function () {
+  getAppName: function () {
     var props = this.props;
     var activeViewIndex = props.activeViewIndex;
     var appName = props.appId;
     var appUri = "#apps/" + encodeURIComponent(props.appId);
 
-    var taskName;
+    if (activeViewIndex === 1) {
+      return (
+        <li>
+          <a href={appUri}>
+            {appName}
+          </a>
+        </li>
+      );
+    }
+
+    return (
+      <li className="active">
+        {appName}
+      </li>
+    );
+  },
+
+  getTaskName: function () {
+    var props = this.props;
+    var activeViewIndex = props.activeViewIndex;
+
+    if (activeViewIndex === 0) {
+      return null;
+    }
+
+    let taskName;
     if (activeViewIndex === 1 && props.activeTaskId != null) {
       taskName = props.activeTaskId;
     }
+    return (
+      <li className="active">{taskName}</li>
+    );
+  },
 
-    var activeAppClassSet = classNames({
-      "active": true,
-      "hidden": activeViewIndex === 1
-    });
-    var inactiveAppClassSet = classNames({
-      "hidden": activeViewIndex === 0
-    });
-    var taskClassSet = classNames({
-      "active": true,
-      "hidden": activeViewIndex === 0
-    });
-
+  render: function () {
     return (
       <ol className="breadcrumb">
         <li>
           <a href="#apps">Apps</a>
         </li>
-        <li className={activeAppClassSet}>
-          {appName}
-        </li>
-        <li className={inactiveAppClassSet}>
-          <a href={appUri}>
-            {appName}
-          </a>
-        </li>
-        <li className={taskClassSet}>
-          {taskName}
-        </li>
+        {this.getAppName()}
+        {this.getTaskName()}
       </ol>
     );
   }

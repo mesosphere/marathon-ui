@@ -4,6 +4,8 @@ var lazy = require("lazy.js");
 var AppDispatcher = require("../AppDispatcher");
 var AppsEvents = require("../events/AppsEvents");
 var appScheme = require("../stores/schemes/appScheme");
+var AppTypes = require("../constants/AppTypes");
+var ContainerConstants = require("../constants/ContainerConstants");
 var AppStatus = require("../constants/AppStatus");
 var HealthStatus = require("../constants/HealthStatus");
 var TasksEvents = require("../events/TasksEvents");
@@ -115,6 +117,14 @@ function getAppHealthWeight(health) {
   }, 0);
 }
 
+function getAppType(app) {
+  if (app.container != null &&
+      app.container.type === ContainerConstants.TYPE.DOCKER) {
+    return AppTypes.DOCKER;
+  }
+  return AppTypes.DEFAULT;
+}
+
 function calculateTotalResources(app) {
   app.totalMem = app.mem * app.instances;
   app.totalCpus = parseFloat((app.cpus * app.instances).toPrecision(4));
@@ -131,7 +141,7 @@ function processApp(app) {
   } else if (app.instances === 0 && app.tasksRunning === 0) {
     app.status = AppStatus.SUSPENDED;
   }
-
+  app.type = getAppType(app);
   app.health = getAppHealth(app);
   app.healthWeight = getAppHealthWeight(app.health);
 
