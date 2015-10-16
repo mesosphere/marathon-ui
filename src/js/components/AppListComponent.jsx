@@ -272,7 +272,7 @@ var AppListComponent = React.createClass({
           <col className="cpu" />
           <col className="ram" />
           <col className="status" />
-          <col className="tasks" />
+          <col className="instances" />
           <col className="health" />
           <col className="actions" />
         </colgroup>
@@ -302,10 +302,10 @@ var AppListComponent = React.createClass({
                 {this.getCaret("status")} Status
               </span>
             </th>
-            <th className="text-right tasks" colSpan="2">
+            <th className="text-right instances" colSpan="2">
               <span onClick={this.sortBy.bind(null, "instances")}
                   className={headerClassSet}>
-                {this.getCaret("instances")} Running Tasks
+                {this.getCaret("instances")} Running Instances
               </span>
             </th>
             <th className="text-center actions"></th>
