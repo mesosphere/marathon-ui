@@ -37,6 +37,8 @@ var HelpModalComponent = React.createClass({
             <dd>Go to Deployments list</dd>
             <dt>g v</dt>
             <dd>Go to UI Version dialog</dd>
+            <dt>s</dt>
+            <dd>Focus application search bar</dd>
             <dt>shift + ,</dt>
             <dd>Go to About modal</dd>
             <dt>?</dt>
