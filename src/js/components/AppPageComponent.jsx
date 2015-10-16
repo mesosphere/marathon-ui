@@ -444,8 +444,7 @@ var AppPageComponent = React.createClass({
 
     return (
       <div>
-        <BreadcrumbComponent
-          group={group}
+        <BreadcrumbComponent group={group}
           app={state.appId}
           task={state.activeTaskId} />
         <div className="container-fluid">
