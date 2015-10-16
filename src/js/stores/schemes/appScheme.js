@@ -29,7 +29,7 @@ const appScheme = {
   tasks: [],
   tasksRunning: 0,
   taskStats: {},
-  type: AppTypes.DEFAULT
+  type: AppTypes.BASIC
 };
 
 module.exports = Util.deepFreeze(appScheme);

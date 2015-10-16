@@ -122,7 +122,7 @@ function getAppType(app) {
       app.container.type === ContainerConstants.TYPE.DOCKER) {
     return AppTypes.DOCKER;
   }
-  return AppTypes.DEFAULT;
+  return AppTypes.BASIC;
 }
 
 function calculateTotalResources(app) {
