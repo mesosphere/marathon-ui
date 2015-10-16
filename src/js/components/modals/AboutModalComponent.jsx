@@ -74,9 +74,9 @@ var AboutModalComponent = React.createClass({
         </div>
         <div className="modal-body">
           <dl className="dl-horizontal dl-horizontal-lg">
-            <dt title="framework_id">Framework Id</dt>
+            <dt title="frameworkId">Framework Id</dt>
             <dd>
-              {this.getInfo("framework_id")}
+              {this.getInfo("frameworkId")}
             </dd>
             <dt title="leader">Leader</dt>
             <dd>
