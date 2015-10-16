@@ -309,12 +309,12 @@ describe("App Version component", function () {
 
   it("has correct amount of memory", function () {
     expect(this.table[23].props.children[0]).to.equal(16.0);
-    expect(this.table[23].props.children[2]).to.equal("MB");
+    expect(this.table[23].props.children[2]).to.equal("MiB");
   });
 
   it("has correct amount of disk space", function () {
     expect(this.table[25].props.children[0]).to.equal(0.0);
-    expect(this.table[25].props.children[2]).to.equal("MB");
+    expect(this.table[25].props.children[2]).to.equal("MiB");
   });
 
   it("has correct ports", function () {

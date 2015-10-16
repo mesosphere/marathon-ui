@@ -215,9 +215,9 @@ var AppVersionComponent = React.createClass({
           <dt>Instances</dt>
           {invalidateValue(appVersion.instances)}
           <dt>Memory</dt>
-          {invalidateValue(appVersion.mem, "MB")}
+          {invalidateValue(appVersion.mem, "MiB")}
           <dt>Disk Space</dt>
-          {invalidateValue(appVersion.disk, "MB")}
+          {invalidateValue(appVersion.disk, "MiB")}
           <dt>Ports</dt>
           {portsNode}
           <dt>Backoff Factor</dt>
