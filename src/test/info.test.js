@@ -69,7 +69,7 @@ describe("About Modal", function () {
   beforeEach(function () {
     InfoStore.info = {
       "version": "1.2.3",
-      "framework_id": "framework1",
+      "frameworkId": "framework1",
       "leader": "leader1.dcos.io",
       "marathon_config": {
         "marathon_field_1": "mf1",
