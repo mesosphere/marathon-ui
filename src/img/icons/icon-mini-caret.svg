@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-mini-caret</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icons/Mini" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-mini-caret" sketch:type="MSArtboardGroup" fill="#000000">
+            <path d="M5,6 L10,6 L10,7 L5,7 L5,6 Z M10,6 L11,6 L11,12 L10,12 L10,6 Z" id="Arrow" sketch:type="MSShapeGroup" transform="translate(8.000000, 9.000000) rotate(-45.000000) translate(-8.000000, -9.000000) "></path>
+        </g>
+    </g>
+</svg>

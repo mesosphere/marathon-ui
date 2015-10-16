@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-mini-folder-color-open</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icons/Mini" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-mini-folder-color-open" sketch:type="MSArtboardGroup" fill="#000000">
+            <path d="M15,13.9997559 L15,14.9997559 L1,14.9997559 L1,13.9997559 L15,13.9997559 L15,13.9997559 Z" id="Bottom" sketch:type="MSShapeGroup"></path>
+            <rect id="Right" sketch:type="MSShapeGroup" x="15" y="3" width="1" height="12"></rect>
+            <path d="M5.37852701,2 C6.03143311,2 6.16621978,2.28795797 6.3072729,2.62350117 L6.75718115,3.69376217 L6.8859151,4 L7.21811088,4 L15,4 L15,3 L7.546875,3 C7.546875,3 7.41760583,2.6891678 7.35297125,2.5337517 C7.31169162,2.43449341 7.22913237,2.23597683 7.22913237,2.23597683 C6.94636694,1.56332233 6.42041016,1 5.48761088,1.00360898 C4.5548116,1.00721795 5.41481849,1 5.37852701,1 L1,1 L1,2 L5.37852701,2 Z" id="Top" sketch:type="MSShapeGroup"></path>
+            <rect id="Left" sketch:type="MSShapeGroup" x="0" y="1" width="1" height="14"></rect>
+            <path d="M15,14 L15,7 L3.50675732,7 L1.16375732,14 L15,14 Z" id="Background" opacity="0.4" sketch:type="MSShapeGroup"></path>
+            <path d="M15.0051036,7 L3.511,7 L1.16696103,14.0046799 L1.00534773,14.0046797 L1.00534774,11.3364835 L2.791,6 L15.0051036,6" id="Flap" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>
