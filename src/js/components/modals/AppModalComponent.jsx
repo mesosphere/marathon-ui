@@ -253,7 +253,7 @@ var AppModalComponent = React.createClass({
               <div className="col-sm-3">
                 <FormGroupComponent
                     fieldId="mem"
-                    label="Memory (MB)"
+                    label="Memory (MiB)"
                     errorMessage={this.getErrorMessage("mem")}
                     value={state.fields.mem}
                     onChange={this.handleFieldUpdate}>
@@ -263,7 +263,7 @@ var AppModalComponent = React.createClass({
               <div className="col-sm-3">
                 <FormGroupComponent
                     fieldId="disk"
-                    label="Disk Space (MB)"
+                    label="Disk Space (MiB)"
                     errorMessage={this.getErrorMessage("disk")}
                     value={state.fields.disk}
                     onChange={this.handleFieldUpdate}>
