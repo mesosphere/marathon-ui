@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-mini-file</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icons/Mini" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-mini-file" sketch:type="MSArtboardGroup" fill="#000000">
+            <rect id="Line" sketch:type="MSShapeGroup" x="3" y="15" width="10" height="1"></rect>
+            <rect id="Line" sketch:type="MSShapeGroup" x="7" y="0" width="6" height="1"></rect>
+            <rect id="Line" sketch:type="MSShapeGroup" transform="translate(13.500549, 8.000000) rotate(-270.000000) translate(-13.500549, -8.000000) " x="5.50054932" y="7.5" width="16" height="1"></rect>
+            <rect id="Line" sketch:type="MSShapeGroup" transform="translate(2.500000, 10.500000) rotate(-270.000000) translate(-2.500000, -10.500000) " x="-3" y="10" width="11" height="1"></rect>
+            <rect id="Line" sketch:type="MSShapeGroup" transform="translate(6.500000, 2.500000) rotate(-270.000000) translate(-6.500000, -2.500000) " x="4" y="2" width="5" height="1"></rect>
+            <rect id="Line" sketch:type="MSShapeGroup" x="2" y="4" width="4" height="1"></rect>
+            <path d="M1.52190527,1.85845952 L7.18549209,1.85845952 C7.18549209,1.85845952 6.85406468,2.19179285 6.68835097,2.35845952 C6.52263726,2.52512619 6.19120985,2.85845952 6.19120985,2.85845952 L2.51113831,2.85845952 L1.52190527,1.85845952 Z" id="Line" sketch:type="MSShapeGroup" transform="translate(4.353699, 2.358460) rotate(-45.000000) translate(-4.353699, -2.358460) "></path>
+            <rect id="Line" sketch:type="MSShapeGroup" x="5" y="11" width="4" height="1"></rect>
+            <rect id="Line" sketch:type="MSShapeGroup" x="5" y="9" width="6" height="1"></rect>
+            <rect id="Line" sketch:type="MSShapeGroup" x="5" y="7" width="6" height="1"></rect>
+        </g>
+    </g>
+</svg>
