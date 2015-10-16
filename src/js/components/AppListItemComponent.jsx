@@ -4,7 +4,7 @@ var React = require("react/addons");
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
-var ViewHelper = require("../helpers/ViewHelper");
+var PathUtil = require("../helpers/PathUtil");
 
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
@@ -92,7 +92,7 @@ var AppListItemComponent = React.createClass({
       "app": !model.isGroup
     });
     var colSpan = model.isGroup ? 3 : 1;
-    var name = ViewHelper.getRelativePath(model.id, this.props.currentGroup);
+    var name = PathUtil.getRelativePath(model.id, this.props.currentGroup);
 
     return (
       // Set `title` on cells that potentially overflow so hovering on the
