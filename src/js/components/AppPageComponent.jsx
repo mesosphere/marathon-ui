@@ -3,7 +3,7 @@ var React = require("react/addons");
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
-var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
+var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
@@ -19,6 +19,7 @@ var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
+var ViewHelper = require("../helpers/ViewHelper");
 var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
 var QueueStore = require("../stores/QueueStore");
@@ -439,12 +440,13 @@ var AppPageComponent = React.createClass({
       content = this.getTaskDetailComponent();
     }
 
+    var groupId = ViewHelper.getGroupFromAppId(state.appId);
+
     return (
       <div>
-        <AppBreadcrumbsComponent
-          activeTaskId={state.activeTaskId}
-          activeViewIndex={state.activeViewIndex}
-          appId={state.appId} />
+        <BreadcrumbComponent groupId={groupId}
+          appId={state.appId}
+          taskId={state.activeTaskId} />
         <div className="container-fluid">
           <div className="page-header">
             <h1>{state.appId}</h1>

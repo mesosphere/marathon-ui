@@ -3,7 +3,13 @@ var ViewHelpers = {
     if (!currentGroup.endsWith("/")) {
       currentGroup += "/";
     }
-    return id.substring(currentGroup.length);
+    if (id.startsWith(currentGroup)) {
+      return id.substring(currentGroup.length);
+    }
+    return id;
+  },
+  getGroupFromAppId(id) {
+    return id.split("/").slice(0, -1).join("/") + "/";
   }
 };
 
