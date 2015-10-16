@@ -12,6 +12,12 @@ var BreadcrumbComponent = React.createClass({
     task: React.PropTypes.string
   },
 
+  shouldComponentUpdate: function (nextProps) {
+    return nextProps.app !== this.props.app ||
+      nextProps.group !== this.props.group ||
+      nextProps.task !== this.props.task;
+  },
+
   getGroupLinks: function () {
     var group = this.props.group;
     if (group == null) {
