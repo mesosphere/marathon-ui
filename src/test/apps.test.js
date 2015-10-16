@@ -154,7 +154,7 @@ describe("Apps", function () {
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].type).to.equal("DOCKER");
-            expect(AppsStore.apps[1].type).to.equal("DEFAULT");
+            expect(AppsStore.apps[1].type).to.equal("BASIC");
           }, done);
         });
 
