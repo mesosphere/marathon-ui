@@ -1,6 +1,7 @@
 ## Unversioned
 ### Added
 - \#2031 - Make keyboard shortcuts discoverable
+- \#2434 - Create keyboard shortcut for focusing on the search field
 
 ### Fixed
 - \#2421 - Error: Invalid calling object (Win 8 IE10, Win 7 IE11)
