@@ -1101,7 +1101,9 @@ describe("Breadcrumb Component", function () {
       renderer.render(
         <BreadcrumbComponent group={group} app={app} task={task} />
       );
-      return renderer.getRenderOutput();
+      var component = renderer.getRenderOutput();
+      renderer.unmount();
+      return component;
     };
   });
 
