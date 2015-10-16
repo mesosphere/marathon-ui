@@ -19,7 +19,7 @@ var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
-var ViewHelper = require("../helpers/ViewHelper");
+var PathUtil = require("../helpers/PathUtil");
 var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
 var QueueStore = require("../stores/QueueStore");
@@ -440,7 +440,7 @@ var AppPageComponent = React.createClass({
       content = this.getTaskDetailComponent();
     }
 
-    var groupId = ViewHelper.getGroupFromAppId(state.appId);
+    var groupId = PathUtil.getGroupFromAppId(state.appId);
 
     return (
       <div>
