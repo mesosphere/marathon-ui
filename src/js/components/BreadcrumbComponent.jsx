@@ -145,6 +145,12 @@ var BreadcrumbComponent = React.createClass({
       : expandedWidth >= availableWidth + COLLAPSE_BUFFER;
   },
 
+  shouldComponentUpdate: function (nextProps) {
+    return nextProps.app !== this.props.app ||
+      nextProps.group !== this.props.group ||
+      nextProps.task !== this.props.task;
+  },
+
   getGroupLinks: function () {
     var groupId = this.props.groupId;
     if (groupId == null) {
