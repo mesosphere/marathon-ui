@@ -20,7 +20,7 @@ var AppListItemComponent = React.createClass({
 
   getLabels: function () {
     var labels = this.props.model.labels;
-    if (labels == null) {
+    if (labels == null || Object.keys(labels).length === 0) {
       return null;
     }
 
@@ -35,7 +35,7 @@ var AppListItemComponent = React.createClass({
       }
 
       return (
-        <span key={i} className="label label-default" title={labelText}>
+        <span key={i} className="label" title={labelText}>
           {labelText}
         </span>
       );
@@ -44,6 +44,7 @@ var AppListItemComponent = React.createClass({
     return (
       <div className="labels">
         {nodes}
+        <span className="label more">&hellip;</span>
       </div>
     );
   },

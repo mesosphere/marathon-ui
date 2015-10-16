@@ -363,7 +363,6 @@ a:focus {
     }
 
     &.name {
-
       display: flex;
       color: inherit;
 
@@ -383,7 +382,7 @@ a:focus {
     }
   }
 
-  .label.label-default {
+  .label {
     display: none;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -395,13 +394,23 @@ a:focus {
     color: @navbar-inactive-color;
     font-size: @small-font-size;
     font-weight: normal;
+
+    &.more {
+      display: inline-block;
+    }
   }
+
+
 
   .label-loop(@i) when (@i > 0) {
     @breakpoint: (@app-list-labels-breakpoint + @i * @app-list-label-width);
+    @next: @i + 1;
     @media only screen and (min-width:  @breakpoint) {
-      .label.label-default:nth-child(@{i}) {
+      .label:nth-child(@{i}) {
         display: inline-block;
+      }
+      .label.more:nth-child(-n+@{next}){
+        display: none;
       }
     }
     .label-loop(@i - 1);
