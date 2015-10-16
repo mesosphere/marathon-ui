@@ -23,7 +23,7 @@ var DeploymentComponent = React.createClass({
     var model = this.props.model;
 
     var confirmMessage =
-      "Destroy deployment of apps: '" + model.affectedAppsString +
+      "Destroy deployment of applications: '" + model.affectedAppsString +
       "'?\nDestroying this deployment will create and start a new " +
       "deployment to revert the affected app to its previous version.";
 
@@ -40,7 +40,7 @@ var DeploymentComponent = React.createClass({
     var model = this.props.model;
 
     var confirmMessage =
-      "Stop deployment of apps: '" + model.affectedAppsString +
+      "Stop deployment of applications: '" + model.affectedAppsString +
       "'?\nThis will stop the deployment immediately and leave it in the " +
       "current state.";
 
