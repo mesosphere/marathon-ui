@@ -166,7 +166,7 @@ var DeploymentListComponent = React.createClass({
             <th>
               <span onClick={this.sortBy.bind(null, "affectedAppsString")}
                   className={headerClassSet}>
-                Affected Apps {this.getCaret("affectedAppsString")}
+                Affected Applications {this.getCaret("affectedAppsString")}
               </span>
             </th>
             <th>
