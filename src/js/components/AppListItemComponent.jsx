@@ -35,7 +35,7 @@ var AppListItemComponent = React.createClass({
       }
 
       return (
-        <span key={i} className="label label-default" title={labelText}>
+        <span key={i} className="label" title={labelText}>
           {labelText}
         </span>
       );
