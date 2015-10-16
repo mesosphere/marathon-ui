@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-mini-eyeglass</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icons/Mini" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="icon-mini-eyeglass" sketch:type="MSArtboardGroup" fill="#000000">
+            <path d="M6.5,12 C3.46243388,12 1,9.53756612 1,6.5 C1,3.46243388 3.46243388,1 6.5,1 C9.53756612,1 12,3.46243388 12,6.5 C12,9.53756612 9.53756612,12 6.5,12 Z M6.5,11 C8.98528137,11 11,8.98528137 11,6.5 C11,4.01471863 8.98528137,2 6.5,2 C4.01471863,2 2,4.01471863 2,6.5 C2,8.98528137 4.01471863,11 6.5,11 Z" id="Shape" sketch:type="MSShapeGroup"></path>
+            <path d="M10.447039,9.88421237 L11.2188918,9.43858293 L14.4196746,14.9825012 L13.6478217,15.4281307 L10.447039,9.88421237 Z" id="Stem" sketch:type="MSShapeGroup" transform="translate(12.433357, 12.433357) rotate(-15.000000) translate(-12.433357, -12.433357) "></path>
+        </g>
+    </g>
+</svg>
