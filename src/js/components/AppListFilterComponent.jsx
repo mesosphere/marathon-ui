@@ -26,7 +26,7 @@ var AppListFilterComponent = React.createClass({
 
     Mousetrap.bind("s", function () {
       React.findDOMNode(this.refs.filterText).focus();
-    }.bind(this));
+    }.bind(this), "keyup");
   },
 
   componentWillUnmount: function () {
