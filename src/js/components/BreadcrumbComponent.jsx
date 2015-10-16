@@ -13,9 +13,9 @@ var BreadcrumbComponent = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps) {
-    return nextProps.app !== this.props.app ||
-      nextProps.group !== this.props.group ||
-      nextProps.task !== this.props.task;
+    return nextProps.appId !== this.props.appId ||
+      nextProps.groupId !== this.props.groupId ||
+      nextProps.taskId !== this.props.taskId;
   },
 
   getGroupLinks: function () {
