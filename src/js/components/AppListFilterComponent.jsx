@@ -1,5 +1,6 @@
 var classNames = require("classnames");
 var React = require("react/addons");
+var Mousetrap = require("mousetrap");
 
 var AppListFilterComponent = React.createClass({
   displayName: "AppListFilterComponent",
@@ -22,6 +23,14 @@ var AppListFilterComponent = React.createClass({
 
   componentDidMount: function () {
     this.updateFilterText();
+
+    Mousetrap.bind("s", function () {
+      React.findDOMNode(this.refs.filterText).focus();
+    }.bind(this));
+  },
+
+  componentWillUnmount: function () {
+    Mousetrap.unbind("s");
   },
 
   componentWillReceiveProps: function () {
@@ -122,6 +131,7 @@ var AppListFilterComponent = React.createClass({
           onKeyDown={this.handleKeyDown}
           placeholder="Filter list"
           type="text"
+          ref="filterText"
           value={state.filterText} />
         <span className="input-group-addon">
           <i className={clearIconClassSet}
