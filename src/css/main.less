@@ -1240,7 +1240,7 @@ fieldset[disabled] .btn-info.active {
           overflow-x: hidden;
 
           li {
-            line-height: @font-size-h2;
+            line-height: @font-size-h2 + @base-spacing-unit;
           }
         }
       }
@@ -1324,6 +1324,7 @@ fieldset[disabled] .btn-info.active {
     a {
       color: @link-color;
       white-space: nowrap;
+      overflow: hidden;
 
       &:hover {
         color: darken(@link-color, 40%);
@@ -1337,7 +1338,6 @@ fieldset[disabled] .btn-info.active {
         content: "...";
         width: 0.75em;
       }
-      overflow: hidden;
       width: 0.75em;
     }
     li:first-child,
