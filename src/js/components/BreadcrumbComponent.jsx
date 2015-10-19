@@ -29,6 +29,7 @@ var BreadcrumbComponent = React.createClass({
     // Avoid referencing window from Node context
     if (global.window != null) {
       window.addEventListener("resize", this.handleResize);
+      window.addEventListener("focus", this.handleResize);
     }
   },
 
@@ -39,6 +40,7 @@ var BreadcrumbComponent = React.createClass({
   componentWillUnmount: function () {
     if (global.window != null) {
       window.removeEventListener("resize", this.handleResize);
+      window.removeEventListener("focus", this.handleResize);
     }
   },
 
