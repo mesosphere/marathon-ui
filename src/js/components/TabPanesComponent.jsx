@@ -152,45 +152,12 @@ var TabPanesComponent = React.createClass({
               </div>
               <AppListLabelsFilterComponent
                 onChange={this.updateFilterLabels} />
-              <div className="flex-row">
-                <h3 className="small-caps">Resources</h3>
-              </div>
-              <div className="range-input">
-                <p className="legend">CPU</p>
-                <div className="flex-row">
-                  <input type="text"
-                    className="form-control"
-                    placeholder="0.1" />
-                  <span>to</span>
-                  <input type="text" className="form-control" />
-                </div>
-              </div>
-              <div className="range-input">
-                <p className="legend">Memory</p>
-                <div className="flex-row">
-                  <input type="text"
-                         className="form-control"
-                         placeholder="32" />
-                  <span>to</span>
-                  <input type="text" className="form-control" />
-                </div>
-              </div>
             </nav>
             <main>
               <div className="contextual-bar">
                 <BreadcrumbComponent groupId={state.currentGroup} />
                 <div className="app-list-controls">
                   <AppListFilterComponent onChange={this.updateFilterText}/>
-                  <div className="btn-group toggle-list-view">
-                    <button className="btn btn-default"
-                      type="button">
-                      <i className="icon ion-navicon" /> List
-                    </button>
-                    <button className="btn btn-default"
-                      type="button">
-                      <i className="icon ion-navicon" /> Tree
-                    </button>
-                  </div>
                 </div>
               </div>
               <AppListComponent {...appListProps} />
