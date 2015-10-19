@@ -1241,7 +1241,10 @@ fieldset[disabled] .btn-info.active {
 
       .contextual-bar {
         display: flex;
-        padding: @base-spacing-unit*2;
+        padding: @base-spacing-unit*2
+          0
+          @base-spacing-unit*2
+          @base-spacing-unit*2;
 
         .app-list-controls {
           display: flex;
