@@ -302,13 +302,12 @@ var AppListComponent = React.createClass({
                 {this.getCaret("status")} Status
               </span>
             </th>
-            <th className="text-right instances" colSpan="2">
+            <th className="text-right instances" colSpan="3">
               <span onClick={this.sortBy.bind(null, "instances")}
                   className={headerClassSet}>
                 {this.getCaret("instances")} Running Instances
               </span>
             </th>
-            <th className="text-center actions"></th>
           </tr>
         </thead>
         <tbody>
