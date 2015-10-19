@@ -341,7 +341,7 @@ a:focus {
     }
 
     &.cpu-col {
-      width: @base-spacing-unit*10;
+      width: @base-spacing-unit*5;
     }
 
     &.status-col {
@@ -412,7 +412,8 @@ a:focus {
           }
 
           .label-loop(@i) when (@i > 0) {
-            @breakpoint: (@app-list-labels-breakpoint + @i * @app-list-label-width);
+            @breakpoint: (@app-list-labels-breakpoint + @i *
+              @app-list-label-width *1.15 );
             @next: @i + 1;
             @media only screen and (min-width: @breakpoint) {
               &:nth-child(@{i}) {
