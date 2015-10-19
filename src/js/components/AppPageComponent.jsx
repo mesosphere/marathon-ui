@@ -348,7 +348,7 @@ var AppPageComponent = React.createClass({
     }
 
     return (
-      <button className="btn btn-sm btn-default pull-right"
+      <button className="btn btn-lg btn-default"
           onClick={this.handleResetDelay}>
         Reset Delay
       </button>
@@ -364,18 +364,21 @@ var AppPageComponent = React.createClass({
 
     return (
       <div className="header-btn">
-        <button className="btn btn-success" onClick={this.handleScaleApp}>
+        <button className="btn btn-lg btn-success"
+            onClick={this.handleScaleApp}>
           Scale Application
         </button>
-        <button className="btn btn-default" onClick={this.handleRestartApp}>
+        <button className="btn btn-lg btn-default"
+            onClick={this.handleRestartApp}>
           Restart
         </button>
-        <button className="btn btn-default"
+        <button className="btn btn-lg btn-default"
             onClick={this.handleSuspendApp}
             disabled={state.app.instances < 1}>
           Suspend
         </button>
-        <button className="btn btn-danger" onClick={this.handleDestroyApp}>
+        <button className="btn btn-lg btn-danger"
+            onClick={this.handleDestroyApp}>
           Destroy
         </button>
         {this.getResetDelayButton()}
