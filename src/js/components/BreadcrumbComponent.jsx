@@ -44,15 +44,11 @@ var BreadcrumbComponent = React.createClass({
     }
   },
 
-  shouldComponentUpdate: function (nextProps) {
-    var state = this.state;
-    if (state.availableWidth == null || state.expandedWidth == null) {
-      // first render
-      return true;
+  shouldComponentUpdate: function (nextProps, nextState) {
+    if (nextState.availableWidth == null || nextState.expandedWidth == null) {
+      return false;
     }
-    var collapsed = state.expandedWidth > state.availableWidth;
-    if (collapsed !== state.collapsed) {
-      this.setState({collapsed: collapsed});
+    if (this.state.collapsed !== nextState.collapsed) {
       return true;
     }
     return this.didPropsChange(nextProps);
@@ -65,15 +61,23 @@ var BreadcrumbComponent = React.createClass({
   },
 
   handleResize: _.throttle(function () {
+    var availableWidth = this.getAvailableWidth();
     // no need to update expanded width
-    this.setState({availableWidth: this.getAvailableWidth()});
+    var expandedWidth = this.state.expandedWidth;
+    this.setState({
+      availableWidth: availableWidth,
+      collapsed: expandedWidth >= availableWidth
+    });
   }, 50),
 
   updateDimensions: function () {
+    var availableWidth = this.getAvailableWidth();
+    var expandedWidth = this.getExpandedWidth();
     // combine state updates where possible for performance
     this.setState({
-      availableWidth: this.getAvailableWidth(),
-      expandedWidth: this.getExpandedWidth()
+      availableWidth: availableWidth,
+      expandedWidth: expandedWidth,
+      collapsed: expandedWidth >= availableWidth
     });
   },
 
