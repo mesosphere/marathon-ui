@@ -1,7 +1,12 @@
+var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 var Link = require("react-router").Link;
 
 var PathUtil = require("../helpers/PathUtil");
+var StyleDimensions = require("../constants/StyleDimensions");
+var PADDED_ICON_WIDTH = StyleDimensions.ICON_SIDE +
+  StyleDimensions.BASE_SPACING_UNIT;
 
 var BreadcrumbComponent = React.createClass({
   displayName: "BreadcrumbComponent",
@@ -12,10 +17,92 @@ var BreadcrumbComponent = React.createClass({
     taskId: React.PropTypes.string
   },
 
+  getInitialState: function () {
+    return {
+      collapsed: false,
+      availableWidth: null,
+      expandedWidth: null
+    };
+  },
+
+  componentDidMount: function () {
+    // Avoid referencing window from Node context
+    if (global.window != null) {
+      window.addEventListener("resize", this.handleResize);
+    }
+  },
+
+  componentDidUpdate: function () {
+    this.updateDimensions();
+  },
+
+  componentWillUnmount: function () {
+    if (global.window != null) {
+      window.removeEventListener("resize", this.handleResize);
+    }
+  },
+
   shouldComponentUpdate: function (nextProps) {
+    var state = this.state;
+    if (state.availableWidth == null || state.expandedWidth == null) {
+      // first render
+      return true;
+    }
+    var collapsed = state.expandedWidth > state.availableWidth;
+    if (collapsed !== state.collapsed) {
+      this.setState({collapsed: collapsed});
+      return true;
+    }
+    return this.didPropsChange(nextProps);
+  },
+
+  didPropsChange: function (nextProps) {
     return nextProps.appId !== this.props.appId ||
       nextProps.groupId !== this.props.groupId ||
       nextProps.taskId !== this.props.taskId;
+  },
+
+  handleResize: _.throttle(function () {
+    // no need to update expanded width
+    this.setState({availableWidth: this.getAvailableWidth()});
+  }, 50),
+
+  updateDimensions: function () {
+    // combine state updates where possible for performance
+    this.setState({
+      availableWidth: this.getAvailableWidth(),
+      expandedWidth: this.getExpandedWidth()
+    });
+  },
+
+  getAvailableWidth: function () {
+    return this.getDOMNode().offsetWidth;
+  },
+
+  getWidthFromExpandedItem: function (item) {
+    return item.offsetWidth;
+  },
+
+  getWidthFromCollapsedItem: function (item) {
+    var link = item.children[0];
+    var textWidth = link.scrollWidth - link.offsetWidth;
+    return textWidth + PADDED_ICON_WIDTH;
+  },
+
+  getExpandedWidth: function () {
+    var listItems = this.getDOMNode().children;
+    var collapsed = this.state.collapsed;
+
+    return Object.values(listItems)
+      .map((item, n) => {
+        var isFirstItem = n === 0;
+        var isLastItem = n === listItems.length - 1;
+        if (!collapsed || isFirstItem || isLastItem) {
+          return this.getWidthFromExpandedItem(item);
+        }
+        return this.getWidthFromCollapsedItem(item);
+      })
+      .reduce((memo, width) => memo + width, 0);
   },
 
   getGroupLinks: function () {
@@ -76,8 +163,16 @@ var BreadcrumbComponent = React.createClass({
   },
 
   render: function () {
+    var classSet = classNames({
+      breadcrumb: true,
+      collapsed: this.state.collapsed
+    });
+
+    // Hacky, but ensures that the dimension measurements are up-to-date
+    _.defer(this.updateDimensions);
+
     return (
-      <ol className="breadcrumb">
+      <ol className={classSet}>
         <li>
           <Link to="apps">Applications</Link>
         </li>
