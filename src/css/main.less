@@ -1247,6 +1247,7 @@ fieldset[disabled] .btn-info.active {
           display: flex;
 
           .toggle-list-view {
+            display: flex;  // prevent line-break between buttons
             margin-left: @base-spacing-unit*2;
           }
         }
@@ -1255,6 +1256,8 @@ fieldset[disabled] .btn-info.active {
           background-color: transparent;
           font-size: @font-size-h2;
           padding: 0;
+          align-items: center;
+          overflow-x: hidden;
 
           li {
             line-height: @font-size-h2;
@@ -1305,9 +1308,8 @@ fieldset[disabled] .btn-info.active {
   padding: @base-spacing-unit*2;
 
   li {
-    height: @base-spacing-unit*2;
     line-height: @base-spacing-unit*2;
-    margin: 0 @horizontal-spacing-unit 0 0;
+    display: flex;
 
     + li::before {
       display: none; /* override Bootstrap */
@@ -1322,6 +1324,7 @@ fieldset[disabled] .btn-info.active {
       height: @base-spacing-unit*2;
       margin: 0 0 0 @base-spacing-unit;
       width: @base-spacing-unit*2;
+      vertical-align: baseline;
     }
 
     &:last-child {
