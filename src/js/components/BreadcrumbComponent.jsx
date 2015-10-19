@@ -20,7 +20,8 @@ var BreadcrumbComponent = React.createClass({
     return {
       collapsed: false,
       availableWidth: null,
-      expandedWidth: null
+      expandedWidth: null,
+      mutationObserver: null
     };
   },
 
@@ -29,6 +30,7 @@ var BreadcrumbComponent = React.createClass({
     if (global.window != null) {
       window.addEventListener("resize", this.handleResize);
       window.addEventListener("focus", this.handleResize);
+      this.startMutationObserver();
     }
   },
 
@@ -40,11 +42,13 @@ var BreadcrumbComponent = React.createClass({
     if (global.window != null) {
       window.removeEventListener("resize", this.handleResize);
       window.removeEventListener("focus", this.handleResize);
+      this.stopMutationObserver();
     }
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
     if (nextState.availableWidth == null || nextState.expandedWidth == null) {
+      this.updateDimensions();
       return false;
     }
     if (this.state.collapsed !== nextState.collapsed) {
@@ -59,20 +63,44 @@ var BreadcrumbComponent = React.createClass({
       nextProps.taskId !== this.props.taskId;
   },
 
-  handleResize: _.throttle(function () {
-    var availableWidth = this.getAvailableWidth();
-    // no need to update expanded width
-    var expandedWidth = this.state.expandedWidth;
-    this.setState({
-      availableWidth: availableWidth,
-      collapsed: expandedWidth >= availableWidth
+  startMutationObserver: function () {
+    if (window.MutationObserver == null) {
+      return;
+    }
+    var mutationObserver = new MutationObserver(this.handleMutation);
+    mutationObserver.observe(this.getDOMNode(), {
+      attributes: true, childList: true
     });
+    this.setState({mutationObserver: mutationObserver});
+  },
+
+  stopMutationObserver: function () {
+    var mutationObserver = this.state.mutationObserver;
+    if (mutationObserver == null) {
+      return;
+    }
+    mutationObserver.disconnect();
+  },
+
+  handleMutation: _.throttle(function () {
+    this.updateDimensions(false, true);
+  }),
+
+  handleResize: _.throttle(function () {
+    this.updateDimensions(true, false);
   }, 50),
 
-  updateDimensions: function () {
-    var availableWidth = this.getAvailableWidth();
-    var expandedWidth = this.getExpandedWidth();
-    // combine state updates where possible for performance
+  updateDimensions: function (updateAvailableWidth = true,
+                              updateExpandedWidth = true) {
+    var state = this.state;
+    var availableWidth = updateAvailableWidth
+      ? this.getAvailableWidth()
+      : state.availableWidth;
+    var expandedWidth = updateExpandedWidth
+      ? this.getExpandedWidth()
+      : state.expandedWidth;
+
+    // combine state updates for best performance
     this.setState({
       availableWidth: availableWidth,
       expandedWidth: expandedWidth,
@@ -174,9 +202,6 @@ var BreadcrumbComponent = React.createClass({
       breadcrumb: true,
       collapsed: this.state.collapsed
     });
-
-    // Hacky, but ensures that the dimension measurements are up-to-date
-    _.defer(this.updateDimensions);
 
     return (
       <ol className={classSet}>
