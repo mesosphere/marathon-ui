@@ -4,9 +4,8 @@ var React = require("react/addons");
 var Link = require("react-router").Link;
 
 var PathUtil = require("../helpers/PathUtil");
-var StyleDimensions = require("../constants/StyleDimensions");
-var PADDED_ICON_WIDTH = StyleDimensions.ICON_SIDE +
-  StyleDimensions.BASE_SPACING_UNIT;
+
+var PADDED_ICON_WIDTH = 24; // 16px icon + 8px padding
 
 var BreadcrumbComponent = React.createClass({
   displayName: "BreadcrumbComponent",
