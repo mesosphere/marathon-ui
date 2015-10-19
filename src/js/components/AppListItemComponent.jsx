@@ -126,13 +126,12 @@ var AppListItemComponent = React.createClass({
           </span>
         </td>
         {this.getStatus()}
-        <td className="text-right instances-cell" colSpan={colSpan}>
+        <td className="text-right instances" colSpan={colSpan + 1}>
           <span>
             {model.tasksRunning}
           </span> of {model.instances}
         </td>
         {this.getHealthBar()}
-        <td className="text-right actions-cell">&hellip;</td>
       </tr>
     );
   }
