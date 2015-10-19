@@ -5,6 +5,7 @@ var Link = require("react-router").Link;
 
 var PathUtil = require("../helpers/PathUtil");
 
+var COLLAPSE_BUFFER = 12;
 var PADDED_ICON_WIDTH = 24; // 16px icon + 8px padding
 
 var BreadcrumbComponent = React.createClass({
@@ -104,7 +105,7 @@ var BreadcrumbComponent = React.createClass({
     this.setState({
       availableWidth: availableWidth,
       expandedWidth: expandedWidth,
-      collapsed: expandedWidth >= availableWidth
+      collapsed: this.shouldCollapse(availableWidth, expandedWidth)
     });
   },
 
@@ -136,6 +137,13 @@ var BreadcrumbComponent = React.createClass({
         return this.getWidthFromCollapsedItem(item);
       })
       .reduce((memo, width) => memo + width, 0);
+  },
+
+  shouldCollapse: function (availableWidth, expandedWidth) {
+    // Smooth collapse action to prevent flickering between states
+    return this.state.collapsed
+      ? expandedWidth >= availableWidth - COLLAPSE_BUFFER
+      : expandedWidth >= availableWidth + COLLAPSE_BUFFER;
   },
 
   getGroupLinks: function () {
