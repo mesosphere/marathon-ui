@@ -1331,16 +1331,17 @@ fieldset[disabled] .btn-info.active {
     }
 
     &:last-child {
-      &::after {
-        opacity: 0;
-      }
-
       a {
         color: darken(@link-color, 40%);
         cursor: default;
+
         &::before {
           content: "";
         }
+      }
+
+      &::after {
+        opacity: 0;
       }
     }
 
@@ -1357,16 +1358,18 @@ fieldset[disabled] .btn-info.active {
 
   &.collapsed {
     a {
+      width: 0.75em;
+
       &::before {
         content: "...";
         width: 0.75em;
       }
-      width: 0.75em;
     }
     li:first-child,
     li:last-child {
       a {
         width: auto;
+
         &::before {
           content: "";
         }
