@@ -1335,6 +1335,9 @@ fieldset[disabled] .btn-info.active {
       a {
         color: darken(@link-color, 40%);
         cursor: default;
+        &::before {
+          content: "";
+        }
       }
     }
 
@@ -1343,6 +1346,27 @@ fieldset[disabled] .btn-info.active {
 
       &:hover {
         color: darken(@link-color, 40%);
+      }
+    }
+  }
+
+  &.collapsed {
+    a {
+      &::before {
+        content: "...";
+        width: 0.75em;
+      }
+      overflow: hidden;
+      width: 0.75em;
+    }
+    li:first-child,
+    li:last-child {
+      a {
+        width: auto;
+        &::before {
+          content: "";
+        }
+
       }
     }
   }
