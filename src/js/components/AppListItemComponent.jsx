@@ -1,6 +1,7 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
+var AppTypes = require("../constants/AppTypes");
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
@@ -16,6 +17,17 @@ var AppListItemComponent = React.createClass({
   propTypes: {
     currentGroup: React.PropTypes.string.isRequired,
     model: React.PropTypes.object.isRequired
+  },
+
+  getIcon: function () {
+    var model = this.props.model;
+    if (model.isGroup) {
+      return (<i className="icon icon-small group"></i>);
+    }
+    if (model.type === AppTypes.DOCKER) {
+      return (<i className="icon icon-small docker"></i>);
+    }
+    return (<i className="icon icon-small app"></i>);
   },
 
   getLabels: function () {
@@ -98,11 +110,14 @@ var AppListItemComponent = React.createClass({
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
       <tr onClick={this.onClick} className={className}>
-        <td className="overflow-ellipsis name" title={model.id}>
+        <td className="icon-cell">
+          {this.getIcon()}
+        </td>
+        <td className="overflow-ellipsis name-cell" title={model.id}>
           <span>{name}</span>
           {this.getLabels()}
         </td>
-        <td className="text-right total cpu">
+        <td className="text-right total cpu-cell">
           {parseFloat(model.totalCpus).toFixed(1)}
         </td>
         <td className="text-right total ram">
@@ -111,13 +126,13 @@ var AppListItemComponent = React.createClass({
           </span>
         </td>
         {this.getStatus()}
-        <td className="text-right instances" colSpan={colSpan}>
+        <td className="text-right instances-cell" colSpan={colSpan}>
           <span>
             {model.tasksRunning}
           </span> of {model.instances}
         </td>
         {this.getHealthBar()}
-        <td className="text-right actions">&hellip;</td>
+        <td className="text-right actions-cell">&hellip;</td>
       </tr>
     );
   }

@@ -254,8 +254,6 @@ a:focus {
       background-size: contain;
     }
 
-
-
   }
 
   &.icon-small {
@@ -270,6 +268,22 @@ a:focus {
       line-height: floor(floor(@icon-small-height * @icon-small-scale) + (@icon-small-offset * @icon-small-scale));
 
     }
+
+    &.group {
+      background-image: url("img/icons/icon-small-group-dark.png");
+      background-size: contain;
+    }
+
+    &.app {
+      background-image: url("img/icons/icon-small-app-color.png");
+      background-size: contain;
+    }
+
+    &.docker {
+      background-image: url("img/icons/icon-small-docker-color.png");
+      background-size: contain;
+    }
+
 
   }
 
@@ -315,31 +329,35 @@ a:focus {
   /* Columns */
   & > colgroup > col {
 
-    &.name {
+    &.icon-col {
+      width: @base-spacing-unit*6;
+    }
+
+    &.name-col {
       width: auto;
     }
 
-    &.ram {
+    &.ram-col {
       width: @base-spacing-unit*12;
     }
 
-    &.cpu {
+    &.cpu-col {
       width: @base-spacing-unit*10;
     }
 
-    &.status {
+    &.status-col {
       width: @base-spacing-unit*27;
     }
 
-    &.instances {
+    &.instances-col {
       width: 8%;
     }
 
-    &.health {
+    &.health-col {
       width: 6%;
     }
 
-    &.actions {
+    &.actions-col {
       width: @base-spacing-unit*8;
     }
 
@@ -351,18 +369,19 @@ a:focus {
     padding-left: @base-spacing-unit*2;
   }
   /* Cells */
-  & > thead > tr > th,
-  & > tbody > tr > th,
-  & > tfoot > tr > th,
-  & > thead > tr > td,
   & > tbody > tr > td,
   & > tfoot > tr > td {
 
-    &.status {
+    &.icon-cell {
+      padding-top: @base-spacing-unit * 1.5;
+      padding-bottom: @base-spacing-unit * 1.5;
+    }
+
+    &.status-cell {
       padding-left: @base-spacing-unit*8;
     }
 
-    &.name {
+    &.name-cell {
       display: flex;
       color: inherit;
 
@@ -399,8 +418,6 @@ a:focus {
       display: inline-block;
     }
   }
-
-
 
   .label-loop(@i) when (@i > 0) {
     @breakpoint: (@app-list-labels-breakpoint + @i * @app-list-label-width);
