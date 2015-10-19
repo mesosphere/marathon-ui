@@ -234,7 +234,6 @@ var AppListItemComponent = React.createClass({
           </span> of {model.instances}
         </td>
         {this.getHealthBar()}
-        <td className="text-right actions-cell">&hellip;</td>
       </tr>
     );
   }
