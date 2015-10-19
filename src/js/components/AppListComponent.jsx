@@ -359,7 +359,6 @@ var AppListComponent = React.createClass({
                 {this.getCaret("tasksRunning")} Running Instances
               </span>
             </th>
-            <th className="text-center actions-cell"></th>
           </tr>
         </thead>
         <tbody>
