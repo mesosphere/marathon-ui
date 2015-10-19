@@ -341,7 +341,7 @@ a:focus {
     }
 
     &.cpu-col {
-      width: @base-spacing-unit*10;
+      width: @base-spacing-unit*5;
     }
 
     &.status-col {
@@ -381,11 +381,11 @@ a:focus {
     }
 
     &.name-cell {
-      display: flex;
       color: inherit;
 
       & > span {
         display: inline-block;
+        float: left;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: @app-list-name-width;
@@ -394,45 +394,43 @@ a:focus {
 
       .labels {
         .label {
+          display: none;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: @app-list-label-width;
+          white-space: nowrap;
+          padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
           margin-left: @horizontal-spacing-unit;
+          background-color: @sidebar-bg-color;
+          border-radius: @base-spacing-unit*2;
+          color: @navbar-inactive-color;
+          font-size: @small-font-size;
+          font-weight: normal;
+
+          &.more {
+            display: inline-block;
+          }
+
+          .label-loop(@i) when (@i > 0) {
+            @breakpoint: (@app-list-labels-breakpoint + @i *
+              @app-list-label-width *1.15 );
+            @next: @i + 1;
+            @media only screen and (min-width: @breakpoint) {
+              &:nth-child(@{i}) {
+                display: inline-block;
+              }
+
+              &.more:nth-child(-n+@{next}) {
+                display: none;
+              }
+            }
+            .label-loop(@i - 1);
+          }
+          .label-loop(10);
         }
       }
     }
   }
-
-  .label {
-    display: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: @app-list-label-width;
-    white-space: nowrap;
-    padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
-    background-color: @sidebar-bg-color;
-    border-radius: @base-spacing-unit*2;
-    color: @navbar-inactive-color;
-    font-size: @small-font-size;
-    font-weight: normal;
-
-    &.more {
-      display: inline-block;
-    }
-  }
-
-  .label-loop(@i) when (@i > 0) {
-    @breakpoint: (@app-list-labels-breakpoint + @i * @app-list-label-width);
-    @next: @i + 1;
-    @media only screen and (min-width:  @breakpoint) {
-      .label:nth-child(@{i}) {
-        display: inline-block;
-      }
-      .label.more:nth-child(-n+@{next}){
-        display: none;
-      }
-    }
-    .label-loop(@i - 1);
-  }
-  .label-loop(10);
-
 }
 
 .list-inline-subtext {
