@@ -1,4 +1,3 @@
-var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 var Link = require("react-router").Link;
@@ -83,13 +82,13 @@ var BreadcrumbComponent = React.createClass({
     mutationObserver.disconnect();
   },
 
-  handleMutation: _.throttle(function () {
+  handleMutation: function () {
     this.updateExpandedWidth();
-  }, 50),
+  },
 
-  handleResize: _.throttle(function () {
+  handleResize: function () {
     this.updateAvailableWidth();
-  }, 50),
+  },
 
   updateDimensions: function () {
     var availableWidth = this.getAvailableWidth();
