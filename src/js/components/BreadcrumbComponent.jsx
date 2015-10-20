@@ -83,11 +83,19 @@ var BreadcrumbComponent = React.createClass({
   },
 
   handleMutation: function () {
-    this.updateExpandedWidth();
+    var expandedWidth = this.getExpandedWidth();
+    this.setState({
+      expandedWidth: expandedWidth,
+      collapsed: this.shouldCollapse(this.state.availableWidth, expandedWidth)
+    });
   },
 
   handleResize: function () {
-    this.updateAvailableWidth();
+    var availableWidth = this.getAvailableWidth();
+    this.setState({
+      availableWidth: availableWidth,
+      collapsed: this.shouldCollapse(availableWidth, this.state.expandedWidth)
+    });
   },
 
   updateDimensions: function () {
@@ -97,22 +105,6 @@ var BreadcrumbComponent = React.createClass({
       availableWidth: availableWidth,
       expandedWidth: expandedWidth,
       collapsed: this.shouldCollapse(availableWidth, expandedWidth)
-    });
-  },
-
-  updateAvailableWidth: function () {
-    var availableWidth = this.getAvailableWidth();
-    this.setState({
-      availableWidth: availableWidth,
-      collapsed: this.shouldCollapse(availableWidth, this.state.expandedWidth)
-    });
-  },
-
-  updateExpandedWidth: function () {
-    var expandedWidth = this.getExpandedWidth();
-    this.setState({
-      expandedWidth: expandedWidth,
-      collapsed: this.shouldCollapse(this.state.availableWidth, expandedWidth)
     });
   },
 
