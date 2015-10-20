@@ -5,8 +5,8 @@ var Link = require("react-router").Link;
 
 var PathUtil = require("../helpers/PathUtil");
 
-var COLLAPSE_BUFFER = 12;
-var PADDED_ICON_WIDTH = 24; // 16px icon + 8px padding
+const COLLAPSE_BUFFER = 12;
+const PADDED_ICON_WIDTH = 24; // 16px icon + 8px padding
 
 var BreadcrumbComponent = React.createClass({
   displayName: "BreadcrumbComponent",
