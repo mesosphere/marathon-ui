@@ -5,6 +5,14 @@ var React = require("react/addons");
 var AppStatus = require("../constants/AppStatus");
 var QueueStore = require("../stores/QueueStore");
 
+var statusClassNameMapping = {
+  [AppStatus.RUNNING]: "running",
+  [AppStatus.DEPLOYING]: "deploying",
+  [AppStatus.SUSPENDED]: "suspended",
+  [AppStatus.DELAYED]: "delayed",
+  [AppStatus.WAITING]: "waiting"
+};
+
 var statusNameMapping = {
   [AppStatus.RUNNING]: "Running",
   [AppStatus.DEPLOYING]: "Deploying",
@@ -17,7 +25,21 @@ var AppStatusComponent = React.createClass({
   displayName: "AppStatusComponent",
 
   propTypes: {
-    model: React.PropTypes.object.isRequired
+    model: React.PropTypes.object.isRequired,
+    showSummary: React.PropTypes.bool
+  },
+
+  getTasksSummary: function () {
+    var props = this.props;
+    if (props.showSummary !== true) {
+      return null;
+    }
+
+    return (
+      <span className="tasks-summary">
+        {`(${props.model.tasksRunning} of ${props.model.instances} tasks)`}
+      </span>
+    );
   },
 
   getStatusTitle: function () {
@@ -35,24 +57,20 @@ var AppStatusComponent = React.createClass({
     return null;
   },
 
-  isWarningStatus: function () {
-    var model = this.props.model;
-
-    return model.status === AppStatus.DEPLOYING
-      || model.status === AppStatus.WAITING;
-  },
-
   render: function () {
     var model = this.props.model;
 
-    var statusClassSet = classNames({
-      "text-warning": this.isWarningStatus(),
-      "text-danger": model.status === AppStatus.DELAYED
-    });
+    var statusClassSet = classNames("app-status",
+      statusClassNameMapping[model.status]);
+
+    var iconClassSet = classNames("icon", "icon-mini",
+      statusClassNameMapping[model.status]);
 
     return (
       <span className={statusClassSet} title={this.getStatusTitle()}>
+        <i className={iconClassSet}></i>
         {statusNameMapping[model.status]}
+        {this.getTasksSummary()}
       </span>
     );
   }

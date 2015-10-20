@@ -55,6 +55,7 @@ var AppListFilterComponent = React.createClass({
 
   updateFilterText: function () {
     var router = this.context.router;
+    var state = this.state;
     var queryParams = router.getCurrentQuery();
     var filterText = queryParams.filterText;
 
@@ -67,7 +68,7 @@ var AppListFilterComponent = React.createClass({
     if (filterText !== this.state.filterText) {
       this.setState({
         filterText: filterText,
-        activated: filterText !== "" || this.state.focused
+        activated: filterText !== "" || state.focused
       });
       this.props.onChange(filterText);
     }

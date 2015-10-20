@@ -1,5 +1,6 @@
 var Util = require("../../helpers/Util");
 
+var AppTypes = require("../../constants/AppTypes");
 var AppStatus = require("../../constants/AppStatus");
 
 const appScheme = {
@@ -27,7 +28,8 @@ const appScheme = {
   user: null,
   tasks: [],
   tasksRunning: 0,
-  taskStats: {}
+  taskStats: {},
+  type: AppTypes.BASIC
 };
 
 module.exports = Util.deepFreeze(appScheme);

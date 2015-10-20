@@ -3,7 +3,9 @@ var expect = require("chai").expect;
 var React = require("react/addons");
 var ReactContext = require("react/lib/ReactContext");
 var TestUtils = React.addons.TestUtils;
+
 var Util = require("../js/helpers/Util");
+var ShallowUtils = require("./helpers/ShallowUtils");
 
 /**
  * This *nasty* hack is needed because we want to prevent TooltipMixin from
@@ -18,7 +20,10 @@ TooltipMixin.getNewTooltip = _.noop;
 TooltipMixin.tip_destroyAllTips = _.noop;
 
 var AppsActions = require("../js/actions/AppsActions");
-var AppComponent = require("../js/components/AppComponent");
+var AppDispatcher = require("../js/AppDispatcher");
+var BreadcrumbComponent = require("../js/components/BreadcrumbComponent.jsx");
+var AppListComponent = require("../js/components/AppListComponent");
+var AppListItemComponent = require("../js/components/AppListItemComponent");
 var AppHealthComponent = require("../js/components/AppHealthComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
 var AppStatusComponent = require("../js/components/AppStatusComponent");
@@ -115,6 +120,17 @@ describe("Apps", function () {
         this.server.setup({
           "apps": [{
             id: "/app-1",
+            container: {
+              type: "DOCKER"
+            },
+            tasksHealthy: 2,
+            tasksUnhealthy: 2,
+            tasksRunning: 5,
+            tasksStaged: 2,
+            instances: 10
+          },
+          {
+            id: "/app-2",
             tasksHealthy: 2,
             tasksUnhealthy: 2,
             tasksRunning: 5,
@@ -128,6 +144,17 @@ describe("Apps", function () {
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].healthWeight).to.equal(47);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+
+      it("has the correct app type", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].type).to.equal("DOCKER");
+            expect(AppsStore.apps[1].type).to.equal("BASIC");
           }, done);
         });
 
@@ -679,22 +706,78 @@ describe("Apps", function () {
 
 });
 
+describe("Groups", function () {
+
+  beforeEach(function () {
+    var apps = [
+      {id: "/app-1", instances: 1, mem: 16, cpus: 1},
+      {id: "/app-2", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-1/app-3", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-1/app-4", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-2/app-5", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-2/app-6", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-1/group-3/app-7", instances: 1, mem: 16, cpus: 1},
+      {id: "/group-1/group-3/app-8", instances: 1, mem: 16, cpus: 1}
+    ];
+
+    AppDispatcher.dispatch({
+      actionType: AppsEvents.REQUEST_APPS,
+      data: {body: {apps: apps}}
+    });
+
+    this.renderer = TestUtils.createRenderer();
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("are extrapolated from app IDs", function () {
+    this.renderer.render(<AppListComponent currentGroup="/" />);
+    this.component = this.renderer.getRenderOutput();
+    var tbody = this.component.props.children[2];
+    var trs = tbody.props.children;
+    this.appNodes = trs[trs.length - 1];
+
+    var appNodeKeys = this.appNodes.map((app) => app.key);
+    expect(appNodeKeys).to.deep.equal([
+      "/app-1", "/app-2", "/group-1", "/group-2"
+    ]);
+  });
+
+  it("correctly renders in group context", function () {
+    this.renderer.render(<AppListComponent currentGroup="/group-1/" />);
+    this.component = this.renderer.getRenderOutput();
+    var tbody = this.component.props.children[2];
+    var trs = tbody.props.children;
+    this.appNodes = trs[trs.length - 1];
+
+    var appNodeKeys = this.appNodes.map((app) => app.key);
+    expect(appNodeKeys).to.deep.equal([
+      "/group-1/app-3", "/group-1/app-4", "/group-1/group-3"
+    ]);
+  });
+
+});
+
 describe("App component", function () {
 
   beforeEach(function () {
     var model = {
-      id: "app-123",
+      id: "/app-123",
       deployments: [],
       tasksRunning: 4,
       instances: 5,
       mem: 100,
-      totalMem: 500,
+      totalMem: 1030,
       cpus: 4,
-      totalCpus: 20,
+      totalCpus: 20.0000001,
       status: 0
     };
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppComponent model={model} />);
+    this.renderer.render(
+      <AppListItemComponent model={model} currentGroup="/" />
+    );
     this.component = this.renderer.getRenderOutput();
   });
 
@@ -703,27 +786,32 @@ describe("App component", function () {
   });
 
   it("has the correct app id", function () {
-    var cellContent = this.component.props.children[0].props.children;
+    var cellContent = this.component.props.children[1].props.children[0].props.children;
     expect(cellContent).to.equal("app-123");
-  });
-
-  it("has the correct amount of total memory", function () {
-    var cellContent = this.component.props.children[1].props.children;
-    expect(cellContent).to.equal(500);
   });
 
   it("has the correct amount of total cpus", function () {
     var cellContent = this.component.props.children[2].props.children;
-    expect(cellContent).to.equal(20);
+    expect(cellContent).to.equal("20.0");
+  });
+
+  it("has the correct amount of total memory", function () {
+    var cellContent = this.component.props.children[3].props.children.props.title;
+    expect(cellContent).to.equal("1030 MiB");
+  });
+
+  it("displays the correct amount memory", function () {
+    var cellContent = this.component.props.children[3].props.children.props.children;
+    expect(cellContent).to.equal("1 GiB");
   });
 
   it("has correct number of tasks running", function () {
-    var tasksRunning = this.component.props.children[3].props.children[0].props.children;
+    var tasksRunning = this.component.props.children[5].props.children[0].props.children;
     expect(tasksRunning).to.equal(4);
   });
 
   it("has correct number of instances", function () {
-    var totalSteps = this.component.props.children[3].props.children[2];
+    var totalSteps = this.component.props.children[5].props.children[2];
     expect(totalSteps).to.equal(5);
   });
 
@@ -966,7 +1054,7 @@ describe("App Status component", function () {
 
     it("has correct status description", function () {
       var statusDescription = this.component.props.children;
-      expect(statusDescription).to.equal("Delayed");
+      expect(statusDescription[1]).to.equal("Delayed");
     });
 
     it("has correct title", function () {
@@ -1000,8 +1088,76 @@ describe("App Status component", function () {
 
     it("has correct status description", function () {
       var statusDescription = this.component.props.children;
-      expect(statusDescription).to.equal("Running");
+      expect(statusDescription[1]).to.equal("Running");
     });
   });
 
 });
+
+describe("Breadcrumb Component", function () {
+  before(function () {
+    this.renderComponent = (group, app, task) => {
+      var renderer = TestUtils.createRenderer();
+      renderer.render(
+        <BreadcrumbComponent groupId={group} appId={app} taskId={task} />
+      );
+      var component = renderer.getRenderOutput();
+      renderer.unmount();
+      return component;
+    };
+  });
+
+  it("shows root path by default", function () {
+    var component = this.renderComponent();
+    var rootLink = component.props.children[0].props.children;
+    expect(rootLink.props.to).to.equal("apps");
+    expect(ShallowUtils.getText(rootLink)).to.equal("Applications");
+  });
+
+  it("renders group names correctly", function () {
+    var component = this.renderComponent("/group-a/group-b/group-c/");
+    var groupItems = component.props.children[1];
+    var linkText = groupItems
+      .filter((li) => !!li)
+      .map((li) => ShallowUtils.getText(li.props.children));
+
+    expect(linkText).to.deep.equal([
+      "group-a", "group-b", "group-c"
+    ]);
+  });
+
+  it("renders group links correctly", function () {
+    var component = this.renderComponent("/group-a/group-b/group-c/");
+    var groupItems = component.props.children[1];
+    var linkTargets = groupItems
+      .filter((li) => !!li)
+      .map((li) => li.props.children.props.params.groupId);
+
+    // routes must be URIEncoded
+    expect(linkTargets).to.deep.equal([
+      "%2Fgroup-a%2F",
+      "%2Fgroup-a%2Fgroup-b%2F",
+      "%2Fgroup-a%2Fgroup-b%2Fgroup-c%2F"
+    ]);
+  });
+
+  it("shows the application, if supplied", function () {
+    var component = this.renderComponent("/group-a/", "/group-a/app-1");
+    var appLink = component.props.children[2].props.children;
+    expect(appLink.props.to).to.equal("app");
+    expect(appLink.props.params.appId).to.equal("%2Fgroup-a%2Fapp-1");
+    expect(ShallowUtils.getText(appLink.props.children)).to.equal("app-1");
+  });
+
+  it("shows the task, if supplied", function () {
+    var component =
+      this.renderComponent("/group-a/", "/group-a/app-1", "task-1");
+    var taskLink = component.props.children[3].props.children;
+    expect(taskLink.props.to).to.equal("appView");
+    expect(taskLink.props.params.appId).to.equal("%2Fgroup-a%2Fapp-1");
+    expect(taskLink.props.params.view).to.equal("task-1");
+    expect(ShallowUtils.getText(taskLink)).to.equal("task-1");
+  });
+
+});
+

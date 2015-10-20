@@ -3,7 +3,7 @@ var React = require("react/addons");
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
-var AppBreadcrumbsComponent = require("../components/AppBreadcrumbsComponent");
+var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
@@ -19,6 +19,7 @@ var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
+var PathUtil = require("../helpers/PathUtil");
 var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
 var QueueStore = require("../stores/QueueStore");
@@ -347,7 +348,7 @@ var AppPageComponent = React.createClass({
     }
 
     return (
-      <button className="btn btn-sm btn-default pull-right"
+      <button className="btn btn-lg btn-default"
           onClick={this.handleResetDelay}>
         Reset Delay
       </button>
@@ -363,22 +364,22 @@ var AppPageComponent = React.createClass({
 
     return (
       <div className="header-btn">
-        <button className="btn btn-sm btn-default"
+        <button className="btn btn-lg btn-success"
+            onClick={this.handleScaleApp}>
+          Scale Application
+        </button>
+        <button className="btn btn-lg btn-default"
+            onClick={this.handleRestartApp}>
+          Restart
+        </button>
+        <button className="btn btn-lg btn-default"
             onClick={this.handleSuspendApp}
             disabled={state.app.instances < 1}>
           Suspend
         </button>
-        <button className="btn btn-sm btn-default"
-            onClick={this.handleScaleApp}>
-          Scale
-        </button>
-        <button className="btn btn-sm btn-danger pull-right"
+        <button className="btn btn-lg btn-danger"
             onClick={this.handleDestroyApp}>
-          Destroy App
-        </button>
-        <button className="btn btn-sm btn-default pull-right"
-            onClick={this.handleRestartApp}>
-          Restart App
+          Destroy
         </button>
         {this.getResetDelayButton()}
       </div>
@@ -442,20 +443,17 @@ var AppPageComponent = React.createClass({
       content = this.getTaskDetailComponent();
     }
 
+    var groupId = PathUtil.getGroupFromAppId(state.appId);
+
     return (
       <div>
-        <AppBreadcrumbsComponent
-          activeTaskId={state.activeTaskId}
-          activeViewIndex={state.activeViewIndex}
-          appId={state.appId} />
+        <BreadcrumbComponent groupId={groupId}
+          appId={state.appId}
+          taskId={state.activeTaskId} />
         <div className="container-fluid">
           <div className="page-header">
-            <span className="h3 modal-title">{state.appId}</span>
-            <ul className="list-inline list-inline-subtext">
-              <li>
-                <AppStatusComponent model={model} />
-              </li>
-            </ul>
+            <h1>{state.appId}</h1>
+            <AppStatusComponent model={model} showSummary={true} />
             {this.getControls()}
           </div>
           {content}
