@@ -1240,7 +1240,6 @@ fieldset[disabled] .btn-info.active {
       flex: 1;
 
       .contextual-bar {
-        align-items: center;
         display: flex;
         padding: @base-spacing-unit*2
           0
@@ -1248,13 +1247,10 @@ fieldset[disabled] .btn-info.active {
           @base-spacing-unit*2;
 
         .app-list-controls {
-          align-items: center;
           display: flex;
-          flex-direction: row;
-          flex: 1;
-          justify-content: flex-end;
 
           .toggle-list-view {
+            display: flex;  // prevent line-break between buttons
             margin-left: @base-spacing-unit*2;
           }
         }
@@ -1263,9 +1259,11 @@ fieldset[disabled] .btn-info.active {
           background-color: transparent;
           font-size: @font-size-h2;
           padding: 0;
+          align-items: center;
+          overflow-x: hidden;
 
           li {
-            line-height: @font-size-h2;
+            line-height: @font-size-h2 + @base-spacing-unit;
           }
         }
       }
@@ -1313,9 +1311,8 @@ fieldset[disabled] .btn-info.active {
   padding: @base-spacing-unit*2;
 
   li {
-    height: @base-spacing-unit*2;
     line-height: @base-spacing-unit*2;
-    margin: 0 @horizontal-spacing-unit 0 0;
+    display: flex;
 
     + li::before {
       display: none; /* override Bootstrap */
@@ -1330,24 +1327,56 @@ fieldset[disabled] .btn-info.active {
       height: @base-spacing-unit*2;
       margin: 0 0 0 @base-spacing-unit;
       width: @base-spacing-unit*2;
+      vertical-align: baseline;
+      display: inline-block;
     }
 
     &:last-child {
-      &::after {
-        opacity: 0;
-      }
-
       a {
         color: darken(@link-color, 40%);
         cursor: default;
+
+        &::before {
+          content: "";
+        }
+      }
+
+      &::after {
+        opacity: 0;
       }
     }
 
     a {
       color: @link-color;
+      white-space: nowrap;
+      overflow: hidden;
 
       &:hover {
         color: darken(@link-color, 40%);
+      }
+    }
+  }
+
+  &.collapsed {
+    a {
+      width: 0.75em;
+
+      &::before {
+        display: inline-block;
+        content: "...";
+        width: 0.75em;
+      }
+    }
+    li:first-child,
+    li:last-child {
+      a {
+        width: auto;
+
+        &::before {
+          width: auto;
+          content: "";
+        }
+
       }
     }
   }

@@ -1,7 +1,11 @@
+var classNames = require("classnames");
 var React = require("react/addons");
 var Link = require("react-router").Link;
 
 var PathUtil = require("../helpers/PathUtil");
+
+const COLLAPSE_BUFFER = 12;
+const PADDED_ICON_WIDTH = 24; // 16px icon + 8px padding
 
 var BreadcrumbComponent = React.createClass({
   displayName: "BreadcrumbComponent",
@@ -12,10 +16,133 @@ var BreadcrumbComponent = React.createClass({
     taskId: React.PropTypes.string
   },
 
-  shouldComponentUpdate: function (nextProps) {
+  getInitialState: function () {
+    return {
+      collapsed: false,
+      availableWidth: null,
+      expandedWidth: null,
+      mutationObserver: null
+    };
+  },
+
+  componentDidMount: function () {
+    // Avoid referencing window from Node context
+    if (global.window != null) {
+      window.addEventListener("resize", this.handleResize);
+      window.addEventListener("focus", this.handleResize);
+      this.startMutationObserver();
+    }
+  },
+
+  componentDidUpdate: function () {
+    this.updateDimensions();
+  },
+
+  componentWillUnmount: function () {
+    if (global.window != null) {
+      window.removeEventListener("resize", this.handleResize);
+      window.removeEventListener("focus", this.handleResize);
+      this.stopMutationObserver();
+    }
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState) {
+    if (nextState.availableWidth == null || nextState.expandedWidth == null) {
+      this.updateDimensions();
+      return false;
+    }
+    if (this.state.collapsed !== nextState.collapsed) {
+      return true;
+    }
+    return this.didPropsChange(nextProps);
+  },
+
+  didPropsChange: function (nextProps) {
     return nextProps.appId !== this.props.appId ||
       nextProps.groupId !== this.props.groupId ||
       nextProps.taskId !== this.props.taskId;
+  },
+
+  startMutationObserver: function () {
+    if (window.MutationObserver == null) {
+      return;
+    }
+    var mutationObserver = new MutationObserver(this.handleMutation);
+    mutationObserver.observe(this.getDOMNode(), {
+      attributes: true, childList: true
+    });
+    this.setState({mutationObserver: mutationObserver});
+  },
+
+  stopMutationObserver: function () {
+    var mutationObserver = this.state.mutationObserver;
+    if (mutationObserver == null) {
+      return;
+    }
+    mutationObserver.disconnect();
+  },
+
+  handleMutation: function () {
+    var expandedWidth = this.getExpandedWidth();
+    this.setState({
+      expandedWidth: expandedWidth,
+      collapsed: this.shouldCollapse(this.state.availableWidth, expandedWidth)
+    });
+  },
+
+  handleResize: function () {
+    var availableWidth = this.getAvailableWidth();
+    this.setState({
+      availableWidth: availableWidth,
+      collapsed: this.shouldCollapse(availableWidth, this.state.expandedWidth)
+    });
+  },
+
+  updateDimensions: function () {
+    var availableWidth = this.getAvailableWidth();
+    var expandedWidth = this.getExpandedWidth();
+    this.setState({
+      availableWidth: availableWidth,
+      expandedWidth: expandedWidth,
+      collapsed: this.shouldCollapse(availableWidth, expandedWidth)
+    });
+  },
+
+  getAvailableWidth: function () {
+    return this.getDOMNode().offsetWidth;
+  },
+
+  getWidthFromExpandedItem: function (item) {
+    return item.offsetWidth;
+  },
+
+  getWidthFromCollapsedItem: function (item) {
+    var link = item.children[0];
+    var textWidth = link.scrollWidth - link.offsetWidth;
+    return textWidth + PADDED_ICON_WIDTH;
+  },
+
+  getExpandedWidth: function () {
+    var listItems = this.getDOMNode().children;
+    var collapsed = this.state.collapsed;
+
+    return Object.values(listItems)
+      .map((item, n) => {
+        var isFirstItem = n === 0;
+        var isLastItem = n === listItems.length - 1;
+        if (!collapsed || isFirstItem || isLastItem) {
+          return this.getWidthFromExpandedItem(item);
+        }
+        return this.getWidthFromCollapsedItem(item);
+      })
+      .reduce((memo, width) => memo + width, 0);
+  },
+
+  shouldCollapse: function (availableWidth, expandedWidth) {
+    // Smooth collapse action to prevent flickering between states
+    return this.state.collapsed
+      ? expandedWidth >= availableWidth - COLLAPSE_BUFFER
+      : expandedWidth >= availableWidth + COLLAPSE_BUFFER;
   },
 
   getGroupLinks: function () {
@@ -29,7 +156,9 @@ var BreadcrumbComponent = React.createClass({
       var id = pathParts.slice(0, i + 1).join("/") + "/";
       return (
         <li key={id}>
-          <Link to="group" params={{groupId: encodeURIComponent(id)}}>
+          <Link to="group"
+              params={{groupId: encodeURIComponent(id)}}
+              title={name}>
             {name}
           </Link>
         </li>
@@ -76,8 +205,13 @@ var BreadcrumbComponent = React.createClass({
   },
 
   render: function () {
+    var classSet = classNames({
+      breadcrumb: true,
+      collapsed: this.state.collapsed
+    });
+
     return (
-      <ol className="breadcrumb">
+      <ol className={classSet}>
         <li>
           <Link to="apps">Applications</Link>
         </li>
