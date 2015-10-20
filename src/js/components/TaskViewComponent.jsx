@@ -152,7 +152,7 @@ var TaskViewComponent = React.createClass({
     return (
       <div>
         <div className="row">
-          <div className="col-sm-6">
+          <div className="col-sm-6 tasks-controls">
             {this.getButtons()}
           </div>
           <div className="col-sm-6">
