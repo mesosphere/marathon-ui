@@ -85,7 +85,7 @@ var BreadcrumbComponent = React.createClass({
 
   handleMutation: _.throttle(function () {
     this.updateExpandedWidth();
-  }),
+  }, 50),
 
   handleResize: _.throttle(function () {
     this.updateAvailableWidth();
