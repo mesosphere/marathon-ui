@@ -94,6 +94,15 @@ var TabPanesComponent = React.createClass({
     return tabs[0].id;
   },
 
+  handleClearFilter: function (filterQueryParamKey) {
+    var router = this.context.router;
+    var queryParams = router.getCurrentQuery();
+    if (queryParams[filterQueryParamKey]) {
+      delete queryParams[filterQueryParamKey];
+      router.transitionTo(router.getCurrentPathname(), {}, queryParams);
+    }
+  },
+
   render: function () {
     var path = this.context.router.getCurrentPathname();
     var state = this.state;
@@ -106,6 +115,18 @@ var TabPanesComponent = React.createClass({
       filterStatus: state.filterStatus,
       viewType: AppListViewTypes.LIST
     };
+
+    var filterStatusClearLink = state.filterStatus.length > 0
+      ? <a onClick={this.handleClearFilter.bind(null, "filterStatus")}>Clear</a>
+      : null;
+
+    var filterTypesClearLink = state.filterTypes.length > 0
+      ? <a onClick={this.handleClearFilter.bind(null, "filterTypes")}>Clear</a>
+      : null;
+
+    var filterLabelsClearLink = state.filterLabels.length > 0
+      ? <a onClick={this.handleClearFilter.bind(null, "filterLabels")}>Clear</a>
+      : null;
 
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
@@ -121,16 +142,18 @@ var TabPanesComponent = React.createClass({
               </Link>
               <div className="flex-row">
                 <h3 className="small-caps">Status</h3>
-                <a href="#" className="hidden">Clear</a>
+                {filterStatusClearLink}
               </div>
               <AppListStatusFilterComponent
                 onChange={this.updateFilterStatus} />
               <div className="flex-row">
                 <h3 className="small-caps">Application Type</h3>
+                {filterTypesClearLink}
               </div>
               <AppListTypeFilterComponent onChange={this.updateFilterTypes} />
               <div className="flex-row">
                 <h3 className="small-caps">Label</h3>
+                {filterLabelsClearLink}
               </div>
               <AppListLabelsFilterComponent
                 onChange={this.updateFilterLabels} />
