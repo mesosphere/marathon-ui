@@ -165,7 +165,7 @@ var AppListComponent = React.createClass({
         }
 
         return lazy(props.filterLabels).some(function (label) {
-          let [key, value] = lazy(label).toArray()[0];
+          let [key, value] = label;
           return labels[key] === value;
         });
       });

@@ -64,19 +64,14 @@ var AppListLabelsFilterComponent = React.createClass({
       })
       .reduce((memo, app) => {
         Object.keys(app.labels).forEach((key) => {
-          let label = {
-            [key]: app.labels[key]
-          };
-          if (lazy(memo).findWhere(label) == null) {
+          let label = [key, app.labels[key]];
+          if (lazy(memo).find(label) == null) {
             memo.push(label);
           }
         });
         return memo;
       }, [])
-      .sort((a, b) => {
-        let [labelKeyA, labelKeyB] = [Object.keys(a)[0], Object.keys(b)[0]];
-        return labelKeyA.localeCompare(labelKeyB);
-      });
+      .sort();
   },
 
   handleClickOutside: function () {
@@ -97,8 +92,7 @@ var AppListLabelsFilterComponent = React.createClass({
 
     if (filterLabels != null && filterLabels.length !== 0) {
       let encodedFilterLabels = filterLabels.map((label) => {
-        let [key, value] = lazy(label).toArray()[0];
-        return encodeURIComponent(`${key}:${value}`);
+        return encodeURIComponent(label.join(":"));
       });
       Object.assign(queryParams, {
         filterLabels: encodedFilterLabels
@@ -122,16 +116,8 @@ var AppListLabelsFilterComponent = React.createClass({
     } else {
       selectedLabels = decodeURIComponent(selectedLabels)
         .split(",")
-        .map((label) => {
-          let [key, value] = label.split(":");
-          return {
-            [key]: value
-          };
-        })
-        .filter((label) => {
-          let existingLabel = lazy(state.availableLabels).findWhere(label);
-          return existingLabel != null;
-        });
+        .map(label => label.split(":"))
+        .filter(label => lazy(state.availableLabels).find(label) != null);
     }
 
     if (stringify(selectedLabels) !== stringify(state.selectedLabels)) {
@@ -144,13 +130,21 @@ var AppListLabelsFilterComponent = React.createClass({
   handleChange: function (label, event) {
     var state = this.state;
     var selectedLabels = [];
+    var update = React.addons.update;
+
+    var labelIndex = state.selectedLabels.findIndex(currentLabel => {
+      return currentLabel[0] === label[0] && currentLabel[1] === label[1];
+    });
 
     if (event.target.checked === true) {
-      selectedLabels = lazy(state.selectedLabels).union(label).value();
+      if (labelIndex === -1) {
+        selectedLabels = update(state.selectedLabels, {$push: [label]});
+      }
     } else {
-      let target = lazy(state.selectedLabels).findWhere(label);
-      if (target != null) {
-        selectedLabels = lazy(state.selectedLabels).without(target).value();
+      if (labelIndex > -1) {
+        selectedLabels = update(state.selectedLabels,
+          {$splice: [[labelIndex, 1]]}
+        );
       }
     }
 
@@ -190,7 +184,7 @@ var AppListLabelsFilterComponent = React.createClass({
     }
 
     let selectedLabelsText = state.selectedLabels.reduce((memo, label) => {
-      let [key, value] = lazy(label).toArray()[0];
+      let [key, value] = label;
       let labelText = key;
       if (value != null) {
         labelText = `${key}:${value}`;
@@ -226,7 +220,7 @@ var AppListLabelsFilterComponent = React.createClass({
     }
 
     let options = state.availableLabels.map((label, i) => {
-      let [key, value] = lazy(label).toArray()[0];
+      let [key, value] = label;
       let optionText = key;
       let filterText = state.filterText;
 
