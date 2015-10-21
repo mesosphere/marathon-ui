@@ -192,19 +192,24 @@ var AppListComponent = React.createClass({
       });
     }
 
+    let sortDirection = state.sortDescending ? 1 : -1;
+
     return appsSequence
+      // Alphabetically presort
       .sortBy((app) => {
-        return app[sortKey] || 0;
+        return app.id;
       }, state.sortDescending)
-      // Hoist groups to top of the application list
+      // Hoist groups to top of the app list and sort everything by sortKey
       .sort((a, b) => {
         if (a.isGroup && !b.isGroup) {
           return -1;
-        }
-        if (b.isGroup && !a.isGroup) {
+        } else if (b.isGroup && !a.isGroup) {
           return 1;
+        } else {
+          return a[sortKey] > b[sortKey]
+            ? -1 * sortDirection
+            : 1 * sortDirection;
         }
-        return 0;
       })
       .map((app) => {
         switch (props.viewType) {
