@@ -46,6 +46,12 @@ var AppListLabelsFilterComponent = React.createClass({
     AppsStore.removeListener(AppsEvents.CHANGE, this.onAppsChange);
   },
 
+  componentDidUpdate: function () {
+    if (this.state.activated) {
+      React.findDOMNode(this.refs.filterText).focus();
+    }
+  },
+
   getAvailableLabels: function () {
     var apps = AppsStore.apps;
     if (apps.length === 0) {
@@ -254,6 +260,7 @@ var AppListLabelsFilterComponent = React.createClass({
       <ul className={dropdownClassSet}>
         <li className="search">
           <input type="text"
+            ref="filterText"
             value={state.filterText}
             placeholder="Filter labels"
             onChange={this.handleFilterTextChange}
