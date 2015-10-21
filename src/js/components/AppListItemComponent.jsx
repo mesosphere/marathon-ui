@@ -56,9 +56,19 @@ var AppListItemComponent = React.createClass({
     return (
       <div className="labels">
         {nodes}
-        <span className="label more">&hellip;</span>
+        <span className="label more" onClick={this.handleMoreLabelClick}>
+          &hellip;
+        </span>
       </div>
     );
+  },
+
+  handleMoreLabelClick: function (event) {
+    event.stopPropagation();  // Prevent this.onClick being called
+    this.context.router.transitionTo("appView", {
+      appId: encodeURIComponent(this.props.model.id),
+      view: "configuration"
+    });
   },
 
   onClick: function () {
