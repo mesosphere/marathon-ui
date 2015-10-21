@@ -194,7 +194,7 @@ var AppListComponent = React.createClass({
 
     return appsSequence
       .sortBy((app) => {
-        return app[sortKey];
+        return app[sortKey] || 0;
       }, state.sortDescending)
       // Hoist groups to top of the application list
       .sort((a, b) => {
@@ -314,9 +314,9 @@ var AppListComponent = React.createClass({
               </span>
             </th>
             <th className="text-right instances-cell" colSpan="2">
-              <span onClick={this.sortBy.bind(null, "instances")}
+              <span onClick={this.sortBy.bind(null, "tasksRunning")}
                   className={headerClassSet}>
-                {this.getCaret("instances")} Running Instances
+                {this.getCaret("tasksRunning")} Running Instances
               </span>
             </th>
             <th className="text-center actions-cell"></th>
