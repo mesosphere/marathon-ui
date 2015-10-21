@@ -196,7 +196,6 @@ var AppListComponent = React.createClass({
       .sortBy((app) => {
         return app[sortKey];
       }, state.sortDescending)
-
       // Hoist groups to top of the application list
       .sort((a, b) => {
         if (a.isGroup && !b.isGroup) {
@@ -207,7 +206,6 @@ var AppListComponent = React.createClass({
         }
         return 0;
       })
-
       .map((app) => {
         switch (props.viewType) {
           case AppListViewTypes.LIST:
