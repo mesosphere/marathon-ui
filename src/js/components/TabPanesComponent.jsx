@@ -94,13 +94,27 @@ var TabPanesComponent = React.createClass({
     return tabs[0].id;
   },
 
-  handleClearFilter: function (filterQueryParamKey) {
-    var router = this.context.router;
-    var queryParams = router.getCurrentQuery();
-    if (queryParams[filterQueryParamKey]) {
-      delete queryParams[filterQueryParamKey];
-      router.transitionTo(router.getCurrentPathname(), {}, queryParams);
+  getClearLinkForFilter: function (filterQueryParamKey) {
+    var state = this.state;
+
+    if (state[filterQueryParamKey].length === 0) {
+      return null;
     }
+
+    let router = this.context.router;
+    let currentPathname = router.getCurrentPathname();
+    let query = Object.assign({}, router.getCurrentQuery());
+    let params = Object.assign({}, router.getCurrentParams());
+
+    if (query[filterQueryParamKey] != null) {
+      delete query[filterQueryParamKey];
+    }
+
+    return (
+      <Link to={currentPathname} query={query} params={params}>
+        Clear
+      </Link>
+    );
   },
 
   render: function () {
@@ -116,18 +130,6 @@ var TabPanesComponent = React.createClass({
       viewType: AppListViewTypes.LIST
     };
 
-    var filterStatusClearLink = state.filterStatus.length > 0
-      ? <a onClick={this.handleClearFilter.bind(null, "filterStatus")}>Clear</a>
-      : null;
-
-    var filterTypesClearLink = state.filterTypes.length > 0
-      ? <a onClick={this.handleClearFilter.bind(null, "filterTypes")}>Clear</a>
-      : null;
-
-    var filterLabelsClearLink = state.filterLabels.length > 0
-      ? <a onClick={this.handleClearFilter.bind(null, "filterLabels")}>Clear</a>
-      : null;
-
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
           className="container-fluid content">
@@ -142,18 +144,18 @@ var TabPanesComponent = React.createClass({
               </Link>
               <div className="flex-row">
                 <h3 className="small-caps">Status</h3>
-                {filterStatusClearLink}
+                {this.getClearLinkForFilter("filterStatus")}
               </div>
               <AppListStatusFilterComponent
                 onChange={this.updateFilterStatus} />
               <div className="flex-row">
                 <h3 className="small-caps">Application Type</h3>
-                {filterTypesClearLink}
+                {this.getClearLinkForFilter("filterTypes")}
               </div>
               <AppListTypeFilterComponent onChange={this.updateFilterTypes} />
               <div className="flex-row">
                 <h3 className="small-caps">Label</h3>
-                {filterLabelsClearLink}
+                {this.getClearLinkForFilter("filterLabels")}
               </div>
               <AppListLabelsFilterComponent
                 onChange={this.updateFilterLabels} />
