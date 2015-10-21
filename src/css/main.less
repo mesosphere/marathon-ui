@@ -1238,8 +1238,6 @@ fieldset[disabled] .btn-info.active {
   min-height: 100vh;
 
   .wrapper {
-    display: flex;
-    flex: 1;
 
     main {
       flex: 1;
@@ -1279,7 +1277,6 @@ fieldset[disabled] .btn-info.active {
       min-height: 100vh;
       margin: 0 0 0 -@base-spacing-unit*2;
       padding: @base-spacing-unit*2;
-      width: @sidebar-width;
 
       .btn-success, .dropdown-toggle, .dropdown-menu {
         margin: 0 0 @base-spacing-unit 0;
@@ -1300,6 +1297,19 @@ fieldset[disabled] .btn-info.active {
         align-items: center;
         display: flex;
         justify-content: space-between;
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-mini) {
+  .tab-pane.active.flex-container {
+    .wrapper {
+      display: flex;
+      flex: 1;
+
+      nav.sidebar {
+        width: @sidebar-width;
       }
     }
   }
