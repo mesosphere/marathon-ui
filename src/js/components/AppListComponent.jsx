@@ -194,7 +194,7 @@ var AppListComponent = React.createClass({
 
     return appsSequence
       .sortBy((app) => {
-        return app[sortKey];
+        return app[sortKey] || 0;
       }, state.sortDescending)
       // Hoist groups to top of the application list
       .sort((a, b) => {
