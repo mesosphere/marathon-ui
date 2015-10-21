@@ -72,7 +72,11 @@ var AppListLabelsFilterComponent = React.createClass({
           }
         });
         return memo;
-      }, []);
+      }, [])
+      .sort((a, b) => {
+        let [labelKeyA, labelKeyB] = [Object.keys(a)[0], Object.keys(b)[0]];
+        return labelKeyA.localeCompare(labelKeyB);
+      });
   },
 
   handleClickOutside: function () {
