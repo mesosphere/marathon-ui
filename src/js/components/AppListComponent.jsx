@@ -196,6 +196,18 @@ var AppListComponent = React.createClass({
       .sortBy((app) => {
         return app[sortKey];
       }, state.sortDescending)
+
+      // Hoist groups to top of the application list
+      .sort((a, b) => {
+        if (a.isGroup && !b.isGroup) {
+          return -1;
+        }
+        if (b.isGroup && !a.isGroup) {
+          return 1;
+        }
+        return 0;
+      })
+
       .map((app) => {
         switch (props.viewType) {
           case AppListViewTypes.LIST:
