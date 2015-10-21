@@ -18,4 +18,14 @@ describe("Path", function () {
         .to.equal("/test/group/");
     });
   });
+  describe("getAppName", function () {
+    it("trims the groups from the app id", function () {
+      expect(PathUtil.getAppName("/test/group/app-1"))
+        .to.equal("app-1");
+    });
+    it("works when an app is in the root group", function () {
+      expect(PathUtil.getAppName("/root-group-app"))
+        .to.equal("root-group-app");
+    });
+  });
 });

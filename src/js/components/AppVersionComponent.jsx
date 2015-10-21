@@ -192,6 +192,8 @@ var AppVersionComponent = React.createClass({
         {this.getApplyButton()}
         {this.getEditButton()}
         <dl className={"dl-horizontal " + this.props.className}>
+          <dt>ID</dt>
+          {invalidateValue(appVersion.id)}
           <dt>Command</dt>
           {invalidateValue(appVersion.cmd)}
           <dt>Constraints</dt>

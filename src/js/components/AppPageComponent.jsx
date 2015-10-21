@@ -444,6 +444,7 @@ var AppPageComponent = React.createClass({
     }
 
     var groupId = PathUtil.getGroupFromAppId(state.appId);
+    var name = PathUtil.getAppName(state.appId);
 
     return (
       <div>
@@ -452,7 +453,7 @@ var AppPageComponent = React.createClass({
           taskId={state.activeTaskId} />
         <div className="container-fluid">
           <div className="page-header">
-            <h1>{state.appId}</h1>
+            <h1>{name}</h1>
             <AppStatusComponent model={model} showSummary={true} />
             {this.getControls()}
           </div>
