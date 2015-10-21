@@ -10,6 +10,10 @@ var PathUtil = {
   },
   getGroupFromAppId(id) {
     return id.split("/").slice(0, -1).join("/") + "/";
+  },
+  getAppName(id) {
+    var tokens = id.split("/");
+    return tokens[tokens.length - 1];
   }
 };
 
