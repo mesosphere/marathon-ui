@@ -741,7 +741,7 @@ describe("Groups", function () {
 
     var appNodeKeys = this.appNodes.map((app) => app.key);
     expect(appNodeKeys).to.deep.equal([
-      "/app-1", "/app-2", "/group-1", "/group-2"
+      "/group-1", "/group-2", "/app-1", "/app-2"
     ]);
   });
 
@@ -754,7 +754,7 @@ describe("Groups", function () {
 
     var appNodeKeys = this.appNodes.map((app) => app.key);
     expect(appNodeKeys).to.deep.equal([
-      "/group-1/app-3", "/group-1/app-4", "/group-1/group-3"
+      "/group-1/group-3", "/group-1/app-3", "/group-1/app-4"
     ]);
   });
 
