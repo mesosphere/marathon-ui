@@ -116,12 +116,8 @@ var AppListLabelsFilterComponent = React.createClass({
     } else {
       selectedLabels = decodeURIComponent(selectedLabels)
         .split(",")
-        .map((label) => {
-          return label.split(":");
-        })
-        .filter((label) => {
-          return lazy(state.availableLabels).find(label) != null;
-        });
+        .map(label => label.split(":"))
+        .filter(label => lazy(state.availableLabels).find(label) != null);
     }
 
     if (stringify(selectedLabels) !== stringify(state.selectedLabels)) {
