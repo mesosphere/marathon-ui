@@ -1,9 +1,8 @@
-var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
 var TooltipMixin = require("../mixins/TooltipMixin");
-
+var Util = require("../helpers/Util");
 var HealthStatus = require("../constants/HealthStatus");
 
 function roundWorkaround(x) {
@@ -29,7 +28,7 @@ var AppHealthComponent = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps) {
-    return !_.isEqual(this.props, nextProps);
+    return !Util.isArrayEqual( this.props.model.health, nextProps.model.health);
   },
 
   handleMouseOverHealthBar: function (ref) {

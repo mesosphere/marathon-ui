@@ -1,8 +1,8 @@
-var _ = require("underscore");
 var classNames = require("classnames");
 var moment = require("moment");
 var React = require("react/addons");
 
+var Util = require("../helpers/Util");
 var AppStatus = require("../constants/AppStatus");
 var QueueStore = require("../stores/QueueStore");
 
@@ -31,7 +31,10 @@ var AppStatusComponent = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps) {
-    return !_.isEqual(this.props, nextProps);
+    var props = this.props;
+
+    return props.status !== nextProps.status ||
+      props.showSummary !== nextProps.showSummary;
   },
 
   getTasksSummary: function () {

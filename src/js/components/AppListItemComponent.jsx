@@ -1,4 +1,3 @@
-var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
@@ -36,7 +35,7 @@ var AppListItemComponent = React.createClass({
   },
 
   componentDidUpdate: function (prevProps) {
-    if (!_.isEqual(this.props, prevProps)) {
+    if (this.didPropsChange(prevProps)) {
       this.updateNumberOfVisibleLabels();
     }
   },
@@ -49,15 +48,27 @@ var AppListItemComponent = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
-    var props = this.props;
-
-    if (nextState.numberOfVisibleLabels === -1 && !props.model.isGroup) {
+    if (nextState.numberOfVisibleLabels === -1 && !this.props.model.isGroup) {
       this.updateNumberOfVisibleLabels();
       return false;
     }
 
-    return !_.isEqual(props, nextProps) ||
-      !_.isEqual(this.state, nextState);
+    return this.didPropsChange(nextProps) ||
+      this.state.numberOfVisibleLabels !== nextState.numberOfVisibleLabels;
+  },
+
+  didPropsChange: function (newProps) {
+    var model = this.props.model;
+    var newModel = newProps.model;
+
+    return model.status !== newModel.status ||
+      model.tasksRunning !== newModel.tasksRunning ||
+      !Util.isArrayEqual( model.health, newModel.health) ||
+      model.totalMem !== newModel.totalMem ||
+      model.totalCpus !== newModel.totalCpus ||
+      model.instances !== newModel.instances ||
+      !Util.isArrayEqual(Object.keys(model.labels),
+        Object.keys(newModel.labels));
   },
 
   handleResize: function () {
