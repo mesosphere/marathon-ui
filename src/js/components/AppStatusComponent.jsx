@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var classNames = require("classnames");
 var moment = require("moment");
 var React = require("react/addons");
@@ -27,6 +28,10 @@ var AppStatusComponent = React.createClass({
   propTypes: {
     model: React.PropTypes.object.isRequired,
     showSummary: React.PropTypes.bool
+  },
+
+  shouldComponentUpdate: function (nextProps) {
+    return !_.isEqual(this.props, nextProps);
   },
 
   getTasksSummary: function () {
