@@ -254,7 +254,7 @@ var Marathon = React.createClass({
               <li>
                 <a href="/help"
                   target="_blank">
-                  API Docs
+                  API Reference
                 </a>
               </li>
               <li>
