@@ -25,9 +25,9 @@ var AppListItemComponent = React.createClass({
       return (<i className="icon icon-small group"></i>);
     }
     if (model.type === AppTypes.DOCKER) {
-      return (<i className="icon icon-small app-docker"></i>);
+      return (<i className="icon icon-small app-docker" title="Docker"></i>);
     }
-    return (<i className="icon icon-small app-basic"></i>);
+    return (<i className="icon icon-small app-basic" title="Basic"></i>);
   },
 
   getLabels: function () {
