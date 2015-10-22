@@ -320,6 +320,26 @@ a:focus {
 
 
 /* ==============
+ * Fixed/scrolling layout for apps tabs:
+ * ==============
+ */
+.content-fixed {
+  position: fixed;
+}
+
+.sidebar-scroll {
+  // ~ is escaped string, otherwise LESS maths takes place
+  height: ~"calc(100vh - 50px)";
+  overflow-y: auto;
+}
+
+.app-list-scroll {
+  // 50px header, 36px context bar
+  height: ~"calc(100vh - " (50px + 36px + (2 * @base-spacing-unit )) ~")";
+  overflow-y: auto;
+}
+
+/* ==============
  * App List (Table)
  * ==============
  */
@@ -1234,7 +1254,6 @@ fieldset[disabled] .btn-info.active {
   display: flex;
   flex: 1;
   flex-direction: column;
-  min-height: 100vh;
 
   .wrapper {
     display: flex;
@@ -1275,7 +1294,6 @@ fieldset[disabled] .btn-info.active {
 
     nav.sidebar {
       background: @sidebar-bg-color;
-      min-height: 100vh;
       margin: 0 0 0 -@base-spacing-unit*2;
       padding: @base-spacing-unit*2;
       width: @sidebar-width;

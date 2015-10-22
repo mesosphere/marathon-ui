@@ -132,10 +132,10 @@ var TabPanesComponent = React.createClass({
 
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
-          className="container-fluid content">
+          className="container-fluid content content-fixed">
         <TabPaneComponent id={tabs[0].id} className="flex-container">
           <div className="wrapper">
-            <nav className="sidebar">
+            <nav className="sidebar sidebar-scroll">
               <Link to={path}
                 query={{modal: "new-app"}}
                 className="btn btn-success create-app"
@@ -200,7 +200,9 @@ var TabPanesComponent = React.createClass({
                   </div>
                 </div>
               </div>
-              <AppListComponent {...appListProps} />
+              <div className="app-list-scroll">
+                <AppListComponent {...appListProps} />
+              </div>
             </main>
           </div>
         </TabPaneComponent>
