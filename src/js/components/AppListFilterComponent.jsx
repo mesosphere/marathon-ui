@@ -50,7 +50,7 @@ var AppListFilterComponent = React.createClass({
       delete queryParams.filterText;
     }
 
-    router.transitionTo(router.getCurrentPathname(), {}, queryParams);
+    router.transitionTo("apps", {}, queryParams);
   },
 
   updateFilterText: function () {
