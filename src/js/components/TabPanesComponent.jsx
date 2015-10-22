@@ -104,7 +104,7 @@ var TabPanesComponent = React.createClass({
     let router = this.context.router;
     let currentPathname = router.getCurrentPathname();
     let query = Object.assign({}, router.getCurrentQuery());
-    let params = Object.assign({}, router.getCurrentParams());
+    let params = router.getCurrentParams();
 
     if (query[filterQueryParamKey] != null) {
       delete query[filterQueryParamKey];
