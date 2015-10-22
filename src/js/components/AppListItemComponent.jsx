@@ -22,7 +22,7 @@ var AppListItemComponent = React.createClass({
   },
 
   getInitialState: function () {
-    return {numVisibleLabels: -1};
+    return {numberOfVisibleLabels: -1};
   },
 
   componentDidMount: function () {
@@ -31,13 +31,13 @@ var AppListItemComponent = React.createClass({
       window.addEventListener("resize", this.handleResize);
       window.addEventListener("focus", this.handleResize);
     }
-    this.updateNumVisibleLabels();
+    this.updateNumberOfVisibleLabels();
 
   },
 
   componentDidUpdate: function (prevProps) {
     if (!_.isEqual(this.props, prevProps)) {
-      this.updateNumVisibleLabels();
+      this.updateNumberOfVisibleLabels();
     }
   },
 
@@ -49,19 +49,22 @@ var AppListItemComponent = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
-    if (nextState.numVisibleLabels === -1 && !this.props.model.isGroup) {
-      this.updateNumVisibleLabels();
+    var props = this.props;
+
+    if (nextState.numberOfVisibleLabels === -1 && !props.model.isGroup) {
+      this.updateNumberOfVisibleLabels();
       return false;
     }
-    return !_.isEqual(this.props, nextProps) ||
+
+    return !_.isEqual(props, nextProps) ||
       !_.isEqual(this.state, nextState);
   },
 
   handleResize: function () {
-    requestAnimationFrame(this.updateNumVisibleLabels);
+    requestAnimationFrame(this.updateNumberOfVisibleLabels);
   },
 
-  updateNumVisibleLabels: function () {
+  updateNumberOfVisibleLabels: function () {
     var labels = this.props.model.labels;
 
     if (labels == null || Object.keys(labels).length === 0) {
@@ -74,22 +77,22 @@ var AppListItemComponent = React.createClass({
     let nameNode = React.findDOMNode(refs.nameNode);
     let moreNode = React.findDOMNode(refs.moreLabel);
 
-    let availableWidth = DOMUtil.getInnerWidth(cellNode);
-    availableWidth -= DOMUtil.getOuterWidth(nameNode);
-    availableWidth -= DOMUtil.getOuterWidth(moreNode);
+    let availableWidth = DOMUtil.getInnerWidth(cellNode) -
+      DOMUtil.getOuterWidth(nameNode) -
+      DOMUtil.getOuterWidth(moreNode);
 
     let labelsWidth = 0;
-    let numVisibleLabels = 0;
+    let numberOfVisibleLabels = 0;
 
-    refs.labels.props.children[0].find( (label) => {
+    refs.labels.props.children[0].find((label) => {
       labelsWidth += DOMUtil.getOuterWidth(React.findDOMNode(refs[label.ref]));
       if (labelsWidth > availableWidth) {
         return true;
       }
-      numVisibleLabels++;
+      numberOfVisibleLabels++;
     });
 
-    this.setState({numVisibleLabels: numVisibleLabels});
+    this.setState({numberOfVisibleLabels: numberOfVisibleLabels});
   },
 
   getIcon: function () {
@@ -105,11 +108,12 @@ var AppListItemComponent = React.createClass({
 
   getLabels: function () {
     var labels = this.props.model.labels;
+
     if (labels == null || Object.keys(labels).length === 0) {
       return null;
     }
 
-    let numVisibleLabels = this.state.numVisibleLabels;
+    let numberOfVisibleLabels = this.state.numberOfVisibleLabels;
     let nodes = Object.keys(labels).sort().map(function (key, i) {
       if (key == null || Util.isEmptyString(key)) {
         return null;
@@ -121,7 +125,7 @@ var AppListItemComponent = React.createClass({
       }
 
       let labelClassName = classNames("label", {
-        "visible": i < numVisibleLabels
+        "visible": i < numberOfVisibleLabels
       });
 
       return (
@@ -133,7 +137,7 @@ var AppListItemComponent = React.createClass({
     });
 
     let moreLabelClassName = classNames("more", {
-      "visible": Object.keys(labels).length > numVisibleLabels
+      "visible": Object.keys(labels).length > numberOfVisibleLabels
     });
 
     return (
