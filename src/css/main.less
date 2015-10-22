@@ -649,7 +649,7 @@ fieldset[disabled] .btn-info.active {
   background-color: transparent;
 }
 
-@media (min-width: 768px) {
+@media (min-width: @screen-small) {
   .navbar > .container .navbar-brand,
   .navbar > .container-fluid .navbar-brand {
     margin-left: 0;
@@ -954,7 +954,7 @@ fieldset[disabled] .btn-info.active {
   padding-bottom: @base-spacing-unit;
 }
 
-@media (min-width: 768px) {
+@media (min-width: @screen-small) {
   .dl-horizontal-lg dt {
     width: 190px;
   }
@@ -1114,7 +1114,8 @@ fieldset[disabled] .btn-info.active {
     margin-bottom: 0;
   }
 }
-@media (min-width: 768px) {
+
+@media (min-width: @screen-small) {
   .modal-centered {
     display: flex;
     align-items: center;
@@ -1237,8 +1238,6 @@ fieldset[disabled] .btn-info.active {
   min-height: 100vh;
 
   .wrapper {
-    display: flex;
-    flex: 1;
 
     main {
       flex: 1;
@@ -1278,7 +1277,6 @@ fieldset[disabled] .btn-info.active {
       min-height: 100vh;
       margin: 0 0 0 -@base-spacing-unit*2;
       padding: @base-spacing-unit*2;
-      width: @sidebar-width;
 
       .btn-success, .dropdown-toggle, .dropdown-menu {
         margin: 0 0 @base-spacing-unit 0;
@@ -1299,6 +1297,19 @@ fieldset[disabled] .btn-info.active {
         align-items: center;
         display: flex;
         justify-content: space-between;
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-mini) {
+  .tab-pane.active.flex-container {
+    .wrapper {
+      display: flex;
+      flex: 1;
+
+      nav.sidebar {
+        width: @sidebar-width;
       }
     }
   }
