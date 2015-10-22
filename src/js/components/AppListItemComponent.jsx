@@ -68,24 +68,26 @@ var AppListItemComponent = React.createClass({
       return null;
     }
 
-    let cellNode = this.getDOMNode().querySelector(".name-cell");
-    let nameNode = cellNode.querySelector(".name");
-    let moreNode = cellNode.querySelector(".more");
-    let labelNodes = Array.prototype.slice.call(
-      cellNode.querySelectorAll(".label"));
+    let refs = this.refs;
+
+    let cellNode = React.findDOMNode(refs.nameCell);
+    let nameNode = React.findDOMNode(refs.nameNode);
+    let moreNode = React.findDOMNode(refs.moreLabel);
+
     let availableWidth = DOMUtil.getInnerWidth(cellNode);
     availableWidth -= DOMUtil.getOuterWidth(nameNode);
     availableWidth -= DOMUtil.getOuterWidth(moreNode);
+
     let labelsWidth = 0;
     let numVisibleLabels = 0;
 
-    for (var i = 0, length = labelNodes.length; i < length; i++) {
-      labelsWidth += DOMUtil.getOuterWidth(labelNodes[i]);
+    refs.labels.props.children[0].find( (label) => {
+      labelsWidth += DOMUtil.getOuterWidth(React.findDOMNode(refs[label.ref]));
       if (labelsWidth > availableWidth) {
-        break;
+        return true;
       }
-      numVisibleLabels += 1;
-    }
+      numVisibleLabels++;
+    });
 
     this.setState({numVisibleLabels: numVisibleLabels});
   },
@@ -123,7 +125,8 @@ var AppListItemComponent = React.createClass({
       });
 
       return (
-        <span key={i} className={labelClassName} title={labelText}>
+        <span key={i} className={labelClassName} title={labelText}
+            ref={`label${i}`}>
           {labelText}
         </span>
       );
@@ -134,10 +137,11 @@ var AppListItemComponent = React.createClass({
     });
 
     return (
-      <div className="labels">
+      <div className="labels" ref="labels">
         {nodes}
         <span className={moreLabelClassName}
-            onClick={this.handleMoreLabelClick}>
+            onClick={this.handleMoreLabelClick}
+            ref="moreLabel">
           &hellip;
         </span>
       </div>
@@ -204,8 +208,9 @@ var AppListItemComponent = React.createClass({
         <td className="icon-cell">
           {this.getIcon()}
         </td>
-        <td className="overflow-ellipsis name-cell" title={model.id}>
-          <span className="name">{name}</span>
+        <td className="overflow-ellipsis name-cell" title={model.id}
+            ref="nameCell">
+          <span className="name" ref="nameNode">{name}</span>
           {this.getLabels()}
         </td>
         <td className="text-right total cpu-cell">
