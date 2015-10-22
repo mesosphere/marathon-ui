@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
@@ -6,6 +7,7 @@ var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
+var DOMUtil = require("../helpers/DOMUtil");
 
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
@@ -17,6 +19,71 @@ var AppListItemComponent = React.createClass({
   propTypes: {
     currentGroup: React.PropTypes.string.isRequired,
     model: React.PropTypes.object.isRequired
+  },
+
+  getInitialState: function () {
+    return {numVisibleLabels: -1};
+  },
+
+  componentDidMount: function () {
+    // Avoid referencing window from Node context
+    if (global.window != null) {
+      window.addEventListener("resize", this.handleResize);
+      window.addEventListener("focus", this.handleResize);
+    }
+    this.updateNumVisibleLabels();
+
+  },
+
+  componentDidUpdate: function (prevProps) {
+    if (!_.isEqual(this.props, prevProps)) {
+      this.updateNumVisibleLabels();
+    }
+  },
+
+  componentWillUnmount: function () {
+    if (global.window != null) {
+      window.removeEventListener("resize", this.handleResize);
+      window.removeEventListener("focus", this.handleResize);
+    }
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState) {
+    if (nextState.numVisibleLabels === -1 && !this.props.model.isGroup) {
+      this.updateNumVisibleLabels();
+      return false;
+    }
+    return !_.isEqual(this.props, nextProps) ||
+      !_.isEqual(this.state, nextState);
+  },
+
+  handleResize: function () {
+    requestAnimationFrame(this.updateNumVisibleLabels);
+  },
+
+  updateNumVisibleLabels: function () {
+    var labels = this.props.model.labels;
+    if (labels == null || Object.keys(labels).length === 0) {
+      return null;
+    }
+    let cellNode = this.getDOMNode().querySelector(".name-cell");
+    let nameNode = cellNode.querySelector(".name");
+    let moreNode = cellNode.querySelector(".more");
+    let labelNodes = Array.prototype.slice.call(
+      cellNode.querySelectorAll(".label"));
+    let availableWidth = DOMUtil.getInnerWidth(cellNode);
+    availableWidth -= DOMUtil.getOuterWidth(nameNode);
+    availableWidth -= DOMUtil.getOuterWidth(moreNode);
+    let labelsWidth = 0;
+    let numVisibleLabels = 0;
+    for (var i = 0, length = labelNodes.length; i < length; i++) {
+      labelsWidth += DOMUtil.getOuterWidth(labelNodes[i]);
+      if (labelsWidth > availableWidth) {
+        break;
+      }
+      numVisibleLabels += 1;
+    }
+    this.setState({numVisibleLabels: numVisibleLabels});
   },
 
   getIcon: function () {
@@ -35,28 +102,32 @@ var AppListItemComponent = React.createClass({
     if (labels == null || Object.keys(labels).length === 0) {
       return null;
     }
-
+    let numVisibleLabels = this.state.numVisibleLabels;
     let nodes = Object.keys(labels).sort().map(function (key, i) {
       if (key == null || Util.isEmptyString(key)) {
         return null;
       }
-
       let labelText = key;
       if (!Util.isEmptyString(labels[key])) {
         labelText = `${key}:${labels[key]}`;
       }
-
+      let labelClassName = classNames("label", {
+        "visible": i < numVisibleLabels
+      });
       return (
-        <span key={i} className="label" title={labelText}>
+        <span key={i} className={labelClassName} title={labelText}>
           {labelText}
         </span>
       );
     });
-
+    let moreLabelClassName = classNames("more", {
+      "visible": Object.keys(labels).length > numVisibleLabels
+    });
     return (
       <div className="labels">
         {nodes}
-        <span className="label more" onClick={this.handleMoreLabelClick}>
+        <span className={moreLabelClassName}
+          onClick={this.handleMoreLabelClick}>
           &hellip;
         </span>
       </div>
@@ -124,7 +195,7 @@ var AppListItemComponent = React.createClass({
           {this.getIcon()}
         </td>
         <td className="overflow-ellipsis name-cell" title={model.id}>
-          <span>{name}</span>
+          <span className="name">{name}</span>
           {this.getLabels()}
         </td>
         <td className="text-right total cpu-cell">
