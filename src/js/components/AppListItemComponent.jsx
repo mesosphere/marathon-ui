@@ -63,9 +63,11 @@ var AppListItemComponent = React.createClass({
 
   updateNumVisibleLabels: function () {
     var labels = this.props.model.labels;
+
     if (labels == null || Object.keys(labels).length === 0) {
       return null;
     }
+
     let cellNode = this.getDOMNode().querySelector(".name-cell");
     let nameNode = cellNode.querySelector(".name");
     let moreNode = cellNode.querySelector(".more");
@@ -76,6 +78,7 @@ var AppListItemComponent = React.createClass({
     availableWidth -= DOMUtil.getOuterWidth(moreNode);
     let labelsWidth = 0;
     let numVisibleLabels = 0;
+
     for (var i = 0, length = labelNodes.length; i < length; i++) {
       labelsWidth += DOMUtil.getOuterWidth(labelNodes[i]);
       if (labelsWidth > availableWidth) {
@@ -83,6 +86,7 @@ var AppListItemComponent = React.createClass({
       }
       numVisibleLabels += 1;
     }
+
     this.setState({numVisibleLabels: numVisibleLabels});
   },
 
@@ -102,32 +106,38 @@ var AppListItemComponent = React.createClass({
     if (labels == null || Object.keys(labels).length === 0) {
       return null;
     }
+
     let numVisibleLabels = this.state.numVisibleLabels;
     let nodes = Object.keys(labels).sort().map(function (key, i) {
       if (key == null || Util.isEmptyString(key)) {
         return null;
       }
+
       let labelText = key;
       if (!Util.isEmptyString(labels[key])) {
         labelText = `${key}:${labels[key]}`;
       }
+
       let labelClassName = classNames("label", {
         "visible": i < numVisibleLabels
       });
+
       return (
         <span key={i} className={labelClassName} title={labelText}>
           {labelText}
         </span>
       );
     });
+
     let moreLabelClassName = classNames("more", {
       "visible": Object.keys(labels).length > numVisibleLabels
     });
+
     return (
       <div className="labels">
         {nodes}
         <span className={moreLabelClassName}
-          onClick={this.handleMoreLabelClick}>
+            onClick={this.handleMoreLabelClick}>
           &hellip;
         </span>
       </div>
