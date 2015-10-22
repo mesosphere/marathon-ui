@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
@@ -25,6 +26,10 @@ var AppHealthComponent = React.createClass({
 
   propTypes: {
     model: React.PropTypes.object.isRequired
+  },
+
+  shouldComponentUpdate: function (nextProps) {
+    return !_.isEqual(this.props, nextProps);
   },
 
   handleMouseOverHealthBar: function (ref) {
