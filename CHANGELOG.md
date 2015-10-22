@@ -2,6 +2,34 @@
 ### Added
 - \#2031 - Make keyboard shortcuts discoverable
 - \#2434 - Create keyboard shortcut for focusing on the search field
+- \#2500 - Add a link to API-Doc in the UI
+- A filter sidebar is introduced with the ability to combine filters
+  or clear them.
+  * Filter by application status
+  * Filter by application type
+  * Filter by labels
+- The application list is treating groups and shows them on top of the list.
+- Don't show the complete appId in the app page and app list.
+  Display the application basename.
+- The complete appId is visible in the configuration tab.
+- Application labels are shown at the application name in the application list
+- Endpoints are shown at the tasks detail page
+- A group route is introduced to display the further contents of a group in the
+  application list
+
+### Changed
+This version introduces major changes to the layout.
+Particulary the application list is redesigned.
+
+- The memory column shows the total amount of memory used by an application
+  with a human readable unit
+- The application status is displayed by a colored icon
+- The instances and health columns were combined into one
+  called "Running Instances"
+- The control buttons on the application page are shown on the left and are
+  redesigned
+- Breadcrumbs treat the groups structure
+- Breadcrumbs will be folded to "...", if there isn't enough space
 
 ### Fixed
 - \#2421 - Error: Invalid calling object (Win 8 IE10, Win 7 IE11)
