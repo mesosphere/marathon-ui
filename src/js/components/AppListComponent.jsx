@@ -42,7 +42,7 @@ var AppListComponent = React.createClass({
     filterLabels: React.PropTypes.array,
     filterStatus: React.PropTypes.array,
     filterText: React.PropTypes.string,
-    filterType: React.PropTypes.array,
+    filterTypes: React.PropTypes.array,
     viewType: React.PropTypes.oneOf(Object.values(AppListViewTypes))
   },
 

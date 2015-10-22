@@ -20,26 +20,26 @@ var AppListTypeFilterComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    this.updateFilterType();
+    this.updateFilterTypes();
   },
 
   componentWillReceiveProps: function () {
-    this.updateFilterType();
+    this.updateFilterTypes();
   },
 
-  setQueryParam: function (filterType) {
+  setQueryParam: function (filterTypes) {
     var router = this.context.router;
     var queryParams = router.getCurrentQuery();
 
-    if (filterType != null && filterType.length !== 0) {
-      let encodedFilterType = filterType.map((key) => {
+    if (filterTypes != null && filterTypes.length !== 0) {
+      let encodedFilterTypes = filterTypes.map((key) => {
         return encodeURIComponent(`${key}`);
       });
       Object.assign(queryParams, {
-        filterType: encodedFilterType
+        filterTypes: encodedFilterTypes
       });
     } else {
-      delete queryParams.filterType;
+      delete queryParams.filterTypes;
     }
 
     router.transitionTo(router.getCurrentPathname(), {}, queryParams);
@@ -64,11 +64,11 @@ var AppListTypeFilterComponent = React.createClass({
     this.setQueryParam(selectedTypes);
   },
 
-  updateFilterType: function () {
+  updateFilterTypes: function () {
     var router = this.context.router;
     var state = this.state;
     var queryParams = router.getCurrentQuery();
-    var selectedTypes = queryParams.filterType;
+    var selectedTypes = queryParams.filterTypes;
     var stringify = JSON.stringify;
 
     if (selectedTypes == null) {

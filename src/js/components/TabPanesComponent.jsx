@@ -94,6 +94,29 @@ var TabPanesComponent = React.createClass({
     return tabs[0].id;
   },
 
+  getClearLinkForFilter: function (filterQueryParamKey) {
+    var state = this.state;
+
+    if (state[filterQueryParamKey].length === 0) {
+      return null;
+    }
+
+    let router = this.context.router;
+    let currentPathname = router.getCurrentPathname();
+    let query = Object.assign({}, router.getCurrentQuery());
+    let params = router.getCurrentParams();
+
+    if (query[filterQueryParamKey] != null) {
+      delete query[filterQueryParamKey];
+    }
+
+    return (
+      <Link to={currentPathname} query={query} params={params}>
+        Clear
+      </Link>
+    );
+  },
+
   render: function () {
     var path = this.context.router.getCurrentPathname();
     var state = this.state;
@@ -121,16 +144,18 @@ var TabPanesComponent = React.createClass({
               </Link>
               <div className="flex-row">
                 <h3 className="small-caps">Status</h3>
-                <a href="#" className="hidden">Clear</a>
+                {this.getClearLinkForFilter("filterStatus")}
               </div>
               <AppListStatusFilterComponent
                 onChange={this.updateFilterStatus} />
               <div className="flex-row">
                 <h3 className="small-caps">Application Type</h3>
+                {this.getClearLinkForFilter("filterTypes")}
               </div>
               <AppListTypeFilterComponent onChange={this.updateFilterTypes} />
               <div className="flex-row">
                 <h3 className="small-caps">Label</h3>
+                {this.getClearLinkForFilter("filterLabels")}
               </div>
               <AppListLabelsFilterComponent
                 onChange={this.updateFilterLabels} />
