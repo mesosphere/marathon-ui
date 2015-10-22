@@ -6,30 +6,31 @@
 - A filter sidebar is introduced with the ability to combine filters
   or clear them.
   * Filter by application status
-  * Filter by application type
+  * Filter by application type (Docker or basic)
   * Filter by labels
-- The application list is treating groups and shows them on top of the list.
-- Don't show the complete appId in the app page and app list.
-  Display the application basename.
-- The complete appId is visible in the configuration tab.
-- Application labels are shown at the application name in the application list
-- Endpoints are shown at the tasks detail page
-- A group route is introduced to display the further contents of a group in the
+- The application list now handles groups
+- Groups are shown at the top of the application list
+- App names are now shown in the app page and app list instead of app IDs
+- The complete appId is available in the configuration tab
+- Application labels are shown by the application name in the application list
+- Endpoints are shown in the tasks detail page
+- A group route is introduced to display the contents of a group in the
   application list
 
 ### Changed
-This version introduces major changes to the layout.
-Particulary the application list is redesigned.
+This version introduces major changes to the layout. In particular, the 
+application list has been redesigned.
 
 - The memory column shows the total amount of memory used by an application
   with a human readable unit
-- The application status is displayed by a colored icon
-- The instances and health columns were combined into one
+- The application status is displayed with a colored icon
+- The instances and health columns have been combined into one
   called "Running Instances"
 - The control buttons on the application page are shown on the left and are
   redesigned
-- Breadcrumbs treat the groups structure
-- Breadcrumbs will be folded to "...", if there isn't enough space
+- Breadcrumbs show the groups structure
+- Breadcrumbs will be folded to "..." when there isn't room to render them
+  in full
 
 ### Fixed
 - \#2421 - Error: Invalid calling object (Win 8 IE10, Win 7 IE11)
