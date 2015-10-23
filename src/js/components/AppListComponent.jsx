@@ -113,12 +113,11 @@ var AppListComponent = React.createClass({
     });
   },
 
-  getGroupedNodes: function () {
-    var apps = this.state.apps;
+  getGroupedNodes: function (appsSequence) {
     var currentGroup = this.props.currentGroup;
 
-    return lazy(apps)
-      .filter((app) => app.id.startsWith(currentGroup))
+    return appsSequence
+      .filter(app => app.id.startsWith(currentGroup))
       .reduce((memo, app) => {
         let relativePath = app.id.substring(currentGroup.length);
         let pathParts = relativePath.split("/");
@@ -148,7 +147,7 @@ var AppListComponent = React.createClass({
     var sortKey = state.sortKey;
     var props = this.props;
 
-    var appsSequence = lazy(this.getGroupedNodes());
+    var appsSequence = lazy(state.apps);
 
     if (props.filterText != null && props.filterText !== "") {
       appsSequence = appsSequence
@@ -192,13 +191,15 @@ var AppListComponent = React.createClass({
       });
     }
 
-    let sortDirection = state.sortDescending ? 1 : -1;
-
-    return appsSequence
+    appsSequence
       // Alphabetically presort
       .sortBy((app) => {
         return app.id;
-      }, state.sortDescending)
+      }, state.sortDescending);
+
+    let sortDirection = state.sortDescending ? 1 : -1;
+
+    return this.getGroupedNodes(appsSequence)
       // Hoist groups to top of the app list and sort everything by sortKey
       .sort((a, b) => {
         if (a.isGroup && !b.isGroup) {
@@ -222,8 +223,7 @@ var AppListComponent = React.createClass({
           default:
             return null;
         }
-      })
-      .value();
+      });
   },
 
   getCaret: function (sortKey) {
