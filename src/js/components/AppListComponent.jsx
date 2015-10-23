@@ -25,12 +25,29 @@ function getGroupStatus(status, app) {
   return status;
 }
 
+function getGroupHealth(health, app) {
+  if (health == null) {
+    return app.health;
+  }
+
+  return health.map(healthState => {
+    var appHealthState =
+      app.health.find(appHealth => appHealth.state === healthState.state);
+
+    if (appHealthState != null) {
+      healthState.quantity += appHealthState.quantity;
+    }
+
+    return healthState;
+  });
+}
 
 function initGroupNode(groupId, app) {
   return {
     id: groupId,
     instances: app.instances,
     status: getGroupStatus(null, app),
+    health: getGroupHealth(null, app),
     tasksRunning: app.tasksRunning,
     totalCpus: app.totalCpus,
     totalMem: app.totalMem,
@@ -43,6 +60,7 @@ function updateGroupNode(group, app) {
   group.tasksRunning += app.tasksRunning;
   group.totalCpus += app.totalCpus;
   group.totalMem += app.totalMem;
+  group.health = getGroupHealth(group.health, app);
   group.status = getGroupStatus(null, app);
   return group;
 }
