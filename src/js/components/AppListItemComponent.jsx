@@ -197,25 +197,22 @@ var AppListItemComponent = React.createClass({
   },
 
   getStatus: function () {
-    var model = this.props.model;
-    if (model.isGroup) {
-      return null;
-    }
-
     return (
       <td className="text-right status">
-        <AppStatusComponent model={model} />
+        <AppStatusComponent model={this.props.model} />
       </td>
     );
   },
 
   render: function () {
     var model = this.props.model;
+
     var className = classNames({
       "group": model.isGroup,
       "app": !model.isGroup
     });
     var colSpan = model.isGroup ? 3 : 1;
+
     var name = PathUtil.getRelativePath(model.id, this.props.currentGroup);
 
     return (

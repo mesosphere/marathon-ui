@@ -67,6 +67,10 @@ var AppStatusComponent = React.createClass({
   render: function () {
     var model = this.props.model;
 
+    if (model.status == null) {
+      return <span></span>;
+    }
+
     var statusClassSet = classNames("app-status",
       statusClassNameMapping[model.status]);
 

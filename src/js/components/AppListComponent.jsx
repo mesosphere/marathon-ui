@@ -2,6 +2,8 @@ var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 
+var AppListViewTypes = require("../constants/AppListViewTypes");
+var AppStatus = require("../constants/AppStatus");
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var AppListItemComponent = require("./AppListItemComponent");
@@ -9,12 +11,26 @@ var AppListItemComponent = require("./AppListItemComponent");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
-var AppListViewTypes = require("../constants/AppListViewTypes");
+function getGroupStatus(status, app) {
+  var appStatus = app.status;
+
+  if (appStatus === AppStatus.DEPLOYING ||
+      appStatus === AppStatus.DELAYED ||
+      appStatus === AppStatus.WAITING) {
+    if (appStatus > status) {
+      return appStatus;
+    }
+  }
+
+  return status;
+}
+
 
 function initGroupNode(groupId, app) {
   return {
     id: groupId,
     instances: app.instances,
+    status: getGroupStatus(null, app),
     tasksRunning: app.tasksRunning,
     totalCpus: app.totalCpus,
     totalMem: app.totalMem,
@@ -27,6 +43,7 @@ function updateGroupNode(group, app) {
   group.tasksRunning += app.tasksRunning;
   group.totalCpus += app.totalCpus;
   group.totalMem += app.totalMem;
+  group.status = getGroupStatus(null, app);
   return group;
 }
 
@@ -127,7 +144,7 @@ var AppListComponent = React.createClass({
           memo.push(app);
         } else {
           let groupId = currentGroup + pathParts[0];
-          let group = memo.find((item) => {
+          let group = memo.find(item => {
             return item.id === groupId;
           });
 
