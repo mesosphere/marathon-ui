@@ -2,7 +2,6 @@ var classNames = require("classnames");
 var moment = require("moment");
 var React = require("react/addons");
 
-var Util = require("../helpers/Util");
 var AppStatus = require("../constants/AppStatus");
 var QueueStore = require("../stores/QueueStore");
 

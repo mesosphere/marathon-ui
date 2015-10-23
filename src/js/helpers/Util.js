@@ -131,7 +131,7 @@ var Util = {
       a != null &&
       b != null &&
       a.length === b.length &&
-      a.every((v, i)=> v === b[i]);
+      a.every((v, i) => v === b[i]);
   }
 };
 

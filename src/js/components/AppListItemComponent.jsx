@@ -21,7 +21,9 @@ var AppListItemComponent = React.createClass({
   },
 
   getInitialState: function () {
-    return {numberOfVisibleLabels: -1};
+    return {
+      numberOfVisibleLabels: -1
+    };
   },
 
   componentDidMount: function () {
@@ -63,7 +65,7 @@ var AppListItemComponent = React.createClass({
 
     return model.status !== newModel.status ||
       model.tasksRunning !== newModel.tasksRunning ||
-      !Util.isArrayEqual( model.health, newModel.health) ||
+      !Util.isArrayEqual(model.health, newModel.health) ||
       model.totalMem !== newModel.totalMem ||
       model.totalCpus !== newModel.totalCpus ||
       model.instances !== newModel.instances ||
