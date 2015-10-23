@@ -252,6 +252,12 @@ var Marathon = React.createClass({
                 </Link>
               </li>
               <li>
+                <a href="../help"
+                  target="_blank">
+                  API Reference
+                </a>
+              </li>
+              <li>
                 <a href="https://mesosphere.github.io/marathon/docs/"
                     target="_blank">
                   Docs ⇗

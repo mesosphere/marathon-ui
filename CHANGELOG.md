@@ -2,6 +2,7 @@
 ### Added
 - \#2031 - Make keyboard shortcuts discoverable
 - \#2434 - Create keyboard shortcut for focusing on the search field
+- \#2500 - Add a link to API-Doc in the UI
 
 ### Fixed
 - \#2421 - Error: Invalid calling object (Win 8 IE10, Win 7 IE11)
