@@ -61,7 +61,7 @@ function updateGroupNode(group, app) {
   group.totalCpus += app.totalCpus;
   group.totalMem += app.totalMem;
   group.health = getGroupHealth(group.health, app);
-  group.status = getGroupStatus(null, app);
+  group.status = getGroupStatus(group.status, app);
   return group;
 }
 
