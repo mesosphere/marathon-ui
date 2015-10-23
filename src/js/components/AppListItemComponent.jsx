@@ -184,38 +184,29 @@ var AppListItemComponent = React.createClass({
   },
 
   getHealthBar: function () {
-    var model = this.props.model;
-    if (model.isGroup) {
-      return null;
-    }
-
     return (
       <td className="text-right health-bar-column">
-        <AppHealthComponent model={model} />
+        <AppHealthComponent model={this.props.model} />
       </td>
     );
   },
 
   getStatus: function () {
-    var model = this.props.model;
-    if (model.isGroup) {
-      return null;
-    }
-
     return (
       <td className="text-right status">
-        <AppStatusComponent model={model} />
+        <AppStatusComponent model={this.props.model} />
       </td>
     );
   },
 
   render: function () {
     var model = this.props.model;
+
     var className = classNames({
       "group": model.isGroup,
       "app": !model.isGroup
     });
-    var colSpan = model.isGroup ? 3 : 1;
+
     var name = PathUtil.getRelativePath(model.id, this.props.currentGroup);
 
     return (
@@ -239,7 +230,7 @@ var AppListItemComponent = React.createClass({
           </span>
         </td>
         {this.getStatus()}
-        <td className="text-right instances-cell" colSpan={colSpan}>
+        <td className="text-right instances-cell">
           <span>
             {model.tasksRunning}
           </span> of {model.instances}
