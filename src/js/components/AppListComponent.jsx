@@ -117,7 +117,7 @@ var AppListComponent = React.createClass({
     var currentGroup = this.props.currentGroup;
 
     return appsSequence
-      .filter((app) => app.id.startsWith(currentGroup))
+      .filter(app => app.id.startsWith(currentGroup))
       .reduce((memo, app) => {
         let relativePath = app.id.substring(currentGroup.length);
         let pathParts = relativePath.split("/");
@@ -147,7 +147,7 @@ var AppListComponent = React.createClass({
     var sortKey = state.sortKey;
     var props = this.props;
 
-    var appsSequence = lazy(this.state.apps);
+    var appsSequence = lazy(state.apps);
 
     if (props.filterText != null && props.filterText !== "") {
       appsSequence = appsSequence
@@ -191,13 +191,13 @@ var AppListComponent = React.createClass({
       });
     }
 
-    let sortDirection = state.sortDescending ? 1 : -1;
-
     appsSequence
       // Alphabetically presort
       .sortBy((app) => {
         return app.id;
       }, state.sortDescending);
+
+    let sortDirection = state.sortDescending ? 1 : -1;
 
     return this.getGroupedNodes(appsSequence)
       // Hoist groups to top of the app list and sort everything by sortKey
