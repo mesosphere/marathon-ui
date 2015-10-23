@@ -1,4 +1,4 @@
-## 0.13.0 - 2015-10-26
+## Unversioned
 ### Added
 - \#2031 - Make keyboard shortcuts discoverable
 - \#2434 - Create keyboard shortcut for focusing on the search field
