@@ -28,7 +28,7 @@ var AppHealthComponent = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps) {
-    return !Util.isArrayEqual(this.props.model.health, nextProps.model.health);
+    return !Util.compareArrays(this.props.model.health, nextProps.model.health);
   },
 
   handleMouseOverHealthBar: function (ref) {
