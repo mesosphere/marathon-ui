@@ -126,7 +126,7 @@ var Util = {
 
     return filesize + " " + units[unitIndex];
   },
-  isArrayEqual: function (a, b) {
+  compareArrays: function (a, b) {
     return a === b ||
       a != null &&
       b != null &&
@@ -138,11 +138,11 @@ var Util = {
       var aVal = a[key];
       var bVal = b[key];
       if (Array.isArray(aVal)) {
-        return this.isArrayEqual(aVal, bVal);
+        return this.compareArrays(aVal, bVal);
       }
       if (this.isObject(aVal) && this.isObject(bVal)) {
-        return this.isArrayEqual(Object.keys(aVal), Object.keys(bVal))
-          && this.isArrayEqual(Object.values(aVal), Object.values(bVal));
+        return this.compareArrays(Object.keys(aVal), Object.keys(bVal))
+          && this.compareArrays(Object.values(aVal), Object.values(bVal));
       }
       return aVal === bVal;
     });
