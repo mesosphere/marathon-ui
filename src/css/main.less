@@ -383,21 +383,22 @@ a:focus {
     &.name-cell {
       color: inherit;
 
-      & > span {
+      .name {
         display: inline-block;
-        float: left;
+        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: @app-list-name-width;
         white-space: nowrap;
       }
 
       .labels {
-        .label {
-          display: none;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          max-width: @app-list-label-width;
+        display: inline-block;
+
+        .label, .more {
+          position: absolute;
+          transform: translateX(-1vw);
+          display: inline-block;
+          visibility: hidden;
           white-space: nowrap;
           padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
           margin-left: @horizontal-spacing-unit;
@@ -407,26 +408,11 @@ a:focus {
           font-size: @small-font-size;
           font-weight: normal;
 
-          &.more {
-            display: inline-block;
+          &.visible {
+            position: relative;
+            transform: translateX(0);
+            visibility: inherit;
           }
-
-          .label-loop(@i) when (@i > 0) {
-            @breakpoint: (@app-list-labels-breakpoint + @i *
-              @app-list-label-width *1.15 );
-            @next: @i + 1;
-            @media only screen and (min-width: @breakpoint) {
-              &:nth-child(@{i}) {
-                display: inline-block;
-              }
-
-              &.more:nth-child(-n+@{next}) {
-                display: none;
-              }
-            }
-            .label-loop(@i - 1);
-          }
-          .label-loop(10);
         }
       }
     }

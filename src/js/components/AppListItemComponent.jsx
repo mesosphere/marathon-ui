@@ -6,6 +6,7 @@ var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
+var DOMUtil = require("../helpers/DOMUtil");
 
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
@@ -17,6 +18,94 @@ var AppListItemComponent = React.createClass({
   propTypes: {
     currentGroup: React.PropTypes.string.isRequired,
     model: React.PropTypes.object.isRequired
+  },
+
+  getInitialState: function () {
+    return {
+      numberOfVisibleLabels: -1
+    };
+  },
+
+  componentDidMount: function () {
+    // Avoid referencing window from Node context
+    if (global.window != null) {
+      window.addEventListener("resize", this.handleResize);
+      window.addEventListener("focus", this.handleResize);
+    }
+    this.updateNumberOfVisibleLabels();
+
+  },
+
+  componentDidUpdate: function (prevProps) {
+    if (this.didPropsChange(prevProps)) {
+      this.updateNumberOfVisibleLabels();
+    }
+  },
+
+  componentWillUnmount: function () {
+    if (global.window != null) {
+      window.removeEventListener("resize", this.handleResize);
+      window.removeEventListener("focus", this.handleResize);
+    }
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState) {
+    if (nextState.numberOfVisibleLabels === -1 && !this.props.model.isGroup) {
+      this.updateNumberOfVisibleLabels();
+      return false;
+    }
+
+    return this.didPropsChange(nextProps) ||
+      this.state.numberOfVisibleLabels !== nextState.numberOfVisibleLabels;
+  },
+
+  didPropsChange: function (newProps) {
+    var model = this.props.model;
+    var newModel = newProps.model;
+
+    return model.status !== newModel.status ||
+      model.tasksRunning !== newModel.tasksRunning ||
+      !Util.isArrayEqual(model.health, newModel.health) ||
+      model.totalMem !== newModel.totalMem ||
+      model.totalCpus !== newModel.totalCpus ||
+      model.instances !== newModel.instances ||
+      !Util.isArrayEqual(Object.keys(model.labels),
+        Object.keys(newModel.labels));
+  },
+
+  handleResize: function () {
+    requestAnimationFrame(this.updateNumberOfVisibleLabels);
+  },
+
+  updateNumberOfVisibleLabels: function () {
+    var labels = this.props.model.labels;
+
+    if (labels == null || Object.keys(labels).length === 0) {
+      return null;
+    }
+
+    let refs = this.refs;
+
+    let cellNode = React.findDOMNode(refs.nameCell);
+    let nameNode = React.findDOMNode(refs.nameNode);
+    let moreNode = React.findDOMNode(refs.moreLabel);
+
+    let availableWidth = DOMUtil.getInnerWidth(cellNode) -
+      DOMUtil.getOuterWidth(nameNode) -
+      DOMUtil.getOuterWidth(moreNode);
+
+    let labelsWidth = 0;
+    let numberOfVisibleLabels = 0;
+
+    refs.labels.props.children[0].find((label) => {
+      labelsWidth += DOMUtil.getOuterWidth(React.findDOMNode(refs[label.ref]));
+      if (labelsWidth > availableWidth) {
+        return true;
+      }
+      numberOfVisibleLabels++;
+    });
+
+    this.setState({numberOfVisibleLabels: numberOfVisibleLabels});
   },
 
   getIcon: function () {
@@ -32,10 +121,12 @@ var AppListItemComponent = React.createClass({
 
   getLabels: function () {
     var labels = this.props.model.labels;
+
     if (labels == null || Object.keys(labels).length === 0) {
       return null;
     }
 
+    let numberOfVisibleLabels = this.state.numberOfVisibleLabels;
     let nodes = Object.keys(labels).sort().map(function (key, i) {
       if (key == null || Util.isEmptyString(key)) {
         return null;
@@ -46,17 +137,28 @@ var AppListItemComponent = React.createClass({
         labelText = `${key}:${labels[key]}`;
       }
 
+      let labelClassName = classNames("label", {
+        "visible": i < numberOfVisibleLabels
+      });
+
       return (
-        <span key={i} className="label" title={labelText}>
+        <span key={i} className={labelClassName} title={labelText}
+            ref={`label${i}`}>
           {labelText}
         </span>
       );
     });
 
+    let moreLabelClassName = classNames("more", {
+      "visible": Object.keys(labels).length > numberOfVisibleLabels
+    });
+
     return (
-      <div className="labels">
+      <div className="labels" ref="labels">
         {nodes}
-        <span className="label more" onClick={this.handleMoreLabelClick}>
+        <span className={moreLabelClassName}
+            onClick={this.handleMoreLabelClick}
+            ref="moreLabel">
           &hellip;
         </span>
       </div>
@@ -123,8 +225,9 @@ var AppListItemComponent = React.createClass({
         <td className="icon-cell">
           {this.getIcon()}
         </td>
-        <td className="overflow-ellipsis name-cell" title={model.id}>
-          <span>{name}</span>
+        <td className="overflow-ellipsis name-cell" title={model.id}
+            ref="nameCell">
+          <span className="name" ref="nameNode">{name}</span>
           {this.getLabels()}
         </td>
         <td className="text-right total cpu-cell">

@@ -125,6 +125,13 @@ var Util = {
     }
 
     return filesize + " " + units[unitIndex];
+  },
+  isArrayEqual: function (a, b) {
+    return a === b ||
+      a != null &&
+      b != null &&
+      a.length === b.length &&
+      a.every((v, i) => v === b[i]);
   }
 };
 

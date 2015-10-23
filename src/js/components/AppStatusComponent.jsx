@@ -29,6 +29,13 @@ var AppStatusComponent = React.createClass({
     showSummary: React.PropTypes.bool
   },
 
+  shouldComponentUpdate: function (nextProps) {
+    var props = this.props;
+
+    return props.status !== nextProps.status ||
+      props.showSummary !== nextProps.showSummary;
+  },
+
   getTasksSummary: function () {
     var props = this.props;
     if (props.showSummary !== true) {
