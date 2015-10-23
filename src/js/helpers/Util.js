@@ -132,6 +132,21 @@ var Util = {
       b != null &&
       a.length === b.length &&
       a.every((v, i) => v === b[i]);
+  },
+  compareProperties: function (a, b, ...keys) {
+    return keys.reduce((memo, key) => {
+      var aVal = a[key];
+      var bVal = b[key];
+      if (Array.isArray(aVal)) {
+        return memo && this.isArrayEqual(aVal, bVal);
+      }
+      if (this.isObject(aVal) && this.isObject(bVal)) {
+        return memo
+          && this.isArrayEqual(Object.keys(aVal), Object.keys(bVal))
+          && this.isArrayEqual(Object.values(aVal), Object.values(bVal));
+      }
+      return memo && aVal === bVal;
+    }, true);
   }
 };
 
