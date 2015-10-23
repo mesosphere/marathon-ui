@@ -3,6 +3,7 @@ It was necessary to increase the version number in order to resolve some issues
 with our release infrastructure. No other changes were made since 0.13.0.
 
 ## 0.13.0 - 2015-11-04
+### Added
 - A filter sidebar is introduced with the ability to combine filters
   or clear them.
   * Filter by application status
