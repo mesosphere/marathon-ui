@@ -370,4 +370,56 @@ describe("Util", function () {
     });
 
   });
+
+  describe("compareProperties", function () {
+    it("returns true when all properties match", function () {
+      expect(Util.compareProperties(
+        {a: 1, b: 2, c: 3},
+        {a: 1, b: 2, c: 3},
+        "a", "b", "c"
+      )).to.equal(true);
+    });
+    it("returns true when only specified properties match", function () {
+      expect(Util.compareProperties(
+        {a: 1, b: 2, c: 3, d: 4},
+        {a: 1, b: 2, c: 3, d: 5},
+        "a", "b", "c"
+      )).to.equal(true);
+    });
+    it("returns false when some specified properties do not match", function () {
+      expect(Util.compareProperties(
+        {a: 1, b: 2, c: 3, d: 4},
+        {a: 1, b: 2, c: 3, d: 5},
+        "a", "b", "d"
+      )).to.equal(false);
+    });
+    it("correctly identifies and compares similar arrays", function () {
+      expect(Util.compareProperties(
+        {a: ["a", "b", "c"]},
+        {a: ["a", "b", "c"]},
+        "a"
+      )).to.equal(true);
+    });
+    it("correctly identifies and compares dissimilar arrays", function () {
+      expect(Util.compareProperties(
+        {a: ["a", "b", "c"]},
+        {a: ["a", "banana", "c"]},
+        "a"
+      )).to.equal(false);
+    });
+    it("correctly identifies and compares similar objects", function () {
+      expect(Util.compareProperties(
+        {a: {a: 1}},
+        {a: {a: 1}},
+        "a"
+      )).to.equal(true);
+    });
+    it("correctly identifies and compares dissimilar objects", function () {
+      expect(Util.compareProperties(
+        {a: {a: 1}},
+        {a: {a: 1, b: 2}},
+        "a"
+      )).to.equal(false);
+    });
+  });
 });
