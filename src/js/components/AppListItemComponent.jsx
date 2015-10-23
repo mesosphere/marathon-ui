@@ -55,22 +55,16 @@ var AppListItemComponent = React.createClass({
       return false;
     }
 
-    return this.didPropsChange(nextProps) ||
-      this.state.numberOfVisibleLabels !== nextState.numberOfVisibleLabels;
+    if (this.state.numberOfVisibleLabels !== nextState.numberOfVisibleLabels) {
+      return true;
+    }
+
+    return this.didPropsChange(nextProps);
   },
 
   didPropsChange: function (newProps) {
-    var model = this.props.model;
-    var newModel = newProps.model;
-
-    return model.status !== newModel.status ||
-      model.tasksRunning !== newModel.tasksRunning ||
-      !Util.isArrayEqual(model.health, newModel.health) ||
-      model.totalMem !== newModel.totalMem ||
-      model.totalCpus !== newModel.totalCpus ||
-      model.instances !== newModel.instances ||
-      !Util.isArrayEqual(Object.keys(model.labels),
-        Object.keys(newModel.labels));
+    return !Util.compareProperties(this.props.model, newProps.model, "status",
+      "tasksRunning", "health", "totalMem", "totalCpus", "instances", "labels");
   },
 
   handleResize: function () {

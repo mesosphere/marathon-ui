@@ -137,7 +137,6 @@ var Util = {
     return keys.reduce((memo, key) => {
       var aVal = a[key];
       var bVal = b[key];
-      var typeOfA = typeof(aVal);
       if (Array.isArray(aVal)) {
         return memo && this.isArrayEqual(aVal, bVal);
       }
