@@ -45,7 +45,7 @@ var webpackConfig = {
     loaders: [
       {
         test: /\.(js|jsx)$/,
-        loader: "babel-loader",
+        loader: "babel-loader?cacheDirectory",
         exclude: /node_modules/
       },
       {
@@ -62,11 +62,13 @@ var webpackConfig = {
   },
   resolve: {
     extensions: ["", ".jsx", ".js"]
-  }
+  },
+  watch: true
 };
 
 // Use webpack to compile jsx into js,
 gulp.task("webpack", function (callback) {
+  var isFirstRun = true;
   // Extend options with source mapping
   if (process.env.GULP_ENV === "development" &&
     !process.env.DISABLE_SOURCE_MAP ||
@@ -94,16 +96,25 @@ gulp.task("webpack", function (callback) {
       timing: true
     }));
 
-    browserSync.reload();
-    callback();
+
+    if (isFirstRun) {
+      // This runs on initial gulp webpack load.
+      isFirstRun = false;
+      callback();
+    } else {
+      // This runs after webpack's internal watch rebuild.
+      eslintFn();
+      browserSync.reload();
+    }
   });
 });
 
-gulp.task("eslint", function () {
+function eslintFn() {
   return gulp.src([dirs.js + "/**/*.?(js|jsx)"])
     .pipe(eslint())
     .pipe(eslint.formatEach("stylish", process.stderr));
-});
+}
+gulp.task("eslint", eslintFn);
 
 gulp.task("less", function () {
   return gulp.src(dirs.styles + "/" + files.mainLess + ".less")
@@ -167,7 +178,6 @@ gulp.task("browsersync", function () {
 
 gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/**/*", ["less"]);
-  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["eslint", "webpack"]);
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
   gulp.watch(dirs.fonts + "/**/*.*", ["fonts"]);
 });
