@@ -1,7 +1,6 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
-var AppTypes = require("../constants/AppTypes");
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
@@ -107,10 +106,7 @@ var AppListItemComponent = React.createClass({
     if (model.isGroup) {
       return (<i className="icon icon-small group"></i>);
     }
-    if (model.type === AppTypes.DOCKER) {
-      return (<i className="icon icon-small app-docker" title="Docker"></i>);
-    }
-    return (<i className="icon icon-small app-basic" title="Basic"></i>);
+    return (<i className="icon icon-small app" title="Basic"></i>);
   },
 
   getLabels: function () {
