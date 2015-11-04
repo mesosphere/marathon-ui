@@ -35,6 +35,11 @@ var files = {
   index: "index.html"
 };
 
+var webpackWatch = false;
+if (process.env.GULP_ENV === "development") {
+  webpackWatch = true;
+}
+
 var webpackConfig = {
   entry: dirs.js + "/" + files.mainJs + ".jsx",
   output: {
@@ -63,7 +68,7 @@ var webpackConfig = {
   resolve: {
     extensions: ["", ".jsx", ".js"]
   },
-  watch: true
+  watch: webpackWatch
 };
 
 // Use webpack to compile jsx into js,
