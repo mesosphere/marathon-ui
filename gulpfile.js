@@ -64,7 +64,7 @@ var webpackConfig = {
     ],
     postLoaders: [
       {
-        loader: "transform?envify"
+        loader: "transform/cacheable?envify"
       }
     ]
   },
