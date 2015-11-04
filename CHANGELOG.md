@@ -6,7 +6,6 @@
 - A filter sidebar is introduced with the ability to combine filters
   or clear them.
   * Filter by application status
-  * Filter by application type (Docker or basic)
   * Filter by labels
 - The application list now handles groups
 - Groups are shown at the top of the application list

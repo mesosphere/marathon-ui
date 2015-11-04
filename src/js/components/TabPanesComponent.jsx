@@ -6,8 +6,6 @@ var AppListLabelsFilterComponent =
   require("../components/AppListLabelsFilterComponent");
 var AppListStatusFilterComponent =
   require("../components/AppListStatusFilterComponent");
-var AppListTypeFilterComponent =
-  require("../components/AppListTypeFilterComponent");
 var AppListComponent = require("../components/AppListComponent");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var DeploymentsListComponent =
@@ -148,11 +146,6 @@ var TabPanesComponent = React.createClass({
               </div>
               <AppListStatusFilterComponent
                 onChange={this.updateFilterStatus} />
-              <div className="flex-row">
-                <h3 className="small-caps">Application Type</h3>
-                {this.getClearLinkForFilter("filterTypes")}
-              </div>
-              <AppListTypeFilterComponent onChange={this.updateFilterTypes} />
               <div className="flex-row">
                 <h3 className="small-caps">Label</h3>
                 {this.getClearLinkForFilter("filterLabels")}
