@@ -1,3 +1,7 @@
+## 0.13.1 - 2015-11-04
+It was necessary to increase the version number in order to resolve some issues
+with our release infrastructure. No other changes were made since 0.13.0.
+
 ## 0.13.0 - 2015-11-04
 ### Added
 - \#2031 - Make keyboard shortcuts discoverable
@@ -17,7 +21,7 @@
   application list
 
 ### Changed
-This version introduces major changes to the layout. In particular, the 
+This version introduces major changes to the layout. In particular, the
 application list has been redesigned.
 
 - The memory column shows the total amount of memory used by an application
