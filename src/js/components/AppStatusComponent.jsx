@@ -4,6 +4,7 @@ var React = require("react/addons");
 
 var AppStatus = require("../constants/AppStatus");
 var QueueStore = require("../stores/QueueStore");
+var Util = require("../helpers/Util");
 
 var statusClassNameMapping = {
   [AppStatus.RUNNING]: "running",
@@ -32,7 +33,8 @@ var AppStatusComponent = React.createClass({
   shouldComponentUpdate: function (nextProps) {
     var props = this.props;
 
-    return props.status !== nextProps.status ||
+    return !Util.compareProperties(props.model, nextProps.model, "status",
+        "tasksRunning", "instances") ||
       props.showSummary !== nextProps.showSummary;
   },
 
