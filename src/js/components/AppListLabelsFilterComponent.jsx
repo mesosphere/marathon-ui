@@ -168,7 +168,8 @@ var AppListLabelsFilterComponent = React.createClass({
 
   toggleActivatedState: function () {
     this.setState({
-      activated: !this.state.activated
+      activated: !this.state.activated,
+      filterText: ""
     });
   },
 
