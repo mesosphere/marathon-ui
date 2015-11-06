@@ -1,6 +1,6 @@
 {
   "name": "marathon-ui",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "npm-shrinkwrap-version": "5.4.0",
   "node-version": "v0.12.7",
   "dependencies": {
@@ -3692,7 +3692,7 @@
                         },
                         "minimatch": {
                           "version": "0.2.14",
-                          "resolved": "http://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz",
+                          "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz",
                           "dependencies": {
                             "lru-cache": {
                               "version": "2.6.4",
@@ -6386,11 +6386,11 @@
             },
             "minimatch": {
               "version": "0.2.14",
-              "resolved": "http://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz",
+              "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.2.14.tgz",
               "dependencies": {
                 "lru-cache": {
-                  "version": "2.6.5",
-                  "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.6.5.tgz"
+                  "version": "2.6.4",
+                  "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.6.4.tgz"
                 },
                 "sigmund": {
                   "version": "1.0.1",
