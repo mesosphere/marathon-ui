@@ -106,7 +106,7 @@ var AppListItemComponent = React.createClass({
     if (model.isGroup) {
       return (<i className="icon icon-small group"></i>);
     }
-    return (<i className="icon icon-small app" title="Basic"></i>);
+    return (<i className="icon icon-small app" title="Application"></i>);
   },
 
   getLabels: function () {
