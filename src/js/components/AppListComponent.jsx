@@ -350,7 +350,7 @@ var AppListComponent = React.createClass({
             <th className="status-cell">
               <span onClick={this.sortBy.bind(null, "status")}
                     className={headerClassSet}>
-                {this.getCaret("status")} Status
+                Status {this.getCaret("status")}
               </span>
             </th>
             <th className="text-right instances-cell" colSpan="3">
