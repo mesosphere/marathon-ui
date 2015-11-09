@@ -78,7 +78,6 @@ var AppListItemComponent = React.createClass({
     });
   },
 
-
   handleResize: function () {
     requestAnimationFrame(this.updateNumberOfVisibleLabels);
   },
