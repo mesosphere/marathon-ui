@@ -1,3 +1,11 @@
+## 0.13.2 - 2015-11-09
+### Fixed
+- \#2565 - Change app icon title from "Basic" to "Application"
+- \#2568 - UI: App state incorrectly shown
+- \#2574 - Label Filter: Filter Label Box is not cleared
+- \#2585 - Sorting by CPU causes row column to expand
+- \#2586 - Sorting by Status shifts heading text
+
 ## 0.13.1 - 2015-11-04
 It was necessary to increase the version number in order to resolve some issues
 with our release infrastructure. No other changes were made since 0.13.0.
