@@ -782,7 +782,10 @@ describe("App component", function () {
   });
 
   afterEach(function () {
-    this.renderer.unmount();
+    // The OnClickOutsideMixin is not render-friendly as of now.
+    // TODO: uncomment once this PR is merged:
+    // https://github.com/Pomax/react-onclickoutside/pull/48/files
+    // this.renderer.unmount();
   });
 
   it("has the correct app id", function () {
