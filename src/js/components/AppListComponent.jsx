@@ -148,39 +148,9 @@ var AppListComponent = React.createClass({
     });
   },
 
-  getGroupedNodes: function (appsSequence) {
-    var currentGroup = this.props.currentGroup;
-
-    return appsSequence
-      .filter(app => app.id.startsWith(currentGroup))
-      .reduce((memo, app) => {
-        let relativePath = app.id.substring(currentGroup.length);
-        let pathParts = relativePath.split("/");
-        let isGroup = pathParts.length > 1;
-
-        if (!isGroup) {
-          memo.push(app);
-        } else {
-          let groupId = currentGroup + pathParts[0];
-          let group = memo.find(item => {
-            return item.id === groupId;
-          });
-
-          if (group == null) {
-            group = initGroupNode(groupId, app);
-            memo.push(group);
-          } else {
-            updateGroupNode(group, app);
-          }
-        }
-        return memo;
-      }, []);
-  },
-
-  getAppNodes: function () {
-    var state = this.state;
-    var sortKey = state.sortKey;
+  getFilteredAppNodesSequence: function () {
     var props = this.props;
+    var state = this.state;
 
     var appsSequence = lazy(state.apps);
 
@@ -232,9 +202,41 @@ var AppListComponent = React.createClass({
         return app.id;
       }, state.sortDescending);
 
-    let sortDirection = state.sortDescending ? 1 : -1;
+    return appsSequence;
+  },
 
-    return this.getGroupedNodes(appsSequence)
+  getGroupedNodes: function (appsSequence) {
+    var props = this.props;
+    var state = this.state;
+
+    var currentGroup = this.props.currentGroup;
+    var sortKey = state.sortKey;
+    var sortDirection = this.state.sortDescending ? 1 : -1;
+
+    return appsSequence
+      .filter(app => app.id.startsWith(currentGroup))
+      .reduce((memo, app) => {
+        let relativePath = app.id.substring(currentGroup.length);
+        let pathParts = relativePath.split("/");
+        let isGroup = pathParts.length > 1;
+
+        if (!isGroup) {
+          memo.push(app);
+        } else {
+          let groupId = currentGroup + pathParts[0];
+          let group = memo.find(item => {
+            return item.id === groupId;
+          });
+
+          if (group == null) {
+            group = initGroupNode(groupId, app);
+            memo.push(group);
+          } else {
+            updateGroupNode(group, app);
+          }
+        }
+        return memo;
+      }, [])
       // Hoist groups to top of the app list and sort everything by sortKey
       .sort((a, b) => {
         if (a.isGroup && !b.isGroup) {
@@ -272,7 +274,8 @@ var AppListComponent = React.createClass({
 
   render: function () {
     var state = this.state;
-    var appNodes = this.getAppNodes();
+    var filteredAppNodesSequence = this.getFilteredAppNodesSequence();
+    var appNodes = this.getGroupedNodes(filteredAppNodesSequence);
 
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
