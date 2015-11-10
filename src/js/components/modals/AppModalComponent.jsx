@@ -72,6 +72,18 @@ var AppModalComponent = React.createClass({
       this.onFieldValidationError);
   },
 
+  componentDidMount: function () {
+    this.setCursorToEndOfAppIdInput();
+  },
+
+  setCursorToEndOfAppIdInput: function () {
+    var appIdInput = React.findDOMNode(this.refs.appId);
+    appIdInput.focus();
+    appIdInput.selectionStart =
+     appIdInput.selectionEnd =
+     appIdInput.value.length;
+  },
+
   componentWillUnmount: function () {
     AppsStore.removeListener(AppsEvents.CREATE_APP,
       this.onCreateApp);
@@ -237,7 +249,7 @@ var AppModalComponent = React.createClass({
                 value={state.fields.appId}
                 label="ID"
                 onChange={this.handleFieldUpdate}>
-              <input autoFocus />
+              <input ref="appId" />
             </FormGroupComponent>
             <div className="row">
               <div className="col-sm-3">
