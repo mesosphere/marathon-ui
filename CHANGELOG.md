@@ -1,4 +1,7 @@
 ## Unversioned
+### Changed
+- Introduced a maximum width for labels in the app list.
+
 ### Fixed
 - \#2593 - Very long labels expand horizontal scrollbar in app list
 
