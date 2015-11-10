@@ -1,3 +1,7 @@
+## Unversioned
+### Added
+- Prefill ID field with group structure in app creation modal
+
 ## 0.13.3 - 2015-11-10
 ### Changed
 - Introduced a maximum width for labels in the app list.
