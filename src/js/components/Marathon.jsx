@@ -54,11 +54,12 @@ var Marathon = React.createClass({
 
     var params = router.getCurrentParams();
     var path = router.getCurrentPathname();
-    var modalQuery = router.getCurrentQuery().modal;
+    var query = router.getCurrentQuery();
+    var modalQuery = query.modal;
     var modal = null;
 
     if (modalQuery === "new-app") {
-      modal = this.getNewAppModal();
+      modal = this.getNewAppModal(query.groupId);
     } else if (modalQuery === "about") {
       modal = this.getAboutModal();
     } else if (modalQuery === "help") {
@@ -207,9 +208,14 @@ var Marathon = React.createClass({
     );
   },
 
-  getNewAppModal: function () {
+  getNewAppModal: function (groupId) {
+    var app = groupId != null
+      ? {id: groupId}
+      : null;
+
     return (
       <AppModalComponent
+        app={app}
         onDestroy={this.handleModalDestroy} />
     );
   },

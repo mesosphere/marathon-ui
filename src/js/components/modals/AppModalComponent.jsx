@@ -72,6 +72,17 @@ var AppModalComponent = React.createClass({
       this.onFieldValidationError);
   },
 
+  componentDidMount: function () {
+    this.setCursorToEndOfAppIdInput();
+  },
+
+  setCursorToEndOfAppIdInput: function () {
+    var appIdInput = React.findDOMNode(this.refs.appId);
+    appIdInput.focus();
+    var valueLength = appIdInput.value.length;
+    appIdInput.setSelectionRange(valueLength, valueLength);
+  },
+
   componentWillUnmount: function () {
     AppsStore.removeListener(AppsEvents.CREATE_APP,
       this.onCreateApp);
@@ -206,7 +217,7 @@ var AppModalComponent = React.createClass({
 
     var modalTitle = "New Application";
 
-    if (props.app != null) {
+    if (props.app != null && props.app.version != null) {
       modalTitle = "Edit Application";
     }
 
@@ -237,7 +248,7 @@ var AppModalComponent = React.createClass({
                 value={state.fields.appId}
                 label="ID"
                 onChange={this.handleFieldUpdate}>
-              <input autoFocus />
+              <input ref="appId" />
             </FormGroupComponent>
             <div className="row">
               <div className="col-sm-3">
