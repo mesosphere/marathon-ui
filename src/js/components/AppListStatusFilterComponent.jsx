@@ -144,7 +144,6 @@ var AppListStatusFilterComponent = React.createClass({
   },
 
   render: function () {
-    console.log()
     return (
       <ul className="list-group checked-list-box filters">
         {this.getStatusNodes()}

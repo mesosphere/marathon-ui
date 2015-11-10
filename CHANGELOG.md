@@ -1,4 +1,7 @@
 ## 0.13.3 - 2015-11-10
+### Added
+- Show application count on application status filters
+
 ### Changed
 - Introduced a maximum width for labels in the app list.
 
