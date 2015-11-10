@@ -126,6 +126,9 @@ var TaskListItemComponent = React.createClass({
           <br />
           {buildTaskAnchors(task)}
         </td>
+        <td className={hasHealthClassSet} title={this.props.taskHealthMessage}>
+          <span className={healthClassSet} />
+        </td>
         <td className="text-center">
           <span className={statusClassSet}>
             {task.status}
@@ -143,9 +146,6 @@ var TaskListItemComponent = React.createClass({
               title={updatedAtISO}>
             {updatedAtLocal}
           </time>
-        </td>
-        <td className={hasHealthClassSet} title={this.props.taskHealthMessage}>
-            <span className={healthClassSet} />
         </td>
       </tr>
     );
