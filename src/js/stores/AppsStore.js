@@ -154,15 +154,9 @@ function processApp(app) {
   return app;
 }
 
-function processApps(apps, appsStatusesCount) {
-  Object.values(AppStatus).forEach(function (status) {
-    appsStatusesCount[status] = 0;
-  });
-
+function processApps(apps) {
   return lazy(apps).map(function (app) {
-    var processedApp = processApp(app);
-    appsStatusesCount[processedApp.status]++;
-    return processedApp;
+    return processApp(app);
   }).value();
 }
 
@@ -209,8 +203,6 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
   // This endpoint delievers more data, like the tasks on the app.
   currentApp: appScheme,
 
-  appsStatusesCount: {},
-
   getCurrentApp: function (appId) {
     if (appId === this.currentApp.id) {
       return this.currentApp;
@@ -239,10 +231,7 @@ QueueStore.on(QueueEvents.CHANGE, function () {
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
-      AppsStore.apps = processApps(
-        action.data.body.apps,
-        AppsStore.appsStatusesCount
-      );
+      AppsStore.apps = processApps(action.data.body.apps);
       applyAppDelayStatusOnAllApps(AppsStore.apps, QueueStore.queue);
       AppsStore.emit(AppsEvents.CHANGE);
       break;

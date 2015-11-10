@@ -13,6 +13,13 @@ var statusNameMapping = {
   [AppStatus.WAITING]: "Waiting"
 };
 
+function getInitialAppStatusCount() {
+  return Object.values(AppStatus).reduce(function (memo, status) {
+    memo[status] = 0;
+    return memo;
+  }, {});
+}
+
 var AppListStatusFilterComponent = React.createClass({
   displayName: "AppListStatusFilterComponent",
 
@@ -26,7 +33,7 @@ var AppListStatusFilterComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      appsStatusesCount: AppsStore.appsStatusesCount,
+      appsStatusesCount: getInitialAppStatusCount(),
       selectedStatus: []
     };
   },
@@ -49,8 +56,14 @@ var AppListStatusFilterComponent = React.createClass({
   },
 
   onAppsChange: function () {
+    var appsStatusesCount = getInitialAppStatusCount();
+
+    AppsStore.apps.forEach(function (app) {
+      appsStatusesCount[app.status]++;
+    });
+
     this.setState({
-      appsStatusesCount: AppsStore.appsStatusesCount
+      appsStatusesCount: appsStatusesCount
     });
   },
 
