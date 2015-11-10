@@ -1,6 +1,8 @@
 var React = require("react/addons");
 
 var AppStatus = require("../constants/AppStatus");
+var AppsStore = require("../stores/AppsStore");
+var AppsEvents = require("../events/AppsEvents");
 
 /* TODO extract from AppStatusComponent */
 var statusNameMapping = {
@@ -24,8 +26,18 @@ var AppListStatusFilterComponent = React.createClass({
 
   getInitialState: function () {
     return {
+      appsStatusesCount: AppsStore.appsStatusesCount,
       selectedStatus: []
     };
+  },
+
+  componentWillMount: function () {
+    AppsStore.on(AppsEvents.CHANGE, this.onAppsChange);
+  },
+
+  componentWillUnmount: function () {
+    AppsStore.removeListener(AppsEvents.CHANGE,
+      this.onAppsChange);
   },
 
   componentDidMount: function () {
@@ -34,6 +46,12 @@ var AppListStatusFilterComponent = React.createClass({
 
   componentWillReceiveProps: function () {
     this.updateFilterStatus();
+  },
+
+  onAppsChange: function () {
+    this.setState({
+      appsStatusesCount: AppsStore.appsStatusesCount
+    });
   },
 
   setQueryParam: function (filterStatus) {
@@ -103,6 +121,7 @@ var AppListStatusFilterComponent = React.createClass({
 
   getStatusNodes: function () {
     var state = this.state;
+
     return Object.keys(statusNameMapping).map((key, i) => {
       let optionText = statusNameMapping[key];
 
@@ -116,13 +135,16 @@ var AppListStatusFilterComponent = React.createClass({
         <li className="checkbox" key={i}>
           <input {...checkboxProps}
             onChange={this.handleChange.bind(this, key)} />
-          <label htmlFor={`status-${key}-${i}`}>{optionText}</label>
+          <label htmlFor={`status-${key}-${i}`}>
+            {optionText} ({state.appsStatusesCount[key] || 0})
+          </label>
         </li>
       );
     });
   },
 
   render: function () {
+    console.log()
     return (
       <ul className="list-group checked-list-box filters">
         {this.getStatusNodes()}
