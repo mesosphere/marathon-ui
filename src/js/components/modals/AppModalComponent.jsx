@@ -79,9 +79,8 @@ var AppModalComponent = React.createClass({
   setCursorToEndOfAppIdInput: function () {
     var appIdInput = React.findDOMNode(this.refs.appId);
     appIdInput.focus();
-    appIdInput.selectionStart =
-     appIdInput.selectionEnd =
-     appIdInput.value.length;
+    var valueLength = appIdInput.value.length;
+    appIdInput.setSelectionRange(valueLength, valueLength);
   },
 
   componentWillUnmount: function () {
