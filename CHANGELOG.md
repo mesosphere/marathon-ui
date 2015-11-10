@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- \#2593 - Very long labels expand horizontal scrollbar in app list
+
 ## 0.13.2 - 2015-11-09
 ### Fixed
 - \#2565 - Change app icon title from "Basic" to "Application"
