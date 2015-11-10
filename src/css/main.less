@@ -389,7 +389,7 @@ a:focus {
         display: inline-block;
 
         .label, .more {
-          position: absolute;
+          position: fixed;
           transform: translateX(-1vw);
           display: inline-block;
           visibility: hidden;
@@ -401,6 +401,9 @@ a:focus {
           color: @navbar-inactive-color;
           font-size: @small-font-size;
           font-weight: normal;
+          max-width: @horizontal-spacing-unit * 64;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
           &.visible {
             position: relative;
