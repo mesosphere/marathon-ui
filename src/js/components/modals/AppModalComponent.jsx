@@ -206,7 +206,7 @@ var AppModalComponent = React.createClass({
 
     var modalTitle = "New Application";
 
-    if (props.app != null) {
+    if (props.app != null && props.app.version != null) {
       modalTitle = "Edit Application";
     }
 

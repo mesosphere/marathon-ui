@@ -128,6 +128,14 @@ var TabPanesComponent = React.createClass({
       viewType: AppListViewTypes.LIST
     };
 
+    var newAppModalQuery = {
+      modal: "new-app"
+    };
+
+    if (state.currentGroup != null && state.currentGroup !== "/") {
+      newAppModalQuery.groupId = state.currentGroup;
+    }
+
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
           className="container-fluid content">
@@ -135,7 +143,7 @@ var TabPanesComponent = React.createClass({
           <div className="wrapper">
             <nav className="sidebar">
               <Link to={path}
-                query={{modal: "new-app"}}
+                query={newAppModalQuery}
                 className="btn btn-success create-app"
                 activeClassName="create-app-active">
                 Create
