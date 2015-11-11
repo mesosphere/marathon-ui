@@ -1,6 +1,7 @@
 ## Unversioned
 ### Added
 - Prefill ID field with group structure in app creation modal
+- Show an animated loading bar on app deployment status
 
 ### Changed
 - Adjust the task list column order
