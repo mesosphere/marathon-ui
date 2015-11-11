@@ -2,6 +2,10 @@
 ### Added
 - Prefill ID field with group structure in app creation modal
 
+### Changed
+- Adjust the task list column order
+- Use colored labels instead of dots for task health
+
 ## 0.13.3 - 2015-11-10
 ### Added
 - Show application count on application status filters
