@@ -4,6 +4,7 @@
 
 ### Fixed
 - \#2593 - Very long labels expand horizontal scrollbar in app list
+- \#2615 - Keep input focus position when updating the Filter bar 
 
 ## 0.13.2 - 2015-11-09
 ### Fixed
