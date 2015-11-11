@@ -901,6 +901,34 @@ fieldset[disabled] .btn-info.active {
   background-color: #2a2c31; // dark-grey
 }
 
+.loading-bar {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    height: 8px;
+    width: 140px;
+    margin-top: -4px;
+    margin-left: -70px;
+    background-image: linear-gradient(
+      -45deg,
+      #2A2C31 25%,
+      rgba(42, 44, 49, 0) 25%,
+      rgba(42, 44, 49, 0) 50%,
+      #2A2C31 50%,
+      #2A2C31 75%,
+      rgba(42, 44, 49, 0) 75%
+    );
+    background-color: #8E929B;
+    background-size: 12px 12px;
+    box-shadow: inset 0 10px 0 rgba(255, 255, 255, 0.2);
+    animation: move 2s linear infinite;
+    -ms-animation-name: move;
+}
+
+@keyframes move {
+    to { background-position: 12px 12px; }
+}
+
 .clickable {
   cursor: pointer;
 }

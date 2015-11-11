@@ -3,6 +3,7 @@ var React = require("react/addons");
 
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Util = require("../helpers/Util");
+var AppStatus = require("../constants/AppStatus");
 var HealthStatus = require("../constants/HealthStatus");
 
 function roundWorkaround(x) {
@@ -43,6 +44,24 @@ var AppHealthComponent = React.createClass({
 
   getHealthBar: function () {
     var health = this.props.model.health;
+    var status = this.props.model.status;
+
+    if (status === AppStatus.DEPLOYING) {
+      return (
+        <div
+          className="loading-bar"
+          ref="loading-bar"
+          key="loading-bar"
+          data-behavior="show-tip"
+          data-tip-type-class="default"
+          data-tip-place="top"
+          data-tip-content="deploying"
+          onMouseOver=
+            {this.handleMouseOverHealthBar.bind(null, "loading-bar")}
+          onMouseOut=
+            {this.handleMouseOutHealthBar.bind(null, "loading-bar")} />
+      );
+    }
 
     // normalize quantities to add up to 100%. Cut off digits at
     // third decimal to work around rounding error leading to more than 100%.
