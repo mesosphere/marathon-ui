@@ -17,7 +17,8 @@ var AppListFilterComponent = React.createClass({
     return {
       filterText: "",
       activated: false,
-      focused: false
+      focused: false,
+      previousCursorPosition: null
     };
   },
 
@@ -37,6 +38,28 @@ var AppListFilterComponent = React.createClass({
     this.updateFilterText();
   },
 
+  shouldComponentUpdate: function (nextProps, nextState) {
+    return this.state.filterText !== nextState.filterText;
+  },
+
+  restorePreviousCursorPosition: function () {
+    var position = this.state.previousCursorPosition;
+    if (position != null) {
+      React.findDOMNode(this.refs.filterText)
+          .setSelectionRange(position.start, position.end);
+    }
+  },
+
+  setCurrentCursorPosition: function () {
+    var input = React.findDOMNode(this.refs.filterText);
+    this.setState({
+      previousCursorPosition: {
+        start: input.selectionStart,
+        end: input.selectionEnd
+      }
+    });
+  },
+
   setQueryParam: function (filterText) {
     var router = this.context.router;
 
@@ -46,6 +69,7 @@ var AppListFilterComponent = React.createClass({
       Object.assign(queryParams, {
         filterText: encodeURIComponent(filterText)
       });
+      this.setCurrentCursorPosition();
     } else {
       delete queryParams.filterText;
     }
@@ -69,7 +93,7 @@ var AppListFilterComponent = React.createClass({
       this.setState({
         filterText: filterText,
         activated: filterText !== "" || state.focused
-      });
+      }, this.restorePreviousCursorPosition);
       this.props.onChange(filterText);
     }
   },
