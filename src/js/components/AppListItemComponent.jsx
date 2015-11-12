@@ -32,7 +32,6 @@ var AppListItemComponent = React.createClass({
       window.addEventListener("focus", this.handleResize);
     }
     this.updateNumberOfVisibleLabels();
-
   },
 
   componentDidUpdate: function (prevProps) {
@@ -74,7 +73,7 @@ var AppListItemComponent = React.createClass({
     var labels = this.props.model.labels;
 
     if (labels == null || Object.keys(labels).length === 0) {
-      return null;
+      return;
     }
 
     let refs = this.refs;
@@ -111,7 +110,6 @@ var AppListItemComponent = React.createClass({
 
   getLabels: function () {
     var labels = this.props.model.labels;
-
     if (labels == null || Object.keys(labels).length === 0) {
       return null;
     }
