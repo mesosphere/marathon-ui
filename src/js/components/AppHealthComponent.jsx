@@ -50,16 +50,16 @@ var AppHealthComponent = React.createClass({
       return (
         <div
           className="loading-bar"
-          ref="loading-bar"
-          key="loading-bar"
+          ref="loadingBar"
+          key="loadingBar"
           data-behavior="show-tip"
           data-tip-type-class="default"
           data-tip-place="top"
           data-tip-content="deploying"
           onMouseOver=
-            {this.handleMouseOverHealthBar.bind(null, "loading-bar")}
+            {this.handleMouseOverHealthBar.bind(null, "loadingBar")}
           onMouseOut=
-            {this.handleMouseOutHealthBar.bind(null, "loading-bar")} />
+            {this.handleMouseOutHealthBar.bind(null, "loadingBar")} />
       );
     }
 
