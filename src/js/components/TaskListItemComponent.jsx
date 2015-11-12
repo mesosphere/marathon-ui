@@ -88,19 +88,14 @@ var TaskListItemComponent = React.createClass({
     });
 
     var healthClassSet = classNames({
-      "health-dot": true,
-      "health-dot-error": taskHealth === HealthStatus.UNHEALTHY,
-      "health-dot-success": taskHealth === HealthStatus.HEALTHY,
-      "health-dot-unknown": taskHealth === HealthStatus.UNKNOWN
+      "hidden": !hasHealth,
+      "sick": taskHealth === HealthStatus.UNHEALTHY,
+      "healthy": taskHealth === HealthStatus.HEALTHY,
+      "unknown": taskHealth === HealthStatus.UNKNOWN
     });
 
     var statusClassSet = classNames({
       "text-warning": task.status === TaskStatus.STAGED
-    });
-
-    var hasHealthClassSet = classNames({
-      "text-center": true,
-      "hidden": !hasHealth
     });
 
     var updatedAtNodeClassSet = classNames({
@@ -126,6 +121,9 @@ var TaskListItemComponent = React.createClass({
           <br />
           {buildTaskAnchors(task)}
         </td>
+        <td className={healthClassSet} title={this.props.taskHealthMessage}>
+          {this.props.taskHealthMessage}
+        </td>
         <td className="text-center">
           <span className={statusClassSet}>
             {task.status}
@@ -143,9 +141,6 @@ var TaskListItemComponent = React.createClass({
               title={updatedAtISO}>
             {updatedAtLocal}
           </time>
-        </td>
-        <td className={hasHealthClassSet} title={this.props.taskHealthMessage}>
-            <span className={healthClassSet} />
         </td>
       </tr>
     );

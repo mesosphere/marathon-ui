@@ -174,7 +174,8 @@ describe("Task List Item component", function () {
     this.renderer = TestUtils.createRenderer();
     this.renderer.render(<TaskListItemComponent
       appId={"/app-1"}
-      hasHealth={false}
+      hasHealth={true}
+      taskHealthMessage="Healthy"
       isActive={false}
       onToggle={()=>{}}
       task={model} />);
@@ -192,34 +193,36 @@ describe("Task List Item component", function () {
     expect(cellContent).to.equal("task-123");
   });
 
+  it("has correct health sate", function () {
+    var cellContent =
+      ShallowUtils.getText(this.component.props.children[2]);
+
+    expect(cellContent).to.equal("Healthy");
+  });
+
   it("has the correct status", function () {
     var cellContent =
-      ShallowUtils.getText(this.component.props.children[2].props.children);
+      ShallowUtils.getText(this.component.props.children[3].props.children);
 
     expect(cellContent).to.equal("status-0");
   });
 
   it("has the correct version", function () {
     var cellContent =
-      this.component.props.children[3].props.children.props;
+      this.component.props.children[4].props.children.props;
 
     expect(cellContent.title).to.equal("2015-06-29T13:54:24.171Z");
   });
 
   it("has the correct update timestamp", function () {
     var cellContent =
-      this.component.props.children[4].props.children.props;
+      this.component.props.children[5].props.children.props;
 
     expect(cellContent.title).to.equal("2015-06-29T14:11:58.709Z");
     expect(cellContent.dateTime).to.equal("2015-06-29T14:11:58.709Z");
   });
 
-  it("has a health dot", function () {
-    var cell =
-      this.component.props.children[5].props.children.props.className;
 
-    expect(cell).to.equal("health-dot");
-  });
 
 });
 

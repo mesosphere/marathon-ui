@@ -128,7 +128,6 @@ var TaskListComponent = React.createClass({
     });
 
     var hasHealthClassSet = classNames({
-      "text-center": true,
       "hidden": !hasHealth
     });
 
@@ -149,7 +148,7 @@ var TaskListComponent = React.createClass({
             {`Error fetching tasks. ${Messages.FORBIDDEN}`}
           </p>
         </div>
-        <table className="table table-unstyled">
+        <table className="table table-unstyled task-list">
           <thead>
             <tr>
               <th
@@ -165,6 +164,12 @@ var TaskListComponent = React.createClass({
                 <span onClick={this.sortBy.bind(null, "id")}
                       className={headerClassSet}>
                   ID {this.getCaret("id")}
+                </span>
+              </th>
+              <th className={hasHealthClassSet}>
+                <span onClick={this.sortBy.bind(null, "healthStatus")}
+                  className={headerClassSet}>
+                  Health {this.getCaret("healthStatus")}
                 </span>
               </th>
               <th className="text-center">
@@ -186,12 +191,6 @@ var TaskListComponent = React.createClass({
                   {this.getCaret("updatedAt")} Updated
                 </span>
               </th>
-                <th className={hasHealthClassSet}>
-                  <span onClick={this.sortBy.bind(null, "healthStatus")}
-                        className={headerClassSet}>
-                    {this.getCaret("healthStatus")} Health
-                  </span>
-                </th>
             </tr>
           </thead>
           <tbody>
