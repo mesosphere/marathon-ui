@@ -43,8 +43,8 @@ var AppHealthComponent = React.createClass({
   },
 
   getHealthBar: function () {
-    var health = this.props.model.health;
-    var status = this.props.model.status;
+    var props = this.props;
+    var {health, status} = props.model;
 
     if (status === AppStatus.DEPLOYING) {
       return (
