@@ -1,10 +1,18 @@
+## Unversioned
+### Added
+
+### Changed
+
+### Fixed
+- \#2626 - Status icons are rendered blotted
+
 ## 0.13.3 - 2015-11-10
 ### Changed
 - Introduced a maximum width for labels in the app list.
 
 ### Fixed
 - \#2593 - Very long labels expand horizontal scrollbar in app list
-- \#2615 - Keep input focus position when updating the Filter bar 
+- \#2615 - Keep input focus position when updating the Filter bar
 
 ## 0.13.2 - 2015-11-09
 ### Fixed
@@ -20,9 +28,6 @@ with our release infrastructure. No other changes were made since 0.13.0.
 
 ## 0.13.0 - 2015-11-04
 ### Added
-- \#2031 - Make keyboard shortcuts discoverable
-- \#2434 - Create keyboard shortcut for focusing on the search field
-- \#2500 - Add a link to API-Doc in the UI
 - A filter sidebar is introduced with the ability to combine filters
   or clear them.
   * Filter by application status
@@ -35,6 +40,9 @@ with our release infrastructure. No other changes were made since 0.13.0.
 - Endpoints are shown in the tasks detail page
 - A group route is introduced to display the contents of a group in the
   application list
+- \#2031 - Make keyboard shortcuts discoverable
+- \#2434 - Create keyboard shortcut for focusing on the search field
+- \#2500 - Add a link to API-Doc in the UI
 
 ### Changed
 This version introduces major changes to the layout. In particular, the
