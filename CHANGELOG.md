@@ -2,6 +2,7 @@
 ### Added
 - Prefill ID field with group structure in app creation modal
 - Show an animated loading bar on app deployment status
+- Show all labels inside a dropdown menu revealed on click
 
 ### Changed
 - Adjust the task list column order
