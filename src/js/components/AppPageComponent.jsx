@@ -18,6 +18,7 @@ var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
+var TaskHealthBreakdownComponent = require("./AppHealthBreakdownComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
@@ -458,6 +459,9 @@ var AppPageComponent = React.createClass({
             <AppStatusComponent model={model} showSummary={true} />
             <div className="app-health-detail">
               <AppHealthComponent model={model} />
+              <TaskHealthBreakdownComponent
+                fields={["healthy", "unhealthy", "unknown"]}
+                model={model} />
             </div>
             {this.getControls()}
           </div>
