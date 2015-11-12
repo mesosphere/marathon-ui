@@ -4,6 +4,7 @@ var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
+var AppHealthComponent = require("./AppHealthComponent");
 var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
@@ -455,6 +456,9 @@ var AppPageComponent = React.createClass({
           <div className="page-header">
             <h1>{name}</h1>
             <AppStatusComponent model={model} showSummary={true} />
+            <div className="app-health-detail">
+              <AppHealthComponent model={model} />
+            </div>
             {this.getControls()}
           </div>
           {content}
