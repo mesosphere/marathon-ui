@@ -95,7 +95,10 @@ var AppListFilterComponent = React.createClass({
         filterText: filterText,
         activated: filterText !== "" || state.focused
       }, this.restorePreviousCursorPosition);
-      this.props.onChange(filterText);
+
+      this.props.onChange({
+        filterText: filterText
+      });
     }
   },
 

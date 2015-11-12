@@ -1,19 +1,15 @@
-var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppListFilterComponent = require("../components/AppListFilterComponent");
-var AppListLabelsFilterComponent =
-  require("../components/AppListLabelsFilterComponent");
-var AppListStatusFilterComponent =
-  require("../components/AppListStatusFilterComponent");
 var AppListComponent = require("../components/AppListComponent");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var DeploymentsListComponent =
   require("../components/DeploymentsListComponent");
+var SidebarComponent = require("../components/SidebarComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
-var AppListViewTypes = require("../constants/AppListViewTypes");
 
+var AppListViewTypes = require("../constants/AppListViewTypes");
 var tabs = require("../constants/tabs");
 
 var TabPanesComponent = React.createClass({
@@ -26,10 +22,7 @@ var TabPanesComponent = React.createClass({
   getInitialState: function () {
     return {
       currentGroup: "/",
-      filterText: "",
-      filterLabels: [],
-      filterStatus: [],
-      filterTypes: []
+      filters: {}
     };
   },
 
@@ -56,28 +49,8 @@ var TabPanesComponent = React.createClass({
     });
   },
 
-  updateFilterText: function (filterText) {
-    this.setState({
-      filterText: filterText
-    });
-  },
-
-  updateFilterLabels: function (filterLabels) {
-    this.setState({
-      filterLabels: filterLabels
-    });
-  },
-
-  updateFilterStatus: function (filterStatus) {
-    this.setState({
-      filterStatus: filterStatus
-    });
-  },
-
-  updateFilterTypes: function (filterTypes) {
-    this.setState({
-      filterTypes: filterTypes
-    });
+  updateFilters: function (filters) {
+    this.setState(Object.assign(this.state.filters, filters));
   },
 
   getTabId: function () {
@@ -92,80 +65,26 @@ var TabPanesComponent = React.createClass({
     return tabs[0].id;
   },
 
-  getClearLinkForFilter: function (filterQueryParamKey) {
-    var state = this.state;
-
-    if (state[filterQueryParamKey].length === 0) {
-      return null;
-    }
-
-    let router = this.context.router;
-    let currentPathname = router.getCurrentPathname();
-    let query = Object.assign({}, router.getCurrentQuery());
-    let params = router.getCurrentParams();
-
-    if (query[filterQueryParamKey] != null) {
-      delete query[filterQueryParamKey];
-    }
-
-    return (
-      <Link to={currentPathname} query={query} params={params}>
-        Clear
-      </Link>
-    );
-  },
-
   render: function () {
-    var path = this.context.router.getCurrentPathname();
     var state = this.state;
 
-    var appListProps = {
+    var appListProps = Object.assign({
       currentGroup: state.currentGroup,
-      filterText: state.filterText,
-      filterLabels: state.filterLabels,
-      filterTypes: state.filterTypes,
-      filterStatus: state.filterStatus,
       viewType: AppListViewTypes.LIST
-    };
-
-    var newAppModalQuery = {
-      modal: "new-app"
-    };
-
-    if (state.currentGroup != null && state.currentGroup !== "/") {
-      newAppModalQuery.groupId = state.currentGroup;
-    }
+    }, state.filters);
 
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
           className="container-fluid content">
         <TabPaneComponent id={tabs[0].id} className="flex-container">
           <div className="wrapper">
-            <nav className="sidebar">
-              <Link to={path}
-                query={newAppModalQuery}
-                className="btn btn-success create-app"
-                activeClassName="create-app-active">
-                Create
-              </Link>
-              <div className="flex-row">
-                <h3 className="small-caps">Status</h3>
-                {this.getClearLinkForFilter("filterStatus")}
-              </div>
-              <AppListStatusFilterComponent
-                onChange={this.updateFilterStatus} />
-              <div className="flex-row">
-                <h3 className="small-caps">Label</h3>
-                {this.getClearLinkForFilter("filterLabels")}
-              </div>
-              <AppListLabelsFilterComponent
-                onChange={this.updateFilterLabels} />
-            </nav>
+            <SidebarComponent groupId={state.currentGroup}
+              onChange={this.updateFilters} />
             <main>
               <div className="contextual-bar">
                 <BreadcrumbComponent groupId={state.currentGroup} />
                 <div className="app-list-controls">
-                  <AppListFilterComponent onChange={this.updateFilterText}/>
+                  <AppListFilterComponent onChange={this.updateFilters} />
                 </div>
               </div>
               <AppListComponent {...appListProps} />
