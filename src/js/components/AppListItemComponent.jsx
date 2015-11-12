@@ -1,4 +1,5 @@
 var classNames = require("classnames");
+var OnClickOutsideMixin = require("react-onclickoutside");
 var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
@@ -9,6 +10,8 @@ var DOMUtil = require("../helpers/DOMUtil");
 
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
+
+  mixins: [OnClickOutsideMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -21,7 +24,8 @@ var AppListItemComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      numberOfVisibleLabels: -1
+      numberOfVisibleLabels: -1,
+      isLabelsDropdownShown: false
     };
   },
 
@@ -49,12 +53,14 @@ var AppListItemComponent = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
+    var state = this.state;
     if (nextState.numberOfVisibleLabels === -1 && !this.props.model.isGroup) {
       this.updateNumberOfVisibleLabels();
       return false;
     }
 
-    if (this.state.numberOfVisibleLabels !== nextState.numberOfVisibleLabels) {
+    if (state.numberOfVisibleLabels !== nextState.numberOfVisibleLabels ||
+      state.isLabelsDropdownShown !== nextState.isLabelsDropdownShown) {
       return true;
     }
 
@@ -64,6 +70,12 @@ var AppListItemComponent = React.createClass({
   didPropsChange: function (newProps) {
     return !Util.compareProperties(this.props.model, newProps.model, "status",
       "tasksRunning", "health", "totalMem", "totalCpus", "instances", "labels");
+  },
+
+  handleClickOutside: function () {
+    this.setState({
+      isLabelsDropdownShown: false
+    });
   },
 
   handleResize: function () {
@@ -116,12 +128,14 @@ var AppListItemComponent = React.createClass({
       return null;
     }
 
-    let numberOfVisibleLabels = this.state.numberOfVisibleLabels;
-    let nodes = Object.keys(labels).sort().map(function (key, i) {
-      if (key == null || Util.isEmptyString(key)) {
-        return null;
-      }
+    let state = this.state;
+    let numberOfVisibleLabels = state.numberOfVisibleLabels;
 
+    let labelKeys = Object.keys(labels).filter(function (key) {
+      return (key != null && !Util.isEmptyString(key));
+    }).sort();
+
+    let visibleNodes = labelKeys.map(function (key, i) {
       let labelText = key;
       if (!Util.isEmptyString(labels[key])) {
         labelText = `${key}:${labels[key]}`;
@@ -140,26 +154,55 @@ var AppListItemComponent = React.createClass({
     });
 
     let moreLabelClassName = classNames("more", {
-      "visible": Object.keys(labels).length > numberOfVisibleLabels
+      "visible": labelKeys.length > numberOfVisibleLabels
     });
+
+    let labelsDropdownClassName = classNames("labels-dropdown", {
+      "visible": state.isLabelsDropdownShown &&
+        labelKeys.length > numberOfVisibleLabels
+    });
+
+    let allNodes = labelKeys.map(function (key, i) {
+      let labelText = key;
+      if (!Util.isEmptyString(labels[key])) {
+        labelText = `${key}:${labels[key]}`;
+      }
+
+      return (
+        <li key={i} title={labelText}>
+          <span className="label visible">
+            {labelText}
+          </span>
+        </li>
+      );
+    });
+
+    let labelsDropdown = (
+      <div className={labelsDropdownClassName}>
+        <h5>All Labels</h5>
+        <ul>
+          {allNodes}
+        </ul>
+      </div>
+    );
 
     return (
       <div className="labels" ref="labels">
-        {nodes}
+        {visibleNodes}
         <span className={moreLabelClassName}
             onClick={this.handleMoreLabelClick}
             ref="moreLabel">
           &hellip;
         </span>
+        {labelsDropdown}
       </div>
     );
   },
 
   handleMoreLabelClick: function (event) {
     event.stopPropagation();  // Prevent this.onClick being called
-    this.context.router.transitionTo("appView", {
-      appId: encodeURIComponent(this.props.model.id),
-      view: "configuration"
+    this.setState({
+      isLabelsDropdownShown: !this.state.isLabelsDropdownShown
     });
   },
 
@@ -210,7 +253,7 @@ var AppListItemComponent = React.createClass({
         <td className="icon-cell">
           {this.getIcon()}
         </td>
-        <td className="overflow-ellipsis name-cell" title={model.id}
+        <td className="name-cell" title={model.id}
             ref="nameCell">
           <span className="name" ref="nameNode">{name}</span>
           {this.getLabels()}
