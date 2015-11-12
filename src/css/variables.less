@@ -2,34 +2,38 @@
  * Colors
  * ==============
  */
-
-//@todo: mesosphere/marathon#2288
 @brand-primary: #2568F5;
 @sidebar-bg-color: #2A2D30;
 @sidebar-heading-color: #5E646C;
 @navbar-inactive-color: #8E929B;
-@navbar-active-color: #ffffff;
+@navbar-active-color: #FFFFFF;
 @btn-default-border-color: #5E646C;
-@btn-default-text-color: #ffffff;
-@btn-default-active-bg-color: #5e646c;
-@btn-default-active-text-color: #ffffff;
+@btn-default-text-color: #FFFFFF;
+@btn-default-active-bg-color: #5E646C;
+@btn-default-active-text-color: #FFFFFF;
 @breadcrumb-text-color: #C3C9D7;
 @checkbox-active-color: #2568F5;
-@link-color: #ffffff;
-@dropdown-bg-color: #ffffff;
+@link-color: #FFFFFF;
+@dropdown-bg-color: #FFFFFF;
 @dropdown-separator-color: #DADCDE;
-@table-header-color:#46494D;
-@table-highlight-color:#3A3C40;
-@table-border-color:#3C3F43;
-@table-text-color:#8E929B;
-@app-status-waiting-color: #e4f342;
-@app-status-deploying-color: #e4f342;
+@table-header-color: #46494D;
+@table-highlight-color: #3A3C40;
+@table-border-color: #3C3F43;
+@table-text-color: #8E929B;
+@app-status-waiting-color: #E4F342;
+@app-status-deploying-color: #E4F342;
 @app-status-running-color: #2568F5;
 @app-status-delayed-color: #F04F42;
 @app-status-suspended-color: @table-text-color;
 @task-health-healthy-color: #00D99C;
 @task-health-sick-color: #FD5B77;
 @task-health-unknown-color: @table-text-color;
+@health-bar-inner-color: #2A2C31;
+@health-bar-over-capacity-color: #4CA0FF;
+@health-bar-unhealthy-color: #FF7D64;
+@health-bar-staged-color: #FFF57A;
+@health-bar-healthy-color: #29F6A0;
+@health-bar-running-color: #8E929B;
 
 /* ==============
  * Layout
@@ -45,7 +49,8 @@
  * ==============
  */
 @base-font-size: 14px;
-@base-line-height: unit(16/@base-font-size); // 16px relative to the base font size
+@base-line-height:
+  unit(16/@base-font-size); // 16px relative to the base font size
 @font-size-h1: 26px;
 @font-size-h2: 18px;
 @font-size-h3: 14px;
@@ -90,3 +95,9 @@
 @app-list-name-width: 150px;
 @app-list-labels-breakpoint: 950px + @app-list-name-width;
 @app-list-label-width: 100px;
+
+/* ==============
+ * Health Bar
+ * ==============
+ */
+ @health-bar-width: 140px;
