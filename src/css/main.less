@@ -27,7 +27,8 @@
  */
 
 body {
-  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family:
+    'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background-color: #323539;
   color: #f6f6f6;
   // Overwrite default bootstrap line height
@@ -222,7 +223,8 @@ a:focus {
 
     &:before {
 
-      line-height: floor(floor(@icon-mini-height * @icon-mini-scale) + (@icon-mini-offset * @icon-mini-scale));
+      line-height: floor(floor(@icon-mini-height * @icon-mini-scale)
+        + (@icon-mini-offset * @icon-mini-scale));
 
     }
 
@@ -264,7 +266,8 @@ a:focus {
 
     &:before {
 
-      line-height: floor(floor(@icon-small-height * @icon-small-scale) + (@icon-small-offset * @icon-small-scale));
+      line-height: floor(floor(@icon-small-height * @icon-small-scale)
+        + (@icon-small-offset * @icon-small-scale));
 
     }
 
@@ -289,7 +292,8 @@ a:focus {
 
     &:before {
 
-      line-height: floor(floor(@icon-medium-height * @icon-medium-scale) + (@icon-medium-offset * @icon-medium-scale));
+      line-height: floor(floor(@icon-medium-height * @icon-medium-scale)
+        + (@icon-medium-offset * @icon-medium-scale));
 
     }
 
@@ -304,7 +308,8 @@ a:focus {
 
     &:before {
 
-      line-height: floor(floor(@icon-large-height * @icon-large-scale) + (@icon-large-offset * @icon-large-scale));
+      line-height: floor(floor(@icon-large-height * @icon-large-scale)
+        + (@icon-large-offset * @icon-large-scale));
 
     }
 
@@ -1423,7 +1428,8 @@ fieldset[disabled] .btn-info.active {
   label::before {
     border: 1px solid @btn-default-text-color;
     content: "";
-    transition: border @transition-fast ease-in-out, color @transition-fast ease-in-out;
+    transition: border @transition-fast ease-in-out,
+      color @transition-fast ease-in-out;
   }
 }
 
