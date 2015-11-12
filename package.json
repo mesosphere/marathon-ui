@@ -25,6 +25,7 @@
     "react-onclickoutside": "^0.3.1",
     "react-router": "^0.13.3",
     "react-tools": "^0.13.2",
+    "reactjs-components": "0.0.17",
     "underscore": "^1.7.0"
   },
   "devDependencies": {
