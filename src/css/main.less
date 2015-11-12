@@ -921,14 +921,16 @@ fieldset[disabled] .btn-info.active {
   vertical-align: middle;
 }
 
-.health-bar-column .health-bar {
+.health-bar {
   width: 100%;
-  max-width: @health-bar-width;
   display: inline-block;
   height: @base-spacing-unit;
   margin-bottom: 2px;
   background-color: @health-bar-inner-color;
   border-radius: 4px;
+}
+.health-bar-column .health-bar {
+  max-width: @health-bar-width;
 }
 
 .health-bar-inner {
