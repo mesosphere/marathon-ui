@@ -89,7 +89,7 @@ var TaskListItemComponent = React.createClass({
 
     var healthClassSet = classNames({
       "hidden": !hasHealth,
-      "sick": taskHealth === HealthStatus.UNHEALTHY,
+      "unhealthy": taskHealth === HealthStatus.UNHEALTHY,
       "healthy": taskHealth === HealthStatus.HEALTHY,
       "unknown": taskHealth === HealthStatus.UNKNOWN
     });
