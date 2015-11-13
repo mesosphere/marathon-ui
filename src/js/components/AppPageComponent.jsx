@@ -448,6 +448,12 @@ var AppPageComponent = React.createClass({
     var groupId = PathUtil.getGroupFromAppId(state.appId);
     var name = PathUtil.getAppName(state.appId);
 
+    var appHealthBreakdownFields = [
+      {label: "Healthy", key: "healthy", state: HealthStatus.HEALTHY},
+      {label: "Unhealthy", key: "unhealthy", state: HealthStatus.UNHEALTHY},
+      {label: "Unknown", key: "unknown", state: HealthStatus.UNKNOWN}
+    ];
+
     return (
       <div>
         <BreadcrumbComponent groupId={groupId}
@@ -460,7 +466,7 @@ var AppPageComponent = React.createClass({
             <div className="app-health-detail">
               <AppHealthComponent model={model} />
               <TaskHealthBreakdownComponent
-                fields={["healthy", "unhealthy", "unknown"]}
+                fields={appHealthBreakdownFields}
                 model={model} />
             </div>
             {this.getControls()}
