@@ -95,14 +95,14 @@ var AppListItemLabelsComponent = React.createClass({
     }
 
     if (offsetTop >= viewportHeight) {
-      dropdownNode.style.marginTop =
-        `-${height - _initialTopMargins[id] * 2}px`;
-      leftArrowNode.style.marginTop =
-        `${height - _initialTopMargins[id] * 2}px`;
+      const marginTop = height - _initialTopMargins[id] * 2;
+      dropdownNode.style.marginTop = `-${marginTop}px`;
+      leftArrowNode.style.marginTop = `${marginTop}px`;
       _reversedDropdowns[id] = true;
     } else {
-      dropdownNode.style.marginTop = `-${_initialTopMargins[id]}px`;
-      leftArrowNode.style.marginTop = `${_initialTopMargins[id]}px`;
+      const marginTop = _initialTopMargins[id];
+      dropdownNode.style.marginTop = `-${marginTop}px`;
+      leftArrowNode.style.marginTop = `${marginTop}px`;
       _reversedDropdowns[id] = false;
     }
   },
