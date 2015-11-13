@@ -2,6 +2,8 @@
 ### Added
 - Prefill ID field with group structure in app creation modal
 - Show an animated loading bar on app deployment status
+- A detailed breakdown of the health status of each instance is shown on the
+  app detail page.
 - Show all labels inside a dropdown menu revealed on click
 
 ### Changed

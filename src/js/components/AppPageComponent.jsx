@@ -4,6 +4,7 @@ var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
+var AppHealthComponent = require("./AppHealthComponent");
 var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
@@ -17,6 +18,7 @@ var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
+var AppHealthBreakdownComponent = require("./AppHealthBreakdownComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
@@ -446,6 +448,12 @@ var AppPageComponent = React.createClass({
     var groupId = PathUtil.getGroupFromAppId(state.appId);
     var name = PathUtil.getAppName(state.appId);
 
+    var appHealthBreakdownFields = [
+      {label: "Healthy", key: "healthy", state: HealthStatus.HEALTHY},
+      {label: "Unhealthy", key: "unhealthy", state: HealthStatus.UNHEALTHY},
+      {label: "Unknown", key: "unknown", state: HealthStatus.UNKNOWN}
+    ];
+
     return (
       <div>
         <BreadcrumbComponent groupId={groupId}
@@ -455,6 +463,12 @@ var AppPageComponent = React.createClass({
           <div className="page-header">
             <h1>{name}</h1>
             <AppStatusComponent model={model} showSummary={true} />
+            <div className="app-health-detail">
+              <AppHealthComponent model={model} />
+              <AppHealthBreakdownComponent
+                fields={appHealthBreakdownFields}
+                model={model} />
+            </div>
             {this.getControls()}
           </div>
           {content}
