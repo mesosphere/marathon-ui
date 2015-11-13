@@ -66,7 +66,7 @@ var AppListItemLabelsComponent = React.createClass({
     }
 
     let height = dropdownNode.offsetHeight;
-    let vh = document.documentElement.clientHeight;
+    let viewportHeight = document.documentElement.clientHeight;
     let offsetTop = 0;
 
     if (dropdownNode.dataset.dropdownReversed != null) {
@@ -75,7 +75,7 @@ var AppListItemLabelsComponent = React.createClass({
       offsetTop = dropdownNode.getBoundingClientRect().top + height;
     }
 
-    if (offsetTop >= vh) {
+    if (offsetTop >= viewportHeight) {
       dropdownNode.style.marginTop = `-${height - this.initialMarginTop * 2}px`;
       leftArrowNode.style.marginTop = `${height - this.initialMarginTop * 2}px`;
       dropdownNode.dataset.dropdownReversed = 1;
