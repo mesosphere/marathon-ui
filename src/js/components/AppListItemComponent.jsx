@@ -180,7 +180,7 @@ var AppListItemComponent = React.createClass({
         <td className="icon-cell">
           {this.getIcon()}
         </td>
-        <td className="name-cell" title={model.id}
+        <td className="overflow-ellipsis name-cell" title={model.id}
             ref="nameCell">
           <span className="name" ref="nameNode">{name}</span>
           {this.getLabels()}
