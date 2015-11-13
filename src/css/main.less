@@ -135,10 +135,10 @@ a:focus {
   border-bottom: none;
   margin-top: 0;
   margin-bottom: 0;
-  padding: @base-spacing-unit*3 0;
+  padding: @base-spacing-unit*3 0 @base-spacing-unit * 1.5;
 
   h1 {
-    margin: 0 0 @base-spacing-unit 0;
+    margin: 0 0 @base-spacing-unit * 1.5 0;
     padding: 0;
     line-height: @base-spacing-unit*4;
   }
@@ -528,6 +528,18 @@ a:focus {
     color: @navbar-inactive-color;
     margin-left: @horizontal-spacing-unit;
   }
+}
+
+.page-header .app-status {
+  font-size: @font-size-icon;
+  line-height: @base-font-size;
+  font-weight: bold;
+  .tasks-summary {
+    margin: @base-spacing-unit * 0.25 0 0 @horizontal-spacing-unit;
+    font-size: @base-font-size;;
+    font-weight: normal;
+  }
+
 }
 
 /* ==============
@@ -1620,7 +1632,7 @@ h3.small-caps {
 }
 
 .app-health-detail {
-  margin: @base-spacing-unit * 2 0;
+  margin: @base-spacing-unit * 2.5 0;
   vertical-align: middle;
   display: flex;
   align-items: center;
