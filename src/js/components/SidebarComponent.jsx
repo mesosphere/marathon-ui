@@ -27,23 +27,9 @@ var SidebarComponent = React.createClass({
     };
   },
 
-  updateFilterLabels: function (filterLabels) {
-    var state = this.state;
-
-    var filters = Object.assign({}, state.filters, {
-      filterLabels: filterLabels
-    });
-
-    this.setState({
-      filters: filters
-    }, this.props.onChange(filters));
-  },
-
-  updateFilterStatus: function (filterStatus) {
-    var state = this.state;
-
-    var filters = Object.assign({}, state.filters, {
-      filterStatus: filterStatus
+  updateFilter: function (filterName, filter) {
+    var filters = Object.assign({}, this.state.filters, {
+      [filterName]: filter
     });
 
     this.setState({
@@ -99,13 +85,13 @@ var SidebarComponent = React.createClass({
           {this.getClearLinkForFilter("filterStatus")}
         </div>
         <AppListStatusFilterComponent
-          onChange={this.updateFilterStatus} />
+          onChange={this.updateFilter.bind(null, "filterStatus")} />
         <div className="flex-row">
           <h3 className="small-caps">Label</h3>
           {this.getClearLinkForFilter("filterLabels")}
         </div>
         <AppListLabelsFilterComponent
-          onChange={this.updateFilterLabels} />
+          onChange={this.updateFilter.bind(null, "filterLabels")} />
       </nav>
     );
   }
