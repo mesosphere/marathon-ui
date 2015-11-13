@@ -4,10 +4,13 @@ var React = require("react/addons");
 var OnClickOutsideMixin = require("react-onclickoutside");
 var Util = require("../helpers/Util");
 
+// Keep track of post-render initial margin value, on a per-reactid basis
+var _initialTopMargins = [];
+// Keep track of reversed dropdown state without modifying the DOM
+var _reversedDropdowns = [];
+
 var AppListItemLabelsComponent = React.createClass({
   displayName: "AppListItemLabelsComponent",
-
-  initialMarginTop: null,
 
   mixins: [OnClickOutsideMixin],
 
@@ -23,10 +26,24 @@ var AppListItemLabelsComponent = React.createClass({
     };
   },
 
+  componentDidMount: function () {
+    var id = React.findDOMNode(this.refs.labelsDropdown)
+      .attributes["data-reactid"].value;
+    _initialTopMargins[id] = null;
+    _reversedDropdowns[id] = false;
+  },
+
   componentDidUpdate: function () {
     if (this.state.isDropdownVisible === true) {
       this.recalculateDropdownPosition();
     }
+  },
+
+  componentWillUnmount: function () {
+    var id = React.findDOMNode(this.refs.labelsDropdown)
+      .attributes["data-reactid"].value;
+    delete _initialTopMargins[id];
+    delete _reversedDropdowns[id];
   },
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -60,29 +77,33 @@ var AppListItemLabelsComponent = React.createClass({
     let dropdownNode = React.findDOMNode(this.refs.labelsDropdown);
     let leftArrowNode = React.findDOMNode(this.refs.leftArrow);
 
+    let id = dropdownNode.attributes["data-reactid"].value;
+
     // First time the dropdown becomes visible: get its initial top offset
-    if (this.initialMarginTop == null) {
-      this.initialMarginTop = Math.abs(dropdownNode.offsetTop);
+    if (_initialTopMargins[id] == null) {
+      _initialTopMargins[id] = Math.abs(dropdownNode.offsetTop);
     }
 
     let height = dropdownNode.offsetHeight;
     let viewportHeight = document.documentElement.clientHeight;
     let offsetTop = 0;
 
-    if (dropdownNode.dataset.dropdownReversed != null) {
+    if (_reversedDropdowns[id] === true) {
       offsetTop = dropdownNode.getBoundingClientRect().bottom + height;
     } else {
       offsetTop = dropdownNode.getBoundingClientRect().top + height;
     }
 
     if (offsetTop >= viewportHeight) {
-      dropdownNode.style.marginTop = `-${height - this.initialMarginTop * 2}px`;
-      leftArrowNode.style.marginTop = `${height - this.initialMarginTop * 2}px`;
-      dropdownNode.dataset.dropdownReversed = 1;
+      dropdownNode.style.marginTop =
+        `-${height - _initialTopMargins[id] * 2}px`;
+      leftArrowNode.style.marginTop =
+        `${height - _initialTopMargins[id] * 2}px`;
+      _reversedDropdowns[id] = true;
     } else {
-      dropdownNode.style.marginTop = `-${this.initialMarginTop}px`;
-      leftArrowNode.style.marginTop = `${this.initialMarginTop}px`;
-      dropdownNode.removeAttribute("data-dropdown-reversed");
+      dropdownNode.style.marginTop = `-${_initialTopMargins[id]}px`;
+      leftArrowNode.style.marginTop = `${_initialTopMargins[id]}px`;
+      _reversedDropdowns[id] = false;
     }
   },
 
