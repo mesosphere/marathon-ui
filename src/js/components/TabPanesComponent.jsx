@@ -50,7 +50,10 @@ var TabPanesComponent = React.createClass({
   },
 
   updateFilters: function (filters) {
-    this.setState(Object.assign(this.state.filters, filters));
+    var filters = Object.assign({}, this.state.filters, filters);
+    this.setState({
+      filters: filters
+    });
   },
 
   getTabId: function () {

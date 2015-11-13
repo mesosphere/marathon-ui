@@ -30,17 +30,25 @@ var SidebarComponent = React.createClass({
   updateFilterLabels: function (filterLabels) {
     var state = this.state;
 
-    this.setState(Object.assign(state.filters, {
+    var filters = Object.assign({}, state.filters, {
       filterLabels: filterLabels
-    }), this.props.onChange(state.filters));
+    });
+
+    this.setState({
+      filters: filters
+    }, this.props.onChange(filters));
   },
 
   updateFilterStatus: function (filterStatus) {
     var state = this.state;
 
-    this.setState(Object.assign(state.filters, {
+    var filters = Object.assign({}, state.filters, {
       filterStatus: filterStatus
-    }), this.props.onChange(state.filters));
+    });
+
+    this.setState({
+      filters: filters
+    }, this.props.onChange(filters));
   },
 
   getClearLinkForFilter: function (filterQueryParamKey) {
