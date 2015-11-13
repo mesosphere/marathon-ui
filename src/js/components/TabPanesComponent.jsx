@@ -50,9 +50,9 @@ var TabPanesComponent = React.createClass({
   },
 
   updateFilters: function (filters) {
-    var filters = Object.assign({}, this.state.filters, filters);
+    var updatedFilters = Object.assign({}, this.state.filters, filters);
     this.setState({
-      filters: filters
+      filters: updatedFilters
     });
   },
 
