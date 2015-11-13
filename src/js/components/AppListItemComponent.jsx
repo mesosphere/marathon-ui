@@ -2,6 +2,8 @@ var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppHealthComponent = require("../components/AppHealthComponent");
+var AppListItemLabelsComponent =
+  require("../components/AppListItemLabelsComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
@@ -32,7 +34,6 @@ var AppListItemComponent = React.createClass({
       window.addEventListener("focus", this.handleResize);
     }
     this.updateNumberOfVisibleLabels();
-
   },
 
   componentDidUpdate: function (prevProps) {
@@ -74,7 +75,7 @@ var AppListItemComponent = React.createClass({
     var labels = this.props.model.labels;
 
     if (labels == null || Object.keys(labels).length === 0) {
-      return null;
+      return;
     }
 
     let refs = this.refs;
@@ -89,9 +90,11 @@ var AppListItemComponent = React.createClass({
 
     let labelsWidth = 0;
     let numberOfVisibleLabels = 0;
+    let labelNodes = React.findDOMNode(refs.labels).querySelectorAll(".label");
 
-    refs.labels.props.children[0].find((label) => {
-      labelsWidth += DOMUtil.getOuterWidth(React.findDOMNode(refs[label.ref]));
+    // labelNodes is not an Array, but a NodeList
+    [].forEach.call(labelNodes, function (label) {
+      labelsWidth += DOMUtil.getOuterWidth(label);
       if (labelsWidth > availableWidth) {
         return true;
       }
@@ -111,56 +114,23 @@ var AppListItemComponent = React.createClass({
 
   getLabels: function () {
     var labels = this.props.model.labels;
-
     if (labels == null || Object.keys(labels).length === 0) {
       return null;
     }
 
-    let numberOfVisibleLabels = this.state.numberOfVisibleLabels;
-    let nodes = Object.keys(labels).sort().map(function (key, i) {
-      if (key == null || Util.isEmptyString(key)) {
-        return null;
-      }
-
-      let labelText = key;
-      if (!Util.isEmptyString(labels[key])) {
-        labelText = `${key}:${labels[key]}`;
-      }
-
-      let labelClassName = classNames("label", {
-        "visible": i < numberOfVisibleLabels
-      });
-
-      return (
-        <span key={i} className={labelClassName} title={labelText}
-            ref={`label${i}`}>
-          {labelText}
-        </span>
-      );
-    });
-
-    let moreLabelClassName = classNames("more", {
-      "visible": Object.keys(labels).length > numberOfVisibleLabels
+    var moreLabelClassName = classNames("more", {
+      "visible": Object.keys(labels).length > this.state.numberOfVisibleLabels
     });
 
     return (
-      <div className="labels" ref="labels">
-        {nodes}
-        <span className={moreLabelClassName}
-            onClick={this.handleMoreLabelClick}
-            ref="moreLabel">
+     <AppListItemLabelsComponent ref="labels"
+          labels={this.props.model.labels}
+          numberOfVisibleLabels={this.state.numberOfVisibleLabels}>
+        <span className={moreLabelClassName} ref="moreLabel">
           &hellip;
         </span>
-      </div>
+     </AppListItemLabelsComponent>
     );
-  },
-
-  handleMoreLabelClick: function (event) {
-    event.stopPropagation();  // Prevent this.onClick being called
-    this.context.router.transitionTo("appView", {
-      appId: encodeURIComponent(this.props.model.id),
-      view: "configuration"
-    });
   },
 
   onClick: function () {
@@ -210,7 +180,7 @@ var AppListItemComponent = React.createClass({
         <td className="icon-cell">
           {this.getIcon()}
         </td>
-        <td className="overflow-ellipsis name-cell" title={model.id}
+        <td className="name-cell" title={model.id}
             ref="nameCell">
           <span className="name" ref="nameNode">{name}</span>
           {this.getLabels()}

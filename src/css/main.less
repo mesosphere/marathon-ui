@@ -393,6 +393,7 @@ a:focus {
 
       .labels {
         display: inline-block;
+        position: relative;
 
         .label, .more {
           position: fixed;
@@ -415,6 +416,57 @@ a:focus {
             position: relative;
             transform: translateX(0);
             visibility: inherit;
+          }
+        }
+
+        .more:hover {
+          background-color: @btn-default-active-bg-color;
+        }
+
+        .labels-dropdown {
+          background-color: @navbar-bg-color;
+          display: none;
+          left: 100%;
+          margin-left: @base-spacing-unit * 2;
+          margin-top: -@base-spacing-unit * 2;
+          position: absolute;
+          top: 0;
+          z-index: 1;
+
+          &.visible {
+            display: block;
+          }
+
+          > h5 {
+            color: @table-text-color;
+            padding: @base-spacing-unit * 2;
+            margin: 0;
+          }
+
+          > .left-arrow {
+            display: block;
+            border-top: @base-spacing-unit solid transparent;
+            border-bottom: @base-spacing-unit solid transparent;
+            border-right: @base-spacing-unit solid @navbar-bg-color;
+            height: 0;
+            margin-left: -@base-spacing-unit;
+            margin-top: @base-spacing-unit * 2;
+            position: absolute;
+            top: 0;
+            width: 0;
+          }
+
+          > ul {
+            padding: 0 @base-spacing-unit * 2;
+
+            li {
+              display: block;
+              margin: 0 0 @base-spacing-unit 0;
+
+              .label {
+                margin: 0;
+              }
+            }
           }
         }
       }
@@ -617,7 +669,7 @@ fieldset[disabled] .btn-info.active {
 }
 
 .navbar-inverse {
-  background-color: #222426;
+  background-color: @navbar-bg-color;
   border: none;
   margin: 0;
 }
@@ -1092,7 +1144,7 @@ fieldset[disabled] .btn-info.active {
   .panel-heading {
     color: @link-color;
   }
-  background-color: #222426;
+  background-color: @navbar-bg-color;
   border-radius: 0;
   border: none;
 
@@ -1223,7 +1275,7 @@ fieldset[disabled] .btn-info.active {
  * ==============
  */
 .tooltip {
-  background: #222426;
+  background: @navbar-bg-color;
   text-transform: capitalize;
 
   &.default {
