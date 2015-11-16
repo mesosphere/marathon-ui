@@ -35,26 +35,21 @@ function removeTasks(tasks, relatedAppId, taskIds) {
 }
 
 function getTaskHealth(task) {
-  var nullResult = true;
-  var health = false;
   var healthCheckResults = task.healthCheckResults;
 
-  if (healthCheckResults != null) {
-    health = lazy(healthCheckResults).every(function (hcr) {
+  if (healthCheckResults != null && healthCheckResults.length > 0) {
+    let isHealthy = healthCheckResults.every(function (hcr) {
       if (hcr.firstSuccess) {
-        nullResult = false;
         return hcr.alive;
       }
 
       return false;
     });
-  }
 
-  if (!health && nullResult) { // health check has not returned yet
+    return isHealthy ? HealthStatus.HEALTHY : HealthStatus.UNHEALTHY;
+  } else {
     return HealthStatus.UNKNOWN;
   }
-
-  return health ? HealthStatus.HEALTHY : HealthStatus.UNHEALTHY;
 }
 
 function setTaskStatus(task) {
