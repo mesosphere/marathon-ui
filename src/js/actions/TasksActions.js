@@ -49,7 +49,8 @@ var TasksActions = {
       .error(function (error) {
         AppDispatcher.dispatch({
           actionType: TasksEvents.DELETE_ERROR,
-          data: error
+          data: error,
+          taskIds: taskIds
         });
       });
   },
