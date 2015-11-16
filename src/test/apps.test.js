@@ -955,11 +955,18 @@ describe("App Page component", function () {
   });
 
   it("returns the right health message for failing tasks", function () {
-    var msg = this.element.getTaskHealthMessage("test-task-1");
+    var msg = this.element.getTaskHealthMessage("test-task-1", true);
     expect(msg).to.equal("Warning: Health check 'HTTP /' failed.");
   });
 
-  it("returns the right health message for tasks with unknown health", function () {
+  it("returns the right shorthand health message for failing tasks",
+      function () {
+    var msg = this.element.getTaskHealthMessage("test-task-1");
+    expect(msg).to.equal("Unhealthy");
+  });
+
+  it("returns the right health message for tasks with unknown health",
+      function () {
     var app = Util.extendObject(appScheme, {
       id: "/test-app-1",
       status: AppStatus.RUNNING,
