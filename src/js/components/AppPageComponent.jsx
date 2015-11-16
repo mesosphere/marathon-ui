@@ -23,6 +23,8 @@ var PathUtil = require("../helpers/PathUtil");
 var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
 var QueueStore = require("../stores/QueueStore");
+var TasksActions = require("../actions/TasksActions");
+var TasksEvents = require("../events/TasksEvents");
 
 var tabsTemplate = [
   {id: "apps/:appId", text: "Tasks"},
@@ -100,6 +102,7 @@ var AppPageComponent = React.createClass({
     AppsStore.on(AppsEvents.RESTART_APP_ERROR, this.onRestartAppError);
     AppsStore.on(AppsEvents.DELETE_APP_ERROR, this.onDeleteAppError);
     AppsStore.on(AppsEvents.DELETE_APP, this.onDeleteAppSuccess);
+    AppsStore.on(TasksEvents.DELETE_ERROR, this.onDeleteTaskError);
     QueueStore.on(QueueEvents.RESET_DELAY_ERROR, this.onResetDelayError);
     QueueStore.on(QueueEvents.RESET_DELAY, this.onResetDelaySuccess);
   },
@@ -216,6 +219,26 @@ var AppPageComponent = React.createClass({
 
   onDeleteAppSuccess: function () {
     this.context.router.transitionTo("apps");
+  },
+
+  onDeleteTaskError: function (errorMessage, statusCode, taskIds) {
+    if (statusCode === 409) {
+      let appId = this.state.appId;
+      const dialogId = DialogActions.
+      confirm(`Failed to kill task and scale ${appId}. If you want to stop any
+        current deployment of the app and force a new one to kill the task and
+        scale it, press the OK button.`);
+      DialogStore.handleUserResponse(dialogId, function () {
+        TasksActions.deleteTasksAndScale(appId, taskIds, true);
+      });
+    } else if (statusCode === 401) {
+      DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Not scaling: ${Messages.FORBIDDEN}`);
+    } else {
+      DialogActions.alert(`Not scaling:
+          ${errorMessage.message || errorMessage}`);
+    }
   },
 
   onResetDelaySuccess: function () {
