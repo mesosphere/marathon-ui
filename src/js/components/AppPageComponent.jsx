@@ -317,28 +317,23 @@ var AppPageComponent = React.createClass({
     }).join(" ");
   },
 
-  getTaskHealthMessage: function (taskId) {
+  getTaskHealthMessage: function (taskId, unhealthyDetails = false) {
     var task = AppsStore.getTask(this.state.appId, taskId);
 
     if (task === undefined) {
       return null;
     }
 
-    var msg;
-
     switch (task.healthStatus) {
       case HealthStatus.HEALTHY:
-        msg = "Healthy";
-        break;
+        return "Healthy";
       case HealthStatus.UNHEALTHY:
-        msg = this.getUnhealthyTaskMessage(task.healthCheckResults);
-        break;
+        return unhealthyDetails
+          ? this.getUnhealthyTaskMessage(task.healthCheckResults)
+          : "Unhealthy";
       default:
-        msg = "Unknown";
-        break;
+        return "Unknown";
     }
-
-    return msg;
   },
 
   getResetDelayButton: function () {
@@ -398,7 +393,7 @@ var AppPageComponent = React.createClass({
       <TaskDetailComponent
         appId={state.appId}
         fetchState={state.fetchState}
-        taskHealthMessage={this.getTaskHealthMessage(state.activeTaskId)}
+        taskHealthMessage={this.getTaskHealthMessage(state.activeTaskId, true)}
         hasHealth={Object.keys(model.healthChecks).length > 0}
         task={task} />
     );
