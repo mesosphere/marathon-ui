@@ -75,6 +75,7 @@ var AppListItemComponent = React.createClass({
     var labels = this.props.model.labels;
 
     if (labels == null || Object.keys(labels).length === 0) {
+      this.setState({numberOfVisibleLabels: 0});
       return;
     }
 
