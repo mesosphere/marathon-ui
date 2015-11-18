@@ -5,6 +5,7 @@
 - A detailed breakdown of the health status of each instance is shown on the
   app detail page.
 - Show all labels inside a dropdown menu revealed on click
+- Show application count on application status filters
 
 ### Changed
 - Adjust the task list column order
@@ -16,17 +17,14 @@
 - \#2634 - UI does not update/show the status correctly
 - \#1780 - When app is locked by deployment, deleting tasks via the UI does
 nothing
+- \#2615 - Keep input focus position when updating the Filter bar
 
 ## 0.13.3 - 2015-11-10
-### Added
-- Show application count on application status filters
-
 ### Changed
 - Introduced a maximum width for labels in the app list.
 
 ### Fixed
 - \#2593 - Very long labels expand horizontal scrollbar in app list
-- \#2615 - Keep input focus position when updating the Filter bar
 
 ## 0.13.2 - 2015-11-09
 ### Fixed
