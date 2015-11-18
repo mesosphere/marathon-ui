@@ -11,6 +11,8 @@ var AppListItemComponent = require("./AppListItemComponent");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
+var Util = require("../helpers/Util");
+
 function getGroupStatus(status, app) {
   var appStatus = app.status;
 
@@ -173,6 +175,11 @@ var AppListComponent = React.createClass({
         }
         return memo;
       }, []);
+  hasFilters: function () {
+    return Object.values(this.props.filters).some((filter) => {
+      return (Util.isArray(filter) && filter.length > 0) ||
+        (Util.isString(filter) && filter != null && filter !== "");
+    });
   },
 
   getAppNodes: function () {
