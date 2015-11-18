@@ -1,8 +1,4 @@
-## Unversioned
-### Added
-
-### Changed
-
+## 0.13.4 - 2015-11-18
 ### Fixed
 - \#2626 - Status icons are rendered blotted
 - \#2627 - Tasks health column shows different health status
