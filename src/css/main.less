@@ -1364,6 +1364,12 @@ fieldset[disabled] .btn-info.active {
         }
       }
 
+      .dropdown-toggle {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+      }
+
       .filters {
         list-style: none;
       }
@@ -1527,10 +1533,7 @@ fieldset[disabled] .btn-info.active {
   margin: 0 0 @base-spacing-unit*2 0;
 
   .dropdown-toggle {
-    align-items: center;
     color: @link-color;
-    display: flex;
-    justify-content: space-between;
     overflow-x: hidden;
 
     &:active, &:focus, &:hover {
