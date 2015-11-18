@@ -1,6 +1,6 @@
 {
   "name": "marathon-ui",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "npm-shrinkwrap-version": "5.4.0",
   "node-version": "v0.12.7",
   "dependencies": {
