@@ -239,7 +239,7 @@ var AppListComponent = React.createClass({
       }, []);
   },
 
-  getAppNodes: function () {
+  getAppListItems: function () {
     var state = this.state;
     var sortKey = state.sortKey;
     var props = this.props;
@@ -303,7 +303,7 @@ var AppListComponent = React.createClass({
 
   render: function () {
     var state = this.state;
-    var appNodes = this.getAppNodes();
+    var appNodes = this.getAppListItems();
 
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
