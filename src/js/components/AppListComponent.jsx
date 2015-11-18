@@ -239,6 +239,44 @@ var AppListComponent = React.createClass({
       }, []);
   },
 
+  getAppNodes: function () {
+    var state = this.state;
+    var sortKey = state.sortKey;
+    var props = this.props;
+
+    var sortDirection = state.sortDescending ? 1 : -1;
+
+    var nodesSequence;
+
+    // Global search view - only display filtered apps
+    if (this.hasFilters()) {
+      nodesSequence = this.filterNodes(lazy(state.apps))
+        .sortBy((app) => {
+          return app[sortKey];
+        }, state.sortDescending);
+
+    // Grouped node view
+    } else {
+      nodesSequence = lazy(this.getGroupedNodes(state.apps))
+        // Alphabetically presort
+        .sortBy((app) => {
+          return app.id;
+        }, state.sortDescending)
+        // Hoist groups to top of the app list and sort everything by sortKey
+        .sort((a, b) => {
+          if (a.isGroup && !b.isGroup) {
+            return -1;
+          } else if (b.isGroup && !a.isGroup) {
+            return 1;
+          } else {
+            return a[sortKey] > b[sortKey]
+              ? -1 * sortDirection
+              : 1 * sortDirection;
+          }
+        });
+    }
+
+    return nodesSequence
       .map((app) => {
         switch (props.viewType) {
           case AppListViewTypes.LIST:
@@ -250,7 +288,8 @@ var AppListComponent = React.createClass({
           default:
             return null;
         }
-      });
+      })
+      .value();
   },
 
   getCaret: function (sortKey) {
