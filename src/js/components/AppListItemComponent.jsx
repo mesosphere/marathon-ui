@@ -4,6 +4,7 @@ var React = require("react/addons");
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppListItemLabelsComponent =
   require("../components/AppListItemLabelsComponent");
+var AppListViewTypes = require("../constants/AppListViewTypes");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
@@ -18,7 +19,14 @@ var AppListItemComponent = React.createClass({
 
   propTypes: {
     currentGroup: React.PropTypes.string.isRequired,
-    model: React.PropTypes.object.isRequired
+    model: React.PropTypes.object.isRequired,
+    viewType: React.PropTypes.string
+  },
+
+  getDefaultProps: function () {
+    return {
+      viewType: AppListViewTypes.GROUPED_LIST
+    };
   },
 
   getInitialState: function () {
