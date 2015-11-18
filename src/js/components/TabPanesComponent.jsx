@@ -9,7 +9,6 @@ var SidebarComponent = require("../components/SidebarComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 
-var AppListViewTypes = require("../constants/AppListViewTypes");
 var tabs = require("../constants/tabs");
 
 var TabPanesComponent = React.createClass({
