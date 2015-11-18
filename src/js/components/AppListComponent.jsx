@@ -148,10 +148,72 @@ var AppListComponent = React.createClass({
     });
   },
 
-  getGroupedNodes: function (appsSequence) {
+  hasFilters: function () {
+    return Object.values(this.props.filters).some((filter) => {
+      return (Util.isArray(filter) && filter.length > 0) ||
+        (Util.isString(filter) && filter != null && filter !== "");
+    });
+  },
+
+  filterNodes: function (nodesSequence) {
+    var props = this.props;
+    var currentGroup = props.currentGroup;
+    var filters = props.filters;
+
+    if (currentGroup !== "/") {
+      nodesSequence = nodesSequence
+        .filter(app => app.id.startsWith(currentGroup));
+    }
+
+    if (filters.filterText != null && filters.filterText !== "") {
+      nodesSequence = nodesSequence
+        .filter(function (app) {
+          return app.id.indexOf(filters.filterText) !== -1;
+        });
+    }
+
+    if (filters.filterLabels != null && filters.filterLabels.length > 0) {
+      nodesSequence = nodesSequence.filter(function (app) {
+        let labels = app.labels;
+        if (labels == null || Object.keys(labels).length === 0) {
+          return false;
+        }
+
+        return lazy(filters.filterLabels).some(function (label) {
+          let [key, value] = label;
+          return labels[key] === value;
+        });
+      });
+    }
+
+    if (filters.filterStatus != null && filters.filterStatus.length > 0) {
+      nodesSequence = nodesSequence.filter(function (app) {
+        if (app.status == null) {
+          return false;
+        }
+        let appStatus = app.status.toString();
+
+        return lazy(filters.filterStatus).some(function (status) {
+          return appStatus === status;
+        });
+      });
+    }
+
+    if (filters.filterTypes != null && filters.filterTypes.length > 0) {
+      nodesSequence = nodesSequence.filter(function (app) {
+        return lazy(filters.filterTypes).some(function (type) {
+          return app.type === type;
+        });
+      });
+    }
+
+    return nodesSequence;
+  },
+
+  getGroupedNodes: function (apps) {
     var currentGroup = this.props.currentGroup;
 
-    return appsSequence
+    return apps
       .filter(app => app.id.startsWith(currentGroup))
       .reduce((memo, app) => {
         let relativePath = app.id.substring(currentGroup.length);
@@ -175,83 +237,8 @@ var AppListComponent = React.createClass({
         }
         return memo;
       }, []);
-  hasFilters: function () {
-    return Object.values(this.props.filters).some((filter) => {
-      return (Util.isArray(filter) && filter.length > 0) ||
-        (Util.isString(filter) && filter != null && filter !== "");
-    });
   },
 
-  getAppNodes: function () {
-    var state = this.state;
-    var sortKey = state.sortKey;
-    var props = this.props;
-
-    var appsSequence = lazy(state.apps);
-
-    if (props.filterText != null && props.filterText !== "") {
-      appsSequence = appsSequence
-        .filter(function (app) {
-          return app.id.indexOf(props.filterText) !== -1;
-        });
-    }
-
-    if (props.filterLabels != null && props.filterLabels.length > 0) {
-      appsSequence = appsSequence.filter(function (app) {
-        let labels = app.labels;
-        if (labels == null || Object.keys(labels).length === 0) {
-          return false;
-        }
-
-        return lazy(props.filterLabels).some(function (label) {
-          let [key, value] = label;
-          return labels[key] === value;
-        });
-      });
-    }
-
-    if (props.filterStatus != null && props.filterStatus.length > 0) {
-      appsSequence = appsSequence.filter(function (app) {
-        if (app.status == null) {
-          return false;
-        }
-        let appStatus = app.status.toString();
-
-        return lazy(props.filterStatus).some(function (status) {
-          return appStatus === status;
-        });
-      });
-    }
-
-    if (props.filterTypes != null && props.filterTypes.length > 0) {
-      appsSequence = appsSequence.filter(function (app) {
-        return lazy(props.filterTypes).some(function (type) {
-          return app.type === type;
-        });
-      });
-    }
-
-    appsSequence
-      // Alphabetically presort
-      .sortBy((app) => {
-        return app.id;
-      }, state.sortDescending);
-
-    let sortDirection = state.sortDescending ? 1 : -1;
-
-    return this.getGroupedNodes(appsSequence)
-      // Hoist groups to top of the app list and sort everything by sortKey
-      .sort((a, b) => {
-        if (a.isGroup && !b.isGroup) {
-          return -1;
-        } else if (b.isGroup && !a.isGroup) {
-          return 1;
-        } else {
-          return a[sortKey] > b[sortKey]
-            ? -1 * sortDirection
-            : 1 * sortDirection;
-        }
-      })
       .map((app) => {
         switch (props.viewType) {
           case AppListViewTypes.LIST:
