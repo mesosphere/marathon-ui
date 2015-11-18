@@ -14,6 +14,8 @@
 - \#2626 - Status icons are rendered blotted
 - \#2627 - Tasks health column shows different health status
 - \#2634 - UI does not update/show the status correctly
+- \#1780 - When app is locked by deployment, deleting tasks via the UI does
+nothing
 
 ## 0.13.3 - 2015-11-10
 ### Added

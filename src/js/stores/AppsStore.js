@@ -316,7 +316,8 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(
         TasksEvents.DELETE_ERROR,
         action.data.body,
-        action.data.status
+        action.data.status,
+        action.taskIds
       );
       break;
   }

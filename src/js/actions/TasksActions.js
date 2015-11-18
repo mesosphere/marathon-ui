@@ -27,13 +27,17 @@ var TasksActions = {
         });
       });
   },
-  deleteTasksAndScale: function (appId, taskIds = []) {
+  deleteTasksAndScale: function (appId, taskIds = [], force = false) {
+    var url = `${config.apiURL}v2/tasks/delete?scale=true`;
+    if (force) {
+      url = url + "&force=true";
+    }
     this.request({
       method: "POST",
       data: {
         "ids": taskIds
       },
-      url: `${config.apiURL}v2/tasks/delete?scale=true`
+      url: url
     })
       .success(function () {
         AppDispatcher.dispatch({
@@ -45,7 +49,8 @@ var TasksActions = {
       .error(function (error) {
         AppDispatcher.dispatch({
           actionType: TasksEvents.DELETE_ERROR,
-          data: error
+          data: error,
+          taskIds: taskIds
         });
       });
   },
