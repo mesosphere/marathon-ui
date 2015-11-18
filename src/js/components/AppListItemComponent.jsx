@@ -70,8 +70,11 @@ var AppListItemComponent = React.createClass({
     return this.didPropsChange(nextProps);
   },
 
-  didPropsChange: function (newProps) {
-    return !Util.compareProperties(this.props.model, newProps.model, "status",
+  didPropsChange: function (nextProps) {
+    var props = this.props;
+
+    return props.viewType !== nextProps.viewType ||
+      !Util.compareProperties(props.model, nextProps.model, "status",
       "tasksRunning", "health", "totalMem", "totalCpus", "instances", "labels");
   },
 
