@@ -862,6 +862,12 @@ fieldset[disabled] .btn-info.active {
 
 .header-btn {
   margin-top: 14px;
+
+  .app-controls {
+    display: inline-block;
+    margin: 0 0 0 @horizontal-spacing-unit;
+    vertical-align: middle;
+  }
 }
 
 .table-fixed {
@@ -1549,6 +1555,7 @@ fieldset[disabled] .btn-info.active {
     border-color: @dropdown-bg-color;
     border-radius: 2px;
     display: block;
+    z-index: 1001; /* Override Bootstrap's 1000 base value */
 
     .checkbox {
       padding: 0 @base-spacing-unit;
