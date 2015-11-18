@@ -172,15 +172,45 @@ var AppListItemComponent = React.createClass({
     );
   },
 
+  getAppName: function () {
+    var props = this.props;
+    var model = props.model;
+
+    if (props.viewType === AppListViewTypes.APP_LIST) {
+      var groupId = PathUtil.getGroupFromAppId(model.id);
+      var appName = PathUtil.getAppName(model.id);
+
+      return (
+        <td className="overflow-ellipsis name-cell global-app-list"
+            title={model.id} ref="nameCell">
+          <span className="name" ref="nameNode">
+            <span className="app-name">{appName}</span>
+            {this.getLabels()}
+            <span className="group-id">{groupId}</span>
+          </span>
+        </td>
+      );
+    }
+
+    let relativeAppName =
+      PathUtil.getRelativePath(model.id, props.currentGroup);
+    return (
+      <td className="overflow-ellipsis name-cell"
+          title={model.id} ref="nameCell">
+        <span className="name" ref="nameNode">{relativeAppName}</span>
+        {this.getLabels()}
+      </td>
+    );
+  },
+
   render: function () {
-    var model = this.props.model;
+    var props = this.props;
+    var model = props.model;
 
     var className = classNames({
       "group": model.isGroup,
       "app": !model.isGroup
     });
-
-    var name = PathUtil.getRelativePath(model.id, this.props.currentGroup);
 
     return (
       // Set `title` on cells that potentially overflow so hovering on the
@@ -189,11 +219,7 @@ var AppListItemComponent = React.createClass({
         <td className="icon-cell">
           {this.getIcon()}
         </td>
-        <td className="overflow-ellipsis name-cell" title={model.id}
-            ref="nameCell">
-          <span className="name" ref="nameNode">{name}</span>
-          {this.getLabels()}
-        </td>
+        {this.getAppName()}
         <td className="text-right total cpu-cell">
           {parseFloat(model.totalCpus).toFixed(1)}
         </td>
