@@ -8,7 +8,7 @@ var DeploymentsListComponent =
 var SidebarComponent = require("../components/SidebarComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
-
+var Util = require("../helpers/Util");
 var tabs = require("../constants/tabs");
 
 var TabPanesComponent = React.createClass({
@@ -31,6 +31,36 @@ var TabPanesComponent = React.createClass({
 
   componentWillMount: function () {
     this.updateCurrentGroup();
+  },
+
+  getContextualBar: function () {
+    var state = this.state;
+
+    if (state.filters.filterText == null ||
+        Util.isEmptyString(state.filters.filterText)) {
+      return <BreadcrumbComponent groupId={state.currentGroup} />;
+    }
+
+    return (
+        <p className="breadcrumb">
+          <span>{`Search results for "${state.filters.filterText}"`}</span>
+          <a href="#"
+              className="clear"
+              onClick={this.handleClearFilterText}>
+            Clear search
+          </a>
+        </p>
+    );
+  },
+
+  handleClearFilterText: function (event) {
+    event.preventDefault();
+
+    var router = this.context.router;
+    var queryParams = router.getCurrentQuery();
+
+    delete queryParams.filterText;
+    router.transitionTo(router.getCurrentPathname(), {}, queryParams);
   },
 
   updateCurrentGroup: function () {
@@ -79,7 +109,7 @@ var TabPanesComponent = React.createClass({
               onChange={this.updateFilters} />
             <main>
               <div className="contextual-bar">
-                <BreadcrumbComponent groupId={state.currentGroup} />
+                {this.getContextualBar()}
                 <div className="app-list-controls">
                   <AppListFilterComponent onChange={this.updateFilters} />
                 </div>
