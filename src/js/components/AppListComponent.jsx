@@ -74,15 +74,13 @@ var AppListComponent = React.createClass({
 
   propTypes: {
     currentGroup: React.PropTypes.string.isRequired,
-    filterLabels: React.PropTypes.array,
-    filterStatus: React.PropTypes.array,
-    filterText: React.PropTypes.string,
-    filterTypes: React.PropTypes.array,
+    filters: React.PropTypes.object,
     viewType: React.PropTypes.oneOf(Object.values(AppListViewTypes))
   },
 
   getDefaultProps: function () {
     return {
+      filters: {},
       viewType: AppListViewTypes.LIST
     };
   },

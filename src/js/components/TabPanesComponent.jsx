@@ -71,11 +71,6 @@ var TabPanesComponent = React.createClass({
   render: function () {
     var state = this.state;
 
-    var appListProps = Object.assign({
-      currentGroup: state.currentGroup,
-      viewType: AppListViewTypes.LIST
-    }, state.filters);
-
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
           className="container-fluid content">
@@ -90,7 +85,8 @@ var TabPanesComponent = React.createClass({
                   <AppListFilterComponent onChange={this.updateFilters} />
                 </div>
               </div>
-              <AppListComponent {...appListProps} />
+              <AppListComponent currentGroup={state.currentGroup}
+                filters={state.filters} />
             </main>
           </div>
         </TabPaneComponent>
