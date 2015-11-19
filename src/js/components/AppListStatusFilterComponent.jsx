@@ -13,13 +13,6 @@ var statusNameMapping = {
   [AppStatus.WAITING]: "Waiting"
 };
 
-function getInitialAppStatusCount() {
-  return Object.values(AppStatus).reduce(function (memo, status) {
-    memo[status] = 0;
-    return memo;
-  }, {});
-}
-
 var AppListStatusFilterComponent = React.createClass({
   displayName: "AppListStatusFilterComponent",
 
@@ -28,55 +21,34 @@ var AppListStatusFilterComponent = React.createClass({
   },
 
   propTypes: {
-    groupId: React.PropTypes.string,
     onChange: React.PropTypes.func.isRequired
-  },
-
-  getDefaultProps: function () {
-    return {
-      groupId: "/"
-    };
   },
 
   getInitialState: function () {
     return {
-      appsStatusesCount: getInitialAppStatusCount(),
+      appsStatusesCount: {},
       selectedStatus: []
     };
   },
 
   componentWillMount: function () {
-    AppsStore.on(AppsEvents.CHANGE, this.onAppsChange);
+    AppsStore.on(AppsEvents.APPS_STATUSES, this.onAppsStatusesChange);
   },
 
   componentWillUnmount: function () {
-    AppsStore.removeListener(AppsEvents.CHANGE,
-      this.onAppsChange);
+    AppsStore.removeListener(AppsEvents.APPS_STATUSES,
+      this.onAppsStatusesChange);
   },
 
   componentDidMount: function () {
     this.updateFilterStatus();
   },
 
-  componentWillReceiveProps: function (nextProps) {
+  componentWillReceiveProps: function () {
     this.updateFilterStatus();
-    this.countStatuses(nextProps);
   },
 
-  onAppsChange: function () {
-    this.countStatuses(this.props);
-  },
-
-  countStatuses: function (props) {
-    var appsStatusesCount = getInitialAppStatusCount();
-    var groupId = props.groupId;
-
-    AppsStore.apps.forEach(function (app) {
-      if (groupId === "/" || app.id.startsWith(groupId)) {
-        appsStatusesCount[app.status]++;
-      }
-    });
-
+  onAppsStatusesChange: function (appsStatusesCount) {
     this.setState({
       appsStatusesCount: appsStatusesCount
     });
