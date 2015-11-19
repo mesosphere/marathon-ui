@@ -149,9 +149,10 @@ var AppListComponent = React.createClass({
   },
 
   hasFilters: function () {
-    return Object.values(this.props.filters).some((filter) => {
-      return (Util.isArray(filter) && filter.length > 0) ||
-        (Util.isString(filter) && filter != null && filter !== "");
+    return Object.values(this.props.filters).some(filter => {
+      return filter != null &&
+        (Util.isArray(filter) && filter.length > 0) ||
+        (Util.isString(filter) && filter !== "");
     });
   },
 
@@ -167,19 +168,17 @@ var AppListComponent = React.createClass({
 
     if (filters.filterText != null && filters.filterText !== "") {
       nodesSequence = nodesSequence
-        .filter(function (app) {
-          return app.id.indexOf(filters.filterText) !== -1;
-        });
+        .filter(app => app.id.indexOf(filters.filterText) !== -1);
     }
 
     if (filters.filterLabels != null && filters.filterLabels.length > 0) {
-      nodesSequence = nodesSequence.filter(function (app) {
+      nodesSequence = nodesSequence.filter(app => {
         let labels = app.labels;
         if (labels == null || Object.keys(labels).length === 0) {
           return false;
         }
 
-        return lazy(filters.filterLabels).some(function (label) {
+        return filters.filterLabels.some(label => {
           let [key, value] = label;
           return labels[key] === value;
         });
@@ -187,23 +186,19 @@ var AppListComponent = React.createClass({
     }
 
     if (filters.filterStatus != null && filters.filterStatus.length > 0) {
-      nodesSequence = nodesSequence.filter(function (app) {
+      nodesSequence = nodesSequence.filter(app => {
         if (app.status == null) {
           return false;
         }
         let appStatus = app.status.toString();
 
-        return lazy(filters.filterStatus).some(function (status) {
-          return appStatus === status;
-        });
+        return filters.filterStatus.some(status => appStatus === status);
       });
     }
 
     if (filters.filterTypes != null && filters.filterTypes.length > 0) {
-      nodesSequence = nodesSequence.filter(function (app) {
-        return lazy(filters.filterTypes).some(function (type) {
-          return app.type === type;
-        });
+      nodesSequence = nodesSequence.filter(app => {
+        return filters.filterTypes.some(type => app.type === type);
       });
     }
 
