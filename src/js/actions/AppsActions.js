@@ -170,9 +170,9 @@ var AppsActions = {
         });
       });
   },
-  pronounceAppStatusesCount: function (appsStatusesCount) {
+  emitAppStatusesCount: function (appsStatusesCount) {
     AppDispatcher.dispatchNext({
-      actionType: AppsEvents.APPS_STATUSES,
+      actionType: AppsEvents.UPDATE_APPS_STATUSES_COUNT,
       data: appsStatusesCount
     });
   },

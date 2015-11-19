@@ -32,11 +32,12 @@ var AppListStatusFilterComponent = React.createClass({
   },
 
   componentWillMount: function () {
-    AppsStore.on(AppsEvents.APPS_STATUSES, this.onAppsStatusesChange);
+    AppsStore.on(AppsEvents.UPDATE_APPS_STATUSES_COUNT,
+      this.onAppsStatusesChange);
   },
 
   componentWillUnmount: function () {
-    AppsStore.removeListener(AppsEvents.APPS_STATUSES,
+    AppsStore.removeListener(AppsEvents.UPDATE_APPS_STATUSES_COUNT,
       this.onAppsStatusesChange);
   },
 

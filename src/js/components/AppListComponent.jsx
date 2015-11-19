@@ -305,7 +305,7 @@ var AppListComponent = React.createClass({
       })
       .value();
 
-    AppsActions.pronounceAppStatusesCount(appsStatusesCount);
+    AppsActions.emitAppStatusesCount(appsStatusesCount);
 
     return appListItems;
   },
