@@ -137,9 +137,9 @@ var AppPageControlsComponent = React.createClass({
         </button>
         {this.getResetDelayButton()}
         <div className="dropdown app-controls">
-          <button className="btn btn-lg btn-default dropdown-toggle"
+          <button className="btn btn-lg btn-default"
               onClick={this.toggleDropdown}>
-            <i className="ion-ios-gear"/>
+            <i className="icon icon-mini gear"></i>
             <span className="caret"/>
           </button>
           <ul className={dropdownClassSet}>
