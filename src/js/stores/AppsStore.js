@@ -320,8 +320,8 @@ AppDispatcher.register(function (action) {
         action.taskIds
       );
       break;
-    case AppsEvents.APPS_STATUSES:
-      AppsStore.emit(AppsEvents.APPS_STATUSES, action.data);
+    case AppsEvents.UPDATE_APPS_STATUSES_COUNT:
+      AppsStore.emit(AppsEvents.UPDATE_APPS_STATUSES_COUNT, action.data);
       break;
   }
 });
