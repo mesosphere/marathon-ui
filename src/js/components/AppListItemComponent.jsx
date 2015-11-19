@@ -180,7 +180,7 @@ var AppListItemComponent = React.createClass({
     var model = props.model;
 
     if (props.viewType === AppListViewTypes.APP_LIST) {
-      var groupId = PathUtil.getGroupFromAppId(model.id);
+      var groupId = model.id;
       var appName = PathUtil.getAppName(model.id);
 
       return (
