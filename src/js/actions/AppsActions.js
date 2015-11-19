@@ -170,6 +170,12 @@ var AppsActions = {
         });
       });
   },
+  pronounceAppStatusesCount: function (appsStatusesCount) {
+    AppDispatcher.dispatchNext({
+      actionType: AppsEvents.APPS_STATUSES,
+      data: appsStatusesCount
+    });
+  },
   request: qajaxWrapper
 };
 
