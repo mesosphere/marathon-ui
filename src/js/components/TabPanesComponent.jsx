@@ -1,3 +1,4 @@
+var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppListFilterComponent = require("../components/AppListFilterComponent");
@@ -41,26 +42,24 @@ var TabPanesComponent = React.createClass({
       return <BreadcrumbComponent groupId={state.currentGroup} />;
     }
 
+    let router = this.context.router;
+    let currentPathname = router.getCurrentPathname();
+    let query = Object.assign({}, router.getCurrentQuery());
+    let params = router.getCurrentParams();
+
+    delete query.filterText;
+
     return (
         <p className="breadcrumb">
           <span>{`Search results for "${state.filters.filterText}"`}</span>
-          <a href="#"
-              className="clear"
-              onClick={this.handleClearFilterText}>
+          <Link className="clear"
+              to={currentPathname}
+              query={query}
+              params={params}>
             Clear search
-          </a>
+          </Link>
         </p>
     );
-  },
-
-  handleClearFilterText: function (event) {
-    event.preventDefault();
-
-    var router = this.context.router;
-    var queryParams = router.getCurrentQuery();
-
-    delete queryParams.filterText;
-    router.transitionTo(router.getCurrentPathname(), {}, queryParams);
   },
 
   updateCurrentGroup: function () {
