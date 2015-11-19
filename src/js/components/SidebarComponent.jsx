@@ -84,7 +84,7 @@ var SidebarComponent = React.createClass({
           <h3 className="small-caps">Status</h3>
           {this.getClearLinkForFilter("filterStatus")}
         </div>
-        <AppListStatusFilterComponent
+        <AppListStatusFilterComponent groupId={props.groupId}
           onChange={this.updateFilter.bind(null, "filterStatus")} />
         <div className="flex-row">
           <h3 className="small-caps">Label</h3>

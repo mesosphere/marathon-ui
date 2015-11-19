@@ -28,7 +28,14 @@ var AppListStatusFilterComponent = React.createClass({
   },
 
   propTypes: {
+    groupId: React.PropTypes.string,
     onChange: React.PropTypes.func.isRequired
+  },
+
+  getDefaultProps: function () {
+    return {
+      groupId: "/"
+    };
   },
 
   getInitialState: function () {
@@ -51,15 +58,23 @@ var AppListStatusFilterComponent = React.createClass({
     this.updateFilterStatus();
   },
 
-  componentWillReceiveProps: function () {
+  componentWillReceiveProps: function (nextProps) {
     this.updateFilterStatus();
+    this.countStatuses(nextProps);
   },
 
   onAppsChange: function () {
+    this.countStatuses(this.props);
+  },
+
+  countStatuses: function (props) {
     var appsStatusesCount = getInitialAppStatusCount();
+    var groupId = props.groupId;
 
     AppsStore.apps.forEach(function (app) {
-      appsStatusesCount[app.status]++;
+      if (groupId === "/" || app.id.startsWith(groupId)) {
+        appsStatusesCount[app.status]++;
+      }
     });
 
     this.setState({
@@ -127,7 +142,7 @@ var AppListStatusFilterComponent = React.createClass({
 
     if (stringify(selectedStatus) !== stringify(state.selectedStatus)) {
       this.setState({
-          selectedStatus: selectedStatus
+        selectedStatus: selectedStatus
       }, this.props.onChange(selectedStatus));
     }
   },
