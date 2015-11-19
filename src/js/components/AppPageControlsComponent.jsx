@@ -150,9 +150,9 @@ var AppPageControlsComponent = React.createClass({
               </a>
             </li>
             <li>
-              <a href="#" className="text-unhealthy"
+              <a href="#"
                   onClick={this.handleDestroyApp}>
-                <span className="text-unhealthy">Destroy</span>
+                <span className="text-danger">Destroy</span>
               </a>
             </li>
           </ul>
