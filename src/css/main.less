@@ -262,6 +262,11 @@ a:focus {
       background-size: contain;
     }
 
+    &.gear {
+      background-image: url("img/icons/icon-mini-gear.svg");
+      background-size: contain;
+    }
+
   }
 
   &.icon-small {
@@ -569,6 +574,10 @@ a:focus {
 
 .btn {
   font-weight: 400;
+
+  .icon {
+    vertical-align: top;
+  }
 }
 
 .btn-sm {
@@ -576,9 +585,10 @@ a:focus {
 }
 
 .btn-lg {
-  padding: @base-font-size*0.5 @base-spacing-unit*2;
+  padding: @base-spacing-unit @base-font-size*0.5 *2;
   font-size: @base-font-size;
   border-radius: @base-spacing-unit*0.5;
+  line-height: 1.15;
 }
 
 .btn-link {
@@ -862,6 +872,16 @@ fieldset[disabled] .btn-info.active {
 
 .header-btn {
   margin-top: 14px;
+
+  .app-controls {
+    display: inline-block;
+    margin: 0 0 0 @horizontal-spacing-unit;
+    vertical-align: middle;
+
+    .btn > .icon {
+      margin-right: @base-spacing-unit * 0.75;
+    }
+  }
 }
 
 .table-fixed {
@@ -1364,6 +1384,12 @@ fieldset[disabled] .btn-info.active {
         }
       }
 
+      .dropdown-toggle {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+      }
+
       .filters {
         list-style: none;
       }
@@ -1527,10 +1553,7 @@ fieldset[disabled] .btn-info.active {
   margin: 0 0 @base-spacing-unit*2 0;
 
   .dropdown-toggle {
-    align-items: center;
     color: @link-color;
-    display: flex;
-    justify-content: space-between;
     overflow-x: hidden;
 
     &:active, &:focus, &:hover {
@@ -1546,6 +1569,7 @@ fieldset[disabled] .btn-info.active {
     border-color: @dropdown-bg-color;
     border-radius: 2px;
     display: block;
+    z-index: 1001; /* Override Bootstrap's 1000 base value */
 
     .checkbox {
       padding: 0 @base-spacing-unit;
@@ -1576,6 +1600,10 @@ fieldset[disabled] .btn-info.active {
         padding: @horizontal-spacing-unit;
         width: 100%;
       }
+    }
+
+    .text-danger {
+      color: @text-color-danger-light;
     }
   }
 }

@@ -5,7 +5,7 @@ var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var AppHealthComponent = require("./AppHealthComponent");
-var AppStatus = require("../constants/AppStatus");
+var AppPageControlsComponent = require("./AppPageControlsComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
 var AppDebugInfoComponent = require("../components/AppDebugInfoComponent");
@@ -22,7 +22,6 @@ var AppHealthBreakdownComponent = require("./AppHealthBreakdownComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
-var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
 var QueueStore = require("../stores/QueueStore");
 var TasksActions = require("../actions/TasksActions");
@@ -267,57 +266,6 @@ var AppPageComponent = React.createClass({
     });
   },
 
-  handleScaleApp: function () {
-    const dialogId =
-      DialogActions.prompt("Scale to how many instances?",
-        this.state.app.instances.toString()
-      );
-
-    DialogStore.handleUserResponse(dialogId, function (instancesString) {
-      if (instancesString != null && instancesString !== "") {
-        let instances = parseInt(instancesString, 10);
-
-        AppsActions.scaleApp(this.state.appId, instances);
-      }
-    }.bind(this));
-  },
-
-  handleSuspendApp: function () {
-    const dialogId =
-      DialogActions.confirm("Suspend app by scaling to 0 instances?");
-
-    DialogStore.handleUserResponse(dialogId, function () {
-      AppsActions.scaleApp(this.state.appId, 0);
-    }.bind(this));
-  },
-
-  handleRestartApp: function () {
-    var appId = this.state.appId;
-
-    const dialogId =
-      DialogActions.confirm(`Restart app '${appId}'?`);
-
-    DialogStore.handleUserResponse(dialogId, function () {
-      AppsActions.restartApp(appId);
-    });
-  },
-
-  handleDestroyApp: function () {
-    var appId = this.state.appId;
-
-    const dialogId =
-      DialogActions.confirm(`Destroy app '${appId}'? This is irreversible.`);
-
-    DialogStore.handleUserResponse(dialogId, function () {
-      AppsActions.deleteApp(appId);
-    });
-  },
-
-  handleResetDelay: function () {
-    var appId = this.state.appId;
-    QueueActions.resetDelay(appId);
-  },
-
   getUnhealthyTaskMessage: function (healthCheckResults = []) {
     return healthCheckResults.map((healthCheck, index) => {
       if (healthCheck && !healthCheck.alive) {
@@ -359,22 +307,6 @@ var AppPageComponent = React.createClass({
     }
   },
 
-  getResetDelayButton: function () {
-    var state = this.state;
-    var model = state.app;
-
-    if (model.status !== AppStatus.DELAYED) {
-      return null;
-    }
-
-    return (
-      <button className="btn btn-lg btn-default"
-          onClick={this.handleResetDelay}>
-        Reset Delay
-      </button>
-    );
-  },
-
   getControls: function () {
     var state = this.state;
 
@@ -382,28 +314,7 @@ var AppPageComponent = React.createClass({
       return null;
     }
 
-    return (
-      <div className="header-btn">
-        <button className="btn btn-lg btn-success"
-            onClick={this.handleScaleApp}>
-          Scale Application
-        </button>
-        <button className="btn btn-lg btn-default"
-            onClick={this.handleRestartApp}>
-          Restart
-        </button>
-        <button className="btn btn-lg btn-default"
-            onClick={this.handleSuspendApp}
-            disabled={state.app.instances < 1}>
-          Suspend
-        </button>
-        <button className="btn btn-lg btn-danger"
-            onClick={this.handleDestroyApp}>
-          Destroy
-        </button>
-        {this.getResetDelayButton()}
-      </div>
-    );
+    return (<AppPageControlsComponent app={state.app} appId={state.appId}/>);
   },
 
   getTaskDetailComponent: function () {
