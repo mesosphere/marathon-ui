@@ -164,13 +164,7 @@ var AppListComponent = React.createClass({
 
   filterNodes: function (nodesSequence, appsStatusesCount) {
     var props = this.props;
-    var currentGroup = props.currentGroup;
     var filters = props.filters;
-
-    if (currentGroup !== "/") {
-      nodesSequence = nodesSequence
-        .filter(app => app.id.startsWith(currentGroup));
-    }
 
     if (filters.filterText != null && filters.filterText !== "") {
       nodesSequence = nodesSequence
