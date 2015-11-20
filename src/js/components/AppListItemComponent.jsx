@@ -4,6 +4,7 @@ var React = require("react/addons");
 var AppHealthComponent = require("../components/AppHealthComponent");
 var AppListItemLabelsComponent =
   require("../components/AppListItemLabelsComponent");
+var AppListViewTypes = require("../constants/AppListViewTypes");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
@@ -18,7 +19,14 @@ var AppListItemComponent = React.createClass({
 
   propTypes: {
     currentGroup: React.PropTypes.string.isRequired,
-    model: React.PropTypes.object.isRequired
+    model: React.PropTypes.object.isRequired,
+    viewType: React.PropTypes.string
+  },
+
+  getDefaultProps: function () {
+    return {
+      viewType: AppListViewTypes.GROUPED_LIST
+    };
   },
 
   getInitialState: function () {
@@ -62,8 +70,11 @@ var AppListItemComponent = React.createClass({
     return this.didPropsChange(nextProps);
   },
 
-  didPropsChange: function (newProps) {
-    return !Util.compareProperties(this.props.model, newProps.model, "status",
+  didPropsChange: function (nextProps) {
+    var props = this.props;
+
+    return props.viewType !== nextProps.viewType ||
+      !Util.compareProperties(props.model, nextProps.model, "status",
       "tasksRunning", "health", "totalMem", "totalCpus", "instances", "labels");
   },
 
@@ -164,15 +175,46 @@ var AppListItemComponent = React.createClass({
     );
   },
 
+  getAppName: function () {
+    var props = this.props;
+    var model = props.model;
+
+    if (props.viewType === AppListViewTypes.APP_LIST) {
+      var groupId = model.id;
+      var appName = PathUtil.getAppName(model.id);
+
+      return (
+        <td className="overflow-ellipsis name-cell global-app-list"
+            title={model.id} ref="nameCell">
+          <span className="name" ref="nameNode">
+            {appName}
+          </span>
+          {this.getLabels()}
+          <span className="group-id">{groupId}</span>
+
+        </td>
+      );
+    }
+
+    let relativeAppName =
+      PathUtil.getRelativePath(model.id, props.currentGroup);
+    return (
+      <td className="overflow-ellipsis name-cell"
+          title={model.id} ref="nameCell">
+        <span className="name" ref="nameNode">{relativeAppName}</span>
+        {this.getLabels()}
+      </td>
+    );
+  },
+
   render: function () {
-    var model = this.props.model;
+    var props = this.props;
+    var model = props.model;
 
     var className = classNames({
       "group": model.isGroup,
       "app": !model.isGroup
     });
-
-    var name = PathUtil.getRelativePath(model.id, this.props.currentGroup);
 
     return (
       // Set `title` on cells that potentially overflow so hovering on the
@@ -181,11 +223,7 @@ var AppListItemComponent = React.createClass({
         <td className="icon-cell">
           {this.getIcon()}
         </td>
-        <td className="overflow-ellipsis name-cell" title={model.id}
-            ref="nameCell">
-          <span className="name" ref="nameNode">{name}</span>
-          {this.getLabels()}
-        </td>
+        {this.getAppName()}
         <td className="text-right total cpu-cell">
           {parseFloat(model.totalCpus).toFixed(1)}
         </td>

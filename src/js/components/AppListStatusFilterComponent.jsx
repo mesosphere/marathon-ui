@@ -13,13 +13,6 @@ var statusNameMapping = {
   [AppStatus.WAITING]: "Waiting"
 };
 
-function getInitialAppStatusCount() {
-  return Object.values(AppStatus).reduce(function (memo, status) {
-    memo[status] = 0;
-    return memo;
-  }, {});
-}
-
 var AppListStatusFilterComponent = React.createClass({
   displayName: "AppListStatusFilterComponent",
 
@@ -33,18 +26,19 @@ var AppListStatusFilterComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      appsStatusesCount: getInitialAppStatusCount(),
+      appsStatusesCount: {},
       selectedStatus: []
     };
   },
 
   componentWillMount: function () {
-    AppsStore.on(AppsEvents.CHANGE, this.onAppsChange);
+    AppsStore.on(AppsEvents.UPDATE_APPS_STATUSES_COUNT,
+      this.onAppsStatusesChange);
   },
 
   componentWillUnmount: function () {
-    AppsStore.removeListener(AppsEvents.CHANGE,
-      this.onAppsChange);
+    AppsStore.removeListener(AppsEvents.UPDATE_APPS_STATUSES_COUNT,
+      this.onAppsStatusesChange);
   },
 
   componentDidMount: function () {
@@ -55,13 +49,7 @@ var AppListStatusFilterComponent = React.createClass({
     this.updateFilterStatus();
   },
 
-  onAppsChange: function () {
-    var appsStatusesCount = getInitialAppStatusCount();
-
-    AppsStore.apps.forEach(function (app) {
-      appsStatusesCount[app.status]++;
-    });
-
+  onAppsStatusesChange: function (appsStatusesCount) {
     this.setState({
       appsStatusesCount: appsStatusesCount
     });
@@ -127,7 +115,7 @@ var AppListStatusFilterComponent = React.createClass({
 
     if (stringify(selectedStatus) !== stringify(state.selectedStatus)) {
       this.setState({
-          selectedStatus: selectedStatus
+        selectedStatus: selectedStatus
       }, this.props.onChange(selectedStatus));
     }
   },
