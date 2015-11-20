@@ -10,6 +10,7 @@
 ### Changed
 - Adjust the task list column order
 - Use colored labels instead of dots for task health
+- \#2646 - Consolidate Actions Menu in App Details View
 
 ## 0.13.4 - 2015-11-18
 ### Fixed
