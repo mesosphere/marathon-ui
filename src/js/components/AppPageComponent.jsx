@@ -2,6 +2,7 @@ var React = require("react/addons");
 
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
+var TaskEvents = require("../events/TasksEvents");
 var AppsStore = require("../stores/AppsStore");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var AppStatus = require("../constants/AppStatus");
@@ -99,6 +100,7 @@ var AppPageComponent = React.createClass({
     AppsStore.on(AppsEvents.SCALE_APP_ERROR, this.onScaleAppError);
     AppsStore.on(AppsEvents.RESTART_APP_ERROR, this.onRestartAppError);
     AppsStore.on(AppsEvents.DELETE_APP_ERROR, this.onDeleteAppError);
+    AppsStore.on(TaskEvents.DELETE_ERROR, this.onKillTaskError);
     AppsStore.on(AppsEvents.DELETE_APP, this.onDeleteAppSuccess);
     QueueStore.on(QueueEvents.RESET_DELAY_ERROR, this.onResetDelayError);
     QueueStore.on(QueueEvents.RESET_DELAY, this.onResetDelaySuccess);
@@ -117,6 +119,8 @@ var AppPageComponent = React.createClass({
       this.onDeleteAppError);
     AppsStore.removeListener(AppsEvents.DELETE_APP,
       this.onDeleteAppSuccess);
+    AppsStore.removeListener(TaskEvents.DELETE_ERROR,
+      this.onKillTaskError);
     QueueStore.removeListener(QueueEvents.RESET_DELAY_ERROR,
       this.onResetDelayError);
     QueueStore.removeListener(QueueEvents.RESET_DELAY,
@@ -210,6 +214,18 @@ var AppPageComponent = React.createClass({
     } else {
       DialogActions.alert(
         `Error destroying app: ${errorMessage.message || errorMessage}`
+      );
+    }
+  },
+
+  onKillTaskError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
+      DialogActions.alert(`Error killing task: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Error killing task: ${Messages.FORBIDDEN}`);
+    } else {
+      DialogActions.alert(
+        `Error killing task: ${errorMessage.message || errorMessage}`
       );
     }
   },

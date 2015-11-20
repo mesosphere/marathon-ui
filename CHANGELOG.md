@@ -9,6 +9,7 @@
 - Use colored labels instead of dots for task health
 
 ### Fixed
+- \#2687 - Show error dialog on kill task error
 - \#2626 - Status icons are rendered blotted
 
 ## 0.13.3 - 2015-11-10
