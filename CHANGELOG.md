@@ -12,6 +12,7 @@
 ### Changed
 - Adjust the task list column order
 - Use colored labels instead of dots for task health
+- \#2660 - Adapt Search box in App Collection View
 - \#2662 - Change Header When Applying Filter in App Collection View
 - \#2663 - Adapt filter count, reflect current result set
 
