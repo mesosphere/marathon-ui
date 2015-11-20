@@ -187,10 +187,11 @@ var AppListItemComponent = React.createClass({
         <td className="overflow-ellipsis name-cell global-app-list"
             title={model.id} ref="nameCell">
           <span className="name" ref="nameNode">
-            <span className="app-name">{appName}</span>
-            {this.getLabels()}
-            <span className="group-id">{groupId}</span>
+            {appName}
           </span>
+          {this.getLabels()}
+          <span className="group-id">{groupId}</span>
+
         </td>
       );
     }
