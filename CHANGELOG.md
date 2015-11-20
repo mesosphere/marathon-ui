@@ -16,6 +16,7 @@
 - \#2660 - Adapt Search box in App Collection View
 - \#2662 - Change Header When Applying Filter in App Collection View
 - \#2663 - Adapt filter count, reflect current result set
+- \#2702 - Show proper info on app creation auth error
 
 ### Fixed
 - \#2691 - Filters don't updated correctly on reload

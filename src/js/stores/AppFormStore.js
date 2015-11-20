@@ -281,6 +281,7 @@ function deleteField(fields, fieldId, index) {
 }
 
 function processResponseErrors(responseErrors, response, statusCode) {
+  var responseHasMessage = response != null && response.message != null;
   if (statusCode >= 500) {
     responseErrors.general =
       AppFormErrorMessages.getGeneralMessage("unknownServerError");
@@ -298,24 +299,33 @@ function processResponseErrors(responseErrors, response, statusCode) {
         AppFormErrorMessages.lookupServerResponseMessage(error.error);
     });
 
-  } else if (statusCode === 409 && response != null &&
-      response.message != null) {
+  } else if (statusCode === 409 && responseHasMessage) {
 
     responseErrors.general =
       AppFormErrorMessages.getGeneralMessage("errorPrefix") + " " +
       response.message;
 
-  } else if (statusCode === 403 && response != null &&
-      response.message != null) {
+  } else if (statusCode === 403) {
 
     responseErrors.general =
       AppFormErrorMessages.getGeneralMessage("forbiddenAccess");
 
-  } else if (statusCode === 401 && response != null &&
-      response.message != null) {
+    if (responseHasMessage) {
+      responseErrors.general =
+        AppFormErrorMessages.getGeneralMessage("errorPrefix") + " " +
+        response.message;
+    }
+
+  } else if (statusCode === 401) {
 
     responseErrors.general =
       AppFormErrorMessages.getGeneralMessage("unauthorizedAccess");
+
+    if (responseHasMessage) {
+      responseErrors.general =
+        AppFormErrorMessages.getGeneralMessage("errorPrefix") + " " +
+        response.message;
+    }
 
   } else if (statusCode === 400 && response != null &&
       Util.isArray(response.details)) {

@@ -796,6 +796,71 @@ describe("App Form", function () {
         });
       });
 
+      it("processes error response codes 401 correctly",
+        function (done) {
+          this.server.setup("something strange", 401);
+
+          AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+            expectAsync(function () {
+              expect(AppFormStore.responseErrors.general)
+                .to.equal(AppFormErrorMessages.getGeneralMessage("unauthorizedAccess"));
+            }, done);
+          });
+
+          AppsActions.createApp({
+            "howdy": "partner"
+          });
+        });
+
+      it("processes error response codes 401 with message correctly",
+        function (done) {
+          this.server.setup({"message": "something strange"}, 401);
+
+          AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+            expectAsync(function () {
+              expect(AppFormStore.responseErrors.general)
+                .to.equal(AppFormErrorMessages.getGeneralMessage("errorPrefix") + " something strange");
+            }, done);
+          });
+
+          AppsActions.createApp({
+            "howdy": "partner"
+          });
+        });
+
+      it("processes error response codes 403 correctly",
+        function (done) {
+          this.server.setup("something strange", 403);
+
+          AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+            expectAsync(function () {
+              expect(AppFormStore.responseErrors.general)
+                .to.equal(AppFormErrorMessages.getGeneralMessage("forbiddenAccess"));
+            }, done);
+          });
+
+          AppsActions.createApp({
+            "howdy": "partner"
+          });
+        });
+
+      it("processes error response codes 403 with message correctly",
+        function (done) {
+          this.server.setup({"message": "something strange"}, 403);
+
+          AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+            expectAsync(function () {
+              expect(AppFormStore.responseErrors.general)
+                .to.equal(AppFormErrorMessages.getGeneralMessage("errorPrefix") + " something strange");
+            }, done);
+          });
+
+          AppsActions.createApp({
+            "howdy": "partner"
+          });
+        });
+
+
       it("processes error response codes >= 500 correctly", function (done) {
         this.server.setup("something strange with the server", 500);
 
