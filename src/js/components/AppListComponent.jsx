@@ -8,6 +8,7 @@ var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var AppListItemComponent = require("./AppListItemComponent");
 
+var AppsActions = require("../actions/AppsActions");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
@@ -42,6 +43,13 @@ function getGroupHealth(health, app) {
 
     return healthState;
   });
+}
+
+function getInitialAppStatusesCount() {
+  return Object.values(AppStatus).reduce(function (memo, status) {
+    memo[status] = 0;
+    return memo;
+  }, {});
 }
 
 function initGroupNode(groupId, app) {
@@ -156,7 +164,7 @@ var AppListComponent = React.createClass({
     });
   },
 
-  filterNodes: function (nodesSequence) {
+  filterNodes: function (nodesSequence, appsStatusesCount) {
     var props = this.props;
     var currentGroup = props.currentGroup;
     var filters = props.filters;
@@ -170,6 +178,10 @@ var AppListComponent = React.createClass({
       nodesSequence = nodesSequence
         .filter(app => app.id.indexOf(filters.filterText) !== -1);
     }
+
+    nodesSequence.each(app => {
+      appsStatusesCount[app.status]++;
+    });
 
     if (filters.filterLabels != null && filters.filterLabels.length > 0) {
       nodesSequence = nodesSequence.filter(app => {
@@ -205,11 +217,16 @@ var AppListComponent = React.createClass({
     return nodesSequence;
   },
 
-  getGroupedNodes: function (apps) {
+  getGroupedNodes: function (apps, appsStatusesCount) {
     var currentGroup = this.props.currentGroup;
 
-    return apps
-      .filter(app => app.id.startsWith(currentGroup))
+    var appsInGroup = apps.filter(app => app.id.startsWith(currentGroup));
+
+    appsInGroup.forEach(app => {
+      appsStatusesCount[app.status]++;
+    });
+
+    return appsInGroup
       .reduce((memo, app) => {
         let relativePath = app.id.substring(currentGroup.length);
         let pathParts = relativePath.split("/");
@@ -243,16 +260,18 @@ var AppListComponent = React.createClass({
 
     var nodesSequence;
 
+    var appsStatusesCount = getInitialAppStatusesCount();
+
     // Global search view - only display filtered apps
     if (this.hasFilters()) {
-      nodesSequence = this.filterNodes(lazy(state.apps))
+      nodesSequence = this.filterNodes(lazy(state.apps), appsStatusesCount)
         .sortBy((app) => {
           return app[sortKey];
         }, state.sortDescending);
 
     // Grouped node view
     } else {
-      nodesSequence = lazy(this.getGroupedNodes(state.apps))
+      nodesSequence = lazy(this.getGroupedNodes(state.apps, appsStatusesCount))
         // Alphabetically presort
         .sortBy((app) => {
           return app.id;
@@ -271,8 +290,8 @@ var AppListComponent = React.createClass({
         });
     }
 
-    return nodesSequence
-      .map((app) => {
+    var appListItems = nodesSequence
+      .map(app => {
         switch (props.viewType) {
           case AppListViewTypes.LIST:
             return (
@@ -285,6 +304,10 @@ var AppListComponent = React.createClass({
         }
       })
       .value();
+
+    AppsActions.emitAppStatusesCount(appsStatusesCount);
+
+    return appListItems;
   },
 
   getCaret: function (sortKey) {
