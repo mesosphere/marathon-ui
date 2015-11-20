@@ -1,3 +1,4 @@
+var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppListFilterComponent = require("../components/AppListFilterComponent");
@@ -8,8 +9,7 @@ var DeploymentsListComponent =
 var SidebarComponent = require("../components/SidebarComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
-
-var AppListViewTypes = require("../constants/AppListViewTypes");
+var Util = require("../helpers/Util");
 var tabs = require("../constants/tabs");
 
 var TabPanesComponent = React.createClass({
@@ -32,6 +32,34 @@ var TabPanesComponent = React.createClass({
 
   componentWillMount: function () {
     this.updateCurrentGroup();
+  },
+
+  getContextualBar: function () {
+    var state = this.state;
+
+    if (state.filters.filterText == null ||
+        Util.isEmptyString(state.filters.filterText)) {
+      return <BreadcrumbComponent groupId={state.currentGroup} />;
+    }
+
+    let router = this.context.router;
+    let currentPathname = router.getCurrentPathname();
+    let query = Object.assign({}, router.getCurrentQuery());
+    let params = router.getCurrentParams();
+
+    delete query.filterText;
+
+    return (
+        <p className="breadcrumb">
+          <span>{`Search results for "${state.filters.filterText}"`}</span>
+          <Link className="clear"
+              to={currentPathname}
+              query={query}
+              params={params}>
+            Clear search
+          </Link>
+        </p>
+    );
   },
 
   updateCurrentGroup: function () {
@@ -71,11 +99,6 @@ var TabPanesComponent = React.createClass({
   render: function () {
     var state = this.state;
 
-    var appListProps = Object.assign({
-      currentGroup: state.currentGroup,
-      viewType: AppListViewTypes.LIST
-    }, state.filters);
-
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
           className="container-fluid content">
@@ -85,12 +108,13 @@ var TabPanesComponent = React.createClass({
               onChange={this.updateFilters} />
             <main>
               <div className="contextual-bar">
-                <BreadcrumbComponent groupId={state.currentGroup} />
+                {this.getContextualBar()}
                 <div className="app-list-controls">
                   <AppListFilterComponent onChange={this.updateFilters} />
                 </div>
               </div>
-              <AppListComponent {...appListProps} />
+              <AppListComponent currentGroup={state.currentGroup}
+                filters={state.filters} />
             </main>
           </div>
         </TabPaneComponent>
