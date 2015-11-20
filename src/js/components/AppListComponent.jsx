@@ -84,14 +84,12 @@ var AppListComponent = React.createClass({
 
   propTypes: {
     currentGroup: React.PropTypes.string.isRequired,
-    filters: React.PropTypes.object,
-    viewType: React.PropTypes.oneOf(Object.values(AppListViewTypes))
+    filters: React.PropTypes.object
   },
 
   getDefaultProps: function () {
     return {
-      filters: {},
-      viewType: AppListViewTypes.LIST
+      filters: {}
     };
   },
 
@@ -255,6 +253,7 @@ var AppListComponent = React.createClass({
     var state = this.state;
     var sortKey = state.sortKey;
     var props = this.props;
+    var appListViewType = AppListViewTypes.GROUPED_LIST;
 
     var sortDirection = state.sortDescending ? 1 : -1;
 
@@ -264,6 +263,7 @@ var AppListComponent = React.createClass({
 
     // Global search view - only display filtered apps
     if (this.hasFilters()) {
+      appListViewType = AppListViewTypes.APP_LIST;
       nodesSequence = this.filterNodes(lazy(state.apps), appsStatusesCount)
         .sortBy((app) => {
           return app[sortKey];
@@ -292,16 +292,12 @@ var AppListComponent = React.createClass({
 
     var appListItems = nodesSequence
       .map(app => {
-        switch (props.viewType) {
-          case AppListViewTypes.LIST:
-            return (
-              <AppListItemComponent key={app.id}
-                model={app}
-                currentGroup={props.currentGroup} />
-            );
-          default:
-            return null;
-        }
+        return (
+          <AppListItemComponent key={app.id}
+            model={app}
+            currentGroup={props.currentGroup}
+            viewType={appListViewType} />
+        );
       })
       .value();
 
