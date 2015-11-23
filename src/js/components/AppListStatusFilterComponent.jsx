@@ -20,10 +20,6 @@ var AppListStatusFilterComponent = React.createClass({
 
   mixins: [QueryParamsMixin],
 
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-
   propTypes: {
     onChange: React.PropTypes.func.isRequired
   },
@@ -81,10 +77,8 @@ var AppListStatusFilterComponent = React.createClass({
   },
 
   updateFilterStatus: function () {
-    var router = this.context.router;
     var state = this.state;
-    var queryParams = router.getCurrentQuery();
-    var selectedStatus = queryParams.filterStatus;
+    var selectedStatus = this.getQueryParamsValue("filterStatus");
     var stringify = JSON.stringify;
 
     if (selectedStatus == null) {

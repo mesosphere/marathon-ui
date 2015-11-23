@@ -13,10 +13,6 @@ var AppListLabelsFilterComponent = React.createClass({
 
   mixins: [OnClickOutsideMixin, QueryParamsMixin],
 
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-
   propTypes: {
     onChange: React.PropTypes.func.isRequired
   },
@@ -89,10 +85,8 @@ var AppListLabelsFilterComponent = React.createClass({
   },
 
   updateFilterLabels: function () {
-    var router = this.context.router;
     var state = this.state;
-    var queryParams = router.getCurrentQuery();
-    var selectedLabels = queryParams.filterLabels;
+    var selectedLabels = this.getQueryParamsValue("filterLabels");
     var stringify = JSON.stringify;
 
     if (selectedLabels == null) {

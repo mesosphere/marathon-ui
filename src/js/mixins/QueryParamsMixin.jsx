@@ -49,7 +49,11 @@ var QueryParamsMixin = {
     );
   },
 
-  setQueryParam: function (filterName, filterValue) {
+  getQueryParamValue: function (paramKey) {
+    var router = this.context.router;
+    return router.getCurrentQuery()[paramKey];
+  },
+
     var router = this.context.router;
     var queryParams = router.getCurrentQuery();
 
