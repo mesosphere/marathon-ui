@@ -94,7 +94,7 @@ var AppListItemComponent = React.createClass({
     let labelNodes = React.findDOMNode(refs.labels).querySelectorAll(".label");
 
     // labelNodes is not an Array, but a NodeList
-    [].forEach.call(labelNodes, function (label) {
+    [...labelNodes].forEach(label => {
       labelsWidth += DOMUtil.getOuterWidth(label);
       if (labelsWidth > availableWidth) {
         return true;
