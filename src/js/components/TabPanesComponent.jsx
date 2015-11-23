@@ -1,4 +1,3 @@
-var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppListFilterComponent = require("../components/AppListFilterComponent");
@@ -12,8 +11,12 @@ var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
 var tabs = require("../constants/tabs");
 
+var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+
 var TabPanesComponent = React.createClass({
   displayName: "TabPanesComponent",
+
+  mixins: [QueryParamsMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -42,22 +45,10 @@ var TabPanesComponent = React.createClass({
       return <BreadcrumbComponent groupId={state.currentGroup} />;
     }
 
-    let router = this.context.router;
-    let currentPathname = router.getCurrentPathname();
-    let query = Object.assign({}, router.getCurrentQuery());
-    let params = router.getCurrentParams();
-
-    delete query.filterText;
-
     return (
         <p className="breadcrumb">
           <span>{`Search results for "${state.filters.filterText}"`}</span>
-          <Link className="clear"
-              to={currentPathname}
-              query={query}
-              params={params}>
-            Clear search
-          </Link>
+          {this.getClearLinkForFilter("filterText", "Clear search", "clear")}
         </p>
     );
   },

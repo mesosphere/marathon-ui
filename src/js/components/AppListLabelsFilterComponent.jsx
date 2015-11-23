@@ -6,14 +6,12 @@ var React = require("react/addons");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
+var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+
 var AppListLabelsFilterComponent = React.createClass({
   displayName: "AppListLabelsFilterComponent",
 
-  mixins: [OnClickOutsideMixin],
-
-  contextTypes: {
-    router: React.PropTypes.func
-  },
+  mixins: [OnClickOutsideMixin, QueryParamsMixin],
 
   propTypes: {
     onChange: React.PropTypes.func.isRequired
@@ -86,29 +84,9 @@ var AppListLabelsFilterComponent = React.createClass({
     }, this.updateFilterLabels);
   },
 
-  setQueryParam: function (filterLabels) {
-    var router = this.context.router;
-    var queryParams = router.getCurrentQuery();
-
-    if (filterLabels != null && filterLabels.length !== 0) {
-      let encodedFilterLabels = filterLabels.map((label) => {
-        return encodeURIComponent(label.join(":"));
-      });
-      Object.assign(queryParams, {
-        filterLabels: encodedFilterLabels
-      });
-    } else {
-      delete queryParams.filterLabels;
-    }
-
-    router.transitionTo(router.getCurrentPathname(), {}, queryParams);
-  },
-
   updateFilterLabels: function () {
-    var router = this.context.router;
     var state = this.state;
-    var queryParams = router.getCurrentQuery();
-    var selectedLabels = queryParams.filterLabels;
+    var selectedLabels = this.getQueryParamValue(FilterTypes.LABELS);
     var stringify = JSON.stringify;
 
     if (selectedLabels == null) {
@@ -147,7 +125,7 @@ var AppListLabelsFilterComponent = React.createClass({
       }
     }
 
-    this.setQueryParam(selectedLabels);
+    this.setQueryParam("filterLabels", selectedLabels);
   },
 
   handleFilterTextChange: function (event) {

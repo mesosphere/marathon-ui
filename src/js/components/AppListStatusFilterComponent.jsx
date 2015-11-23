@@ -4,6 +4,8 @@ var AppStatus = require("../constants/AppStatus");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
+var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+
 /* TODO extract from AppStatusComponent */
 var statusNameMapping = {
   [AppStatus.RUNNING]: "Running",
@@ -16,9 +18,7 @@ var statusNameMapping = {
 var AppListStatusFilterComponent = React.createClass({
   displayName: "AppListStatusFilterComponent",
 
-  contextTypes: {
-    router: React.PropTypes.func
-  },
+  mixins: [QueryParamsMixin],
 
   propTypes: {
     onChange: React.PropTypes.func.isRequired
@@ -55,24 +55,6 @@ var AppListStatusFilterComponent = React.createClass({
     });
   },
 
-  setQueryParam: function (filterStatus) {
-    var router = this.context.router;
-    var queryParams = router.getCurrentQuery();
-
-    if (filterStatus != null && filterStatus.length !== 0) {
-      let encodedFilterStatus = filterStatus.map((key) => {
-        return encodeURIComponent(`${key}`);
-      });
-      Object.assign(queryParams, {
-        filterStatus: encodedFilterStatus
-      });
-    } else {
-      delete queryParams.filterStatus;
-    }
-
-    router.transitionTo(router.getCurrentPathname(), {}, queryParams);
-  },
-
   handleChange: function (statusKey, event) {
     var state = this.state;
     var selectedStatus = [];
@@ -91,14 +73,12 @@ var AppListStatusFilterComponent = React.createClass({
       }
     }
 
-    this.setQueryParam(selectedStatus);
+    this.setQueryParam("filterStatus", selectedStatus);
   },
 
   updateFilterStatus: function () {
-    var router = this.context.router;
     var state = this.state;
-    var queryParams = router.getCurrentQuery();
-    var selectedStatus = queryParams.filterStatus;
+    var selectedStatus = this.getQueryParamValue(FilterTypes.STATUS);
     var stringify = JSON.stringify;
 
     if (selectedStatus == null) {
