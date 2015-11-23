@@ -6,8 +6,12 @@ var AppListLabelsFilterComponent =
 var AppListStatusFilterComponent =
   require("../components/AppListStatusFilterComponent");
 
+var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+
 var SidebarComponent = React.createClass({
   displayName: "SidebarComponent",
+
+  mixins: [QueryParamsMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -35,29 +39,6 @@ var SidebarComponent = React.createClass({
     this.setState({
       filters: filters
     }, this.props.onChange(filters));
-  },
-
-  getClearLinkForFilter: function (filterQueryParamKey) {
-    var state = this.state;
-
-    if (state.filters[filterQueryParamKey].length === 0) {
-      return null;
-    }
-
-    let router = this.context.router;
-    let currentPathname = router.getCurrentPathname();
-    let query = Object.assign({}, router.getCurrentQuery());
-    let params = router.getCurrentParams();
-
-    if (query[filterQueryParamKey] != null) {
-      delete query[filterQueryParamKey];
-    }
-
-    return (
-      <Link to={currentPathname} query={query} params={params}>
-        Clear
-      </Link>
-    );
   },
 
   render: function () {
