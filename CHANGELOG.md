@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+ - \#2676 - Create button doesn't work with IE
+
 ## 0.11.2 - 2015-10-12
 ### Fixed
 - \#2338 - Parameters in the Docker container settings are not taken into

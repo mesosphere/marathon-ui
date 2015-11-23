@@ -1,3 +1,6 @@
+// window.toString is different to Object.prototype.toString in IE:
+var toString = Object.prototype.toString;
+
 var Util = {
   param: function (obj) {
     if (typeof obj !== "object" ) {
