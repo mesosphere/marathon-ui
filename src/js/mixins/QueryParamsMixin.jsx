@@ -1,6 +1,22 @@
 var Link = require("react-router").Link;
 var React = require("react/addons");
 
+var Util = require("../helpers/Util");
+
+function encodeValuesToURIComponents(values) {
+  if (Util.isArray(values)) {
+    return values.map((param) => {
+      var uriComponent = Util.isArray(param)
+        ? param.join(":")
+        : param.toString();
+
+      return encodeURIComponent(uriComponent);
+    });
+  }
+
+  return encodeURIComponent(values);
+}
+
 var QueryParamsMixin = {
   contextTypes: {
     router: React.PropTypes.func
@@ -31,6 +47,23 @@ var QueryParamsMixin = {
         {caption}
       </Link>
     );
+  },
+
+  setQueryParam: function (filterName, filterValue) {
+    var router = this.context.router;
+    var queryParams = router.getCurrentQuery();
+
+    if (filterValue != null && filterValue.length !== 0) {
+      let encodedFilter = encodeValuesToURIComponents(filterValue);
+
+      Object.assign(queryParams, {
+        [filterName]: encodedFilter
+      });
+    } else {
+      delete queryParams[filterName];
+    }
+
+    router.transitionTo(router.getCurrentPathname(), {}, queryParams);
   }
 };
 

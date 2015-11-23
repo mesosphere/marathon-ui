@@ -4,6 +4,8 @@ var AppStatus = require("../constants/AppStatus");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
+var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+
 /* TODO extract from AppStatusComponent */
 var statusNameMapping = {
   [AppStatus.RUNNING]: "Running",
@@ -15,6 +17,8 @@ var statusNameMapping = {
 
 var AppListStatusFilterComponent = React.createClass({
   displayName: "AppListStatusFilterComponent",
+
+  mixins: [QueryParamsMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -55,24 +59,6 @@ var AppListStatusFilterComponent = React.createClass({
     });
   },
 
-  setQueryParam: function (filterStatus) {
-    var router = this.context.router;
-    var queryParams = router.getCurrentQuery();
-
-    if (filterStatus != null && filterStatus.length !== 0) {
-      let encodedFilterStatus = filterStatus.map((key) => {
-        return encodeURIComponent(`${key}`);
-      });
-      Object.assign(queryParams, {
-        filterStatus: encodedFilterStatus
-      });
-    } else {
-      delete queryParams.filterStatus;
-    }
-
-    router.transitionTo(router.getCurrentPathname(), {}, queryParams);
-  },
-
   handleChange: function (statusKey, event) {
     var state = this.state;
     var selectedStatus = [];
@@ -91,7 +77,7 @@ var AppListStatusFilterComponent = React.createClass({
       }
     }
 
-    this.setQueryParam(selectedStatus);
+    this.setQueryParam("filterStatus", selectedStatus);
   },
 
   updateFilterStatus: function () {

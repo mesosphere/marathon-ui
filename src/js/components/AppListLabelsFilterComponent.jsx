@@ -6,10 +6,12 @@ var React = require("react/addons");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
+var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+
 var AppListLabelsFilterComponent = React.createClass({
   displayName: "AppListLabelsFilterComponent",
 
-  mixins: [OnClickOutsideMixin],
+  mixins: [OnClickOutsideMixin, QueryParamsMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -86,24 +88,6 @@ var AppListLabelsFilterComponent = React.createClass({
     }, this.updateFilterLabels);
   },
 
-  setQueryParam: function (filterLabels) {
-    var router = this.context.router;
-    var queryParams = router.getCurrentQuery();
-
-    if (filterLabels != null && filterLabels.length !== 0) {
-      let encodedFilterLabels = filterLabels.map((label) => {
-        return encodeURIComponent(label.join(":"));
-      });
-      Object.assign(queryParams, {
-        filterLabels: encodedFilterLabels
-      });
-    } else {
-      delete queryParams.filterLabels;
-    }
-
-    router.transitionTo(router.getCurrentPathname(), {}, queryParams);
-  },
-
   updateFilterLabels: function () {
     var router = this.context.router;
     var state = this.state;
@@ -147,7 +131,7 @@ var AppListLabelsFilterComponent = React.createClass({
       }
     }
 
-    this.setQueryParam(selectedLabels);
+    this.setQueryParam("filterLabels", selectedLabels);
   },
 
   handleFilterTextChange: function (event) {
