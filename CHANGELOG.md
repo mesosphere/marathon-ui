@@ -6,11 +6,19 @@
   app detail page.
 - Show all labels inside a dropdown menu revealed on click
 - Show application count on application status filters
+- \#2659 - Show the full ID path under the base ID
+- \#2664 - Adapt Filter Behavior to new Global Search
 
 ### Changed
 - Adjust the task list column order
 - Use colored labels instead of dots for task health
 - \#2646 - Consolidate Actions Menu in App Details View
+- \#2660 - Adapt Search box in App Collection View
+- \#2662 - Change Header When Applying Filter in App Collection View
+- \#2663 - Adapt filter count, reflect current result set
+
+### Fixed
+- \#2691 - Filters don't updated correctly on reload
 
 ## 0.13.4 - 2015-11-18
 ### Fixed

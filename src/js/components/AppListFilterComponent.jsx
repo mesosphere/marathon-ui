@@ -15,10 +15,9 @@ var AppListFilterComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      filterText: "",
       activated: false,
-      focused: false,
-      previousCursorPosition: null
+      filterText: "",
+      focused: false
     };
   },
 
@@ -43,24 +42,6 @@ var AppListFilterComponent = React.createClass({
         this.state.activated !== nextState.activated;
   },
 
-  restorePreviousCursorPosition: function () {
-    var position = this.state.previousCursorPosition;
-    if (position != null) {
-      React.findDOMNode(this.refs.filterText)
-          .setSelectionRange(position.start, position.end);
-    }
-  },
-
-  setCurrentCursorPosition: function () {
-    var input = React.findDOMNode(this.refs.filterText);
-    this.setState({
-      previousCursorPosition: {
-        start: input.selectionStart,
-        end: input.selectionEnd
-      }
-    });
-  },
-
   setQueryParam: function (filterText) {
     var router = this.context.router;
 
@@ -70,12 +51,12 @@ var AppListFilterComponent = React.createClass({
       Object.assign(queryParams, {
         filterText: encodeURIComponent(filterText)
       });
-      this.setCurrentCursorPosition();
     } else {
       delete queryParams.filterText;
     }
 
     router.transitionTo(router.getCurrentPathname(), {}, queryParams);
+    this.props.onChange({filterText});
   },
 
   updateFilterText: function () {
@@ -94,11 +75,8 @@ var AppListFilterComponent = React.createClass({
       this.setState({
         filterText: filterText,
         activated: filterText !== "" || state.focused
-      }, this.restorePreviousCursorPosition);
-
-      this.props.onChange({
-        filterText: filterText
       });
+      this.props.onChange({filterText});
     }
   },
 
@@ -108,14 +86,27 @@ var AppListFilterComponent = React.createClass({
 
   handleFilterTextChange: function (event) {
     var filterText = event.target.value;
+    this.setState({filterText}, () => {
+      if (filterText == null || filterText === "") {
+        this.handleClearFilterText();
+      }
+    });
+  },
 
-    this.setQueryParam(filterText);
+  handleSubmit: function (event) {
+    event.preventDefault();
+    this.setQueryParam(this.state.filterText);
   },
 
   handleKeyDown: function (event) {
-    if (event.key === "Escape") {
-      event.target.blur();
-      this.handleClearFilterText();
+    switch (event.key) {
+      case "Escape":
+        event.target.blur();
+        this.handleClearFilterText();
+        break;
+      case "Enter":
+        this.setQueryParam(this.state.filterText);
+        break;
     }
   },
 
@@ -133,7 +124,7 @@ var AppListFilterComponent = React.createClass({
     });
   },
 
-  getFilterBox: function () {
+  render: function () {
     var state = this.state;
 
     var filterBoxClassSet = classNames({
@@ -142,37 +133,28 @@ var AppListFilterComponent = React.createClass({
       "filter-box-activated": !!state.activated
     });
 
-    var clearIconClassSet = classNames({
-      "icon ion-close-circled clickable filter-box-clear": true,
-      "hidden": state.filterText === ""
+    var searchIconClassSet = classNames("icon ion-search", {
+      "clickable": state.filterText !== ""
     });
 
     return (
       <div className={filterBoxClassSet}>
-        <span className="input-group-addon search-icon-container">
-          <i className="icon ion-search"></i>
-        </span>
+        <span className="input-group-addon" />
         <input className="form-control"
           onBlur={this.blurInputGroup}
           onChange={this.handleFilterTextChange}
           onFocus={this.focusInputGroup}
           onKeyDown={this.handleKeyDown}
-          placeholder="Filter list"
+          placeholder="Search all applications"
           type="text"
           ref="filterText"
           value={state.filterText} />
-        <span className="input-group-addon">
-          <i className={clearIconClassSet}
-            onClick={this.handleClearFilterText}></i>
+        <span className="input-group-addon search-icon-container">
+          <i className={searchIconClassSet} onClick={this.handleSubmit} />
         </span>
       </div>
     );
-  },
-
-  render: function () {
-    return this.getFilterBox();
   }
-
 });
 
 module.exports = AppListFilterComponent;

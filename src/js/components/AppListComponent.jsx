@@ -8,8 +8,11 @@ var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var AppListItemComponent = require("./AppListItemComponent");
 
+var AppsActions = require("../actions/AppsActions");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
+
+var Util = require("../helpers/Util");
 
 function getGroupStatus(status, app) {
   var appStatus = app.status;
@@ -40,6 +43,13 @@ function getGroupHealth(health, app) {
 
     return healthState;
   });
+}
+
+function getInitialAppStatusesCount() {
+  return Object.values(AppStatus).reduce(function (memo, status) {
+    memo[status] = 0;
+    return memo;
+  }, {});
 }
 
 function initGroupNode(groupId, app) {
@@ -74,16 +84,12 @@ var AppListComponent = React.createClass({
 
   propTypes: {
     currentGroup: React.PropTypes.string.isRequired,
-    filterLabels: React.PropTypes.array,
-    filterStatus: React.PropTypes.array,
-    filterText: React.PropTypes.string,
-    filterTypes: React.PropTypes.array,
-    viewType: React.PropTypes.oneOf(Object.values(AppListViewTypes))
+    filters: React.PropTypes.object
   },
 
   getDefaultProps: function () {
     return {
-      viewType: AppListViewTypes.LIST
+      filters: {}
     };
   },
 
@@ -148,11 +154,75 @@ var AppListComponent = React.createClass({
     });
   },
 
-  getGroupedNodes: function (appsSequence) {
+  hasFilters: function () {
+    return Object.values(this.props.filters).some(filter => {
+      return filter != null &&
+        (Util.isArray(filter) && filter.length > 0) ||
+        (Util.isString(filter) && filter !== "");
+    });
+  },
+
+  filterNodes: function (nodesSequence, appsStatusesCount) {
+    var props = this.props;
+    var currentGroup = props.currentGroup;
+    var filters = props.filters;
+
+    if (filters.filterText != null && filters.filterText !== "") {
+      nodesSequence = nodesSequence
+        .filter(app => app.id.indexOf(filters.filterText) !== -1);
+    } else if (currentGroup !== "/") {
+      nodesSequence = nodesSequence
+          .filter(app => app.id.startsWith(currentGroup));
+    }
+
+    nodesSequence.each(app => {
+      appsStatusesCount[app.status]++;
+    });
+
+    if (filters.filterLabels != null && filters.filterLabels.length > 0) {
+      nodesSequence = nodesSequence.filter(app => {
+        let labels = app.labels;
+        if (labels == null || Object.keys(labels).length === 0) {
+          return false;
+        }
+
+        return filters.filterLabels.some(label => {
+          let [key, value] = label;
+          return labels[key] === value;
+        });
+      });
+    }
+
+    if (filters.filterStatus != null && filters.filterStatus.length > 0) {
+      nodesSequence = nodesSequence.filter(app => {
+        if (app.status == null) {
+          return false;
+        }
+        let appStatus = app.status.toString();
+
+        return filters.filterStatus.some(status => appStatus === status);
+      });
+    }
+
+    if (filters.filterTypes != null && filters.filterTypes.length > 0) {
+      nodesSequence = nodesSequence.filter(app => {
+        return filters.filterTypes.some(type => app.type === type);
+      });
+    }
+
+    return nodesSequence;
+  },
+
+  getGroupedNodes: function (apps, appsStatusesCount) {
     var currentGroup = this.props.currentGroup;
 
-    return appsSequence
-      .filter(app => app.id.startsWith(currentGroup))
+    var appsInGroup = apps.filter(app => app.id.startsWith(currentGroup));
+
+    appsInGroup.forEach(app => {
+      appsStatusesCount[app.status]++;
+    });
+
+    return appsInGroup
       .reduce((memo, app) => {
         let relativePath = app.id.substring(currentGroup.length);
         let pathParts = relativePath.split("/");
@@ -177,88 +247,61 @@ var AppListComponent = React.createClass({
       }, []);
   },
 
-  getAppNodes: function () {
+  getAppListItems: function () {
     var state = this.state;
     var sortKey = state.sortKey;
     var props = this.props;
+    var appListViewType = AppListViewTypes.GROUPED_LIST;
 
-    var appsSequence = lazy(state.apps);
+    var sortDirection = state.sortDescending ? 1 : -1;
 
-    if (props.filterText != null && props.filterText !== "") {
-      appsSequence = appsSequence
-        .filter(function (app) {
-          return app.id.indexOf(props.filterText) !== -1;
+    var nodesSequence;
+
+    var appsStatusesCount = getInitialAppStatusesCount();
+
+    // Global search view - only display filtered apps
+    if (this.hasFilters()) {
+      appListViewType = AppListViewTypes.APP_LIST;
+      nodesSequence = this.filterNodes(lazy(state.apps), appsStatusesCount)
+        .sortBy((app) => {
+          return app[sortKey];
+        }, state.sortDescending);
+
+    // Grouped node view
+    } else {
+      nodesSequence = lazy(this.getGroupedNodes(state.apps, appsStatusesCount))
+        // Alphabetically presort
+        .sortBy((app) => {
+          return app.id;
+        }, state.sortDescending)
+        // Hoist groups to top of the app list and sort everything by sortKey
+        .sort((a, b) => {
+          if (a.isGroup && !b.isGroup) {
+            return -1;
+          } else if (b.isGroup && !a.isGroup) {
+            return 1;
+          } else {
+            return a[sortKey] > b[sortKey]
+              ? -1 * sortDirection
+              : 1 * sortDirection;
+          }
         });
     }
 
-    if (props.filterLabels != null && props.filterLabels.length > 0) {
-      appsSequence = appsSequence.filter(function (app) {
-        let labels = app.labels;
-        if (labels == null || Object.keys(labels).length === 0) {
-          return false;
-        }
-
-        return lazy(props.filterLabels).some(function (label) {
-          let [key, value] = label;
-          return labels[key] === value;
-        });
-      });
-    }
-
-    if (props.filterStatus != null && props.filterStatus.length > 0) {
-      appsSequence = appsSequence.filter(function (app) {
-        if (app.status == null) {
-          return false;
-        }
-        let appStatus = app.status.toString();
-
-        return lazy(props.filterStatus).some(function (status) {
-          return appStatus === status;
-        });
-      });
-    }
-
-    if (props.filterTypes != null && props.filterTypes.length > 0) {
-      appsSequence = appsSequence.filter(function (app) {
-        return lazy(props.filterTypes).some(function (type) {
-          return app.type === type;
-        });
-      });
-    }
-
-    appsSequence
-      // Alphabetically presort
-      .sortBy((app) => {
-        return app.id;
-      }, state.sortDescending);
-
-    let sortDirection = state.sortDescending ? 1 : -1;
-
-    return this.getGroupedNodes(appsSequence)
-      // Hoist groups to top of the app list and sort everything by sortKey
-      .sort((a, b) => {
-        if (a.isGroup && !b.isGroup) {
-          return -1;
-        } else if (b.isGroup && !a.isGroup) {
-          return 1;
-        } else {
-          return a[sortKey] > b[sortKey]
-            ? -1 * sortDirection
-            : 1 * sortDirection;
-        }
+    var appListItems = nodesSequence
+      .map(app => {
+        return (
+          <AppListItemComponent key={app.id}
+            model={app}
+            currentGroup={props.currentGroup}
+            viewType={appListViewType} />
+        );
       })
-      .map((app) => {
-        switch (props.viewType) {
-          case AppListViewTypes.LIST:
-            return (
-              <AppListItemComponent key={app.id}
-                model={app}
-                currentGroup={props.currentGroup} />
-            );
-          default:
-            return null;
-        }
-      });
+      .value();
+
+    AppsActions.emitAppStatusesCount(appsStatusesCount);
+
+    return appListItems;
   },
 
   getCaret: function (sortKey) {
@@ -272,7 +315,7 @@ var AppListComponent = React.createClass({
 
   render: function () {
     var state = this.state;
-    var appNodes = this.getAppNodes();
+    var appNodes = this.getAppListItems();
 
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;

@@ -383,8 +383,8 @@ a:focus {
   & > tfoot > tr > td {
 
     &.icon-cell {
-      padding-top: @base-spacing-unit * 1.5;
-      padding-bottom: @base-spacing-unit * 1.5;
+      padding-top: @base-spacing-unit*1.5;
+      padding-bottom: @base-spacing-unit*1.5;
     }
 
     &.status-cell {
@@ -394,12 +394,24 @@ a:focus {
     &.name-cell {
       color: inherit;
 
-      .name {
+      &.global-app-list {
+        padding-top: @base-spacing-unit;
+        padding-bottom: @base-spacing-unit*0.75;
+      }
+
+      .name, .group-id {
         display: inline-block;
+        line-height: inherit;
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+
+      .group-id {
+        color: @text-color-muted;
+        display: block;
+        margin-top: @base-spacing-unit*0.25;
       }
 
       .labels {
@@ -419,6 +431,7 @@ a:focus {
           color: @navbar-inactive-color;
           font-size: @small-font-size;
           font-weight: normal;
+          line-height: inherit;
           max-width: @horizontal-spacing-unit * 64;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -1086,12 +1099,7 @@ fieldset[disabled] .btn-info.active {
     transition: border-color ease-in-out .15s;
     border-color: #5e646c;
     border-width: 1px;
-  }
-
-  .filter-box-clear {
-    display: none;
-    color: #5e646c;
-    transition: color ease-in-out .15s;
+    padding-left: 0;
   }
 }
 
@@ -1103,12 +1111,6 @@ fieldset[disabled] .btn-info.active {
     transition: border-color ease-in-out .15s;
     color: @brand-primary;
     border-color: @brand-primary;
-  }
-  .filter-box-clear {
-    display: inline;
-    &:hover {
-      color: @brand-primary;
-    }
   }
 }
 
@@ -1361,6 +1363,10 @@ fieldset[disabled] .btn-info.active {
 
           li {
             line-height: @font-size-h2 + @base-spacing-unit;
+          }
+
+          .clear {
+            margin-left: @horizontal-spacing-unit;
           }
         }
       }
