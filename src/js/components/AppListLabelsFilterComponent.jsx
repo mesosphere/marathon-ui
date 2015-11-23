@@ -86,7 +86,7 @@ var AppListLabelsFilterComponent = React.createClass({
 
   updateFilterLabels: function () {
     var state = this.state;
-    var selectedLabels = this.getQueryParamsValue("filterLabels");
+    var selectedLabels = this.getQueryParamValue(FilterTypes.LABELS);
     var stringify = JSON.stringify;
 
     if (selectedLabels == null) {

@@ -54,17 +54,18 @@ var QueryParamsMixin = {
     return router.getCurrentQuery()[paramKey];
   },
 
+  setQueryParam: function (paramKey, paramValue) {
     var router = this.context.router;
     var queryParams = router.getCurrentQuery();
 
-    if (filterValue != null && filterValue.length !== 0) {
-      let encodedFilter = encodeValuesToURIComponents(filterValue);
+    if (paramValue != null && paramValue.length !== 0) {
+      let encodedFilter = encodeValuesToURIComponents(paramValue);
 
       Object.assign(queryParams, {
-        [filterName]: encodedFilter
+        [paramKey]: encodedFilter
       });
     } else {
-      delete queryParams[filterName];
+      delete queryParams[paramKey];
     }
 
     router.transitionTo(router.getCurrentPathname(), {}, queryParams);

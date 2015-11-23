@@ -78,7 +78,7 @@ var AppListStatusFilterComponent = React.createClass({
 
   updateFilterStatus: function () {
     var state = this.state;
-    var selectedStatus = this.getQueryParamsValue("filterStatus");
+    var selectedStatus = this.getQueryParamValue(FilterTypes.STATUS);
     var stringify = JSON.stringify;
 
     if (selectedStatus == null) {

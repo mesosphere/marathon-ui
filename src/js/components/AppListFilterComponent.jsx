@@ -44,7 +44,7 @@ var AppListFilterComponent = React.createClass({
 
   updateFilterText: function () {
     var state = this.state;
-    var filterText = this.getQueryParamsValue("filterText");
+    var filterText = this.getQueryParamValue(FilterTypes.TEXT);
 
     if (filterText == null) {
       filterText = "";
