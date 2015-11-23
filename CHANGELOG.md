@@ -14,6 +14,7 @@
 
 ## 0.13.4 - 2015-11-18
 ### Fixed
+- \#2687 - Show error dialog on kill task error
 - \#2626 - Status icons are rendered blotted
 - \#2627 - Tasks health column shows different health status
 - \#2634 - UI does not update/show the status correctly
