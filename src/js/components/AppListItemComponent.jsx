@@ -191,7 +191,6 @@ var AppListItemComponent = React.createClass({
           </span>
           {this.getLabels()}
           <span className="group-id">{groupId}</span>
-
         </td>
       );
     }
