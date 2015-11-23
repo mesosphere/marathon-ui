@@ -25,20 +25,30 @@ function getGroupStatus(status, app) {
   return status;
 }
 
-function getGroupHealth(health, app) {
-  if (health == null) {
-    return app.health;
+function getGroupHealth(groupHealth, app) {
+  if (groupHealth == null) {
+    groupHealth = [];
   }
 
-  return health.map(healthState => {
-    var appHealthState =
-      app.health.find(appHealth => appHealth.state === healthState.state);
+  if (app.health == null) {
+    return groupHealth;
+  }
 
-    if (appHealthState != null) {
-      healthState.quantity += appHealthState.quantity;
+  let appHealth = app.health;
+
+  return appHealth.map(appHealthState => {
+    var groupHealthState =
+      groupHealth.find(groupHealthState => {
+        return groupHealthState.state === appHealthState.state;
+      });
+
+    if (groupHealthState == null) {
+      return Object.assign({}, appHealthState);
     }
 
-    return healthState;
+    groupHealthState.quantity += appHealthState.quantity;
+
+    return groupHealthState;
   });
 }
 
