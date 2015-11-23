@@ -3,6 +3,7 @@ var React = require("react/addons");
 var AppStatus = require("../constants/AppStatus");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
+var FilterTypes = require("../constants/FilterTypes");
 
 var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
@@ -73,7 +74,7 @@ var AppListStatusFilterComponent = React.createClass({
       }
     }
 
-    this.setQueryParam("filterStatus", selectedStatus);
+    this.setQueryParam(FilterTypes.STATUS, selectedStatus);
   },
 
   updateFilterStatus: function () {

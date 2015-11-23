@@ -5,6 +5,7 @@ var React = require("react/addons");
 
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
+var FilterTypes = require("../constants/FilterTypes");
 
 var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
@@ -125,7 +126,7 @@ var AppListLabelsFilterComponent = React.createClass({
       }
     }
 
-    this.setQueryParam("filterLabels", selectedLabels);
+    this.setQueryParam(FilterTypes.LABELS, selectedLabels);
   },
 
   handleFilterTextChange: function (event) {

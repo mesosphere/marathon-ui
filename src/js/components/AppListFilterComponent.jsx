@@ -2,6 +2,8 @@ var classNames = require("classnames");
 var React = require("react/addons");
 var Mousetrap = require("mousetrap");
 
+var FilterTypes = require("../constants/FilterTypes");
+
 var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
 var AppListFilterComponent = React.createClass({
@@ -57,13 +59,13 @@ var AppListFilterComponent = React.createClass({
         filterText: filterText,
         activated: filterText !== "" || state.focused
       });
-      this.props.onChange({filterText});
+      this.props.onChange({[FilterTypes.TEXT]: filterText});
     }
   },
 
   handleClearFilterText: function () {
-    this.setQueryParam("filterText", "");
-    this.props.onChange({filterText: ""});
+    this.setQueryParam(FilterTypes.TEXT, "");
+    this.props.onChange({[FilterTypes.TEXT]: ""});
   },
 
   handleFilterTextChange: function (event) {
@@ -78,8 +80,8 @@ var AppListFilterComponent = React.createClass({
   handleSubmit: function (event) {
     event.preventDefault();
     var filterText = this.state.filterText;
-    this.setQueryParam("filterText", filterText);
-    this.props.onChange({filterText});
+    this.setQueryParam(FilterTypes.TEXT, filterText);
+    this.props.onChange({[FilterTypes.TEXT]: filterText});
   },
 
   handleKeyDown: function (event) {

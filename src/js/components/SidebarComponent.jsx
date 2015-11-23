@@ -5,6 +5,7 @@ var AppListLabelsFilterComponent =
   require("../components/AppListLabelsFilterComponent");
 var AppListStatusFilterComponent =
   require("../components/AppListStatusFilterComponent");
+var FilterTypes = require("../constants/FilterTypes");
 
 var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
@@ -25,8 +26,8 @@ var SidebarComponent = React.createClass({
   getInitialState: function () {
     return {
       filters: {
-        filterLabels: [],
-        filterStatus: []
+        [FilterTypes.LABELS]: [],
+        [FilterTypes.STATUS]: []
       }
     };
   },
@@ -63,16 +64,16 @@ var SidebarComponent = React.createClass({
         </Link>
         <div className="flex-row">
           <h3 className="small-caps">Status</h3>
-          {this.getClearLinkForFilter("filterStatus")}
+          {this.getClearLinkForFilter(FilterTypes.STATUS)}
         </div>
         <AppListStatusFilterComponent
-          onChange={this.updateFilter.bind(null, "filterStatus")} />
+          onChange={this.updateFilter.bind(null, FilterTypes.STATUS)} />
         <div className="flex-row">
           <h3 className="small-caps">Label</h3>
-          {this.getClearLinkForFilter("filterLabels")}
+          {this.getClearLinkForFilter(FilterTypes.LABELS)}
         </div>
         <AppListLabelsFilterComponent
-          onChange={this.updateFilter.bind(null, "filterLabels")} />
+          onChange={this.updateFilter.bind(null, FilterTypes.LABELS)} />
       </nav>
     );
   }
