@@ -11,30 +11,26 @@ var AppListItemComponent = require("./AppListItemComponent");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 
-function getGroupStatus(status, app) {
-  var appStatus = app.status;
-
+function getGroupStatus(groupStatus, appStatus) {
   if (appStatus === AppStatus.DEPLOYING ||
       appStatus === AppStatus.DELAYED ||
       appStatus === AppStatus.WAITING) {
-    if (appStatus > status) {
+    if (appStatus > groupStatus) {
       return appStatus;
     }
   }
 
-  return status;
+  return groupStatus;
 }
 
-function getGroupHealth(groupHealth, app) {
+function getGroupHealth(groupHealth, appHealth) {
   if (groupHealth == null) {
     groupHealth = [];
   }
 
-  if (app.health == null) {
+  if (appHealth == null) {
     return groupHealth;
   }
-
-  let appHealth = app.health;
 
   return appHealth.map(appHealthState => {
     var groupHealthState =
@@ -56,8 +52,8 @@ function initGroupNode(groupId, app) {
   return {
     id: groupId,
     instances: app.instances,
-    status: getGroupStatus(null, app),
-    health: getGroupHealth(null, app),
+    status: getGroupStatus(null, app.status),
+    health: getGroupHealth(null, app.health),
     tasksRunning: app.tasksRunning,
     totalCpus: app.totalCpus,
     totalMem: app.totalMem,
@@ -70,8 +66,8 @@ function updateGroupNode(group, app) {
   group.tasksRunning += app.tasksRunning;
   group.totalCpus += app.totalCpus;
   group.totalMem += app.totalMem;
-  group.health = getGroupHealth(group.health, app);
-  group.status = getGroupStatus(group.status, app);
+  group.status = getGroupStatus(group.status, app.status);
+  group.health = getGroupHealth(group.health, app.health);
   return group;
 }
 
