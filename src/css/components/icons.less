@@ -1,0 +1,121 @@
+/* ==============
+ * Icons - Styles borrowed from mesosphere/canvas
+ * ==============
+ */
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  background-repeat: no-repeat;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &.icon-mini {
+
+    font-size: floor(@icon-mini-height* @icon-mini-scale);
+    line-height: floor(@icon-mini-height* @icon-mini-scale);
+    width: floor(@icon-mini-width * @icon-mini-scale);
+    height: floor(@icon-mini-height * @icon-mini-scale);
+
+    &:before {
+
+      line-height: floor(floor(@icon-mini-height * @icon-mini-scale)
+        + (@icon-mini-offset * @icon-mini-scale));
+
+    }
+
+    // Temporary icon styling as discussed in #2392 will be removed
+    // if we have the SVGs in place.
+    &.running {
+      background-image: url("img/icons/icon-mini-running-color.png");
+      background-size: contain;
+    }
+
+    &.deploying {
+      background-image: url("img/icons/icon-mini-deploying-color.png");
+      background-size: contain;
+    }
+
+    &.suspended {
+      background-image: url("img/icons/icon-mini-suspended-color.png");
+      background-size: contain;
+    }
+
+    &.delayed {
+      background-image: url("img/icons/icon-mini-delayed-color.png");
+      background-size: contain;
+    }
+
+    &.waiting {
+      background-image: url("img/icons/icon-mini-waiting-color.png");
+      background-size: contain;
+    }
+
+    &.gear {
+      background-image: url("img/icons/icon-mini-gear.svg");
+      background-size: contain;
+    }
+
+  }
+
+  &.icon-small {
+
+    font-size: floor(@icon-small-height* @icon-small-scale);
+    line-height: floor(@icon-small-height* @icon-small-scale);
+    width: floor(@icon-small-width * @icon-small-scale);
+    height: floor(@icon-small-height * @icon-small-scale);
+
+    &:before {
+
+      line-height: floor(floor(@icon-small-height * @icon-small-scale)
+        + (@icon-small-offset * @icon-small-scale));
+
+    }
+
+    &.group {
+      background-image: url("img/icons/icon-small-group.svg");
+      background-size: contain;
+    }
+
+    &.app {
+      background-image: url("img/icons/icon-small-app.svg");
+      background-size: contain;
+    }
+
+  }
+
+  &.icon-medium {
+
+    font-size: floor(@icon-medium-height* @icon-medium-scale);
+    line-height: floor(@icon-medium-height* @icon-medium-scale);
+    width: floor(@icon-medium-width * @icon-medium-scale);
+    height: floor(@icon-medium-height * @icon-medium-scale);
+
+    &:before {
+
+      line-height: floor(floor(@icon-medium-height * @icon-medium-scale)
+        + (@icon-medium-offset * @icon-medium-scale));
+
+    }
+
+  }
+
+  &.icon-large {
+
+    font-size: floor(@icon-large-height* @icon-large-scale);
+    line-height: floor(@icon-large-height* @icon-large-scale);
+    width: floor(@icon-large-width * @icon-large-scale);
+    height: floor(@icon-large-height * @icon-large-scale);
+
+    &:before {
+
+      line-height: floor(floor(@icon-large-height * @icon-large-scale)
+        + (@icon-large-offset * @icon-large-scale));
+
+    }
+
+  }
+
+}
