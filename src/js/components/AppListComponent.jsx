@@ -50,24 +50,24 @@ function getGroupHealth(groupHealth, appHealth) {
 
 function initGroupNode(groupId, app) {
   return {
+    health: getGroupHealth(null, app.health),
     id: groupId,
     instances: app.instances,
+    isGroup: true,
     status: getGroupStatus(null, app.status),
-    health: getGroupHealth(null, app.health),
     tasksRunning: app.tasksRunning,
     totalCpus: app.totalCpus,
-    totalMem: app.totalMem,
-    isGroup: true
+    totalMem: app.totalMem
   };
 }
 
 function updateGroupNode(group, app) {
+  group.health = getGroupHealth(group.health, app.health);
   group.instances += app.instances;
+  group.status = getGroupStatus(group.status, app.status);
   group.tasksRunning += app.tasksRunning;
   group.totalCpus += app.totalCpus;
   group.totalMem += app.totalMem;
-  group.status = getGroupStatus(group.status, app.status);
-  group.health = getGroupHealth(group.health, app.health);
   return group;
 }
 
