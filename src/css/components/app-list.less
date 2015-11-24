@@ -1,0 +1,167 @@
+/* ==============
+ * App List (Table)
+ * ==============
+ */
+.table.app-list {
+
+  /* Columns */
+  & > colgroup > col {
+
+    &.icon-col {
+      width: @base-spacing-unit*6;
+    }
+
+    &.name-col {
+      width: auto;
+    }
+
+    &.ram-col {
+      width: @base-spacing-unit*12;
+    }
+
+    &.cpu-col {
+      width: @base-spacing-unit*7;
+    }
+
+    &.status-col {
+      width: @base-spacing-unit*13;
+    }
+
+    &.instances-col {
+      width: @base-spacing-unit*12;
+    }
+
+    &.health-col {
+      width: @base-spacing-unit*8;
+    }
+
+    &.actions-col {
+      width: @base-spacing-unit*8;
+    }
+
+  }
+
+  & tr td:first-child,
+  & tr th:first-child
+  {
+    padding-left: @base-spacing-unit*2;
+  }
+  /* Cells */
+  & > tbody > tr > td,
+  & > tfoot > tr > td {
+
+    &.icon-cell {
+      padding-top: @base-spacing-unit*1.5;
+      padding-bottom: @base-spacing-unit*1.5;
+    }
+
+    &.status-cell {
+      padding-left: @base-spacing-unit*8;
+    }
+
+    &.name-cell {
+      color: inherit;
+
+      &.global-app-list {
+        padding-top: @base-spacing-unit;
+        padding-bottom: @base-spacing-unit*0.75;
+      }
+
+      .name, .group-id {
+        display: inline-block;
+        line-height: inherit;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .group-id {
+        color: @text-color-muted;
+        display: block;
+        margin-top: @base-spacing-unit*0.25;
+      }
+
+      .labels {
+        display: inline-block;
+        position: absolute;
+
+        .label, .more {
+          position: fixed;
+          transform: translateX(-1vw);
+          display: inline-block;
+          visibility: hidden;
+          white-space: nowrap;
+          padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
+          margin-left: @horizontal-spacing-unit;
+          background-color: @sidebar-bg-color;
+          border-radius: @base-spacing-unit*2;
+          color: @navbar-inactive-color;
+          font-size: @small-font-size;
+          font-weight: normal;
+          line-height: inherit;
+          max-width: @horizontal-spacing-unit * 64;
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          &.visible {
+            position: relative;
+            transform: translateX(0);
+            visibility: inherit;
+          }
+        }
+
+        .more:hover {
+          background-color: @btn-default-active-bg-color;
+        }
+
+        .labels-dropdown {
+          background-color: @navbar-bg-color;
+          display: none;
+          left: 100%;
+          margin-left: @base-spacing-unit * 2;
+          margin-top: -@base-spacing-unit * 2;
+          position: absolute;
+          top: 0;
+          z-index: 1;
+
+          &.visible {
+            display: block;
+          }
+
+          > h5 {
+            color: @table-text-color;
+            padding: @base-spacing-unit * 2;
+            margin: 0;
+          }
+
+          > .left-arrow {
+            display: block;
+            border-top: @base-spacing-unit solid transparent;
+            border-bottom: @base-spacing-unit solid transparent;
+            border-right: @base-spacing-unit solid @navbar-bg-color;
+            height: 0;
+            margin-left: -@base-spacing-unit;
+            margin-top: @base-spacing-unit * 2;
+            position: absolute;
+            top: 0;
+            width: 0;
+          }
+
+          > ul {
+            padding: 0 @base-spacing-unit * 2;
+
+            li {
+              display: block;
+              margin: 0 0 @base-spacing-unit 0;
+
+              .label {
+                margin: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
