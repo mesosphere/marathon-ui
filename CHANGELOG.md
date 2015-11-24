@@ -18,9 +18,6 @@
 - \#2663 - Adapt filter count, reflect current result set
 - \#2702 - Show proper info on app creation auth error
 
-### Fixed
-- \#2691 - Filters don't updated correctly on reload
-
 ## 0.13.5 - 2015-11-24
 ### Fixed
 - \#2699 - App list health bar update/render issue
