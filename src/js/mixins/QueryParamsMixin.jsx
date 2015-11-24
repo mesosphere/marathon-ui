@@ -22,8 +22,9 @@ var QueryParamsMixin = {
     router: React.PropTypes.func
   },
 
-  getClearLinkForFilter:
-      function (filterQueryParamKey, caption = "Clear", className = null) {
+  getClearLinkForFilter: function (filterQueryParamKey,
+      caption = "Clear",
+      className = null) {
     var state = this.state;
 
     if (state.filters[filterQueryParamKey].length === 0) {

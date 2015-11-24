@@ -98,12 +98,12 @@ var Marathon = React.createClass({
   },
 
   componentDidUpdate: function (prevProps, prevState) {
-    /*eslint-disable eqeqeq */
+    /* eslint-disable eqeqeq */
     if (prevState.activeAppId != this.state.activeAppId ||
       prevState.activeTabId != this.state.activeTabId) {
       this.resetPolling();
     }
-    /*eslint-enable eqeqeq */
+    /* eslint-enable eqeqeq */
   },
 
   componentWillUnmount: function () {

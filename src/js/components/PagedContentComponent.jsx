@@ -1,56 +1,56 @@
 var React = require("react/addons");
 
 module.exports = React.createClass({
-    displayName: "PagedContentComponent",
+  displayName: "PagedContentComponent",
 
-    propTypes: {
-      children: React.PropTypes.node,
-      className: React.PropTypes.string,
-      currentPage: React.PropTypes.number.isRequired,
-      itemsPerPage: React.PropTypes.number,
-      tag: React.PropTypes.string
-    },
+  propTypes: {
+    children: React.PropTypes.node,
+    className: React.PropTypes.string,
+    currentPage: React.PropTypes.number.isRequired,
+    itemsPerPage: React.PropTypes.number,
+    tag: React.PropTypes.string
+  },
 
-    getDefaultProps: function () {
-      return {
-        itemsPerPage: 20,
-        tag: "div"
-      };
-    },
+  getDefaultProps: function () {
+    return {
+      itemsPerPage: 20,
+      tag: "div"
+    };
+  },
 
-    isHidden: function (child) {
-      return child != null &&
-        child.props != null &&
-        child.props.className != null &&
-        child.props.className.split(" ").indexOf("hidden") > -1;
-    },
+  isHidden: function (child) {
+    return child != null &&
+      child.props != null &&
+      child.props.className != null &&
+      child.props.className.split(" ").indexOf("hidden") > -1;
+  },
 
-    getVisibleChildren: function (children) {
-      return children.filter(function (child) {
-        return !this.isHidden(child);
-      }.bind(this));
-    },
+  getVisibleChildren: function (children) {
+    return children.filter(function (child) {
+      return !this.isHidden(child);
+    }.bind(this));
+  },
 
-    getPageNodes: function () {
-      var children = this.props.children;
-      var begin = this.props.currentPage * this.props.itemsPerPage;
-      var end = begin + this.props.itemsPerPage;
-      var visibleChildren = this.getVisibleChildren(children);
+  getPageNodes: function () {
+    var children = this.props.children;
+    var begin = this.props.currentPage * this.props.itemsPerPage;
+    var end = begin + this.props.itemsPerPage;
+    var visibleChildren = this.getVisibleChildren(children);
 
-      return React.Children.map(visibleChildren, function (child, i) {
-        if (i >= begin && i < end) {
-          return React.cloneElement(child, {key: i});
-        }
-      });
-    },
+    return React.Children.map(visibleChildren, function (child, i) {
+      if (i >= begin && i < end) {
+        return React.cloneElement(child, {key: i});
+      }
+    });
+  },
 
-    render: function () {
-      return (
-        React.createElement(
-          this.props.tag,
-          {className: this.props.className},
-          this.getPageNodes()
-        )
-      );
-    }
-  });
+  render: function () {
+    return (
+      React.createElement(
+        this.props.tag,
+        {className: this.props.className},
+        this.getPageNodes()
+      )
+    );
+  }
+});

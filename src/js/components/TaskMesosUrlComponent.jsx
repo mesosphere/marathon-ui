@@ -12,7 +12,7 @@ var TaskMesosUrlComponent = React.createClass({
     text: React.PropTypes.string
   },
 
- getInitialState: function () {
+  getInitialState: function () {
     return {
       info: InfoStore.info
     };
