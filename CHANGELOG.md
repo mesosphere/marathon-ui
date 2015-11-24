@@ -20,6 +20,9 @@
 
 ### Fixed
 - \#2691 - Filters don't updated correctly on reload
+
+## 0.13.5 - 2015-11-24
+### Fixed
 - \#2699 - App list health bar update/render issue
 
 ## 0.13.4 - 2015-11-18
