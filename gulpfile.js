@@ -104,7 +104,6 @@ gulp.task("webpack", function (callback) {
       timing: true
     }));
 
-
     if (isFirstRun) {
       // This runs on initial gulp webpack load.
       isFirstRun = false;
@@ -118,9 +117,13 @@ gulp.task("webpack", function (callback) {
 });
 
 function eslintFn() {
+  var noop = function () {};
+
   return gulp.src([dirs.js + "/**/*.?(js|jsx)"])
     .pipe(eslint())
-    .pipe(eslint.formatEach("stylish", process.stderr));
+    // Binding a function on data event is a workaround
+    // to resolve https://github.com/adametry/gulp-eslint/issues/36
+    .pipe(eslint.formatEach("stylish", process.stderr).on("data", noop));
 }
 gulp.task("eslint", eslintFn);
 
