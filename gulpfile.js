@@ -2,7 +2,7 @@ var autoprefixer = require("gulp-autoprefixer");
 var connect = require("gulp-connect");
 var header = require('gulp-header');
 var browserSync = require("browser-sync");
-var eslint = require("gulp-eslint");
+var eslintFormatter = require("eslint/lib/formatters/stylish");
 var gulp = require("gulp");
 var gutil = require("gulp-util");
 var less = require("gulp-less");
@@ -35,7 +35,8 @@ var files = {
   mainCssDist: "main",
   index: "index.html",
   sourceSansPro: "SourceSansPro-Regular.otf.woff",
-  sourceSansProBold: "SourceSansPro-Bold.otf.woff"
+  sourceSansProBold: "SourceSansPro-Bold.otf.woff",
+  eslintRc: "./.eslintrc"
 };
 
 var webpackWatch = false;
@@ -45,16 +46,31 @@ if (process.env.GULP_ENV === "development") {
 
 var webpackConfig = {
   entry: dirs.js + "/" + files.mainJs + ".jsx",
+  eslint: {
+    configFile: files.eslintRc,
+    formatter: eslintFormatter
+  },
   output: {
     path: path.resolve(dirs.dist),
     filename: files.mainJsDist + ".js"
   },
   module: {
+    preLoaders: [
+      {
+        test: /\.(js|jsx)$/,
+        loader: "eslint-loader",
+        exclude: /node_modules/
+      }
+    ],
     loaders: [
       {
         test: /\.(js|jsx)$/,
-        loader: "babel-loader?cacheDirectory",
-        exclude: /node_modules/
+        loader: "babel",
+        exclude: /node_modules/,
+        query: {
+          cacheDirectory: true,
+          presets: ["react", "es2015"]
+        }
       },
       {
         test: /\.json$/,
@@ -82,13 +98,16 @@ gulp.task("webpack", function (callback) {
     !process.env.DISABLE_SOURCE_MAP ||
     process.env.DISABLE_SOURCE_MAP === "false") {
     webpackConfig.devtool = "source-map";
-    webpackConfig.module.preLoaders = [
+    if (webpackConfig.module.preLoaders == null) {
+      webpackConfig.module.preLoaders = [];
+    }
+    webpackConfig.module.preLoaders.push(
       {
         test: /\.js$/,
         loader: "source-map-loader",
         exclude: /node_modules/
       }
-    ];
+    );
   }
   // run webpack
   webpack(webpackConfig, function (err, stats) {
@@ -110,22 +129,10 @@ gulp.task("webpack", function (callback) {
       callback();
     } else {
       // This runs after webpack's internal watch rebuild.
-      eslintFn();
       browserSync.reload();
     }
   });
 });
-
-function eslintFn() {
-  var noop = function () {};
-
-  return gulp.src([dirs.js + "/**/*.?(js|jsx)"])
-    .pipe(eslint())
-    // Binding a function on data event is a workaround
-    // to resolve https://github.com/adametry/gulp-eslint/issues/36
-    .pipe(eslint.formatEach("stylish", process.stderr).on("data", noop));
-}
-gulp.task("eslint", eslintFn);
 
 gulp.task("less", function () {
   return gulp.src(dirs.styles + "/" + files.mainLess + ".less")
@@ -196,7 +203,7 @@ gulp.task("watch", function () {
   gulp.watch(dirs.fonts + "/**/*.*", ["fonts"]);
 });
 
-gulp.task("replace-js-strings", ["webpack", "eslint", "minify-js"], function () {
+gulp.task("replace-js-strings", ["webpack", "minify-js"], function () {
   return gulp.src(dirs.dist + "/main.js")
     .pipe(replace("@@ENV", process.env.GULP_ENV))
     .pipe(gulp.dest(dirs.dist));
@@ -206,7 +213,6 @@ gulp.task("serve", ["default", "connect:server", "watch"]);
 gulp.task("livereload", ["default", "browsersync", "watch"]);
 
 var tasks = [
-  "eslint",
   "webpack",
   "less",
   "images",
