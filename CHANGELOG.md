@@ -1,3 +1,7 @@
+## 0.13.5 - 2015-11-24
+### Fixed
+- \#2699 - App list health bar update/render issue
+
 ## 0.13.4 - 2015-11-18
 ### Fixed
 - \#2626 - Status icons are rendered blotted
