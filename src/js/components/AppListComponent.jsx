@@ -15,34 +15,40 @@ var AppsEvents = require("../events/AppsEvents");
 
 var Util = require("../helpers/Util");
 
-function getGroupStatus(status, app) {
-  var appStatus = app.status;
-
+function getGroupStatus(groupStatus, appStatus) {
   if (appStatus === AppStatus.DEPLOYING ||
       appStatus === AppStatus.DELAYED ||
       appStatus === AppStatus.WAITING) {
-    if (appStatus > status) {
+    if (appStatus > groupStatus) {
       return appStatus;
     }
   }
 
-  return status;
+  return groupStatus;
 }
 
-function getGroupHealth(health, app) {
-  if (health == null) {
-    return app.health;
+function getGroupHealth(groupHealth, appHealth) {
+  if (groupHealth == null) {
+    groupHealth = [];
   }
 
-  return health.map(healthState => {
-    var appHealthState =
-      app.health.find(appHealth => appHealth.state === healthState.state);
+  if (appHealth == null) {
+    return groupHealth;
+  }
 
-    if (appHealthState != null) {
-      healthState.quantity += appHealthState.quantity;
+  return appHealth.map(appHealthState => {
+    var groupHealthState =
+      groupHealth.find(healthState => {
+        return healthState.state === appHealthState.state;
+      });
+
+    if (groupHealthState == null) {
+      return Object.assign({}, appHealthState);
     }
 
-    return healthState;
+    groupHealthState.quantity += appHealthState.quantity;
+
+    return groupHealthState;
   });
 }
 
@@ -55,24 +61,24 @@ function getInitialAppStatusesCount() {
 
 function initGroupNode(groupId, app) {
   return {
+    health: getGroupHealth(null, app.health),
     id: groupId,
     instances: app.instances,
-    status: getGroupStatus(null, app),
-    health: getGroupHealth(null, app),
+    isGroup: true,
+    status: getGroupStatus(null, app.status),
     tasksRunning: app.tasksRunning,
     totalCpus: app.totalCpus,
-    totalMem: app.totalMem,
-    isGroup: true
+    totalMem: app.totalMem
   };
 }
 
 function updateGroupNode(group, app) {
+  group.health = getGroupHealth(group.health, app.health);
   group.instances += app.instances;
+  group.status = getGroupStatus(group.status, app.status);
   group.tasksRunning += app.tasksRunning;
   group.totalCpus += app.totalCpus;
   group.totalMem += app.totalMem;
-  group.health = getGroupHealth(group.health, app);
-  group.status = getGroupStatus(group.status, app);
   return group;
 }
 
