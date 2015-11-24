@@ -168,7 +168,10 @@ var AppListComponent = React.createClass({
     var currentGroup = props.currentGroup;
     var filters = props.filters;
 
-    let filterText = filters[FilterTypes.TEXT];
+    var filterText = filters[FilterTypes.TEXT];
+    var filterLabels = filters[FilterTypes.LABELS];
+    var filterStatus = filters[FilterTypes.STATUS];
+
     if (filterText != null && filterText !== "") {
       nodesSequence = nodesSequence
         .filter(app => app.id.indexOf(filterText) !== -1);
@@ -181,7 +184,6 @@ var AppListComponent = React.createClass({
       appsStatusesCount[app.status]++;
     });
 
-    let filterLabels = filters[FilterTypes.LABELS];
     if (filterLabels != null && filterLabels.length > 0) {
       nodesSequence = nodesSequence.filter(app => {
         let labels = app.labels;
@@ -196,7 +198,6 @@ var AppListComponent = React.createClass({
       });
     }
 
-    let filterStatus = filters[FilterTypes.STATUS];
     if (filterStatus != null && filterStatus.length > 0) {
       nodesSequence = nodesSequence.filter(app => {
         if (app.status == null) {
