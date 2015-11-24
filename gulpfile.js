@@ -68,8 +68,7 @@ var webpackConfig = {
         loader: "babel",
         exclude: /node_modules/,
         query: {
-          cacheDirectory: true,
-          presets: ["react", "es2015"]
+          cacheDirectory: true
         }
       },
       {
