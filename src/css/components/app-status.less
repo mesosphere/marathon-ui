@@ -1,0 +1,49 @@
+/* ==============
+ * App Status
+ * ==============
+ */
+.app-status {
+  display: flex;
+  align-items: center;
+
+  > i {
+    margin-right: @horizontal-spacing-unit;
+  }
+
+  &.running {
+    color: @app-status-running-color;
+  }
+
+  &.deploying {
+    color: @app-status-deploying-color;
+  }
+
+  &.suspended {
+    color: @app-status-suspended-color;
+  }
+
+  &.delayed {
+    color: @app-status-delayed-color;
+  }
+
+  &.waiting {
+    color: @app-status-waiting-color;
+  }
+
+  > span.tasks-summary {
+    color: @navbar-inactive-color;
+    margin-left: @horizontal-spacing-unit;
+  }
+}
+
+.page-header .app-status {
+  font-size: @font-size-icon;
+  line-height: @base-font-size;
+
+  .tasks-summary {
+    margin: @base-spacing-unit * 0.25 0 0 @horizontal-spacing-unit;
+    font-size: @base-font-size;;
+    font-weight: normal;
+  }
+
+}
