@@ -4,6 +4,7 @@ var React = require("react/addons");
 
 var AppListViewTypes = require("../constants/AppListViewTypes");
 var AppStatus = require("../constants/AppStatus");
+var FilterTypes = require("../constants/FilterTypes");
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var AppListItemComponent = require("./AppListItemComponent");
@@ -167,9 +168,13 @@ var AppListComponent = React.createClass({
     var currentGroup = props.currentGroup;
     var filters = props.filters;
 
-    if (filters.filterText != null && filters.filterText !== "") {
+    var filterText = filters[FilterTypes.TEXT];
+    var filterLabels = filters[FilterTypes.LABELS];
+    var filterStatus = filters[FilterTypes.STATUS];
+
+    if (!Util.isEmptyString(filterText)) {
       nodesSequence = nodesSequence
-        .filter(app => app.id.indexOf(filters.filterText) !== -1);
+        .filter(app => app.id.indexOf(filterText) !== -1);
     } else if (currentGroup !== "/") {
       nodesSequence = nodesSequence
           .filter(app => app.id.startsWith(currentGroup));
@@ -179,34 +184,28 @@ var AppListComponent = React.createClass({
       appsStatusesCount[app.status]++;
     });
 
-    if (filters.filterLabels != null && filters.filterLabels.length > 0) {
+    if (filterLabels != null && filterLabels.length > 0) {
       nodesSequence = nodesSequence.filter(app => {
         let labels = app.labels;
         if (labels == null || Object.keys(labels).length === 0) {
           return false;
         }
 
-        return filters.filterLabels.some(label => {
+        return filterLabels.some(label => {
           let [key, value] = label;
           return labels[key] === value;
         });
       });
     }
 
-    if (filters.filterStatus != null && filters.filterStatus.length > 0) {
+    if (filterStatus != null && filterStatus.length > 0) {
       nodesSequence = nodesSequence.filter(app => {
         if (app.status == null) {
           return false;
         }
         let appStatus = app.status.toString();
 
-        return filters.filterStatus.some(status => appStatus === status);
-      });
-    }
-
-    if (filters.filterTypes != null && filters.filterTypes.length > 0) {
-      nodesSequence = nodesSequence.filter(app => {
-        return filters.filterTypes.some(type => app.type === type);
+        return filterStatus.some(status => appStatus === status);
       });
     }
 

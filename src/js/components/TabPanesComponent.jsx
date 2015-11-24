@@ -1,4 +1,3 @@
-var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppListFilterComponent = require("../components/AppListFilterComponent");
@@ -6,14 +5,19 @@ var AppListComponent = require("../components/AppListComponent");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var DeploymentsListComponent =
   require("../components/DeploymentsListComponent");
+var FilterTypes = require("../constants/FilterTypes");
 var SidebarComponent = require("../components/SidebarComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
 var tabs = require("../constants/tabs");
 
+var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+
 var TabPanesComponent = React.createClass({
   displayName: "TabPanesComponent",
+
+  mixins: [QueryParamsMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -37,27 +41,19 @@ var TabPanesComponent = React.createClass({
   getContextualBar: function () {
     var state = this.state;
 
-    if (state.filters.filterText == null ||
-        Util.isEmptyString(state.filters.filterText)) {
+    if (state.filters[FilterTypes.TEXT] == null ||
+        Util.isEmptyString(state.filters[FilterTypes.TEXT])) {
       return <BreadcrumbComponent groupId={state.currentGroup} />;
     }
 
-    let router = this.context.router;
-    let currentPathname = router.getCurrentPathname();
-    let query = Object.assign({}, router.getCurrentQuery());
-    let params = router.getCurrentParams();
-
-    delete query.filterText;
-
     return (
         <p className="breadcrumb">
-          <span>{`Search results for "${state.filters.filterText}"`}</span>
-          <Link className="clear"
-              to={currentPathname}
-              query={query}
-              params={params}>
-            Clear search
-          </Link>
+          <span>
+            {`Search results for "${state.filters[FilterTypes.TEXT]}"`}
+          </span>
+          {this.getClearLinkForFilter(FilterTypes.TEXT,
+            "Clear search",
+            "clear")}
         </p>
     );
   },

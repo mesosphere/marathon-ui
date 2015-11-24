@@ -5,9 +5,14 @@ var AppListLabelsFilterComponent =
   require("../components/AppListLabelsFilterComponent");
 var AppListStatusFilterComponent =
   require("../components/AppListStatusFilterComponent");
+var FilterTypes = require("../constants/FilterTypes");
+
+var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
 var SidebarComponent = React.createClass({
   displayName: "SidebarComponent",
+
+  mixins: [QueryParamsMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -21,8 +26,8 @@ var SidebarComponent = React.createClass({
   getInitialState: function () {
     return {
       filters: {
-        filterLabels: [],
-        filterStatus: []
+        [FilterTypes.LABELS]: [],
+        [FilterTypes.STATUS]: []
       }
     };
   },
@@ -35,29 +40,6 @@ var SidebarComponent = React.createClass({
     this.setState({
       filters: filters
     }, this.props.onChange(filters));
-  },
-
-  getClearLinkForFilter: function (filterQueryParamKey) {
-    var state = this.state;
-
-    if (state.filters[filterQueryParamKey].length === 0) {
-      return null;
-    }
-
-    let router = this.context.router;
-    let currentPathname = router.getCurrentPathname();
-    let query = Object.assign({}, router.getCurrentQuery());
-    let params = router.getCurrentParams();
-
-    if (query[filterQueryParamKey] != null) {
-      delete query[filterQueryParamKey];
-    }
-
-    return (
-      <Link to={currentPathname} query={query} params={params}>
-        Clear
-      </Link>
-    );
   },
 
   render: function () {
@@ -82,16 +64,16 @@ var SidebarComponent = React.createClass({
         </Link>
         <div className="flex-row">
           <h3 className="small-caps">Status</h3>
-          {this.getClearLinkForFilter("filterStatus")}
+          {this.getClearLinkForFilter(FilterTypes.STATUS)}
         </div>
         <AppListStatusFilterComponent
-          onChange={this.updateFilter.bind(null, "filterStatus")} />
+          onChange={this.updateFilter.bind(null, FilterTypes.STATUS)} />
         <div className="flex-row">
           <h3 className="small-caps">Label</h3>
-          {this.getClearLinkForFilter("filterLabels")}
+          {this.getClearLinkForFilter(FilterTypes.LABELS)}
         </div>
         <AppListLabelsFilterComponent
-          onChange={this.updateFilter.bind(null, "filterLabels")} />
+          onChange={this.updateFilter.bind(null, FilterTypes.LABELS)} />
       </nav>
     );
   }
