@@ -172,7 +172,7 @@ var AppListComponent = React.createClass({
     var filterLabels = filters[FilterTypes.LABELS];
     var filterStatus = filters[FilterTypes.STATUS];
 
-    if (filterText != null && filterText !== "") {
+    if (!Util.isEmptyString(filterText)) {
       nodesSequence = nodesSequence
         .filter(app => app.id.indexOf(filterText) !== -1);
     } else if (currentGroup !== "/") {
