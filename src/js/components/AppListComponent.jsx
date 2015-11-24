@@ -37,8 +37,8 @@ function getGroupHealth(groupHealth, appHealth) {
 
   return appHealth.map(appHealthState => {
     var groupHealthState =
-      groupHealth.find(groupHealthState => {
-        return groupHealthState.state === appHealthState.state;
+      groupHealth.find(healthState => {
+        return healthState.state === appHealthState.state;
       });
 
     if (groupHealthState == null) {
