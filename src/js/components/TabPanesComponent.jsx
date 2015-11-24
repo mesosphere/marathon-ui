@@ -5,6 +5,7 @@ var AppListComponent = require("../components/AppListComponent");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var DeploymentsListComponent =
   require("../components/DeploymentsListComponent");
+var FilterTypes = require("../constants/FilterTypes");
 var SidebarComponent = require("../components/SidebarComponent");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
@@ -40,15 +41,19 @@ var TabPanesComponent = React.createClass({
   getContextualBar: function () {
     var state = this.state;
 
-    if (state.filters.filterText == null ||
-        Util.isEmptyString(state.filters.filterText)) {
+    if (state.filters[FilterTypes.TEXT] == null ||
+        Util.isEmptyString(state.filters[FilterTypes.TEXT])) {
       return <BreadcrumbComponent groupId={state.currentGroup} />;
     }
 
     return (
         <p className="breadcrumb">
-          <span>{`Search results for "${state.filters.filterText}"`}</span>
-          {this.getClearLinkForFilter("filterText", "Clear search", "clear")}
+          <span>
+            {`Search results for "${state.filters[FilterTypes.TEXT]}"`}
+          </span>
+          {this.getClearLinkForFilter(FilterTypes.TEXT,
+            "Clear search",
+            "clear")}
         </p>
     );
   },
