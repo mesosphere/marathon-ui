@@ -201,13 +201,7 @@
   border-bottom: 3px solid @brand-primary;
 }
 
-.list-unstyled, .table-unstyled {
-  margin-bottom: 0;
-}
-
-.dl-unstyled {
-  margin-bottom: 0;
-}
+@import "layout/list.less";
 
 @import "components/badge.less";
 
@@ -217,16 +211,6 @@
 
 .tasks-controls {
   padding-bottom: @base-spacing-unit;
-}
-
-@media (min-width: 768px) {
-  .dl-horizontal-lg dt {
-    width: 190px;
-  }
-
-  .dl-horizontal-lg dd {
-    margin-left: 210px;
-  }
 }
 
 @import "components/filter-box.less";
