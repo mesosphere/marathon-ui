@@ -146,7 +146,7 @@ var AppVersionComponent = React.createClass({
       ? <UNSPECIFIED_NODE />
       // Print environment variables as key value pairs like "key=value"
       : Object.keys(appVersion.env).map(function (k) {
-        return <dd key={k}>{k + "=" + appVersion.env[k]}</dd>;
+        return <dd key={k}>{k + "=" + "xxxxxxxx" + appVersion.env[k].slice(-4)}</dd>;
       });
 
     var executorNode = (appVersion.executor === "")
