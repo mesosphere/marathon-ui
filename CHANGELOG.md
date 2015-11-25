@@ -1,3 +1,5 @@
+## 0.13.6 - 2015-11-25
+
 ## 0.13.5 - 2015-11-24
 ### Fixed
 - \#2699 - App list health bar update/render issue
