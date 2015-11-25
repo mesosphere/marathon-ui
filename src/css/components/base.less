@@ -1,0 +1,82 @@
+/* ==============
+ * Base
+ * ==============
+ */
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Source Sans Pro Regular'),
+       local('SourceSansPro-Regular'),
+       url('fonts/SourceSansPro-Regular.otf.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: bold;
+  src: local('Source Sans Pro Bold'),
+  local('SourceSansPro-Bold'),
+  url('fonts/SourceSansPro-Bold.otf.woff') format('woff');
+}
+
+body {
+  font-family:
+    'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: @primary-bg-color;
+  color: #f6f6f6;
+  // Overwrite default bootstrap line height
+  line-height: @base-line-height;
+}
+
+code {
+  color: #fff;
+  background-color: #454a50;
+}
+
+pre {
+  color: #fff;
+  background-color: #323539;
+  border-style: none;
+}
+
+hr {
+  border-color: #2a2d2f;
+}
+
+dt,
+th {
+  color: #8e929b;
+}
+
+dd {
+  color: #f6f6f6;
+}
+
+dt,
+dd {
+  line-height: 1.728571429;
+}
+
+a {
+  color: @link-color;
+}
+
+a:hover,
+a:focus {
+  color: darken(@link-color, 20%);
+  text-decoration: none;
+}
+
+h1 {
+  font-size: @font-size-h1;
+}
+
+h3.small-caps {
+  color: @sidebar-heading-color;
+  font-weight: bold;
+  font-size: @font-size-h3;
+  line-height: @base-spacing-unit*2;
+  text-transform: uppercase;
+  margin: @base-spacing-unit 0;
+}
