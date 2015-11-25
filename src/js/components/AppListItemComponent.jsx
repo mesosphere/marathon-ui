@@ -6,6 +6,7 @@ var AppListItemLabelsComponent =
   require("../components/AppListItemLabelsComponent");
 var AppListViewTypes = require("../constants/AppListViewTypes");
 var AppStatusComponent = require("../components/AppStatusComponent");
+var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
 var DOMUtil = require("../helpers/DOMUtil");
@@ -145,6 +146,10 @@ var AppListItemComponent = React.createClass({
     );
   },
 
+  handleBreadcrumbClick: function (event) {
+    event.stopPropagation();
+  },
+
   onClick: function () {
     var model = this.props.model;
     var router = this.context.router;
@@ -190,7 +195,10 @@ var AppListItemComponent = React.createClass({
             {appName}
           </span>
           {this.getLabels()}
-          <span className="group-id">{groupId}</span>
+          <span className="group-id" onClick={this.handleBreadcrumbClick}>
+            <span className="lead-in">in</span>
+            <BreadcrumbComponent groupId={groupId} />
+          </span>
         </td>
       );
     }
