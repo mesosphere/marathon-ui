@@ -1,0 +1,134 @@
+/* ==============
+ * Buttons
+ * ==============
+ */
+.btn {
+  font-weight: 400;
+  transition: all 0.2s ease-in-out;
+
+  .icon {
+    vertical-align: top;
+  }
+}
+
+.btn-sm {
+  padding: 5px 14px;
+}
+
+.btn-lg {
+  padding: @base-spacing-unit @base-spacing-unit*2;
+  font-size: @base-font-size;
+  border-radius: @base-spacing-unit*0.5;
+  line-height: 1.15;
+}
+
+.btn-link {
+  color: #8e929b;
+}
+
+.btn-default {
+  background-color: transparent;
+  border-color: @btn-default-border-color;
+  color: @btn-default-text-color;
+}
+
+.btn-default.disabled,
+.btn-default[disabled] {
+  background-color: transparent;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+  background-color: @btn-default-active-bg-color;
+  border-color: @btn-default-active-bg-color;
+  color: @btn-default-active-text-color;
+}
+
+.btn-success {
+  background-color: @brand-primary;
+  border-color: @brand-primary;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-success.active,
+.open .dropdown-toggle.btn-success {
+  background-color: lighten(@brand-primary, 10%);
+  border-color: lighten(@brand-primary, 10%);
+}
+
+.btn-danger {
+  background-color: transparent;
+  border-color: #d9534f;
+  color: #d9534f;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger.active,
+.open .dropdown-toggle.btn-danger {
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.btn-info {
+  background-color: #5b6067;
+  border-color: @primary-bg-color;
+}
+
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active,
+.btn-info.active,
+.open .dropdown-toggle.btn-info {
+  background-color: #8e929b;
+  border-color: @primary-bg-color;
+}
+
+.btn-info.disabled,
+.btn-info[disabled],
+fieldset[disabled] .btn-info,
+.btn-info.disabled:hover,
+.btn-info[disabled]:hover,
+fieldset[disabled] .btn-info:hover,
+.btn-info.disabled:focus,
+.btn-info[disabled]:focus,
+fieldset[disabled] .btn-info:focus,
+.btn-info.disabled:active,
+.btn-info[disabled]:active,
+fieldset[disabled] .btn-info:active,
+.btn-info.disabled.active,
+.btn-info[disabled].active,
+fieldset[disabled] .btn-info.active {
+  color: #838a93;
+  background-color: #4d5157;
+  border-color: @primary-bg-color;
+}
+
+.page-header .btn + .btn {
+  margin-left: 5px;
+  margin-bottom: 0;
+}
+
+.btn.pull-right {
+  margin-left: 5px;
+}
+
+.header-btn {
+  margin-top: 14px;
+
+  .app-controls {
+    display: inline-block;
+    margin: 0 0 0 @horizontal-spacing-unit;
+    vertical-align: middle;
+
+    .btn > .icon {
+      margin-right: @base-spacing-unit * 0.75;
+    }
+  }
+}
