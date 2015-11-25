@@ -10,14 +10,6 @@
 }
 
 
-.centered-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 85vh;
-  width: 100vw;
-  text-align: center;
-}
 
 .page-header {
   border-bottom: none;
@@ -63,20 +55,6 @@
 @import "components/app-status.less";
 
 @import "components/buttons.less";
-
-/* ==============
- * Helpers
- * ==============
- */
-.text-align-top {
-   vertical-align: text-top;
-}
-
-.overflow-ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 /* ==============
  * Textures
@@ -180,6 +158,7 @@
 .nav-tabs-unbordered {
   border-bottom: 0 solid transparent;
 }
+@import "components/helpers.less";
 
 .nav-tabs-unbordered > li {
   margin-bottom: 0;
@@ -235,18 +214,6 @@
 @import "components/app-status.less";
 
 @import "components/health-bar.less";
-
-.clickable {
-  cursor: pointer;
-}
-
-.flush-top {
-  margin-top: 0px;
-}
-
-.flush-bottom {
-  margin-bottom: 0px;
-}
 
 .tasks-controls {
   padding-bottom: @base-spacing-unit;
