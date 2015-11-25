@@ -85,12 +85,12 @@ function getAppHealth(app) {
     healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
   }
 
-  // ... show everything above that in blue
+  // get the number for tasks overcapacity
   var overCapacity = Math.max(0, tasksSum - app.instances);
 
   healthData.push({quantity: overCapacity, state: HealthStatus.OVERCAPACITY});
 
-  // add unscheduled tasks
+  // count unscheduled tasks
   var unscheduled = Math.max(0, (app.instances - tasksSum));
 
   healthData.push({
