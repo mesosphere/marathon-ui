@@ -1,3 +1,14 @@
+.control-label {
+  font-weight: normal;
+}
+
+.form-control {
+  background: #f6f6f6;
+  border-color: #5e646c;
+  color: #555;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
 .checkbox {
   display: flex;
   align-items: center;
@@ -59,5 +70,25 @@
     content: "";
     transition: border @transition-fast ease-in-out,
       color @transition-fast ease-in-out;
+  }
+}
+
+.checkbox-form-group {
+  margin-bottom: 25px;
+  position: relative;
+  input[type=checkbox], input[type=radio] {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    display: inline;
+    height: auto;
+    width: auto;
+    box-shadow: none;
+  }
+  label {
+    background: rgb(43, 46, 49);
+    display: block;
+    padding: 8px 8px 8px 32px;
+    border-radius: 4px;
   }
 }
