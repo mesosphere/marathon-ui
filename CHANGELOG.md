@@ -8,6 +8,8 @@
 - Show application count on application status filters
 - \#2659 - Show the full ID path under the base ID
 - \#2664 - Adapt Filter Behavior to new Global Search
+- \#2704 - Change format of groupId under app name
+- \#2705 - Link groupId in search results to individual groups
 
 ### Changed
 - Adjust the task list column order
