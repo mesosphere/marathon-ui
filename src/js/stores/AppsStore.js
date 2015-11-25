@@ -77,7 +77,6 @@ function getAppHealth(app) {
     {quantity: app.tasksStaged || 0, state: HealthStatus.STAGED}
   ];
 
-  // cut off after `instances` many tasks...
   var tasksSum = 0;
   for (let i = 0; i < healthData.length; i++) {
     let capacityLeft = Math.max(0, app.instances - tasksSum);
@@ -85,18 +84,12 @@ function getAppHealth(app) {
     healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
   }
 
-  // ... show everything above that in blue
   var overCapacity = Math.max(0, tasksSum - app.instances);
-
   healthData.push({quantity: overCapacity, state: HealthStatus.OVERCAPACITY});
 
-  // add unscheduled task, or show black if completely suspended
-  var isSuspended = app.instances === 0 && tasksSum === 0;
   var unscheduled = Math.max(0, (app.instances - tasksSum));
-  var unscheduledOrSuspended = isSuspended ? 1 : unscheduled;
-
   healthData.push({
-    quantity: unscheduledOrSuspended,
+    quantity: unscheduled,
     state: HealthStatus.UNSCHEDULED
   });
 

@@ -115,22 +115,65 @@ describe("Apps", function () {
       AppsActions.requestApps();
     });
 
-    describe("App", function () {
+    describe("basic app", function () {
       beforeEach(function () {
         this.server.setup({
           "apps": [{
             id: "/app-1",
-            container: {
-              type: "DOCKER"
-            },
             tasksHealthy: 2,
             tasksUnhealthy: 2,
             tasksRunning: 5,
             tasksStaged: 2,
             instances: 10
-          },
-          {
-            id: "/app-2",
+          }]
+        }, 200);
+      });
+
+      it("has correct health weight", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].healthWeight).to.equal(47);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+
+      it("has the correct app type", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].type).to.equal("BASIC");
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+
+      it("has correct health data object", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].health).to.deep.equal([
+              {quantity: 2, state: HealthStatus.HEALTHY},
+              {quantity: 2, state: HealthStatus.UNHEALTHY},
+              {quantity: 1, state: HealthStatus.UNKNOWN},
+              {quantity: 2, state: HealthStatus.STAGED},
+              {quantity: 0, state: HealthStatus.OVERCAPACITY},
+              {quantity: 3, state: HealthStatus.UNSCHEDULED}
+            ]);
+          }, done);
+        });
+        AppsActions.requestApps();
+      });
+    });
+
+    describe("docker app", function () {
+      beforeEach(function () {
+        this.server.setup({
+          "apps": [{
+            id: "/app-1-docker",
+            container: {
+              type: "DOCKER"
+            },
             tasksHealthy: 2,
             tasksUnhealthy: 2,
             tasksRunning: 5,
@@ -154,7 +197,6 @@ describe("Apps", function () {
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].type).to.equal("DOCKER");
-            expect(AppsStore.apps[1].type).to.equal("BASIC");
           }, done);
         });
 
@@ -165,16 +207,138 @@ describe("Apps", function () {
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].health).to.deep.equal([
-              { quantity: 2, state: HealthStatus.HEALTHY },
-              { quantity: 2, state: HealthStatus.UNHEALTHY },
-              { quantity: 1, state: HealthStatus.UNKNOWN },
-              { quantity: 2, state: HealthStatus.STAGED },
-              { quantity: 0, state: HealthStatus.OVERCAPACITY },
-              { quantity: 3, state: HealthStatus.UNSCHEDULED }
+              {quantity: 2, state: HealthStatus.HEALTHY},
+              {quantity: 2, state: HealthStatus.UNHEALTHY},
+              {quantity: 1, state: HealthStatus.UNKNOWN},
+              {quantity: 2, state: HealthStatus.STAGED},
+              {quantity: 0, state: HealthStatus.OVERCAPACITY},
+              {quantity: 3, state: HealthStatus.UNSCHEDULED}
             ]);
           }, done);
         });
+        AppsActions.requestApps();
+      });
+    });
 
+    describe("basic suspended app", function () {
+      beforeEach(function () {
+        this.server.setup({
+          "apps": [{
+            id: "/app-1",
+            tasksHealthy: 0,
+            tasksUnhealthy: 0,
+            tasksRunning: 0,
+            tasksStaged: 0,
+            instances: 0
+          }]
+        }, 200);
+      });
+
+      it("has correct health weight", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].healthWeight).to.equal(0);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+
+      it("has correct health data object", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].health).to.deep.equal([
+              {quantity: 0, state: HealthStatus.HEALTHY},
+              {quantity: 0, state: HealthStatus.UNHEALTHY},
+              {quantity: 0, state: HealthStatus.UNKNOWN},
+              {quantity: 0, state: HealthStatus.STAGED},
+              {quantity: 0, state: HealthStatus.OVERCAPACITY},
+              {quantity: 0, state: HealthStatus.UNSCHEDULED}
+            ]);
+          }, done);
+        });
+        AppsActions.requestApps();
+      });
+    });
+
+    describe("basic deploying app", function () {
+      beforeEach(function () {
+        this.server.setup({
+          "apps": [{
+            id: "/app-1",
+            tasksHealthy: 5,
+            tasksUnhealthy: 0,
+            tasksRunning: 0,
+            tasksStaged: 5,
+            instances: 15
+          }]
+        }, 200);
+      });
+
+      it("has correct health weight", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].healthWeight).to.equal(13);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+
+      it("has correct health data object", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].health).to.deep.equal([
+              {quantity: 5, state: HealthStatus.HEALTHY},
+              {quantity: 0, state: HealthStatus.UNHEALTHY},
+              {quantity: 0, state: HealthStatus.UNKNOWN},
+              {quantity: 5, state: HealthStatus.STAGED},
+              {quantity: 0, state: HealthStatus.OVERCAPACITY},
+              {quantity: 5, state: HealthStatus.UNSCHEDULED}
+            ]);
+          }, done);
+        });
+        AppsActions.requestApps();
+      });
+    });
+
+    describe("basic app overcapacity", function () {
+      beforeEach(function () {
+        this.server.setup({
+          "apps": [{
+            id: "/app-1",
+            tasksHealthy: 0,
+            tasksUnhealthy: 0,
+            tasksRunning: 1,
+            tasksStaged: 0,
+            instances: 0
+          }]
+        }, 200);
+      });
+
+      it("has correct health weight", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].healthWeight).to.equal(16);
+          }, done);
+        });
+
+        AppsActions.requestApps();
+      });
+
+      it("has correct health data object", function (done) {
+        AppsStore.once(AppsEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppsStore.apps[0].health).to.deep.equal([
+              {quantity: 0, state: HealthStatus.HEALTHY},
+              {quantity: 0, state: HealthStatus.UNHEALTHY},
+              {quantity: 0, state: HealthStatus.UNKNOWN},
+              {quantity: 0, state: HealthStatus.STAGED},
+              {quantity: 1, state: HealthStatus.OVERCAPACITY},
+              {quantity: 0, state: HealthStatus.UNSCHEDULED}
+            ]);
+          }, done);
+        });
         AppsActions.requestApps();
       });
     });
