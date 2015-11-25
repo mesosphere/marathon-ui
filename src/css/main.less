@@ -31,45 +31,6 @@
  * ==============
  */
 
-.nav > li > a:hover,
-.nav > li > a:focus {
-  text-decoration: none;
-  background-color: transparent;
-}
-
-.navbar-inverse {
-  background-color: @navbar-bg-color;
-  border: none;
-  margin: 0;
-}
-
-.navbar-inverse .navbar-nav > li > a {
-  color: darken(@link-color, 40%);
-}
-
-.navbar-inverse .navbar-nav > .active > a,
-.navbar-inverse .navbar-nav > .active > a:hover,
-.navbar-inverse .navbar-nav > .active > a:focus {
-  color: #f6f6f6;
-  background-color: transparent;
-}
-
-@media (min-width: 768px) {
-  .navbar > .container .navbar-brand,
-  .navbar > .container-fluid .navbar-brand {
-    margin-left: 0;
-  }
-}
-
-.navbar-brand {
-  height: auto;
-  padding-bottom: 12px;
-  padding-top: 11px;
-  padding-left: 0;
-  text-align: center;
-  width: @sidebar-width - @base-spacing-unit*2;
-}
-
 .pagination-unstyled {
   margin-bottom: -9px;
   margin-top: -6px;
@@ -119,57 +80,10 @@
   color: #f6f6f6;
   background-color: #00b482;
 }
-
-.nav-tabs {
-  border-bottom: 2px solid #2a2d2f;
-  margin-top: 0;
-}
-
-.nav-tabs-unbordered {
-  border-bottom: 0 solid transparent;
-}
 @import "components/helpers.less";
 
-.nav-tabs-unbordered > li {
-  margin-bottom: 0;
-  border-bottom: 0 solid transparent;
-}
 
-.nav-tabs > li > a {
-  color: @navbar-inactive-color;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-radius: 0;
-  min-width: @navbar-min-width;
-  padding-bottom: 13px;
-  padding-top: 15px;
-  text-align: center;
-  border-bottom: 3px solid transparent;
-  line-height: 19px;
-}
-
-.nav-tabs > li > a:hover,
-.nav-tabs > li > a:focus {
-  color: @navbar-active-color;
-  border-color: transparent;
-}
-
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
-  background-color: transparent;
-  color: @navbar-active-color;
-}
-
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom: 3px solid @brand-primary;
-}
+@import "components/navigation.less";
 
 @import "layout/list.less";
 
