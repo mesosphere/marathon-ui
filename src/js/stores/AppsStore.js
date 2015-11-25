@@ -90,13 +90,11 @@ function getAppHealth(app) {
 
   healthData.push({quantity: overCapacity, state: HealthStatus.OVERCAPACITY});
 
-  // add unscheduled task, or show black if completely suspended
-  var isSuspended = app.instances === 0 && tasksSum === 0;
+  // add unscheduled tasks
   var unscheduled = Math.max(0, (app.instances - tasksSum));
-  var unscheduledOrSuspended = isSuspended ? 1 : unscheduled;
 
   healthData.push({
-    quantity: unscheduledOrSuspended,
+    quantity: unscheduled,
     state: HealthStatus.UNSCHEDULED
   });
 
