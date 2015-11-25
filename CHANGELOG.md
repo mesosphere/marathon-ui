@@ -1,6 +1,5 @@
 ## 0.13.6 - 2015-11-25
-
-### Fixed
+### Changed
 - \#2684 - Running instances are confusing
 
 ## 0.13.5 - 2015-11-24
