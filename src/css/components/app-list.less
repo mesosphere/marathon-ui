@@ -80,6 +80,32 @@
         color: @text-color-muted;
         display: block;
         margin-top: @base-spacing-unit*0.25;
+
+        .lead-in {
+          display: block;
+          float: left;
+          margin-right: @horizontal-spacing-unit;
+        }
+
+        .breadcrumb {
+          background-color: transparent;
+          padding: 0;
+
+          a {
+            color: darken(@link-color, 40%);
+
+            &:hover {
+              color: @link-color;
+            }
+          }
+
+          &:last-child {
+            a {
+              cursor: pointer;
+            }
+          }
+        }
+
       }
 
       .labels {
