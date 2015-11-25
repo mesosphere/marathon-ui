@@ -1,0 +1,46 @@
+.duplicable-row { /* own module */
+  .controls {
+    margin: 0 0 1em 0.2em;
+    .btn {
+      display: inline-block;
+      position: relative;
+      height: 35px;
+      width: 32px;
+      margin-left: 0.2em;
+
+      .icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 1;
+        transition: opacity 0.3s ease-out;
+      }
+      .icon-hover {
+        opacity: 0;
+      }
+
+      &:hover {
+        .icon {
+          opacity: 0;
+        }
+        .icon-hover {
+          opacity: 1;
+        }
+      }
+      &:focus {
+        outline: none;
+      }
+      &.add {
+        color: @brand-primary;
+      }
+      &.remove {
+        color: rgb(246, 246, 246);
+      }
+    }
+    .icon {
+      pointer-events: none;
+      line-height: 1em;
+      font-size: 2.6em;
+    }
+  }
+}
