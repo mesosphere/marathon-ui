@@ -19,6 +19,12 @@
 - \#2662 - Change Header When Applying Filter in App Collection View
 - \#2663 - Adapt filter count, reflect current result set
 - \#2702 - Show proper info on app creation auth error
+
+## 0.13.6 - 2015-11-25
+### Fixed
+- \#2719 - Show correct button label when creating inside group
+
+### Changed
 - \#2684 - Running instances are confusing
 
 ## 0.13.5 - 2015-11-24
