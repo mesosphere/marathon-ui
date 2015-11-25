@@ -1,0 +1,54 @@
+/* ==============
+ * App Health Detail
+ * ==============
+ */
+.app-health-detail {
+  margin: @base-spacing-unit * 2.5 0;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+}
+
+.app-health-detail .health-bar {
+  width: @base-spacing-unit * 22;
+}
+
+.app-health-detail .health-breakdown {
+  margin: 0 @base-spacing-unit * 2;
+}
+
+.health-breakdown-item {
+  margin-left: @base-spacing-unit;
+  &.health-breakdown-item-unknown {
+    color: @task-health-unknown-color;
+  }
+}
+
+.health-percentage {
+  margin-left: @base-spacing-unit / 2;
+  color: @text-color-muted;
+}
+
+.health-dot {
+  display: inline-block;
+  &:before {
+    content: "\00a0";
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    vertical-align: middle;
+    margin: @base-spacing-unit * 0.5 @base-spacing-unit * 0.75
+      @base-spacing-unit * 0.75;
+  }
+  &.health-dot-unhealthy:before {
+    background-color: @task-health-unhealthy-color;
+  }
+  &.health-dot-healthy:before {
+    background-color: @task-health-healthy-color;
+  }
+  &.health-dot-unknown:before {
+    background-color: @task-health-unknown-color;
+  }
+}
+
