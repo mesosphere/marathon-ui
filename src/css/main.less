@@ -78,20 +78,6 @@ a:focus {
   border-width: 5px;
 }
 
-.badge {
-  background-color: @primary-bg-color;
-  color: #8e929b;
-}
-
-.badge-default {
-  background-color: #EEE;
-  color: #444;
-}
-
-.badge-warning {
-  background-color: #E8EF98;
-}
-
 .close,
 .close:focus,
 .close:hover {
@@ -436,21 +422,7 @@ a:focus {
   margin-bottom: 0;
 }
 
-.badge {
-   position: absolute;
-   top: 5px;
-   left: 1px;
-   font-size: .7em;
-   color: #2a2d2f;
-   background: #e4f342;
-   min-width: 18px;
-   height: 18px;
-   text-align: center;
-   line-height: 18px;
-   border-radius: 50%;
-   box-shadow: 0 1px 1px #333;
-   padding: 0 2px;
-}
+@import "components/badge.less";
 
 @import "components/app-status.less";
 
