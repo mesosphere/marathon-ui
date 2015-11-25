@@ -185,9 +185,10 @@ var AppModalComponent = React.createClass({
   },
 
   getSubmitButton: function () {
-    var submitButtonTitle = this.props.app != null
-      ? "Change and deploy configuration"
-      : "+ Create";
+    var submitButtonTitle = "+ Create";
+    if (this.props.app != null && this.props.app.version != null) {
+      submitButtonTitle = "Change and deploy configuration";
+    }
 
     var classSet = classNames({
       "btn btn-success": true,
