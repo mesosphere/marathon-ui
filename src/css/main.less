@@ -154,47 +154,6 @@
   width: @sidebar-width - @base-spacing-unit*2;
 }
 
-.panel-group {
-  margin-top: 58px;
-}
-
-.panel-group .panel-inverse {
-  border-radius: 0;
-  border-top: solid 1px #3d4045;
-  border-bottom-width: 0;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.panel-group .panel-header {
-  color: #8e929b;
-  font-weight: bold;
-  border-top: solid 0 transparent;
-  border-bottom: solid 1px #3d4045;
-}
-
-.panel-group .panel-inverse + .panel-inverse {
-  margin-top: 0;
-}
-
-.panel-inverse {
-  background-color: transparent;
-  border-color: transparent;
-}
-
-.panel-body {
-  background-color: #222224;
-}
-
-.panel-inverse:not(.panel-header) .panel-heading:hover {
-  background-color: #454a50;
-}
-
-.panel-inverse .panel-body {
-  border-radius: 0 0 4px 4px;
-  margin-bottom: 15px;
-}
-
 .pagination-unstyled {
   margin-bottom: -9px;
   margin-top: -6px;
@@ -326,10 +285,6 @@
   cursor: pointer;
 }
 
-.modal-header-blend {
-  background: transparent;
-}
-
 .flush-top {
   margin-top: 0px;
 }
@@ -356,37 +311,7 @@
 
 @import "components/modal.less";
 
-.collapsible-panel {
-  margin-bottom: 1px;
-  &.panel-inverse .panel-heading:hover {
-    background: transparent;
-  }
-  .panel-heading {
-    color: @link-color;
-  }
-  background-color: @navbar-bg-color;
-  border-radius: 0;
-  border: none;
-
-  .panel-title {
-    user-select: none;
-    font-size: 1.1em;
-  }
-  .panel-title:before {
-    font-family: "Ionicons";
-    display: inline-block;
-    font-size: 0.8em;
-    content: "\f125";
-    width: 1.2em;
-  }
-  .panel-title.open:before{
-    content: "\f123";
-  }
-
-  .panel-body {
-    margin-bottom: 0;
-  }
-}
+@import "components/panel.less";
 
 @import "components/duplicable-row.less";
 
