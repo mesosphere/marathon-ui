@@ -237,7 +237,7 @@ describe("Apps", function () {
       it("has correct health weight", function (done) {
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
-            expect(AppsStore.apps[0].healthWeight).to.equal(1);
+            expect(AppsStore.apps[0].healthWeight).to.equal(0);
           }, done);
         });
 
@@ -253,7 +253,7 @@ describe("Apps", function () {
               {quantity: 0, state: HealthStatus.UNKNOWN},
               {quantity: 0, state: HealthStatus.STAGED},
               {quantity: 0, state: HealthStatus.OVERCAPACITY},
-              {quantity: 1, state: HealthStatus.UNSCHEDULED}
+              {quantity: 0, state: HealthStatus.UNSCHEDULED}
             ]);
           }, done);
         });
