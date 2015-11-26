@@ -4,6 +4,7 @@ import React from "react/addons";
 import AppListComponent from "../components/AppListComponent";
 import BreadcrumbComponent from "../components/BreadcrumbComponent";
 import DeploymentsListComponent from "../components/DeploymentsListComponent";
+import EventsListComponent from "../components/EventsListComponent";
 import FilterTypes from "../constants/FilterTypes";
 import SidebarComponent from "../components/SidebarComponent";
 import TabPaneComponent from "../components/TabPaneComponent";
@@ -136,6 +137,9 @@ var TabPanesComponent = React.createClass({
         </TabPaneComponent>
         <TabPaneComponent id={tabs[1].id}>
           <DeploymentsListComponent />
+        </TabPaneComponent>
+        <TabPaneComponent id={tabs[2].id}>
+          <EventsListComponent />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
