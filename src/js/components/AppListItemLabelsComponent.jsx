@@ -120,12 +120,12 @@ var AppListItemLabelsComponent = React.createClass({
     let dropdownNodes = [];
 
     Object.keys(labels).sort().forEach(function (key, i) {
-      if (key == null || Util.isEmptyString(key)) {
+      if (key == null || Util.isStringAndEmpty(key)) {
         return null;
       }
 
       let labelText = key;
-      if (!Util.isEmptyString(labels[key])) {
+      if (!Util.isStringAndEmpty(labels[key])) {
         labelText = `${key}:${labels[key]}`;
       }
 

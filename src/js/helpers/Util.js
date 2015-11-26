@@ -23,7 +23,7 @@ var Util = {
   isObject: function (obj) {
     return toString.call(obj) === "[object Object]";
   },
-  isEmptyString: function (str) {
+  isStringAndEmpty: function (str) {
     return this.isString(str) && (str == null || str === "");
   },
   hasClass: function (element, className) {

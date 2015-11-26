@@ -42,7 +42,7 @@ var TabPanesComponent = React.createClass({
     var state = this.state;
 
     if (state.filters[FilterTypes.TEXT] == null ||
-        Util.isEmptyString(state.filters[FilterTypes.TEXT])) {
+        Util.isStringAndEmpty(state.filters[FilterTypes.TEXT])) {
       return <BreadcrumbComponent groupId={state.currentGroup} />;
     }
 
