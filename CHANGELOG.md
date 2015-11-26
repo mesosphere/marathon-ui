@@ -19,6 +19,7 @@
 - \#2662 - Change Header When Applying Filter in App Collection View
 - \#2663 - Adapt filter count, reflect current result set
 - \#2702 - Show proper info on app creation auth error
+ -\#2529 - The Health checks close button (x) is misleading
 
 ## 0.13.6 - 2015-11-25
 ### Fixed
