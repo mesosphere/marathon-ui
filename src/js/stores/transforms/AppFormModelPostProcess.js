@@ -12,7 +12,7 @@ function hasOnlyEmptyValues(obj) {
       return element == null ||
         element === false ||
         (Util.isArray(element) && element.length === 0) ||
-        Util.isEmptyString(element);
+        Util.isStringAndEmpty(element);
     });
 }
 
@@ -52,7 +52,7 @@ const AppFormModelPostProcess = {
     } else {
       // Remove this hack, if there is a solution available.
       // https://github.com/mesosphere/marathon/issues/2147
-      if (Util.isEmptyString(app.cmd)) {
+      if (Util.isStringAndEmpty(app.cmd)) {
         app.cmd = " ";
       }
     }
@@ -67,7 +67,7 @@ const AppFormModelPostProcess = {
     let hc = healthChecks[0];
 
     let isEmpty = hc.protocol === HealthCheckProtocols.HTTP &&
-      hc.path == null || Util.isEmptyString(healthChecks.path) &&
+      hc.path == null || Util.isStringAndEmpty(healthChecks.path) &&
       ["portIndex",
       "gracePeriodSeconds",
       "intervalSeconds",

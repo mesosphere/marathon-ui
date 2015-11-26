@@ -3,10 +3,10 @@ var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
 var ValidConstraints = require("../../constants/ValidConstraints");
 
 function isValidPort(value) {
-  if (value == null || Util.isEmptyString(value)) {
+  if (value == null || Util.isStringAndEmpty(value)) {
     return true;
   }
-  if (!Util.isEmptyString(value) && !/^[0-9]+$/.test(value.toString())) {
+  if (!Util.isStringAndEmpty(value) && !/^[0-9]+$/.test(value.toString())) {
     return false;
   }
   var port = parseInt(value, 10);
@@ -14,14 +14,14 @@ function isValidPort(value) {
 }
 
 function isValidPath(value) {
-  if (value == null || Util.isEmptyString(value)) {
+  if (value == null || Util.isStringAndEmpty(value)) {
     return true;
   }
   return value.match(/ /g) == null;
 }
 
 const AppFormValidators = {
-  appIdNotEmpty: (str) => !Util.isEmptyString(str),
+  appIdNotEmpty: (str) => !Util.isStringAndEmpty(str),
 
   appIdNoWhitespaces: (str) => str.match(/ /g) == null,
 
@@ -34,7 +34,7 @@ const AppFormValidators = {
       "[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$";
 
     return str.split("/").every((pathSegement) => {
-      return Util.isEmptyString(pathSegement) ||
+      return Util.isStringAndEmpty(pathSegement) ||
         pathSegement === "." ||
         pathSegement === ".." ||
         !!pathSegement.match(idMatchRegExp);
@@ -45,9 +45,9 @@ const AppFormValidators = {
 
   containerVolumesHostPathIsValid: (obj) => isValidPath(obj.hostPath),
 
-  containerVolumesModeNotEmpty: (obj) => !Util.isEmptyString(obj.mode),
+  containerVolumesModeNotEmpty: (obj) => !Util.isStringAndEmpty(obj.mode),
 
-  constraints: (constraints) => Util.isEmptyString(constraints) ||
+  constraints: (constraints) => Util.isStringAndEmpty(constraints) ||
     constraints
       .split(",")
       .map((constraint) => constraint.split(":").map((value) => value.trim()))
@@ -58,18 +58,18 @@ const AppFormValidators = {
         return ValidConstraints.indexOf(p[1].toLowerCase()) !== -1;
       }),
 
-  cpus: (value) => !Util.isEmptyString(value) &&
+  cpus: (value) => !Util.isStringAndEmpty(value) &&
     !!value.toString().match(/^[0-9\.]+$/),
 
-  disk: (value) => !Util.isEmptyString(value) &&
+  disk: (value) => !Util.isStringAndEmpty(value) &&
     !!value.toString().match(/^[0-9\.]+$/),
 
   dockerImageNoWhitespaces: (str) => str.match(/ /g) == null,
 
   dockerParameters: (obj) => obj.hasOwnProperty("key") &&
     obj.hasOwnProperty("value") &&
-    !(Util.isEmptyString(obj.key) &&
-    !Util.isEmptyString(obj.value)),
+    !(Util.isStringAndEmpty(obj.key) &&
+    !Util.isStringAndEmpty(obj.value)),
 
   dockerPortMappingsContainerPortIsValid: (obj) =>
     isValidPort(obj.containerPort),
@@ -80,14 +80,14 @@ const AppFormValidators = {
 
   dockerPortMappingsProtocolValidType: (obj) =>
     obj.protocol == null ||
-    Util.isEmptyString(obj.protocol) ||
+    Util.isStringAndEmpty(obj.protocol) ||
     (obj.protocol != null &&
       (obj.protocol === "tcp" || obj.protocol === "udp")),
 
   env: (obj) => obj.hasOwnProperty("key") &&
     obj.hasOwnProperty("value") &&
-    !(Util.isEmptyString(obj.key) &&
-    !Util.isEmptyString(obj.value)),
+    !(Util.isStringAndEmpty(obj.key) &&
+    !Util.isStringAndEmpty(obj.value)),
 
   executor: (str) => Util.isString(str) &&
     (new RegExp("^(|\\/\\/cmd|\\/?[^\\/]+(\\/[^\\/]+)*)$"))
@@ -101,12 +101,12 @@ const AppFormValidators = {
 
   healthChecksCommandNotEmpty: (obj) => {
     return obj.protocol !== HealthCheckProtocols.COMMAND ||
-      !Util.isEmptyString(obj.command);
+      !Util.isStringAndEmpty(obj.command);
   },
 
   healthChecksPathNotEmpty: (obj) => {
     return obj.protocol !== HealthCheckProtocols.HTTP ||
-      !Util.isEmptyString(obj.path);
+      !Util.isStringAndEmpty(obj.path);
   },
 
   healthChecksPortIndex: (obj) => {
@@ -131,18 +131,18 @@ const AppFormValidators = {
     return !!obj.maxConsecutiveFailures.toString().match(/^[0-9]+$/);
   },
 
-  instances: (value) => !Util.isEmptyString(value) &&
+  instances: (value) => !Util.isStringAndEmpty(value) &&
     !!value.toString().match(/^[0-9]+$/),
 
   labels: (obj) => obj.hasOwnProperty("key") &&
     obj.hasOwnProperty("value") &&
-    !(Util.isEmptyString(obj.key) &&
-    !Util.isEmptyString(obj.value)),
+    !(Util.isStringAndEmpty(obj.key) &&
+    !Util.isStringAndEmpty(obj.value)),
 
-  mem: (value) => !Util.isEmptyString(value) &&
+  mem: (value) => !Util.isStringAndEmpty(value) &&
     !!value.toString().match(/^[0-9\.]+$/),
 
-  ports: (ports) => Util.isEmptyString(ports) ||
+  ports: (ports) => Util.isStringAndEmpty(ports) ||
     ports.split(",")
       .every((port) => port.toString().trim().match(/^[0-9]+$/))
 };

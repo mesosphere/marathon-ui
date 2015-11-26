@@ -39,7 +39,7 @@ const AppFormFieldToModelTransforms = {
     .filter((row) => {
       return ["containerPath", "hostPath", "mode"].every((key) => {
         return (row[key] != null &&
-          !Util.isEmptyString(row[key].toString().trim()));
+          !Util.isStringAndEmpty(row[key].toString().trim()));
       });
     })
     .value(),
@@ -47,7 +47,8 @@ const AppFormFieldToModelTransforms = {
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))
     .compact()
     .filter((row) => {
-      return row.key != null && !Util.isEmptyString(row.key.toString().trim());
+      return row.key != null &&
+        !Util.isStringAndEmpty(row.key.toString().trim());
     })
     .value(),
   dockerPortMappings: (rows) => lazy(rows)
@@ -58,13 +59,13 @@ const AppFormFieldToModelTransforms = {
 
       ["containerPort", "hostPort", "servicePort"].forEach((key) => {
         if (row[key] != null &&
-            !Util.isEmptyString(row[key].toString().trim())) {
+            !Util.isStringAndEmpty(row[key].toString().trim())) {
           obj[key] = parseInt(row[key], 10);
         }
       });
 
       if (Object.keys(obj).length) {
-        if (!Util.isEmptyString(row.protocol)) {
+        if (!Util.isStringAndEmpty(row.protocol)) {
           obj.protocol = row.protocol;
         }
         return obj;
@@ -75,7 +76,8 @@ const AppFormFieldToModelTransforms = {
   dockerPrivileged: (isChecked) => !!isChecked,
   env: (rows) => {
     return rows.reduce((memo, row) => {
-      if (!Util.isEmptyString(row.key) || !Util.isEmptyString(row.value)) {
+      if (!Util.isStringAndEmpty(row.key) ||
+          !Util.isStringAndEmpty(row.value)) {
         memo[row.key] = row.value;
       }
       return memo;
@@ -109,7 +111,7 @@ const AppFormFieldToModelTransforms = {
       "portIndex"]
         .forEach((key) => {
           if (row[key] != null &&
-              !Util.isEmptyString(row[key].toString().trim())) {
+              !Util.isStringAndEmpty(row[key].toString().trim())) {
             row[key] = parseInt(row[key], 10);
           }
         });
@@ -121,7 +123,8 @@ const AppFormFieldToModelTransforms = {
   instances: (value) => parseInt(value, 10),
   labels: (rows) => {
     return rows.reduce((memo, row) => {
-      if (!Util.isEmptyString(row.key) || !Util.isEmptyString(row.value)) {
+      if (!Util.isStringAndEmpty(row.key) ||
+          !Util.isStringAndEmpty(row.value)) {
         memo[row.key] = row.value;
       }
       return memo;

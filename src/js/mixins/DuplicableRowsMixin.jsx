@@ -116,7 +116,7 @@ var DuplicableRowsMixin = {
     }
 
     return Object.keys(this.duplicableRowsScheme[fieldId]).every((key) => {
-      return rows[0][key] == null || Util.isEmptyString(rows[0][key]);
+      return rows[0][key] == null || Util.isStringAndEmpty(rows[0][key]);
     });
   },
 
