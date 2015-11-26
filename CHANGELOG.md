@@ -20,6 +20,7 @@
 - \#2663 - Adapt filter count, reflect current result set
 - \#2702 - Show proper info on app creation auth error
  -\#2529 - The Health checks close button (x) is misleading
+- \#2566 - Port mappings do make sense when container is in net=host mode
 
 ## 0.13.6 - 2015-11-25
 ### Fixed
