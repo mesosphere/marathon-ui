@@ -1,0 +1,88 @@
+/* ==============
+ * Health bar
+ * ==============
+ */
+.progress {
+  height: 10px;
+  border-radius: 3px;
+}
+
+.progress-bar {
+  line-height: 10px;
+}
+
+.progress-bar-info {
+  background-color: #5e646b;
+}
+
+.health-bar-column {
+  vertical-align: middle;
+}
+
+.health-bar {
+  width: 100%;
+  display: inline-block;
+  height: @base-spacing-unit;
+  margin-bottom: 2px;
+  background-color: @health-bar-inner-color;
+  border-radius: 4px;
+}
+.health-bar-column .health-bar {
+  max-width: @health-bar-width;
+}
+
+.health-bar-inner {
+  border-left: 1px solid @health-bar-inner-color;
+}
+
+.health-bar-over-capacity {
+  background-color: @health-bar-over-capacity-color;
+}
+
+.health-bar-unhealthy {
+  background-color: @health-bar-unhealthy-color;
+}
+
+.health-bar-staged {
+  background-color: @health-bar-staged-color;
+}
+
+.health-bar-healthy {
+  background-color: @health-bar-healthy-color;
+}
+
+.health-bar-running {
+  background-color: @health-bar-running-color;
+}
+
+.health-bar-unscheduled {
+  background-color: @health-bar-inner-color;
+}
+
+.loading-bar {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    height: @base-spacing-unit;
+    width: @health-bar-width;
+    margin-top: @base-spacing-unit*-0.5;
+    margin-left: @health-bar-width*-0.5;
+    background-image: linear-gradient(
+      -45deg,
+      @health-bar-inner-color 25%,
+      rgba(42, 44, 49, 0) 25%,
+      rgba(42, 44, 49, 0) 50%,
+      @health-bar-inner-color 50%,
+      @health-bar-inner-color 75%,
+      rgba(42, 44, 49, 0) 75%
+    );
+    background-color: @health-bar-running-color;
+    background-size: 12px 12px;
+    box-shadow: inset 0 10px 0 rgba(255, 255, 255, 0.2);
+    animation: move 2s linear infinite;
+    -ms-animation-name: move;
+}
+
+@keyframes move {
+    to { background-position: 12px 12px; }
+}

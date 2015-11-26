@@ -1,0 +1,47 @@
+/* ==============
+ * Filter box
+ * ==============
+ */
+.filter-box {
+  max-width: 240px;
+
+  // Hide native clear button in IE10+
+  ::-ms-clear {
+    display: none;
+  }
+
+  .search-icon-container {
+    .icon {
+      font-size: @font-size-icon;
+    }
+    padding: @base-font-size*0.5 @base-spacing-unit;
+  }
+  .form-control {
+    padding: @base-font-size*0.5 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    color: #f6f6f6;
+    background: transparent;
+    border-color: #5e646c;
+    border-width: 1px 0;
+    height: auto;
+  }
+
+  .input-group-addon {
+    background: transparent;
+    transition: border-color ease-in-out .15s;
+    border-color: #5e646c;
+    border-width: 1px;
+    padding-left: 0;
+  }
+}
+
+.filter-box-activated {
+  .form-control {
+    border-color: @brand-primary;
+  }
+  .input-group-addon {
+    transition: border-color ease-in-out .15s;
+    color: @brand-primary;
+    border-color: @brand-primary;
+  }
+}

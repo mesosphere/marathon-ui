@@ -1,0 +1,91 @@
+/* ==============
+ * Pane
+ * ==============
+ */
+.pane-header {
+  line-height: 30px;
+}
+
+.tab-pane.active.flex-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .wrapper {
+    display: flex;
+    flex: 1;
+
+    main {
+      flex: 1;
+
+      .contextual-bar {
+        display: flex;
+        padding: @base-spacing-unit*2
+          0
+          @base-spacing-unit*2
+          @base-spacing-unit*2;
+
+        .app-list-controls {
+          display: flex;
+
+          .toggle-list-view {
+            display: flex;  // prevent line-break between buttons
+            margin-left: @base-spacing-unit*2;
+          }
+        }
+
+        .breadcrumb {
+          background-color: transparent;
+          font-size: @font-size-h2;
+          padding: 0;
+          align-items: center;
+          overflow-x: hidden;
+
+          li {
+            line-height: @font-size-h2 + @base-spacing-unit;
+          }
+
+          .clear {
+            margin-left: @horizontal-spacing-unit;
+          }
+        }
+      }
+    }
+
+    nav.sidebar {
+      background: @sidebar-bg-color;
+      min-height: 100vh;
+      margin: 0 0 0 -@base-spacing-unit*2;
+      padding: @base-spacing-unit*2;
+      width: @sidebar-width;
+
+      .btn-success, .dropdown-toggle, .dropdown-menu {
+        margin: 0 0 @base-spacing-unit 0;
+        text-align: left;
+        width: 100%;
+
+        > div {
+          overflow-x: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .dropdown-toggle {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .filters {
+        list-style: none;
+      }
+
+      .flex-row {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+}

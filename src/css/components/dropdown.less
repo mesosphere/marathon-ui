@@ -1,0 +1,62 @@
+/* ==============
+ * Dropdown
+ * ==============
+ */
+.dropdown {
+  margin: 0 0 @base-spacing-unit*2 0;
+
+  .dropdown-toggle {
+    color: @link-color;
+    overflow-x: hidden;
+
+    &:active, &:focus, &:hover {
+      background-color: transparent;
+    }
+
+    &:active, &:focus {
+      border-color: @brand-primary;
+    }
+  }
+
+  .dropdown-menu {
+    border-color: @dropdown-bg-color;
+    border-radius: 2px;
+    display: block;
+    z-index: 1001; /* Override Bootstrap's 1000 base value */
+
+    .checkbox {
+      padding: 0 @base-spacing-unit;
+      border-bottom: 1px solid @dropdown-separator-color;
+
+      label {
+        color: @sidebar-heading-color;
+
+        &::before {
+          border: 1px solid @breadcrumb-text-color;
+        }
+
+        > span {
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: @sidebar-width*0.5;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .search {
+      padding: @horizontal-spacing-unit @base-spacing-unit;
+
+      input[type=text] {
+        color: @sidebar-heading-color;
+        padding: @horizontal-spacing-unit;
+        width: 100%;
+      }
+    }
+
+    .text-danger {
+      color: @text-color-danger-light;
+    }
+  }
+}
