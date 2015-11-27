@@ -4,8 +4,10 @@ const JSONPUtil = {
   /**
    * Request JSONP data
    *
-   * @param url {String}
-   * @returns {Q.promise}
+   * @todo: write test to verify this util is working properly
+   *
+   * @param {string} url
+   * @returns {Q.promise} promise
    */
   request(url) {
     var deferred = Q.defer();
@@ -27,13 +29,13 @@ const JSONPUtil = {
     // Add handler
     script.onerror = function handleScriptError(error) {
       script.cleanUp();
-      deferred.reject(error)
+      deferred.reject(error);
     };
     script.onload = function handleScriptLoad() {
       script.cleanUp();
     };
     // Load data
-    script.src = `${url}${/[?&]/.test(url)? "&" : "?"}jsonp=${callback}`;
+    script.src = `${url}${ /[?&]/.test(url) ? "&" : "?" }jsonp=${callback}`;
     document.head.appendChild(script);
     return deferred.promise;
   }
