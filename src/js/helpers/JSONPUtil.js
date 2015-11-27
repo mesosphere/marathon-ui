@@ -7,7 +7,7 @@ const JSONPUtil = {
    * @param {string} url
    * @returns {Promise} promise
    */
-  request(url) {
+  request: function (url) {
     return new Promise(function (resolve, reject) {
       var callback = `jsonp_${Date.now().toString(16)}`;
       var script = document.createElement("script");
