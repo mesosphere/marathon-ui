@@ -216,6 +216,17 @@ describe("App Version component", function () {
       "user": "testuser",
       "env": {},
       "instances": 14,
+      "ipAddress": {
+        "groups": ["dev"],
+        "labels": {
+          "pool": "127.0.0.1/24"
+        },
+        "discovery": {
+          "ports": [
+            {"number": 80, "name": "http", "protocol": "tcp"}
+          ]
+        }
+      },
       "cpus": 0.1,
       "mem": 16.0,
       "disk": 0.0,
@@ -309,6 +320,13 @@ describe("App Version component", function () {
 
   it("has correct number of instances", function () {
     expect(this.table[23].props.children[0]).to.equal(14);
+  });
+
+  it("has correct ip address", function () {
+    var ipAddress = this.table[25].props.children.props.children;
+    expect(ipAddress).to.equal(
+      JSON.stringify(this.model.ipAddress, null, 2)
+    );
   });
 
   it("has correct amount of memory", function () {
