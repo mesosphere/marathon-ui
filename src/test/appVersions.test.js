@@ -216,6 +216,17 @@ describe("App Version component", function () {
       "user": "testuser",
       "env": {},
       "instances": 14,
+      "ipAddress": {
+        "groups": ["dev"],
+        "labels": {
+          "pool": "127.0.0.1/24"
+        },
+        "discovery": {
+          "ports": [
+            {"number": 80, "name": "http", "protocol": "tcp"}
+          ]
+        }
+      },
       "cpus": 0.1,
       "mem": 16.0,
       "disk": 0.0,
@@ -311,45 +322,52 @@ describe("App Version component", function () {
     expect(this.table[23].props.children[0]).to.equal(14);
   });
 
-  it("has correct amount of memory", function () {
-    expect(this.table[25].props.children[0]).to.equal(16.0);
-    expect(this.table[25].props.children[2]).to.equal("MiB");
+  it("has correct ip address", function () {
+    var ipAddress = this.table[25].props.children.props.children;
+    expect(ipAddress).to.equal(
+      JSON.stringify(this.model.ipAddress, null, 2)
+    );
   });
 
-  it("has correct amount of disk space", function () {
-    expect(this.table[27].props.children[0]).to.equal(0.0);
+  it("has correct amount of memory", function () {
+    expect(this.table[27].props.children[0]).to.equal(16.0);
     expect(this.table[27].props.children[2]).to.equal("MiB");
   });
 
+  it("has correct amount of disk space", function () {
+    expect(this.table[29].props.children[0]).to.equal(0.0);
+    expect(this.table[29].props.children[2]).to.equal("MiB");
+  });
+
   it("has correct ports", function () {
-    expect(this.table[29].props.children).to.equal("10000, 10001");
+    expect(this.table[31].props.children).to.equal("10000, 10001");
   });
 
   it("has correct backoff factor", function () {
-    expect(this.table[31].props.children[0]).to.equal(1.15);
+    expect(this.table[33].props.children[0]).to.equal(1.15);
   });
 
   it("has correct backoff", function () {
-    expect(this.table[33].props.children[0]).to.equal(1);
-    expect(this.table[33].props.children[2]).to.equal("seconds");
-  });
-
-  it("has correct max launch delay", function () {
-    expect(this.table[35].props.children[0]).to.equal(3600);
+    expect(this.table[35].props.children[0]).to.equal(1);
     expect(this.table[35].props.children[2]).to.equal("seconds");
   });
 
+  it("has correct max launch delay", function () {
+    expect(this.table[37].props.children[0]).to.equal(3600);
+    expect(this.table[37].props.children[2]).to.equal("seconds");
+  });
+
   it("has correct URIs", function () {
-    expect(this.table[37].type.displayName)
+    expect(this.table[39].type.displayName)
       .to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct User", function () {
-    expect(this.table[39].props.children[0]).to.equal("testuser");
+    expect(this.table[41].props.children[0]).to.equal("testuser");
   });
 
   it("has correct version", function () {
-    expect(this.table[41].props.children[0])
+    expect(this.table[43].props.children[0])
       .to.equal("2015-06-29T12:57:02.269Z");
   });
 

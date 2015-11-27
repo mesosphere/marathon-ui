@@ -10,6 +10,7 @@
 - \#2664 - Adapt Filter Behavior to new Global Search
 - \#2704 - Change format of groupId under app name
 - \#2705 - Link groupId in search results to individual groups
+- \#2729 - Expose IP-per-container app definition in App Details page
 
 ### Changed
 - Adjust the task list column order
