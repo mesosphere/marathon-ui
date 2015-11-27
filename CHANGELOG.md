@@ -11,6 +11,7 @@
 - \#2704 - Change format of groupId under app name
 - \#2705 - Link groupId in search results to individual groups
 - \#2729 - Expose IP-per-container app definition in App Details page
+- \#2727 - Integrate IP-Per-Container ipAddresses into task detail view
 
 ### Changed
 - Adjust the task list column order
