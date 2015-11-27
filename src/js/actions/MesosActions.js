@@ -7,7 +7,7 @@ var MesosActions = {
     JSONPUtil.request(`${url}/state`).then(
       function (state) {
         AppDispatcher.dispatch({
-          actionType: MesosEvents.REQUEST_STATE,
+          actionType: MesosEvents.REQUEST_STATE_COMPLETE,
           data: {id: id, state: state}
         });
       },
@@ -19,14 +19,14 @@ var MesosActions = {
       }
     );
   },
-  requestFiles(id, url, filePath) {
+  requestFiles(id, host, filePath) {
     JSONPUtil.request(
-      `${url}/files/browse?path=${encodeURIComponent(filePath)}`)
+      `${host}/files/browse?path=${encodeURIComponent(filePath)}`)
       .then(
         function (files) {
           AppDispatcher.dispatch({
-            actionType: MesosEvents.REQUEST_FILES,
-            data: {id: id, files: files}
+            actionType: MesosEvents.REQUEST_FILES_COMPLETE,
+            data: {id: id, host: host, files: files}
           });
         },
         function (error) {
@@ -36,6 +36,12 @@ var MesosActions = {
           });
         }
       );
+  },
+  requestTaskFiles(agentId, taskId) {
+    AppDispatcher.dispatch({
+      actionType: MesosEvents.REQUEST_FILES,
+      data: {agentId: agentId, taskId: taskId}
+    });
   }
 };
 
