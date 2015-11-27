@@ -1,6 +1,5 @@
 var Util = require("../../helpers/Util");
 
-var ContainerConstants = require("../../constants/ContainerConstants");
 var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
 
 const healthChecksRowScheme = require("../schemes/healthChecksRowScheme");
@@ -31,15 +30,6 @@ const AppFormModelPostProcess = {
 
     if (container == null) {
       return;
-    }
-
-    if (container.docker != null) {
-      if (container.docker.network === ContainerConstants.NETWORK.HOST) {
-        // If host networking is set, remove all port mappings.
-        if (Util.isArray(container.docker.portMappings)) {
-          container.docker.portMappings = [];
-        }
-      }
     }
 
     let isEmpty = (Util.isArray(container.volumes) &&
