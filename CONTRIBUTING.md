@@ -10,20 +10,29 @@ Before you submit your issue search the archive, maybe your question was already
 
 #### Compiling the UI
 
-1. Install [NPM](https://npmjs.org/)
+1. Install Mesos and Marathon (follow the [tutorial here](https://mesosphere.github.io/marathon/docs/))
+2. Setup a CORS proxy on your machine to proxy the UI requests to your running Marathon instance (e.g. via [Corsproxy](https://www.npmjs.com/package/corsproxy))
+3. Install [Node 5](https://nodejs.org/en/blog/release/v5.0.0/) and [NPM](https://npmjs.org/)
 
-2. Install dev dependencies
+4. Install dev dependencies
 
         npm install
         npm install -g gulp
 
-3. Run development environment
+5. Override development configuration
+
+    1. Copy `src/js/config/config.template.js` to `src/js/config/config.dev.js`
+    2. Override variables in `config.dev.js` to reflect your local development configuration
+
+6. Run development environment
 
         npm run serve
 
-    Or build the assets
+  or
 
-        npm run dist
+        npm run livereload
+
+  for a `browsersync` live-reload server.
 
 #### Adding npm package dependencies to package.json
 
