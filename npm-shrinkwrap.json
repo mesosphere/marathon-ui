@@ -15620,6 +15620,10 @@
         }
       }
     },
+    "q": {
+      "version": "1.4.1",
+      "resolved": "https://registry.npmjs.org/q/-/q-1.4.1.tgz"
+    },
     "qajax": {
       "version": "1.3.0",
       "resolved": "https://registry.npmjs.org/qajax/-/qajax-1.3.0.tgz",
