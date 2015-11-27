@@ -24,7 +24,9 @@ var AppDispatcher = require("../js/AppDispatcher");
 var BreadcrumbComponent = require("../js/components/BreadcrumbComponent.jsx");
 var AppListComponent = require("../js/components/AppListComponent");
 var AppListItemComponent = require("../js/components/AppListItemComponent");
-var AppHealthComponent =
+var AppHealthBarComponent =
+  require("../js/components/AppHealthBarComponent");
+var AppHealthBarWithTooltipComponent =
   require("../js/components/AppHealthBarWithTooltipComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
 var AppStatusComponent = require("../js/components/AppStatusComponent");
@@ -982,11 +984,12 @@ describe("App component", function () {
 
 });
 
-describe("App Health component", function () {
+describe("App Health Bar", function () {
 
   beforeEach(function () {
-    var model = {
+    this.model = {
       id: "app-123",
+      instances: 5,
       health: [
         { state: HealthStatus.HEALTHY, quantity: 2 },
         { state: HealthStatus.UNHEALTHY, quantity: 2 },
@@ -998,7 +1001,7 @@ describe("App Health component", function () {
     };
 
     this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppHealthComponent model={model} />);
+    this.renderer.render(<AppHealthBarComponent model={this.model} />);
     this.component = this.renderer.getRenderOutput();
   });
 
@@ -1036,34 +1039,30 @@ describe("App Health component", function () {
     expect(width).to.equal("20%");
   });
 
-  it("health bar for healthy tasks has correct content", function () {
-    var content = this.component.props.children[0].props["data-tip-content"];
-    expect(content).to.equal("healthy");
-  });
+  describe("tooltip", function () {
 
-  it("health bar for unhealthy tasks has correct content", function () {
-    var content = this.component.props.children[1].props["data-tip-content"];
-    expect(content).to.equal("unhealthy");
-  });
+    beforeEach(function () {
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(
+        <AppHealthBarWithTooltipComponent
+          model={this.model}/>);
+      var component = this.renderer.getRenderOutput();
+      this.content = component._store.props.children.props["data-tip-content"];
+    });
 
-  it("health bar for running tasks has correct content", function () {
-    var content = this.component.props.children[2].props["data-tip-content"];
-    expect(content).to.equal("running");
-  });
+    it("Healthy tasks are reported correctly", function () {
+      // Regexp matching because the content is a string of html
+      expect(this.content).to.match(/2.*Healthy.*\(.*40.*%\).*/);
+    });
 
-  it("health bar for staged tasks has correct content", function () {
-    var content = this.component.props.children[3].props["data-tip-content"];
-    expect(content).to.equal("staged");
-  });
+    it("Unhealthy tasks are reported correctly", function () {
+      expect(this.content).to.match(/2.*Unhealthy.*\(.*40.*%\).*/);
+    });
 
-  it("health bar for over capacity tasks has correct content", function () {
-    var content = this.component.props.children[4].props["data-tip-content"];
-    expect(content).to.equal("over-capacity");
-  });
+    it("Unknown tasks are reported correctly", function () {
+      expect(this.content).to.match(/1.*Unknown.*\(.*20.*%\).*/);
+    });
 
-  it("health bar for unscheduled tasks has correct content", function () {
-    var content = this.component.props.children[5].props["data-tip-content"];
-    expect(content).to.equal("unscheduled");
   });
 
 });
