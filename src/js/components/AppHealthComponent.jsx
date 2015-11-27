@@ -131,6 +131,7 @@ var AppHealthComponent = React.createClass({
   getAppHealthBreakdown: function () {
     let component = (
       <AppHealthBreakdownComponent
+        className="list-unstyled"
         fields={appHealthBreakdownFields}
         model={this.props.model} />
     );

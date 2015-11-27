@@ -411,6 +411,7 @@ var AppPageComponent = React.createClass({
             <div className="app-health-detail">
               <AppHealthComponent model={model} />
               <AppHealthBreakdownComponent
+                className="list-inline"
                 fields={appHealthBreakdownFields}
                 model={model} />
             </div>

@@ -5,6 +5,7 @@ var AppHealthBreakdownComponent = React.createClass({
   displayName: "AppHealthBreakdownComponent",
 
   propTypes: {
+    className: React.PropTypes.string,
     fields: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     model: React.PropTypes.object.isRequired
   },
