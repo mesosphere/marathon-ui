@@ -25,20 +25,18 @@ var AppHealthBreakdownComponent = React.createClass({
     var instances = health.quantity;
     var percentage = Math.round((instances / totalInstances) * 100);
     var key = field.key;
-    var itemClasses = classNames([
-      "health-breakdown-item", `health-breakdown-item-${key}`
-    ]);
+    var itemClasses = classNames(
+      "health-breakdown-item",
+      `health-breakdown-item-${key}`,
+      {"health-breakdown-item-empty": isNaN(percentage) || percentage === 0}
+    );
     var healthDotClasses = classNames(["health-dot", `health-dot-${key}`]);
-    var percentageClasses = classNames({
-      "health-percentage": true,
-      "hidden": isNaN(percentage) || percentage === 0
-    });
 
     return (
       <li className={itemClasses} key={key}>
         <span className={healthDotClasses}></span>
         {instances} {field.label}
-        <span className={percentageClasses}>
+        <span className="health-percentage">
           ({percentage}%)
         </span>
       </li>
@@ -47,8 +45,9 @@ var AppHealthBreakdownComponent = React.createClass({
 
   render: function () {
     var items = this.props.fields.map(this.renderItem);
+    var ulClassNames = classNames("health-breakdown", this.props.className);
     return (
-      <ul className="health-breakdown list-inline">
+      <ul className={ulClassNames}>
         {items}
       </ul>
     );

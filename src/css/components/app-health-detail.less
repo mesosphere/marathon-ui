@@ -22,6 +22,9 @@
   &.health-breakdown-item-unknown {
     color: @task-health-unknown-color;
   }
+  &.health-breakdown-item-empty .health-percentage {
+    display: none;
+  }
 }
 
 .health-percentage {
@@ -37,6 +40,9 @@
     margin: @base-spacing-unit;
     font-size: @base-font-size;
     color: @text-color-muted;
+  }
+  .health-breakdown-item-empty {
+    display: none;
   }
   .health-dot {
     margin-right: @base-spacing-unit;
