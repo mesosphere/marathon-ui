@@ -1,9 +1,9 @@
-import AppDispatcher from "../AppDispatcher";
-import JSONPUtil from "../helpers/JSONPUtil";
-import MesosEvents from "../events/MesosEvents";
+var AppDispatcher = require("../AppDispatcher");
+var JSONPUtil = require("../helpers/JSONPUtil");
+var MesosEvents = require("../events/MesosEvents");
 
 var MesosActions = {
-  requestState(id, url) {
+  requestState: function (id, url) {
     JSONPUtil.request(`${url}/state`).then(
       function (state) {
         AppDispatcher.dispatch({
@@ -19,7 +19,7 @@ var MesosActions = {
       }
     );
   },
-  requestFiles(id, host, filePath) {
+  requestFiles: function (id, host, filePath) {
     JSONPUtil.request(
       `${host}/files/browse?path=${encodeURIComponent(filePath)}`)
       .then(
@@ -37,7 +37,7 @@ var MesosActions = {
         }
       );
   },
-  requestTaskFiles(agentId, taskId) {
+  requestTaskFiles: function (agentId, taskId) {
     AppDispatcher.dispatch({
       actionType: MesosEvents.REQUEST_FILES,
       data: {agentId: agentId, taskId: taskId}
@@ -45,4 +45,4 @@ var MesosActions = {
   }
 };
 
-export default MesosActions;
+module.exports = MesosActions;

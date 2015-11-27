@@ -1,7 +1,7 @@
-import React from "react/addons";
-import MesosActions from "../actions/MesosActions";
-import MesosEvents from "../events/MesosEvents";
-import MesosStore from "../stores/MesosStore";
+var React = require( "react/addons");
+var MesosActions = require( "../actions/MesosActions");
+var MesosEvents = require( "../events/MesosEvents");
+var MesosStore = require( "../stores/MesosStore");
 
 var TaskFileListComponent = React.createClass({
   displayName: "TaskFileListComponent",
@@ -9,7 +9,7 @@ var TaskFileListComponent = React.createClass({
     task: React.PropTypes.object.isRequired
   },
 
-  getInitialState() {
+  getInitialState: function () {
     var task = this.props.task;
     var taskId = task.id || task.taskId;
     return {
@@ -17,11 +17,11 @@ var TaskFileListComponent = React.createClass({
     };
   },
 
-  componentWillMount() {
+  componentWillMount: function () {
     MesosStore.on(MesosEvents.CHANGE, this.onMesosChange);
   },
 
-  componentDidMount() {
+  componentDidMount: function () {
     var task = this.props.task;
     var agentId = task.slaveId;
     var taskId = task.id || task.taskId;
@@ -30,7 +30,7 @@ var TaskFileListComponent = React.createClass({
     }
   },
 
-  componentWillUnmount() {
+  componentWillUnmount: function () {
     MesosStore.removeListener(MesosEvents.CHANGE, this.onMesosChange);
   },
 
@@ -45,7 +45,7 @@ var TaskFileListComponent = React.createClass({
     }
   },
 
-  getFileNodes() {
+  getFileNodes: function () {
     var files = this.state.files;
     if (files != null) {
       return files.map((file) => {
