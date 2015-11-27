@@ -13,7 +13,7 @@ var TaskFileLinkComponent = React.createClass({
   displayName: "TaskFileLinkComponent",
   propTypes: {
     children: React.PropTypes.node,
-    classNames: React.PropTypes.string,
+    className: React.PropTypes.string,
     name: React.PropTypes.string.isRequired,
     task: React.PropTypes.object.isRequired
   },
@@ -67,7 +67,7 @@ var TaskFileLinkComponent = React.createClass({
   },
 
   render: function () {
-    var className = classNames(this.props.classNames, {
+    var className = classNames(this.props.className, {
       "loading": this.state.requested
     });
     return (<a className={className} onClick={this.handleClick}>
