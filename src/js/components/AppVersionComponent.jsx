@@ -169,6 +169,10 @@ var AppVersionComponent = React.createClass({
       ? <UnspecifiedNodeComponent />
       : <dd><pre>{JSON.stringify(appVersion.healthChecks, null, 2)}</pre></dd>;
 
+    var ipAddressNode = (appVersion.ipAddress == null)
+      ? <UnspecifiedNodeComponent />
+      : <dd><pre>{JSON.stringify(appVersion.ipAddress, null, 2)}</pre></dd>;
+
     var labelsNode = (appVersion.labels == null ||
         Object.keys(appVersion.labels).length === 0)
       ? <UnspecifiedNodeComponent />
@@ -216,6 +220,8 @@ var AppVersionComponent = React.createClass({
           {healthChecksNode}
           <dt>Instances</dt>
           {invalidateValue(appVersion.instances)}
+          <dt>IP Address</dt>
+          {ipAddressNode}
           <dt>Memory</dt>
           {invalidateValue(appVersion.mem, "MiB")}
           <dt>Disk Space</dt>
