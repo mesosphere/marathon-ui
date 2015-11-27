@@ -14,7 +14,7 @@ var TaskFileLinkComponent = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     className: React.PropTypes.string,
-    name: React.PropTypes.string.isRequired,
+    fileName: React.PropTypes.string.isRequired,
     task: React.PropTypes.object.isRequired
   },
 
@@ -39,7 +39,7 @@ var TaskFileLinkComponent = React.createClass({
     var taskId = task.id || task.taskId;
     var files = MesosStore.getTaskFiles(taskId);
     if (files) {
-      var file = files.filter(matchFileName(props.name))[0];
+      var file = files.filter(matchFileName(props.fileName))[0];
       // Download link if file was requested by the user
       if (this.state.requested) {
         window.open(file.download);
@@ -67,7 +67,7 @@ var TaskFileLinkComponent = React.createClass({
   },
 
   render: function () {
-    var className = classNames(this.props.className, {
+    var className = classNames("task-file-download", this.props.className, {
       "loading": this.state.requested
     });
     return (<a className={className} onClick={this.handleClick}>
