@@ -2,6 +2,7 @@ var classNames = require("classnames");
 var Link = require("react-router").Link;
 var React = require("react/addons");
 
+var AppsStore = require("../stores/AppsStore");
 var States = require("../constants/States");
 var TimeFieldComponent = require("../components/TimeFieldComponent");
 var TaskHealthComponent = require("../components/TaskHealthComponent");
@@ -41,8 +42,31 @@ var TaskDetailComponent = React.createClass({
   getTaskEndpoints: function () {
     var props = this.props;
     var task = props.task;
-    if (task.ports == null || task.ports.length === 0) {
+    var app = AppsStore.getCurrentApp(props.appId);
+
+    if ((task.ports == null || task.ports.length === 0) &&
+        (task.ipAddresses == null || task.ipAddresses.length === 0)) {
       return (<dd>None</dd>);
+    }
+
+    if (app.ipAddress != null &&
+        app.ipAddress.discovery != null &&
+        app.ipAddress.discovery.ports != null &&
+        task.ipAddresses != null &&
+        task.ipAddresses.length > 0) {
+
+      let endpoints = task.ipAddresses.reduce((memo, address) => {
+        app.ipAddress.discovery.ports.forEach(port => {
+          memo.push(`${address.ipAddress}:${port.number}`);
+        });
+        return memo;
+      }, []);
+
+      return endpoints.map(endpoint => (
+        <dd key={endpoint} className="overflow-ellipsis">
+          <a href={`//${endpoint}`} target="_blank">{endpoint}</a>
+        </dd>
+      ));
     }
 
     return task.ports.map((port) => {
@@ -53,6 +77,46 @@ var TaskDetailComponent = React.createClass({
         </dd>
       );
     });
+  },
+
+  getIpAddresses: function () {
+    var props = this.props;
+    var task = props.task;
+
+    var ipAddresses = (task.ipAddresses != null && task.ipAddresses.length > 0)
+      ? task.ipAddresses.map(address => address.ipAddress)
+      : [task.host];
+
+    return ipAddresses.map(ipAddress => (<dd key={ipAddress}>{ipAddress}</dd>));
+  },
+
+  getPorts: function () {
+    var task = this.props.task;
+    var ports = "[]";
+
+    if (task.ports != null && task.ports.length > 0) {
+      ports = `[${task.ports.toString()}]`;
+    }
+
+    return (<dd>{ports}</dd>);
+  },
+
+  getServiceDiscovery: function () {
+    var app = AppsStore.getCurrentApp(this.props.appId);
+
+    if (app == null ||
+        app.ipAddress == null ||
+        app.ipAddress.discovery == null ||
+        app.ipAddress.discovery.ports == null ||
+        app.ipAddress.discovery.ports.length === 0) {
+      return (<dd>n/a</dd>);
+    }
+
+    return app.ipAddress.discovery.ports.map(port => (
+      <dd key={port.number}>
+        {`${port.name}, ${port.number}, ${port.protocol}`}
+      </dd>
+    ));
   },
 
   getTaskHealthComponent: function () {
@@ -102,12 +166,14 @@ var TaskDetailComponent = React.createClass({
     return (
       <div>
         <dl className="dl-horizontal task-details">
-          <dt>Host</dt>
-          <dd>{task.host}</dd>
+          <dt>IP Addresses</dt>
+          {this.getIpAddresses()}
           <dt>Ports</dt>
-          <dd>[{task.ports.toString()}]</dd>
+          {this.getPorts()}
           <dt>Endpoints</dt>
           {this.getTaskEndpoints()}
+          <dt>Service Discovery</dt>
+          {this.getServiceDiscovery()}
           <dt>Status</dt>
           <dd>{task.status}</dd>
           {timeFields}
