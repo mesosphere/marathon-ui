@@ -1,0 +1,46 @@
+.filters.checked-list-box {
+  .checkbox {
+    input[type="checkbox"] + label::before {
+      border-color: @table-header-color;
+    }
+
+    input[type="checkbox"]:checked + label::before {
+      border-color: @brand-primary;
+    }
+  }
+
+  label {
+    color: @text-color-muted;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .label {
+    width: auto;
+    background-color: @table-header-color;
+    padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.25;
+    margin-left: 0px;
+    flex-shrink: 0;
+  }
+
+  li:hover {
+    &.checkbox {
+      input[type="checkbox"] + label::before {
+        border-color: @btn-default-text-color;
+        transition: initial;
+      }
+
+      input[type="checkbox"]:checked + label::before {
+       border-color: @brand-primary;
+      }
+    }
+
+    & > label {
+      color: @btn-default-text-color;
+    }
+
+    & > .label {
+      color: @btn-default-text-color;
+    }
+  }
+}
