@@ -6,6 +6,7 @@ var Moment = require("moment");
 var AppsStore = require("../stores/AppsStore");
 var HealthStatus = require("../constants/HealthStatus");
 var TaskStatus = require("../constants/TaskStatus");
+var TaskFileLinkComponent = require("../components/TaskFileLinkComponent");
 
 function joinNodes(nodes, separator = ", ") {
   var lastIndex = nodes.length - 1;
@@ -204,6 +205,16 @@ var TaskListItemComponent = React.createClass({
           <span className={statusClassSet}>
             {task.status}
           </span>
+        </td>
+        <td className="text-center">
+          <TaskFileLinkComponent task={task} name="stderr">
+            <i className="icon icon-mini file" /> stderr
+          </TaskFileLinkComponent>
+        </td>
+        <td className="text-center">
+          <TaskFileLinkComponent task={task} name="stdout">
+            <i className="icon icon-mini file" /> stdout
+          </TaskFileLinkComponent>
         </td>
         <td className="text-right">
           <span
