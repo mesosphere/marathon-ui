@@ -165,7 +165,7 @@ class MesosStore extends EventEmitter {
           files: data.files.map((file) => {
             let encodedPath = encodeURIComponent(file.path);
             file.host = data.host;
-            file.name = /[^/]+$/.exec(file.path);
+            file.name = /[^/]+\/?$/.exec(file.path)[0];
             file.download = `${data.host}/files/download?path=${encodedPath}`;
             return file;
           }),
