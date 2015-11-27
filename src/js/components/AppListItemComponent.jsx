@@ -1,7 +1,8 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
-var AppHealthComponent = require("../components/AppHealthComponent");
+var AppHealthBarWithTooltipComponent =
+  require("./AppHealthBarWithTooltipComponent");
 var AppListItemLabelsComponent =
   require("../components/AppListItemLabelsComponent");
 var AppListViewTypes = require("../constants/AppListViewTypes");
@@ -167,7 +168,7 @@ var AppListItemComponent = React.createClass({
   getHealthBar: function () {
     return (
       <td className="text-right health-bar-column">
-        <AppHealthComponent model={this.props.model} />
+        <AppHealthBarWithTooltipComponent model={this.props.model} />
       </td>
     );
   },

@@ -5,7 +5,8 @@ var AppsEvents = require("../events/AppsEvents");
 var TaskEvents = require("../events/TasksEvents");
 var AppsStore = require("../stores/AppsStore");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
-var AppHealthComponent = require("./AppHealthComponent");
+var AppHealthBarWithTooltipComponent =
+    require("./AppHealthBarWithTooltipComponent");
 var AppPageControlsComponent = require("./AppPageControlsComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
@@ -409,7 +410,7 @@ var AppPageComponent = React.createClass({
             <h1>{name}</h1>
             <AppStatusComponent model={model} showSummary={true} />
             <div className="app-health-detail">
-              <AppHealthComponent model={model} />
+              <AppHealthBarWithTooltipComponent model={model} />
               <AppHealthBreakdownComponent
                 className="list-inline"
                 fields={appHealthBreakdownFields}

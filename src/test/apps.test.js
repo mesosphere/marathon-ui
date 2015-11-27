@@ -24,7 +24,8 @@ var AppDispatcher = require("../js/AppDispatcher");
 var BreadcrumbComponent = require("../js/components/BreadcrumbComponent.jsx");
 var AppListComponent = require("../js/components/AppListComponent");
 var AppListItemComponent = require("../js/components/AppListItemComponent");
-var AppHealthComponent = require("../js/components/AppHealthComponent");
+var AppHealthComponent =
+  require("../js/components/AppHealthBarWithTooltipComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
 var AppStatusComponent = require("../js/components/AppStatusComponent");
 var appScheme = require("../js/stores/schemes/appScheme");
