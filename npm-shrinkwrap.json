@@ -17123,10 +17123,6 @@
           }
         }
       }
-    },
-    "whatwg-fetch": {
-      "version": "0.10.1",
-      "resolved": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.10.1.tgz"
     }
   }
 }
