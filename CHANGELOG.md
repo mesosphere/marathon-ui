@@ -6,6 +6,7 @@
   app detail page.
 - Show all labels inside a dropdown menu revealed on click
 - Show application count on application status filters
+- \#2657 - Tooltip for health bar in App Collection View
 - \#2659 - Show the full ID path under the base ID
 - \#2664 - Adapt Filter Behavior to new Global Search
 - \#2704 - Change format of groupId under app name
