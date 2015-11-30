@@ -12,7 +12,7 @@ const JSONPUtil = {
       var callback = `jsonp_${Date.now().toString(16)}`;
       var script = document.createElement("script");
       // Add jsonp callback
-      window[callback] = function handleJSONPResponce(data) {
+      window[callback] = function handleJSONPResponse(data) {
         if (data != null) {
           return resolve(data);
         }
