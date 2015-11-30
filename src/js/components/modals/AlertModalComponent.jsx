@@ -36,7 +36,7 @@ var AlertModalComponent = React.createClass({
           size="sm"
           onDestroy={this.props.onDestroy}>
         <div className="modal-body reduced-padding">
-          <GeminiScrollbar autoshow={true}>
+          <GeminiScrollbar>
             {this.props.message}
           </GeminiScrollbar>
           <div className="modal-controls fixed-height">

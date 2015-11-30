@@ -52,7 +52,7 @@ var PromptModalComponent = React.createClass({
           size="sm"
           onDestroy={this.props.onDestroy}>
         <div className="modal-body reduced-padding">
-          <GeminiScrollbar autoshow={true}>
+          <GeminiScrollbar>
             <label>{this.props.message}</label>
           </GeminiScrollbar>
           <input className="form-control"
