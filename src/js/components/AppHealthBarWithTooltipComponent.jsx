@@ -6,12 +6,6 @@ var AppHealthDetailComponent = require("./AppHealthDetailComponent");
 var Util = require("../helpers/Util");
 var HealthStatus = require("../constants/HealthStatus");
 
-var appHealthBreakdownFields = [
-  {label: "Healthy", key: "healthy", state: HealthStatus.HEALTHY},
-  {label: "Unhealthy", key: "unhealthy", state: HealthStatus.UNHEALTHY},
-  {label: "Unknown", key: "unknown", state: HealthStatus.UNKNOWN}
-];
-
 var AppHealthBarWithTooltipComponent = React.createClass({
   displayName: "AppHealthBarWithTooltipComponent",
 
@@ -52,7 +46,11 @@ var AppHealthBarWithTooltipComponent = React.createClass({
     let component = (
       <AppHealthDetailComponent
         className="list-unstyled"
-        fields={appHealthBreakdownFields}
+        fields={[
+          HealthStatus.HEALTHY,
+          HealthStatus.UNHEALTHY,
+          HealthStatus.UNKNOWN
+          ]}
         model={model} />
     );
     return React.renderToString(component);

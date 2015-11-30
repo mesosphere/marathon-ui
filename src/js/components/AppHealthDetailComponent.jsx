@@ -1,12 +1,23 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
+var HealthStatus = require("../constants/HealthStatus");
+
+var healthStatusLabels = {
+  [HealthStatus.HEALTHY]: "Healthy",
+  [HealthStatus.UNHEALTHY]: "Unhealthy",
+  [HealthStatus.UNKNOWN]: "Unknown",
+  [HealthStatus.STAGED]: "Staged",
+  [HealthStatus.OVERCAPACITY]: "Over Capacity",
+  [HealthStatus.UNSCHEDULED]: "Unscheduled"
+};
+
 var AppHealthDetailComponent = React.createClass({
   displayName: "AppHealthDetailComponent",
 
   propTypes: {
     className: React.PropTypes.string,
-    fields: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+    fields: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
     model: React.PropTypes.object.isRequired
   },
 
@@ -19,23 +30,23 @@ var AppHealthDetailComponent = React.createClass({
     return health;
   },
 
-  renderItem: function (field) {
-    var health = this.getHealth(field.state);
+  renderItem: function (state) {
+    var health = this.getHealth(state);
     var totalInstances = this.props.model.instances;
     var instances = health.quantity;
     var percentage = Math.round((instances / totalInstances) * 100);
-    var key = field.key;
+    var label = healthStatusLabels[state];
     var itemClasses = classNames(
       "health-breakdown-item",
-      `health-breakdown-item-${key}`,
+      `health-breakdown-item-${state}`,
       {"health-breakdown-item-empty": isNaN(percentage) || percentage === 0}
     );
-    var healthDotClasses = classNames(["health-dot", `health-dot-${key}`]);
+    var healthDotClasses = classNames(["health-dot", `health-dot-${state}`]);
 
     return (
-      <li className={itemClasses} key={key}>
+      <li className={itemClasses} key={state}>
         <span className={healthDotClasses}></span>
-        {instances} {field.label}
+        {instances} {label}
         <span className="health-percentage">
           ({percentage}%)
         </span>
