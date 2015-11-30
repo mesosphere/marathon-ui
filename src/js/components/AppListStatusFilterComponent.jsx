@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppStatus = require("../constants/AppStatus");
@@ -116,20 +117,26 @@ var AppListStatusFilterComponent = React.createClass({
   },
 
   getStatusNodes: function () {
-    return Object.keys(statusNameMapping).map((key, i) => {
-      let optionText = statusNameMapping[key];
+    var state = this.state;
 
-      let checkboxProps = {
+    return Object.keys(statusNameMapping).map((key, i) => {
+      var optionText = statusNameMapping[key];
+
+      var checkboxProps = {
         type: "checkbox",
         id: `status-${key}-${i}`,
         checked: this.state.selectedStatus.indexOf(key) !== -1
       };
 
+      var labelClassName = classNames({
+        "text-muted": !state.appsStatusesCount[key]
+      });
+
       return (
         <li className="checkbox" key={i}>
             <input {...checkboxProps}
               onChange={this.handleChange.bind(this, key)} />
-            <label htmlFor={`status-${key}-${i}`}>
+            <label htmlFor={`status-${key}-${i}`} className={labelClassName}>
               {optionText}
             </label>
             {this.getStatusCountBadge(`status-${key}-${i}`, key)}

@@ -10,12 +10,17 @@
   }
 
   label {
-    color: @text-color-muted;
+    color: @breadcrumb-text-color;
     display: inline-block;
     width: 100%;
+
+    &.text-muted {
+      color: @text-color-muted;
+    }
   }
 
   .label {
+    color: @breadcrumb-text-color;
     width: auto;
     background-color: @table-header-color;
     padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.25;
