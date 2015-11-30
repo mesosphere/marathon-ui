@@ -50,7 +50,7 @@ var TaskListItemComponent = React.createClass({
     }
 
     if (ports != null && ports.length > 1) {
-      let portNodes = ports.map(function (port, index) {
+      let portNodes = ports.map(function (port) {
         return (
           <a key={`${task.host}:${port}`}
               className="text-muted" href={`//${task.host}:${port}`}>
@@ -100,7 +100,7 @@ var TaskListItemComponent = React.createClass({
           );
         }
 
-        let portNodes = serviceDiscoveryPorts.map((port, j) => {
+        let portNodes = serviceDiscoveryPorts.map((port) => {
           return (
             <a key={`${ipAddress}:${port.number}`}
                 className="text-muted" href={`//${ipAddress}:${port.number}`}>
