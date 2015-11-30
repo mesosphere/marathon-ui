@@ -14,7 +14,7 @@ function joinNodes(nodes, separator = ", ") {
       separator = null;
     }
     return (
-      <span className="text-muted">
+      <span className="text-muted" key={i}>
         {node}{separator}
       </span>
     );
