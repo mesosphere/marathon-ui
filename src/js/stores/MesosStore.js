@@ -156,7 +156,7 @@ AppDispatcher.register(function (action) {
       MesosStore.emit(MesosEvents.CHANGE);
       break;
     case MesosEvents.REQUEST_STATE_ERROR:
-      MesosEvents.emit(MesosEvents.REQUEST_STATE_ERROR, data.body);
+      MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data.body);
       break;
     case MesosEvents.REQUEST_FILES_COMPLETE:
       files[data.id] = {
@@ -173,7 +173,7 @@ AppDispatcher.register(function (action) {
       MesosStore.emit(MesosEvents.CHANGE);
       break;
     case MesosEvents.REQUEST_FILES_ERROR:
-      MesosEvents.emit(MesosEvents.REQUEST_FILES_ERROR, data.body);
+      MesosStore.emit(MesosEvents.REQUEST_FILES_ERROR, data.body);
       break;
   }
 });
