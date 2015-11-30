@@ -55,8 +55,9 @@ var TaskDetailComponent = React.createClass({
         task.ipAddresses != null &&
         task.ipAddresses.length > 0) {
 
+      let ports = app.ipAddress.discovery.ports;
       let endpoints = task.ipAddresses.reduce((memo, address) => {
-        app.ipAddress.discovery.ports.forEach(port => {
+        ports.forEach(port => {
           memo.push(`${address.ipAddress}:${port.number}`);
         });
         return memo;
