@@ -73,11 +73,18 @@ h1 {
   font-size: @font-size-h1;
 }
 
-h3.small-caps {
-  color: @sidebar-heading-color;
-  font-weight: bold;
+h2 {
+  font-size: @font-size-h2;
+}
+
+h3 {
   font-size: @font-size-h3;
-  line-height: @base-spacing-unit*2;
-  text-transform: uppercase;
-  margin: @base-spacing-unit 0;
+
+  &.small-caps {
+    color: @sidebar-heading-color;
+    font-weight: bold;
+    line-height: @base-spacing-unit*2;
+    text-transform: uppercase;
+    margin: @base-spacing-unit 0;
+  }
 }
