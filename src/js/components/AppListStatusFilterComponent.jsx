@@ -111,7 +111,7 @@ var AppListStatusFilterComponent = React.createClass({
 
     return (
       <label htmlFor={id} className="label visible">
-        {state.appsStatusesCount[appStatus]}
+        {state.appsStatusesCount[appStatus].toLocaleString()}
       </label>
     );
   },
