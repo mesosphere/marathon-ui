@@ -52,11 +52,10 @@ var TaskListItemComponent = React.createClass({
     if (ports != null && ports.length > 1) {
       let portNodes = ports.map(function (port, index) {
         return (
-          <span key={`${task.host}:${port}`}>
-            <a className="text-muted" href={`//${task.host}:${port}`}>
-              {port}
-            </a>
-          </span>
+          <a key={`${task.host}:${port}`}
+              className="text-muted" href={`//${task.host}:${port}`}>
+            {port}
+          </a>
         );
       });
 
@@ -94,21 +93,19 @@ var TaskListItemComponent = React.createClass({
         if (serviceDiscoveryPorts.length === 1) {
           let port = serviceDiscoveryPorts[0].number;
           return (
-            <span className="text-muted" key={`${ipAddress}:${port}`}>
-              <a className="text-muted" href={`//${ipAddress}:${port}`}>
-                {`${ipAddress}:${port}`}
-              </a>
-            </span>
+            <a key={`${ipAddress}:${port}`}
+                className="text-muted" href={`//${ipAddress}:${port}`}>
+              {`${ipAddress}:${port}`}
+            </a>
           );
         }
 
         let portNodes = serviceDiscoveryPorts.map((port, j) => {
           return (
-            <span key={`${ipAddress}:${port.number}`}>
-              <a className="text-muted" href={`//${ipAddress}:${port.number}`}>
-                {port.number}
-              </a>
-            </span>
+            <a key={`${ipAddress}:${port.number}`}
+                className="text-muted" href={`//${ipAddress}:${port.number}`}>
+              {port.number}
+            </a>
           );
         });
 
