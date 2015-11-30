@@ -23,7 +23,7 @@ var AppHealthBarWithTooltipComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      tipContent: this.getAppHealthBreakdown()
+      tipContent: this.getAppHealthBreakdown(this.props.model)
     };
   },
 
@@ -31,7 +31,9 @@ var AppHealthBarWithTooltipComponent = React.createClass({
     var shouldUpdate =
       !Util.compareArrays(this.props.model.health, nextProps.model.health);
     if (shouldUpdate) {
-      this.setState({tipContent: this.getAppHealthBreakdown()});
+      this.setState({
+        tipContent: this.getAppHealthBreakdown(nextProps.model)
+      });
     }
     return shouldUpdate;
   },
@@ -46,12 +48,12 @@ var AppHealthBarWithTooltipComponent = React.createClass({
     this.tip_hideTip(el);
   },
 
-  getAppHealthBreakdown: function () {
+  getAppHealthBreakdown: function (model) {
     let component = (
       <AppHealthDetailComponent
         className="list-unstyled"
         fields={appHealthBreakdownFields}
-        model={this.props.model} />
+        model={model} />
     );
     return React.renderToString(component);
   },
