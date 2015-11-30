@@ -227,19 +227,18 @@ describe("Task List Item component", function () {
 });
 
 describe("Task Detail component", function () {
+  var baseModel = {
+    appId: "/app-1",
+    id: "task-123",
+    status: "status-0",
+    updatedAt: "2015-06-29T14:11:58.709Z",
+    stagedAt: "2015-06-29T14:11:58.709Z",
+    startedAt: "2015-06-29T14:11:58.709Z",
+    version: "2015-06-29T13:54:24.171Z"
+  };
 
   beforeEach(function () {
-    this.model = {
-      appId: "/app-1",
-      id: "task-123",
-      host: "host-1",
-      ports: [1, 2, 3],
-      status: "status-0",
-      updatedAt: "2015-06-29T14:11:58.709Z",
-      stagedAt: "2015-06-29T14:11:58.709Z",
-      startedAt: "2015-06-29T14:11:58.709Z",
-      version: "2015-06-29T13:54:24.171Z"
-    };
+    this.model = Object.assign({}, baseModel);
 
     this.renderer = TestUtils.createRenderer();
     this.renderer.render(<TaskDetailComponent
@@ -255,40 +254,20 @@ describe("Task Detail component", function () {
     this.renderer.unmount();
   });
 
-  it("has the correct host", function () {
-    var content = ShallowUtils.getText(this.taskDetails.props.children[1]);
-    expect(content).to.equal("host-1");
-  });
-
-  it("has the correct ports", function () {
-    var content = ShallowUtils.getText(this.taskDetails.props.children[3]);
-    expect(content).to.equal("[1,2,3]");
-  });
-
-  it("has the correct endpoints", function () {
-    var list = this.taskDetails.props.children[5];
-    var endpoints = [
-      ShallowUtils.getText(list[0].props.children),
-      ShallowUtils.getText(list[1].props.children),
-      ShallowUtils.getText(list[2].props.children)
-    ];
-    expect(endpoints).to.deep.equal(["host-1:1", "host-1:2", "host-1:3"]);
-  });
-
   it("has the correct status", function () {
-    var content = ShallowUtils.getText(this.taskDetails.props.children[7]);
+    var content = ShallowUtils.getText(this.taskDetails.props.children[9]);
     expect(content).to.equal("status-0");
   });
 
   it("has the correct timefields", function () {
-    var stagedAt = this.taskDetails.props.children[8][0].props;
-    var startedAt = this.taskDetails.props.children[8][1].props;
+    var stagedAt = this.taskDetails.props.children[10][0].props;
+    var startedAt = this.taskDetails.props.children[10][1].props;
     expect(stagedAt.time).to.equal("2015-06-29T14:11:58.709Z");
     expect(startedAt.time).to.equal("2015-06-29T14:11:58.709Z");
   });
 
   it("has the correct version", function () {
-    var version = this.taskDetails.props.children[10].props.children.props;
+    var version = this.taskDetails.props.children[12].props.children.props;
     expect(version.dateTime).to.equal("2015-06-29T13:54:24.171Z");
   });
 
@@ -304,6 +283,106 @@ describe("Task Detail component", function () {
     var content = ShallowUtils.findOne(component, "text-danger");
 
     expect(content).to.be.an.object;
+  });
+
+  describe("with host and ports", function () {
+    before(function () {
+      this.model = Object.assign({}, baseModel, {
+        host: "host-1",
+        ports: [1, 2, 3]
+      });
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<TaskDetailComponent
+        appId={this.model.appId}
+        fetchState={States.STATE_SUCCESS}
+        hasHealth={false}
+        task={this.model} />);
+      this.component = this.renderer.getRenderOutput();
+      this.taskDetails = this.component.props.children[1].props.children[0];
+    });
+
+    after(function () {
+      this.renderer.unmount();
+    });
+
+    it("has the correct host", function () {
+      var content = ShallowUtils.getText(this.taskDetails.props.children[1][0]);
+      expect(content).to.equal("host-1");
+    });
+
+    it("has the correct ports", function () {
+      var content = ShallowUtils.getText(this.taskDetails.props.children[3]);
+      expect(content).to.equal("[1,2,3]");
+    });
+
+    it("has the correct endpoints", function () {
+      var list = this.taskDetails.props.children[5];
+      var endpoints = [
+        ShallowUtils.getText(list[0].props.children),
+        ShallowUtils.getText(list[1].props.children),
+        ShallowUtils.getText(list[2].props.children)
+      ];
+      expect(endpoints).to.deep.equal(["host-1:1", "host-1:2", "host-1:3"]);
+    });
+  });
+
+  describe("with IP per container", function () {
+    before(function () {
+      this.model = Object.assign({}, baseModel, {
+        "ipAddresses": [
+          {
+            "protocol": "IPv4",
+            "ipAddress": "127.0.0.1"
+          }
+        ]
+      });
+
+      AppsStore.currentApp.ipAddress = {
+        "labels": {
+          "pool": "1.1.1.1/24"
+        },
+        "discovery": {
+          "ports": [
+            {"number": 8080, "name": "http", "protocol": "tcp"},
+            {"number": 8081, "name": "http", "protocol": "tcp"}
+          ]
+        }
+      };
+
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(<TaskDetailComponent
+        appId={this.model.appId}
+        fetchState={States.STATE_SUCCESS}
+        hasHealth={false}
+        task={this.model} />);
+      this.component = this.renderer.getRenderOutput();
+      this.taskDetails = this.component.props.children[1].props.children[0];
+    });
+
+    after(function () {
+      this.renderer.unmount();
+      delete AppsStore.currentApp.ipAddress;
+    });
+
+    it("has the correct ip address", function () {
+      var content = ShallowUtils.getText(this.taskDetails.props.children[1][0]);
+      expect(content).to.equal("127.0.0.1");
+    });
+
+    it("has the correct ports", function () {
+      var content = ShallowUtils.getText(this.taskDetails.props.children[3]);
+      expect(content).to.equal("[]");
+    });
+
+    it("has the correct endpoints", function () {
+      var list = this.taskDetails.props.children[5];
+      var endpoints = [
+        ShallowUtils.getText(list[0].props.children),
+        ShallowUtils.getText(list[1].props.children)
+      ];
+      expect(endpoints).to.deep.equal(["127.0.0.1:8080", "127.0.0.1:8081"]);
+    });
   });
 
 });

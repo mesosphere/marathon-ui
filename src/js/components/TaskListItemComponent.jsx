@@ -1,51 +1,24 @@
 var classNames = require("classnames");
+var objectPath = require("object-path");
 var React = require("react/addons");
 var Moment = require("moment");
 
+var AppsStore = require("../stores/AppsStore");
 var HealthStatus = require("../constants/HealthStatus");
 var TaskStatus = require("../constants/TaskStatus");
 
-function buildHref(host, port) {
-  return "http://" + host + ":" + port;
-}
-
-function buildTaskAnchors(task) {
-  var taskAnchors;
-  var ports = task.ports;
-  var portsLength = ports.length;
-
-  if (portsLength > 1) {
-    // Linkify each port with the hostname. The port is the text of the
-    // anchor, but the href contains the hostname and port, a full link.
-    taskAnchors = (
-      <span className="text-muted">
-        {task.host}:[{ports.map(function (p, index) {
-          return (
-            <span key={p}>
-              <a className="text-muted" href={buildHref(task.host, p)}>
-                {p}
-              </a>
-              {index < portsLength - 1 ? ", " : ""}
-            </span>
-          );
-        })}]
+function joinNodes(nodes, separator = ", ") {
+  var lastIndex = nodes.length - 1;
+  return nodes.map((node, i) => {
+    if (lastIndex === i) {
+      separator = null;
+    }
+    return (
+      <span className="text-muted" key={i}>
+        {node}{separator}
       </span>
     );
-  } else if (portsLength === 1) {
-    // Linkify the hostname + port since there is only one port.
-    taskAnchors = (
-      <a className="text-muted" href={buildHref(task.host, ports[0])}>
-        {task.host}:{ports[0]}
-      </a>
-    );
-  } else {
-    // Ain't no ports; don't linkify.
-    taskAnchors = (
-      <span className="text-muted">{task.host}</span>
-    );
-  }
-
-  return taskAnchors;
+  });
 }
 
 var TaskListItemComponent = React.createClass({
@@ -58,6 +31,97 @@ var TaskListItemComponent = React.createClass({
     onToggle: React.PropTypes.func.isRequired,
     task: React.PropTypes.object.isRequired,
     taskHealthMessage: React.PropTypes.string
+  },
+
+  getHostAndPorts: function () {
+    var task = this.props.task;
+    var ports = task.ports;
+
+    if (ports == null || ports.length === 0 ) {
+      return (<span className="text-muted">{task.host}</span>);
+    }
+
+    if (ports != null && ports.length === 1) {
+      return (
+        <a className="text-muted" href={`//${task.host}:${ports[0]}`}>
+          {`${task.host}:${ports[0]}`}
+        </a>
+      );
+    }
+
+    if (ports != null && ports.length > 1) {
+      let portNodes = ports.map(function (port) {
+        return (
+          <a key={`${task.host}:${port}`}
+              className="text-muted" href={`//${task.host}:${port}`}>
+            {port}
+          </a>
+        );
+      });
+
+      return (
+        <span className="text-muted">
+          {task.host}:[{joinNodes(portNodes)}]
+        </span>
+      );
+    }
+  },
+
+  getEndpoints: function () {
+    var task = this.props.task;
+
+    if (task.ipAddresses == null) {
+      return this.getHostAndPorts();
+    }
+
+    return this.getServiceDiscoveryEndpoints();
+  },
+
+  getServiceDiscoveryEndpoints: function () {
+    var props = this.props;
+    var task = props.task;
+    var app = AppsStore.getCurrentApp(props.appId);
+
+    if (objectPath.get(app, "ipAddress.discovery.ports") != null &&
+        task.ipAddresses != null &&
+        task.ipAddresses.length > 0) {
+
+      let serviceDiscoveryPorts = app.ipAddress.discovery.ports;
+
+      let endpoints = task.ipAddresses.map((address) => {
+        let ipAddress = address.ipAddress;
+        if (serviceDiscoveryPorts.length === 1) {
+          let port = serviceDiscoveryPorts[0].number;
+          return (
+            <a key={`${ipAddress}:${port}`}
+                className="text-muted" href={`//${ipAddress}:${port}`}>
+              {`${ipAddress}:${port}`}
+            </a>
+          );
+        }
+
+        let portNodes = serviceDiscoveryPorts.map((port) => {
+          return (
+            <a key={`${ipAddress}:${port.number}`}
+                className="text-muted" href={`//${ipAddress}:${port.number}`}>
+              {port.number}
+            </a>
+          );
+        });
+
+        return (
+          <span key={address.ipAddress} className="text-muted">
+            {address.ipAddress}:[{joinNodes(portNodes)}]
+          </span>
+        );
+      });
+
+      return (
+        <span className="text-muted">
+          {joinNodes(endpoints)}
+        </span>
+      );
+    }
   },
 
   handleClick: function (event) {
@@ -119,7 +183,7 @@ var TaskListItemComponent = React.createClass({
         <td>
             <a href={taskUri}>{taskId}</a>
           <br />
-          {buildTaskAnchors(task)}
+          {this.getEndpoints()}
         </td>
         <td className={healthClassSet} title={this.props.taskHealthMessage}>
           {this.props.taskHealthMessage}
