@@ -1,0 +1,84 @@
+/* ==============
+ * Labels
+ * ==============
+ */
+.labels {
+  display: inline-block;
+  position: absolute;
+
+  .labels-dropdown {
+    background-color: @navbar-bg-color;
+    display: none;
+    left: 100%;
+    margin-left: @base-spacing-unit * 2;
+    margin-top: -@base-spacing-unit * 2;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+
+    &.visible {
+      display: block;
+    }
+
+    > h5 {
+      color: @table-text-color;
+      padding: @base-spacing-unit * 2;
+      margin: 0;
+    }
+
+    > .left-arrow {
+      display: block;
+      border-top: @base-spacing-unit solid transparent;
+      border-bottom: @base-spacing-unit solid transparent;
+      border-right: @base-spacing-unit solid @navbar-bg-color;
+      height: 0;
+      margin-left: -@base-spacing-unit;
+      margin-top: @base-spacing-unit * 2;
+      position: absolute;
+      top: 0;
+      width: 0;
+    }
+
+    > ul {
+      padding: 0 @base-spacing-unit * 2;
+
+      li {
+        display: block;
+        margin: 0 0 @base-spacing-unit 0;
+
+        .label {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+.label, .more {
+  position: fixed;
+  transform: translateX(-1vw);
+  display: inline-block;
+  visibility: hidden;
+  white-space: nowrap;
+  padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
+  margin-left: @horizontal-spacing-unit;
+  background-color: @sidebar-bg-color;
+  border-radius: @base-spacing-unit*2;
+  color: @navbar-inactive-color;
+  font-size: @small-font-size;
+  font-weight: normal;
+  line-height: inherit;
+  max-width: @horizontal-spacing-unit * 64;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &.visible {
+    position: relative;
+    transform: translateX(0);
+    visibility: inherit;
+  }
+}
+
+.more:hover {
+  background-color: @btn-default-active-bg-color;
+}

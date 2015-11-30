@@ -1,3 +1,4 @@
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var AppStatus = require("../constants/AppStatus");
@@ -101,25 +102,44 @@ var AppListStatusFilterComponent = React.createClass({
     }
   },
 
+  getStatusCountBadge: function (id, appStatus) {
+    var state = this.state;
+
+    if (!state.appsStatusesCount[appStatus]) {
+      return null;
+    }
+
+    return (
+      <label htmlFor={id} className="label visible">
+        {state.appsStatusesCount[appStatus].toLocaleString()}
+      </label>
+    );
+  },
+
   getStatusNodes: function () {
     var state = this.state;
 
     return Object.keys(statusNameMapping).map((key, i) => {
-      let optionText = statusNameMapping[key];
+      var optionText = statusNameMapping[key];
 
-      let checkboxProps = {
+      var checkboxProps = {
         type: "checkbox",
         id: `status-${key}-${i}`,
-        checked: state.selectedStatus.indexOf(key) !== -1
+        checked: this.state.selectedStatus.indexOf(key) !== -1
       };
+
+      var labelClassName = classNames({
+        "text-muted": !state.appsStatusesCount[key]
+      });
 
       return (
         <li className="checkbox" key={i}>
-          <input {...checkboxProps}
-            onChange={this.handleChange.bind(this, key)} />
-          <label htmlFor={`status-${key}-${i}`}>
-            {optionText} ({state.appsStatusesCount[key] || 0})
-          </label>
+            <input {...checkboxProps}
+              onChange={this.handleChange.bind(this, key)} />
+            <label htmlFor={`status-${key}-${i}`} className={labelClassName}>
+              {optionText}
+            </label>
+            {this.getStatusCountBadge(`status-${key}-${i}`, key)}
         </li>
       );
     });
