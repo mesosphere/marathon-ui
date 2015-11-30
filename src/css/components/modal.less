@@ -23,9 +23,15 @@
 }
 
 .modal-body {
-  .gm-scroll-view {
-    overflow: hidden;
+  height: 100%;
+
+  .gm-scrollbar-container .gm-scroll-view {
+    overflow-x: hidden;
   }
+  .gm-prevented .gm-scroll-view {
+    overflow-x: scroll;
+  }
+
   .row.full-bleed {
     margin-left: -20px;
     margin-right: -20px;
