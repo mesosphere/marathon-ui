@@ -7,6 +7,20 @@ var AppsStore = require("../stores/AppsStore");
 var HealthStatus = require("../constants/HealthStatus");
 var TaskStatus = require("../constants/TaskStatus");
 
+function joinNodes(nodes, separator = ", ") {
+  var lastIndex = nodes.length - 1;
+  return nodes.map((node, i) => {
+    if (lastIndex === i) {
+      separator = null;
+    }
+    return (
+      <span className="text-muted">
+        {node}{separator}
+      </span>
+    );
+  });
+}
+
 var TaskListItemComponent = React.createClass({
   displayName: "TaskListItemComponent",
 
@@ -42,14 +56,13 @@ var TaskListItemComponent = React.createClass({
             <a className="text-muted" href={`//${task.host}:${port}`}>
               {port}
             </a>
-            {index < ports.length - 1 ? ", " : ""}
           </span>
         );
       });
 
       return (
         <span className="text-muted">
-          {task.host}:[{portNodes}]
+          {task.host}:[{joinNodes(portNodes)}]
         </span>
       );
     }
@@ -76,10 +89,8 @@ var TaskListItemComponent = React.createClass({
 
       let serviceDiscoveryPorts = app.ipAddress.discovery.ports;
 
-      let endpoints = task.ipAddresses.map((address, i) => {
+      let endpoints = task.ipAddresses.map((address) => {
         let ipAddress = address.ipAddress;
-        let trailingComma = i < task.ipAddresses.length - 1;
-
         if (serviceDiscoveryPorts.length === 1) {
           let port = serviceDiscoveryPorts[0].number;
           return (
@@ -87,7 +98,6 @@ var TaskListItemComponent = React.createClass({
               <a className="text-muted" href={`//${ipAddress}:${port}`}>
                 {`${ipAddress}:${port}`}
               </a>
-              {trailingComma ? ", " : ""}
             </span>
           );
         }
@@ -98,22 +108,20 @@ var TaskListItemComponent = React.createClass({
               <a className="text-muted" href={`//${ipAddress}:${port.number}`}>
                 {port.number}
               </a>
-              {j < serviceDiscoveryPorts.length - 1 ? ", " : ""}
             </span>
           );
         });
 
         return (
           <span key={address.ipAddress} className="text-muted">
-            {address.ipAddress}:[{portNodes}]
-            {trailingComma ? ", " : ""}
+            {address.ipAddress}:[{joinNodes(portNodes)}]
           </span>
         );
       });
 
       return (
         <span className="text-muted">
-          {endpoints}
+          {joinNodes(endpoints)}
         </span>
       );
     }
