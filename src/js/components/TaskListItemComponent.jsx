@@ -95,7 +95,7 @@ var TaskListItemComponent = React.createClass({
 
         let portNodes = serviceDiscoveryPorts.map((port, j) => {
           return (
-            <span key={port.number}>
+            <span key={`//${ipAddress}:${port.number}`}>
               <a className="text-muted" href={`//${ipAddress}:${port.number}`}>
                 {port.number}
               </a>
