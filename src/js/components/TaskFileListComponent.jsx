@@ -37,12 +37,9 @@ var TaskFileListComponent = React.createClass({
   onMesosChange() {
     var task = this.props.task;
     var taskId = task.id || task.taskId;
-    var files = MesosStore.getTaskFiles(taskId);
-    if (files != null) {
-      this.setState({
-        files: files
-      });
-    }
+    this.setState({
+      files: MesosStore.getTaskFiles(taskId)
+    });
   },
 
   getFileNodes: function () {
