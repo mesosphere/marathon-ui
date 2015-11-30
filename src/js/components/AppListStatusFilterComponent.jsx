@@ -101,16 +101,28 @@ var AppListStatusFilterComponent = React.createClass({
     }
   },
 
-  getStatusNodes: function () {
+  getStatusCountBadge: function (id, appStatus) {
     var state = this.state;
 
+    if (!state.appsStatusesCount[appStatus]) {
+      return null;
+    }
+
+    return (
+      <label htmlFor={id} className="label visible">
+        {state.appsStatusesCount[appStatus]}
+      </label>
+    );
+  },
+
+  getStatusNodes: function () {
     return Object.keys(statusNameMapping).map((key, i) => {
       let optionText = statusNameMapping[key];
 
       let checkboxProps = {
         type: "checkbox",
         id: `status-${key}-${i}`,
-        checked: state.selectedStatus.indexOf(key) !== -1
+        checked: this.state.selectedStatus.indexOf(key) !== -1
       };
 
       return (
@@ -120,9 +132,7 @@ var AppListStatusFilterComponent = React.createClass({
             <label htmlFor={`status-${key}-${i}`}>
               {optionText}
             </label>
-            <label htmlFor={`status-${key}-${i}`} className="label visible">
-              {state.appsStatusesCount[key] || 0}
-            </label>
+            {this.getStatusCountBadge(`status-${key}-${i}`, key)}
         </li>
       );
     });
