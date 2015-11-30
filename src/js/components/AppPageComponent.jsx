@@ -19,7 +19,7 @@ var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
-var AppHealthBreakdownComponent = require("./AppHealthBreakdownComponent");
+var AppHealthDetailComponent = require("./AppHealthDetailComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
@@ -410,7 +410,7 @@ var AppPageComponent = React.createClass({
             <AppStatusComponent model={model} showSummary={true} />
             <div className="app-health-detail">
               <AppHealthBarComponent model={model} />
-              <AppHealthBreakdownComponent
+              <AppHealthDetailComponent
                 className="list-inline"
                 fields={appHealthBreakdownFields}
                 model={model} />

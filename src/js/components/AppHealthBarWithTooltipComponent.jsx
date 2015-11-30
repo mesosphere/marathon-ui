@@ -2,7 +2,7 @@ var React = require("react/addons");
 
 var TooltipMixin = require("../mixins/TooltipMixin");
 var AppHealthBarComponent = require("./AppHealthBarComponent");
-var AppHealthBreakdownComponent = require("./AppHealthBreakdownComponent");
+var AppHealthDetailComponent = require("./AppHealthDetailComponent");
 var Util = require("../helpers/Util");
 var HealthStatus = require("../constants/HealthStatus");
 
@@ -48,7 +48,7 @@ var AppHealthBarWithTooltipComponent = React.createClass({
 
   getAppHealthBreakdown: function () {
     let component = (
-      <AppHealthBreakdownComponent
+      <AppHealthDetailComponent
         className="list-unstyled"
         fields={appHealthBreakdownFields}
         model={this.props.model} />

@@ -1,8 +1,8 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
-var AppHealthBreakdownComponent = React.createClass({
-  displayName: "AppHealthBreakdownComponent",
+var AppHealthDetailComponent = React.createClass({
+  displayName: "AppHealthDetailComponent",
 
   propTypes: {
     className: React.PropTypes.string,
@@ -55,4 +55,4 @@ var AppHealthBreakdownComponent = React.createClass({
 
 });
 
-module.exports = AppHealthBreakdownComponent;
+module.exports = AppHealthDetailComponent;
