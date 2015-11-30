@@ -62,12 +62,12 @@ var AppHealthBarWithTooltipComponent = React.createClass({
     return (
       <div>
         <div ref="healthBar"
-             data-behavior="show-tip"
-             data-tip-type-class="default"
-             data-tip-place="top"
-             data-tip-content={this.state.tipContent}
-             onMouseOver={this.handleMouseOverHealthBar}
-             onMouseOut={this.handleMouseOutHealthBar}>
+          data-behavior="show-tip"
+          data-tip-type-class="default"
+          data-tip-place="top"
+          data-tip-content={this.state.tipContent}
+          onMouseOver={this.handleMouseOverHealthBar}
+          onMouseOut={this.handleMouseOutHealthBar}>
           <AppHealthBarComponent
             model={this.props.model}/>
         </div>
