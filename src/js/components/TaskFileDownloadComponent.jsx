@@ -20,7 +20,7 @@ var TaskFileLinkComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      file: null,
+      file: this.getFile(),
       requested: false
     };
   },
@@ -33,19 +33,23 @@ var TaskFileLinkComponent = React.createClass({
     MesosStore.removeListener(MesosEvents.CHANGE, this.onMesosChange);
   },
 
-  onMesosChange: function () {
+  getFile: function () {
     var props = this.props;
-    var requested = this.state.requested;
-    var task = props.task;
+    var task = this.props.task;
     var taskId = task.id || task.taskId;
     var files = MesosStore.getTaskFiles(taskId);
-    var file = null;
     if (files) {
-      file = files.filter(matchFileName(props.fileName))[0];
-      // Start download if file was requested by the user
-      if (requested) {
-        window.open(file.download);
-      }
+      return files.filter(matchFileName(props.fileName))[0];
+    }
+    return null;
+  },
+
+  onMesosChange: function () {
+    var file = this.getFile();
+    var requested = this.state.requested;
+    // Start download if file was requested by the user
+    if (file && requested) {
+      window.open(file.download);
       requested = false;
     }
     this.setState({
@@ -54,7 +58,7 @@ var TaskFileLinkComponent = React.createClass({
     });
   },
 
-  handleClick: function () {
+  handleClick: function (event) {
     var file = this.state.file;
     if (file == null) {
       var task = this.props.task;
@@ -64,18 +68,30 @@ var TaskFileLinkComponent = React.createClass({
       this.setState({
         requested: true
       });
-      return;
+      event.preventDefault();
     }
-    window.open(file.download);
   },
 
   render: function () {
     var className = classNames("task-file-download", this.props.className, {
       "loading": this.state.requested
     });
-    return (<a className={className} onClick={this.handleClick}>
-      {this.props.children}
-    </a>);
+    var file = this.state.file;
+    var href = "";
+    var name = "";
+    if (file) {
+      name = file.name;
+      href = file.download;
+    }
+    return (
+      <a className={className}
+        href={href}
+        onClick={this.handleClick}
+        ref="download"
+        download={name}>
+        {this.props.children}
+      </a>
+    );
   }
 });
 
