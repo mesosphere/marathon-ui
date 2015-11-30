@@ -191,6 +191,8 @@ var TaskDetailComponent = React.createClass({
           <dd><TaskMesosUrlComponent task={task}/></dd>
         </dl>
         {this.getTaskHealthComponent()}
+        <hr />
+        <h3>Working Directory</h3>
         <TaskFileListComponent task={task}/>
       </div>
     );
