@@ -1,3 +1,4 @@
+var GeminiScrollbar = require("react-gemini-scrollbar");
 var React = require("react/addons");
 var Util = require("../../helpers/Util");
 
@@ -51,7 +52,9 @@ var PromptModalComponent = React.createClass({
           size="sm"
           onDestroy={this.props.onDestroy}>
         <div className="modal-body reduced-padding">
-          <label>{this.props.message}</label>
+          <GeminiScrollbar autoshow={true}>
+            <label>{this.props.message}</label>
+          </GeminiScrollbar>
           <input className="form-control"
             type="text"
             ref="textInput"

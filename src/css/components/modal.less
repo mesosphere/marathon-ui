@@ -2,6 +2,8 @@
  * Modal
  * ==============
  */
+@import (inline) "../../node_modules/react-gemini-scrollbar/node_modules/gemini-scrollbar/gemini-scrollbar.css";
+
 .modal {
   display: block;
 }
@@ -21,6 +23,9 @@
 }
 
 .modal-body {
+  .gm-scroll-view {
+    overflow: hidden;
+  }
   .row.full-bleed {
     margin-left: -20px;
     margin-right: -20px;

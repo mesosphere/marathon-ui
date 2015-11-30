@@ -1,3 +1,4 @@
+var GeminiScrollbar = require("react-gemini-scrollbar");
 var React = require("react/addons");
 var Util = require("../../helpers/Util");
 
@@ -41,7 +42,9 @@ var ConfirmModalComponent = React.createClass({
           size="sm"
           onDestroy={this.props.onDestroy}>
         <div className="modal-body reduced-padding">
-          {this.props.message}
+          <GeminiScrollbar autoshow={true}>
+            {this.props.message}
+          </GeminiScrollbar>
           <div className="modal-controls fixed-height">
             <button
                 className="btn btn-sm  btn-success pull-right"
