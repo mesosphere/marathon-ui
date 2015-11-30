@@ -1,4 +1,5 @@
 var classNames = require("classnames");
+var objectPath = require("object-path");
 var React = require("react/addons");
 var Moment = require("moment");
 
@@ -69,9 +70,7 @@ var TaskListItemComponent = React.createClass({
     var task = props.task;
     var app = AppsStore.getCurrentApp(props.appId);
 
-    if (app.ipAddress != null &&
-        app.ipAddress.discovery != null &&
-        app.ipAddress.discovery.ports != null &&
+    if (objectPath.get(app, "ipAddress.discovery.ports") != null &&
         task.ipAddresses != null &&
         task.ipAddresses.length > 0) {
 

@@ -1,5 +1,6 @@
 var classNames = require("classnames");
 var Link = require("react-router").Link;
+var objectPath = require("object-path");
 var React = require("react/addons");
 
 var AppsStore = require("../stores/AppsStore");
@@ -49,9 +50,7 @@ var TaskDetailComponent = React.createClass({
       return (<dd>None</dd>);
     }
 
-    if (app.ipAddress != null &&
-        app.ipAddress.discovery != null &&
-        app.ipAddress.discovery.ports != null &&
+    if (objectPath.get(app, "ipAddress.discovery.ports") != null &&
         task.ipAddresses != null &&
         task.ipAddresses.length > 0) {
 
@@ -105,10 +104,7 @@ var TaskDetailComponent = React.createClass({
   getServiceDiscovery: function () {
     var app = AppsStore.getCurrentApp(this.props.appId);
 
-    if (app == null ||
-        app.ipAddress == null ||
-        app.ipAddress.discovery == null ||
-        app.ipAddress.discovery.ports == null ||
+    if (objectPath.get(app, "ipAddress.discovery.ports") == null ||
         app.ipAddress.discovery.ports.length === 0) {
       return (<dd>n/a</dd>);
     }
