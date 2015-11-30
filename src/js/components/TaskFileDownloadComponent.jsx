@@ -35,20 +35,23 @@ var TaskFileLinkComponent = React.createClass({
 
   onMesosChange: function () {
     var props = this.props;
+    var requested = this.state.requested;
     var task = props.task;
     var taskId = task.id || task.taskId;
     var files = MesosStore.getTaskFiles(taskId);
+    var file = null;
     if (files) {
-      var file = files.filter(matchFileName(props.fileName))[0];
-      // Download link if file was requested by the user
-      if (this.state.requested) {
+      file = files.filter(matchFileName(props.fileName))[0];
+      // Start download if file was requested by the user
+      if (requested) {
         window.open(file.download);
       }
-      this.setState({
-        file: file,
-        requested: false
-      });
+      requested = false;
     }
+    this.setState({
+      file: file,
+      requested: requested
+    });
   },
 
   handleClick: function () {
