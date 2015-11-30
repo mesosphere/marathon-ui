@@ -29,7 +29,7 @@ var TasksActions = require("../actions/TasksActions");
 var TasksEvents = require("../events/TasksEvents");
 
 var tabsTemplate = [
-  {id: "apps/:appId", text: "Tasks"},
+  {id: "apps/:appId", text: "Instances"},
   {id: "apps/:appId/configuration", text: "Configuration"},
   {id: "apps/:appId/debug", text: "Debug"}
 ];

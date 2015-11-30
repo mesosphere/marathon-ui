@@ -46,7 +46,7 @@ var AppStatusComponent = React.createClass({
 
     return (
       <span className="tasks-summary">
-        {`(${props.model.tasksRunning} of ${props.model.instances} tasks)`}
+        {`(${props.model.tasksRunning} of ${props.model.instances} instances)`}
       </span>
     );
   },
