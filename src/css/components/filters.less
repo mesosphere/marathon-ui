@@ -4,8 +4,14 @@
       border-color: @table-header-color;
     }
 
-    input[type="checkbox"]:checked + label::before {
-      border-color: @brand-primary;
+    input[type="checkbox"]:checked {
+      & + label {
+        color: @btn-default-text-color;
+
+        &::before {
+          border-color: @brand-primary;
+        }
+      }
     }
   }
 
