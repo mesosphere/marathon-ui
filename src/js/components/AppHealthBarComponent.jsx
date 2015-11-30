@@ -1,20 +1,10 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 var AppStatus = require("../constants/AppStatus");
-var HealthStatus = require("../constants/HealthStatus");
 
 function roundWorkaround(x) {
   return Math.floor(x * 1000) / 1000;
 }
-
-var healthNameMap = {
-  [HealthStatus.HEALTHY]: "healthy",
-  [HealthStatus.UNHEALTHY]: "unhealthy",
-  [HealthStatus.UNKNOWN]: "running",
-  [HealthStatus.STAGED]: "staged",
-  [HealthStatus.OVERCAPACITY]: "over-capacity",
-  [HealthStatus.UNSCHEDULED]: "unscheduled"
-};
 
 var AppHealthBarComponent = React.createClass({
   displayName: "AppHealthBarComponent",
@@ -41,7 +31,6 @@ var AppHealthBarComponent = React.createClass({
 
     let allZeroWidthBefore = true;
     return health.map(function (d, i) {
-      var name = healthNameMap[d.state];
       var width = roundWorkaround(d.quantity * 100 / dataSum);
       var classSet = {
         // set health-bar-inner class for bars in the stack which have a
@@ -50,7 +39,7 @@ var AppHealthBarComponent = React.createClass({
         "progress-bar": true
       };
       // add health bar name
-      classSet["health-bar-" + name] = true;
+      classSet["health-bar-" + d.state] = true;
 
       if (width !== 0) {
         allZeroWidthBefore = false;

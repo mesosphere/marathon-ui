@@ -1,10 +1,10 @@
 const HealthStatus = {
-  HEALTHY: 0,
-  UNHEALTHY: 1,
-  UNKNOWN: 2,
-  STAGED: 3,
-  OVERCAPACITY: 4,
-  UNSCHEDULED: 5
+  HEALTHY: "healthy",
+  UNHEALTHY: "unhealthy",
+  UNKNOWN: "unknown",
+  STAGED: "staged",
+  OVERCAPACITY: "over-capacity",
+  UNSCHEDULED: "unscheduled"
 };
 
 module.exports = Object.freeze(HealthStatus);
