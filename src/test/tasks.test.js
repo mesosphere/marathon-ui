@@ -209,14 +209,14 @@ describe("Task List Item component", function () {
 
   it("has the correct version", function () {
     var cellContent =
-      this.component.props.children[4].props.children.props;
+      this.component.props.children[6].props.children.props;
 
     expect(cellContent.title).to.equal("2015-06-29T13:54:24.171Z");
   });
 
   it("has the correct update timestamp", function () {
     var cellContent =
-      this.component.props.children[5].props.children.props;
+      this.component.props.children[7].props.children.props;
 
     expect(cellContent.title).to.equal("2015-06-29T14:11:58.709Z");
     expect(cellContent.dateTime).to.equal("2015-06-29T14:11:58.709Z");
