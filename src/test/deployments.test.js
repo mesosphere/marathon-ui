@@ -197,7 +197,6 @@ describe("Deployments navigation badge", function () {
 
   it("has the correct amount of deployments", function () {
     var badge = this.component.props.children[1].props.children[1];
-    expect(badge.props.className).to.equal("badge");
     expect(badge.props.children).to.equal(2);
   });
 
