@@ -131,7 +131,7 @@ var AppListItemComponent = React.createClass({
       return null;
     }
 
-    var moreLabelClassName = classNames("more", {
+    var moreLabelClassName = classNames("badge more", {
       "visible": Object.keys(labels).length > this.state.numberOfVisibleLabels
     });
 
