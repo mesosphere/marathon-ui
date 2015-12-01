@@ -1,0 +1,27 @@
+/* ==============
+ * Loading bar
+ * ==============
+ */
+.loading-bar {
+  height: @base-spacing-unit ;
+  max-width: @health-bar-width;
+
+  background-image: linear-gradient(
+          -45deg,
+          @health-bar-inner-color 25%,
+          rgba(42, 44, 49, 0) 25%,
+          rgba(42, 44, 49, 0) 50%,
+          @health-bar-inner-color 50%,
+          @health-bar-inner-color 75%,
+          rgba(42, 44, 49, 0) 75%
+  );
+  background-color: @health-bar-running-color;
+  background-size: 12px 12px;
+  box-shadow: inset 0 10px 0 rgba(255, 255, 255, 0.2);
+  animation: move 2s linear infinite;
+  -ms-animation-name: move;
+}
+
+@keyframes move {
+  to { background-position: 12px 12px; }
+}
