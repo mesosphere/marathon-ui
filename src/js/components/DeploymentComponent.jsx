@@ -5,9 +5,12 @@ var React = require("react/addons");
 var DeploymentActions = require("../actions/DeploymentActions");
 var DialogActions = require("../actions/DialogActions");
 var DialogStore = require("../stores/DialogStore");
+var TooltipMixin = require("../mixins/TooltipMixin");
 
 var DeploymentComponent = React.createClass({
   displayName: "DeploymentComponent",
+
+  mixins: [TooltipMixin],
 
   propTypes: {
     model: React.PropTypes.object.isRequired
@@ -53,17 +56,30 @@ var DeploymentComponent = React.createClass({
     }.bind(this));
   },
 
+  handleMouseOverHealthBar: function (ref) {
+    var el = this.refs[ref].getDOMNode();
+    this.tip_showTip(el);
+  },
+
+  handleMouseOutHealthBar: function (ref) {
+    var el = this.refs[ref].getDOMNode();
+    this.tip_hideTip(el);
+  },
+
   getButtons: function () {
     if (this.state.loading) {
       return (
-        <div className="progress progress-striped active pull-right"
-            style={{"width": "140px"}}>
-          <span className="progress-bar progress-bar-info" role="progressbar"
-              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-              style={{"width": "100%"}}>
-            <span className="sr-only">Rolling back deployment</span>
-          </span>
-        </div>
+        <div className="loading-bar"
+          ref="loadingBar"
+          key="loadingBar"
+          data-behavior="show-tip"
+          data-tip-type-class="default"
+          data-tip-place="top"
+          data-tip-content="deploying"
+          onMouseOver=
+            {this.handleMouseOverHealthBar.bind(null, "loadingBar")}
+          onMouseOut=
+            {this.handleMouseOutHealthBar.bind(null, "loadingBar")} />
       );
     } else {
       return (
@@ -127,7 +143,7 @@ var DeploymentComponent = React.createClass({
             {progressStep}
           </span> / {model.totalSteps}
         </td>
-        <td className="text-right">
+        <td className="text-right deployment-buttons">
           {this.getButtons()}
         </td>
       </tr>
