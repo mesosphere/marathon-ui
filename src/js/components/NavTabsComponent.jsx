@@ -43,7 +43,7 @@ var NavTabsComponent = React.createClass({
     if (tab.id !== "/deployments" || state.activeDeployments < 1 ) {
       return null;
     }
-    return <span className="badge">{state.activeDeployments}</span>;
+    return <span className="badge indicator">{state.activeDeployments}</span>;
   },
 
   render: function () {
