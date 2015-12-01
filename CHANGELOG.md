@@ -24,6 +24,7 @@
  -\#2529 - The Health checks close button (x) is misleading
 - \#2566 - Port mappings do make sense when container is in net=host mode
 - \#2047 - Tasks/Instances column rewording
+- \#2715 - Deployment loading bar should have new style
 
 ### Fixed
 - \#2720 - Disabled button has wrong colour
