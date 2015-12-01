@@ -49,8 +49,11 @@ var AppHealthBarWithTooltipComponent = React.createClass({
         fields={[
           HealthStatus.HEALTHY,
           HealthStatus.UNHEALTHY,
-          HealthStatus.UNKNOWN
-          ]}
+          HealthStatus.UNKNOWN,
+          HealthStatus.STAGED,
+          HealthStatus.OVERCAPACITY,
+          HealthStatus.UNSCHEDULED
+        ]}
         model={model} />
     );
     return React.renderToString(component);
