@@ -6,6 +6,28 @@
   display: inline-block;
   position: absolute;
 
+  .badge, .more {
+    display: inline-block;
+    position: fixed;
+    transform: translateX(-1vw);
+    visibility: hidden;
+    white-space: nowrap;
+    margin-left: @horizontal-spacing-unit;
+    background-color: @sidebar-bg-color;
+    border-radius: @base-spacing-unit*2;
+    color: @navbar-inactive-color;
+    line-height: inherit;
+    max-width: @horizontal-spacing-unit * 64;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.visible {
+      position: relative;
+      transform: translateX(0);
+      visibility: inherit;
+    }
+  }
+
   .labels-dropdown {
     background-color: @navbar-bg-color;
     display: none;
@@ -46,36 +68,11 @@
         display: block;
         margin: 0 0 @base-spacing-unit 0;
 
-        .label {
+        .badge {
           margin: 0;
         }
       }
     }
-  }
-}
-
-.label, .more {
-  position: fixed;
-  transform: translateX(-1vw);
-  display: inline-block;
-  visibility: hidden;
-  white-space: nowrap;
-  padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.5;
-  margin-left: @horizontal-spacing-unit;
-  background-color: @sidebar-bg-color;
-  border-radius: @base-spacing-unit*2;
-  color: @navbar-inactive-color;
-  font-size: @small-font-size;
-  font-weight: normal;
-  line-height: inherit;
-  max-width: @horizontal-spacing-unit * 64;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  &.visible {
-    position: relative;
-    transform: translateX(0);
-    visibility: inherit;
   }
 }
 

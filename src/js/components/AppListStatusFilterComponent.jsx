@@ -110,9 +110,9 @@ var AppListStatusFilterComponent = React.createClass({
     }
 
     return (
-      <label htmlFor={id} className="label visible">
+      <span className="badge">
         {state.appsStatusesCount[appStatus].toLocaleString()}
-      </label>
+      </span>
     );
   },
 
@@ -138,8 +138,8 @@ var AppListStatusFilterComponent = React.createClass({
               onChange={this.handleChange.bind(this, key)} />
             <label htmlFor={`status-${key}-${i}`} className={labelClassName}>
               {optionText}
+              {this.getStatusCountBadge(`status-${key}-${i}`, key)}
             </label>
-            {this.getStatusCountBadge(`status-${key}-${i}`, key)}
         </li>
       );
     });

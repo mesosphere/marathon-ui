@@ -103,7 +103,7 @@ var AppListItemComponent = React.createClass({
 
     let labelsWidth = 0;
     let numberOfVisibleLabels = 0;
-    let labelNodes = React.findDOMNode(refs.labels).querySelectorAll(".label");
+    let labelNodes = React.findDOMNode(refs.labels).querySelectorAll(".badge");
 
     // labelNodes is not an Array, but a NodeList
     [...labelNodes].forEach(label => {
@@ -131,7 +131,7 @@ var AppListItemComponent = React.createClass({
       return null;
     }
 
-    var moreLabelClassName = classNames("more", {
+    var moreLabelClassName = classNames("badge more", {
       "visible": Object.keys(labels).length > this.state.numberOfVisibleLabels
     });
 

@@ -25,13 +25,9 @@
     }
   }
 
-  .label {
-    color: @breadcrumb-text-color;
-    width: auto;
-    background-color: @table-header-color;
-    padding: @horizontal-spacing-unit*0.25 @base-spacing-unit*1.25;
-    margin-left: 0px;
-    flex-shrink: 0;
+  .badge {
+    line-height: @base-line-height;
+    right:0;
   }
 
   li:hover {
@@ -50,7 +46,7 @@
       color: @btn-default-text-color;
     }
 
-    & > .label {
+    & .badge {
       color: @btn-default-text-color;
     }
   }

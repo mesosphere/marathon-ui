@@ -129,7 +129,7 @@ var AppListItemLabelsComponent = React.createClass({
         labelText = `${key}:${labels[key]}`;
       }
 
-      let labelClassName = classNames("label", {
+      let labelClassName = classNames("badge", {
         "visible": i < numberOfVisibleLabels
       });
 
@@ -142,7 +142,7 @@ var AppListItemLabelsComponent = React.createClass({
 
       dropdownNodes.push((
         <li key={i} title={labelText}>
-          <span className="label visible">{labelText}</span>
+          <span className="badge visible">{labelText}</span>
         </li>
       ));
     });
