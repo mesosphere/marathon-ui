@@ -25,6 +25,9 @@
 - \#2566 - Port mappings do make sense when container is in net=host mode
 - \#2047 - Tasks/Instances column rewording
 
+### Fixed
+- \#2720 - Disabled button has wrong colour
+
 ## 0.13.6 - 2015-11-25
 ### Fixed
 - \#2719 - Show correct button label when creating inside group
