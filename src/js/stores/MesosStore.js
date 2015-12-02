@@ -64,7 +64,9 @@ function invalidateTaskFiles(taskId) {
 function getNodeUrl(nodeId) {
   var master = MesosStore.getState(MASTER_ID);
   if (master == null) {
-    return "";
+    throw new Error(
+      `Unable to get the node url as the master state is undefined.`
+    );
   }
 
   let agent = master.slaves.find((slave) => {
@@ -72,7 +74,9 @@ function getNodeUrl(nodeId) {
   });
 
   if (agent == null) {
-    return "";
+    throw new Error(
+      `Can't get the node url as the he node (${nodeId}) is undefined.`
+    );
   }
 
   let pid = agent.pid;
@@ -84,7 +88,10 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
   var agentState = MesosStore.getState(agentId);
 
   if (agentState == null) {
-    return null;
+    throw new Error(
+      `Unable get the executor directory as the agent (${agentId})
+      state is undefined.`
+    );
   }
 
   function matchFramework(framework) {
@@ -97,8 +104,8 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
 
   if (!framework) {
     throw new Error(
-      `Framework with ID ${frameworkId} does not exist on slave\
-         with ID ${agentId}.`
+      `Can't get the executor directory as the Framework (${frameworkId})
+       does not exist on the given agent (${agentId}).`
     );
   }
 
@@ -111,7 +118,10 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
     framework.completed_executors.find(matchExecutor);
 
   if (executor == null) {
-    return null;
+    throw new Error(
+      `Unable to get the executor directory as the task (${taskId})
+      does not exists.`
+    );
   }
 
   return executor.directory;
