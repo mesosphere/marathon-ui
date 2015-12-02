@@ -152,21 +152,32 @@ function resolveTaskFileRequests() {
     // Get node/agent sate. This is needed to actually retrieve
     // the executor directory.
     if (!MesosStore.getState(agentId)) {
-      MesosActions.requestState(agentId, getNodeUrl(agentId));
+      try {
+        MesosActions.requestState(agentId, getNodeUrl(agentId));
+      } catch (error) {
+        // Invalidate underlying data and start over
+        invalidateState(MASTER_ID);
+        resolveTaskFileRequests();
+      }
       return;
     }
 
     // Request the files if not present
     if (!MesosStore.getTaskFiles(taskId)) {
-      MesosActions.requestFiles(taskId,
-        getNodeUrl(agentId),
-        getExecutorDirectory(agentId, info.frameworkId, taskId));
+      try {
+        MesosActions.requestFiles(taskId,
+          getNodeUrl(agentId),
+          getExecutorDirectory(agentId, info.frameworkId, taskId));
+      } catch (error) {
+        // Invalidate underlying data and start over
+        invalidateState(agentId);
+        resolveTaskFileRequests();
+      }
       return;
     }
 
     // Everything is fine, we have the file, let's remove it from the que
     taskFileRequestQue.splice(index, 1);
-
   });
 }
 
