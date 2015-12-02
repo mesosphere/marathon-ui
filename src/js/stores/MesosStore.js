@@ -11,29 +11,55 @@ const FILES_TTL = 60000;
 const STATE_TTL = 60000;
 const MASTER_ID = "master";
 
-var state = {};
-var files = {};
-var fileRequests = [];
+var stateMap = {};
+var taskFileMap = {};
+var taskFileRequestQue = [];
 
 var MesosStore = Object.assign({
 
-  getTaskFiles: function (taskId) {
-    var data = files[taskId];
-    if (data == null || data.timestamp + FILES_TTL < Date.now()) {
-      return null;
-    }
-    return data.files;
-  },
-
   getState: function (nodeId) {
-    var data = state[nodeId];
+    var data = stateMap[nodeId];
     if (data == null || data.timestamp + STATE_TTL < Date.now()) {
+      invalidateState(nodeId);
       return null;
     }
     return data.state;
+  },
+
+  getTaskFiles: function (taskId) {
+    var data = taskFileMap[taskId];
+    if (data == null || data.timestamp + FILES_TTL < Date.now()) {
+      invalidateTaskFiles(taskId);
+      return null;
+    }
+    return data.files;
   }
 
 }, EventEmitter.prototype);
+
+function addState(nodeId, state) {
+  stateMap[nodeId] = {
+    state: state,
+    timestamp: Date.now()
+  };
+  MesosStore.emit(MesosEvents.CHANGE);
+}
+
+function invalidateState(nodeId) {
+  stateMap[nodeId] = null;
+}
+
+function addTaskFiles(taskId, files) {
+  taskFileMap[taskId] = {
+    files: files,
+    timestamp: Date.now()
+  };
+  MesosStore.emit(MesosEvents.CHANGE);
+}
+
+function invalidateTaskFiles(taskId) {
+  delete taskFileMap[taskId];
+}
 
 function getNodeUrl(nodeId) {
   var master = MesosStore.getState(MASTER_ID);
@@ -91,7 +117,7 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
   return executor.directory;
 }
 
-function resolveFileRequests() {
+function resolveTaskFileRequests() {
   var info = InfoStore.info;
 
   // Get the marathon config, to retrieve the mesos leader (master)  url
@@ -108,7 +134,7 @@ function resolveFileRequests() {
   }
 
   // Check all requests, request needed data or remove them from the que
-  fileRequests.forEach((request, index) => {
+  taskFileRequestQue.forEach((request, index) => {
 
     var taskId = request.taskId;
     var agentId = request.agentId;
@@ -129,7 +155,7 @@ function resolveFileRequests() {
     }
 
     // Everything is fine, we have the file, let's remove it from the que
-    fileRequests.splice(index, 1);
+    taskFileRequestQue.splice(index, 1);
 
   });
 }
@@ -138,39 +164,31 @@ AppDispatcher.register(function (action) {
   var data = action.data;
   switch (action.actionType) {
     case MesosEvents.REQUEST_FILES:
-      fileRequests.push({
+      taskFileRequestQue.push({
         agentId: data.agentId,
         taskId: data.taskId
       });
-      resolveFileRequests();
+      resolveTaskFileRequests();
       break;
     case InfoEvents.CHANGE:
-      resolveFileRequests();
+      resolveTaskFileRequests();
       break;
     case MesosEvents.REQUEST_STATE_COMPLETE:
-      state[data.id] = {
-        state: data.state,
-        timestamp: Date.now()
-      };
-      resolveFileRequests();
-      MesosStore.emit(MesosEvents.CHANGE);
+      addState(data.id, data.state);
+      resolveTaskFileRequests();
       break;
     case MesosEvents.REQUEST_STATE_ERROR:
       MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data.body);
       break;
     case MesosEvents.REQUEST_FILES_COMPLETE:
-      files[data.id] = {
-        files: data.files.map((file) => {
-          let encodedPath = encodeURIComponent(file.path);
-          file.host = data.host;
-          file.name = /[^/]+\/?$/.exec(file.path)[0];
-          file.download = `${data.host}/files/download?path=${encodedPath}`;
-          return file;
-        }),
-        timestamp: Date.now()
-      };
-      resolveFileRequests();
-      MesosStore.emit(MesosEvents.CHANGE);
+      addTaskFiles(data.id, data.files.map((file) => {
+        let encodedPath = encodeURIComponent(file.path);
+        file.host = data.host;
+        file.name = /[^/]+\/?$/.exec(file.path)[0];
+        file.download = `${data.host}/files/download?path=${encodedPath}`;
+        return file;
+      }));
+      resolveTaskFileRequests();
       break;
     case MesosEvents.REQUEST_FILES_ERROR:
       MesosStore.emit(MesosEvents.REQUEST_FILES_ERROR, data.body);
