@@ -234,7 +234,8 @@ describe("Task Detail component", function () {
     updatedAt: "2015-06-29T14:11:58.709Z",
     stagedAt: "2015-06-29T14:11:58.709Z",
     startedAt: "2015-06-29T14:11:58.709Z",
-    version: "2015-06-29T13:54:24.171Z"
+    version: "2015-06-29T13:54:24.171Z",
+    host: "example.com"
   };
 
   beforeEach(function () {
