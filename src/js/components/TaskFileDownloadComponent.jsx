@@ -9,8 +9,8 @@ function matchFileName(name) {
   return (file) => file.name === name;
 }
 
-var TaskFileLinkComponent = React.createClass({
-  displayName: "TaskFileLinkComponent",
+var TaskFileDownloadComponent = React.createClass({
+  displayName: "TaskFileDownloadComponent",
   propTypes: {
     children: React.PropTypes.node,
     className: React.PropTypes.string,
@@ -95,4 +95,4 @@ var TaskFileLinkComponent = React.createClass({
   }
 });
 
-module.exports = TaskFileLinkComponent;
+module.exports = TaskFileDownloadComponent;
