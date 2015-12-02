@@ -39,10 +39,10 @@ var DuplicableRowsMixin = {
 
     Object.keys(duplicableRowsScheme).forEach(function (fieldId) {
       if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
-        FormActions.insert(fieldId,
-            Util.extendObject(duplicableRowsScheme[fieldId], {
+        let rowScheme = Util.extendObject(duplicableRowsScheme[fieldId], {
           consecutiveKey: Util.getUniqueId()
-        }));
+        });
+        FormActions.insert(fieldId, rowScheme);
       }
     });
   },

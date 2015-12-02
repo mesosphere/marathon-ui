@@ -230,7 +230,7 @@ var AppListLabelsFilterComponent = React.createClass({
     });
 
     let dropdownClassSet = classNames({
-        "hidden": !this.state.activated
+      "hidden": !this.state.activated
     }, "dropdown-menu list-group filters");
 
     return (

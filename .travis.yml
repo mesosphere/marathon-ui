@@ -4,7 +4,7 @@ before_script:
   - npm cache clear
   - npm install -g gulp
 node_js:
-  - "0.12"
+  - "5.0.0"
 script: npm install && npm run dist
 notifications:
   slack:
