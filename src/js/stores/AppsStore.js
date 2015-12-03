@@ -134,6 +134,7 @@ function processApp(app) {
   app.healthWeight = getAppHealthWeight(app.health);
 
   app.tasks = lazy(app.tasks).map(function (task) {
+    task.id =  task.id || task.taskId;
     task.healthStatus = getTaskHealth(task);
     setTaskStatus(task);
     return task;
