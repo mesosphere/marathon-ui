@@ -126,7 +126,8 @@ var BreadcrumbComponent = React.createClass({
     var listItems = this.getDOMNode().children;
     var collapsed = this.state.collapsed;
 
-    return Object.values(listItems)
+    // array/splat casts NodeList to array
+    return [...listItems]
       .map((item, n) => {
         var isFirstItem = n === 0;
         var isLastItem = n === listItems.length - 1;
