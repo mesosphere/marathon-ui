@@ -10,11 +10,13 @@ var MesosEvents = require("../events/MesosEvents");
 
 const FILES_TTL = 60000;
 const STATE_TTL = 60000;
+const REQUEST_DELAY = 100;
 const MASTER_ID = "master";
 
 var stateMap = {};
 var taskFileMap = {};
 var taskFileRequestQueue = [];
+var requestCount = 0;
 
 function getDataFromMap(id, map, ttl = 100) {
   if (!Util.isString(id) || map == null) {
@@ -126,17 +128,22 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
   return executor.directory;
 }
 
+function throttleRequest(request) {
+  setTimeout(request, Math.pow(++requestCount, 2)*REQUEST_DELAY);
+}
+
 function resolveTaskFileRequests() {
   var info = InfoStore.info;
 
-  if (!info.hasOwnProperty("marathon_config")) {
-    InfoActions.requestInfo();
+  if (!Util.isObject(info.marathon_config) ||
+      !Util.isString(info.marathon_config.mesos_leader_ui_url)) {
+    throttleRequest(()=>InfoActions.requestInfo());
     return;
   }
 
   if (!MesosStore.getState(MASTER_ID)) {
-    MesosActions.requestState(MASTER_ID,
-      info.marathon_config.mesos_leader_ui_url.replace(/\/?$/, "/master"));
+    throttleRequest(()=>{MesosActions.requestState(MASTER_ID,
+      info.marathon_config.mesos_leader_ui_url.replace(/\/?$/, "/master"))});
     return;
   }
 
@@ -169,6 +176,8 @@ function resolveTaskFileRequests() {
     // Everything is fine, we have the file, let's remove it from the queue
     taskFileRequestQueue.splice(index, 1);
   });
+
+  requestCount = 0;
 }
 
 AppDispatcher.register(function (action) {
@@ -179,9 +188,11 @@ AppDispatcher.register(function (action) {
         agentId: data.agentId,
         taskId: data.taskId
       });
+      requestCount = 0;
       resolveTaskFileRequests();
       break;
-    case InfoEvents.CHANGE:
+    case InfoEvents.REQUEST:
+      AppDispatcher.waitFor([InfoStore.dispatchToken]);
       resolveTaskFileRequests();
       break;
     case MesosEvents.REQUEST_STATE_COMPLETE:
@@ -191,6 +202,7 @@ AppDispatcher.register(function (action) {
       MesosStore.emit(MesosEvents.STATE_CHANGE);
       break;
     case MesosEvents.REQUEST_STATE_ERROR:
+      resolveTaskFileRequests();
       MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data.body);
       break;
     case MesosEvents.REQUEST_FILES_COMPLETE:
