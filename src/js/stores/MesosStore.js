@@ -188,6 +188,7 @@ AppDispatcher.register(function (action) {
       addDataToMap(data.id, stateMap, data.state);
       resolveTaskFileRequests();
       MesosStore.emit(MesosEvents.CHANGE);
+      MesosStore.emit(MesosEvents.STATE_CHANGE);
       break;
     case MesosEvents.REQUEST_STATE_ERROR:
       MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data.body);
@@ -202,6 +203,7 @@ AppDispatcher.register(function (action) {
       }));
       resolveTaskFileRequests();
       MesosStore.emit(MesosEvents.CHANGE);
+      MesosStore.emit(MesosEvents.TASK_FILE_CHANGE);
       break;
     case MesosEvents.REQUEST_FILES_ERROR:
       MesosStore.emit(MesosEvents.REQUEST_FILES_ERROR, data.body);
