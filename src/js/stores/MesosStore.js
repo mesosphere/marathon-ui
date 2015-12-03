@@ -99,8 +99,7 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
     return frameworkId === framework.id;
   }
 
-  let framework =
-    agentState.frameworks.find(matchFramework) ||
+  let framework = agentState.frameworks.find(matchFramework) ||
     agentState.completed_frameworks.find(matchFramework);
 
   if (!framework) {
@@ -114,7 +113,7 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
     return taskId === executor.id;
   }
 
-  var executor = framework.executors.find(matchExecutor) ||
+  let executor = framework.executors.find(matchExecutor) ||
     framework.completed_executors.find(matchExecutor);
 
   if (executor == null) {
@@ -130,46 +129,37 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
 function resolveTaskFileRequests() {
   var info = InfoStore.info;
 
-  // Get the marathon config, to retrieve the mesos leader (master)  url
   if (!info.hasOwnProperty("marathon_config")) {
     InfoActions.requestInfo();
     return;
   }
 
-  // Get master sate, We need it to parse the agent/node url
   if (!MesosStore.getState(MASTER_ID)) {
     MesosActions.requestState(MASTER_ID,
       info.marathon_config.mesos_leader_ui_url.replace(/\/?$/, "/master"));
     return;
   }
 
-  // Check all requests, request needed data or remove them from the queue
   taskFileRequestQueue.forEach((request, index) => {
-
     var taskId = request.taskId;
     var agentId = request.agentId;
 
-    // Get node/agent sate. This is needed to actually retrieve
-    // the executor directory.
     if (!MesosStore.getState(agentId)) {
       try {
         MesosActions.requestState(agentId, getNodeUrl(agentId));
       } catch (error) {
-        // Invalidate underlying data and start over
         invalidateMapData(MASTER_ID, stateMap);
         resolveTaskFileRequests();
       }
       return;
     }
 
-    // Request the files if not present
     if (!MesosStore.getTaskFiles(taskId)) {
       try {
         MesosActions.requestFiles(taskId,
           getNodeUrl(agentId),
           getExecutorDirectory(agentId, info.frameworkId, taskId));
       } catch (error) {
-        // Invalidate underlying data and start over
         invalidateMapData(agentId, stateMap);
         resolveTaskFileRequests();
       }
@@ -203,8 +193,8 @@ AppDispatcher.register(function (action) {
       MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data.body);
       break;
     case MesosEvents.REQUEST_FILES_COMPLETE:
-      addDataToMap(data.id, taskFileMap, data.files.map((file) => {
-        let encodedPath = encodeURIComponent(file.path);
+      addDataToMap(data.id, taskFileMap, data.files.map(file => {
+        var encodedPath = encodeURIComponent(file.path);
         file.host = data.host;
         file.name = /[^/]+\/?$/.exec(file.path)[0];
         file.download = `${data.host}/files/download?path=${encodedPath}`;
