@@ -26,11 +26,12 @@ var TaskFileDownloadComponent = React.createClass({
   },
 
   componentWillMount: function () {
-    MesosStore.on(MesosEvents.CHANGE, this.onMesosChange);
+    MesosStore.on(MesosEvents.TASK_FILE_CHANGE, this.onMesosTaskFileChange);
   },
 
   componentWillUnmount: function () {
-    MesosStore.removeListener(MesosEvents.CHANGE, this.onMesosChange);
+    MesosStore.removeListener(MesosEvents.TASK_FILE_CHANGE,
+      this.onMesosTaskFileChange);
   },
 
   getFile: function () {
@@ -44,7 +45,7 @@ var TaskFileDownloadComponent = React.createClass({
     return null;
   },
 
-  onMesosChange: function () {
+  onMesosTaskFileChange: function () {
     var file = this.getFile();
     var requested = this.state.requested;
     // Start download if file was requested by the user
