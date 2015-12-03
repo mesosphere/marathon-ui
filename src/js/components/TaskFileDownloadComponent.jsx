@@ -32,7 +32,7 @@ var TaskFileDownloadComponent = React.createClass({
 
   getFile: function () {
     var props = this.props;
-    var task = this.props.task;
+    var task = props.task;
     var taskId = task.id || task.taskId;
     var files = MesosStore.getTaskFiles(taskId);
     if (files != null && files.length) {
@@ -70,23 +70,25 @@ var TaskFileDownloadComponent = React.createClass({
   },
 
   render: function () {
-    var className = classNames("task-file-download", this.props.className, {
-      "loading": this.state.requested
-    });
-    var file = this.state.file;
+    var state = this.state;
+    var props = this.props;
+    var file = state.file;
     var href = "";
     var name = "";
     if (file) {
       name = file.name;
       href = file.download;
     }
+    var className = classNames("task-file-download", props.className, {
+      "loading": state.fileIsRequestedByUser
+    });
     return (
       <a className={className}
           href={href}
           onClick={this.handleClick}
           ref="download"
           download={name}>
-        {this.props.children}
+        {props.children}
       </a>
     );
   }
