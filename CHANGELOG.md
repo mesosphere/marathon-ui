@@ -27,6 +27,7 @@
 
 ### Fixed
 - \#2720 - Disabled button has wrong colour
+- \#2647 - Application cmd override causes application to restart repeatedly
 
 ## 0.13.6 - 2015-11-25
 ### Fixed
