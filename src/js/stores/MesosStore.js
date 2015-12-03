@@ -1,6 +1,7 @@
 var EventEmitter = require("events").EventEmitter;
 
 var AppDispatcher = require("../AppDispatcher");
+var Util = require("../helpers/Util");
 var InfoStore = require("../stores/InfoStore");
 var InfoActions = require("../actions/InfoActions");
 var InfoEvents = require("../events/InfoEvents");
@@ -18,47 +19,47 @@ var taskFileRequestQue = [];
 var MesosStore = Object.assign({
 
   getState: function (nodeId) {
-    var data = stateMap[nodeId];
-    if (data == null || data.timestamp + STATE_TTL < Date.now()) {
-      invalidateState(nodeId);
-      return null;
-    }
-    return data.state;
+    return getDataFromMap(nodeId, stateMap, STATE_TTL);
   },
 
   getTaskFiles: function (taskId) {
-    var data = taskFileMap[taskId];
-    if (data == null || data.timestamp + FILES_TTL < Date.now()) {
-      invalidateTaskFiles(taskId);
-      return null;
-    }
-    return data.files;
+    return getDataFromMap(taskId, taskFileMap, FILES_TTL);
   }
 
 }, EventEmitter.prototype);
 
-function addState(nodeId, state) {
-  stateMap[nodeId] = {
-    state: state,
+function getDataFromMap(id, map, ttl = 100) {
+  if (!Util.isString(id) || map == null) {
+    return null;
+  }
+
+  let item = map[id];
+  if (item == null) {
+    return null;
+  }
+  if (item.timestamp + ttl < Date.now()) {
+    invalidateMapData(id, map);
+    return null;
+  }
+
+  return item.data;
+}
+
+function invalidateMapData(id, map) {
+  if (!Util.isString(id) || map == null) {
+    return;
+  }
+  delete map[id];
+}
+
+function addDataToMap(id, map, data) {
+  if (!Util.isString(id) || map == null || data == null) {
+    return;
+  }
+  map[id] = {
+    data: data,
     timestamp: Date.now()
   };
-  MesosStore.emit(MesosEvents.CHANGE);
-}
-
-function invalidateState(nodeId) {
-  stateMap[nodeId] = null;
-}
-
-function addTaskFiles(taskId, files) {
-  taskFileMap[taskId] = {
-    files: files,
-    timestamp: Date.now()
-  };
-  MesosStore.emit(MesosEvents.CHANGE);
-}
-
-function invalidateTaskFiles(taskId) {
-  delete taskFileMap[taskId];
 }
 
 function getNodeUrl(nodeId) {
@@ -113,8 +114,7 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
     return taskId === executor.id;
   }
 
-  var executor =
-    framework.executors.find(matchExecutor) ||
+  var executor = framework.executors.find(matchExecutor) ||
     framework.completed_executors.find(matchExecutor);
 
   if (executor == null) {
@@ -156,7 +156,7 @@ function resolveTaskFileRequests() {
         MesosActions.requestState(agentId, getNodeUrl(agentId));
       } catch (error) {
         // Invalidate underlying data and start over
-        invalidateState(MASTER_ID);
+        invalidateMapData(MASTER_ID, stateMap);
         resolveTaskFileRequests();
       }
       return;
@@ -170,7 +170,7 @@ function resolveTaskFileRequests() {
           getExecutorDirectory(agentId, info.frameworkId, taskId));
       } catch (error) {
         // Invalidate underlying data and start over
-        invalidateState(agentId);
+        invalidateMapData(agentId, stateMap);
         resolveTaskFileRequests();
       }
       return;
@@ -195,14 +195,15 @@ AppDispatcher.register(function (action) {
       resolveTaskFileRequests();
       break;
     case MesosEvents.REQUEST_STATE_COMPLETE:
-      addState(data.id, data.state);
+      addDataToMap(data.id, stateMap, data.state);
       resolveTaskFileRequests();
+      MesosStore.emit(MesosEvents.CHANGE);
       break;
     case MesosEvents.REQUEST_STATE_ERROR:
       MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data.body);
       break;
     case MesosEvents.REQUEST_FILES_COMPLETE:
-      addTaskFiles(data.id, data.files.map((file) => {
+      addDataToMap(data.id, taskFileMap, data.files.map((file) => {
         let encodedPath = encodeURIComponent(file.path);
         file.host = data.host;
         file.name = /[^/]+\/?$/.exec(file.path)[0];
@@ -210,6 +211,7 @@ AppDispatcher.register(function (action) {
         return file;
       }));
       resolveTaskFileRequests();
+      MesosStore.emit(MesosEvents.CHANGE);
       break;
     case MesosEvents.REQUEST_FILES_ERROR:
       MesosStore.emit(MesosEvents.REQUEST_FILES_ERROR, data.body);
