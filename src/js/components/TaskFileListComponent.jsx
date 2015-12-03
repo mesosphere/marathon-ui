@@ -15,9 +15,8 @@ var TaskFileListComponent = React.createClass({
 
   getInitialState: function () {
     var task = this.props.task;
-    var taskId = task.id || task.taskId;
     return {
-      files: MesosStore.getTaskFiles(taskId)
+      files: MesosStore.getTaskFiles(task.id)
     };
   },
 
@@ -27,10 +26,8 @@ var TaskFileListComponent = React.createClass({
 
   componentDidMount: function () {
     var task = this.props.task;
-    var agentId = task.slaveId;
-    var taskId = task.id || task.taskId;
     if (this.state.files == null) {
-      MesosActions.requestTaskFiles(agentId, taskId);
+      MesosActions.requestTaskFiles(task.slaveId, task.id);
     }
   },
 
@@ -41,9 +38,8 @@ var TaskFileListComponent = React.createClass({
 
   onMesosTaskFileChange() {
     var task = this.props.task;
-    var taskId = task.id || task.taskId;
     this.setState({
-      files: MesosStore.getTaskFiles(taskId)
+      files: MesosStore.getTaskFiles(task.id)
     });
   },
 
