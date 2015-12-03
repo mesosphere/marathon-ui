@@ -5,10 +5,6 @@ var MesosActions = require("../actions/MesosActions");
 var MesosEvents = require("../events/MesosEvents");
 var MesosStore = require("../stores/MesosStore");
 
-function matchFileName(name) {
-  return (file) => file.name === name;
-}
-
 var TaskFileDownloadComponent = React.createClass({
   displayName: "TaskFileDownloadComponent",
   propTypes: {
@@ -40,7 +36,7 @@ var TaskFileDownloadComponent = React.createClass({
     var taskId = task.id || task.taskId;
     var files = MesosStore.getTaskFiles(taskId);
     if (files) {
-      return files.filter(matchFileName(props.fileName))[0];
+      return files.filter(file => file.name === props.fileName)[0];
     }
     return null;
   },
