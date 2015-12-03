@@ -5,12 +5,9 @@ var React = require("react/addons");
 var DeploymentActions = require("../actions/DeploymentActions");
 var DialogActions = require("../actions/DialogActions");
 var DialogStore = require("../stores/DialogStore");
-var TooltipMixin = require("../mixins/TooltipMixin");
 
 var DeploymentComponent = React.createClass({
   displayName: "DeploymentComponent",
-
-  mixins: [TooltipMixin],
 
   propTypes: {
     model: React.PropTypes.object.isRequired
@@ -56,31 +53,9 @@ var DeploymentComponent = React.createClass({
     }.bind(this));
   },
 
-  handleMouseOverHealthBar: function (ref) {
-    var el = this.refs[ref].getDOMNode();
-    this.tip_showTip(el);
-  },
-
-  handleMouseOutHealthBar: function (ref) {
-    var el = this.refs[ref].getDOMNode();
-    this.tip_hideTip(el);
-  },
-
   getButtons: function () {
     if (this.state.loading) {
-      return (
-        <div className="loading-bar"
-          ref="loadingBar"
-          key="loadingBar"
-          data-behavior="show-tip"
-          data-tip-type-class="default"
-          data-tip-place="top"
-          data-tip-content="deploying"
-          onMouseOver=
-            {this.handleMouseOverHealthBar.bind(null, "loadingBar")}
-          onMouseOut=
-            {this.handleMouseOutHealthBar.bind(null, "loadingBar")} />
-      );
+      return (<div className="loading-bar" />);
     } else {
       return (
         <ul className="list-inline">
