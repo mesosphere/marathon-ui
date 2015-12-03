@@ -61,14 +61,14 @@ var TaskFileDownloadComponent = React.createClass({
   handleClick: function (event) {
     var file = this.state.file;
     if (file == null) {
-      var task = this.props.task;
-      var agentId = task.slaveId;
-      var taskId = task.id || task.taskId;
+      event.preventDefault();
+      let task = this.props.task;
+      let agentId = task.slaveId;
+      let taskId = task.id || task.taskId;
       MesosActions.requestTaskFiles(agentId, taskId);
       this.setState({
         requested: true
       });
-      event.preventDefault();
     }
   },
 
@@ -85,10 +85,10 @@ var TaskFileDownloadComponent = React.createClass({
     }
     return (
       <a className={className}
-        href={href}
-        onClick={this.handleClick}
-        ref="download"
-        download={name}>
+          href={href}
+          onClick={this.handleClick}
+          ref="download"
+          download={name}>
         {this.props.children}
       </a>
     );
