@@ -16,18 +16,6 @@ var stateMap = {};
 var taskFileMap = {};
 var taskFileRequestQueue = [];
 
-var MesosStore = Object.assign({
-
-  getState: function (nodeId) {
-    return getDataFromMap(nodeId, stateMap, STATE_TTL);
-  },
-
-  getTaskFiles: function (taskId) {
-    return getDataFromMap(taskId, taskFileMap, FILES_TTL);
-  }
-
-}, EventEmitter.prototype);
-
 function getDataFromMap(id, map, ttl = 100) {
   if (!Util.isString(id) || map == null) {
     return null;
@@ -61,6 +49,18 @@ function addDataToMap(id, map, data) {
     timestamp: Date.now()
   };
 }
+
+var MesosStore = Object.assign({
+
+  getState: function (nodeId) {
+    return getDataFromMap(nodeId, stateMap, STATE_TTL);
+  },
+
+  getTaskFiles: function (taskId) {
+    return getDataFromMap(taskId, taskFileMap, FILES_TTL);
+  }
+
+}, EventEmitter.prototype);
 
 function getNodeUrl(nodeId) {
   var master = MesosStore.getState(MASTER_ID);
