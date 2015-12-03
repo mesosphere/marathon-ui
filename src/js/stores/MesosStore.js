@@ -14,7 +14,7 @@ const MASTER_ID = "master";
 
 var stateMap = {};
 var taskFileMap = {};
-var taskFileRequestQue = [];
+var taskFileRequestQueue = [];
 
 var MesosStore = Object.assign({
 
@@ -143,8 +143,8 @@ function resolveTaskFileRequests() {
     return;
   }
 
-  // Check all requests, request needed data or remove them from the que
-  taskFileRequestQue.forEach((request, index) => {
+  // Check all requests, request needed data or remove them from the queue
+  taskFileRequestQueue.forEach((request, index) => {
 
     var taskId = request.taskId;
     var agentId = request.agentId;
@@ -176,8 +176,8 @@ function resolveTaskFileRequests() {
       return;
     }
 
-    // Everything is fine, we have the file, let's remove it from the que
-    taskFileRequestQue.splice(index, 1);
+    // Everything is fine, we have the file, let's remove it from the queue
+    taskFileRequestQueue.splice(index, 1);
   });
 }
 
@@ -185,7 +185,7 @@ AppDispatcher.register(function (action) {
   var data = action.data;
   switch (action.actionType) {
     case MesosEvents.REQUEST_FILES:
-      taskFileRequestQue.push({
+      taskFileRequestQueue.push({
         agentId: data.agentId,
         taskId: data.taskId
       });
