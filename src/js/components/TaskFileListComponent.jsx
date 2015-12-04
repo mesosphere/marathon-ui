@@ -97,7 +97,7 @@ var TaskFileListComponent = React.createClass({
               </td>
               <td className="text-right">
                 <span>
-                  {`${Util.filesize(file.size * Math.pow(1024, 2), 0)}`}
+                  {`${Util.filesize(file.size, 0)}`}
                 </span>
               </td>
               <td className="text-right">
