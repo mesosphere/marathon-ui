@@ -208,14 +208,10 @@ var TaskListItemComponent = React.createClass({
           </span>
         </td>
         <td className="text-center">
-          <TaskFileDownloadComponent task={task} fileName="stderr">
-            <i className="icon icon-mini file" /> stderr
-          </TaskFileDownloadComponent>
+          <TaskFileDownloadComponent task={task} fileName="stderr" />
         </td>
         <td className="text-center">
-          <TaskFileDownloadComponent task={task} fileName="stdout">
-            <i className="icon icon-mini file" /> stdout
-          </TaskFileDownloadComponent>
+          <TaskFileDownloadComponent task={task} fileName="stdout" />
         </td>
         <td className="text-right">
           <span
