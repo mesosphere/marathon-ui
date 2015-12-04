@@ -90,7 +90,8 @@ AppDispatcher.register(function (action) {
         DialogEvents.PROMPT_SHOW,
         action.message,
         action.defaultValue,
-        action.dialogId
+        action.dialogId,
+        action.inputType
       );
       break;
     case DialogEvents.PROMPT_DISMISS:

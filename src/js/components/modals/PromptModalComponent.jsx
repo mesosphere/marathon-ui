@@ -8,6 +8,7 @@ var PromptModalComponent = React.createClass({
 
   propTypes: {
     defaultValue: React.PropTypes.string,
+    inputType: React.PropTypes.string,
     message: React.PropTypes.string,
     onConfirm: React.PropTypes.func,
     onDestroy: React.PropTypes.func
@@ -17,6 +18,7 @@ var PromptModalComponent = React.createClass({
     return {
       defaultValue: "",
       message: "",
+      inputType: "text",
       onConfirm: Util.noop,
       onDestroy: Util.noop
     };
@@ -53,7 +55,7 @@ var PromptModalComponent = React.createClass({
         <div className="modal-body reduced-padding">
           <label>{this.props.message}</label>
           <input className="form-control"
-            type="text"
+            type={this.props.inputType}
             ref="textInput"
             onKeyUp={this.onKeyUp}
             defaultValue={this.props.defaultValue} />

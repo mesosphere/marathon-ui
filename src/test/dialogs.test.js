@@ -116,6 +116,26 @@ describe("Dialog store", function () {
       });
     });
 
+    it("show sends correct default type", function (done) {
+      DialogActions.prompt("test prompt");
+
+      DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value, id, inputType) {
+        expectAsync(function () {
+          expect(inputType).to.equal("text");
+        }, done);
+      });
+    });
+
+    it("show sends correct defined type", function (done) {
+      DialogActions.prompt("test prompt", "test value", "number");
+
+      DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value, id, inputType) {
+        expectAsync(function () {
+          expect(inputType).to.equal("number");
+        }, done);
+      });
+    });
+
     it("show sends correct dialogId", function (done) {
       var id = DialogActions.prompt("");
 
