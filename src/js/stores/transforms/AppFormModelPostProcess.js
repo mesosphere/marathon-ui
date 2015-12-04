@@ -40,10 +40,9 @@ const AppFormModelPostProcess = {
     if (isEmpty) {
       app.container = null;
     } else {
-      // Remove this hack, if there is a solution available.
-      // https://github.com/mesosphere/marathon/issues/2147
+      // sending null unsets any pre-existing command in the API
       if (Util.isStringAndEmpty(app.cmd)) {
-        app.cmd = " ";
+        app.cmd = null;
       }
     }
   },

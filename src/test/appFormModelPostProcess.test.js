@@ -51,8 +51,7 @@ describe("App Form Model Post Process", function () {
       expect(app).to.deep.equal(app);
     });
 
-    it("sets an empty space on the cmd field if cmd is empty and container set",
-        function () {
+    it("overrides blank cmd with null when a container is set", function () {
       var app = {
         cmd: "",
         container: {
@@ -67,7 +66,7 @@ describe("App Form Model Post Process", function () {
 
       AppFormModelPostProcess.container(app);
 
-      expect(app.cmd).to.equal(" ");
+      expect(app.cmd).to.equal(null);
     });
 
   });
