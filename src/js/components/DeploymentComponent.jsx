@@ -55,16 +55,7 @@ var DeploymentComponent = React.createClass({
 
   getButtons: function () {
     if (this.state.loading) {
-      return (
-        <div className="progress progress-striped active pull-right"
-            style={{"width": "140px"}}>
-          <span className="progress-bar progress-bar-info" role="progressbar"
-              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-              style={{"width": "100%"}}>
-            <span className="sr-only">Rolling back deployment</span>
-          </span>
-        </div>
-      );
+      return (<div className="loading-bar" />);
     } else {
       return (
         <ul className="list-inline">
@@ -127,7 +118,7 @@ var DeploymentComponent = React.createClass({
             {progressStep}
           </span> / {model.totalSteps}
         </td>
-        <td className="text-right">
+        <td className="text-right deployment-buttons">
           {this.getButtons()}
         </td>
       </tr>
