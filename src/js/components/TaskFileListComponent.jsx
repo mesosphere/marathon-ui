@@ -9,6 +9,7 @@ var MesosStore = require("../stores/MesosStore");
 
 var TaskFileListComponent = React.createClass({
   displayName: "TaskFileListComponent",
+
   propTypes: {
     task: React.PropTypes.object.isRequired
   },
@@ -67,13 +68,11 @@ var TaskFileListComponent = React.createClass({
     var sortKey = state.sortKey;
     if (files != null) {
       return lazy(files)
-        .sortBy((app) => {
-          return app[sortKey];
-        }, state.sortDescending)
+        .sortBy(app => app[sortKey], state.sortDescending)
         .map((file) => {
-          let lastModifiedDate = new Date(file.mtime);
-          let lastModifiedIsoString = lastModifiedDate.toISOString();
-          let lastModifiedLocaleString = lastModifiedDate.toLocaleString();
+          var lastModifiedDate = new Date(file.mtime);
+          var lastModifiedIsoString = lastModifiedDate.toISOString();
+          var lastModifiedLocaleString = lastModifiedDate.toLocaleString();
           return (
             <tr key={file.path}>
               <td>
