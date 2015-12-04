@@ -205,7 +205,7 @@ AppDispatcher.register(function (action) {
         var encodedPath = encodeURIComponent(file.path);
         file.host = data.host;
         file.name = /[^/]+\/?$/.exec(file.path)[0];
-        file.download = `${data.host}/files/download?path=${encodedPath}`;
+        file.downloadUri = `${data.host}/files/download?path=${encodedPath}`;
         return file;
       }));
       resolveTaskFileRequests();
