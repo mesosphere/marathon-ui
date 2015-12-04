@@ -1,4 +1,5 @@
 var EventEmitter = require("events").EventEmitter;
+var semver = require("semver");
 
 var AppDispatcher = require("../AppDispatcher");
 var Util = require("../helpers/Util");
@@ -13,6 +14,7 @@ const STATE_TTL = 60000;
 const REQUEST_DELAY = 100;
 const MASTER_ID = "master";
 
+var version = null;
 var stateMap = {};
 var taskFileMap = {};
 var taskFileRequestQueue = [];
@@ -121,6 +123,10 @@ function throttleRequest(request) {
 function resolveTaskFileRequests() {
   var info = InfoStore.info;
 
+  if (taskFileRequestQueue.length === 0) {
+    return;
+  }
+
   if (!Util.isString(info.frameworkId) ||
       !Util.isObject(info.marathon_config) ||
       !Util.isString(info.marathon_config.mesos_leader_ui_url)) {
@@ -128,9 +134,16 @@ function resolveTaskFileRequests() {
     return;
   }
 
+  if (!version) {
+    throttleRequest(()=>MesosActions.requestVersionInformation(
+      info.marathon_config.mesos_leader_ui_url.replace(/\/$/, "")));
+    return;
+  }
+
   if (!MesosStore.getState(MASTER_ID)) {
     throttleRequest(()=>{MesosActions.requestState(MASTER_ID,
-      info.marathon_config.mesos_leader_ui_url.replace(/\/?$/, "/master"))});
+      info.marathon_config.mesos_leader_ui_url.replace(/\/?$/, "/master"),
+      version)});
     return;
   }
 
@@ -147,7 +160,7 @@ function resolveTaskFileRequests() {
         return;
       }
 
-      MesosActions.requestState(agentId, nodeUrl);
+      MesosActions.requestState(agentId, nodeUrl, version);
       return;
     }
 
@@ -164,7 +177,7 @@ function resolveTaskFileRequests() {
         return;
       }
 
-      MesosActions.requestFiles(taskId, nodeUrl, executorDirectory);
+      MesosActions.requestFiles(taskId, nodeUrl, executorDirectory, version);
       return;
     }
 
@@ -190,6 +203,14 @@ AppDispatcher.register(function (action) {
       AppDispatcher.waitFor([InfoStore.dispatchToken]);
       resolveTaskFileRequests();
       break;
+    case MesosEvents.REQUEST_VERSION_INFORMATION_COMPLETE:
+      version = data.version;
+      resolveTaskFileRequests();
+      break;
+    case MesosEvents.REQUEST_VERSION_INFORMATION_ERROR:
+      version = "0.0.0";
+      resolveTaskFileRequests();
+      break;
     case MesosEvents.REQUEST_STATE_COMPLETE:
       addDataToMap(data.id, stateMap, data.state);
       resolveTaskFileRequests();
@@ -201,11 +222,15 @@ AppDispatcher.register(function (action) {
       MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data.body);
       break;
     case MesosEvents.REQUEST_FILES_COMPLETE:
+      let downloadRoute = "/files/download.json";
+      if (semver.valid(version) && semver.satisfies(version,">=0.26.0")) {
+        downloadRoute = "/files/download";
+      }
       addDataToMap(data.id, taskFileMap, data.files.map(file => {
         var encodedPath = encodeURIComponent(file.path);
         file.host = data.host;
         file.name = /[^/]+\/?$/.exec(file.path)[0];
-        file.downloadUri = `${data.host}/files/download?path=${encodedPath}`;
+        file.downloadUri = `${data.host}${downloadRoute}?path=${encodedPath}`;
         return file;
       }));
       resolveTaskFileRequests();
