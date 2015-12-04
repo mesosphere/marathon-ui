@@ -62,11 +62,15 @@ var TaskDetailComponent = React.createClass({
         return memo;
       }, []);
 
-      return endpoints.map(endpoint => (
-        <dd key={endpoint} className="overflow-ellipsis">
-          <a href={`//${endpoint}`} target="_blank">{endpoint}</a>
-        </dd>
-      ));
+      if (endpoints.length) {
+        return endpoints.map(endpoint => (
+          <dd key={endpoint} className="overflow-ellipsis">
+            <a href={`//${endpoint}`} target="_blank">{endpoint}</a>
+          </dd>
+        ));
+      }
+
+      return (<dd>n/a</dd>);
     }
 
     return task.ports.map((port) => {
