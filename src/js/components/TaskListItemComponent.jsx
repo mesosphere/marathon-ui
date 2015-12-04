@@ -109,9 +109,17 @@ var TaskListItemComponent = React.createClass({
           );
         });
 
+        if (portNodes.length) {
+          return (
+            <span key={address.ipAddress} className="text-muted">
+              {address.ipAddress}:[{joinNodes(portNodes)}]
+            </span>
+          );
+        }
+
         return (
           <span key={address.ipAddress} className="text-muted">
-            {address.ipAddress}:[{joinNodes(portNodes)}]
+            {address.ipAddress}
           </span>
         );
       });
