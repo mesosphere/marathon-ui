@@ -9,7 +9,6 @@ var TaskFileDownloadComponent = React.createClass({
   displayName: "TaskFileDownloadComponent",
 
   propTypes: {
-    children: React.PropTypes.node,
     className: React.PropTypes.string,
     fileName: React.PropTypes.string.isRequired,
     task: React.PropTypes.object.isRequired
@@ -69,11 +68,10 @@ var TaskFileDownloadComponent = React.createClass({
   render: function () {
     var state = this.state;
     var props = this.props;
+    var name = props.fileName;
     var file = state.file;
     var href = "";
-    var name = "";
     if (file) {
-      name = file.name;
       href = file.download;
     }
     var className = classNames("task-file-download", props.className, {
@@ -85,7 +83,7 @@ var TaskFileDownloadComponent = React.createClass({
           onClick={this.handleClick}
           ref="download"
           download={name}>
-        {props.children}
+        <i className="icon icon-mini file" /> {name}
       </a>
     );
   }
