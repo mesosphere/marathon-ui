@@ -64,22 +64,18 @@ var MesosStore = Object.assign({
 
 }, EventEmitter.prototype);
 
-function getNodeUrl(nodeId) {
-  var master = MesosStore.getState(MASTER_ID);
-  if (master == null) {
-    throw new Error(
-      `Unable to get the node url as the master state is undefined.`
-    );
+function getNodeUrlFromState(nodeId, state) {
+
+  if (state == null) {
+    return null;
   }
 
-  let agent = master.slaves.find((slave) => {
+  let agent = state.slaves.find((slave) => {
     return slave.id === nodeId;
   });
 
   if (agent == null) {
-    throw new Error(
-      `Can't get the node url as the he node (${nodeId}) is undefined.`
-    );
+    return null;
   }
 
   let pid = agent.pid;
@@ -87,28 +83,21 @@ function getNodeUrl(nodeId) {
   return `//${hostname}:${pid.substring(pid.lastIndexOf(":") + 1)}`;
 }
 
-function getExecutorDirectory(agentId, frameworkId, taskId) {
-  var agentState = MesosStore.getState(agentId);
+function getExecutorDirectoryFromState(frameworkId, taskId, state) {
 
-  if (agentState == null) {
-    throw new Error(
-      `Unable get the executor directory as the agent (${agentId})
-      state is undefined.`
-    );
+  if (state == null) {
+    return null;
   }
 
   function matchFramework(framework) {
     return frameworkId === framework.id;
   }
 
-  let framework = agentState.frameworks.find(matchFramework) ||
-    agentState.completed_frameworks.find(matchFramework);
+  let framework = state.frameworks.find(matchFramework) ||
+    state.completed_frameworks.find(matchFramework);
 
-  if (!framework) {
-    throw new Error(
-      `Can't get the executor directory as the Framework (${frameworkId})
-       does not exist on the given agent (${agentId}).`
-    );
+  if (framework == null) {
+    return null;
   }
 
   function matchExecutor(executor) {
@@ -119,10 +108,7 @@ function getExecutorDirectory(agentId, frameworkId, taskId) {
     framework.completed_executors.find(matchExecutor);
 
   if (executor == null) {
-    throw new Error(
-      `Unable to get the executor directory as the task (${taskId})
-      does not exists.`
-    );
+    return null;
   }
 
   return executor.directory;
@@ -135,7 +121,8 @@ function throttleRequest(request) {
 function resolveTaskFileRequests() {
   var info = InfoStore.info;
 
-  if (!Util.isObject(info.marathon_config) ||
+  if (!Util.isString(info.frameworkId) ||
+      !Util.isObject(info.marathon_config) ||
       !Util.isString(info.marathon_config.mesos_leader_ui_url)) {
     throttleRequest(()=>InfoActions.requestInfo());
     return;
@@ -152,24 +139,32 @@ function resolveTaskFileRequests() {
     var agentId = request.agentId;
 
     if (!MesosStore.getState(agentId)) {
-      try {
-        MesosActions.requestState(agentId, getNodeUrl(agentId));
-      } catch (error) {
+      let masterState = MesosStore.getState(MASTER_ID);
+      let nodeUrl = getNodeUrlFromState(agentId, masterState);
+      if (nodeUrl == null) {
         invalidateMapData(MASTER_ID, stateMap);
         resolveTaskFileRequests();
+        return;
       }
+
+      MesosActions.requestState(agentId, nodeUrl);
       return;
     }
 
     if (!MesosStore.getTaskFiles(taskId)) {
-      try {
-        MesosActions.requestFiles(taskId,
-          getNodeUrl(agentId),
-          getExecutorDirectory(agentId, info.frameworkId, taskId));
-      } catch (error) {
+      let masterState = MesosStore.getState(MASTER_ID);
+      let agentState = MesosStore.getState(agentId);
+      let nodeUrl = getNodeUrlFromState(agentId, masterState);
+      let executorDirectory =
+        getExecutorDirectoryFromState(info.frameworkId, taskId, agentState);
+
+      if (nodeUrl == null || executorDirectory == null) {
         invalidateMapData(agentId, stateMap);
         resolveTaskFileRequests();
+        return;
       }
+
+      MesosActions.requestFiles(taskId, nodeUrl, executorDirectory);
       return;
     }
 
