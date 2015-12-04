@@ -6,6 +6,7 @@ var PathUtil = require("../helpers/PathUtil");
 
 const COLLAPSE_BUFFER = 12;
 const PADDED_ICON_WIDTH = 24; // 16px icon + 8px padding
+const LAST_ITEM_OFFSET = 96; // Difference between scrollWidth and outerWidth
 
 var BreadcrumbComponent = React.createClass({
   displayName: "BreadcrumbComponent",
@@ -128,6 +129,7 @@ var BreadcrumbComponent = React.createClass({
 
     // array/splat casts NodeList to array
     return [...listItems]
+      .slice(0, -1)
       .map((item, n) => {
         var isFirstItem = n === 0;
         var isLastItem = n === listItems.length - 1;
@@ -136,7 +138,13 @@ var BreadcrumbComponent = React.createClass({
         }
         return this.getWidthFromCollapsedItem(item);
       })
-      .reduce((memo, width) => memo + width, 0);
+      .reduce((memo, width) => memo + width, this.getLastItemWidth());
+  },
+
+  getLastItemWidth: function () {
+    var lastItem = this.getDOMNode().lastChild;
+    var lastItemLink = lastItem.firstChild;
+    return lastItemLink.scrollWidth + LAST_ITEM_OFFSET;
   },
 
   shouldCollapse: function (availableWidth, expandedWidth) {
