@@ -1,10 +1,34 @@
+var semver = require("semver");
+
 var AppDispatcher = require("../AppDispatcher");
 var JSONPUtil = require("../helpers/JSONPUtil");
 var MesosEvents = require("../events/MesosEvents");
 
 var MesosActions = {
-  requestState: function (id, url) {
-    JSONPUtil.request(`${url}/state`).then(
+  requestVersionInformation: function (host) {
+    JSONPUtil.request(`${host}/version`).then(
+      function (data) {
+        AppDispatcher.dispatch({
+          actionType: MesosEvents.REQUEST_VERSION_INFORMATION_COMPLETE,
+          data: data
+        });
+      },
+      function (error) {
+        AppDispatcher.dispatch({
+          actionType: MesosEvents.REQUEST_VERSION_INFORMATION_ERROR,
+          data: error
+        });
+      }
+    );
+  },
+  requestState: function (id, host, mesosVersion) {
+    var route = "/state.json";
+    if (semver.valid(mesosVersion) &&
+        semver.satisfies(mesosVersion,">=0.26.0")) {
+      route = "/state";
+    }
+
+    JSONPUtil.request(`${host}${route}`).then(
       function (state) {
         AppDispatcher.dispatch({
           actionType: MesosEvents.REQUEST_STATE_COMPLETE,
@@ -19,9 +43,15 @@ var MesosActions = {
       }
     );
   },
-  requestFiles: function (id, host, filePath) {
+  requestFiles: function (id, host, filePath,mesosVersion) {
+    var route = "/files/browse.json";
+    if (semver.valid(mesosVersion) &&
+        semver.satisfies(mesosVersion,">=0.26.0")) {
+      route = "/files/browse";
+    }
+
     JSONPUtil.request(
-      `${host}/files/browse?path=${encodeURIComponent(filePath)}`)
+      `${host}${route}?path=${encodeURIComponent(filePath)}`)
       .then(
         function (files) {
           AppDispatcher.dispatch({
