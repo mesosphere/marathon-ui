@@ -83,6 +83,9 @@
     }
     li:last-child {
       flex: 1;
+      // min-width is necessary to resolve Firefox flexbox bug
+      // (https://bugzilla.mozilla.org/show_bug.cgi?id=823483)
+      min-width: 0;
       a {
         text-overflow: ellipsis;
       }
