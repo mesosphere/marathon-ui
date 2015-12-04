@@ -7,6 +7,7 @@ var MesosStore = require("../stores/MesosStore");
 
 var TaskFileDownloadComponent = React.createClass({
   displayName: "TaskFileDownloadComponent",
+
   propTypes: {
     children: React.PropTypes.node,
     className: React.PropTypes.string,
