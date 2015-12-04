@@ -44,7 +44,7 @@ var TaskFileDownloadComponent = React.createClass({
     var file = this.getFile();
     var fileIsRequestedByUser = this.state.fileIsRequestedByUser;
     if (file != null && fileIsRequestedByUser) {
-      window.open(file.download);
+      window.open(file.downloadUri);
       fileIsRequestedByUser = false;
     }
     this.setState({
@@ -72,7 +72,7 @@ var TaskFileDownloadComponent = React.createClass({
     var file = state.file;
     var href = "";
     if (file) {
-      href = file.download;
+      href = file.downloadUri;
     }
     var className = classNames("task-file-download", props.className, {
       "loading": state.fileIsRequestedByUser
