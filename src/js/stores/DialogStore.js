@@ -91,7 +91,7 @@ AppDispatcher.register(function (action) {
         action.message,
         action.defaultValue,
         action.dialogId,
-        action.inputType
+        action.inputProps
       );
       break;
     case DialogEvents.PROMPT_DISMISS:

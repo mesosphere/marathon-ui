@@ -38,14 +38,14 @@ var DialogActions = {
       dialogId: dialogId
     });
   },
-  prompt: function (message, defaultValue = "", inputType="text") {
+  prompt: function (message, defaultValue = "", inputProps = {type:"text"}) {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.PROMPT_SHOW,
       message: message,
       defaultValue: defaultValue,
       dialogId: dialogId,
-      inputType: inputType
+      inputProps: inputProps
     });
     return dialogId;
   },

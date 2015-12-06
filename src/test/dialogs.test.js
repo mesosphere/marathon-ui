@@ -119,19 +119,19 @@ describe("Dialog store", function () {
     it("show sends correct default type", function (done) {
       DialogActions.prompt("test prompt");
 
-      DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value, id, inputType) {
+      DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value, id, inputProps) {
         expectAsync(function () {
-          expect(inputType).to.equal("text");
+          expect(inputProps).to.deep.equal({type:"text"});
         }, done);
       });
     });
 
     it("show sends correct defined type", function (done) {
-      DialogActions.prompt("test prompt", "test value", "number");
+      DialogActions.prompt("test prompt", "test value", {type:"number"});
 
-      DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value, id, inputType) {
+      DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value, id, inputProps) {
         expectAsync(function () {
-          expect(inputType).to.equal("number");
+          expect(inputProps).to.deep.equal({type:"number"});
         }, done);
       });
     });
