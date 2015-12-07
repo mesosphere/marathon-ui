@@ -55,7 +55,10 @@ var AppPageControlsComponent = React.createClass({
 
     const dialogId =
       DialogActions.prompt("Scale to how many instances?",
-          props.app.instances.toString()
+          props.app.instances.toString(), {
+            type: "number",
+            min: "0"
+          }
       );
 
     DialogStore.handleUserResponse(dialogId, instancesString => {

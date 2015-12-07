@@ -74,12 +74,13 @@ var DialogsComponent = React.createClass({
     });
   },
 
-  onDialogPromptShow: function (message, defaultValue, dialogId) {
+  onDialogPromptShow: function (message, defaultValue, dialogId, inputProps) {
     this.setState({
       dialog: {
         type: DialogTypes.PROMPT,
         message: message,
-        defaultValue: defaultValue
+        defaultValue: defaultValue,
+        inputProps: inputProps
       },
       currentId: dialogId
     });
@@ -138,6 +139,7 @@ var DialogsComponent = React.createClass({
         return (
           <PromptModalComponent message={dialog.message}
             defaultValue={dialog.defaultValue}
+            inputProps={dialog.inputProps}
             onConfirm={this.handlePromptAccept}
             onDestroy={this.handlePromptDismiss} />
         );
