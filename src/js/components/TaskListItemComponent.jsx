@@ -43,7 +43,9 @@ var TaskListItemComponent = React.createClass({
 
     if (ports != null && ports.length === 1) {
       return (
-        <a className="text-muted" href={`//${task.host}:${ports[0]}`}>
+        <a className="text-muted"
+            href={`//${task.host}:${ports[0]}`}
+            target="_blank">
           {`${task.host}:${ports[0]}`}
         </a>
       );
@@ -53,7 +55,9 @@ var TaskListItemComponent = React.createClass({
       let portNodes = ports.map(function (port) {
         return (
           <a key={`${task.host}:${port}`}
-              className="text-muted" href={`//${task.host}:${port}`}>
+              className="text-muted"
+              href={`//${task.host}:${port}`}
+              target="_blank">
             {port}
           </a>
         );
