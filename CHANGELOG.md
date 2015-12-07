@@ -1,4 +1,4 @@
-## Unversioned
+## 0.14.0 - 2015-12-07
 ### Added
 - Prefill ID field with group structure in app creation modal
 - Show an animated loading bar on app deployment status
