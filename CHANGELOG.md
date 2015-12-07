@@ -15,6 +15,7 @@
 - \#2727 - Integrate IP-Per-Container ipAddresses into task detail view
 - \#2714 - Global ellipsis in breadcrumbs
 - \#2785 - Prompt support for number input type
+- \#2771 - Open task links in a new tab
 
 ### Changed
 - Adjust the task list column order
