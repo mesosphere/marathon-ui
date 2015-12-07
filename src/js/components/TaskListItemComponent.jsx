@@ -155,7 +155,7 @@ var TaskListItemComponent = React.createClass({
     var hasHealth = !!this.props.hasHealth;
     var version = new Date(task.version).toISOString();
     var taskId = task.id;
-    var taskUri = "#apps/" +
+    var taskURI = "#apps/" +
       encodeURIComponent(this.props.appId) +
       "/" + encodeURIComponent(taskId);
 
@@ -195,7 +195,7 @@ var TaskListItemComponent = React.createClass({
             onChange={this.handleCheckboxClick} />
         </td>
         <td>
-            <a href={taskUri}>{taskId}</a>
+            <a href={taskURI}>{taskId}</a>
           <br />
           {this.getEndpoints()}
         </td>

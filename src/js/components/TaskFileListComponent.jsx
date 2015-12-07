@@ -78,7 +78,7 @@ var TaskFileListComponent = React.createClass({
               <td>
                 <span>{file.name}</span>
                 <a className="btn btn-default"
-                  href={file.downloadUri}
+                  href={file.downloadURI}
                   download={`${lastModifiedIsoString}-${file.name}`}>
                   <i className="icon icon-mini file"/> Download
                 </a>

@@ -66,7 +66,7 @@ var MesosStore = Object.assign({
 
 }, EventEmitter.prototype);
 
-function getNodeUrlFromState(nodeId, state) {
+function getNodeURLFromState(nodeId, state) {
 
   if (state == null) {
     return null;
@@ -153,31 +153,31 @@ function resolveTaskFileRequests() {
 
     if (!MesosStore.getState(agentId)) {
       let masterState = MesosStore.getState(MASTER_ID);
-      let nodeUrl = getNodeUrlFromState(agentId, masterState);
-      if (nodeUrl == null) {
+      let nodeURL = getNodeURLFromState(agentId, masterState);
+      if (nodeURL == null) {
         invalidateMapData(MASTER_ID, stateMap);
         resolveTaskFileRequests();
         return;
       }
 
-      MesosActions.requestState(agentId, nodeUrl, version);
+      MesosActions.requestState(agentId, nodeURL, version);
       return;
     }
 
     if (!MesosStore.getTaskFiles(taskId)) {
       let masterState = MesosStore.getState(MASTER_ID);
       let agentState = MesosStore.getState(agentId);
-      let nodeUrl = getNodeUrlFromState(agentId, masterState);
+      let nodeURL = getNodeURLFromState(agentId, masterState);
       let executorDirectory =
         getExecutorDirectoryFromState(info.frameworkId, taskId, agentState);
 
-      if (nodeUrl == null || executorDirectory == null) {
+      if (nodeURL == null || executorDirectory == null) {
         invalidateMapData(agentId, stateMap);
         resolveTaskFileRequests();
         return;
       }
 
-      MesosActions.requestFiles(taskId, nodeUrl, executorDirectory, version);
+      MesosActions.requestFiles(taskId, nodeURL, executorDirectory, version);
       return;
     }
 
@@ -230,7 +230,7 @@ AppDispatcher.register(function (action) {
         var encodedPath = encodeURIComponent(file.path);
         file.host = data.host;
         file.name = /[^/]+\/?$/.exec(file.path)[0];
-        file.downloadUri = `${data.host}${downloadRoute}?path=${encodedPath}`;
+        file.downloadURI = `${data.host}${downloadRoute}?path=${encodedPath}`;
         return file;
       }));
       resolveTaskFileRequests();
