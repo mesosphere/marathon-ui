@@ -38,7 +38,7 @@ var DialogActions = {
       dialogId: dialogId
     });
   },
-  prompt: function (message, defaultValue = "", inputProps = {type:"text"}) {
+  prompt: function (message, defaultValue = "", inputProps = {type: "text"}) {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.PROMPT_SHOW,

@@ -18,7 +18,7 @@ var PromptModalComponent = React.createClass({
     return {
       defaultValue: "",
       message: "",
-      inputType: {type:"text"},
+      inputType: {type: "text"},
       onConfirm: Util.noop,
       onDestroy: Util.noop
     };

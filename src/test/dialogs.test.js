@@ -121,17 +121,17 @@ describe("Dialog store", function () {
 
       DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value, id, inputProps) {
         expectAsync(function () {
-          expect(inputProps).to.deep.equal({type:"text"});
+          expect(inputProps).to.deep.equal({type: "text"});
         }, done);
       });
     });
 
     it("show sends correct defined type", function (done) {
-      DialogActions.prompt("test prompt", "test value", {type:"number"});
+      DialogActions.prompt("test prompt", "test value", {type: "number"});
 
       DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value, id, inputProps) {
         expectAsync(function () {
-          expect(inputProps).to.deep.equal({type:"number"});
+          expect(inputProps).to.deep.equal({type: "number"});
         }, done);
       });
     });
