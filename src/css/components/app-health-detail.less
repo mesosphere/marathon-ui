@@ -22,11 +22,29 @@
   &.health-breakdown-item-unknown {
     color: @task-health-unknown-color;
   }
+  &.health-breakdown-item-empty .health-percentage {
+    display: none;
+  }
 }
 
 .health-percentage {
   margin-left: @base-spacing-unit / 2;
   color: @text-color-muted;
+}
+
+.tooltip {
+  .health-breakdown-item {
+    margin: @base-spacing-unit / 2 0;
+    font-size: @base-font-size;
+    color: @text-color-muted;
+  }
+  .health-dot {
+    margin-right: @base-spacing-unit;
+  }
+
+  .health-breakdown-item-empty.health-breakdown-item-impermanent {
+    display: none;
+  }
 }
 
 .health-dot {
@@ -49,6 +67,15 @@
   }
   &.health-dot-unknown:before {
     background-color: @task-health-unknown-color;
+  }
+  &.health-dot-staged:before {
+    background-color: @task-health-staged-color;
+  }
+  &.health-dot-over-capacity:before {
+    background-color: @task-health-over-capacity-color;
+  }
+  &.health-dot-unscheduled:before {
+    background-color: @task-health-unscheduled-color;
   }
 }
 

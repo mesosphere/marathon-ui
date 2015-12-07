@@ -5,7 +5,7 @@ var AppsEvents = require("../events/AppsEvents");
 var TaskEvents = require("../events/TasksEvents");
 var AppsStore = require("../stores/AppsStore");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
-var AppHealthComponent = require("./AppHealthComponent");
+var AppHealthBarComponent = require("./AppHealthBarComponent");
 var AppPageControlsComponent = require("./AppPageControlsComponent");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var AppVersionsActions = require("../actions/AppVersionsActions");
@@ -19,7 +19,7 @@ var States = require("../constants/States");
 var TabPaneComponent = require("../components/TabPaneComponent");
 var TaskDetailComponent = require("../components/TaskDetailComponent");
 var TaskViewComponent = require("../components/TaskViewComponent");
-var AppHealthBreakdownComponent = require("./AppHealthBreakdownComponent");
+var AppHealthDetailComponent = require("./AppHealthDetailComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
@@ -393,12 +393,6 @@ var AppPageComponent = React.createClass({
     var groupId = PathUtil.getGroupFromAppId(state.appId);
     var name = PathUtil.getAppName(state.appId);
 
-    var appHealthBreakdownFields = [
-      {label: "Healthy", key: "healthy", state: HealthStatus.HEALTHY},
-      {label: "Unhealthy", key: "unhealthy", state: HealthStatus.UNHEALTHY},
-      {label: "Unknown", key: "unknown", state: HealthStatus.UNKNOWN}
-    ];
-
     return (
       <div>
         <BreadcrumbComponent groupId={groupId}
@@ -409,9 +403,14 @@ var AppPageComponent = React.createClass({
             <h1>{name}</h1>
             <AppStatusComponent model={model} showSummary={true} />
             <div className="app-health-detail">
-              <AppHealthComponent model={model} />
-              <AppHealthBreakdownComponent
-                fields={appHealthBreakdownFields}
+              <AppHealthBarComponent model={model} />
+              <AppHealthDetailComponent
+                className="list-inline"
+                fields={[
+                  HealthStatus.HEALTHY,
+                  HealthStatus.UNHEALTHY,
+                  HealthStatus.UNKNOWN
+                ]}
                 model={model} />
             </div>
             {this.getControls()}

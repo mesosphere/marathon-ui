@@ -32,16 +32,16 @@
 @app-status-running-color: #2568F5;
 @app-status-delayed-color: #F04F42;
 @app-status-suspended-color: @text-color-muted;
-@task-health-healthy-color: #00D99C;
-@task-health-unhealthy-color: #FD5B77;
-@task-health-unknown-color: @text-color-muted;
 @health-bar-inner-color: #2A2C31;
-@health-bar-over-capacity-color: #4CA0FF;
-@health-bar-unhealthy-color: #FF7D64;
-@health-bar-staged-color: #FFF57A;
-@health-bar-healthy-color: #29F6A0;
-@health-bar-running-color: #8E929B;
 @filter-text-muted-color: #75787F;
+// Health is specific to tasks, and distinct from app status
+@task-health-healthy-color: #29F6A0;
+@task-health-unhealthy-color: #FF7D64;
+@task-health-unknown-color: @text-color-muted;
+@task-health-staged-color: #FFF57A;
+@task-health-over-capacity-color: #4CA0FF;
+@task-health-unscheduled-color: #2A2C31;
+@task-health-running-color: #8E929B;
 
 /* ==============
  * Layout
