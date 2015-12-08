@@ -1,4 +1,4 @@
-var http = require('http');
+var http = require("http");
 
 function HttpServer(config) {
   this.port = config.port || 8181;
@@ -11,7 +11,7 @@ function HttpServer(config) {
 
 HttpServer.prototype.start = function (fn) {
   this.server = http.createServer(function (req, res) {
-    res.writeHead(this.options.resCode, {'Content-Type': 'application/json'});
+    res.writeHead(this.options.resCode, {"Content-Type": "application/json"});
     res.end(JSON.stringify(this.options.data));
   }.bind(this)).listen(this.port, this.address, fn);
   return this;
