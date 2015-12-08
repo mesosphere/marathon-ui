@@ -8,6 +8,7 @@ var States = require("../constants/States");
 var TimeFieldComponent = require("../components/TimeFieldComponent");
 var TaskHealthComponent = require("../components/TaskHealthComponent");
 var TaskMesosUrlComponent = require("../components/TaskMesosUrlComponent");
+var TaskFileListComponent = require("../components/TaskFileListComponent");
 var HealthStatus = require("../constants/HealthStatus");
 
 var TaskDetailComponent = React.createClass({
@@ -187,9 +188,12 @@ var TaskDetailComponent = React.createClass({
           <dt>Health</dt>
           <dd className={healthClassSet}>{props.taskHealthMessage}</dd>
           <dt>Mesos details</dt>
-          <dd><TaskMesosUrlComponent task={task}/></dd>
+          <dd><TaskMesosUrlComponent task={task} /></dd>
         </dl>
         {this.getTaskHealthComponent()}
+        <hr />
+        <h3>Working Directory</h3>
+        <TaskFileListComponent task={task} />
       </div>
     );
   },

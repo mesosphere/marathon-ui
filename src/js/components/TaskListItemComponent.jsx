@@ -6,6 +6,8 @@ var Moment = require("moment");
 var AppsStore = require("../stores/AppsStore");
 var HealthStatus = require("../constants/HealthStatus");
 var TaskStatus = require("../constants/TaskStatus");
+var TaskFileDownloadComponent =
+  require("../components/TaskFileDownloadComponent");
 
 function joinNodes(nodes, separator = ", ") {
   var lastIndex = nodes.length - 1;
@@ -153,7 +155,7 @@ var TaskListItemComponent = React.createClass({
     var hasHealth = !!this.props.hasHealth;
     var version = new Date(task.version).toISOString();
     var taskId = task.id;
-    var taskUri = "#apps/" +
+    var taskURI = "#apps/" +
       encodeURIComponent(this.props.appId) +
       "/" + encodeURIComponent(taskId);
 
@@ -193,7 +195,7 @@ var TaskListItemComponent = React.createClass({
             onChange={this.handleCheckboxClick} />
         </td>
         <td>
-            <a href={taskUri}>{taskId}</a>
+            <a href={taskURI}>{taskId}</a>
           <br />
           {this.getEndpoints()}
         </td>
@@ -204,6 +206,12 @@ var TaskListItemComponent = React.createClass({
           <span className={statusClassSet}>
             {task.status}
           </span>
+        </td>
+        <td className="text-center">
+          <TaskFileDownloadComponent task={task} fileName="stderr" />
+        </td>
+        <td className="text-center">
+          <TaskFileDownloadComponent task={task} fileName="stdout" />
         </td>
         <td className="text-right">
           <span

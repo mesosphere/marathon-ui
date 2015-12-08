@@ -8,7 +8,7 @@ var InfoStore = lazy(EventEmitter.prototype).extend({
   info: {}
 }).value();
 
-AppDispatcher.register(function (action) {
+InfoStore.dispatchToken = AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case InfoEvents.REQUEST:
       InfoStore.info = action.data.body;
