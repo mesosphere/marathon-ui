@@ -1,4 +1,4 @@
-var fetch = require("node-fetch");
+var fetch = require("isomorphic-fetch");
 var Util = require("./Util");
 
 var uniqueCalls = [];
@@ -9,6 +9,7 @@ function removeCall(options) {
 
 var ajaxWrapper = function (opts = {}) {
   var defaults = {
+    method: "GET",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"

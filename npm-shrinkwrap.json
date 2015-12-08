@@ -9098,6 +9098,10 @@
       "version": "2.2.0",
       "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.2.0.tgz"
     },
+    "encoding": {
+      "version": "0.1.11",
+      "resolved": "https://registry.npmjs.org/encoding/-/encoding-0.1.11.tgz"
+    },
     "envify": {
       "version": "3.4.0",
       "resolved": "http://registry.npmjs.org/envify/-/envify-3.4.0.tgz",
@@ -14192,9 +14196,17 @@
         }
       }
     },
+    "iconv-lite": {
+      "version": "0.4.13",
+      "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.13.tgz"
+    },
     "ionicons": {
       "version": "2.0.1",
       "resolved": "https://registry.npmjs.org/ionicons/-/ionicons-2.0.1.tgz"
+    },
+    "isomorphic-fetch": {
+      "version": "2.2.0",
+      "resolved": "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-2.2.0.tgz"
     },
     "json-loader": {
       "version": "0.5.4",
@@ -17111,6 +17123,10 @@
           }
         }
       }
+    },
+    "whatwg-fetch": {
+      "version": "0.10.1",
+      "resolved": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.10.1.tgz"
     }
   }
 }
