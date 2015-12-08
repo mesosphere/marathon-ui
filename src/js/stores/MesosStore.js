@@ -219,7 +219,7 @@ AppDispatcher.register(function (action) {
       break;
     case MesosEvents.REQUEST_STATE_ERROR:
       resolveTaskFileRequests();
-      MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data.body);
+      MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data);
       break;
     case MesosEvents.REQUEST_FILES_COMPLETE:
       let downloadRoute = "/files/download.json";
@@ -238,7 +238,7 @@ AppDispatcher.register(function (action) {
       MesosStore.emit(MesosEvents.TASK_FILE_CHANGE);
       break;
     case MesosEvents.REQUEST_FILES_ERROR:
-      MesosStore.emit(MesosEvents.REQUEST_FILES_ERROR, data.body);
+      MesosStore.emit(MesosEvents.REQUEST_FILES_ERROR, data);
       break;
   }
 });
