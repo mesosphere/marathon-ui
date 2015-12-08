@@ -1,4 +1,6 @@
 ## Unversioned
+### Fixed
+- \#2755 - Memory leak in Marathon UI
 
 ## 0.14.0 - 2015-12-07
 ### Added
