@@ -6,7 +6,7 @@ var MesosEvents = require("../events/MesosEvents");
 
 var MesosActions = {
   requestVersionInformation: function (host) {
-    JSONPUtil.request(`${host}/version`).then(
+    this.request(`${host}/version`).then(
       function (data) {
         AppDispatcher.dispatch({
           actionType: MesosEvents.REQUEST_VERSION_INFORMATION_COMPLETE,
@@ -28,7 +28,7 @@ var MesosActions = {
       route = "/state";
     }
 
-    JSONPUtil.request(`${host}${route}`).then(
+    this.request(`${host}${route}`).then(
       function (state) {
         AppDispatcher.dispatch({
           actionType: MesosEvents.REQUEST_STATE_COMPLETE,
@@ -43,14 +43,14 @@ var MesosActions = {
       }
     );
   },
-  requestFiles: function (id, host, filePath,mesosVersion) {
+  requestFiles: function (id, host, filePath, mesosVersion) {
     var route = "/files/browse.json";
     if (semver.valid(mesosVersion) &&
         semver.satisfies(mesosVersion,">=0.26.0")) {
       route = "/files/browse";
     }
 
-    JSONPUtil.request(
+    this.request(
       `${host}${route}?path=${encodeURIComponent(filePath)}`)
       .then(
         function (files) {
@@ -72,7 +72,8 @@ var MesosActions = {
       actionType: MesosEvents.REQUEST_FILES,
       data: {agentId: agentId, taskId: taskId}
     });
-  }
+  },
+  request: JSONPUtil.request
 };
 
 module.exports = MesosActions;
