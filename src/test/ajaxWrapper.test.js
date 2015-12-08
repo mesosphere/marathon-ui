@@ -1,5 +1,5 @@
 var expect = require("chai").expect;
-var qajax = require("../js/helpers/qajaxWrapper");
+var ajaxWrapper = require("../js/helpers/ajaxWrapper");
 var config = require("../js/config/config");
 
 var expectAsync = require("./helpers/expectAsync");
@@ -8,7 +8,7 @@ var HttpServer = require("./helpers/HttpServer").HttpServer;
 var server = new HttpServer(config.localTestserverURI);
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
-describe("qajaxWrapper", function () {
+describe("ajaxWrapper", function () {
 
   beforeEach(function () {
     this.server = server
@@ -25,7 +25,7 @@ describe("qajaxWrapper", function () {
   describe("on GET request", function () {
 
     it("returns a JSON object on success", function (done) {
-      qajax({
+      ajaxWrapper({
         method: "GET",
         url: config.apiURL
       })
@@ -42,7 +42,7 @@ describe("qajaxWrapper", function () {
     it("handles failure gracefully", function (done) {
       this.server.setup({message: "Guru Meditation"}, 404);
 
-      qajax({
+      ajaxWrapper({
         method: "GET",
         url: config.apiURL + "/foo/bar"
       })
@@ -74,13 +74,13 @@ describe("qajaxWrapper", function () {
         }
       };
 
-      qajax({
+      ajaxWrapper({
         method: "GET",
         url: config.apiURL + "/concurrent"
       })
       .success(increaseResponses);
 
-      qajax({
+      ajaxWrapper({
         method: "GET",
         url: config.apiURL + "/concurrent"
       })
@@ -102,14 +102,14 @@ describe("qajaxWrapper", function () {
         }
       }
 
-      qajax({
+      ajaxWrapper({
         method: "GET",
         url: config.apiURL + "/concurrent",
         concurrent: true
       })
       .success(increaseResponses);
 
-      qajax({
+      ajaxWrapper({
         method: "GET",
         url: config.apiURL + "/concurrent",
         concurrent: true

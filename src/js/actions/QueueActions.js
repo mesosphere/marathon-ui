@@ -1,4 +1,4 @@
-var qajaxWrapper = require("../helpers/qajaxWrapper");
+var ajaxWrapper = require("../helpers/ajaxWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -41,7 +41,7 @@ var QueueActions = {
         });
       });
   },
-  request: qajaxWrapper
+  request: ajaxWrapper
 };
 
 module.exports = QueueActions;

@@ -7,7 +7,7 @@ function removeCall(options) {
   uniqueCalls.splice(uniqueCalls.indexOf(options.url), 1);
 }
 
-var qajaxWrapper = function (opts = {}) {
+var ajaxWrapper = function (opts = {}) {
   var defaults = {
     headers: {
       "Accept": "application/json",
@@ -81,4 +81,4 @@ var qajaxWrapper = function (opts = {}) {
   return api;
 };
 
-module.exports = qajaxWrapper;
+module.exports = ajaxWrapper;

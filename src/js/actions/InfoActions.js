@@ -1,4 +1,4 @@
-var qajaxWrapper = require("../helpers/qajaxWrapper");
+var ajaxWrapper = require("../helpers/ajaxWrapper");
 
 var config = require("../config/config");
 var AppDispatcher = require("../AppDispatcher");
@@ -22,7 +22,7 @@ var InfoActions = {
         });
       });
   },
-  request: qajaxWrapper
+  request: ajaxWrapper
 };
 
 module.exports = InfoActions;
