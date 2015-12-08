@@ -1,4 +1,3 @@
-var url = require("url");
 var packageJSON = require("../../../package.json");
 
 var config = {
@@ -30,15 +29,4 @@ if (process.env.GULP_ENV === "development") {
       "to enable a development configuration.");
   }
 }
-
-// Convert relative URLs to absolute URLs for node-fetch
-if (global.document != null) {
-  if (config.apiURL.indexOf(":") === -1) {
-    config.apiURL = url.resolve(
-      document.location.origin,
-      document.location.pathname + config.apiURL
-    );
-  }
-}
-
 module.exports = config;
