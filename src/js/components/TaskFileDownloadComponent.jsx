@@ -88,7 +88,6 @@ var TaskFileDownloadComponent = React.createClass({
       <a className={className}
           href={href}
           onClick={this.handleClick}
-          ref="download"
           download={name}>
         <i className="icon icon-mini file" /> {name}
       </a>
