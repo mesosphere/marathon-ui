@@ -23,6 +23,10 @@ HttpServer.prototype.setup = function (data, resCode) {
   return this;
 };
 
+HttpServer.prototype.on = function (event, fn) {
+  this.server.on(event, fn);
+};
+
 HttpServer.prototype.stop = function (fn) {
   this.server.close();
   if (fn) {
