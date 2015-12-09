@@ -147,35 +147,28 @@ describe("ajaxWrapper", function () {
 
   describe("on POST request", function () {
 
+    beforeEach(function () {
+      this.server = server
+        .setup(null, 200, true)
+        .start();
+    });
+
+    afterEach(function (done) {
+      this.server.stop(done);
+    });
+
     it("sends the correct payload", function (done) {
-      var response = {body: ""};
-      var request = {method: null};
       var payload = {"key": "value"};
-
-      this.server.on("request", function (req) {
-        request.method = req.method;
-
-        req.addListener("data", function (chunk) {
-          response.body += chunk;
-        });
-
-        req.addListener("end", function (chunk) {
-          if (chunk) {
-            response.body += chunk;
-          }
-        });
-
-      });
 
       ajaxWrapper({
         method: "POST",
         url: config.apiURL,
         data: payload
       })
-        .success(function () {
+        .success(function (response) {
           expectAsync(function () {
-            expect(request.method).to.equal("POST");
-            expect(response.body).to.equal(JSON.stringify(payload));
+            expect(response.body.method).to.equal("POST");
+            expect(response.body.payload).to.equal(JSON.stringify(payload));
           }, done);
         })
         .error(function () {
