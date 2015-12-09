@@ -133,4 +133,64 @@ describe("ajaxWrapper", function () {
 
   });
 
+  describe("on POST request", function () {
+
+    it("sends the correct payload", function (done) {
+      var response = {body: ""};
+      var request = {method: null};
+      var payload = {"key": "value"};
+
+      this.server.on("request", function (req) {
+        request.method = req.method;
+
+        req.addListener("data", function (chunk) {
+          response.body += chunk;
+        });
+
+        req.addListener("end", function (chunk) {
+          if (chunk) {
+            response.body += chunk;
+          }
+        });
+
+      });
+
+      ajaxWrapper({
+        method: "POST",
+        url: config.apiURL,
+        data: payload
+      })
+        .success(function () {
+          expectAsync(function () {
+            expect(request.method).to.equal("POST");
+            expect(response.body).to.equal(JSON.stringify(payload));
+          }, done);
+        })
+        .error(function () {
+          done(new Error("I should not be called"));
+        });
+    });
+
+    it("handles failure gracefully", function (done) {
+      var payload = {"key": "value"};
+
+      this.server.setup({message: "Guru Meditation"}, 404);
+
+      ajaxWrapper({
+        method: "POST",
+        url: config.apiURL + "/foo/bar",
+        data: payload
+      })
+        .success(function () {
+          done(new Error("I should not be called"));
+        })
+        .error(function (error) {
+          expectAsync(function () {
+            expect(error.body.message).to.equal("Guru Meditation");
+          }, done);
+        });
+    });
+
+  });
+
 });
