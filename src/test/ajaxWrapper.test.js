@@ -198,4 +198,68 @@ describe("ajaxWrapper", function () {
 
   });
 
+  describe("on PUT request", function () {
+
+    beforeEach(function () {
+      this.server = server
+        .setup(null, 200, true)
+        .start();
+    });
+
+    afterEach(function (done) {
+      this.server.stop(done);
+    });
+
+    it("sends the correct payload with a PUT", function (done) {
+
+      var payload = {"key": "value"};
+
+      ajaxWrapper({
+        method: "PUT",
+        url: config.apiURL,
+        data: payload
+      })
+        .success(response => {
+          expectAsync(() => {
+            expect(response.body.method).to.equal("PUT");
+            expect(response.body.payload).to.equal(JSON.stringify(payload));
+          }, done);
+        })
+        .error(() => {
+          done(new Error("I should not be called"));
+        });
+    });
+
+  });
+
+  describe("on DELETE request", function () {
+
+    beforeEach(function () {
+      this.server = server
+        .setup(null, 200, true)
+        .start();
+    });
+
+    afterEach(function (done) {
+      this.server.stop(done);
+    });
+
+    it("returns the right response for a DELETE", function (done) {
+
+      ajaxWrapper({
+        method: "DELETE",
+        url: config.apiURL + "/foo/bar",
+        data: null
+      })
+        .success(response => {
+          expectAsync(() => {
+            expect(response.body.method).to.equal("DELETE");
+          }, done);
+        })
+        .error(() => {
+          done(new Error("I should not be called"));
+        });
+    });
+  })
+
 });
