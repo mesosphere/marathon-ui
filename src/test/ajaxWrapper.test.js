@@ -39,6 +39,20 @@ describe("ajaxWrapper", function () {
       });
     });
 
+    it("defaults to GET when no method is supplied", function (done) {
+      ajaxWrapper({
+        url: config.apiURL
+      })
+      .success(function (response) {
+        expectAsync(function () {
+          expect(response.body.name).to.equal("Marathon");
+        }, done);
+      })
+      .error(function () {
+        done(new Error("I should not be called"));
+      });
+    });
+
     it("handles failure gracefully", function (done) {
       this.server.setup({message: "Guru Meditation"}, 404);
 
