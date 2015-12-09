@@ -16,6 +16,7 @@ var TaskFileListComponent = React.createClass({
 
   getInitialState: function () {
     var task = this.props.task;
+
     return {
       files: MesosStore.getTaskFiles(task.id)
     };
@@ -27,6 +28,7 @@ var TaskFileListComponent = React.createClass({
 
   componentDidMount: function () {
     var task = this.props.task;
+
     if (this.state.files == null) {
       MesosActions.requestTaskFiles(task.slaveId, task.id);
     }
@@ -39,6 +41,7 @@ var TaskFileListComponent = React.createClass({
 
   onMesosTaskFileChange() {
     var task = this.props.task;
+
     this.setState({
       files: MesosStore.getTaskFiles(task.id)
     });
@@ -59,6 +62,7 @@ var TaskFileListComponent = React.createClass({
         <span className="caret"></span>
       );
     }
+
     return null;
   },
 
@@ -66,6 +70,7 @@ var TaskFileListComponent = React.createClass({
     var state = this.state;
     var files = state.files;
     var sortKey = state.sortKey;
+
     if (files != null) {
       return lazy(files)
         .sortBy(app => app[sortKey], state.sortDescending)
@@ -78,8 +83,8 @@ var TaskFileListComponent = React.createClass({
               <td>
                 <span>{file.name}</span>
                 <a className="btn btn-default"
-                  href={file.downloadURI}
-                  download={`${lastModifiedIsoString}-${file.name}`}>
+                    href={file.downloadURI}
+                    download={`${lastModifiedIsoString}-${file.name}`}>
                   <i className="icon icon-mini file"/> Download
                 </a>
               </td>
@@ -102,7 +107,7 @@ var TaskFileListComponent = React.createClass({
               </td>
               <td className="text-right">
                 <time dateTime={lastModifiedIsoString}
-                  title={lastModifiedIsoString}>
+                    title={lastModifiedIsoString}>
                   {lastModifiedLocaleString}
                 </time>
               </td>
@@ -118,6 +123,7 @@ var TaskFileListComponent = React.createClass({
       "clickable": true,
       "dropup": !this.state.sortDescending
     });
+
     return (
       <table className="table table-hover table-selectable task-file-list">
         <thead>
@@ -165,7 +171,7 @@ var TaskFileListComponent = React.createClass({
         </th>
         </thead>
         <tbody>
-        {this.getFileNodes()}
+          {this.getFileNodes()}
         </tbody>
       </table>
     );
