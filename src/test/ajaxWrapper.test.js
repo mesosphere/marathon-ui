@@ -10,19 +10,19 @@ config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("ajaxWrapper", function () {
 
-  beforeEach(function () {
-    this.server = server
-      .setup({
-        "name": "Marathon"
-      }, 200)
-      .start();
-  });
-
-  afterEach(function (done) {
-    this.server.stop(done);
-  });
-
   describe("on GET request", function () {
+
+    beforeEach(function () {
+      this.server = server
+        .setup({
+          "name": "Marathon"
+        }, 200)
+        .start();
+    });
+
+    afterEach(function (done) {
+      this.server.stop(done);
+    });
 
     it("returns a JSON object on success", function (done) {
       ajaxWrapper({
@@ -73,6 +73,18 @@ describe("ajaxWrapper", function () {
   });
 
   describe("on concurrent request", function () {
+
+    beforeEach(function () {
+      this.server = server
+        .setup({
+          "name": "Marathon"
+        }, 200)
+        .start();
+    });
+
+    afterEach(function (done) {
+      this.server.stop(done);
+    });
 
     it("should timeout on second request", function (done) {
       var responses = 0;
