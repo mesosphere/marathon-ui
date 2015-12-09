@@ -4,17 +4,23 @@ var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
-var AppsActions = require("../js/actions/AppsActions");
-var AppsEvents = require("../js/events/AppsEvents");
-var AppsStore = require("../js/stores/AppsStore");
-var InfoStore = require("../js/stores/InfoStore");
+var AppDispatcher = require("../js/AppDispatcher");
 var States = require("../js/constants/States");
+var AppsActions = require("../js/actions/AppsActions");
+var AppsStore = require("../js/stores/AppsStore");
+var AppsEvents = require("../js/events/AppsEvents");
+var InfoStore = require("../js/stores/InfoStore");
+var MesosStore = require("../js/stores/MesosStore");
+var MesosEvents = require("../js/events/MesosEvents");
 var TasksActions = require("../js/actions/TasksActions");
 var TasksEvents = require("../js/events/TasksEvents");
 var TaskListItemComponent = require("../js/components/TaskListItemComponent");
 var TaskDetailComponent = require("../js/components/TaskDetailComponent");
 var TaskListComponent = require("../js/components/TaskListComponent");
 var TaskMesosUrlComponent = require("../js/components/TaskMesosUrlComponent");
+var TaskFileListComponent = require("../js/components/TaskFileListComponent");
+var TaskFileDownloadComponent =
+  require("../js/components/TaskFileDownloadComponent");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
@@ -221,8 +227,6 @@ describe("Task List Item component", function () {
     expect(cellContent.title).to.equal("2015-06-29T14:11:58.709Z");
     expect(cellContent.dateTime).to.equal("2015-06-29T14:11:58.709Z");
   });
-
-
 
 });
 
@@ -482,4 +486,172 @@ describe("Task Mesos Url component", function () {
         "executors/task-123");
     }
   );
+});
+
+describe("Task file list component", function () {
+
+  beforeEach(function (done) {
+    this.model = {
+      appId: "/app-1",
+      id: "task-id",
+      slaveId: "agent-id"
+    };
+
+    this.renderer = TestUtils.createRenderer();
+
+    MesosStore.once(MesosEvents.CHANGE, function (){
+      this.renderer.render(<TaskFileListComponent task={this.model}/>);
+      this.component = this.renderer.getRenderOutput();
+      done();
+    }.bind(this));
+
+    AppDispatcher.dispatch({
+      actionType: MesosEvents.REQUEST_VERSION_INFORMATION_COMPLETE,
+      data: {
+        version: "0.26.0"
+      }
+    });
+
+    AppDispatcher.dispatch({
+      actionType: MesosEvents.REQUEST_FILES_COMPLETE,
+      data: {
+        id: this.model.id,
+        host: "//mesos-agent:5050",
+        files: [{
+          gid: "staff",
+          mode: "-rw-r--r--",
+          mtime: 1449573729,
+          nlink: 1,
+          path: "/file/path/filename",
+          size: 506,
+          uid: "user"
+        }]
+      }
+    });
+
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("has the correct number of files/rows", function () {
+    var tbody = this.component.props.children[1].props.children;
+    expect(tbody.length).to.equal(1);
+  });
+
+  it("has correct download link", function () {
+    var tableBody = this.component.props.children[1].props.children;
+    var firstTableRow = tableBody[0].props.children;
+    var idCell = firstTableRow[0].props.children;
+    expect(idCell[1].props.href)
+      .to.equal("//mesos-agent:5050/files/download?" +
+        "path=%2Ffile%2Fpath%2Ffilename");
+  });
+
+  it("has correct permissions", function () {
+    var tableBody = this.component.props.children[1].props.children;
+    var firstTableRow = tableBody[0].props.children;
+    var permissionsCell = firstTableRow[1].props.children;
+    expect(permissionsCell.props.children).to.equal("-rw-r--r--");
+  });
+
+  it("has correct nlik", function () {
+    var tableBody = this.component.props.children[1].props.children;
+    var firstTableRow = tableBody[0].props.children;
+    var nlinkCell = firstTableRow[2].props.children;
+    expect(nlinkCell.props.children).to.equal(1);
+  });
+
+  it("has correct uid", function () {
+    var tableBody = this.component.props.children[1].props.children;
+    var firstTableRow = tableBody[0].props.children;
+    var uidCell = firstTableRow[3].props.children;
+    expect(uidCell.props.children).to.equal("user");
+  });
+
+  it("has correct gid", function () {
+    var tableBody = this.component.props.children[1].props.children;
+    var firstTableRow = tableBody[0].props.children;
+    var gidCell = firstTableRow[4].props.children;
+    expect(gidCell.props.children).to.equal("staff");
+  });
+
+  it("has the correct file size", function () {
+    var tableBody = this.component.props.children[1].props.children;
+    var firstTableRow = tableBody[0].props.children;
+    var sizeCell = firstTableRow[5].props.children;
+    expect(sizeCell.props.children).to.equal("506 B");
+  });
+
+  it("has correct mtime", function () {
+    var tableBody = this.component.props.children[1].props.children;
+    var firstTableRow = tableBody[0].props.children;
+    var mtimeCell = firstTableRow[6].props.children;
+    expect(mtimeCell.props.children).to.equal("1/17/1970, 7:39:33 PM");
+    expect(mtimeCell.props.dateTime).to.equal("1970-01-17T18:39:33.729Z");
+  });
+
+});
+
+describe("Task file download component", function () {
+
+  beforeEach(function (done) {
+    this.model = {
+      appId: "/app-1",
+      id: "task-id",
+      slaveId: "agent-id"
+    };
+
+    this.renderer = TestUtils.createRenderer();
+
+    MesosStore.once(MesosEvents.CHANGE, function () {
+      this.renderer.render(
+        <TaskFileDownloadComponent task={this.model} fileName="filename"/>
+      );
+      this.component = this.renderer.getRenderOutput();
+      done();
+    }.bind(this));
+
+    AppDispatcher.dispatch({
+      actionType: MesosEvents.REQUEST_VERSION_INFORMATION_COMPLETE,
+      data: {
+        version: "0.26.0"
+      }
+    });
+
+    AppDispatcher.dispatch({
+      actionType: MesosEvents.REQUEST_FILES_COMPLETE,
+      data: {
+        id: this.model.id,
+        host: "//mesos-agent:5050",
+        files: [{
+          gid: "staff",
+          mode: "-rw-r--r--",
+          mtime: 1449573729,
+          nlink: 1,
+          path: "/file/path/filename",
+          size: 506,
+          uid: "user"
+        }]
+      }
+    });
+
+  });
+
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
+  it("has correct download link", function () {
+    expect(this.component.props.href)
+      .to.equal("//mesos-agent:5050/files/download?" +
+      "path=%2Ffile%2Fpath%2Ffilename");
+  });
+
+  it("has correct lable", function () {
+    expect(this.component.props.children[2])
+      .to.equal("filename");
+  });
+
 });
