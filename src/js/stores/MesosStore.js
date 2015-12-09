@@ -11,14 +11,16 @@ var MesosEvents = require("../events/MesosEvents");
 
 const FILES_TTL = 60000;
 const STATE_TTL = 60000;
-const REQUEST_DELAY = 100;
+const REQUEST_COUNT_TTL = 10000;
+const MAX_REQUESTS = 1;
 const MASTER_ID = "master";
+const INFO_ID = "info";
 
 var version = null;
 var stateMap = {};
 var taskFileMap = {};
 var taskFileRequestQueue = [];
-var requestCount = 0;
+var requestCountMap = {};
 
 function getDataFromMap(id, map, ttl = 100) {
   if (!Util.isString(id) || map == null) {
@@ -116,8 +118,29 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
   return executor.directory;
 }
 
-function throttleRequest(request) {
-  setTimeout(request, Math.pow(++requestCount, 2)*REQUEST_DELAY);
+function performRequest(requestId, request) {
+  let requestCount = getDataFromMap(requestId, requestCountMap,
+      REQUEST_COUNT_TTL) || 0;
+  if (requestCount >= MAX_REQUESTS) {
+    return false;
+  }
+  addDataToMap(requestId, requestCountMap, ++requestCount);
+  request();
+  return true;
+}
+
+function resetRequest(requestId) {
+  invalidateMapData(requestId, requestCountMap);
+}
+
+function resolveFileRequest(fileRequest, queueIndex) {
+  MesosStore.emit(MesosEvents.REQUEST_TASK_FILES_COMPLETE, fileRequest);
+  taskFileRequestQueue.splice(queueIndex, 1);
+}
+
+function rejectFileRequest(fileRequest, queueIndex) {
+  MesosStore.emit(MesosEvents.REQUEST_TASK_FILES_ERROR, fileRequest);
+  taskFileRequestQueue.splice(queueIndex, 1);
 }
 
 function resolveTaskFileRequests() {
@@ -127,29 +150,50 @@ function resolveTaskFileRequests() {
     return;
   }
 
-  if (!Util.isString(info.frameworkId) ||
-      !Util.isObject(info.marathon_config) ||
-      !Util.isString(info.marathon_config.mesos_leader_ui_url)) {
-    throttleRequest(()=>InfoActions.requestInfo());
+  if (!info) {
+    let isRequested = performRequest(INFO_ID, () => {
+      InfoActions.requestInfo();
+    });
+
+    if (!isRequested) {
+      taskFileRequestQueue.forEach(rejectFileRequest);
+    }
     return;
   }
 
+  if (!Util.isString(info.frameworkId) ||
+      !Util.isObject(info.marathon_config) ||
+      !Util.isString(info.marathon_config.mesos_leader_ui_url)) {
+    taskFileRequestQueue.forEach(rejectFileRequest);
+    return;
+  }
+
+  resetRequest(INFO_ID);
+
   if (!version) {
-    throttleRequest(()=>MesosActions.requestVersionInformation(
-      info.marathon_config.mesos_leader_ui_url.replace(/\/$/, "")));
+    MesosActions.requestVersionInformation(
+      info.marathon_config.mesos_leader_ui_url.replace(/\/$/, ""));
     return;
   }
 
   if (!MesosStore.getState(MASTER_ID)) {
-    throttleRequest(()=>{MesosActions.requestState(MASTER_ID,
-      info.marathon_config.mesos_leader_ui_url.replace(/\/?$/, "/master"),
-      version)});
+
+    let isRequested = performRequest(MASTER_ID, () => {
+      MesosActions.requestState(MASTER_ID,
+        info.marathon_config.mesos_leader_ui_url.replace(/\/?$/, "/master"),
+        version)
+    });
+
+    if (!isRequested) {
+      taskFileRequestQueue.forEach(rejectFileRequest);
+    }
+
     return;
   }
 
-  taskFileRequestQueue.forEach((request, index) => {
-    var taskId = request.taskId;
-    var agentId = request.agentId;
+  taskFileRequestQueue.forEach((fileRequest, queueIndex) => {
+    var taskId = fileRequest.taskId;
+    var agentId = fileRequest.agentId;
 
     if (!MesosStore.getState(agentId)) {
       let masterState = MesosStore.getState(MASTER_ID);
@@ -160,9 +204,18 @@ function resolveTaskFileRequests() {
         return;
       }
 
-      MesosActions.requestState(agentId, nodeURL, version);
+      let isRequested = performRequest(agentId, () => {
+        MesosActions.requestState(agentId, nodeURL, version);
+      });
+
+      if (!isRequested) {
+        rejectFileRequest(fileRequest, queueIndex);
+      }
+
       return;
     }
+
+    resetRequest(MASTER_ID);
 
     if (!MesosStore.getTaskFiles(taskId)) {
       let masterState = MesosStore.getState(MASTER_ID);
@@ -177,15 +230,22 @@ function resolveTaskFileRequests() {
         return;
       }
 
-      MesosActions.requestFiles(taskId, nodeURL, executorDirectory, version);
+      let isRequested = performRequest(taskId, () => {
+        MesosActions.requestFiles(taskId, nodeURL, executorDirectory, version);
+      });
+
+      if (!isRequested) {
+        rejectFileRequest(fileRequest, queueIndex);
+      }
+
       return;
     }
 
-    // Everything is fine, we have the file, let's remove it from the queue
-    taskFileRequestQueue.splice(index, 1);
+    resetRequest(agentId);
+    resetRequest(taskId);
+    resolveFileRequest(fileRequest, queueIndex);
   });
 
-  requestCount = 0;
 }
 
 AppDispatcher.register(function (action) {
@@ -196,7 +256,6 @@ AppDispatcher.register(function (action) {
         agentId: data.agentId,
         taskId: data.taskId
       });
-      requestCount = 0;
       resolveTaskFileRequests();
       break;
     case InfoEvents.REQUEST:
@@ -215,7 +274,6 @@ AppDispatcher.register(function (action) {
       addDataToMap(data.id, stateMap, data.state);
       resolveTaskFileRequests();
       MesosStore.emit(MesosEvents.CHANGE);
-      MesosStore.emit(MesosEvents.STATE_CHANGE);
       break;
     case MesosEvents.REQUEST_STATE_ERROR:
       resolveTaskFileRequests();
@@ -235,9 +293,9 @@ AppDispatcher.register(function (action) {
       }));
       resolveTaskFileRequests();
       MesosStore.emit(MesosEvents.CHANGE);
-      MesosStore.emit(MesosEvents.TASK_FILE_CHANGE);
       break;
     case MesosEvents.REQUEST_FILES_ERROR:
+      resolveTaskFileRequests();
       MesosStore.emit(MesosEvents.REQUEST_FILES_ERROR, data);
       break;
   }
