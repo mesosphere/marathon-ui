@@ -214,7 +214,6 @@ describe("Mesos", function () {
 
     beforeEach(function () {
       MesosActions.request = function (url) {
-        console.log(">>",url);
         return new Promise(function (resolve, reject) {
           switch (url) {
             case "//mesos-master:5051/version":
