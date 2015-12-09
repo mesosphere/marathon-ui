@@ -588,7 +588,8 @@ describe("Task file list component", function () {
     var tableBody = this.component.props.children[1].props.children;
     var firstTableRow = tableBody[0].props.children;
     var mtimeCell = firstTableRow[6].props.children;
-    expect(mtimeCell.props.children).to.equal("1/17/1970, 7:39:33 PM");
+    expect(mtimeCell.props.children)
+      .to.equal(new Date(1449573729).toLocaleString());
     expect(mtimeCell.props.dateTime).to.equal("1970-01-17T18:39:33.729Z");
   });
 
