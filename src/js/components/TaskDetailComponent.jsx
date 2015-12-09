@@ -86,12 +86,15 @@ var TaskDetailComponent = React.createClass({
   getIpAddresses: function () {
     var props = this.props;
     var task = props.task;
+    var ipAddresses = task.ipAddresses;
 
-    var ipAddresses = (task.ipAddresses != null && task.ipAddresses.length > 0)
-      ? task.ipAddresses.map(address => address.ipAddress)
-      : [task.host];
+    if (ipAddresses == null) {
+      return null;
+    }
 
-    return ipAddresses.map(ipAddress => (<dd key={ipAddress}>{ipAddress}</dd>));
+    return ipAddresses.map(address => (
+      <dd key={address.ipAddress}>{address.ipAddress}</dd>
+    ));
   },
 
   getPorts: function () {
@@ -164,11 +167,17 @@ var TaskDetailComponent = React.createClass({
       );
     });
 
+    var ipAddressFields = this.getIpAddresses();
+    if (ipAddressFields != null && ipAddressFields.length > 0) {
+      ipAddressFields.unshift(<dt key="ip-addresses">IP Addresses</dt>)
+    }
+
     return (
       <div>
         <dl className="dl-horizontal task-details">
-          <dt>IP Addresses</dt>
-          {this.getIpAddresses()}
+          <dt>Host</dt>
+          <dd>{task.host}</dd>
+          {ipAddressFields}
           <dt>Ports</dt>
           {this.getPorts()}
           <dt>Endpoints</dt>
