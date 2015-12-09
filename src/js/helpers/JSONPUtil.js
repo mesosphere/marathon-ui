@@ -1,12 +1,4 @@
 const JSONPUtil = {
-  /**
-   * Request JSONP data
-   *
-   * @todo: write test to verify this util is working properly
-   *
-   * @param {string} url
-   * @returns {Promise} promise
-   */
   request: function (url) {
     return new Promise(function (resolve, reject) {
       var callback = `jsonp_${Date.now().toString(16)}`;
