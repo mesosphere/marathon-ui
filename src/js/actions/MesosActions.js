@@ -69,7 +69,7 @@ var MesosActions = {
   },
   requestTaskFiles: function (agentId, taskId) {
     AppDispatcher.dispatch({
-      actionType: MesosEvents.REQUEST_FILES,
+      actionType: MesosEvents.REQUEST_TASK_FILES,
       data: {agentId: agentId, taskId: taskId}
     });
   },
