@@ -97,8 +97,14 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
     return frameworkId === framework.id;
   }
 
-  let framework = state.frameworks.find(matchFramework) ||
-    state.completed_frameworks.find(matchFramework);
+  let framework = null;
+
+  if (state.frameworks != null) {
+    framework = state.frameworks.find(matchFramework)
+  }
+  else if (state.completed_frameworks != null) {
+    framework = state.completed_frameworks.find(matchFramework)
+  }
 
   if (framework == null) {
     return null;
@@ -108,8 +114,14 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
     return taskId === executor.id;
   }
 
-  let executor = framework.executors.find(matchExecutor) ||
-    framework.completed_executors.find(matchExecutor);
+  let executor = null;
+
+  if (framework.executors != null) {
+    executor = framework.executors.find(matchExecutor)
+  }
+  else if (framework.completed_executors != null) {
+    executor = framework.completed_executors.find(matchExecutor)
+  }
 
   if (executor == null) {
     return null;
