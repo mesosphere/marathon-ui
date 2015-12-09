@@ -256,19 +256,19 @@ describe("Task Detail component", function () {
   });
 
   it("has the correct status", function () {
-    var content = ShallowUtils.getText(this.taskDetails.props.children[9]);
+    var content = ShallowUtils.getText(this.taskDetails.props.children[10]);
     expect(content).to.equal("status-0");
   });
 
   it("has the correct timefields", function () {
-    var stagedAt = this.taskDetails.props.children[10][0].props;
-    var startedAt = this.taskDetails.props.children[10][1].props;
+    var stagedAt = this.taskDetails.props.children[11][0].props;
+    var startedAt = this.taskDetails.props.children[11][1].props;
     expect(stagedAt.time).to.equal("2015-06-29T14:11:58.709Z");
     expect(startedAt.time).to.equal("2015-06-29T14:11:58.709Z");
   });
 
   it("has the correct version", function () {
-    var version = this.taskDetails.props.children[12].props.children.props;
+    var version = this.taskDetails.props.children[13].props.children.props;
     expect(version.dateTime).to.equal("2015-06-29T13:54:24.171Z");
   });
 
@@ -308,17 +308,17 @@ describe("Task Detail component", function () {
     });
 
     it("has the correct host", function () {
-      var content = ShallowUtils.getText(this.taskDetails.props.children[1][0]);
+      var content = ShallowUtils.getText(this.taskDetails.props.children[1]);
       expect(content).to.equal("host-1");
     });
 
     it("has the correct ports", function () {
-      var content = ShallowUtils.getText(this.taskDetails.props.children[3]);
+      var content = ShallowUtils.getText(this.taskDetails.props.children[4]);
       expect(content).to.equal("[1,2,3]");
     });
 
     it("has the correct endpoints", function () {
-      var list = this.taskDetails.props.children[5];
+      var list = this.taskDetails.props.children[6];
       var endpoints = [
         ShallowUtils.getText(list[0].props.children),
         ShallowUtils.getText(list[1].props.children),
@@ -331,6 +331,7 @@ describe("Task Detail component", function () {
   describe("with IP per container", function () {
     before(function () {
       this.model = Object.assign({}, baseModel, {
+        "host": "example.com",
         "ipAddresses": [
           {
             "protocol": "IPv4",
@@ -366,18 +367,23 @@ describe("Task Detail component", function () {
       delete AppsStore.currentApp.ipAddress;
     });
 
+    it("has the correct host", function () {
+      var content = ShallowUtils.getText(this.taskDetails.props.children[1]);
+      expect(content).to.equal("example.com");
+    });
+
     it("has the correct ip address", function () {
-      var content = ShallowUtils.getText(this.taskDetails.props.children[1][0]);
+      var content = ShallowUtils.getText(this.taskDetails.props.children[2][1]);
       expect(content).to.equal("127.0.0.1");
     });
 
     it("has the correct ports", function () {
-      var content = ShallowUtils.getText(this.taskDetails.props.children[3]);
+      var content = ShallowUtils.getText(this.taskDetails.props.children[4]);
       expect(content).to.equal("[]");
     });
 
     it("has the correct endpoints", function () {
-      var list = this.taskDetails.props.children[5];
+      var list = this.taskDetails.props.children[6];
       var endpoints = [
         ShallowUtils.getText(list[0].props.children),
         ShallowUtils.getText(list[1].props.children)
