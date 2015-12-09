@@ -116,6 +116,8 @@ var TaskFileListComponent = React.createClass({
         })
         .value();
     }
+
+    return null;
   },
 
   render: function () {
