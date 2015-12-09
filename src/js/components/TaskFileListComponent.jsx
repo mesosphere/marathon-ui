@@ -23,7 +23,7 @@ var TaskFileListComponent = React.createClass({
   },
 
   componentWillMount: function () {
-    MesosStore.on(MesosEvents.TASK_FILE_CHANGE, this.onMesosTaskFileChange);
+    MesosStore.on(MesosEvents.CHANGE, this.onMesosChange);
   },
 
   componentDidMount: function () {
@@ -35,11 +35,10 @@ var TaskFileListComponent = React.createClass({
   },
 
   componentWillUnmount: function () {
-    MesosStore.removeListener(MesosEvents.TASK_FILE_CHANGE,
-      this.onMesosTaskFileChange);
+    MesosStore.removeListener(MesosEvents.CHANGE, this.onMesosChange);
   },
 
-  onMesosTaskFileChange() {
+  onMesosChange() {
     var task = this.props.task;
 
     this.setState({
