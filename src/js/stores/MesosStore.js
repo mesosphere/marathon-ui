@@ -191,7 +191,7 @@ function resolveTaskFileRequests() {
 AppDispatcher.register(function (action) {
   var data = action.data;
   switch (action.actionType) {
-    case MesosEvents.REQUEST_FILES:
+    case MesosEvents.REQUEST_TASK_FILES:
       taskFileRequestQueue.push({
         agentId: data.agentId,
         taskId: data.taskId
