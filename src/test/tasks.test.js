@@ -501,6 +501,8 @@ describe("Task file list component", function () {
 
     this.renderer = TestUtils.createRenderer();
 
+    MesosStore._resetStore();
+
     MesosStore.once(MesosEvents.CHANGE, function (){
       this.renderer.render(<TaskFileListComponent task={this.model}/>);
       this.component = this.renderer.getRenderOutput();
@@ -607,6 +609,8 @@ describe("Task file download component", function () {
     };
 
     this.renderer = TestUtils.createRenderer();
+
+    MesosStore._resetStore();
 
     MesosStore.once(MesosEvents.CHANGE, function () {
       this.renderer.render(
