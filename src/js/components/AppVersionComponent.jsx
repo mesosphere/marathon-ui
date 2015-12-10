@@ -1,6 +1,7 @@
 var classNames = require("classnames");
 var Link = require("react-router").Link;
 var React = require("react/addons");
+var url = require("url");
 
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
@@ -187,8 +188,15 @@ var AppVersionComponent = React.createClass({
 
     var urisNode = (appVersion.uris == null || appVersion.uris.length === 0)
       ? <UnspecifiedNodeComponent />
-      : appVersion.uris.map(function (u) {
-        return <dd key={u}>{u}</dd>;
+      : appVersion.uris.map(function (uri) {
+        var parsedURI = url.parse(uri);
+        var linkName = uri;
+
+        if (parsedURI.protocol === "http:" || parsedURI.protocol === "https:") {
+          linkName = <a href={uri} target="_blank">{uri}</a>;
+        }
+
+        return <dd key={uri}>{linkName}</dd>;
       });
 
     return (
