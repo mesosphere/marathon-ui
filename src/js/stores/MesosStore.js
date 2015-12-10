@@ -9,10 +9,10 @@ var InfoEvents = require("../events/InfoEvents");
 var MesosActions = require("../actions/MesosActions");
 var MesosEvents = require("../events/MesosEvents");
 
-const FILES_TTL = 60000;
+const FILES_TTL = 60000; // in ms
 const STATE_TTL = 60000;
 const REQUEST_DATA_TTL = 10000;
-const REQUEST_TIMEOUT = 500;
+const REQUEST_TIMEOUT = 500; // in ms
 const MAX_REQUESTS = 1;
 const MASTER_ID = "master";
 const INFO_ID = "info";
@@ -23,7 +23,7 @@ var taskFileMap = {};
 var taskFileRequestQueue = [];
 var requestMap = {};
 
-function getDataFromMap(id, map, ttl = 100) {
+function getDataFromMap(id, map, ttlMilliseconds = 100) {
   if (!Util.isString(id) || map == null) {
     return null;
   }
@@ -32,7 +32,7 @@ function getDataFromMap(id, map, ttl = 100) {
   if (item == null) {
     return null;
   }
-  if (item.timestamp + ttl < Date.now()) {
+  if (item.timestamp + ttlMilliseconds < Date.now()) {
     invalidateMapData(id, map);
     return null;
   }
@@ -67,7 +67,7 @@ var MesosStore = Object.assign({
     return getDataFromMap(taskId, taskFileMap, FILES_TTL);
   },
 
-  _resetStore: function () {
+  resetStore: function () {
     stateMap = {};
     taskFileMap = {};
     taskFileRequestQueue.length = 0;
@@ -109,8 +109,7 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
 
   if (state.frameworks != null) {
     framework = state.frameworks.find(matchFramework)
-  }
-  else if (state.completed_frameworks != null) {
+  } else if (state.completed_frameworks != null) {
     framework = state.completed_frameworks.find(matchFramework)
   }
 
@@ -126,8 +125,7 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
 
   if (framework.executors != null) {
     executor = framework.executors.find(matchExecutor)
-  }
-  else if (framework.completed_executors != null) {
+  } else if (framework.completed_executors != null) {
     executor = framework.completed_executors.find(matchExecutor)
   }
 
@@ -140,9 +138,11 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
 
 function performRequest(requestId, requestCallback, timeoutErrorCallback) {
   var timestamp = Date.now();
-  var requestData = getDataFromMap(requestId, requestMap,
-      REQUEST_DATA_TTL) || {count:0, timeout: timestamp + REQUEST_TIMEOUT,
-        error:false};
+  var requestData = getDataFromMap(requestId, requestMap, REQUEST_DATA_TTL) || {
+    count:0,
+    timeout: timestamp + REQUEST_TIMEOUT,
+    error:false
+  };
 
   if (requestData.error || requestData.count >= MAX_REQUESTS &&
       requestData.timeout <= timestamp) {
@@ -161,8 +161,7 @@ function performRequest(requestId, requestCallback, timeoutErrorCallback) {
 }
 
 function updateRequest(requestId, nextRequestData) {
-  var requestData = getDataFromMap(requestId, requestMap,
-    REQUEST_DATA_TTL);
+  var requestData = getDataFromMap(requestId, requestMap, REQUEST_DATA_TTL);
   if (requestData != null) {
     addDataToMap(requestId, requestMap,
       Object.assign(requestData, nextRequestData));
@@ -213,7 +212,6 @@ function resolveTaskFileRequests() {
   }
 
   if (!MesosStore.getState(MASTER_ID)) {
-
     performRequest(MASTER_ID,
       () => MesosActions.requestState(MASTER_ID,
         info.marathon_config.mesos_leader_ui_url.replace(/\/?$/, "/master"),
@@ -223,12 +221,13 @@ function resolveTaskFileRequests() {
   }
 
   taskFileRequestQueue.forEach((fileRequest, queueIndex) => {
-    var taskId = fileRequest.taskId;
     var agentId = fileRequest.agentId;
+    var taskId = fileRequest.taskId;
 
     if (!MesosStore.getState(agentId)) {
       let masterState = MesosStore.getState(MASTER_ID);
       let nodeURL = getNodeURLFromState(agentId, masterState);
+
       if (nodeURL == null) {
         updateRequest(MASTER_ID, {error:true});
         invalidateMapData(MASTER_ID, stateMap);

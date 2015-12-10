@@ -71,8 +71,8 @@ var TaskFileDownloadComponent = React.createClass({
       return;
     }
 
-    let message = `Request failed or timed out for task ID ${request.taskId}`;
-    DialogActions.alert(message);
+    DialogActions
+      .alert(`Request failed or timed out for task ID ${request.taskId}`);
 
     MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
       this.onMesosRequestTaskFilesComplete);

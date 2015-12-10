@@ -23,7 +23,7 @@ describe("Mesos", function () {
   describe("Actions", function () {
 
     beforeEach(function () {
-      MesosStore._resetStore();
+      MesosStore.resetStore();
       MesosActions.request = function (url) {
         return new Promise(function (resolve, reject) {
           switch (url) {
@@ -214,7 +214,7 @@ describe("Mesos", function () {
   describe("Store", function () {
 
     beforeEach(function () {
-      MesosStore._resetStore();
+      MesosStore.resetStore();
       MesosActions.request = function (url) {
         return new Promise(function (resolve, reject) {
           switch (url) {
