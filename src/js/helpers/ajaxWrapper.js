@@ -33,13 +33,20 @@ var ajaxWrapper = function (opts = {}) {
   };
 
   var makeRequest = function (options) {
-    return fetch(options.url, {
+    var fetchOptions = {
       method: options.method,
-      headers: options.headers,
-      body: options.data != null
-        ? JSON.stringify(options.data)
-        : null
-    });
+      headers: options.headers
+    };
+
+    if (options.method !== "GET" && options.method !== "HEAD") {
+      Object.assign(fetchOptions, {
+        body: options.data != null
+          ? JSON.stringify(options.data)
+          : null
+      });
+    }
+
+    return fetch(options.url, fetchOptions);
   };
 
   var parseResponse = function (xhr, callback) {
