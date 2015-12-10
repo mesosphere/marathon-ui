@@ -116,7 +116,13 @@ var TaskFileListComponent = React.createClass({
         .value();
     }
 
-    return null;
+    return (
+      <tr>
+        <td colSpan="7" className="text-center">
+          Currently no files available
+        </td>
+      </tr>
+    );
   },
 
   render: function () {
