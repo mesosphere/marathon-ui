@@ -11,7 +11,8 @@ var MesosEvents = require("../events/MesosEvents");
 
 const FILES_TTL = 60000;
 const STATE_TTL = 60000;
-const REQUEST_COUNT_TTL = 10000;
+const REQUEST_DATA_TTL = 10000;
+const REQUEST_TIMEOUT = 500;
 const MAX_REQUESTS = 1;
 const MASTER_ID = "master";
 const INFO_ID = "info";
@@ -20,7 +21,7 @@ var version = null;
 var stateMap = {};
 var taskFileMap = {};
 var taskFileRequestQueue = [];
-var requestCountMap = {};
+var requestMap = {};
 
 function getDataFromMap(id, map, ttl = 100) {
   if (!Util.isString(id) || map == null) {
@@ -130,19 +131,39 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
   return executor.directory;
 }
 
-function performRequest(requestId, request) {
-  let requestCount = getDataFromMap(requestId, requestCountMap,
-      REQUEST_COUNT_TTL) || 0;
-  if (requestCount >= MAX_REQUESTS) {
-    return false;
+function performRequest(requestId, requestCallback, timeoutErrorCallback) {
+  var timestamp = Date.now();
+  var requestData = getDataFromMap(requestId, requestMap,
+      REQUEST_DATA_TTL) || {count:0, timeout: timestamp + REQUEST_TIMEOUT,
+        error:false};
+
+  if (requestData.error || requestData.count >= MAX_REQUESTS &&
+      requestData.timeout <= timestamp) {
+    timeoutErrorCallback();
+    return;
   }
-  addDataToMap(requestId, requestCountMap, ++requestCount);
-  request();
-  return true;
+
+  if (requestData.count >= MAX_REQUESTS) {
+    return;
+  }
+
+  requestData.count += 1;
+  requestData.timeout = timestamp + REQUEST_TIMEOUT;
+  addDataToMap(requestId, requestMap, requestData);
+  requestCallback();
+}
+
+function updateRequest(requestId, nextRequestData) {
+  var requestData = getDataFromMap(requestId, requestMap,
+    REQUEST_DATA_TTL);
+  if (requestData != null) {
+    addDataToMap(requestId, requestMap,
+      Object.assign(requestData, nextRequestData));
+  }
 }
 
 function resetRequest(requestId) {
-  invalidateMapData(requestId, requestCountMap);
+  invalidateMapData(requestId, requestMap);
 }
 
 function resolveFileRequest(fileRequest, queueIndex) {
@@ -163,13 +184,9 @@ function resolveTaskFileRequests() {
   }
 
   if (!info) {
-    let isRequested = performRequest(INFO_ID, () => {
-      InfoActions.requestInfo();
-    });
-
-    if (!isRequested) {
-      taskFileRequestQueue.forEach(rejectFileRequest);
-    }
+    performRequest(INFO_ID,
+      () =>  InfoActions.requestInfo(),
+      () => taskFileRequestQueue.forEach(rejectFileRequest));
     return;
   }
 
@@ -190,16 +207,11 @@ function resolveTaskFileRequests() {
 
   if (!MesosStore.getState(MASTER_ID)) {
 
-    let isRequested = performRequest(MASTER_ID, () => {
-      MesosActions.requestState(MASTER_ID,
+    performRequest(MASTER_ID,
+      () => MesosActions.requestState(MASTER_ID,
         info.marathon_config.mesos_leader_ui_url.replace(/\/?$/, "/master"),
-        version)
-    });
-
-    if (!isRequested) {
-      taskFileRequestQueue.forEach(rejectFileRequest);
-    }
-
+        version),
+      () => taskFileRequestQueue.forEach(rejectFileRequest));
     return;
   }
 
@@ -216,14 +228,9 @@ function resolveTaskFileRequests() {
         return;
       }
 
-      let isRequested = performRequest(agentId, () => {
-        MesosActions.requestState(agentId, nodeURL, version);
-      });
-
-      if (!isRequested) {
-        rejectFileRequest(fileRequest, queueIndex);
-      }
-
+      performRequest(agentId,
+        () => MesosActions.requestState(agentId, nodeURL, version),
+        () => rejectFileRequest(fileRequest, queueIndex));
       return;
     }
 
@@ -242,14 +249,10 @@ function resolveTaskFileRequests() {
         return;
       }
 
-      let isRequested = performRequest(taskId, () => {
-        MesosActions.requestFiles(taskId, nodeURL, executorDirectory, version);
-      });
-
-      if (!isRequested) {
-        rejectFileRequest(fileRequest, queueIndex);
-      }
-
+      performRequest(taskId,
+        () =>  MesosActions.requestFiles(taskId, nodeURL, executorDirectory,
+          version),
+        () => rejectFileRequest(fileRequest, queueIndex));
       return;
     }
 
@@ -274,6 +277,9 @@ AppDispatcher.register(function (action) {
       AppDispatcher.waitFor([InfoStore.dispatchToken]);
       resolveTaskFileRequests();
       break;
+    case InfoEvents.REQUEST_ERROR:
+      updateRequest(INFO_ID, {error:true});
+      break;
     case MesosEvents.REQUEST_VERSION_INFORMATION_COMPLETE:
       version = data.version;
       resolveTaskFileRequests();
@@ -288,12 +294,13 @@ AppDispatcher.register(function (action) {
       MesosStore.emit(MesosEvents.CHANGE);
       break;
     case MesosEvents.REQUEST_STATE_ERROR:
+      updateRequest(data.id, {error:true});
       resolveTaskFileRequests();
       MesosStore.emit(MesosEvents.REQUEST_STATE_ERROR, data);
       break;
     case MesosEvents.REQUEST_FILES_COMPLETE:
       let downloadRoute = "/files/download.json";
-      if (semver.valid(version) && semver.satisfies(version,">=0.26.0")) {
+      if (semver.valid(version) && semver.satisfies(version, ">=0.26.0")) {
         downloadRoute = "/files/download";
       }
       addDataToMap(data.id, taskFileMap, data.files.map(file => {
@@ -307,6 +314,7 @@ AppDispatcher.register(function (action) {
       MesosStore.emit(MesosEvents.CHANGE);
       break;
     case MesosEvents.REQUEST_FILES_ERROR:
+      updateRequest(data.id, {error:true});
       resolveTaskFileRequests();
       MesosStore.emit(MesosEvents.REQUEST_FILES_ERROR, data);
       break;
