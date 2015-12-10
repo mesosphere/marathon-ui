@@ -198,12 +198,12 @@ var TaskListComponent = React.createClass({
           </thead>
           <tbody>
             <tr className={noTasksClassSet}>
-              <td className="text-center" colSpan="7">
+              <td className="text-center" colSpan="8">
                 No tasks running.
               </td>
             </tr>
             <tr className={loadingClassSet}>
-              <td className="text-center text-muted" colSpan="7">
+              <td className="text-center text-muted" colSpan="8">
                 Loading tasks...
               </td>
             </tr>
