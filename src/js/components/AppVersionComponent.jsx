@@ -188,7 +188,7 @@ var AppVersionComponent = React.createClass({
 
     var urisNode = (appVersion.uris == null || appVersion.uris.length === 0)
       ? <UnspecifiedNodeComponent />
-      : appVersion.uris.map(function (uri) {
+      : appVersion.uris.map(function (uri, i) {
         var parsedURI = url.parse(uri);
         var linkName = uri;
 
@@ -196,7 +196,7 @@ var AppVersionComponent = React.createClass({
           linkName = <a href={uri} target="_blank">{uri}</a>;
         }
 
-        return <dd key={uri}>{linkName}</dd>;
+        return <dd key={uri+i}>{linkName}</dd>;
       });
 
     return (
