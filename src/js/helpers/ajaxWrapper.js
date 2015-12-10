@@ -1,4 +1,4 @@
-var qajax = require("qajax");
+var fetch = require("isomorphic-fetch");
 var Util = require("./Util");
 
 var uniqueCalls = [];
@@ -7,8 +7,9 @@ function removeCall(options) {
   uniqueCalls.splice(uniqueCalls.indexOf(options.url), 1);
 }
 
-var qajaxWrapper = function (opts = {}) {
+var ajaxWrapper = function (opts = {}) {
   var defaults = {
+    method: "GET",
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"
@@ -31,16 +32,34 @@ var qajaxWrapper = function (opts = {}) {
     body: null
   };
 
-  var parseResponse = function (xhr) {
-    response.status = xhr.status;
-    try {
-      response.body = JSON.parse(xhr.responseText);
-    } catch (e) {
-      response.body = xhr.responseText;
-    }
+  var makeRequest = function (options) {
+    return fetch(options.url, {
+      method: options.method,
+      headers: options.headers,
+      body: options.data != null
+        ? JSON.stringify(options.data)
+        : null
+    });
   };
 
-  var api = qajax(options);
+  var parseResponse = function (xhr, callback) {
+    response.status = xhr.status;
+    xhr.json().then(
+      function (body) {
+        response.body = body;
+      },
+      function () {
+        xhr.text().then(function (body) {
+          response.body = body;
+        });
+      }
+    ).then(function () {
+      callback(response);
+    });
+  };
+
+  var api = makeRequest(options);
+
   api.error = function (callback) {
     var promise = this;
     // Bind callback also for non 200 status
@@ -48,17 +67,19 @@ var qajaxWrapper = function (opts = {}) {
       // not a 2* response
       function (xhr) {
         if (xhr.status.toString()[0] !== "2") {
-          parseResponse(xhr);
-          removeCall(options);
-          callback(response);
+          parseResponse(xhr, function (response) {
+            removeCall(options);
+            callback(response);
+          });
         }
       },
       // the promise is only rejected if the server has failed
       // to reply to the client (network problem or timeout reached).
       function (xhr) {
-        parseResponse(xhr);
-        removeCall(options);
-        callback(response);
+        parseResponse(xhr, function (response) {
+          removeCall(options);
+          callback(response);
+        });
       }
     );
     return promise;
@@ -66,19 +87,18 @@ var qajaxWrapper = function (opts = {}) {
 
   api.success = function (callback) {
     var promise = this;
-    promise
-      .then(qajax.filterStatus(function (status) {
-        return status.toString()[0] === "2";
-      }))
-      .then(function (xhr) {
-        parseResponse(xhr);
-        removeCall(options);
-        callback(response);
-      });
+    promise.then(function (xhr) {
+      if (xhr.status.toString()[0] === "2") {
+        parseResponse(xhr, function (response) {
+          removeCall(options);
+          callback(response);
+        });
+      }
+    });
     return promise;
   };
 
   return api;
 };
 
-module.exports = qajaxWrapper;
+module.exports = ajaxWrapper;
