@@ -21,12 +21,11 @@ var TaskFileDownloadComponent = React.createClass({
     };
   },
 
-  componentWillMount: function () {
-    MesosStore.on(MesosEvents.CHANGE, this.onMesosChange);
-  },
-
   componentWillUnmount: function () {
-    MesosStore.removeListener(MesosEvents.CHANGE, this.onMesosChange);
+    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
+      this.onMesosRequestTaskFilesComplete);
+    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
+      this.onMesosRequestTaskFilesError);
   },
 
   getFile: function () {
@@ -41,9 +40,14 @@ var TaskFileDownloadComponent = React.createClass({
     return null;
   },
 
-  onMesosChange: function () {
+  onMesosRequestTaskFilesComplete: function () {
     var file = this.getFile();
     var fileIsRequestedByUser = this.state.fileIsRequestedByUser;
+
+    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
+      this.onMesosRequestTaskFilesComplete);
+    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
+      this.onMesosRequestTaskFilesError);
 
     if (file != null && fileIsRequestedByUser) {
       window.open(file.downloadURI);
@@ -54,6 +58,14 @@ var TaskFileDownloadComponent = React.createClass({
       file: file,
       fileIsRequestedByUser: fileIsRequestedByUser
     });
+
+  },
+
+  onMesosRequestTaskFilesError: function () {
+    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
+      this.onMesosRequestTaskFilesComplete);
+    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
+      this.onMesosRequestTaskFilesError);
   },
 
   handleClick: function (event) {
@@ -61,11 +73,17 @@ var TaskFileDownloadComponent = React.createClass({
 
     if (file == null) {
       event.preventDefault();
+
       let task = this.props.task;
-      MesosActions.requestTaskFiles(task.slaveId, task.id);
+
+      MesosStore.on(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
+        this.onMesosRequestTaskFilesComplete);
+      MesosStore.on(MesosEvents.REQUEST_TASK_FILES_ERROR,
+        this.onMesosRequestTaskFilesError);
+
       this.setState({
         fileIsRequestedByUser: true
-      });
+      }, () => MesosActions.requestTaskFiles(task.slaveId, task.id));
     }
   },
 
