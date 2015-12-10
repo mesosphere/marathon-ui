@@ -14196,6 +14196,10 @@
         }
       }
     },
+    "highlight.js": {
+      "version": "9.0.0",
+      "resolved": "https://registry.npmjs.org/highlight.js/-/highlight.js-9.0.0.tgz"
+    },
     "iconv-lite": {
       "version": "0.4.13",
       "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.13.tgz"
