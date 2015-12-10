@@ -16,7 +16,7 @@ var MesosActions = {
       function (error) {
         AppDispatcher.dispatch({
           actionType: MesosEvents.REQUEST_VERSION_INFORMATION_ERROR,
-          data: error
+          data: {error: error}
         });
       }
     );
@@ -38,7 +38,7 @@ var MesosActions = {
       function (error) {
         AppDispatcher.dispatch({
           actionType: MesosEvents.REQUEST_STATE_ERROR,
-          data: error
+          data: {id: id, error: error}
         });
       }
     );
@@ -62,7 +62,7 @@ var MesosActions = {
         function (error) {
           AppDispatcher.dispatch({
             actionType: MesosEvents.REQUEST_FILES_ERROR,
-            data: error
+            data: {id: id, error: error}
           });
         }
       );
