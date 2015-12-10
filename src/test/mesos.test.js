@@ -81,7 +81,7 @@ describe("Mesos", function () {
             MesosEvents.REQUEST_VERSION_INFORMATION_ERROR) {
             AppDispatcher.unregister(dispatchToken);
             expectAsync(function () {
-              expect(action.data.message).to.equal("error");
+              expect(action.data.error.message).to.equal("error");
             }, done);
           }
         });
@@ -125,7 +125,7 @@ describe("Mesos", function () {
           if (action.actionType === MesosEvents.REQUEST_STATE_ERROR) {
             AppDispatcher.unregister(dispatchToken);
             expectAsync(function () {
-              expect(action.data.message).to.equal("error");
+              expect(action.data.error.message).to.equal("error");
             }, done);
           }
         });
@@ -199,7 +199,7 @@ describe("Mesos", function () {
           if (action.actionType === MesosEvents.REQUEST_FILES_ERROR) {
             AppDispatcher.unregister(dispatchToken);
             expectAsync(function () {
-              expect(action.data.message).to.equal("error");
+              expect(action.data.error.message).to.equal("error");
             }, done);
           }
         });
@@ -297,9 +297,9 @@ describe("Mesos", function () {
       });
 
       it("handles failure gracefully", function (done) {
-        MesosStore.once(MesosEvents.REQUEST_STATE_ERROR, function (error) {
+        MesosStore.once(MesosEvents.REQUEST_STATE_ERROR, function (event) {
           expectAsync(function () {
-            expect(error.message).to.equal("error");
+            expect(event.error.message).to.equal("error");
           }, done);
         });
 
@@ -360,9 +360,9 @@ describe("Mesos", function () {
       );
 
       it("handles failure gracefully", function (done) {
-        MesosStore.once(MesosEvents.REQUEST_FILES_ERROR, function (error) {
+        MesosStore.once(MesosEvents.REQUEST_FILES_ERROR, function (event) {
           expectAsync(function () {
-            expect(error.message).to.equal("error");
+            expect(event.error.message).to.equal("error");
           }, done);
         });
 
