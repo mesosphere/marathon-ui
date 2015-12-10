@@ -23,6 +23,7 @@ describe("Mesos", function () {
   describe("Actions", function () {
 
     beforeEach(function () {
+      MesosStore._resetStore();
       MesosActions.request = function (url) {
         return new Promise(function (resolve, reject) {
           switch (url) {
@@ -213,6 +214,7 @@ describe("Mesos", function () {
   describe("Store", function () {
 
     beforeEach(function () {
+      MesosStore._resetStore();
       MesosActions.request = function (url) {
         return new Promise(function (resolve, reject) {
           switch (url) {
@@ -234,6 +236,18 @@ describe("Mesos", function () {
                   "attributes": {},
                   "hostname": "mesos-agent",
                   "id": "wrong-file-path-test-agent-id",
+                  "pid": "slave(1)@mesos-agent:5051"
+                }, {
+                  "active": true,
+                  "attributes": {},
+                  "hostname": "mesos-agent",
+                  "id": "wrong-framework-id-test-wrong-agent-id",
+                  "pid": "slave(1)@mesos-agent:5051"
+                }, {
+                  "active": true,
+                  "attributes": {},
+                  "hostname": "mesos-agent",
+                  "id": "wrong-task-id-test-agent-id",
                   "pid": "slave(1)@mesos-agent:5051"
                 }]
               });
@@ -433,30 +447,9 @@ describe("Mesos", function () {
         MesosActions.requestTaskFiles(agentId, taskId);
       });
 
-      it("handles wrong mesos leader url gracefully", function (done) {
-        var agentId = "task-file-test-wrong-leader-url-agent-id";
-        var taskId = "task-file-test-wrong-leader-url-task-id";
-
-        InfoStore.info = {
-          "frameworkId": "framework-id",
-          "marathon_config": {
-            "mesos_leader_ui_url": "//mesos-fail:5051"
-          }
-        };
-
-        MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
-          expectAsync(function () {
-            expect(event.agentId).to.equal(agentId);
-            expect(event.taskId).to.equal(taskId);
-          }, done);
-        });
-
-        MesosActions.requestTaskFiles(agentId, taskId);
-      });
-
       it("handles wrong framework id gracefully", function (done) {
-        var agentId = "task-file-test-wrong-framework-agent-id";
-        var taskId = "task-file-test-wrong-framework-task-id";
+        var agentId = "wrong-framework-id-test-wrong-agent-id";
+        var taskId = "wrong-framework-id-test-wrong-task-id";
 
         InfoStore.info = {
           "frameworkId": "wrong-framework-id",
@@ -476,8 +469,8 @@ describe("Mesos", function () {
       });
 
       it("handles wrong agent id gracefully", function (done) {
-        var agentId = "task-file-test-wrong-agent-id";
-        var taskId = "task-file-test-agent-id";
+        var agentId = "wrong-agent-id-test-agent-id";
+        var taskId = "wrong-agent-id-test-task-id";
 
         MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
           expectAsync(function () {
@@ -490,8 +483,8 @@ describe("Mesos", function () {
       });
 
       it("handles wrong task id gracefully", function (done) {
-        var agentId = "task-file-test-agent-id";
-        var taskId = "wrong-task-id";
+        var agentId = "wrong-task-id-test-agent-id";
+        var taskId = "wrong-task-id-test-task-id";
 
         MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
           expectAsync(function () {
@@ -506,6 +499,27 @@ describe("Mesos", function () {
       it("handles wrong file path gracefully", function (done) {
         var agentId = "wrong-file-path-test-agent-id";
         var taskId = "wrong-file-path-test-task-id";
+
+        MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
+          expectAsync(function () {
+            expect(event.agentId).to.equal(agentId);
+            expect(event.taskId).to.equal(taskId);
+          }, done);
+        });
+
+        MesosActions.requestTaskFiles(agentId, taskId);
+      });
+
+      it("handles wrong mesos leader url gracefully", function (done) {
+        var agentId = "wrong-leader-url-test-agent-id";
+        var taskId = "wrong-leader-url-test-task-id";
+
+        InfoStore.info = {
+          "frameworkId": "framework-id",
+          "marathon_config": {
+            "mesos_leader_ui_url": "//mesos-fail:5051"
+          }
+        };
 
         MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
           expectAsync(function () {
