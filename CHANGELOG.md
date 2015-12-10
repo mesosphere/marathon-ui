@@ -29,6 +29,7 @@
 - \#2714 - Global ellipsis in breadcrumbs
 - \#2785 - Prompt support for number input type
 - \#2771 - Open task links in a new tab
+- \#2721 - Provide log download links for easier task debugging
 
 ### Changed
 - Adjust the task list column order
