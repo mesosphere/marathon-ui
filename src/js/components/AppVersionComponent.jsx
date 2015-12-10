@@ -190,13 +190,13 @@ var AppVersionComponent = React.createClass({
       ? <UnspecifiedNodeComponent />
       : appVersion.uris.map(function (uri, i) {
         var parsedURI = url.parse(uri);
-        var linkName = uri;
+        var linkNode = uri;
 
         if (parsedURI.protocol === "http:" || parsedURI.protocol === "https:") {
-          linkName = <a href={uri} target="_blank">{uri}</a>;
+          linkNode = <a href={uri} target="_blank">{uri}</a>;
         }
 
-        return <dd key={uri+i}>{linkName}</dd>;
+        return <dd key={uri+i}>{linkNode}</dd>;
       });
 
     return (
