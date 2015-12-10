@@ -1,4 +1,5 @@
 var classNames = require("classnames");
+var highlight = require("highlight.js");
 var Link = require("react-router").Link;
 var React = require("react/addons");
 var url = require("url");
@@ -19,6 +20,16 @@ function invalidateValue(value, suffix) {
       <dd>{value} {suffix}</dd>
     );
   }
+}
+
+function getHighlightNode(data) {
+  return (
+    <dd>
+      <pre className="highlight">
+        {JSON.stringify(data, null, 2)}
+      </pre>
+    </dd>
+  );
 }
 
 var AppVersionComponent = React.createClass({
@@ -61,6 +72,14 @@ var AppVersionComponent = React.createClass({
     }
   },
 
+  componentDidMount: function () {
+    this.highlightNodes();
+  },
+
+  componentDidUpdate: function () {
+    this.highlightNodes();
+  },
+
   onAppApplySettingsRequest: function () {
     this.setState({isStale: true});
   },
@@ -86,6 +105,15 @@ var AppVersionComponent = React.createClass({
     return classNames({
       "btn btn-sm btn-default pull-right": true,
       "disabled": this.state.isStale || this.props.appVersion.version == null
+    });
+  },
+
+  highlightNodes: function () {
+    var highlightNodes =
+      React.findDOMNode(this).getElementsByClassName("highlight");
+
+    [...highlightNodes].forEach(node => {
+      highlight.highlightBlock(node);
     });
   },
 
@@ -140,7 +168,7 @@ var AppVersionComponent = React.createClass({
 
     var containerNode = (appVersion.container == null)
       ? <UnspecifiedNodeComponent />
-      : <dd><pre>{JSON.stringify(appVersion.container, null, 2)}</pre></dd>;
+      : getHighlightNode(appVersion.container);
 
     var dependenciesNode = (appVersion.dependencies.length === 0)
       ? <UnspecifiedNodeComponent />
@@ -168,11 +196,11 @@ var AppVersionComponent = React.createClass({
     var healthChecksNode = (appVersion.healthChecks == null
         || appVersion.healthChecks.length === 0)
       ? <UnspecifiedNodeComponent />
-      : <dd><pre>{JSON.stringify(appVersion.healthChecks, null, 2)}</pre></dd>;
+      : getHighlightNode(appVersion.healthChecks);
 
     var ipAddressNode = (appVersion.ipAddress == null)
       ? <UnspecifiedNodeComponent />
-      : <dd><pre>{JSON.stringify(appVersion.ipAddress, null, 2)}</pre></dd>;
+      : getHighlightNode(appVersion.ipAddress);
 
     var labelsNode = (appVersion.labels == null ||
         Object.keys(appVersion.labels).length === 0)
