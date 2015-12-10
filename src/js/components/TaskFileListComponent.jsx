@@ -65,6 +65,18 @@ var TaskFileListComponent = React.createClass({
     return null;
   },
 
+  getDownloadButton: function (file) {
+    if (file == null || /^d/.test(file.mode)) {
+      return null;
+    }
+
+    return (
+      <a className="btn btn-default" href={file.downloadURI}>
+        <i className="icon icon-mini file"/> Download
+      </a>
+    );
+  },
+
   getFileNodes: function () {
     var state = this.state;
     var files = state.files;
@@ -73,19 +85,14 @@ var TaskFileListComponent = React.createClass({
     if (files != null) {
       return lazy(files)
         .sortBy(app => app[sortKey], state.sortDescending)
-        .map((file) => {
+        .map(file => {
           var lastModifiedDate = new Date(file.mtime);
           var lastModifiedIsoString = lastModifiedDate.toISOString();
-          var lastModifiedLocaleString = lastModifiedDate.toLocaleString();
           return (
             <tr key={file.path}>
               <td>
                 <span>{file.name}</span>
-                <a className="btn btn-default"
-                    href={file.downloadURI}
-                    download={`${lastModifiedIsoString}-${file.name}`}>
-                  <i className="icon icon-mini file"/> Download
-                </a>
+                {this.getDownloadButton(file)}
               </td>
               <td>
                 <span>{file.mode}</span>
@@ -107,7 +114,7 @@ var TaskFileListComponent = React.createClass({
               <td className="text-right">
                 <time dateTime={lastModifiedIsoString}
                     title={lastModifiedIsoString}>
-                  {lastModifiedLocaleString}
+                  {lastModifiedDate.toLocaleString()}
                 </time>
               </td>
             </tr>
