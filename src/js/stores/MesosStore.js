@@ -65,6 +65,13 @@ var MesosStore = Object.assign({
 
   getTaskFiles: function (taskId) {
     return getDataFromMap(taskId, taskFileMap, FILES_TTL);
+  },
+
+  _resetStore: function () {
+    stateMap = {};
+    taskFileMap = {};
+    taskFileRequestQueue.length = 0;
+    requestMap = {};
   }
 
 }, EventEmitter.prototype);
