@@ -1,6 +1,7 @@
 var React = require("react/addons");
 var classNames = require("classnames");
 
+var DialogActions = require("../actions/DialogActions");
 var MesosActions = require("../actions/MesosActions");
 var MesosEvents = require("../events/MesosEvents");
 var MesosStore = require("../stores/MesosStore");
@@ -26,6 +27,8 @@ var TaskFileDownloadComponent = React.createClass({
       this.onMesosRequestTaskFilesComplete);
     MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
       this.onMesosRequestTaskFilesError);
+    MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
+      this.onRequestError);
   },
 
   getFile: function () {
@@ -68,6 +71,16 @@ var TaskFileDownloadComponent = React.createClass({
       this.onMesosRequestTaskFilesError);
   },
 
+  onRequestError: function (request) {
+    var taskId = request.taskId;
+
+    if (taskId && taskId === this.props.task.id) {
+      MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
+        this.onRequestError);
+      DialogActions.alert(`Request failed or timed out for task ID ${taskId}`);
+    }
+  },
+
   handleClick: function (event) {
     var file = this.state.file;
 
@@ -75,11 +88,11 @@ var TaskFileDownloadComponent = React.createClass({
       event.preventDefault();
 
       let task = this.props.task;
-
       MesosStore.on(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
         this.onMesosRequestTaskFilesComplete);
       MesosStore.on(MesosEvents.REQUEST_TASK_FILES_ERROR,
         this.onMesosRequestTaskFilesError);
+      MesosStore.on(MesosEvents.REQUEST_TASK_FILES_ERROR, this.onRequestError);
 
       this.setState({
         fileIsRequestedByUser: true
