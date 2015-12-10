@@ -223,6 +223,7 @@ function resolveTaskFileRequests() {
       let masterState = MesosStore.getState(MASTER_ID);
       let nodeURL = getNodeURLFromState(agentId, masterState);
       if (nodeURL == null) {
+        updateRequest(MASTER_ID, {error:true});
         invalidateMapData(MASTER_ID, stateMap);
         resolveTaskFileRequests();
         return;
@@ -244,6 +245,7 @@ function resolveTaskFileRequests() {
         getExecutorDirectoryFromState(info.frameworkId, taskId, agentState);
 
       if (nodeURL == null || executorDirectory == null) {
+        updateRequest(agentId, {error:true});
         invalidateMapData(agentId, stateMap);
         resolveTaskFileRequests();
         return;
