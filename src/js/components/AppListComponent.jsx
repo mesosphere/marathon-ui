@@ -375,7 +375,6 @@ var AppListComponent = React.createClass({
           <col className="status-col" />
           <col className="instances-col" />
           <col className="health-col" />
-          <col className="actions-col" />
         </colgroup>
         <thead>
           <tr>
@@ -409,7 +408,7 @@ var AppListComponent = React.createClass({
                 {this.getCaret("tasksRunning")} Running Instances
               </span>
             </th>
-            <th className="health-cell" colSpan="2">
+            <th className="health-cell">
               <span onClick={this.sortBy.bind(null, "healthWeight")}
                   className={headerClassSet}>
                 {this.getCaret("healthWeight")} Health

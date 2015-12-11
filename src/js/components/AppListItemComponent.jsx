@@ -167,7 +167,7 @@ var AppListItemComponent = React.createClass({
 
   getHealthBar: function () {
     return (
-      <td className="text-right health-bar-column" colSpan="2">
+      <td className="text-right health-bar-column">
         <AppHealthBarWithTooltipComponent model={this.props.model} />
       </td>
     );
