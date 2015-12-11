@@ -17,6 +17,7 @@ const MAX_REQUESTS = 1;
 const MASTER_ID = "master";
 const INFO_ID = "info";
 
+var info = null;
 var version = null;
 var stateMap = {};
 var taskFileMap = {};
@@ -68,6 +69,8 @@ var MesosStore = Object.assign({
   },
 
   resetStore: function () {
+    info = null;
+    version = null;
     stateMap = {};
     taskFileMap = {};
     taskFileRequestQueue.length = 0;
@@ -183,7 +186,6 @@ function rejectFileRequest(fileRequest, queueIndex) {
 }
 
 function resolveTaskFileRequests() {
-  var info = InfoStore.info;
 
   if (taskFileRequestQueue.length === 0) {
     return;
@@ -197,13 +199,13 @@ function resolveTaskFileRequests() {
   }
 
   if (!Util.isString(info.frameworkId) ||
-      !Util.isObject(info.marathon_config) ||
-      !Util.isString(info.marathon_config.mesos_leader_ui_url)) {
-    taskFileRequestQueue.forEach(rejectFileRequest);
+    !Util.isObject(info.marathon_config) ||
+    !Util.isString(info.marathon_config.mesos_leader_ui_url)) {
+    info = null;
+    updateRequest(INFO_ID, {error:true});
+    resolveTaskFileRequests();
     return;
   }
-
-  resetRequest(INFO_ID);
 
   if (!version) {
     MesosActions.requestVersionInformation(
@@ -219,6 +221,8 @@ function resolveTaskFileRequests() {
       () => taskFileRequestQueue.forEach(rejectFileRequest));
     return;
   }
+
+  resetRequest(INFO_ID);
 
   taskFileRequestQueue.forEach((fileRequest, queueIndex) => {
     var agentId = fileRequest.agentId;
@@ -279,14 +283,17 @@ AppDispatcher.register(function (action) {
         agentId: data.agentId,
         taskId: data.taskId
       });
+      info = InfoStore.info;
       resolveTaskFileRequests();
       break;
     case InfoEvents.REQUEST:
       AppDispatcher.waitFor([InfoStore.dispatchToken]);
+      info = InfoStore.info;
       resolveTaskFileRequests();
       break;
     case InfoEvents.REQUEST_ERROR:
       updateRequest(INFO_ID, {error:true});
+      resolveTaskFileRequests();
       break;
     case MesosEvents.REQUEST_VERSION_INFORMATION_COMPLETE:
       version = data.version;
