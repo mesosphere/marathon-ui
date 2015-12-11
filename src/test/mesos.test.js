@@ -7,7 +7,9 @@ var config = require("../js/config/config");
 
 var AppDispatcher = require("../js/AppDispatcher");
 var JSONPUtil = require("../js/helpers/JSONPUtil");
+var InfoActions = require("../js/actions/InfoActions");
 var InfoStore = require("../js/stores/InfoStore");
+var InfoEvents = require("../js/events/InfoEvents");
 var MesosActions = require("../js/actions/MesosActions");
 var MesosStore = require("../js/stores/MesosStore");
 var MesosEvents = require("../js/events/MesosEvents");
@@ -15,8 +17,8 @@ var MesosEvents = require("../js/events/MesosEvents");
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
 
-var marathon = new HttpServer(config.localTestserverURI);
-config.apiURL = "http://" + marathon.address + ":" + marathon.port + "/";
+var server = new HttpServer(config.localTestserverURI);
+config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("Mesos", function () {
 
@@ -388,13 +390,22 @@ describe("Mesos", function () {
 
     describe("on request task files", function () {
 
-      beforeEach(function () {
+      beforeEach(function (done) {
+
         InfoStore.info = {
           "frameworkId": "framework-id",
           "marathon_config": {
             "mesos_leader_ui_url": "//mesos-master:5051"
           }
         };
+
+        this.server = server
+          .setup({"name": "Marathon"}, 200)
+          .start(done);
+      });
+
+      afterEach(function (done) {
+        this.server.stop(done);
       });
 
       it("updates the files data on success", function (done) {
@@ -418,6 +429,8 @@ describe("Mesos", function () {
           }
         };
 
+        this.server.setup(InfoStore.info, 200);
+
         MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
           expectAsync(function () {
             expect(event.agentId).to.equal(agentId);
@@ -437,6 +450,8 @@ describe("Mesos", function () {
           "marathon_config": {}
         };
 
+        this.server.setup(InfoStore.info, 200);
+
         MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
           expectAsync(function () {
             expect(event.agentId).to.equal(agentId);
@@ -445,6 +460,54 @@ describe("Mesos", function () {
         });
 
         MesosActions.requestTaskFiles(agentId, taskId);
+      });
+
+
+      it("recovers from missing framework id", function (done) {
+        InfoStore.info = {
+          "marathon_config": {
+            "mesos_leader_ui_url": "//mesos-master:5051"
+          }
+        };
+
+        this.server.setup({
+          "frameworkId": "framework-id",
+          "marathon_config": {
+            "mesos_leader_ui_url": "//mesos-master:5051"
+          }
+        }, 200);
+
+        MesosStore.once(MesosEvents.REQUEST_TASK_FILES_COMPLETE, function () {
+          expectAsync(function () {
+            var files = MesosStore.getTaskFiles("task-file-test-task-id");
+            expect(files[0].path).to.equal("/file/path/filename");
+          }, done);
+        });
+        MesosActions.requestTaskFiles("task-file-test-agent-id",
+          "task-file-test-task-id");
+      });
+
+      it("recovers from missing leader url", function (done) {
+        InfoStore.info = {
+          "frameworkId": "framework-id",
+          "marathon_config": {}
+        };
+
+        this.server.setup({
+          "frameworkId": "framework-id",
+          "marathon_config": {
+            "mesos_leader_ui_url": "//mesos-master:5051"
+          }
+        }, 200);
+
+        MesosStore.once(MesosEvents.REQUEST_TASK_FILES_COMPLETE, function () {
+          expectAsync(function () {
+            var files = MesosStore.getTaskFiles("task-file-test-task-id");
+            expect(files[0].path).to.equal("/file/path/filename");
+          }, done);
+        });
+        MesosActions.requestTaskFiles("task-file-test-agent-id",
+          "task-file-test-task-id");
       });
 
       it("handles wrong framework id gracefully", function (done) {
@@ -457,6 +520,8 @@ describe("Mesos", function () {
             "mesos_leader_ui_url": "//mesos-master:5051"
           }
         };
+
+        this.server.setup(InfoStore.info, 200);
 
         MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
           expectAsync(function () {
