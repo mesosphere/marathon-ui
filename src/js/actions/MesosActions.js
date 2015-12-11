@@ -68,7 +68,7 @@ var MesosActions = {
       );
   },
   requestTaskFiles: function (agentId, taskId) {
-    AppDispatcher.dispatch({
+    AppDispatcher.dispatchNext({
       actionType: MesosEvents.REQUEST_TASK_FILES,
       data: {agentId: agentId, taskId: taskId}
     });
