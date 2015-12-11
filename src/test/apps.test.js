@@ -7,6 +7,8 @@ var TestUtils = React.addons.TestUtils;
 var Util = require("../js/helpers/Util");
 var ShallowUtils = require("./helpers/ShallowUtils");
 
+var AppTypes = require("../js/constants/AppTypes");
+
 /**
  * This *nasty* hack is needed because we want to prevent TooltipMixin from
  * actually requiring vendor/tooltip.js due do it depending on the DOM.
@@ -145,7 +147,7 @@ describe("Apps", function () {
       it("has the correct app type", function (done) {
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
-            expect(AppsStore.apps[0].type).to.equal("BASIC");
+            expect(AppsStore.apps[0].type).to.equal(AppTypes.CGROUP);
           }, done);
         });
 
