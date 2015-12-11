@@ -62,6 +62,7 @@ function getInitialAppStatusesCount() {
 function initGroupNode(groupId, app) {
   return {
     health: getGroupHealth(null, app.health),
+    healthWeight: app.healthWeight,
     id: groupId,
     instances: app.instances,
     isGroup: true,
@@ -74,6 +75,7 @@ function initGroupNode(groupId, app) {
 
 function updateGroupNode(group, app) {
   group.health = getGroupHealth(group.health, app.health);
+  group.healthWeight += app.healthWeight;
   group.instances += app.instances;
   group.status = getGroupStatus(group.status, app.status);
   group.tasksRunning += app.tasksRunning;
@@ -401,10 +403,16 @@ var AppListComponent = React.createClass({
                 Status {this.getCaret("status")}
               </span>
             </th>
-            <th className="text-right instances-cell" colSpan="3">
+            <th className="text-right instances-cell">
               <span onClick={this.sortBy.bind(null, "tasksRunning")}
                   className={headerClassSet}>
                 {this.getCaret("tasksRunning")} Running Instances
+              </span>
+            </th>
+            <th className="health-cell" colSpan="2">
+              <span onClick={this.sortBy.bind(null, "healthWeight")}
+                  className={headerClassSet}>
+                {this.getCaret("healthWeight")} Health
               </span>
             </th>
           </tr>
