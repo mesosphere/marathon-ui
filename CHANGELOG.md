@@ -1,4 +1,7 @@
 ## Unversioned
+### Added
+- \#2772 - URI fields should be links
+
 ### Fixed
 - \#2755 - Memory leak in Marathon UI
 
