@@ -397,11 +397,11 @@ describe("Mesos", function () {
         };
       });
 
-      it("updates the files data on success", function () {
-        MesosStore.once(MesosEvents.CHANGE, function () {
+      it("updates the files data on success", function (done) {
+        MesosStore.once(MesosEvents.REQUEST_TASK_FILES_COMPLETE, function () {
           expectAsync(function () {
-            var files = MesosStore.getTaskFiles("task-id");
-            expect(files[0].path).to.equal("/file/path/stderr");
+            var files = MesosStore.getTaskFiles("task-file-test-task-id");
+            expect(files[0].path).to.equal("/file/path/filename");
           }, done);
         });
         MesosActions.requestTaskFiles("task-file-test-agent-id",
