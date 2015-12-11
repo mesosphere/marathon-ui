@@ -167,7 +167,7 @@ var AppListItemComponent = React.createClass({
 
   getHealthBar: function () {
     return (
-      <td className="text-right health-bar-column">
+      <td className="text-right health-bar-column" colSpan="2">
         <AppHealthBarWithTooltipComponent model={this.props.model} />
       </td>
     );
@@ -241,7 +241,7 @@ var AppListItemComponent = React.createClass({
           </span>
         </td>
         {this.getStatus()}
-        <td className="text-right instances-cell" colSpan="2">
+        <td className="text-right instances-cell">
           <span>
             {model.tasksRunning}
           </span> of {model.instances}
