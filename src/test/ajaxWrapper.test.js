@@ -10,19 +10,19 @@ config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("ajaxWrapper", function () {
 
+  beforeEach(function (done) {
+    this.server = server
+      .setup({
+        "name": "Marathon"
+      }, 200)
+      .start(done);
+  });
+
+  afterEach(function (done) {
+    this.server.stop(done);
+  });
+
   describe("on GET request", function () {
-
-    beforeEach(function () {
-      this.server = server
-        .setup({
-          "name": "Marathon"
-        }, 200)
-        .start();
-    });
-
-    afterEach(function (done) {
-      this.server.stop(done);
-    });
 
     it("returns a JSON object on success", function (done) {
       ajaxWrapper({
@@ -73,18 +73,6 @@ describe("ajaxWrapper", function () {
   });
 
   describe("on concurrent request", function () {
-
-    beforeEach(function () {
-      this.server = server
-        .setup({
-          "name": "Marathon"
-        }, 200)
-        .start();
-    });
-
-    afterEach(function (done) {
-      this.server.stop(done);
-    });
 
     it("should timeout on second request", function (done) {
       var responses = 0;
@@ -148,13 +136,7 @@ describe("ajaxWrapper", function () {
   describe("on POST request", function () {
 
     beforeEach(function () {
-      this.server = server
-        .setup(null, 200, true)
-        .start();
-    });
-
-    afterEach(function (done) {
-      this.server.stop(done);
+      this.server.setup(null, 200, true);
     });
 
     it("sends the correct payload", function (done) {
@@ -166,7 +148,7 @@ describe("ajaxWrapper", function () {
         data: payload
       })
         .success(function (response) {
-          expectAsync(function () {
+          expectAsync(function (done) {
             expect(response.body.method).to.equal("POST");
             expect(response.body.payload).to.equal(JSON.stringify(payload));
           }, done);
@@ -179,7 +161,7 @@ describe("ajaxWrapper", function () {
     it("handles failure gracefully", function (done) {
       var payload = {"key": "value"};
 
-      this.server.setup({message: "Guru Meditation"}, 404);
+      this.server.setup({message: "Guru Meditation"}, 404, false);
 
       ajaxWrapper({
         method: "POST",
@@ -201,13 +183,7 @@ describe("ajaxWrapper", function () {
   describe("on PUT request", function () {
 
     beforeEach(function () {
-      this.server = server
-        .setup(null, 200, true)
-        .start();
-    });
-
-    afterEach(function (done) {
-      this.server.stop(done);
+      this.server.setup(null, 200, true);
     });
 
     it("sends the correct payload with a PUT", function (done) {
@@ -235,13 +211,7 @@ describe("ajaxWrapper", function () {
   describe("on DELETE request", function () {
 
     beforeEach(function () {
-      this.server = server
-        .setup(null, 200, true)
-        .start();
-    });
-
-    afterEach(function (done) {
-      this.server.stop(done);
+      this.server.setup(null, 200, true);
     });
 
     it("returns the right response for a DELETE", function (done) {
