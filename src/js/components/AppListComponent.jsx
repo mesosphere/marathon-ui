@@ -5,6 +5,7 @@ var React = require("react/addons");
 var AppListViewTypes = require("../constants/AppListViewTypes");
 var AppStatus = require("../constants/AppStatus");
 var FilterTypes = require("../constants/FilterTypes");
+var HealthStatus = require("../constants/HealthStatus");
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var AppListItemComponent = require("./AppListItemComponent");
@@ -174,6 +175,7 @@ var AppListComponent = React.createClass({
     var currentGroup = props.currentGroup;
     var filters = props.filters;
 
+    var filterHealth = filters[FilterTypes.HEALTH];
     var filterText = filters[FilterTypes.TEXT];
     var filterLabels = filters[FilterTypes.LABELS];
     var filterStatus = filters[FilterTypes.STATUS];
@@ -188,6 +190,9 @@ var AppListComponent = React.createClass({
 
     nodesSequence.each(app => {
       filterCounts.appsStatusesCount[app.status]++;
+      app.health.forEach(health => {
+        filterCounts.appsHealthCount[health.state] += health.quantity;
+      });
     });
 
     if (filterLabels != null && filterLabels.length > 0) {
@@ -215,6 +220,20 @@ var AppListComponent = React.createClass({
       });
     }
 
+    if (filterHealth != null && filterHealth.length > 0) {
+      nodesSequence = nodesSequence.filter(app => {
+        if (app.health == null) {
+          return false;
+        }
+
+        return filterHealth.some(healthFilter => {
+          return app.health.some(health =>
+            health.state === healthFilter && health.quantity > 0
+          );
+        });
+      });
+    }
+
     return nodesSequence;
   },
 
@@ -225,6 +244,9 @@ var AppListComponent = React.createClass({
 
     appsInGroup.forEach(app => {
       filterCounts.appsStatusesCount[app.status]++;
+      app.health.forEach(health => {
+        filterCounts.appsHealthCount[health.state] += health.quantity;
+      });
     });
 
     return appsInGroup
