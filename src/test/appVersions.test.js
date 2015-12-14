@@ -1,6 +1,10 @@
+var describeWithDOM = require("enzyme").describeWithDOM;
 var expect = require("chai").expect;
+var expectAsync = require("./helpers/expectAsync");
+var mount = require("enzyme").mount;
+var nock = require("nock");
+
 var React = require("react/addons");
-var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
 var AppVersionsActions = require("../js/actions/AppVersionsActions");
@@ -9,33 +13,23 @@ var AppVersionsStore = require("../js/stores/AppVersionsStore");
 var AppVersionComponent = require("../js/components/AppVersionComponent");
 var AppVersionListComponent =
   require("../js/components/AppVersionListComponent");
+var AppVersionListItemComponent =
+  require("../js/components/AppVersionListItemComponent");
 
-var expectAsync = require("./helpers/expectAsync");
-var HttpServer = require("./helpers/HttpServer").HttpServer;
-
-var server = new HttpServer(config.localTestserverURI);
-config.apiURL = "http://" + server.address + ":" + server.port + "/";
+var server = config.localTestserverURI;
+config.apiURL = `http://${server.address}:${server.port}/`;
 
 describe("AppVersions", function () {
 
-  beforeEach(function (done) {
-    this.server = server
-    .setup({
-      "versions": [
-        "version-timestamp-1",
-        "version-timestamp-2"
-      ]
-    }, 200)
-    .start(function () {
-      AppVersionsStore.once(AppVersionsEvents.CHANGE, function () {
-        done();
+  beforeEach(function () {
+    nock(config.apiURL)
+      .get("/v2/apps//app-1/versions")
+      .reply(200, {
+        "versions": [
+          "version-timestamp-1",
+          "version-timestamp-2"
+        ]
       });
-      AppVersionsActions.requestAppVersions("/app-1");
-    });
-  });
-
-  afterEach(function (done) {
-    this.server.stop(done);
   });
 
   describe("on app versions request", function () {
@@ -63,7 +57,6 @@ describe("AppVersions", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({message: "Guru Meditation"}, 404);
 
       AppVersionsStore.once(AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
           function (error) {
@@ -71,6 +64,11 @@ describe("AppVersions", function () {
           expect(error.message).to.equal("Guru Meditation");
         }, done);
       });
+
+      nock.cleanAll();
+      nock(config.apiURL)
+        .get("/v2/apps//non-existing-app/versions")
+        .reply(404, {"message": "Guru Meditation"});
 
       AppVersionsActions.requestAppVersions("/non-existing-app");
     });
@@ -86,7 +84,10 @@ describe("AppVersions", function () {
     });
 
     it("emits requesters appId on error", function (done) {
-      this.server.setup({message: "Guru Meditation"}, 404);
+      nock.cleanAll();
+      nock(config.apiURL)
+        .get("/v2/apps//app-1/versions")
+        .reply(404, {"message": "Guru Meditation"});
 
       AppVersionsStore.once(AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
           function (error, appId) {
@@ -103,10 +104,6 @@ describe("AppVersions", function () {
   describe("on single app version request", function () {
 
     it("updates the AppVersionsStore on success", function (done) {
-      this.server.setup({
-        "id": "/app-1",
-        "version": "version-timestamp-1"
-      }, 200);
 
       AppVersionsStore.once(AppVersionsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -116,6 +113,13 @@ describe("AppVersions", function () {
             .to.equal("version-timestamp-1");
         }, done);
       });
+
+      nock(config.apiURL)
+        .get("/v2/apps//app-1/versions/version-timestamp-1")
+        .reply(200, {
+          "id": "/app-1",
+          "version": "version-timestamp-1"
+        });
 
       AppVersionsActions.requestAppVersion("/app-1", "version-timestamp-1");
     });
@@ -127,18 +131,27 @@ describe("AppVersions", function () {
         }, done);
       });
 
+      nock(config.apiURL)
+        .get("/v2/apps//app-1/versions/version-timestamp-1")
+        .reply(200, {
+          "id": "/app-1",
+          "version": "version-timestamp-1"
+        });
+
       AppVersionsActions.requestAppVersion("/app-1", "version-timestamp-1");
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({message: "Guru Meditation"}, 404);
-
       AppVersionsStore.once(AppVersionsEvents.REQUEST_ONE_ERROR,
           function (error) {
         expectAsync(function () {
           expect(error.message).to.equal("Guru Meditation");
         }, done);
       });
+
+      nock(config.apiURL)
+        .get("/v2/apps//app-1/versions/non-existing-version")
+        .reply(404, {"message": "Guru Meditation"});
 
       AppVersionsActions.requestAppVersion("/app-1", "non-existing-version");
     });
@@ -151,11 +164,17 @@ describe("AppVersions", function () {
         }, done);
       });
 
+      nock(config.apiURL)
+        .get("/v2/apps//app-1/versions/version-timestamp-1")
+        .reply(200, {
+          "id": "/app-1",
+          "version": "version-timestamp-1"
+        });
+
       AppVersionsActions.requestAppVersion("/app-1", "version-timestamp-1");
     });
 
     it("emits requesters version timestamp on error", function (done) {
-      this.server.setup({message: "Guru Meditation"}, 404);
 
       AppVersionsStore.once(AppVersionsEvents.REQUEST_ONE_ERROR,
           function (error, versionTimestamp) {
@@ -164,6 +183,10 @@ describe("AppVersions", function () {
         }, done);
       });
 
+      nock(config.apiURL)
+        .get("/v2/apps//app-1/versions/version-timestamp-1")
+        .reply(404, {"message": "Guru Meditation"});
+
       AppVersionsActions.requestAppVersion("/app-1", "version-timestamp-1");
     });
 
@@ -171,9 +194,9 @@ describe("AppVersions", function () {
 
 });
 
-describe("App Version List component", function () {
+describeWithDOM("App Version List component", function () {
 
-  beforeEach(function () {
+  before(function () {
     AppVersionsStore.currentAppId = "/app-test";
     AppVersionsStore.availableAppVersions = [
       "2015-06-29T13:54:01.577Z",
@@ -181,34 +204,26 @@ describe("App Version List component", function () {
       "2015-06-29T13:02:19.363Z"
     ];
 
-    this.renderer = TestUtils.createRenderer();
-
-    this.renderer.render(<AppVersionListComponent
-      appId={"/app-test"} />);
-
-    this.component = this.renderer.getRenderOutput();
-  });
-
-  afterEach(function () {
-    this.renderer.unmount();
+    this.component = mount(<AppVersionListComponent appId={"/app-test"} />);
   });
 
   it("has correct AppVersionListItemComponents", function () {
-    var items =
-      this.component.props.children[2].props.children[1].props.children[2];
+    var items = this.component.find(AppVersionListItemComponent);
 
     // First version is sliced out as current version,
     // so that are only 2 versions here
     expect(items.length).to.equal(2);
-    expect(items[0].key).to.equal("2015-06-29T13:02:29.615Z");
-    expect(items[1].key).to.equal("2015-06-29T13:02:19.363Z");
+    expect(items.first().prop("appVersionTimestamp"))
+      .to.equal("2015-06-29T13:02:29.615Z");
+    expect(items.at(1).prop("appVersionTimestamp"))
+      .to.equal("2015-06-29T13:02:19.363Z");
   });
 
 });
 
-describe("App Version component", function () {
+describeWithDOM("App Version component", function () {
 
-  beforeEach(function () {
+  before(function () {
     this.model = {
       "id": "/sleep10",
       "cmd": "sleep 10",
@@ -260,118 +275,113 @@ describe("App Version component", function () {
       "version": "2015-06-29T12:57:02.269Z"
     };
 
-    this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppVersionComponent
-      appVersion={this.model} />);
-    this.component = this.renderer.getRenderOutput();
-    this.table = this.component.props.children[2].props.children;
-  });
-
-  afterEach(function () {
-    this.renderer.unmount();
+    this.component = mount(<AppVersionComponent appVersion={this.model} />);
+    this.table = this.component.find("dl.dl-horizontal");
+    this.rows = this.table.children();
   });
 
   it("shows the app ID", function () {
-    expect(this.table[1].props.children[0]).to.equal("/sleep10");
+    expect(this.rows.at(1).text().trim()).to.equal("/sleep10");
   });
 
   it("has correct command", function () {
-    expect(this.table[3].props.children[0]).to.equal("sleep 10");
+    expect(this.rows.at(3).text().trim()).to.equal("sleep 10");
   });
 
   it("has correct constraints", function () {
-    expect(this.table[5].type.displayName).to.equal("UnspecifiedNodeComponent");
+    expect(this.rows.at(5).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct dependencies", function () {
-    expect(this.table[7].type.displayName).to.equal("UnspecifiedNodeComponent");
+    expect(this.rows.at(7).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct labels", function () {
-    expect(this.table[9].type.displayName).to.equal("UnspecifiedNodeComponent");
+    expect(this.rows.at(9).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct accepted resource roles", function () {
-    expect(this.table[11].type.displayName)
-      .to.equal("UnspecifiedNodeComponent");
+    expect(this.rows.at(11).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct container", function () {
-    expect(this.table[13].type.displayName)
-      .to.equal("UnspecifiedNodeComponent");
+    expect(this.rows.at(13).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct cpus", function () {
-    expect(this.table[15].props.children[0]).to.equal(0.1);
+    expect(this.rows.at(15).text().trim()).to.equal("0.1");
   });
 
   it("has correct environment", function () {
-    expect(this.table[17].type.displayName)
-      .to.equal("UnspecifiedNodeComponent");
+    expect(this.rows.at(17).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct executor", function () {
-    expect(this.table[19].type.displayName)
-      .to.equal("UnspecifiedNodeComponent");
+    expect(this.rows.at(19).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct health checks", function () {
-    var healthChecks = this.table[21].props.children.props.children;
+    var healthChecks = this.rows.at(21).text().trim();
     expect(healthChecks).to.equal(
       JSON.stringify(this.model.healthChecks, null, 2)
     );
   });
 
   it("has correct number of instances", function () {
-    expect(this.table[23].props.children[0]).to.equal(14);
+    expect(this.rows.at(23).text().trim()).to.equal("14");
   });
 
   it("has correct ip address", function () {
-    var ipAddress = this.table[25].props.children.props.children;
+    var ipAddress = this.rows.at(25).text().trim();
     expect(ipAddress).to.equal(
       JSON.stringify(this.model.ipAddress, null, 2)
     );
   });
 
   it("has correct amount of memory", function () {
-    expect(this.table[27].props.children[0]).to.equal(16.0);
-    expect(this.table[27].props.children[2]).to.equal("MiB");
+    var children = this.rows.at(27).props().children;
+    expect(children[0]).to.equal(16.0);
+    expect(children[2]).to.equal("MiB");
   });
 
   it("has correct amount of disk space", function () {
-    expect(this.table[29].props.children[0]).to.equal(0.0);
-    expect(this.table[29].props.children[2]).to.equal("MiB");
+    var children = this.rows.at(29).props().children;
+    expect(children[0]).to.equal(0.0);
+    expect(children[2]).to.equal("MiB");
   });
 
   it("has correct ports", function () {
-    expect(this.table[31].props.children).to.equal("10000, 10001");
+    var children = this.rows.at(31).props().children;
+    expect(children).to.equal("10000, 10001");
   });
 
   it("has correct backoff factor", function () {
-    expect(this.table[33].props.children[0]).to.equal(1.15);
+    var children = this.rows.at(33).props().children;
+    expect(children[0]).to.equal(1.15);
   });
 
   it("has correct backoff", function () {
-    expect(this.table[35].props.children[0]).to.equal(1);
-    expect(this.table[35].props.children[2]).to.equal("seconds");
+    var children = this.rows.at(35).props().children;
+    expect(children[0]).to.equal(1);
+    expect(children[2]).to.equal("seconds");
   });
 
   it("has correct max launch delay", function () {
-    expect(this.table[37].props.children[0]).to.equal(3600);
-    expect(this.table[37].props.children[2]).to.equal("seconds");
+    var children = this.rows.at(37).props().children;
+    expect(children[0]).to.equal(3600);
+    expect(children[2]).to.equal("seconds");
   });
 
   it("has correct URIs", function () {
-    expect(this.table[39].type.displayName)
-      .to.equal("UnspecifiedNodeComponent");
+    expect(this.rows.at(39).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct User", function () {
-    expect(this.table[41].props.children[0]).to.equal("testuser");
+    expect(this.rows.at(41).props().children[0]).to.equal("testuser");
   });
 
   it("has correct version", function () {
-    expect(this.table[43].props.children[0])
+    expect(this.rows.at(43).props().children[0])
       .to.equal("2015-06-29T12:57:02.269Z");
   });
 
