@@ -3,71 +3,63 @@ var ajaxWrapper = require("../js/helpers/ajaxWrapper");
 var config = require("../js/config/config");
 
 var expectAsync = require("./helpers/expectAsync");
-var HttpServer = require("./helpers/HttpServer").HttpServer;
+var nock = require("nock");
 
-var server = new HttpServer(config.localTestserverURI);
-config.apiURL = "http://" + server.address + ":" + server.port + "/";
+var server = config.localTestserverURI;
+config.apiURL = `http://${server.address}:${server.port}/`;
 
 describe("ajaxWrapper", function () {
-
-  beforeEach(function (done) {
-    this.server = server
-      .setup({
-        "name": "Marathon"
-      }, 200)
-      .start(done);
-  });
-
-  afterEach(function (done) {
-    this.server.stop(done);
-  });
 
   describe("on GET request", function () {
 
     it("returns a JSON object on success", function (done) {
+      nock(config.apiURL)
+        .get("/")
+        .reply(200, {"name": "Marathon"});
+
       ajaxWrapper({
         method: "GET",
         url: config.apiURL
       })
-      .success(function (response) {
-        expectAsync(function () {
-          expect(response.body.name).to.equal("Marathon");
-        }, done);
-      })
-      .error(function () {
-        done(new Error("I should not be called"));
-      });
+        .success(function (response) {
+          expectAsync(function () {
+            expect(response.body.name).to.equal("Marathon");
+          }, done);
+        });
     });
 
     it("defaults to GET when no method is supplied", function (done) {
+      nock(config.apiURL)
+        .get("/")
+        .reply(200, {"name": "Marathon"});
+
       ajaxWrapper({
         url: config.apiURL
       })
-      .success(function (response) {
-        expectAsync(function () {
-          expect(response.body.name).to.equal("Marathon");
-        }, done);
-      })
-      .error(function () {
-        done(new Error("I should not be called"));
-      });
+        .success(function (response) {
+          expectAsync(function () {
+            expect(response.body.name).to.equal("Marathon");
+          }, done);
+        });
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({message: "Guru Meditation"}, 404);
+      nock(config.apiURL)
+        .get("/foo/bar")
+        .reply(404, {"message": "Guru Meditation"});
 
       ajaxWrapper({
         method: "GET",
-        url: config.apiURL + "/foo/bar"
+        url: config.apiURL + "foo/bar"
       })
-      .success(function () {
-        done(new Error("I should not be called"));
-      })
-      .error(function (error) {
-        expectAsync(function () {
-          expect(error.body.message).to.equal("Guru Meditation");
-        }, done);
-      });
+        .success(() => {
+          done(new Error("Success should not be called on 404"));
+        })
+        .error(function (error) {
+          expectAsync(function () {
+            expect(error.body.message).to.equal("Guru Meditation");
+          }, done);
+        });
     });
 
   });
@@ -88,15 +80,20 @@ describe("ajaxWrapper", function () {
         }
       };
 
+      nock(config.apiURL)
+        .get("/concurrent")
+        .twice()
+        .reply(200);
+
       ajaxWrapper({
         method: "GET",
-        url: config.apiURL + "/concurrent"
+        url: config.apiURL + "concurrent"
       })
       .success(increaseResponses);
 
       ajaxWrapper({
         method: "GET",
-        url: config.apiURL + "/concurrent"
+        url: config.apiURL + "concurrent"
       })
       .success(increaseResponses);
 
@@ -116,16 +113,21 @@ describe("ajaxWrapper", function () {
         }
       }
 
+      nock(config.apiURL)
+        .get("/concurrent")
+        .twice()
+        .reply(200);
+
       ajaxWrapper({
         method: "GET",
-        url: config.apiURL + "/concurrent",
+        url: config.apiURL + "concurrent",
         concurrent: true
       })
       .success(increaseResponses);
 
       ajaxWrapper({
         method: "GET",
-        url: config.apiURL + "/concurrent",
+        url: config.apiURL + "concurrent",
         concurrent: true
       })
       .success(increaseResponses);
@@ -135,12 +137,17 @@ describe("ajaxWrapper", function () {
 
   describe("on POST request", function () {
 
-    beforeEach(function () {
-      this.server.setup(null, 200, true);
-    });
-
     it("sends the correct payload", function (done) {
       var payload = {"key": "value"};
+
+      nock(config.apiURL)
+        .post("/")
+        .reply(200, function (uri, requestBody) {
+          return {
+            method: "POST",
+            payload: requestBody
+          };
+        });
 
       ajaxWrapper({
         method: "POST",
@@ -152,25 +159,21 @@ describe("ajaxWrapper", function () {
             expect(response.body.method).to.equal("POST");
             expect(response.body.payload).to.equal(JSON.stringify(payload));
           }, done);
-        })
-        .error(function () {
-          done(new Error("I should not be called"));
         });
     });
 
     it("handles failure gracefully", function (done) {
       var payload = {"key": "value"};
 
-      this.server.setup({message: "Guru Meditation"}, 404);
+      nock(config.apiURL)
+        .post("/foo/bar")
+        .reply(404, {message: "Guru Meditation"});
 
       ajaxWrapper({
         method: "POST",
-        url: config.apiURL + "/foo/bar",
+        url: config.apiURL + "foo/bar",
         data: payload
       })
-        .success(function () {
-          done(new Error("I should not be called"));
-        })
         .error(function (error) {
           expectAsync(function () {
             expect(error.body.message).to.equal("Guru Meditation");
@@ -182,13 +185,18 @@ describe("ajaxWrapper", function () {
 
   describe("on PUT request", function () {
 
-    beforeEach(function () {
-      this.server.setup(null, 200, true);
-    });
-
     it("sends the correct payload with a PUT", function (done) {
 
       var payload = {"key": "value"};
+
+      nock(config.apiURL)
+        .put("/")
+        .reply(200, function (uri, requestBody) {
+          return {
+            method: "PUT",
+            payload: requestBody
+          };
+        });
 
       ajaxWrapper({
         method: "PUT",
@@ -200,9 +208,6 @@ describe("ajaxWrapper", function () {
             expect(response.body.method).to.equal("PUT");
             expect(response.body.payload).to.equal(JSON.stringify(payload));
           }, done);
-        })
-        .error(() => {
-          done(new Error("I should not be called"));
         });
     });
 
@@ -210,24 +215,27 @@ describe("ajaxWrapper", function () {
 
   describe("on DELETE request", function () {
 
-    beforeEach(function () {
-      this.server.setup(null, 200, true);
-    });
-
     it("returns the right response for a DELETE", function (done) {
+
+      nock(config.apiURL)
+        .delete("/foo/bar")
+        .reply(200, function (uri, requestBody) {
+          return {
+            method: "DELETE",
+            payload: requestBody
+          };
+        });
 
       ajaxWrapper({
         method: "DELETE",
-        url: config.apiURL + "/foo/bar",
+        url: config.apiURL + "foo/bar",
         data: null
       })
         .success(response => {
           expectAsync(() => {
             expect(response.body.method).to.equal("DELETE");
+            expect(response.body.payload).to.be.empty;
           }, done);
-        })
-        .error(() => {
-          done(new Error("I should not be called"));
         });
     });
   })
