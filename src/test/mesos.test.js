@@ -17,6 +17,7 @@ var MesosEvents = require("../js/events/MesosEvents");
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
 var ajaxWrapperStub = require("./stubs/ajaxWrapperStub");
+var JSONPUtilRequestStub = require("./stubs/JSONPUtilRequestStub");
 
 var server = new HttpServer(config.localTestserverURI);
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
@@ -27,8 +28,8 @@ describe("Mesos", function () {
 
     beforeEach(function () {
       MesosStore.resetStore();
-      MesosActions.request = function (url) {
-        return new Promise(function (resolve, reject) {
+      MesosActions.request = JSONPUtilRequestStub(
+        function (url, resolve, reject) {
           switch (url) {
             case "//mesos-master:5051/version":
               resolve({"version": "0.26.0"});
@@ -55,8 +56,7 @@ describe("Mesos", function () {
               reject({message: "error"});
               break;
           }
-        })
-      };
+        });
     });
 
     afterEach(function () {
@@ -218,8 +218,8 @@ describe("Mesos", function () {
 
     beforeEach(function () {
       MesosStore.resetStore();
-      MesosActions.request = function (url) {
-        return new Promise(function (resolve, reject) {
+      MesosActions.request = JSONPUtilRequestStub(
+        function (url, resolve, reject) {
           switch (url) {
             case "//mesos-master:5051/version":
               resolve({"version": "0.26.0"});
@@ -324,11 +324,10 @@ describe("Mesos", function () {
               break;
             default:
               reject({message: "error"});
+
               break;
           }
-
-        })
-      };
+        });
       DCOSActions.request = ajaxWrapperStub(
         function (url, resolve, reject) {
           reject({message: "error"});
