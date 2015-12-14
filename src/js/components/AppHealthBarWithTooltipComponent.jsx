@@ -21,15 +21,20 @@ var AppHealthBarWithTooltipComponent = React.createClass({
     };
   },
 
-  shouldComponentUpdate: function (nextProps) {
-    var shouldUpdate =
+  shouldComponentUpdate: function (nextProps, nextState) {
+    // Ensure that the health bar does not update before the tipContent was
+    // updated (`setState` is not guaranteed to complete before `render`)
+    if (this.state.tipContent !== nextState.tipContent) {
+      return true;
+    }
+    var healthWasUpdated =
       !Util.compareArrays(this.props.model.health, nextProps.model.health);
-    if (shouldUpdate) {
+    if (healthWasUpdated) {
       this.setState({
         tipContent: this.getAppHealthBreakdown(nextProps.model)
       });
     }
-    return shouldUpdate;
+    return false;
   },
 
   handleMouseOverHealthBar: function () {
