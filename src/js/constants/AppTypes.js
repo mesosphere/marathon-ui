@@ -1,5 +1,5 @@
 const AppTypes = {
-  BASIC: "BASIC",
+  CGROUP: "CGROUP",
   DOCKER: "DOCKER"
 };
 
