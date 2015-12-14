@@ -199,8 +199,8 @@ function resolveTaskFileRequests() {
   }
 
   if (!Util.isString(info.frameworkId) ||
-    !Util.isObject(info.marathon_config) ||
-    !Util.isString(info.marathon_config.mesos_leader_ui_url)) {
+      !Util.isObject(info.marathon_config) ||
+      !Util.isString(info.marathon_config.mesos_leader_ui_url)) {
     info = null;
     updateRequest(INFO_ID, {error:true});
     resolveTaskFileRequests();
