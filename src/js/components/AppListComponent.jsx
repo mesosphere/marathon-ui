@@ -62,6 +62,7 @@ function getInitialAppStatusesCount() {
 function initGroupNode(groupId, app) {
   return {
     health: getGroupHealth(null, app.health),
+    healthWeight: app.healthWeight,
     id: groupId,
     instances: app.instances,
     isGroup: true,
@@ -74,6 +75,7 @@ function initGroupNode(groupId, app) {
 
 function updateGroupNode(group, app) {
   group.health = getGroupHealth(group.health, app.health);
+  group.healthWeight += app.healthWeight;
   group.instances += app.instances;
   group.status = getGroupStatus(group.status, app.status);
   group.tasksRunning += app.tasksRunning;
@@ -373,7 +375,6 @@ var AppListComponent = React.createClass({
           <col className="status-col" />
           <col className="instances-col" />
           <col className="health-col" />
-          <col className="actions-col" />
         </colgroup>
         <thead>
           <tr>
@@ -401,40 +402,46 @@ var AppListComponent = React.createClass({
                 Status {this.getCaret("status")}
               </span>
             </th>
-            <th className="text-right instances-cell" colSpan="3">
+            <th className="text-right instances-cell">
               <span onClick={this.sortBy.bind(null, "tasksRunning")}
                   className={headerClassSet}>
                 {this.getCaret("tasksRunning")} Running Instances
+              </span>
+            </th>
+            <th className="health-cell">
+              <span onClick={this.sortBy.bind(null, "healthWeight")}
+                  className={headerClassSet}>
+                Health {this.getCaret("healthWeight")}
               </span>
             </th>
           </tr>
         </thead>
         <tbody>
           <tr className={loadingClassSet}>
-            <td className="text-center text-muted" colSpan="8">
+            <td className="text-center text-muted" colSpan="7">
               Loading apps...
             </td>
           </tr>
           <tr className={noAppsClassSet}>
-            <td className="text-center" colSpan="8">No running apps.</td>
+            <td className="text-center" colSpan="7">No running apps.</td>
           </tr>
           <tr className={noRunningAppsClassSet}>
-            <td className="text-center" colSpan="8">
+            <td className="text-center" colSpan="7">
               No apps match your query.
             </td>
           </tr>
           <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan="8">
+            <td className="text-center text-danger" colSpan="7">
               {`Error fetching apps. ${Messages.RETRY_REFRESH}`}
             </td>
           </tr>
           <tr className={unauthorizedClassSet}>
-            <td className="text-center text-danger" colSpan="8">
+            <td className="text-center text-danger" colSpan="7">
               {`Error fetching apps. ${Messages.UNAUTHORIZED}`}
             </td>
           </tr>
           <tr className={forbiddenClassSet}>
-            <td className="text-center text-danger" colSpan="8">
+            <td className="text-center text-danger" colSpan="7">
               {`Error fetching apps. ${Messages.FORBIDDEN}`}
             </td>
           </tr>

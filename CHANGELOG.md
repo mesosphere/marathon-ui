@@ -3,6 +3,9 @@
 - \#2772 - URI fields should be links
 - \#2775 - Syntax highlighting for JSON fragments in configuration
 
+### Changed
+- \#2764 - Make health status bar wider
+
 ### Fixed
 - \#2755 - Memory leak in Marathon UI
 
