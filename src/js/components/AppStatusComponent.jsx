@@ -6,20 +6,14 @@ var AppStatus = require("../constants/AppStatus");
 var QueueStore = require("../stores/QueueStore");
 var Util = require("../helpers/Util");
 
+var statusNameMapping = require("../constants/NameMappings").statusNameMapping;
+
 var statusClassNameMapping = {
   [AppStatus.RUNNING]: "running",
   [AppStatus.DEPLOYING]: "deploying",
   [AppStatus.SUSPENDED]: "suspended",
   [AppStatus.DELAYED]: "delayed",
   [AppStatus.WAITING]: "waiting"
-};
-
-var statusNameMapping = {
-  [AppStatus.RUNNING]: "Running",
-  [AppStatus.DEPLOYING]: "Deploying",
-  [AppStatus.SUSPENDED]: "Suspended",
-  [AppStatus.DELAYED]: "Delayed",
-  [AppStatus.WAITING]: "Waiting"
 };
 
 var AppStatusComponent = React.createClass({
