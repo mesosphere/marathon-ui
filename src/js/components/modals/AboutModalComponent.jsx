@@ -36,9 +36,7 @@ var AboutModalComponent = React.createClass({
   },
 
   destroy: function () {
-    // This will also call `this.props.onDestroy` since it is passed as the
-    // callback for the modal's `onDestroy` prop.
-    this.refs.modalComponent.destroy();
+    this.props.onDestroy();
   },
 
   getInfo: function (attr) {
@@ -56,41 +54,37 @@ var AboutModalComponent = React.createClass({
     var marathonConfig = this.state.info.marathon_config;
     var zookeeperConfig = this.state.info.zookeeper_config;
     var logoPath = config.rootUrl + "img/marathon-logo.png";
-    // @todo: #2815 remove extra div
     return (
-      <div>
-        <ModalComponent
-            onDestroy={this.props.onDestroy}
-            ref="modalComponent"
-            size="lg">
-          <div className="modal-header modal-header-blend">
-            <button type="button" className="close"
-              aria-hidden="true" onClick={this.destroy}>&times;</button>
-            <h3 className="modal-title" title={`UI Version ${config.version}`}>
-              <img width="160" height="27" alt="Marathon" src={logoPath} />
-              <small className="text-muted" style={{"marginLeft": "1em"}}>
-                Version {this.getInfo("version")}
-              </small>
-            </h3>
-          </div>
-          <div className="modal-body">
-            <dl className="dl-horizontal dl-horizontal-lg">
-              <dt title="frameworkId">Framework Id</dt>
-              <dd>
-                {this.getInfo("frameworkId")}
-              </dd>
-              <dt title="leader">Leader</dt>
-              <dd>
-                {this.getInfo("leader")}
-              </dd>
-            </dl>
-            <h5 title="marathon_config">Marathon Config</h5>
-            <ObjectDlComponent object={marathonConfig} />
-            <h5 title="zookeeper_config">ZooKeeper Config</h5>
-            <ObjectDlComponent object={zookeeperConfig} />
-          </div>
-        </ModalComponent>
-      </div>
+      <ModalComponent
+          onDestroy={this.props.onDestroy}
+          size="lg">
+        <div className="modal-header modal-header-blend">
+          <button type="button" className="close"
+            aria-hidden="true" onClick={this.destroy}>&times;</button>
+          <h3 className="modal-title" title={`UI Version ${config.version}`}>
+            <img width="160" height="27" alt="Marathon" src={logoPath} />
+            <small className="text-muted" style={{"marginLeft": "1em"}}>
+              Version {this.getInfo("version")}
+            </small>
+          </h3>
+        </div>
+        <div className="modal-body">
+          <dl className="dl-horizontal dl-horizontal-lg">
+            <dt title="frameworkId">Framework Id</dt>
+            <dd>
+              {this.getInfo("frameworkId")}
+            </dd>
+            <dt title="leader">Leader</dt>
+            <dd>
+              {this.getInfo("leader")}
+            </dd>
+          </dl>
+          <h5 title="marathon_config">Marathon Config</h5>
+          <ObjectDlComponent object={marathonConfig} />
+          <h5 title="zookeeper_config">ZooKeeper Config</h5>
+          <ObjectDlComponent object={zookeeperConfig} />
+        </div>
+      </ModalComponent>
     );
   }
 });
