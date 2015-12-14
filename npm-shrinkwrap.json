@@ -15630,16 +15630,6 @@
       "version": "0.9.2",
       "resolved": "https://registry.npmjs.org/object-path/-/object-path-0.9.2.tgz"
     },
-    "oboe": {
-      "version": "2.1.2",
-      "resolved": "https://registry.npmjs.org/oboe/-/oboe-2.1.2.tgz",
-      "dependencies": {
-        "http-https": {
-          "version": "1.0.0",
-          "resolved": "https://registry.npmjs.org/http-https/-/http-https-1.0.0.tgz"
-        }
-      }
-    },
     "react": {
       "version": "0.13.3",
       "resolved": "https://registry.npmjs.org/react/-/react-0.13.3.tgz"

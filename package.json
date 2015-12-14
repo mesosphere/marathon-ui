@@ -63,7 +63,6 @@
     "mocha": "^2.3.4",
     "mocha-teamcity-reporter": "0.0.4",
     "npm-shrinkwrap": "^200.4.0",
-    "oboe": "^2.1.2",
     "sinon": "^1.12.2",
     "source-map-loader": "^0.1.5",
     "source-sans-pro": "^2.0.10",
