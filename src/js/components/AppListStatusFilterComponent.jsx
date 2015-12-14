@@ -134,12 +134,12 @@ var AppListStatusFilterComponent = React.createClass({
 
       return (
         <li className="checkbox" key={i}>
-            <input {...checkboxProps}
-              onChange={this.handleChange.bind(this, key)} />
-            <label htmlFor={`status-${key}-${i}`} className={labelClassName}>
-              {optionText}
-              {this.getStatusCountBadge(`status-${key}-${i}`, key)}
-            </label>
+          <input {...checkboxProps}
+            onChange={this.handleChange.bind(this, key)} />
+          <label htmlFor={`status-${key}-${i}`} className={labelClassName}>
+            {optionText}
+            {this.getStatusCountBadge(`status-${key}-${i}`, key)}
+          </label>
         </li>
       );
     });

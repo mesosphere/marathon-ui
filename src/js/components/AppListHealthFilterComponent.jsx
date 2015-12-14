@@ -134,12 +134,12 @@ var AppListHealthFilterComponent = React.createClass({
 
       return (
         <li className="checkbox" key={i}>
-            <input {...checkboxProps}
-              onChange={this.handleChange.bind(this, key)} />
-            <label htmlFor={`health-${key}-${i}`} className={labelClassName}>
-              {optionText}
-              {this.getHealthCountBadge(`health-${key}-${i}`, key)}
-            </label>
+          <input {...checkboxProps}
+            onChange={this.handleChange.bind(this, key)} />
+          <label htmlFor={`health-${key}-${i}`} className={labelClassName}>
+            {optionText}
+            {this.getHealthCountBadge(`health-${key}-${i}`, key)}
+          </label>
         </li>
       );
     });
