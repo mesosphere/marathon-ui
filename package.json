@@ -63,6 +63,7 @@
     "json-loader": "^0.5.2",
     "mocha": "^2.3.4",
     "mocha-teamcity-reporter": "0.0.4",
+    "nock": "^3.4.0",
     "npm-shrinkwrap": "^200.4.0",
     "sinon": "^1.12.2",
     "source-map-loader": "^0.1.5",
