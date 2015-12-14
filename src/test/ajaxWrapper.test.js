@@ -161,7 +161,7 @@ describe("ajaxWrapper", function () {
     it("handles failure gracefully", function (done) {
       var payload = {"key": "value"};
 
-      this.server.setup({message: "Guru Meditation"}, 404, false);
+      this.server.setup({message: "Guru Meditation"}, 404);
 
       ajaxWrapper({
         method: "POST",
