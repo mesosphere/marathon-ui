@@ -1,21 +1,22 @@
-var _ = require("underscore");
 var expect = require("chai").expect;
 var React = require("react/addons");
-var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
 
 var AppDispatcher = require("../js/AppDispatcher");
+var ajaxWrapper = require("../js/helpers/ajaxWrapper");
 var JSONPUtil = require("../js/helpers/JSONPUtil");
 var InfoActions = require("../js/actions/InfoActions");
 var InfoStore = require("../js/stores/InfoStore");
 var InfoEvents = require("../js/events/InfoEvents");
+var DCOSActions = require("../js/actions/DCOSActions");
 var MesosActions = require("../js/actions/MesosActions");
 var MesosStore = require("../js/stores/MesosStore");
 var MesosEvents = require("../js/events/MesosEvents");
 
 var expectAsync = require("./helpers/expectAsync");
 var HttpServer = require("./helpers/HttpServer").HttpServer;
+var ajaxWrapperStub = require("./stubs/ajaxWrapperStub");
 
 var server = new HttpServer(config.localTestserverURI);
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
@@ -251,6 +252,13 @@ describe("Mesos", function () {
                   "hostname": "mesos-agent",
                   "id": "wrong-task-id-test-agent-id",
                   "pid": "slave(1)@mesos-agent:5051"
+                },
+                {
+                  "active": true,
+                  "attributes": {},
+                  "hostname": "mesos-agent",
+                  "id": "node-url-test-agent-id",
+                  "pid": "slave(1)@mesos-agent:5051"
                 }]
               });
               break;
@@ -285,6 +293,35 @@ describe("Mesos", function () {
                 "uid": "user"
               }]);
               break;
+            case "/slave/node-url-test-agent-id/state":
+            case "/slave/node-url-test-agent-id/state.json":
+              resolve({
+                "frameworks": [{
+                  "id": "framework-id",
+                  "executors": [{
+                    "id": "node-url-test-task-id",
+                    "directory": "/file/path"
+                  }],
+                  "completed_executors": [{
+                    "id": "node-url-test-task-id",
+                    "directory": "/file/path"
+                  }]
+                }]
+              });
+            case "/slave/node-url-test-agent-id/files/browse" +
+            "?path=%2Ffile%2Fpath":
+            case "/slave/node-url-test-agent-id/files/browse.json" +
+            "?path=%2Ffile%2Fpath":
+              resolve([{
+                "gid": "staff",
+                "mode": "-rw-r--r--",
+                "mtime": 1449573729,
+                "nlink": 1,
+                "path": "/file/path/filename",
+                "size": 506,
+                "uid": "user"
+              }]);
+              break;
             default:
               reject({message: "error"});
               break;
@@ -292,10 +329,16 @@ describe("Mesos", function () {
 
         })
       };
+      DCOSActions.request = ajaxWrapperStub(
+        function (url, resolve, reject) {
+          reject({message: "error"});
+        }
+      );
     });
 
     afterEach(function () {
       MesosActions.request = JSONPUtil.request;
+      DCOSActions.request = ajaxWrapper;
     });
 
     describe("on request state", function () {
@@ -419,6 +462,30 @@ describe("Mesos", function () {
           "task-file-test-task-id");
       });
 
+      it("determines correct node/agent urls", function (done) {
+        DCOSActions.request = ajaxWrapperStub(
+          function (url, resolve, reject) {
+            switch (url) {
+              case "/pkgpanda/active.buildinfo.full.json":
+                resolve({"build": "info"});
+                break;
+              default:
+                reject({message: "error"});
+                break;
+            }
+          }
+        );
+
+        MesosStore.once(MesosEvents.REQUEST_TASK_FILES_COMPLETE, function () {
+          expectAsync(function () {
+            var files = MesosStore.getTaskFiles("node-url-test-task-id");
+            expect(files[0].path).to.equal("/file/path/filename");
+          }, done);
+        });
+        MesosActions.requestTaskFiles("node-url-test-agent-id",
+          "node-url-test-task-id");
+      });
+
       it("handles missing framework id gracefully", function (done) {
         var agentId = "task-file-test-missing-framework-agent-id";
         var taskId = "task-file-test-missing-framework-task-id";
@@ -461,7 +528,6 @@ describe("Mesos", function () {
 
         MesosActions.requestTaskFiles(agentId, taskId);
       });
-
 
       it("recovers from missing framework id", function (done) {
         InfoStore.info = {
