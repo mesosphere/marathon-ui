@@ -170,10 +170,10 @@ var AppsActions = {
         });
       });
   },
-  emitAppStatusesCount: function (appsStatusesCount) {
+  emitFilterCounts: function (filterCounts) {
     AppDispatcher.dispatchNext({
-      actionType: AppsEvents.UPDATE_APPS_STATUSES_COUNT,
-      data: appsStatusesCount
+      actionType: AppsEvents.UPDATE_APPS_FILTER_COUNT,
+      data: filterCounts
     });
   },
   request: ajaxWrapper

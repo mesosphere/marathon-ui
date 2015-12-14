@@ -313,8 +313,8 @@ AppDispatcher.register(function (action) {
         action.taskIds
       );
       break;
-    case AppsEvents.UPDATE_APPS_STATUSES_COUNT:
-      AppsStore.emit(AppsEvents.UPDATE_APPS_STATUSES_COUNT, action.data);
+    case AppsEvents.UPDATE_APPS_FILTER_COUNT:
+      AppsStore.emit(AppsEvents.UPDATE_APPS_FILTER_COUNT, action.data);
       break;
   }
 });

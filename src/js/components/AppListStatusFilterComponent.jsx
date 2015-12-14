@@ -34,12 +34,12 @@ var AppListStatusFilterComponent = React.createClass({
   },
 
   componentWillMount: function () {
-    AppsStore.on(AppsEvents.UPDATE_APPS_STATUSES_COUNT,
+    AppsStore.on(AppsEvents.UPDATE_APPS_FILTER_COUNT,
       this.onAppsStatusesChange);
   },
 
   componentWillUnmount: function () {
-    AppsStore.removeListener(AppsEvents.UPDATE_APPS_STATUSES_COUNT,
+    AppsStore.removeListener(AppsEvents.UPDATE_APPS_FILTER_COUNT,
       this.onAppsStatusesChange);
   },
 
@@ -51,9 +51,9 @@ var AppListStatusFilterComponent = React.createClass({
     this.updateFilterStatus();
   },
 
-  onAppsStatusesChange: function (appsStatusesCount) {
+  onAppsStatusesChange: function (filterCounts) {
     this.setState({
-      appsStatusesCount: appsStatusesCount
+      appsStatusesCount: filterCounts.appsStatusesCount
     });
   },
 
