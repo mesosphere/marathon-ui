@@ -1,6 +1,8 @@
 var Link = require("react-router").Link;
 var React = require("react/addons");
 
+var AppListHealthFilterComponent =
+  require("../components/AppListHealthFilterComponent");
 var AppListLabelsFilterComponent =
   require("../components/AppListLabelsFilterComponent");
 var AppListStatusFilterComponent =
@@ -26,6 +28,7 @@ var SidebarComponent = React.createClass({
   getInitialState: function () {
     return {
       filters: {
+        [FilterTypes.HEALTH]: [],
         [FilterTypes.LABELS]: [],
         [FilterTypes.STATUS]: []
       }
@@ -68,6 +71,12 @@ var SidebarComponent = React.createClass({
         </div>
         <AppListStatusFilterComponent
           onChange={this.updateFilter.bind(null, FilterTypes.STATUS)} />
+        <div className="flex-row">
+          <h3 className="small-caps">Health</h3>
+          {this.getClearLinkForFilter(FilterTypes.HEALTH)}
+        </div>
+        <AppListHealthFilterComponent
+          onChange={this.updateFilter.bind(null, FilterTypes.HEALTH)} />
         <div className="flex-row">
           <h3 className="small-caps">Label</h3>
           {this.getClearLinkForFilter(FilterTypes.LABELS)}
