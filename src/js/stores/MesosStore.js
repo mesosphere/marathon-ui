@@ -6,6 +6,8 @@ var Util = require("../helpers/Util");
 var InfoStore = require("../stores/InfoStore");
 var InfoActions = require("../actions/InfoActions");
 var InfoEvents = require("../events/InfoEvents");
+var DCOSActions = require("../actions/DCOSActions");
+var DCOSEvents = require("../events/DCOSEvents");
 var MesosActions = require("../actions/MesosActions");
 var MesosEvents = require("../events/MesosEvents");
 
@@ -17,7 +19,11 @@ const MAX_REQUESTS = 1;
 const MASTER_ID = "master";
 const INFO_ID = "info";
 
+const DCOS_ENVIRONMENT = "dcos";
+const HOMEGROWN_ENVIRONMENT = "homegrown";
+
 var info = null;
+var environment = null;
 var version = null;
 var stateMap = {};
 var taskFileMap = {};
@@ -70,6 +76,7 @@ var MesosStore = Object.assign({
 
   resetStore: function () {
     info = null;
+    environment = null;
     version = null;
     stateMap = {};
     taskFileMap = {};
@@ -81,8 +88,16 @@ var MesosStore = Object.assign({
 
 function getNodeURLFromState(nodeId, state) {
 
+  if (nodeId == null) {
+    return null;
+  }
+
   if (state == null) {
     return null;
+  }
+
+  if (environment === DCOS_ENVIRONMENT) {
+    return `/slave/${nodeId}`
   }
 
   let agent = state.slaves.find((slave) => {
@@ -207,6 +222,11 @@ function resolveTaskFileRequests() {
     return;
   }
 
+  if (!environment) {
+    DCOSActions.requestBuildInformation();
+    return;
+  }
+
   if (!version) {
     MesosActions.requestVersionInformation(
       info.marathon_config.mesos_leader_ui_url.replace(/\/$/, ""));
@@ -293,6 +313,14 @@ AppDispatcher.register(function (action) {
       break;
     case InfoEvents.REQUEST_ERROR:
       updateRequest(INFO_ID, {error:true});
+      resolveTaskFileRequests();
+      break;
+    case DCOSEvents.REQUEST_BUILD_INFORMATION_COMPLETE:
+      environment = DCOS_ENVIRONMENT;
+      resolveTaskFileRequests();
+      break;
+    case DCOSEvents.REQUEST_BUILD_INFORMATION_ERROR:
+      environment = HOMEGROWN_ENVIRONMENT;
       resolveTaskFileRequests();
       break;
     case MesosEvents.REQUEST_VERSION_INFORMATION_COMPLETE:
