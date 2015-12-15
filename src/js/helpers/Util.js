@@ -74,6 +74,27 @@ var Util = {
 
     objectPath.set(obj, path, value);
   },
+  deepCopy: function (obj) {
+    var copy;
+
+    if (this.isObject(obj)) {
+      copy = Object.assign({}, obj);
+
+      Object.keys(copy).forEach((key) => {
+        copy[key] = this.deepCopy(copy[key]);
+      });
+    } else if (this.isArray(obj)) {
+      copy = obj.slice(); // shallow copy
+
+      copy.forEach((value, index) => {
+        copy[index] = this.deepCopy(value);
+      });
+    } else {
+      copy = obj;
+    }
+
+    return copy;
+  },
   deepFreeze: function (obj) {
     Object.freeze(obj);
 
