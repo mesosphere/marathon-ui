@@ -193,7 +193,9 @@ var AppListComponent = React.createClass({
     nodesSequence.each(app => {
       filterCounts.appsStatusesCount[app.status]++;
       app.health.forEach(health => {
-        filterCounts.appsHealthCount[health.state] += health.quantity;
+        if (health.quantity) {
+          filterCounts.appsHealthCount[health.state]++;
+        }
       });
     });
 
@@ -247,7 +249,9 @@ var AppListComponent = React.createClass({
     appsInGroup.forEach(app => {
       filterCounts.appsStatusesCount[app.status]++;
       app.health.forEach(health => {
-        filterCounts.appsHealthCount[health.state] += health.quantity;
+        if (health.quantity) {
+          filterCounts.appsHealthCount[health.state]++;
+        }
       });
     });
 
