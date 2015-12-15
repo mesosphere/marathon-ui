@@ -6,7 +6,7 @@ var AppStatus = require("../constants/AppStatus");
 var QueueStore = require("../stores/QueueStore");
 var Util = require("../helpers/Util");
 
-var statusNameMapping = require("../constants/NameMappings").statusNameMapping;
+var statusNameMapping = require("../constants/LabelMapping").statusNameMapping;
 
 var statusClassNameMapping = {
   [AppStatus.RUNNING]: "running",

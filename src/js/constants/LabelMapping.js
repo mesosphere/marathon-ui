@@ -1,6 +1,6 @@
 var AppStatus = require("../constants/AppStatus");
 
-const NameMappings = {
+const LabelMapping = {
   statusNameMapping: {
     [AppStatus.RUNNING]: "Running",
     [AppStatus.DEPLOYING]: "Deploying",
@@ -10,4 +10,4 @@ const NameMappings = {
   }
 };
 
-module.exports = Object.freeze(NameMappings);
+module.exports = Object.freeze(LabelMapping);

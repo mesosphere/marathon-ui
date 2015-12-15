@@ -7,7 +7,7 @@ var FilterTypes = require("../constants/FilterTypes");
 
 var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
-var statusNameMapping = require("../constants/NameMappings").statusNameMapping;
+var statusNameMapping = require("../constants/LabelMapping").statusNameMapping;
 
 var AppListStatusFilterComponent = React.createClass({
   displayName: "AppListStatusFilterComponent",
