@@ -422,4 +422,81 @@ describe("Util", function () {
       )).to.equal(false);
     });
   });
+
+  describe("deepCopy", function () {
+
+    it("it returns an actual deep copy", function () {
+      var currentDate = new Date();
+
+      var originalObject = {
+        obj1: {
+          string2: "string2",
+          number2: 2,
+          func: function () {
+            return true;
+          },
+          obj2: {
+            string3: "string3",
+            number3: 3,
+            date: currentDate,
+            obj3: {
+              array2: ["a", "b"],
+              number3: 3
+            }
+          }
+        },
+        string1: "string1",
+        number1: 1,
+        array1: [1, 2]
+      };
+
+      var copiedObject = Util.deepCopy(originalObject);
+      expect(copiedObject).to.eql(originalObject);
+    });
+
+    it("mutating the copy does not affect the original", function () {
+      var currentDate = new Date();
+
+      var originalObject = {
+        obj1: {
+          obj2: {
+            string3: "string3",
+            number3: 3,
+            date: currentDate,
+            obj3: {
+              array2: ["a", "b"],
+              number3: 3
+            }
+          }
+        },
+        string1: "string1",
+        number1: 1,
+        array1: [1, 2]
+      };
+
+      // An exact replica of the originalObject
+      var originalObject2 = {
+        obj1: {
+          obj2: {
+            string3: "string3",
+            number3: 3,
+            date: currentDate,
+            obj3: {
+              array2: ["a", "b"],
+              number3: 3
+            }
+          }
+        },
+        string1: "string1",
+        number1: 1,
+        array1: [1, 2]
+      };
+
+      var copiedObject = Util.deepCopy(originalObject);
+
+      copiedObject.obj1.obj2 = null;
+      expect(copiedObject).to.not.eql(originalObject);
+      expect(originalObject2).to.eql(originalObject);
+    });
+  });
 });

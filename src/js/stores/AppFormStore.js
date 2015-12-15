@@ -364,7 +364,7 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
   },
   populateFieldsFromAppDefinition: function (app) {
     this.app = app;
-    populateFieldsFromModel(app, this.fields);
+    populateFieldsFromModel(Util.deepCopy(app), this.fields);
   }
 }).value();
 
