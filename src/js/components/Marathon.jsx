@@ -43,6 +43,8 @@ var Marathon = React.createClass({
     this.bindKeyboardShortcuts();
 
     this.startPolling();
+
+    this.xMasSpecial();
   },
 
   componentWillReceiveProps: function () {
@@ -227,6 +229,16 @@ var Marathon = React.createClass({
         appVersion={appVersion}
         onDestroy={this.handleModalDestroy} />
     );
+  },
+
+  xMasSpecial: function () {
+    var date = new Date();
+    var dayOfMonth = date.getDate();
+
+    if (date.getMonth() === 11 && dayOfMonth >= 24 && dayOfMonth <= 31) {
+      DialogActions
+        .alert("We wish you a Merry Christmas and a Happy New Year!");
+    }
   },
 
   render: function () {
