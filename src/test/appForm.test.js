@@ -67,6 +67,41 @@ describe("App Form", function () {
         FormActions.update("appId", "/app-1");
       });
 
+      it("preserves unknown properties", function (done) {
+        AppFormStore.app = {
+          id: "/app-1",
+          unknownProperty: "unknown"
+        };
+
+        AppFormStore.once(FormEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppFormStore.app.id).to.equal("/app-2");
+            expect(AppFormStore.app.unknownProperty).to.equal("unknown");
+          }, done);
+        });
+
+        FormActions.update("appId", "/app-2");
+      });
+
+      it("preserves unknown nested properties", function (done) {
+        AppFormStore.app = {
+          container: {
+            docker: {
+              unknownProperty: "unknown"
+            }
+          }
+        };
+
+        AppFormStore.once(FormEvents.CHANGE, function () {
+          expectAsync(function () {
+            expect(AppFormStore.app.container.docker.unknownProperty)
+              .to.equal("unknown");
+          }, done);
+        });
+
+        FormActions.update("appId", "docker-app");
+      });
+
       describe("the cpus field", function () {
 
         it("updates correctly", function (done) {
