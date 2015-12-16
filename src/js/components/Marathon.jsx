@@ -9,6 +9,7 @@ var RouteHandler = require("react-router").RouteHandler;
 var AboutModalComponent = require("../components/modals/AboutModalComponent");
 var AppModalComponent = require("../components/modals/AppModalComponent");
 var DialogsComponent = require("../components/DialogsComponent");
+var DialogStore = require("../stores/DialogStore");
 var EditAppModalComponent =
   require("../components/modals/EditAppModalComponent");
 var HelpModalComponent = require("../components/modals/HelpModalComponent");
@@ -235,9 +236,15 @@ var Marathon = React.createClass({
     var date = new Date();
     var dayOfMonth = date.getDate();
 
-    if (date.getMonth() === 11 && dayOfMonth >= 24 && dayOfMonth <= 31) {
-      DialogActions
-        .alert("We wish you a Merry Christmas and a Happy New Year!");
+    if (date.getMonth() === 11 && dayOfMonth >= 16 && dayOfMonth <= 31) {
+      const dialogId = DialogActions
+        .confirm("We wish you a Merry Christmas and a Happy New Year! " +
+          "Press OK to get a snowy experience.");
+
+      DialogStore.handleUserResponse(dialogId, () => {
+        var snowstorm = require("../vendor/snowstorm");
+        snowstorm.start();
+      });
     }
   },
 
