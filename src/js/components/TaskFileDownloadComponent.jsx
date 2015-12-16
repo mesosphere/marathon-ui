@@ -110,16 +110,20 @@ var TaskFileDownloadComponent = React.createClass({
     var file = state.file;
     var href = "";
 
-    var className = classNames("task-file-download", props.className, {
-      "loading": state.fileIsRequestedByUser
-    });
+    if (this.state.fileIsRequestedByUser === true) {
+      return (
+        <span>
+          <i className="icon icon-small loading" />
+        </span>
+      )
+    }
 
     if (file) {
       href = file.downloadURI;
     }
 
     return (
-      <a className={className}
+      <a className="task-file-download"
           href={href}
           onClick={this.handleClick}
           download={name}>
