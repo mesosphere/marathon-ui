@@ -1,13 +1,13 @@
 var Link = require("react-router").Link;
 var React = require("react/addons");
 
-var AppListHealthFilterComponent =
-  require("../components/AppListHealthFilterComponent");
-var AppListLabelsFilterComponent =
-  require("../components/AppListLabelsFilterComponent");
-var AppListStatusFilterComponent =
-  require("../components/AppListStatusFilterComponent");
 var FilterTypes = require("../constants/FilterTypes");
+var SidebarHealthFilterComponent =
+  require("../components/SidebarHealthFilterComponent");
+var SidebarLabelsFilterComponent =
+  require("../components/SidebarLabelsFilterComponent");
+var SidebarStatusFilterComponent =
+  require("../components/SidebarStatusFilterComponent");
 
 var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
@@ -69,19 +69,19 @@ var SidebarComponent = React.createClass({
           <h3 className="small-caps">Status</h3>
           {this.getClearLinkForFilter(FilterTypes.STATUS)}
         </div>
-        <AppListStatusFilterComponent
+        <SidebarStatusFilterComponent
           onChange={this.updateFilter.bind(null, FilterTypes.STATUS)} />
         <div className="flex-row">
           <h3 className="small-caps">Health</h3>
           {this.getClearLinkForFilter(FilterTypes.HEALTH)}
         </div>
-        <AppListHealthFilterComponent
+        <SidebarHealthFilterComponent
           onChange={this.updateFilter.bind(null, FilterTypes.HEALTH)} />
         <div className="flex-row">
           <h3 className="small-caps">Label</h3>
           {this.getClearLinkForFilter(FilterTypes.LABELS)}
         </div>
-        <AppListLabelsFilterComponent
+        <SidebarLabelsFilterComponent
           onChange={this.updateFilter.bind(null, FilterTypes.LABELS)} />
       </nav>
     );

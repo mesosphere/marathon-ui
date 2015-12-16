@@ -17,8 +17,8 @@ var healthNameMapping = {
 /**
  * Health is wealth, peace of mind is happiness.
  */
-var AppListHealthFilterComponent = React.createClass({
-  displayName: "AppListHealthFilterComponent",
+var SidebarHealthFilterComponent = React.createClass({
+  displayName: "SidebarHealthFilterComponent",
 
   mixins: [QueryParamsMixin],
 
@@ -155,4 +155,4 @@ var AppListHealthFilterComponent = React.createClass({
 
 });
 
-module.exports = AppListHealthFilterComponent;
+module.exports = SidebarHealthFilterComponent;
