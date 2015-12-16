@@ -43,6 +43,7 @@ const AppFormFieldToModelTransforms = {
       });
     })
     .value(),
+  dockerForcePullImage: (isChecked) => !!isChecked,
   dockerParameters: (rows) => lazy(rows)
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))
     .compact()
