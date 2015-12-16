@@ -1,3 +1,5 @@
+var Util = require("../helpers/Util");
+
 var AppStatus = require("../constants/AppStatus");
 
 const LabelMapping = {
@@ -10,4 +12,4 @@ const LabelMapping = {
   }
 };
 
-module.exports = Object.freeze(LabelMapping);
+module.exports = Util.deepFreeze(LabelMapping);
