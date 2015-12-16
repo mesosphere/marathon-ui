@@ -1,21 +1,13 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
-var AppStatus = require("../constants/AppStatus");
 var AppsStore = require("../stores/AppsStore");
 var AppsEvents = require("../events/AppsEvents");
 var FilterTypes = require("../constants/FilterTypes");
 
 var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
-/* TODO extract from AppStatusComponent */
-var statusNameMapping = {
-  [AppStatus.RUNNING]: "Running",
-  [AppStatus.DEPLOYING]: "Deploying",
-  [AppStatus.SUSPENDED]: "Suspended",
-  [AppStatus.DELAYED]: "Delayed",
-  [AppStatus.WAITING]: "Waiting"
-};
+var statusNameMapping = require("../constants/LabelMapping").statusNameMapping;
 
 var AppListStatusFilterComponent = React.createClass({
   displayName: "AppListStatusFilterComponent",
