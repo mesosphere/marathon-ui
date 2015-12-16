@@ -292,11 +292,13 @@ describe("App Version component", function () {
   });
 
   it("has correct accepted resource roles", function () {
-    expect(this.table[11].type.displayName).to.equal("UnspecifiedNodeComponent");
+    expect(this.table[11].type.displayName)
+      .to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct container", function () {
-    expect(this.table[13].type.displayName).to.equal("UnspecifiedNodeComponent");
+    expect(this.table[13].type.displayName)
+      .to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct cpus", function () {
@@ -304,11 +306,13 @@ describe("App Version component", function () {
   });
 
   it("has correct environment", function () {
-    expect(this.table[17].type.displayName).to.equal("UnspecifiedNodeComponent");
+    expect(this.table[17].type.displayName)
+      .to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct executor", function () {
-    expect(this.table[19].type.displayName).to.equal("UnspecifiedNodeComponent");
+    expect(this.table[19].type.displayName)
+      .to.equal("UnspecifiedNodeComponent");
   });
 
   it("has correct health checks", function () {

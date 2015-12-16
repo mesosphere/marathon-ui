@@ -860,7 +860,6 @@ describe("App Form", function () {
           });
         });
 
-
       it("processes error response codes >= 500 correctly", function (done) {
         this.server.setup("something strange with the server", 500);
 

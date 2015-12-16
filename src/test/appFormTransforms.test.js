@@ -125,16 +125,16 @@ describe("App Form Field to Model Transform", function () {
           consecutiveKey: 3
         }
       ])).to.deep.equal([
-          {
-            containerPort: 123,
-            hostPort: 123,
-            protocol: "tcp"
-          },
-          {
-            containerPort: 456,
-            servicePort: 456,
-            protocol: "udp"
-          }
+        {
+          containerPort: 123,
+          hostPort: 123,
+          protocol: "tcp"
+        },
+        {
+          containerPort: 456,
+          servicePort: 456,
+          protocol: "udp"
+        }
       ]);
     });
 
@@ -148,11 +148,11 @@ describe("App Form Field to Model Transform", function () {
           consecutiveKey: 1
         }
       ])).to.deep.equal([
-          {
-            containerPort: 123,
-            hostPort: 123
-          }
-        ]);
+        {
+          containerPort: 123,
+          hostPort: 123
+        }
+      ]);
     });
 
     it("dockerParameters to array of objects", function () {
@@ -300,8 +300,8 @@ describe("App Form Model To Field Transform", function () {
       expect(AppFormTransforms.ModelToField.constraints([
           ["hostname", "UNIQUE"],
           ["atomic", "LIKE", "man"]
-        ]))
-        .to.equal("hostname:UNIQUE, atomic:LIKE:man");
+      ]))
+      .to.equal("hostname:UNIQUE, atomic:LIKE:man");
     });
 
     it("dockerPortMappings to array with consecutiveKey", function () {
