@@ -563,8 +563,8 @@ describe("Apps", function () {
 
     it("sends create event on success", function (done) {
       this.server.setup({
-          "id": "/app-3"
-        }, 201);
+        "id": "/app-3"
+      }, 201);
 
       AppsStore.once(AppsEvents.CREATE_APP, function () {
         expectAsync(function () {
@@ -647,9 +647,9 @@ describe("Apps", function () {
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
-          "deploymentId": "deployment-that-deletes-app",
-          "version": "v1"
-        }, 200);
+        "deploymentId": "deployment-that-deletes-app",
+        "version": "v1"
+      }, 200);
 
       AppsStore.once(AppsEvents.DELETE_APP, function () {
         expectAsync(function () {
@@ -698,9 +698,9 @@ describe("Apps", function () {
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
-          "deploymentId": "deployment-that-restarts-app",
-          "version": "v1"
-        }, 200);
+        "deploymentId": "deployment-that-restarts-app",
+        "version": "v1"
+      }, 200);
 
       AppsStore.once(AppsEvents.RESTART_APP, function () {
         expectAsync(function () {
@@ -759,9 +759,9 @@ describe("Apps", function () {
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
-          "deploymentId": "deployment-that-scales-app",
-          "version": "v1"
-        }, 200);
+        "deploymentId": "deployment-that-scales-app",
+        "version": "v1"
+      }, 200);
 
       AppsStore.once(AppsEvents.SCALE_APP, function () {
         expectAsync(function () {
@@ -807,9 +807,9 @@ describe("Apps", function () {
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
-          "deploymentId": "deployment-that-applies-new-settings",
-          "version": "v2"
-        }, 200);
+        "deploymentId": "deployment-that-applies-new-settings",
+        "version": "v2"
+      }, 200);
 
       AppsStore.once(AppsEvents.APPLY_APP, function () {
         expectAsync(function () {
@@ -846,9 +846,9 @@ describe("Apps", function () {
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
-          "deploymentId": "deployment-that-applies-new-settings",
-          "version": "v2"
-        }, 200);
+        "deploymentId": "deployment-that-applies-new-settings",
+        "version": "v2"
+      }, 200);
 
       AppsStore.once(AppsEvents.APPLY_APP, function (isEditing) {
         expectAsync(function () {
@@ -955,7 +955,8 @@ describe("App component", function () {
   });
 
   it("has the correct app id", function () {
-    var cellContent = this.component.props.children[1].props.children[0].props.children;
+    var cellContent =
+      this.component.props.children[1].props.children[0].props.children;
     expect(cellContent).to.equal("app-123");
   });
 
@@ -965,17 +966,20 @@ describe("App component", function () {
   });
 
   it("has the correct amount of total memory", function () {
-    var cellContent = this.component.props.children[3].props.children.props.title;
+    var cellContent =
+      this.component.props.children[3].props.children.props.title;
     expect(cellContent).to.equal("1030 MiB");
   });
 
   it("displays the correct amount memory", function () {
-    var cellContent = this.component.props.children[3].props.children.props.children;
+    var cellContent =
+      this.component.props.children[3].props.children.props.children;
     expect(cellContent).to.equal("1 GiB");
   });
 
   it("has correct number of tasks running", function () {
-    var tasksRunning = this.component.props.children[5].props.children[0].props.children;
+    var tasksRunning =
+      this.component.props.children[5].props.children[0].props.children;
     expect(tasksRunning).to.equal(4);
   });
 
@@ -993,12 +997,12 @@ describe("App Health Bar", function () {
       id: "app-123",
       instances: 5,
       health: [
-        { state: HealthStatus.HEALTHY, quantity: 2 },
-        { state: HealthStatus.UNHEALTHY, quantity: 2 },
-        { state: HealthStatus.UNKNOWN, quantity: 1 },
-        { state: HealthStatus.STAGED, quantity: 1 },
-        { state: HealthStatus.OVERCAPACITY, quantity: 2 },
-        { state: HealthStatus.UNSCHEDULED, quantity: 2 }
+        {state: HealthStatus.HEALTHY, quantity: 2},
+        {state: HealthStatus.UNHEALTHY, quantity: 2},
+        {state: HealthStatus.UNKNOWN, quantity: 1},
+        {state: HealthStatus.STAGED, quantity: 1},
+        {state: HealthStatus.OVERCAPACITY, quantity: 2},
+        {state: HealthStatus.UNSCHEDULED, quantity: 2}
       ]
     };
 

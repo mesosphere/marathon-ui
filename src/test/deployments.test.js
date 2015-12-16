@@ -83,9 +83,9 @@ describe("Deployments", function () {
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
       this.server.setup({
-          "deploymentId": "deployment-reverts",
-          "version": "v1"
-        }, 200);
+        "deploymentId": "deployment-reverts",
+        "version": "v1"
+      }, 200);
 
       DeploymentStore.once(DeploymentEvents.CHANGE, function () {
         expectAsync(function () {

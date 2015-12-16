@@ -321,17 +321,20 @@ describe("Util", function () {
 
     it("should convert to correct unit of GiB", function () {
       var factorize = Math.pow(1024, 2);
-      expect(Util.filesize((this.baseSize + 128) * factorize)).to.equal("0.9 GiB");
+      expect(Util.filesize((this.baseSize + 128) * factorize))
+        .to.equal("0.9 GiB");
     });
 
     it("should convert to correct unit of TiB", function () {
       var factorize = Math.pow(1024, 3);
-      expect(Util.filesize((this.baseSize + 158) * factorize)).to.equal("0.93 TiB");
+      expect(Util.filesize((this.baseSize + 158) * factorize))
+        .to.equal("0.93 TiB");
     });
 
     it("should convert to correct unit of PiB", function () {
       var factorize = Math.pow(1024, 5);
-      expect(Util.filesize((this.baseSize + 230) * factorize)).to.equal("1026 PiB");
+      expect(Util.filesize((this.baseSize + 230) * factorize))
+        .to.equal("1026 PiB");
     });
 
     // Special tests
@@ -386,7 +389,8 @@ describe("Util", function () {
         "a", "b", "c"
       )).to.equal(true);
     });
-    it("returns false when some specified properties do not match", function () {
+    it("returns false when some specified properties do not match",
+        function () {
       expect(Util.compareProperties(
         {a: 1, b: 2, c: 3, d: 4},
         {a: 1, b: 2, c: 3, d: 5},

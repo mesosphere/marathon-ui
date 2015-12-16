@@ -74,7 +74,8 @@ describe("App Form Model Post Process", function () {
   describe("health checks", function () {
 
     it("is empty on spefific object", function () {
-      var app = {healthChecks: [{
+      var app = {
+        healthChecks: [{
           "path": null,
           "protocol": "HTTP",
           "portIndex": 0,
@@ -92,7 +93,8 @@ describe("App Form Model Post Process", function () {
     });
 
     it("is untouched on given path", function () {
-      var app = {healthChecks: [{
+      var app = {
+        healthChecks: [{
           "path": "/",
           "protocol": "HTTP",
           "portIndex": 0,
