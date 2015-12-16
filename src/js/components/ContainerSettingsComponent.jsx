@@ -25,6 +25,7 @@ var ContainerSettingsComponent = React.createClass({
   statics: {
     fieldIds: Object.freeze({
       containerVolumes: "containerVolumes",
+      dockerForcePullImage: "dockerForcePullImage",
       dockerImage: "dockerImage",
       dockerNetwork: "dockerNetwork",
       dockerParameters: "dockerParameters",
@@ -327,6 +328,16 @@ var ContainerSettingsComponent = React.createClass({
             </FormGroupComponent>
           </div>
         </div>
+        <h4>Force Pull Image</h4>
+        <FormGroupComponent className="checkbox-form-group"
+          errorMessage={props.getErrorMessage(fieldIds.dockerForcePullImage)}
+          fieldId={fieldIds.dockerForcePullImage}
+          help="Force Docker to pull the image before launching each task."
+          label="Pull image on every launch"
+          value={props.fields[fieldIds.dockerForcePullImage]}
+          onChange={this.handleSingleFieldUpdate}>
+          <input type="checkbox" />
+        </FormGroupComponent>
         <h4>Privileges</h4>
         <FormGroupComponent className="checkbox-form-group"
           errorMessage={props.getErrorMessage(fieldIds.dockerPrivileged)}
