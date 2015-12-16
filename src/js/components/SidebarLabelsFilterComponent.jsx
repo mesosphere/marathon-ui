@@ -9,8 +9,8 @@ var FilterTypes = require("../constants/FilterTypes");
 
 var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
-var AppListLabelsFilterComponent = React.createClass({
-  displayName: "AppListLabelsFilterComponent",
+var SidebarLabelsFilterComponent = React.createClass({
+  displayName: "SidebarLabelsFilterComponent",
 
   mixins: [OnClickOutsideMixin, QueryParamsMixin],
 
@@ -259,4 +259,4 @@ var AppListLabelsFilterComponent = React.createClass({
 
 });
 
-module.exports = AppListLabelsFilterComponent;
+module.exports = SidebarLabelsFilterComponent;

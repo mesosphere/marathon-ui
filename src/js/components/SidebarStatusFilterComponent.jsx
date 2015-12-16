@@ -9,8 +9,8 @@ var QueryParamsMixin = require("../mixins/QueryParamsMixin");
 
 var statusNameMapping = require("../constants/LabelMapping").statusNameMapping;
 
-var AppListStatusFilterComponent = React.createClass({
-  displayName: "AppListStatusFilterComponent",
+var SidebarStatusFilterComponent = React.createClass({
+  displayName: "SidebarStatusFilterComponent",
 
   mixins: [QueryParamsMixin],
 
@@ -147,4 +147,4 @@ var AppListStatusFilterComponent = React.createClass({
 
 });
 
-module.exports = AppListStatusFilterComponent;
+module.exports = SidebarStatusFilterComponent;
