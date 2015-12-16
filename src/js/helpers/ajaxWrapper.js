@@ -35,7 +35,8 @@ var ajaxWrapper = function (opts = {}) {
   var makeRequest = function (options) {
     var fetchOptions = {
       method: options.method,
-      headers: options.headers
+      headers: options.headers,
+      credentials: "same-origin"
     };
 
     if (options.method !== "GET" && options.method !== "HEAD") {
