@@ -1,0 +1,22 @@
+/* ==============
+ * Task File List (table)
+ * ==============
+ */
+.task-file-list {
+  margin-top: @base-spacing-unit*3;
+
+  tr {
+    .btn {
+      float: right;
+      opacity: 0;
+      margin-top: -@horizontal-spacing-unit;
+      margin-bottom: -@horizontal-spacing-unit;
+    }
+
+    &:hover {
+      .btn {
+        opacity: 1;
+      }
+    }
+  }
+}

@@ -36,9 +36,7 @@ var AboutModalComponent = React.createClass({
   },
 
   destroy: function () {
-    // This will also call `this.props.onDestroy` since it is passed as the
-    // callback for the modal's `onDestroy` prop.
-    this.refs.modalComponent.destroy();
+    this.props.onDestroy();
   },
 
   getInfo: function (attr) {
@@ -56,11 +54,9 @@ var AboutModalComponent = React.createClass({
     var marathonConfig = this.state.info.marathon_config;
     var zookeeperConfig = this.state.info.zookeeper_config;
     var logoPath = config.rootUrl + "img/marathon-logo.png";
-
     return (
       <ModalComponent
           onDestroy={this.props.onDestroy}
-          ref="modalComponent"
           size="lg">
         <div className="modal-header modal-header-blend">
           <button type="button" className="close"

@@ -53,9 +53,7 @@ var TaskListComponent = React.createClass({
     var sortKey = state.sortKey;
 
     return lazy(this.props.tasks)
-      .sortBy(function (app) {
-        return app[sortKey];
-      }, state.sortDescending)
+      .sortBy(app => app[sortKey], state.sortDescending)
       .drop(dropCount)
       .take(this.props.itemsPerPage)
       .map(function (task) {
@@ -162,32 +160,37 @@ var TaskListComponent = React.createClass({
               </th>
               <th>
                 <span onClick={this.sortBy.bind(null, "id")}
-                      className={headerClassSet}>
+                    className={headerClassSet}>
                   ID {this.getCaret("id")}
                 </span>
               </th>
               <th className={hasHealthClassSet}>
                 <span onClick={this.sortBy.bind(null, "healthStatus")}
-                  className={headerClassSet}>
+                    className={headerClassSet}>
                   Health {this.getCaret("healthStatus")}
                 </span>
               </th>
               <th className="text-center">
                 <span onClick={this.sortBy.bind(null, "status")}
-                      className={headerClassSet}>
+                    className={headerClassSet}>
                   Status {this.getCaret("status")}
                 </span>
               </th>
+              <th className="text-center">
+                Error Log
+              </th>
+              <th className="text-center">
+                Output Log
+              </th>
               <th className="text-right">
-                <span
-                  className={headerClassSet}
-                  onClick={this.sortBy.bind(null, "version")}>
+                <span onClick={this.sortBy.bind(null, "version")}
+                    className={headerClassSet}>
                   {this.getCaret("version")} Version
                 </span>
               </th>
               <th className="text-right">
                 <span onClick={this.sortBy.bind(null, "updatedAt")}
-                      className={headerClassSet}>
+                    className={headerClassSet}>
                   {this.getCaret("updatedAt")} Updated
                 </span>
               </th>
@@ -195,12 +198,12 @@ var TaskListComponent = React.createClass({
           </thead>
           <tbody>
             <tr className={noTasksClassSet}>
-              <td className="text-center" colSpan="7">
+              <td className="text-center" colSpan="8">
                 No tasks running.
               </td>
             </tr>
             <tr className={loadingClassSet}>
-              <td className="text-center text-muted" colSpan="7">
+              <td className="text-center text-muted" colSpan="8">
                 Loading tasks...
               </td>
             </tr>

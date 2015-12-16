@@ -93,6 +93,10 @@ describe("About Modal", function () {
     });
   });
 
+  afterEach(function () {
+    this.renderer.unmount();
+  });
+
   it("displays the current Marathon version", function () {
     var modalTitle = ShallowUtils.findOne(this.modal, "modal-title");
     var titleText = ShallowUtils.getText(modalTitle);
