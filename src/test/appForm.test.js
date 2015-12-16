@@ -292,6 +292,18 @@ describe("App Form", function () {
 
       describe("the container settings", function () {
 
+        describe("the force pull image field", function () {
+          it("updates correctly", function (done) {
+            AppFormStore.once(FormEvents.CHANGE, function () {
+              expectAsync(function () {
+                expect(AppFormStore.fields.dockerForcePullImage).to.equal(true);
+              }, done);
+            });
+
+            FormActions.update("dockerForcePullImage", true);
+          });
+        });
+
         describe("the image field", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {

@@ -59,6 +59,13 @@ describe("App Form Field to Model Transform", function () {
       ])).to.deep.equal([]);
     });
 
+    it("dockerForcePullImage is checked", function () {
+      expect(AppFormTransforms.FieldToModel.dockerForcePullImage(true))
+        .to.be.true;
+      expect(AppFormTransforms.FieldToModel.dockerForcePullImage())
+        .to.be.false;
+    });
+
     it("dockerPortMappings to array of one object", function () {
       expect(AppFormTransforms.FieldToModel.dockerPortMappings([
         {

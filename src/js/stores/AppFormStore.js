@@ -89,6 +89,7 @@ const resolveFieldIdToAppKeyMap = {
   containerVolumes: "container.volumes",
   cpus: "cpus",
   disk: "disk",
+  dockerForcePullImage: "container.docker.forcePullImage",
   dockerImage: "container.docker.image",
   dockerNetwork: "container.docker.network",
   dockerParameters: "container.docker.parameters",
@@ -117,6 +118,7 @@ const responseAttributePathToFieldIdMap = {
   "/acceptedResourceRoles": "acceptedResourceRoles",
   "/cmd": "cmd",
   "/constraints": "constraints",
+  "/container/docker/forcePullImage": "dockerForcePullImage",
   "/container/docker/image": "dockerImage",
   "/container/docker/network": "dockerNetwork",
   "/container/docker/privileged": "dockerPrivileged",
@@ -171,6 +173,7 @@ const responseAttributePathToFieldIdMap = {
  */
 const resolveAppKeyToFieldIdMap = {
   id: "appId",
+  "container.docker.forcePullImage": "dockerForcePullImage",
   "container.docker.image": "dockerImage",
   "container.docker.network": "dockerNetwork",
   "container.docker.portMappings": "dockerPortMappings",
