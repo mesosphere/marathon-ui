@@ -78,6 +78,10 @@ var TaskFileDownloadComponent = React.createClass({
       this.onMesosRequestTaskFilesComplete);
     MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
       this.onMesosRequestTaskFilesError);
+
+    this.setState({
+      fileIsRequestedByUser: false
+    });
   },
 
   handleClick: function (event) {
