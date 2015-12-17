@@ -1,0 +1,55 @@
+.popover {
+
+  border: none;
+  display: none;
+  margin: 0;
+  max-width: none;
+  padding: 0;
+  position: relative;
+
+  &.visible {
+    display: block;
+  }
+
+  .content {
+    background-color: @navbar-bg-color;
+    padding: .8em 1em;
+    position: absolute;
+    z-index: 1;
+  }
+
+  &.default, &.top, &.bottom {
+    margin: 0;
+
+    .content:before, .content:after {
+      border: solid transparent;
+      border-width: @base-spacing-unit;
+      left: 50%;
+      height: 0;
+      margin-left: -@base-spacing-unit;
+      pointer-events: none;
+      position: absolute;
+      width: 0;
+    }
+  }
+
+  &.default .content, &.top .content {
+    bottom: 0;
+
+    &:before {
+      border-top-color: @navbar-bg-color;
+      top: 100%;
+      content: " ";
+    }
+  }
+
+  &.bottom .content {
+    top: 0;
+
+    &:after {
+      border-bottom-color: @navbar-bg-color;
+      bottom: 100%;
+      content: " ";
+    }
+  }
+}
