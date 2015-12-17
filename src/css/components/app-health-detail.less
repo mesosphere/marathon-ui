@@ -32,7 +32,11 @@
   color: @text-color-muted;
 }
 
-.tooltip {
+.app-health-detail-popover {
+  .health-breakdown {
+    margin: 0;
+  }
+
   .health-breakdown-item {
     margin: @base-spacing-unit / 2 0;
     font-size: @base-font-size;
@@ -44,6 +48,31 @@
 
   .health-breakdown-item-empty.health-breakdown-item-impermanent {
     display: none;
+  }
+
+  &.popover {
+    &.default, &.top, &.bottom {
+      margin: 0;
+
+      .content {
+        right:0;
+        white-space: nowrap;
+
+        &:before, &:after {
+          left:auto;
+          right: @base-spacing-unit;
+        }
+
+      }
+    }
+
+    &.default .content, &.top .content {
+      bottom: @base-spacing-unit;
+    }
+
+    &.bottom .content {
+      top: @base-spacing-unit*2.5;
+    }
   }
 }
 
