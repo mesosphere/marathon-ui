@@ -1,15 +1,13 @@
 var React = require("react/addons");
 
-var TooltipMixin = require("../mixins/TooltipMixin");
 var AppHealthBarComponent = require("./AppHealthBarComponent");
 var AppHealthDetailComponent = require("./AppHealthDetailComponent");
+var PopoverComponent = require("./PopoverComponent");
 var Util = require("../helpers/Util");
 var HealthStatus = require("../constants/HealthStatus");
 
 var AppHealthBarWithTooltipComponent = React.createClass({
   displayName: "AppHealthBarWithTooltipComponent",
-
-  mixins: [TooltipMixin],
 
   propTypes: {
     model: React.PropTypes.object.isRequired
@@ -17,68 +15,48 @@ var AppHealthBarWithTooltipComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      tipContent: this.getAppHealthBreakdown(this.props.model)
+      isPopoverVisible: false
     };
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
-    // Ensure that the health bar does not update before the tipContent was
-    // updated (`setState` is not guaranteed to complete before `render`)
-    if (this.state.tipContent !== nextState.tipContent) {
-      return true;
-    }
-    var healthWasUpdated =
+    return  this.state.isPopoverVisible !== nextState.isPopoverVisible ||
       !Util.compareArrays(this.props.model.health, nextProps.model.health);
-    if (healthWasUpdated) {
-      this.setState({
-        tipContent: this.getAppHealthBreakdown(nextProps.model)
-      });
-    }
-    return false;
   },
 
   handleMouseOverHealthBar: function () {
-    var el = this.refs.healthBar.getDOMNode();
-    this.tip_showTip(el);
+    this.setState({
+      isPopoverVisible: true
+    });
   },
 
   handleMouseOutHealthBar: function () {
-    var el = this.refs.healthBar.getDOMNode();
-    this.tip_hideTip(el);
-  },
-
-  getAppHealthBreakdown: function (model) {
-    let component = (
-      <AppHealthDetailComponent
-        className="list-unstyled"
-        fields={[
-          HealthStatus.HEALTHY,
-          HealthStatus.UNHEALTHY,
-          HealthStatus.UNKNOWN,
-          HealthStatus.STAGED,
-          HealthStatus.OVERCAPACITY,
-          HealthStatus.UNSCHEDULED
-        ]}
-        model={model} />
-    );
-    return React.renderToString(component);
+    this.setState({
+      isPopoverVisible: false
+    });
   },
 
   render: function () {
-    // Extra <div> nesting is necessary here because of the way the TooltipMixin
-    // searches for elements - it finds children
+    var model = this.props.model;
+
     return (
-      <div>
-        <div ref="healthBar"
-          data-behavior="show-tip"
-          data-tip-type-class="default"
-          data-tip-place="top-left"
-          data-tip-content={this.state.tipContent}
-          onMouseOver={this.handleMouseOverHealthBar}
-          onMouseOut={this.handleMouseOutHealthBar}>
-          <AppHealthBarComponent
-            model={this.props.model}/>
-        </div>
+      <div onMouseOver={this.handleMouseOverHealthBar}
+           onMouseOut={this.handleMouseOutHealthBar}>
+        <PopoverComponent visible={this.state.isPopoverVisible}
+            className="app-health-detail-popover">
+          <AppHealthDetailComponent
+            className="list-unstyled"
+            fields={[
+              HealthStatus.HEALTHY,
+              HealthStatus.UNHEALTHY,
+              HealthStatus.UNKNOWN,
+              HealthStatus.STAGED,
+              HealthStatus.OVERCAPACITY,
+              HealthStatus.UNSCHEDULED
+            ]}
+            model={model} />
+        </PopoverComponent>
+        <AppHealthBarComponent model={model}/>
       </div>
     );
   }

@@ -13,6 +13,7 @@
 - \#2755 - Memory leak in Marathon UI
 - \#2845 - Misleading error feedback in app creation modal on port conflict
 - \#2812 - Cannot change configuration of Marathon app after deployment
+- \#2821 - Tooltip content update issue
 
 ## 0.14.0 - 2015-12-07
 ### Added
