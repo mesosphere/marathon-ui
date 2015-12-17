@@ -4,6 +4,7 @@
 - \#2775 - Syntax highlighting for JSON fragments in configuration
 - \#2809 - Health filter in sidebar
 - \#2824 - Add UI option for Docker forcePullImage
+- \#2721 - Provide log download links for easier task debugging
 
 ### Changed
 - \#2764 - Make health status bar wider
@@ -31,7 +32,6 @@
 - \#2714 - Global ellipsis in breadcrumbs
 - \#2785 - Prompt support for number input type
 - \#2771 - Open task links in a new tab
-- \#2721 - Provide log download links for easier task debugging
 
 ### Changed
 - Adjust the task list column order
