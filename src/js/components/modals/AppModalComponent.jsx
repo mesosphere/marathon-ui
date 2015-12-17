@@ -112,7 +112,8 @@ var AppModalComponent = React.createClass({
     // All status below 300 are actually not an error
     if (status < 300) {
       this.onCreateApp();
-    } else if (status === 409) {
+    } else if (status === 409 && data.deployments != null) {
+      // a 409 error without deployments is a field conflict
       this.setState({
         responseErrorMessages: {
           general: AppFormErrorMessages.getGeneralMessage("appLocked")
