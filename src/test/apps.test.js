@@ -1090,8 +1090,8 @@ describe("App Health Bar", function () {
     beforeEach(function () {
       this.renderer = TestUtils.createRenderer();
       this.renderer.render(
-        <AppHealthBarWithTooltipComponent
-          model={this.model}/>);
+        <AppHealthBarWithTooltipComponent model={this.model}/>
+      );
       this.content = this.renderer.getRenderOutput().props.children;
     });
 
