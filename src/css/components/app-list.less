@@ -105,7 +105,36 @@
             }
           }
         }
+      }
+    }
 
+    &.health-bar-column {
+
+      .popover {
+
+        &.default, &.top, &.bottom {
+          margin: 0;
+
+          .content {
+            min-width: @base-spacing-unit*10;
+            right:0;
+            white-space: nowrap;
+
+            &:before, &:after {
+              left:auto;
+              right: @base-spacing-unit*3;
+            }
+
+          }
+        }
+
+        &.default .content, &.top .content {
+          bottom: @base-spacing-unit;
+        }
+
+        &.bottom .content {
+          top: @base-spacing-unit*2.5;
+        }
       }
     }
   }
