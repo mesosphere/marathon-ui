@@ -24,7 +24,7 @@ var AppHealthBarWithTooltipComponent = React.createClass({
       !Util.compareArrays(this.props.model.health, nextProps.model.health);
   },
 
-  handleMouseOverHealthBar: function (e) {
+  handleMouseOverHealthBar: function () {
     this.setState({
       isPopoverVisible: true
     });
