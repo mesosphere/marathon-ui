@@ -1067,6 +1067,10 @@ describe("App Health Bar", function () {
       this.content = this.renderer.getRenderOutput().props.children;
     });
 
+    afterEach(function () {
+      this.renderer.unmount();
+    });
+
     it("Healthy tasks are reported correctly", function () {
       expect(this.content[0].props.children[1]).to.equal(2);
     });
@@ -1089,6 +1093,10 @@ describe("App Health Bar", function () {
         <AppHealthBarWithTooltipComponent
           model={this.model}/>);
       this.content = this.renderer.getRenderOutput().props.children;
+    });
+
+    afterEach(function () {
+      this.renderer.unmount();
     });
 
     it("has  health details", function () {
