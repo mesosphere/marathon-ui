@@ -787,7 +787,31 @@ describe("App Form", function () {
         });
       });
 
-      it("processes a 409 error response message correctly", function (done) {
+      it("processes a locked deployment error correctly", function (done) {
+        this.server.setup({
+          "message": "App is locked by one or more deployments.",
+          deployments: [{"id":"foobar"}]
+        }, 409);
+
+        var expectedMessage =
+          AppFormErrorMessages.getGeneralMessage("appLocked");
+
+        console.log(expectedMessage);
+
+        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+          expectAsync(function () {
+            console.log(expectedMessage);
+            expect(AppFormStore.responseErrors.general)
+              .to.equal(expectedMessage);
+          }, done);
+        });
+
+        AppsActions.createApp({
+          "howdy": "partner"
+        });
+      });
+
+      it("processes a field conflict error correctly", function (done) {
         this.server.setup({
           "message": "bad error"
         }, 409);

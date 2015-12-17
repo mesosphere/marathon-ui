@@ -285,6 +285,7 @@ function deleteField(fields, fieldId, index) {
 
 function processResponseErrors(responseErrors, response, statusCode) {
   var responseHasMessage = response != null && response.message != null;
+  var responseHasDeployments = response != null && response.deployments != null;
   if (statusCode >= 500) {
     responseErrors.general =
       AppFormErrorMessages.getGeneralMessage("unknownServerError");
@@ -301,6 +302,11 @@ function processResponseErrors(responseErrors, response, statusCode) {
       responseErrors[fieldId] =
         AppFormErrorMessages.lookupServerResponseMessage(error.error);
     });
+
+  } else if (statusCode === 409 && responseHasDeployments) {
+
+    responseErrors.general =
+      AppFormErrorMessages.getGeneralMessage("appLocked");
 
   } else if (statusCode === 409 && responseHasMessage) {
 
