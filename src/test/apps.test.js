@@ -30,6 +30,8 @@ var AppHealthBarComponent =
   require("../js/components/AppHealthBarComponent");
 var AppHealthBarWithTooltipComponent =
   require("../js/components/AppHealthBarWithTooltipComponent");
+var AppHealthDetailComponent =
+  require("../js/components/AppHealthDetailComponent");
 var AppPageComponent = require("../js/components/AppPageComponent");
 var AppStatusComponent = require("../js/components/AppStatusComponent");
 var appScheme = require("../js/stores/schemes/appScheme");
@@ -1045,28 +1047,58 @@ describe("App Health Bar", function () {
     expect(width).to.equal("20%");
   });
 
-  describe("tooltip", function () {
+  describe("detail", function () {
+
+    beforeEach(function () {
+      this.renderer = TestUtils.createRenderer();
+      this.renderer.render(
+        <AppHealthDetailComponent
+          className="list-unstyled"
+          fields={[
+            HealthStatus.HEALTHY,
+            HealthStatus.UNHEALTHY,
+            HealthStatus.UNKNOWN,
+            HealthStatus.STAGED,
+            HealthStatus.OVERCAPACITY,
+            HealthStatus.UNSCHEDULED
+          ]}
+          model={this.model} />
+      );
+      this.content = this.renderer.getRenderOutput().props.children;
+    });
+
+    it("Healthy tasks are reported correctly", function () {
+      expect(this.content[0].props.children[1]).to.equal(2);
+    });
+
+    it("Unhealthy tasks are reported correctly", function () {
+      expect(this.content[1].props.children[1]).to.equal(2);
+    });
+
+    it("Unknown tasks are reported correctly", function () {
+      expect(this.content[2].props.children[1]).to.equal(1);
+    });
+
+  });
+
+  describe("with tooltip", function () {
 
     beforeEach(function () {
       this.renderer = TestUtils.createRenderer();
       this.renderer.render(
         <AppHealthBarWithTooltipComponent
           model={this.model}/>);
-      var component = this.renderer.getRenderOutput();
-      this.content = component._store.props.children.props["data-tip-content"];
+      this.content = this.renderer.getRenderOutput().props.children;
     });
 
-    it("Healthy tasks are reported correctly", function () {
-      // Regexp matching because the content is a string of html
-      expect(this.content).to.match(/2.*Healthy.*\(.*40.*%\).*/);
+    it("has  health details", function () {
+      expect(this.content[0].props.children.type.displayName)
+        .to.equal("AppHealthDetailComponent");
     });
 
-    it("Unhealthy tasks are reported correctly", function () {
-      expect(this.content).to.match(/2.*Unhealthy.*\(.*40.*%\).*/);
-    });
-
-    it("Unknown tasks are reported correctly", function () {
-      expect(this.content).to.match(/1.*Unknown.*\(.*20.*%\).*/);
+    it("has healthbar", function () {
+      expect(this.content[1].type.displayName)
+        .to.equal("AppHealthBarComponent");
     });
 
   });
