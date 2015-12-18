@@ -207,6 +207,10 @@ describeWithDOM("App Version List component", function () {
     this.component = mount(<AppVersionListComponent appId={"/app-test"} />);
   });
 
+  after(function () {
+    this.component.component.getInstance().componentWillUnmount();
+  });
+
   it("has correct AppVersionListItemComponents", function () {
     var items = this.component.find(AppVersionListItemComponent);
 
@@ -278,6 +282,10 @@ describeWithDOM("App Version component", function () {
     this.component = mount(<AppVersionComponent appVersion={this.model} />);
     this.table = this.component.find("dl.dl-horizontal");
     this.rows = this.table.children();
+  });
+
+  after(function () {
+    this.component.component.getInstance().componentWillUnmount();
   });
 
   it("shows the app ID", function () {
