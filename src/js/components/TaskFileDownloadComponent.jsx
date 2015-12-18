@@ -103,20 +103,19 @@ var TaskFileDownloadComponent = React.createClass({
     }
   },
 
+  getIcon: function() {
+    if (this.state.fileIsRequestedByUser === true) {
+      return (<i className="icon icon-mini loading" />)
+    }
+    return (<i className="icon icon-mini file" />)
+  },
+
   render: function () {
     var state = this.state;
     var props = this.props;
     var name = props.fileName;
     var file = state.file;
     var href = "";
-
-    if (this.state.fileIsRequestedByUser === true) {
-      return (
-        <span>
-          <i className="icon icon-small loading" />
-        </span>
-      )
-    }
 
     if (file) {
       href = file.downloadURI;
@@ -127,7 +126,7 @@ var TaskFileDownloadComponent = React.createClass({
           href={href}
           onClick={this.handleClick}
           download={name}>
-        <i className="icon icon-mini file" /> {name}
+        {this.getIcon()} {name}
       </a>
     );
   }
