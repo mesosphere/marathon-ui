@@ -1,57 +1,43 @@
 var _ = require("underscore");
 var expect = require("chai").expect;
-var mount = require("enzyme").mount;
+var expectAsync = require("./helpers/expectAsync");
+var shallow = require("enzyme").shallow;
+var nock = require("nock");
 var describeWithDOM = require("enzyme").describeWithDOM;
 
 var React = require("react/addons");
 
 var config = require("../js/config/config");
-var AboutModalComponent = require("../js/components/modals/AboutModalComponent");
+var AboutModalComponent = require(
+  "../js/components/modals/AboutModalComponent");
 var InfoActions = require("../js/actions/InfoActions");
 var InfoEvents = require("../js/events/InfoEvents");
 var InfoStore = require("../js/stores/InfoStore");
 var ObjectDlComponent = require("../js/components/ObjectDlComponent");
 
-var ShallowUtils = require("./helpers/ShallowUtils");
-var expectAsync = require("./helpers/expectAsync");
-var HttpServer = require("./helpers/HttpServer").HttpServer;
-
-var server = new HttpServer(config.localTestserverURI);
+var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("Info", function () {
 
-  beforeEach(function (done) {
-    this.server = server
-    .setup({
-      "name": "Marathon"
-    }, 200)
-    .start(function () {
-      InfoStore.once(InfoEvents.CHANGE, done);
-      InfoActions.requestInfo();
-    });
-  });
-
-  afterEach(function (done) {
-    this.server.stop(done);
+  before(function (done) {
+    nock(config.apiURL)
+      .get("/v2/info")
+      .reply(200, {"name": "Marathon"});
+    InfoStore.once(InfoEvents.CHANGE, done);
+    InfoActions.requestInfo();
   });
 
   describe("on info request", function () {
 
-    it("updates the InfoStore on success", function (done) {
-      InfoStore.once(InfoEvents.CHANGE, function () {
-        expectAsync(function () {
-          expect(InfoStore.info.name).to.equal("Marathon");
-        }, done);
-      });
-
-      InfoActions.requestInfo();
+    it("updates the InfoStore on success", function () {
+      expect(InfoStore.info.name).to.equal("Marathon");
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({
-        message: "Guru Meditation"
-      }, 404);
+      nock(config.apiURL)
+        .get("/v2/info")
+        .reply(404, {message: "Guru Meditation"});
 
       InfoStore.once(InfoEvents.REQUEST_ERROR, function (error) {
         expectAsync(function () {
@@ -68,7 +54,7 @@ describe("Info", function () {
 
 describeWithDOM("About Modal", function () {
 
-  beforeEach(function () {
+  before(function () {
     InfoStore.info = {
       "version": "1.2.3",
       "frameworkId": "framework1",
@@ -83,16 +69,16 @@ describeWithDOM("About Modal", function () {
       }
     };
 
-    this.modal = mount(<AboutModalComponent onDestroy={_.noop} />);
+    this.component = shallow(<AboutModalComponent onDestroy={_.noop} />);
     this.nodes = {
-      modalTitleText: this.modal.find(".modal-title").text(),
-      modalBodyText: this.modal.find(".modal-body").text(),
-      objectDlComponents: this.modal.find(ObjectDlComponent)
+      modalTitleText: this.component.find(".modal-title").text(),
+      modalBodyText: this.component.find(".modal-body").text(),
+      objectDlComponents: this.component.find(ObjectDlComponent)
     };
   });
 
-  afterEach(function () {
-    this.renderer.unmount();
+  after(function () {
+    this.component.instance().componentWillUnmount();
   });
 
   it("displays the current Marathon version", function () {
