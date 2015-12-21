@@ -984,67 +984,66 @@ describe("Apps", function () {
 
 });
 
-describe("Groups", function () {
+describeWithDOM("Groups", function () {
 
-  beforeEach(function () {
-    var apps = [
-      {id: "/app-1", instances: 1, mem: 16, cpus: 1},
-      {id: "/app-2", instances: 1, mem: 16, cpus: 1},
-      {id: "/group-1/app-3", instances: 1, mem: 16, cpus: 1},
-      {id: "/group-1/app-4", instances: 1, mem: 16, cpus: 1},
-      {id: "/group-2/app-5", instances: 1, mem: 16, cpus: 1},
-      {id: "/group-2/app-6", instances: 1, mem: 16, cpus: 1},
-      {id: "/group-1/group-3/app-7", instances: 1, mem: 16, cpus: 1},
-      {id: "/group-1/group-3/app-8", instances: 1, mem: 16, cpus: 1}
-    ];
+  var apps = [
+    {id: "/app-1", instances: 1, mem: 16, cpus: 1},
+    {id: "/app-2", instances: 1, mem: 16, cpus: 1},
+    {id: "/group-1/app-3", instances: 1, mem: 16, cpus: 1},
+    {id: "/group-1/app-4", instances: 1, mem: 16, cpus: 1},
+    {id: "/group-2/app-5", instances: 1, mem: 16, cpus: 1},
+    {id: "/group-2/app-6", instances: 1, mem: 16, cpus: 1},
+    {id: "/group-1/group-3/app-7", instances: 1, mem: 16, cpus: 1},
+    {id: "/group-1/group-3/app-8", instances: 1, mem: 16, cpus: 1}
+  ];
 
+  before(function () {
     AppDispatcher.dispatch({
       actionType: AppsEvents.REQUEST_APPS,
       data: {body: {apps: apps}}
     });
 
-    this.renderer = TestUtils.createRenderer();
-  });
-
-  afterEach(function () {
-    this.renderer.unmount();
+    // Ideally we should mount(AppListComponent) once here
+    // and use .setProps(), but we can't:
+    // TODO https://github.com/airbnb/enzyme/issues/68
   });
 
   it("are extrapolated from app IDs", function () {
-    this.renderer.render(<AppListComponent currentGroup="/" />);
-    this.component = this.renderer.getRenderOutput();
-    var tbody = this.component.props.children[2];
-    var trs = tbody.props.children;
-    this.appNodes = trs[trs.length - 1];
+    this.component = mount(<AppListComponent currentGroup="/" />);
 
-    var appNodeKeys = this.appNodes.map((app) => app.key);
-    expect(appNodeKeys).to.deep.equal([
-      "/group-1", "/group-2", "/app-1", "/app-2"
+    var appNames = this.component
+      .find(AppListItemComponent)
+      .map(appNode => appNode.find(".name-cell").text());
+
+    expect(appNames).to.deep.equal([
+      "group-1", "group-2", "app-1", "app-2"
     ]);
+    this.component.instance().componentWillUnmount();
   });
 
   it("correctly renders in group context", function () {
-    this.renderer.render(<AppListComponent currentGroup="/group-1/" />);
-    this.component = this.renderer.getRenderOutput();
-    var tbody = this.component.props.children[2];
-    var trs = tbody.props.children;
-    this.appNodes = trs[trs.length - 1];
+    this.component = mount(<AppListComponent currentGroup="/group-1/" />);
 
-    var appNodeKeys = this.appNodes.map((app) => app.key);
-    expect(appNodeKeys).to.deep.equal([
-      "/group-1/group-3", "/group-1/app-3", "/group-1/app-4"
+    var appNames = this.component
+      .find(AppListItemComponent)
+      .map(appNode => appNode.find(".name-cell").text());
+
+    expect(appNames).to.deep.equal([
+        "group-3", "app-3", "app-4"
     ]);
+    this.component.instance().componentWillUnmount();
   });
 
 });
 
 describe("App component", function () {
 
-  beforeEach(function () {
+  before(function () {
     var model = {
       id: "/app-123",
       deployments: [],
       tasksRunning: 4,
+      health: [],
       instances: 5,
       mem: 100,
       totalMem: 1030,
@@ -1052,113 +1051,121 @@ describe("App component", function () {
       totalCpus: 20.0000001,
       status: 0
     };
-    this.renderer = TestUtils.createRenderer();
-    this.renderer.render(
+
+    this.component = render(
       <AppListItemComponent model={model} currentGroup="/" />
     );
-    this.component = this.renderer.getRenderOutput();
   });
 
-  afterEach(function () {
-    this.renderer.unmount();
+  after(function () {
+    this.component = null;
   });
 
   it("has the correct app id", function () {
-    var cellContent =
-      this.component.props.children[1].props.children[0].props.children;
-    expect(cellContent).to.equal("app-123");
+    expect(this.component.find(".name-cell").text()).to.equal("app-123");
   });
 
   it("has the correct amount of total cpus", function () {
-    var cellContent = this.component.props.children[2].props.children;
-    expect(cellContent).to.equal("20.0");
+    expect(this.component.find(".cpu-cell").text()).to.equal("20.0");
   });
 
   it("has the correct amount of total memory", function () {
-    var cellContent =
-      this.component.props.children[3].props.children.props.title;
-    expect(cellContent).to.equal("1030 MiB");
+    var node = this.component.find(".total.ram > span");
+    expect(node.get(0).attribs.title).to.equal("1030 MiB");
   });
 
   it("displays the correct amount memory", function () {
-    var cellContent =
-      this.component.props.children[3].props.children.props.children;
-    expect(cellContent).to.equal("1 GiB");
+    expect(this.component.find(".total.ram").text()).to.equal("1 GiB");
   });
 
-  it("has correct number of tasks running", function () {
-    var tasksRunning =
-      this.component.props.children[5].props.children[0].props.children;
-    expect(tasksRunning).to.equal(4);
-  });
-
-  it("has correct number of instances", function () {
-    var totalSteps = this.component.props.children[5].props.children[2];
-    expect(totalSteps).to.equal(5);
+  it("has correct number of tasks and instances", function () {
+    expect(this.component.find(".instances-cell").text())
+      .to.equal("4 of 5");
   });
 
 });
 
 describe("App Health Bar", function () {
 
-  beforeEach(function () {
-    this.model = {
-      id: "app-123",
-      instances: 5,
-      health: [
-        {state: HealthStatus.HEALTHY, quantity: 2},
-        {state: HealthStatus.UNHEALTHY, quantity: 2},
-        {state: HealthStatus.UNKNOWN, quantity: 1},
-        {state: HealthStatus.STAGED, quantity: 1},
-        {state: HealthStatus.OVERCAPACITY, quantity: 2},
-        {state: HealthStatus.UNSCHEDULED, quantity: 2}
-      ]
-    };
+  var model = {
+    id: "app-123",
+    instances: 5,
+    health: [
+      {state: HealthStatus.HEALTHY, quantity: 2},
+      {state: HealthStatus.UNHEALTHY, quantity: 2},
+      {state: HealthStatus.UNKNOWN, quantity: 1},
+      {state: HealthStatus.STAGED, quantity: 1},
+      {state: HealthStatus.OVERCAPACITY, quantity: 2},
+      {state: HealthStatus.UNSCHEDULED, quantity: 2}
+    ]
+  };
 
-    this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AppHealthBarComponent model={this.model} />);
-    this.component = this.renderer.getRenderOutput();
+  before(function () {
+    this.component = shallow(<AppHealthBarComponent model={model} />);
   });
 
-  afterEach(function () {
-    this.renderer.unmount();
+  after(function () {
+    this.component = null;
   });
 
   it("health bar for healthy tasks has correct width", function () {
-    var width = this.component.props.children[0].props.style.width;
+    var width = this.component
+      .find(".progress-bar")
+      .at(0)
+      .props()
+      .style.width;
     expect(width).to.equal("20%");
   });
 
   it("health bar for unhealthy tasks has correct width", function () {
-    var width = this.component.props.children[1].props.style.width;
+    var width = this.component
+      .find(".progress-bar")
+      .at(1)
+      .props()
+      .style.width;
     expect(width).to.equal("20%");
   });
 
   it("health bar for running tasks has correct width", function () {
-    var width = this.component.props.children[2].props.style.width;
+    var width = this.component
+      .find(".progress-bar")
+      .at(2)
+      .props()
+      .style.width;
     expect(width).to.equal("10%");
   });
 
   it("health bar for staged tasks has correct width", function () {
-    var width = this.component.props.children[3].props.style.width;
+    var width = this.component
+      .find(".progress-bar")
+      .at(3)
+      .props()
+      .style.width;
     expect(width).to.equal("10%");
   });
 
   it("health bar for over capacity tasks has correct width", function () {
-    var width = this.component.props.children[4].props.style.width;
+    var width = this.component
+      .find(".progress-bar")
+      .at(4)
+      .props()
+      .style.width;
     expect(width).to.equal("20%");
   });
 
   it("health bar for unscheduled tasks has correct width", function () {
-    var width = this.component.props.children[5].props.style.width;
+    var width = this.component
+      .find(".progress-bar")
+      .at(5)
+      .props()
+      .style.width;
     expect(width).to.equal("20%");
   });
 
   describe("detail", function () {
 
-    beforeEach(function () {
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(
+    before(function () {
+      this.component = shallow(
         <AppHealthDetailComponent
           className="list-unstyled"
           fields={[
@@ -1169,59 +1176,78 @@ describe("App Health Bar", function () {
             HealthStatus.OVERCAPACITY,
             HealthStatus.UNSCHEDULED
           ]}
-          model={this.model} />
+          model={model} />
       );
-      this.content = this.renderer.getRenderOutput().props.children;
     });
 
-    afterEach(function () {
-      this.renderer.unmount();
+    after(function () {
+      this.component = null;
     });
 
     it("Healthy tasks are reported correctly", function () {
-      expect(this.content[0].props.children[1]).to.equal(2);
+      expect(
+        this.component.find(".health-breakdown-item-healthy")
+          .text()
+      ).to.equal("2 Healthy(40%)");
     });
 
     it("Unhealthy tasks are reported correctly", function () {
-      expect(this.content[1].props.children[1]).to.equal(2);
+      expect(
+        this.component.find(".health-breakdown-item-unhealthy")
+          .text()
+      ).to.equal("2 Unhealthy(40%)");
     });
 
     it("Unknown tasks are reported correctly", function () {
-      expect(this.content[2].props.children[1]).to.equal(1);
+      expect(
+        this.component.find(".health-breakdown-item-unknown")
+          .text()
+      ).to.equal("1 Unknown(20%)");
     });
   });
 
-  describe("with tooltip", function () {
+  describeWithDOM("with tooltip", function () {
+    var PopoverComponent = require("../js/components/PopoverComponent");
 
-    beforeEach(function () {
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(
-        <AppHealthBarWithTooltipComponent model={this.model}/>
+    before(function () {
+      this.component = mount(
+        <AppHealthBarWithTooltipComponent model={model}/>
       );
-      this.content = this.renderer.getRenderOutput().props.children;
     });
 
-    afterEach(function () {
-      this.renderer.unmount();
+    after(function () {
+      React.unmountComponentAtNode(this.component.instance().getDOMNode());
     });
 
-    it("has  health details", function () {
-      expect(this.content[0].props.children.type.displayName)
-        .to.equal("AppHealthDetailComponent");
+    it("has health details", function () {
+      expect(this.component
+        .find(AppHealthDetailComponent)
+        .length
+      ).to.equal(1);
     });
 
     it("has healthbar", function () {
-      expect(this.content[1].type.displayName)
-        .to.equal("AppHealthBarComponent");
+      expect(this.component
+        .find(AppHealthBarComponent)
+        .length
+      ).to.equal(1);
+    });
+
+    it("shows the tooltip on hover", function () {
+      this.component.simulate("mouseOver");
+      expect(this.component
+        .find(PopoverComponent)
+        .props()
+        .visible
+      ).to.be.true;
     });
 
   });
-
 });
 
 describe("App Page component", function () {
 
-  beforeEach(function () {
+  before(function () {
     var app = Util.extendObject(appScheme, {
       id: "/test-app-1",
       healthChecks: [{path: "/", protocol: "HTTP"}],
@@ -1253,32 +1279,30 @@ describe("App Page component", function () {
       }
     };
 
-    this.renderer = TestUtils.createRenderer();
-    ReactContext.current = context;
-    this.renderer.render(<AppPageComponent />, context);
-    ReactContext.current = {};
-    this.component = this.renderer.getRenderOutput();
-    this.element = this.renderer._instance._instance;
+    this.component = shallow(<AppPageComponent />, {context});
   });
 
-  afterEach(function () {
-    this.renderer.unmount();
+  after(function () {
+    this.component.instance().componentWillUnmount();
   });
 
-  it("has the correct app id", function () {
-    var appId = this.component.props.children[0].props.appId;
-    expect(appId).to.equal("/test-app-1");
+  it("gets the correct app id from the router", function () {
+    expect(this.component.state("appId")).to.equal("/test-app-1");
   });
 
   it("returns the right health message for failing tasks", function () {
-    var msg = this.element.getTaskHealthMessage("test-task-1", true);
-    expect(msg).to.equal("Warning: Health check 'HTTP /' failed.");
+    expect(this.component
+      .instance()
+      .getTaskHealthMessage("test-task-1", true)
+    ).to.equal("Warning: Health check 'HTTP /' failed.");
   });
 
   it("returns the right shorthand health message for failing tasks",
       function () {
-    var msg = this.element.getTaskHealthMessage("test-task-1");
-    expect(msg).to.equal("Unhealthy");
+    expect(this.component
+      .instance()
+      .getTaskHealthMessage("test-task-1")
+    ).to.equal("Unhealthy");
   });
 
   it("returns the right health message for tasks with unknown health",
@@ -1290,14 +1314,17 @@ describe("App Page component", function () {
         {
           id: "test-task-1",
           appId: "/test-app-1",
-          healthStatus: HealthStatus.UNKNOWN,
+          healthStatus: HealthStatus.UNKNOWN
         }
       ]
     });
 
     AppsStore.apps = [app];
-    var msg = this.element.getTaskHealthMessage("test-task-1");
-    expect(msg).to.equal("Unknown");
+
+    expect(this.component
+      .instance()
+      .getTaskHealthMessage("test-task-1")
+    ).to.equal("Unknown");
   });
 
   it("returns the right health message for healthy tasks", function () {
@@ -1308,14 +1335,17 @@ describe("App Page component", function () {
         {
           id: "test-task-1",
           appId: "/test-app-1",
-          healthStatus: HealthStatus.HEALTHY,
+          healthStatus: HealthStatus.HEALTHY
         }
       ]
     });
 
     AppsStore.apps = [app];
-    var msg = this.element.getTaskHealthMessage("test-task-1");
-    expect(msg).to.equal("Healthy");
+
+    expect(this.component
+      .instance()
+      .getTaskHealthMessage("test-task-1")
+    ).to.equal("Healthy");
   });
 
   describe("on unauthorized access error", function () {
@@ -1343,7 +1373,7 @@ describe("App Status component", function () {
 
   describe("on delayed status", function () {
 
-    beforeEach(function () {
+    before(function () {
       var model = {
         id: "app-1",
         deployments: [],
@@ -1361,30 +1391,22 @@ describe("App Status component", function () {
         }
       ];
 
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(<AppStatusComponent model={model} />);
-      this.component = this.renderer.getRenderOutput();
-    });
-
-    afterEach(function () {
-      this.renderer.unmount();
+      this.component = shallow(<AppStatusComponent model={model} />);
     });
 
     it("has correct status description", function () {
-      var statusDescription = this.component.props.children;
-      expect(statusDescription[1]).to.equal("Delayed");
+      expect(this.component.text()).to.equal("Delayed");
     });
 
     it("has correct title", function () {
       var expectedTitle = "Task execution failed, delayed for 3 minutes.";
-      var title = this.component.props.title;
-      expect(title).to.equal(expectedTitle);
+      expect(this.component.props().title).to.equal(expectedTitle);
     });
   });
 
   describe("on running status", function () {
 
-    beforeEach(function () {
+    before(function () {
       var model = {
         id: "app-1",
         deployments: [],
@@ -1395,23 +1417,25 @@ describe("App Status component", function () {
         status: AppStatus.RUNNING
       };
 
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(<AppStatusComponent model={model} />);
-      this.component = this.renderer.getRenderOutput();
-    });
-
-    afterEach(function () {
-      this.renderer.unmount();
+      this.component = shallow(<AppStatusComponent model={model} />);
     });
 
     it("has correct status description", function () {
-      var statusDescription = this.component.props.children;
-      expect(statusDescription[1]).to.equal("Running");
+      expect(this.component.text()).to.equal("Running");
     });
   });
 
 });
 
+/*
+* TODO https://github.com/mesosphere/marathon/issues/2710
+*
+* ReactRouter.Link pre-1.0 still depends on the childContext
+* https://github.com/rackt/react-router/blob/57543eb41ce45b994a29792d77c86cc10b51eac9/docs/guides/testing.md
+*
+* The stubRouterContext approach is incompatible with enzyme, so let's revisit
+* the BreadcrumbComponent testing once we upgrade to ReactRouter 1.x
+*/
 describe("Breadcrumb Component", function () {
   var TestUtils = React.addons.TestUtils;
   var ShallowUtils = require("./helpers/ShallowUtils");
