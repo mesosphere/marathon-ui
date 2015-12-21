@@ -1,25 +1,17 @@
 var _ = require("underscore");
+var config = require("../js/config/config");
+var describeWithDOM = require("enzyme").describeWithDOM;
 var expect = require("chai").expect;
-var React = require("react/addons");
-var ReactContext = require("react/lib/ReactContext");
-var TestUtils = React.addons.TestUtils;
-
+var expectAsync = require("./helpers/expectAsync");
+var mount = require("enzyme").mount;
+var nock = require("nock");
+var render = require("enzyme").render;
+var shallow = require("enzyme").shallow;
 var Util = require("../js/helpers/Util");
-var ShallowUtils = require("./helpers/ShallowUtils");
+
+var React = require("react/addons");
 
 var AppTypes = require("../js/constants/AppTypes");
-
-/**
- * This *nasty* hack is needed because we want to prevent TooltipMixin from
- * actually requiring vendor/tooltip.js due do it depending on the DOM.
- *
- * Let's get rid of this once we have jsDom or similar tools in our tests.
- * TODO: https://github.com/mesosphere/marathon/issues/1796
- */
-var TooltipMixin = require("../js/mixins/TooltipMixin");
-TooltipMixin.init = _.noop;
-TooltipMixin.getNewTooltip = _.noop;
-TooltipMixin.tip_destroyAllTips = _.noop;
 
 var AppsActions = require("../js/actions/AppsActions");
 var AppDispatcher = require("../js/AppDispatcher");
@@ -42,41 +34,39 @@ var HealthStatus = require("../js/constants/HealthStatus");
 var QueueActions = require("../js/actions/QueueActions");
 var QueueStore = require("../js/stores/QueueStore");
 var States = require("../js/constants/States");
-var config = require("../js/config/config");
 
-var expectAsync = require("./helpers/expectAsync");
-var HttpServer = require("./helpers/HttpServer").HttpServer;
-
-var server = new HttpServer(config.localTestserverURI);
+var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("Apps", function () {
 
-  beforeEach(function (done) {
-    this.server = server
-    .setup({
-      "apps": [{
-        id: "/app-1",
-        instances: 5,
-        mem: 100,
-        cpus: 4
-      }, {
-        id: "/app-2"
-      }]
-    }, 200)
-    .start(function () {
-      AppsStore.once(AppsEvents.CHANGE, done);
-      AppsActions.requestApps();
-    });
-  });
+  var nockResponse = {
+    apps: [{
+      id: "/app-1",
+      instances: 5,
+      mem: 100,
+      cpus: 4
+    }, {
+      id: "/app-2"
+    }]
+  };
 
-  afterEach(function (done) {
-    this.server.stop(done);
+  beforeEach(function (done) {
+    nock(config.apiURL)
+      .get("/v2/apps")
+      .reply(200, nockResponse);
+
+    AppsStore.once(AppsEvents.CHANGE, done);
+    AppsActions.requestApps();
   });
 
   describe("on apps request", function () {
 
     it("updates the AppsStore on success", function (done) {
+      nock(config.apiURL)
+        .get("/v2/apps")
+        .reply(200, nockResponse);
+
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
           expect(AppsStore.apps).to.have.length(2);
@@ -87,6 +77,10 @@ describe("Apps", function () {
     });
 
     it("calculate total resources", function (done) {
+      nock(config.apiURL)
+        .get("/v2/apps")
+        .reply(200, nockResponse);
+
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
           expect(AppsStore.apps[0].totalMem).to.equal(500);
@@ -98,7 +92,9 @@ describe("Apps", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({message: "Guru Meditation"}, 404);
+      nock(config.apiURL)
+        .get("/v2/apps")
+        .reply(404, {message: "Guru Meditation"});
 
       AppsStore.once(AppsEvents.REQUEST_APPS_ERROR, function (error) {
         expectAsync(function () {
@@ -110,7 +106,9 @@ describe("Apps", function () {
     });
 
     it("handles unauthorized errors gracefully", function (done) {
-      this.server.setup({message: "Unauthorized access"}, 401);
+      nock(config.apiURL)
+        .get("/v2/apps")
+        .reply(401, {message: "Unauthorized access"});
 
       AppsStore.once(AppsEvents.REQUEST_APPS_ERROR,
           function (error, statusCode) {
@@ -123,20 +121,23 @@ describe("Apps", function () {
     });
 
     describe("basic app", function () {
-      beforeEach(function () {
-        this.server.setup({
-          "apps": [{
-            id: "/app-1",
-            tasksHealthy: 2,
-            tasksUnhealthy: 2,
-            tasksRunning: 5,
-            tasksStaged: 2,
-            instances: 10
-          }]
-        }, 200);
-      });
+
+      var nockResponse = {
+        apps: [{
+          id: "/app-1",
+          tasksHealthy: 2,
+          tasksUnhealthy: 2,
+          tasksRunning: 5,
+          tasksStaged: 2,
+          instances: 10
+        }]
+      };
 
       it("has correct health weight", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].healthWeight).to.equal(47);
@@ -147,6 +148,10 @@ describe("Apps", function () {
       });
 
       it("has the correct app type", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].type).to.equal(AppTypes.CGROUP);
@@ -157,6 +162,10 @@ describe("Apps", function () {
       });
 
       it("has correct health data object", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].health).to.deep.equal([
@@ -174,23 +183,26 @@ describe("Apps", function () {
     });
 
     describe("docker app", function () {
-      beforeEach(function () {
-        this.server.setup({
-          "apps": [{
-            id: "/app-1-docker",
-            container: {
-              type: "DOCKER"
-            },
-            tasksHealthy: 2,
-            tasksUnhealthy: 2,
-            tasksRunning: 5,
-            tasksStaged: 2,
-            instances: 10
-          }]
-        }, 200);
-      });
+
+      var nockResponse = {
+        apps: [{
+          id: "/app-1-docker",
+          container: {
+            type: "DOCKER"
+          },
+          tasksHealthy: 2,
+          tasksUnhealthy: 2,
+          tasksRunning: 5,
+          tasksStaged: 2,
+          instances: 10
+        }]
+      };
 
       it("has correct health weight", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].healthWeight).to.equal(47);
@@ -201,6 +213,10 @@ describe("Apps", function () {
       });
 
       it("has the correct app type", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].type).to.equal("DOCKER");
@@ -211,6 +227,10 @@ describe("Apps", function () {
       });
 
       it("has correct health data object", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].health).to.deep.equal([
@@ -228,20 +248,23 @@ describe("Apps", function () {
     });
 
     describe("basic suspended app", function () {
-      beforeEach(function () {
-        this.server.setup({
-          "apps": [{
-            id: "/app-1",
-            tasksHealthy: 0,
-            tasksUnhealthy: 0,
-            tasksRunning: 0,
-            tasksStaged: 0,
-            instances: 0
-          }]
-        }, 200);
-      });
+
+      var nockResponse = {
+        apps: [{
+          id: "/app-1",
+          tasksHealthy: 0,
+          tasksUnhealthy: 0,
+          tasksRunning: 0,
+          tasksStaged: 0,
+          instances: 0
+        }]
+      };
 
       it("has correct health weight", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].healthWeight).to.equal(0);
@@ -252,6 +275,10 @@ describe("Apps", function () {
       });
 
       it("has correct health data object", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].health).to.deep.equal([
@@ -269,20 +296,23 @@ describe("Apps", function () {
     });
 
     describe("basic deploying app", function () {
-      beforeEach(function () {
-        this.server.setup({
-          "apps": [{
-            id: "/app-1",
-            tasksHealthy: 5,
-            tasksUnhealthy: 0,
-            tasksRunning: 0,
-            tasksStaged: 5,
-            instances: 15
-          }]
-        }, 200);
-      });
+
+      var nockResponse = {
+        apps: [{
+          id: "/app-1",
+          tasksHealthy: 5,
+          tasksUnhealthy: 0,
+          tasksRunning: 0,
+          tasksStaged: 5,
+          instances: 15
+        }]
+      };
 
       it("has correct health weight", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].healthWeight).to.equal(13);
@@ -293,6 +323,10 @@ describe("Apps", function () {
       });
 
       it("has correct health data object", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].health).to.deep.equal([
@@ -310,20 +344,23 @@ describe("Apps", function () {
     });
 
     describe("basic app overcapacity", function () {
-      beforeEach(function () {
-        this.server.setup({
-          "apps": [{
-            id: "/app-1",
-            tasksHealthy: 0,
-            tasksUnhealthy: 0,
-            tasksRunning: 1,
-            tasksStaged: 0,
-            instances: 0
-          }]
-        }, 200);
-      });
+
+      var nockResponse = {
+        apps: [{
+          id: "/app-1",
+          tasksHealthy: 0,
+          tasksUnhealthy: 0,
+          tasksRunning: 1,
+          tasksStaged: 0,
+          instances: 0
+        }]
+      };
 
       it("has correct health weight", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].healthWeight).to.equal(16);
@@ -334,6 +371,10 @@ describe("Apps", function () {
       });
 
       it("has correct health data object", function (done) {
+        nock(config.apiURL)
+          .get("/v2/apps")
+          .reply(200, nockResponse);
+
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
             expect(AppsStore.apps[0].health).to.deep.equal([
@@ -355,11 +396,14 @@ describe("Apps", function () {
   describe("on single app request", function () {
 
     it("updates the AppsStore on success", function (done) {
-      this.server.setup({
-        "app": {
-          "id": "/single-app"
-        }
-      }, 200);
+      nock(config.apiURL)
+        .get("/v2/apps//single-app")
+        .query({embed: "app.taskStats"})
+        .reply(200, {
+          "app": {
+            "id": "/single-app"
+          }
+        });
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -371,13 +415,16 @@ describe("Apps", function () {
     });
 
     it("has the correct app status (running)", function (done) {
-      this.server.setup({
-        "app": {
-          "id": "/single-app",
-          "instances": 1,
-          "tasksRunning": 1
-        }
-      }, 200);
+      nock(config.apiURL)
+        .get("/v2/apps//single-app")
+        .query({embed: "app.taskStats"})
+        .reply(200, {
+          "app": {
+            "id": "/single-app",
+            "instances": 1,
+            "tasksRunning": 1
+          }
+        });
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -389,12 +436,15 @@ describe("Apps", function () {
     });
 
     it("has the correct app status (deploying)", function (done) {
-      this.server.setup({
-        "app": {
-          "id": "/single-app",
-          "deployments": ["deployment-1"]
-        }
-      }, 200);
+      nock(config.apiURL)
+        .get("/v2/apps//single-app")
+        .query({embed: "app.taskStats"})
+        .reply(200, {
+          "app": {
+            "id": "/single-app",
+            "deployments": ["deployment-1"]
+          }
+        });
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -406,11 +456,14 @@ describe("Apps", function () {
     });
 
     it("has the correct app status (suspended)", function (done) {
-      this.server.setup({
-        "app": {
-          "id": "/single-app"
-        }
-      }, 200);
+      nock(config.apiURL)
+        .get("/v2/apps//single-app")
+        .query({embed: "app.taskStats"})
+        .reply(200, {
+          "app": {
+            "id": "/single-app"
+          }
+        });
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -422,7 +475,10 @@ describe("Apps", function () {
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({message: "Guru Meditation"}, 404);
+      nock(config.apiURL)
+        .filteringPath(path => "/")
+        .get("/")
+        .reply(404, {message: "Guru Meditation"});
 
       AppsStore.once(AppsEvents.REQUEST_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -434,7 +490,10 @@ describe("Apps", function () {
     });
 
     it("handles unauthorized errors gracefully", function (done) {
-      this.server.setup({message: "Unauthorized access"}, 401);
+      nock(config.apiURL)
+        .filteringPath(path => "/")
+        .get("/")
+        .reply(401, {message: "Guru Meditation"});
 
       AppsStore.once(AppsEvents.REQUEST_APP_ERROR,
           function (error, statusCode) {
@@ -451,7 +510,7 @@ describe("Apps", function () {
   describe("on queue update", function () {
 
     it("has the correct app status (delayed)", function (done) {
-      this.server.setup({
+      var nockResponse = {
         "queue": [
           {
             "app": {
@@ -464,7 +523,10 @@ describe("Apps", function () {
             }
           }
         ]
-      }, 200);
+      };
+      nock(config.apiURL)
+        .get("/v2/queue")
+        .reply(200, nockResponse);
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -477,7 +539,7 @@ describe("Apps", function () {
     });
 
     it("has the correct app status (waiting)", function (done) {
-      this.server.setup({
+      var nockResponse = {
         "queue": [
           {
             "app": {
@@ -490,7 +552,10 @@ describe("Apps", function () {
             }
           }
         ]
-      }, 200);
+      };
+      nock(config.apiURL)
+        .get("/v2/queue")
+        .reply(200, nockResponse);
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -507,7 +572,7 @@ describe("Apps", function () {
       var initialTimeout = this.timeout();
       this.timeout(25);
 
-      this.server.setup({
+      var nockResponse = {
         "queue": [
           {
             "app": {
@@ -520,7 +585,10 @@ describe("Apps", function () {
             }
           }
         ]
-      }, 200);
+      };
+      nock(config.apiURL)
+        .get("/v2/queue")
+        .reply(200, nockResponse);
 
       var onChange = function () {
         expectAsync(function () {
@@ -544,9 +612,9 @@ describe("Apps", function () {
   describe("on app creation", function () {
 
     it("updates the AppsStore on success", function (done) {
-      this.server.setup({
-          "id": "/app-3"
-        }, 201);
+      nock(config.apiURL)
+        .post("/v2/apps")
+        .reply(201, {"id": "/app-3"});
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
@@ -564,9 +632,11 @@ describe("Apps", function () {
     });
 
     it("sends create event on success", function (done) {
-      this.server.setup({
-        "id": "/app-3"
-      }, 201);
+      nock(config.apiURL)
+        .post("/v2/apps")
+        .reply(201, {
+          "id": "/app-3"
+        });
 
       AppsStore.once(AppsEvents.CREATE_APP, function () {
         expectAsync(function () {
@@ -580,7 +650,9 @@ describe("Apps", function () {
     });
 
     it("handles bad request", function (done) {
-      this.server.setup({message: "Guru Meditation"}, 400);
+      nock(config.apiURL)
+        .post("/v2/apps")
+        .reply(400, {message: "Guru Meditation"});
 
       AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error, status) {
         expectAsync(function () {
@@ -595,7 +667,9 @@ describe("Apps", function () {
     });
 
     it("passes response status", function (done) {
-      this.server.setup({message: "Guru Meditation"}, 400);
+      nock(config.apiURL)
+        .post("/v2/apps")
+        .reply(400, {message: "Guru Meditation"});
 
       AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error, status) {
         expectAsync(function () {
@@ -609,12 +683,16 @@ describe("Apps", function () {
     });
 
     it("handles atttribute value error", function (done) {
-      this.server.setup({
-        errors: [{
-            attribute: "id",
-            error: "attribute has invalid value"
-          }
-        ]}, 422);
+      nock(config.apiURL)
+        .post("/v2/apps")
+        .reply(422, {
+          errors: [
+            {
+              attribute: "id",
+              error: "attribute has invalid value"
+            }
+          ]
+        });
 
       AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -629,7 +707,9 @@ describe("Apps", function () {
     });
 
     it("handles unauthorized errors gracefully", function (done) {
-      this.server.setup({message: "Unauthorized access"}, 401);
+      nock(config.apiURL)
+        .post("/v2/apps")
+        .reply(401, {message: "Unauthorized access"});
 
       AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error, statusCode) {
         expectAsync(function () {
@@ -648,10 +728,12 @@ describe("Apps", function () {
       // A successful response with a payload of a new delete-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
-      this.server.setup({
-        "deploymentId": "deployment-that-deletes-app",
-        "version": "v1"
-      }, 200);
+      nock(config.apiURL)
+        .delete("/v2/apps//app-1")
+        .reply(200, {
+          "deploymentId": "deployment-that-deletes-app",
+          "version": "v1"
+        });
 
       AppsStore.once(AppsEvents.DELETE_APP, function () {
         expectAsync(function () {
@@ -667,7 +749,9 @@ describe("Apps", function () {
     });
 
     it("receives a delete error", function (done) {
-      this.server.setup({message: "delete error"}, 404);
+      nock(config.apiURL)
+        .delete("/v2/apps//non-existing-app")
+        .reply(404, {message: "delete error"});
 
       AppsStore.once(AppsEvents.DELETE_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -680,7 +764,9 @@ describe("Apps", function () {
     });
 
     it("handles unauthorized errors gracefully", function (done) {
-      this.server.setup({message: "Unauthorized access"}, 401);
+      nock(config.apiURL)
+        .delete("/v2/apps//app-1")
+        .reply(401, {message: "Unauthorized access"});
 
       AppsStore.once(AppsEvents.DELETE_APP_ERROR, function (error, statusCode) {
         expectAsync(function () {
@@ -699,10 +785,12 @@ describe("Apps", function () {
       // A successful response with a payload of a new restart-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
-      this.server.setup({
-        "deploymentId": "deployment-that-restarts-app",
-        "version": "v1"
-      }, 200);
+      nock(config.apiURL)
+        .post("/v2/apps//app-1/restart")
+        .reply(200, {
+          "deploymentId": "deployment-that-restarts-app",
+          "version": "v1"
+        });
 
       AppsStore.once(AppsEvents.RESTART_APP, function () {
         expectAsync(function () {
@@ -714,7 +802,9 @@ describe("Apps", function () {
     });
 
     it("receives a restart error on non existing app", function (done) {
-      this.server.setup({message: "restart error"}, 404);
+      nock(config.apiURL)
+        .post("/v2/apps//non-existing-app/restart")
+        .reply(404, {message: "restart error"});
 
       AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -727,7 +817,9 @@ describe("Apps", function () {
     });
 
     it("receives a restart error on locked app", function (done) {
-      this.server.setup({message: "app locked by deployment"}, 409);
+      nock(config.apiURL)
+        .post("/v2/apps//app-1/restart")
+        .reply(409, {message: "app locked by deployment"});
 
       AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -740,7 +832,9 @@ describe("Apps", function () {
     });
 
     it("handles unauthorized errors gracefully", function (done) {
-      this.server.setup({message: "Unauthorized access"}, 401);
+      nock(config.apiURL)
+        .post("/v2/apps//app-1/restart")
+        .reply(401, {message: "Unauthorized access"});
 
       AppsStore.once(AppsEvents.RESTART_APP_ERROR,
           function (error, statusCode) {
@@ -751,7 +845,6 @@ describe("Apps", function () {
 
       AppsActions.restartApp("/app-1");
     });
-
   });
 
   describe("on app scale", function () {
@@ -760,10 +853,12 @@ describe("Apps", function () {
       // A successful response with a payload of a new scale-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
-      this.server.setup({
-        "deploymentId": "deployment-that-scales-app",
-        "version": "v1"
-      }, 200);
+      nock(config.apiURL)
+        .put("/v2/apps//app-1")
+        .reply(200, {
+          "deploymentId": "deployment-that-scales-app",
+          "version": "v1"
+        });
 
       AppsStore.once(AppsEvents.SCALE_APP, function () {
         expectAsync(function () {
@@ -775,7 +870,9 @@ describe("Apps", function () {
     });
 
     it("receives a scale error on non existing app", function (done) {
-      this.server.setup({message: "scale error"}, 404);
+      nock(config.apiURL)
+        .put("/v2/apps//non-existing-app")
+        .reply(404, {message: "scale error"});
 
       AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -788,7 +885,9 @@ describe("Apps", function () {
     });
 
     it("receives a scale error on bad data", function (done) {
-      this.server.setup({message: "scale bad data error"}, 400);
+      nock(config.apiURL)
+        .put("/v2/apps//app-1")
+        .reply(400, {message: "scale bad data error"});
 
       AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -808,10 +907,12 @@ describe("Apps", function () {
       // A successful response with a payload of a apply-settings-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
-      this.server.setup({
-        "deploymentId": "deployment-that-applies-new-settings",
-        "version": "v2"
-      }, 200);
+      nock(config.apiURL)
+        .put("/v2/apps//app-1")
+        .reply(200, {
+          "deploymentId": "deployment-that-applies-new-settings",
+          "version": "v2"
+        });
 
       AppsStore.once(AppsEvents.APPLY_APP, function () {
         expectAsync(function () {
@@ -827,7 +928,9 @@ describe("Apps", function () {
     });
 
     it("receives an apply error on bad data", function (done) {
-      this.server.setup({message: "apply bad data error"}, 400);
+      nock(config.apiURL)
+        .put("/v2/apps//app-1")
+        .reply(400, {message: "apply bad data error"});
 
       AppsStore.once(AppsEvents.APPLY_APP_ERROR, function (error) {
         expectAsync(function () {
@@ -847,10 +950,12 @@ describe("Apps", function () {
       // A successful response with a payload of a apply-settings-deployment,
       // like the API would do.
       // Indeed the payload isn't processed by the store yet.
-      this.server.setup({
-        "deploymentId": "deployment-that-applies-new-settings",
-        "version": "v2"
-      }, 200);
+      nock(config.apiURL)
+        .put("/v2/apps//app-1")
+        .reply(200, {
+          "deploymentId": "deployment-that-applies-new-settings",
+          "version": "v2"
+        });
 
       AppsStore.once(AppsEvents.APPLY_APP, function (isEditing) {
         expectAsync(function () {
@@ -862,7 +967,9 @@ describe("Apps", function () {
     });
 
     it("it passes isEditing-flag on error", function (done) {
-      this.server.setup({message: "apply bad data error"}, 400);
+      nock(config.apiURL)
+        .put("/v2/apps//app-1")
+        .reply(400, {message: "apply bad data error"});
 
       AppsStore.once(AppsEvents.APPLY_APP_ERROR, function (error, isEditing) {
         expectAsync(function () {
@@ -1082,7 +1189,6 @@ describe("App Health Bar", function () {
     it("Unknown tasks are reported correctly", function () {
       expect(this.content[2].props.children[1]).to.equal(1);
     });
-
   });
 
   describe("with tooltip", function () {
@@ -1213,15 +1319,6 @@ describe("App Page component", function () {
   });
 
   describe("on unauthorized access error", function () {
-    beforeEach(function () {
-      this.server = server
-        .setup({"message": "Unauthorized access"}, 401)
-        .start();
-    });
-
-    afterEach(function (done) {
-      this.server.stop(done);
-    });
 
     it("has the correct fetchState", function () {
 
@@ -1231,6 +1328,10 @@ describe("App Page component", function () {
             .to.equal(States.STATE_UNAUTHORIZED);
         }, done);
       });
+
+      nock(config.apiURL)
+        .get("/v2/apps")
+        .reply(401, {"message": "Unauthorized access"});
 
       AppsActions.requestApps();
     });
@@ -1312,6 +1413,9 @@ describe("App Status component", function () {
 });
 
 describe("Breadcrumb Component", function () {
+  var TestUtils = React.addons.TestUtils;
+  var ShallowUtils = require("./helpers/ShallowUtils");
+
   before(function () {
     this.renderComponent = (group, app, task) => {
       var renderer = TestUtils.createRenderer();
