@@ -782,11 +782,8 @@ describe("App Form", function () {
         var expectedMessage =
           AppFormErrorMessages.getGeneralMessage("appLocked");
 
-        console.log(expectedMessage);
-
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
-            console.log(expectedMessage);
             expect(AppFormStore.responseErrors.general)
               .to.equal(expectedMessage);
           }, done);
