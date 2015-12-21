@@ -40,55 +40,35 @@ config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("Apps", function () {
 
-  var nockResponse = {
-    apps: [{
-      id: "/app-1",
-      instances: 5,
-      mem: 100,
-      cpus: 4
-    }, {
-      id: "/app-2"
-    }]
-  };
-
-  beforeEach(function (done) {
-    nock(config.apiURL)
-      .get("/v2/apps")
-      .reply(200, nockResponse);
-
-    AppsStore.once(AppsEvents.CHANGE, done);
-    AppsActions.requestApps();
-  });
-
   describe("on apps request", function () {
 
-    it("updates the AppsStore on success", function (done) {
+    before(function (done) {
+      var nockResponse = {
+        apps: [{
+          id: "/app-1",
+          instances: 5,
+          mem: 100,
+          cpus: 4
+        }, {
+          id: "/app-2"
+        }]
+      };
+
       nock(config.apiURL)
         .get("/v2/apps")
         .reply(200, nockResponse);
 
-      AppsStore.once(AppsEvents.CHANGE, function () {
-        expectAsync(function () {
-          expect(AppsStore.apps).to.have.length(2);
-        }, done);
-      });
-
+      AppsStore.once(AppsEvents.CHANGE, done);
       AppsActions.requestApps();
     });
 
-    it("calculate total resources", function (done) {
-      nock(config.apiURL)
-        .get("/v2/apps")
-        .reply(200, nockResponse);
+    it("updates the AppsStore on success", function () {
+      expect(AppsStore.apps).to.have.length(2);
+    });
 
-      AppsStore.once(AppsEvents.CHANGE, function () {
-        expectAsync(function () {
-          expect(AppsStore.apps[0].totalMem).to.equal(500);
-          expect(AppsStore.apps[0].totalCpus).to.equal(20);
-        }, done);
-      });
-
-      AppsActions.requestApps();
+    it("calculate total resources", function () {
+      expect(AppsStore.apps[0].totalMem).to.equal(500);
+      expect(AppsStore.apps[0].totalCpus).to.equal(20);
     });
 
     it("handles failure gracefully", function (done) {
@@ -122,272 +102,202 @@ describe("Apps", function () {
 
     describe("basic app", function () {
 
-      var nockResponse = {
-        apps: [{
-          id: "/app-1",
-          tasksHealthy: 2,
-          tasksUnhealthy: 2,
-          tasksRunning: 5,
-          tasksStaged: 2,
-          instances: 10
-        }]
-      };
+      before(function (done) {
+        var nockResponse = {
+          apps: [{
+            id: "/app-1",
+            tasksHealthy: 2,
+            tasksUnhealthy: 2,
+            tasksRunning: 5,
+            tasksStaged: 2,
+            instances: 10
+          }]
+        };
 
-      it("has correct health weight", function (done) {
         nock(config.apiURL)
           .get("/v2/apps")
           .reply(200, nockResponse);
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].healthWeight).to.equal(47);
-          }, done);
-        });
-
+        AppsStore.once(AppsEvents.CHANGE, done);
         AppsActions.requestApps();
       });
 
-      it("has the correct app type", function (done) {
-        nock(config.apiURL)
-          .get("/v2/apps")
-          .reply(200, nockResponse);
-
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].type).to.equal(AppTypes.CGROUP);
-          }, done);
-        });
-
-        AppsActions.requestApps();
+      it("has correct health weight", function () {
+        expect(AppsStore.apps[0].healthWeight).to.equal(47);
       });
 
-      it("has correct health data object", function (done) {
-        nock(config.apiURL)
-          .get("/v2/apps")
-          .reply(200, nockResponse);
+      it("has the correct app type", function () {
+        expect(AppsStore.apps[0].type).to.equal(AppTypes.CGROUP);
+      });
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].health).to.deep.equal([
-              {quantity: 2, state: HealthStatus.HEALTHY},
-              {quantity: 2, state: HealthStatus.UNHEALTHY},
-              {quantity: 1, state: HealthStatus.UNKNOWN},
-              {quantity: 2, state: HealthStatus.STAGED},
-              {quantity: 0, state: HealthStatus.OVERCAPACITY},
-              {quantity: 3, state: HealthStatus.UNSCHEDULED}
-            ]);
-          }, done);
-        });
-        AppsActions.requestApps();
+      it("has correct health data object", function () {
+        expect(AppsStore.apps[0].health).to.deep.equal([
+          {quantity: 2, state: HealthStatus.HEALTHY},
+          {quantity: 2, state: HealthStatus.UNHEALTHY},
+          {quantity: 1, state: HealthStatus.UNKNOWN},
+          {quantity: 2, state: HealthStatus.STAGED},
+          {quantity: 0, state: HealthStatus.OVERCAPACITY},
+          {quantity: 3, state: HealthStatus.UNSCHEDULED}
+        ]);
       });
     });
 
     describe("docker app", function () {
 
-      var nockResponse = {
-        apps: [{
-          id: "/app-1-docker",
-          container: {
-            type: "DOCKER"
-          },
-          tasksHealthy: 2,
-          tasksUnhealthy: 2,
-          tasksRunning: 5,
-          tasksStaged: 2,
-          instances: 10
-        }]
-      };
+      before(function (done) {
+        var nockResponse = {
+          apps: [{
+            id: "/app-1-docker",
+            container: {
+              type: "DOCKER"
+            },
+            tasksHealthy: 2,
+            tasksUnhealthy: 2,
+            tasksRunning: 5,
+            tasksStaged: 2,
+            instances: 10
+          }]
+        };
 
-      it("has correct health weight", function (done) {
         nock(config.apiURL)
           .get("/v2/apps")
           .reply(200, nockResponse);
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].healthWeight).to.equal(47);
-          }, done);
-        });
-
+        AppsStore.once(AppsEvents.CHANGE, done);
         AppsActions.requestApps();
       });
 
-      it("has the correct app type", function (done) {
-        nock(config.apiURL)
-          .get("/v2/apps")
-          .reply(200, nockResponse);
-
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].type).to.equal("DOCKER");
-          }, done);
-        });
-
-        AppsActions.requestApps();
+      it("has correct health weight", function () {
+        expect(AppsStore.apps[0].healthWeight).to.equal(47);
       });
 
-      it("has correct health data object", function (done) {
-        nock(config.apiURL)
-          .get("/v2/apps")
-          .reply(200, nockResponse);
+      it("has the correct app type", function () {
+        expect(AppsStore.apps[0].type).to.equal("DOCKER");
+      });
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].health).to.deep.equal([
-              {quantity: 2, state: HealthStatus.HEALTHY},
-              {quantity: 2, state: HealthStatus.UNHEALTHY},
-              {quantity: 1, state: HealthStatus.UNKNOWN},
-              {quantity: 2, state: HealthStatus.STAGED},
-              {quantity: 0, state: HealthStatus.OVERCAPACITY},
-              {quantity: 3, state: HealthStatus.UNSCHEDULED}
-            ]);
-          }, done);
-        });
-        AppsActions.requestApps();
+      it("has correct health data object", function () {
+        expect(AppsStore.apps[0].health).to.deep.equal([
+          {quantity: 2, state: HealthStatus.HEALTHY},
+          {quantity: 2, state: HealthStatus.UNHEALTHY},
+          {quantity: 1, state: HealthStatus.UNKNOWN},
+          {quantity: 2, state: HealthStatus.STAGED},
+          {quantity: 0, state: HealthStatus.OVERCAPACITY},
+          {quantity: 3, state: HealthStatus.UNSCHEDULED}
+        ]);
       });
     });
 
     describe("basic suspended app", function () {
 
-      var nockResponse = {
-        apps: [{
-          id: "/app-1",
-          tasksHealthy: 0,
-          tasksUnhealthy: 0,
-          tasksRunning: 0,
-          tasksStaged: 0,
-          instances: 0
-        }]
-      };
+      before(function (done) {
+        var nockResponse = {
+          apps: [{
+            id: "/app-1",
+            tasksHealthy: 0,
+            tasksUnhealthy: 0,
+            tasksRunning: 0,
+            tasksStaged: 0,
+            instances: 0
+          }]
+        };
 
-      it("has correct health weight", function (done) {
         nock(config.apiURL)
           .get("/v2/apps")
           .reply(200, nockResponse);
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].healthWeight).to.equal(0);
-          }, done);
-        });
-
+        AppsStore.once(AppsEvents.CHANGE, done);
         AppsActions.requestApps();
       });
 
-      it("has correct health data object", function (done) {
-        nock(config.apiURL)
-          .get("/v2/apps")
-          .reply(200, nockResponse);
+      it("has correct health weight", function () {
+        expect(AppsStore.apps[0].healthWeight).to.equal(0);
+      });
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].health).to.deep.equal([
-              {quantity: 0, state: HealthStatus.HEALTHY},
-              {quantity: 0, state: HealthStatus.UNHEALTHY},
-              {quantity: 0, state: HealthStatus.UNKNOWN},
-              {quantity: 0, state: HealthStatus.STAGED},
-              {quantity: 0, state: HealthStatus.OVERCAPACITY},
-              {quantity: 0, state: HealthStatus.UNSCHEDULED}
-            ]);
-          }, done);
-        });
-        AppsActions.requestApps();
+      it("has correct health data object", function () {
+        expect(AppsStore.apps[0].health).to.deep.equal([
+          {quantity: 0, state: HealthStatus.HEALTHY},
+          {quantity: 0, state: HealthStatus.UNHEALTHY},
+          {quantity: 0, state: HealthStatus.UNKNOWN},
+          {quantity: 0, state: HealthStatus.STAGED},
+          {quantity: 0, state: HealthStatus.OVERCAPACITY},
+          {quantity: 0, state: HealthStatus.UNSCHEDULED}
+        ]);
       });
     });
 
     describe("basic deploying app", function () {
 
-      var nockResponse = {
-        apps: [{
-          id: "/app-1",
-          tasksHealthy: 5,
-          tasksUnhealthy: 0,
-          tasksRunning: 0,
-          tasksStaged: 5,
-          instances: 15
-        }]
-      };
+      before(function (done) {
+        var nockResponse = {
+          apps: [{
+            id: "/app-1",
+            tasksHealthy: 5,
+            tasksUnhealthy: 0,
+            tasksRunning: 0,
+            tasksStaged: 5,
+            instances: 15
+          }]
+        };
 
-      it("has correct health weight", function (done) {
         nock(config.apiURL)
           .get("/v2/apps")
           .reply(200, nockResponse);
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].healthWeight).to.equal(13);
-          }, done);
-        });
-
+        AppsStore.once(AppsEvents.CHANGE, done);
         AppsActions.requestApps();
       });
 
-      it("has correct health data object", function (done) {
-        nock(config.apiURL)
-          .get("/v2/apps")
-          .reply(200, nockResponse);
+      it("has correct health weight", function () {
+        expect(AppsStore.apps[0].healthWeight).to.equal(13);
+      });
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].health).to.deep.equal([
-              {quantity: 5, state: HealthStatus.HEALTHY},
-              {quantity: 0, state: HealthStatus.UNHEALTHY},
-              {quantity: 0, state: HealthStatus.UNKNOWN},
-              {quantity: 5, state: HealthStatus.STAGED},
-              {quantity: 0, state: HealthStatus.OVERCAPACITY},
-              {quantity: 5, state: HealthStatus.UNSCHEDULED}
-            ]);
-          }, done);
-        });
-        AppsActions.requestApps();
+      it("has correct health data object", function () {
+        expect(AppsStore.apps[0].health).to.deep.equal([
+          {quantity: 5, state: HealthStatus.HEALTHY},
+          {quantity: 0, state: HealthStatus.UNHEALTHY},
+          {quantity: 0, state: HealthStatus.UNKNOWN},
+          {quantity: 5, state: HealthStatus.STAGED},
+          {quantity: 0, state: HealthStatus.OVERCAPACITY},
+          {quantity: 5, state: HealthStatus.UNSCHEDULED}
+        ]);
       });
     });
 
     describe("basic app overcapacity", function () {
 
-      var nockResponse = {
-        apps: [{
-          id: "/app-1",
-          tasksHealthy: 0,
-          tasksUnhealthy: 0,
-          tasksRunning: 1,
-          tasksStaged: 0,
-          instances: 0
-        }]
-      };
+      before(function (done) {
+        var nockResponse = {
+          apps: [{
+            id: "/app-1",
+            tasksHealthy: 0,
+            tasksUnhealthy: 0,
+            tasksRunning: 1,
+            tasksStaged: 0,
+            instances: 0
+          }]
+        };
 
-      it("has correct health weight", function (done) {
         nock(config.apiURL)
           .get("/v2/apps")
           .reply(200, nockResponse);
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].healthWeight).to.equal(16);
-          }, done);
-        });
-
+        AppsStore.once(AppsEvents.CHANGE, done);
         AppsActions.requestApps();
       });
 
-      it("has correct health data object", function (done) {
-        nock(config.apiURL)
-          .get("/v2/apps")
-          .reply(200, nockResponse);
+      it("has correct health weight", function () {
+        expect(AppsStore.apps[0].healthWeight).to.equal(16);
+      });
 
-        AppsStore.once(AppsEvents.CHANGE, function () {
-          expectAsync(function () {
-            expect(AppsStore.apps[0].health).to.deep.equal([
-              {quantity: 0, state: HealthStatus.HEALTHY},
-              {quantity: 0, state: HealthStatus.UNHEALTHY},
-              {quantity: 0, state: HealthStatus.UNKNOWN},
-              {quantity: 0, state: HealthStatus.STAGED},
-              {quantity: 1, state: HealthStatus.OVERCAPACITY},
-              {quantity: 0, state: HealthStatus.UNSCHEDULED}
-            ]);
-          }, done);
-        });
-        AppsActions.requestApps();
+      it("has correct health data object", function () {
+        expect(AppsStore.apps[0].health).to.deep.equal([
+          {quantity: 0, state: HealthStatus.HEALTHY},
+          {quantity: 0, state: HealthStatus.UNHEALTHY},
+          {quantity: 0, state: HealthStatus.UNKNOWN},
+          {quantity: 0, state: HealthStatus.STAGED},
+          {quantity: 1, state: HealthStatus.OVERCAPACITY},
+          {quantity: 0, state: HealthStatus.UNSCHEDULED}
+        ]);
       });
     });
 
@@ -611,6 +521,23 @@ describe("Apps", function () {
 
   describe("on app creation", function () {
 
+    beforeEach(function (done) {
+      var nockResponse = {
+        apps: [{
+          id: "/app-1",
+        }, {
+          id: "/app-2"
+        }]
+      };
+
+      nock(config.apiURL)
+        .get("/v2/apps")
+        .reply(200, nockResponse);
+
+      AppsStore.once(AppsEvents.CHANGE, done);
+      AppsActions.requestApps();
+    });
+
     it("updates the AppsStore on success", function (done) {
       nock(config.apiURL)
         .post("/v2/apps")
@@ -723,6 +650,22 @@ describe("Apps", function () {
   });
 
   describe("on app deletion", function () {
+    beforeEach(function (done) {
+      var nockResponse = {
+        apps: [{
+          id: "/app-1",
+        }, {
+          id: "/app-2"
+        }]
+      };
+
+      nock(config.apiURL)
+        .get("/v2/apps")
+        .reply(200, nockResponse);
+
+      AppsStore.once(AppsEvents.CHANGE, done);
+      AppsActions.requestApps();
+    });
 
     it("deletes an app on success", function (done) {
       // A successful response with a payload of a new delete-deployment,
