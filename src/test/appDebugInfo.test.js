@@ -1,4 +1,7 @@
 var expect = require("chai").expect;
+var nock = require("nock");
+var shallow = require("enzyme").shallow;
+
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
@@ -11,9 +14,7 @@ var AppDebugInfoComponent = require("../js/components/AppDebugInfoComponent");
 var AppTaskStatsListComponent =
   require("../js/components/AppTaskStatsListComponent");
 
-var HttpServer = require("./helpers/HttpServer").HttpServer;
-
-var server = new HttpServer(config.localTestserverURI);
+var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("App debug info component", function () {
@@ -21,7 +22,7 @@ describe("App debug info component", function () {
   describe("Last task failure", function () {
 
     afterEach(function () {
-      this.renderer.unmount();
+      this.component.instance().componentWillUnmount();
     });
 
     it("should show failed task", function () {
@@ -48,20 +49,15 @@ describe("App debug info component", function () {
       });
 
       AppsStore.apps = [app];
+      this.component = shallow(<AppDebugInfoComponent appId={app.id} />);
+      var nodes = this.component.find("dd");
 
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(<AppDebugInfoComponent appId={app.id} />);
-      this.component = this.renderer.getRenderOutput();
-
-      var element = this.component
-        .props.children[2].props.children[1].props.children.props.children;
-
-      var taskId = element[1].props.children[0];
-      var state = element[3].props.children[0];
-      var message = element[5].props.children[0];
-      var host = element[7].props.children[0];
-      var timestamp = element[9].props.children[0].props.children;
-      var version = element[11].props.children[0].props.children;
+      var taskId = nodes.at(0).text().trim();
+      var state = nodes.at(1).text().trim();
+      var message = nodes.at(2).text().trim();
+      var host = nodes.at(3).text().trim();
+      var timestamp = nodes.at(4).find("span").text().trim();
+      var version = nodes.at(5).find("span").text().trim();
 
       expect(taskId).to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
       expect(state).to.equal("TASK_LOST");
@@ -84,23 +80,17 @@ describe("App debug info component", function () {
       });
 
       AppsStore.apps = [app];
+      this.component = shallow(<AppDebugInfoComponent appId={app.id} />);
+      var nodes = this.component.find("dl").children();
 
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(<AppDebugInfoComponent appId={app.id} />);
-      this.component = this.renderer.getRenderOutput();
+      var state = nodes.at(3).type().displayName;
+      var message = nodes.at(5).type().displayName;
 
-      var element = this.component
-        .props.children[2].props.children[1].props.children.props.children;
-
-      var state = element[3];
-      var message = element[5];
-
-      expect(state.type.displayName).to.equal("UnspecifiedNodeComponent");
-      expect(message.type.displayName).to.equal("UnspecifiedNodeComponent");
+      expect(state).to.equal("UnspecifiedNodeComponent");
+      expect(message).to.equal("UnspecifiedNodeComponent");
     });
 
     it("should show message when app never failed", function () {
-
       this.appId = "/python";
       var app = Util.extendObject(appScheme, {
         id: "/python"
@@ -108,20 +98,15 @@ describe("App debug info component", function () {
 
       AppsStore.apps = [app];
 
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(<AppDebugInfoComponent appId={this.appId} />);
-      this.component = this.renderer.getRenderOutput();
-
-      var message = this.component
-        .props.children[2].props.children[1].props.children.props.children;
-
+      this.component = shallow(<AppDebugInfoComponent appId={this.appId} />);
+      var message = this.component.children().at(2).find(".panel-body").text();
       expect(message).to.equal("This app does not have failed tasks");
     });
   });
 
   describe("Last configuration changes", function () {
 
-    beforeEach(function () {
+    before(function () {
       var app = Util.extendObject(appScheme, {
         id: "/app-1",
         versionInfo: {
@@ -131,40 +116,41 @@ describe("App debug info component", function () {
       });
 
       AppsStore.apps = [app];
-
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(<AppDebugInfoComponent appId={app.id} />);
-      this.component = this.renderer.getRenderOutput();
+      this.component = shallow(<AppDebugInfoComponent appId={app.id} />);
     });
 
-    afterEach(function () {
-      this.renderer.unmount();
+    after(function () {
+      this.component.instance().componentWillUnmount();
     });
 
     it("scale or restart field has no recent operation", function () {
       var message = this.component
-        .props.children[1].props.children[1].props.children.props.children[1]
-        .props.children.props.children;
-
+        .children()
+        .at(1)
+        .find(".panel-body")
+        .find("dd")
+        .at(0)
+        .text();
       expect(message).to.equal("No operation since last config change");
     });
 
     it("last configuration change has correct date", function () {
       var message = this.component
-        .props.children[1].props.children[1].props.children.props.children[3]
-        .props.children[0].props.children;
-
+        .children()
+        .at(1)
+        .find(".panel-body")
+        .find("dd")
+        .at(1)
+        .find("span")
+        .text();
       expect(message).to.equal("2015-08-11T13:57:11.238Z");
     });
 
   });
 
   describe("App Tasks Stats List component", function () {
-    afterEach(function () {
-      this.renderer.unmount();
-    });
 
-    it("displayes given amount of categories", function () {
+    it("displays given amount of categories", function () {
       var app = Util.extendObject(appScheme, {
         id: "/app-1",
         "taskStats": {
@@ -183,18 +169,16 @@ describe("App debug info component", function () {
         }
       });
 
-      this.renderer = TestUtils.createRenderer();
-      this.renderer.render(<AppTaskStatsListComponent
+      this.component = shallow(<AppTaskStatsListComponent
         taskStatsList={app.taskStats} />);
-      this.component = this.renderer.getRenderOutput();
 
-      expect(this.component.props.children[1].props.caption)
+      expect(this.component.children().at(1).props().caption)
         .to.equal("Started After Last Scaling");
-      expect(this.component.props.children[2].props.caption)
+      expect(this.component.children().at(2).props().caption)
         .to.equal("With Latest Config");
-      expect(this.component.props.children[3].props.caption)
+      expect(this.component.children().at(3).props().caption)
         .to.equal("With Outdated Config");
-      expect(this.component.props.children[4].props.caption)
+      expect(this.component.children().at(4).props().caption)
         .to.equal("Total Summary");
     });
   });
