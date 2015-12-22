@@ -844,7 +844,24 @@ describe("Apps", function () {
 
   });
 
-  describe("on app apply", function () {
+  describeWithDOM("on app apply", function () {
+
+    before(function (done) {
+      var nockResponse = {
+        apps: [{
+          id: "/app-1"
+        }, {
+          id: "/app-2"
+        }]
+      };
+
+      nock(config.apiURL)
+        .get("/v2/apps")
+        .reply(200, nockResponse);
+
+      AppsStore.once(AppsEvents.CHANGE, done);
+      AppsActions.requestApps();
+    });
 
     it("applies app settings on success", function (done) {
       // A successful response with a payload of a apply-settings-deployment,
