@@ -5,7 +5,10 @@ before_script:
   - npm install -g gulp
 node_js:
   - "5.2.0"
-script: npm install && npm run dist
+script: npm install && npm run dist && tar -zcvf "$TRAVIS_BUILD_NUMBER.tar.gz" dist && npm run clean && rm -rf node_modules
 notifications:
   slack:
     secure: apUObVUa/OhaTEvoYw3oM1ZTTT0LtYolofJYqnWiBOusc6qgMlK2rfk5kod7vDn33cSKwGhFcyVrrFCn2qxuvYUWCpK4Yo6Hj7KIjoqMi9yHLHXAAWIfAFNMlCdaUGjlHLWn757rBkbuQUDVH8HmB6Vc3J3sybTbiFmMDP1cEVo=
+addons:
+  artifacts: true
+  s3_region: "us-west-1"
