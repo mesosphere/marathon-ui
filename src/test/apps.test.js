@@ -9,18 +9,6 @@ var ShallowUtils = require("./helpers/ShallowUtils");
 
 var AppTypes = require("../js/constants/AppTypes");
 
-/**
- * This *nasty* hack is needed because we want to prevent TooltipMixin from
- * actually requiring vendor/tooltip.js due do it depending on the DOM.
- *
- * Let's get rid of this once we have jsDom or similar tools in our tests.
- * TODO: https://github.com/mesosphere/marathon/issues/1796
- */
-var TooltipMixin = require("../js/mixins/TooltipMixin");
-TooltipMixin.init = _.noop;
-TooltipMixin.getNewTooltip = _.noop;
-TooltipMixin.tip_destroyAllTips = _.noop;
-
 var AppsActions = require("../js/actions/AppsActions");
 var AppDispatcher = require("../js/AppDispatcher");
 var BreadcrumbComponent = require("../js/components/BreadcrumbComponent.jsx");
