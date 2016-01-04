@@ -1,10 +1,11 @@
 var React = require("react/addons");
 var classNames = require("classnames");
 
-var DialogActions = require("../actions/DialogActions");
 var MesosActions = require("../actions/MesosActions");
 var MesosEvents = require("../events/MesosEvents");
 var MesosStore = require("../stores/MesosStore");
+var PopoverComponent = require("../components/PopoverComponent");
+var TooltipComponent = require("../components/TooltipComponent");
 
 var TaskFileDownloadComponent = React.createClass({
   displayName: "TaskFileDownloadComponent",
@@ -18,7 +19,9 @@ var TaskFileDownloadComponent = React.createClass({
   getInitialState: function () {
     return {
       file: this.getFile(),
-      fileIsRequestedByUser: false
+      fileIsRequestedByUser: false,
+      fileRequestFailed: false,
+      isPopoverVisible: false
     };
   },
 
@@ -61,7 +64,8 @@ var TaskFileDownloadComponent = React.createClass({
 
     this.setState({
       file: file,
-      fileIsRequestedByUser: fileIsRequestedByUser
+      fileIsRequestedByUser: fileIsRequestedByUser,
+      fileRequestFailed: false
     });
 
   },
@@ -71,16 +75,26 @@ var TaskFileDownloadComponent = React.createClass({
       return;
     }
 
-    DialogActions
-      .alert(`Request failed or timed out for task ID ${request.taskId}`);
-
     MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
       this.onMesosRequestTaskFilesComplete);
     MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
       this.onMesosRequestTaskFilesError);
 
     this.setState({
-      fileIsRequestedByUser: false
+      fileIsRequestedByUser: false,
+      fileRequestFailed: true
+    });
+  },
+
+  handleMouseOver: function () {
+    this.setState({
+      isPopoverVisible: true
+    });
+  },
+
+  handleMouseOut: function () {
+    this.setState({
+      isPopoverVisible: false
     });
   },
 
@@ -103,31 +117,32 @@ var TaskFileDownloadComponent = React.createClass({
     }
   },
 
-  getIcon: function() {
-    if (this.state.fileIsRequestedByUser === true) {
-      return (<i className="icon icon-mini loading" />)
-    }
-    return (<i className="icon icon-mini file" />)
-  },
-
   render: function () {
     var state = this.state;
     var props = this.props;
     var name = props.fileName;
     var file = state.file;
+    var fileIsRequestedByUser = state.fileIsRequestedByUser;
+    var fileRequestFailed = state.fileRequestFailed;
     var href = "";
 
     if (file) {
       href = file.downloadURI;
     }
 
+    var iconClassName = classNames("icon", "icon-mini", {
+      "loading": fileIsRequestedByUser,
+      "warning": !fileIsRequestedByUser && fileRequestFailed,
+      "file": !fileIsRequestedByUser && !fileRequestFailed
+    });
+
     return (
-      <a className="task-file-download"
-          href={href}
-          onClick={this.handleClick}
-          download={name}>
-        {this.getIcon()} {name}
-      </a>
+      <TooltipComponent disabled={fileIsRequestedByUser || !fileRequestFailed}>
+        <a href={href}
+           onClick={this.handleClick}>
+          <i className={iconClassName}/> {name}
+        </a>
+      </TooltipComponent>
     );
   }
 });
