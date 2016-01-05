@@ -2,6 +2,7 @@
 ### Changed
 - \#2651 - Improve ui scale error messages
 - \#2832 - Convert all confirm dialogs to have meaningful action button labels
+- \#2844 - Show error icon for failing Mesos logs
 
 ### Fixed
 - \#2892 - Version in task detail component shouldn't be localised
