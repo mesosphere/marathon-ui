@@ -81,7 +81,6 @@ function getAppHealth(app) {
   for (let i = 0; i < healthData.length; i++) {
     let capacityLeft = Math.max(0, app.instances - tasksSum);
     tasksSum += healthData[i].quantity;
-    healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
   }
 
   var overCapacity = Math.max(0, tasksSum - app.instances);
