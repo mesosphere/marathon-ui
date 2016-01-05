@@ -80,7 +80,8 @@ var AppPageControlsComponent = React.createClass({
     }
 
     const dialogId =
-      DialogActions.confirm("Suspend app by scaling to 0 instances?");
+      DialogActions.confirm("Suspend app by scaling to 0 instances?",
+        "Suspend");
 
     DialogStore.handleUserResponse(dialogId, () => {
       AppsActions.scaleApp(props.appId, 0);
@@ -91,7 +92,7 @@ var AppPageControlsComponent = React.createClass({
     var appId = this.props.appId;
 
     const dialogId =
-      DialogActions.confirm(`Restart app '${appId}'?`);
+      DialogActions.confirm(`Restart app '${appId}'?`, "Restart");
 
     DialogStore.handleUserResponse(dialogId, () => {
       AppsActions.restartApp(appId);
@@ -104,7 +105,8 @@ var AppPageControlsComponent = React.createClass({
     var appId = this.props.appId;
 
     const dialogId =
-      DialogActions.confirm(`Destroy app '${appId}'? This is irreversible.`);
+      DialogActions.confirm(`Destroy app '${appId}'? This is irreversible.`,
+        "Destroy");
 
     DialogStore.handleUserResponse(dialogId, () => {
       AppsActions.deleteApp(appId);

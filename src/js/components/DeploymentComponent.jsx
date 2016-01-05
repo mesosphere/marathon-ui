@@ -23,12 +23,12 @@ var DeploymentComponent = React.createClass({
     var model = this.props.model;
 
     var confirmMessage =
-      "Destroy deployment of applications: '" + model.affectedAppsString +
+      "Rollback deployment of applications: '" + model.affectedAppsString +
       "'?\nDestroying this deployment will create and start a new " +
       "deployment to revert the affected app to its previous version.";
 
     const dialogId =
-      DialogActions.confirm(confirmMessage);
+      DialogActions.confirm(confirmMessage, "Rollback deployment");
 
     DialogStore.handleUserResponse(dialogId, function () {
       this.setState({loading: true});
@@ -45,7 +45,7 @@ var DeploymentComponent = React.createClass({
       "current state.";
 
     const dialogId =
-      DialogActions.confirm(confirmMessage);
+      DialogActions.confirm(confirmMessage, "Destroy deployment");
 
     DialogStore.handleUserResponse(dialogId, function () {
       this.setState({loading: true});

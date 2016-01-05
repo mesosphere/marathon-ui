@@ -184,7 +184,7 @@ var AppPageComponent = React.createClass({
       const dialogId = DialogActions.
         confirm(`There is a deployment in progress that changes ${appId}.
           If you want to stop this deployment and force a new one to scale it,
-          press the OK button.`, "Scale forcefully");
+          press the 'Scale forcefully' button.`, "Scale forcefully");
       DialogStore.handleUserResponse(dialogId, function () {
         AppsActions.scaleApp(appId, instances, true);
       });
@@ -244,7 +244,8 @@ var AppPageComponent = React.createClass({
       const dialogId = DialogActions.
       confirm(`Failed to kill task and scale ${appId}. If you want to stop any
         current deployment of the app and force a new one to kill the task and
-        scale it, press the OK button.`);
+        scale it, press the 'Kill and scale forcefully' button.`,
+          "Kill and scale forcefully");
       DialogStore.handleUserResponse(dialogId, function () {
         TasksActions.deleteTasksAndScale(appId, taskIds, true);
       });
