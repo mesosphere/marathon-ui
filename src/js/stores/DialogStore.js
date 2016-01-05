@@ -59,7 +59,8 @@ AppDispatcher.register(function (action) {
       DialogStore.emit(
         DialogEvents.ALERT_SHOW,
         action.message,
-        action.dialogId
+        action.dialogId,
+        action.dismissButtonLabel
       );
       break;
     case DialogEvents.ALERT_DISMISS:

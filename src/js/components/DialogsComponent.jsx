@@ -54,11 +54,12 @@ var DialogsComponent = React.createClass({
     DialogStore.removeListener(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
   },
 
-  onDialogAlertShow: function (message, dialogId) {
+  onDialogAlertShow: function (message, dialogId, dismissButtonLabel) {
     this.setState({
       dialog: {
         type: DialogTypes.ALERT,
-        message: message
+        message: message,
+        dismissButtonLabel: dismissButtonLabel
       },
       currentId: dialogId
     });
@@ -127,7 +128,8 @@ var DialogsComponent = React.createClass({
     switch (dialog.type) {
       case DialogTypes.ALERT:
         return (
-          <AlertModalComponent message={dialog.message}
+          <AlertModalComponent dismissButtonLabel={dialog.dismissButtonLabel}
+            message={dialog.message}
             onDestroy={this.handleAlertDismiss} />
         );
       case DialogTypes.CONFIRM:

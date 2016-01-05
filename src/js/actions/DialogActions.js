@@ -2,11 +2,12 @@ var AppDispatcher = require("../AppDispatcher");
 var DialogEvents = require("../events/DialogEvents");
 
 var DialogActions = {
-  alert: function (message) {
+  alert: function (message, dismissButtonLabel = "OK") {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.ALERT_SHOW,
       dialogId: dialogId,
+      dismissButtonLabel: dismissButtonLabel,
       message: message
     });
     return dialogId;
