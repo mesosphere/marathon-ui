@@ -6,8 +6,8 @@ var DialogActions = {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.ALERT_SHOW,
-      message: message,
-      dialogId: dialogId
+      dialogId: dialogId,
+      message: message
     });
     return dialogId;
   },
@@ -17,12 +17,12 @@ var DialogActions = {
       dialogId: dialogId
     });
   },
-  confirm: function (message) {
+  confirm: function (message, successButtonLabel = "OK") {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.CONFIRM_SHOW,
-      message: message,
-      dialogId: dialogId
+      dialogId: dialogId,
+      message: message
     });
     return dialogId;
   },
@@ -42,10 +42,10 @@ var DialogActions = {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.PROMPT_SHOW,
-      message: message,
       defaultValue: defaultValue,
       dialogId: dialogId,
-      inputProps: inputProps
+      inputProps: inputProps,
+      message: message
     });
     return dialogId;
   },
