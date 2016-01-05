@@ -2,12 +2,13 @@ var AppDispatcher = require("../AppDispatcher");
 var DialogEvents = require("../events/DialogEvents");
 
 var DialogActions = {
-  alert: function (message) {
+  alert: function (message, dismissButtonLabel = "OK") {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.ALERT_SHOW,
-      message: message,
-      dialogId: dialogId
+      dialogId: dialogId,
+      dismissButtonLabel: dismissButtonLabel,
+      message: message
     });
     return dialogId;
   },
@@ -17,12 +18,13 @@ var DialogActions = {
       dialogId: dialogId
     });
   },
-  confirm: function (message) {
+  confirm: function (message, successButtonLabel = "OK") {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.CONFIRM_SHOW,
+      dialogId: dialogId,
       message: message,
-      dialogId: dialogId
+      successButtonLabel: successButtonLabel
     });
     return dialogId;
   },
@@ -42,10 +44,10 @@ var DialogActions = {
     const dialogId = Symbol(message);
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.PROMPT_SHOW,
-      message: message,
       defaultValue: defaultValue,
       dialogId: dialogId,
-      inputProps: inputProps
+      inputProps: inputProps,
+      message: message
     });
     return dialogId;
   },

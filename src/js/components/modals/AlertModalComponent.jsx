@@ -7,6 +7,7 @@ var AlertModalComponent = React.createClass({
   displayName: "AlertModalComponent",
 
   propTypes: {
+    dismissButtonLabel: React.PropTypes.string,
     message: React.PropTypes.string,
     onDestroy: React.PropTypes.func
   },
@@ -17,6 +18,7 @@ var AlertModalComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
+      dismissButtonLabel: "OK",
       message: "",
       onDestroy: Util.noop
     };
@@ -27,22 +29,24 @@ var AlertModalComponent = React.createClass({
   },
 
   render: function () {
+    var props = this.props;
+
     return (
       <ModalComponent
           centered={true}
           dismissOnClickOutside={true}
           ref="modalComponent"
           size="sm"
-          onDestroy={this.props.onDestroy}>
+          onDestroy={props.onDestroy}>
         <div className="modal-body reduced-padding">
-          {this.props.message}
+          {props.message}
           <div className="modal-controls fixed-height">
             <button
                 className="btn btn-sm btn-default pull-right"
                 ref="button"
                 type="button"
                 onClick={this.handleDestroy}>
-              OK
+              {props.dismissButtonLabel}
             </button>
           </div>
         </div>

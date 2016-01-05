@@ -9,7 +9,8 @@ var ConfirmModalComponent = React.createClass({
   propTypes: {
     message: React.PropTypes.string,
     onConfirm: React.PropTypes.func,
-    onDestroy: React.PropTypes.func
+    onDestroy: React.PropTypes.func,
+    successButtonLabel: React.PropTypes.string
   },
 
   componentDidMount: function () {
@@ -20,7 +21,8 @@ var ConfirmModalComponent = React.createClass({
     return {
       message: "",
       onConfirm: Util.noop,
-      onDestroy: Util.noop
+      onDestroy: Util.noop,
+      successButtonLabel: "OK"
     };
   },
 
@@ -33,15 +35,17 @@ var ConfirmModalComponent = React.createClass({
   },
 
   render: function () {
+    var props = this.props;
+
     return (
       <ModalComponent
           centered={true}
           dismissOnClickOutside={true}
           ref="modalComponent"
           size="sm"
-          onDestroy={this.props.onDestroy}>
+          onDestroy={props.onDestroy}>
         <div className="modal-body reduced-padding">
-          {this.props.message}
+          {props.message}
           <div className="modal-controls fixed-height">
             <button
                 className="btn btn-sm  btn-success pull-right"
@@ -49,7 +53,7 @@ var ConfirmModalComponent = React.createClass({
                 tabIndex="2"
                 type="button"
                 onClick={this.handleConfirm}>
-              OK
+              {props.successButtonLabel}
             </button>
             <button
                 className="btn btn-sm btn-default pull-right"

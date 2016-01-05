@@ -22,6 +22,28 @@ describe("Dialog store", function () {
       });
     });
 
+    it("show sends correct default dismiss Button label", function (done) {
+      var id = DialogActions.alert("");
+
+      DialogStore.once(DialogEvents.ALERT_SHOW, function (message, dialogId,
+          dismissButtonLabel) {
+        expectAsync(function () {
+          expect(dismissButtonLabel).to.equal("OK");
+        }, done);
+      });
+    });
+
+    it("show sends correct custom dismiss Button label", function (done) {
+      var id = DialogActions.alert("", "CUSTOM");
+
+      DialogStore.once(DialogEvents.ALERT_SHOW, function (message, dialogId,
+          dismissButtonLabel) {
+        expectAsync(function () {
+          expect(dismissButtonLabel).to.equal("CUSTOM");
+        }, done);
+      });
+    });
+
     it("show sends correct dialogId", function (done) {
       var id = DialogActions.alert("");
 
@@ -54,6 +76,31 @@ describe("Dialog store", function () {
       DialogStore.once(DialogEvents.CONFIRM_SHOW, function (message) {
         expectAsync(function () {
           expect(message).to.equal("test confirm");
+        }, done);
+      });
+    });
+
+    it("show sends correct successButtonLabel default value", function (done) {
+      var id = DialogActions.confirm("");
+
+      DialogStore.once(DialogEvents.CONFIRM_SHOW, function (message,
+          dialogId,
+          successButtonLabel) {
+        expectAsync(function () {
+          expect(successButtonLabel).to.equal("OK");
+        }, done);
+      });
+    });
+
+    it("show sends correct successButtonLabel not default value",
+        function (done) {
+      var id = DialogActions.confirm("", "TEST");
+
+      DialogStore.once(DialogEvents.CONFIRM_SHOW, function (message,
+          dialogId,
+          successButtonLabel) {
+        expectAsync(function () {
+          expect(successButtonLabel).to.equal("TEST");
         }, done);
       });
     });
