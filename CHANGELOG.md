@@ -1,6 +1,7 @@
 ## Unversioned
 ### Changed
 - \#2651 - Improve ui scale error messages
+- \#2832 - Convert all confirm dialogs to have meaningful action button labels
 
 ### Fixed
 - \#2892 - Version in task detail component shouldn't be localised
