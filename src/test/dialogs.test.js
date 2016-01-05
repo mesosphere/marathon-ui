@@ -22,6 +22,28 @@ describe("Dialog store", function () {
       });
     });
 
+    it("show sends correct default dismiss Button label", function (done) {
+      var id = DialogActions.alert("");
+
+      DialogStore.once(DialogEvents.ALERT_SHOW, function (message, dialogId,
+          dismissButtonLabel) {
+        expectAsync(function () {
+          expect(dismissButtonLabel).to.equal("OK");
+        }, done);
+      });
+    });
+
+    it("show sends correct custom dismiss Button label", function (done) {
+      var id = DialogActions.alert("", "CUSTOM");
+
+      DialogStore.once(DialogEvents.ALERT_SHOW, function (message, dialogId,
+          dismissButtonLabel) {
+        expectAsync(function () {
+          expect(dismissButtonLabel).to.equal("CUSTOM");
+        }, done);
+      });
+    });
+
     it("show sends correct dialogId", function (done) {
       var id = DialogActions.alert("");
 
