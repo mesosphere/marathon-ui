@@ -20,8 +20,7 @@ var TaskFileDownloadComponent = React.createClass({
     return {
       file: this.getFile(),
       fileIsRequestedByUser: false,
-      fileRequestFailed: false,
-      isPopoverVisible: false
+      fileRequestFailed: false
     };
   },
 
@@ -83,18 +82,6 @@ var TaskFileDownloadComponent = React.createClass({
     this.setState({
       fileIsRequestedByUser: false,
       fileRequestFailed: true
-    });
-  },
-
-  handleMouseOver: function () {
-    this.setState({
-      isPopoverVisible: true
-    });
-  },
-
-  handleMouseOut: function () {
-    this.setState({
-      isPopoverVisible: false
     });
   },
 
