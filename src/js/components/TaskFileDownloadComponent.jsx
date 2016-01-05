@@ -1,10 +1,11 @@
 var React = require("react/addons");
 var classNames = require("classnames");
 
-var DialogActions = require("../actions/DialogActions");
 var MesosActions = require("../actions/MesosActions");
 var MesosEvents = require("../events/MesosEvents");
 var MesosStore = require("../stores/MesosStore");
+var PopoverComponent = require("../components/PopoverComponent");
+var TooltipComponent = require("../components/TooltipComponent");
 
 var TaskFileDownloadComponent = React.createClass({
   displayName: "TaskFileDownloadComponent",
@@ -18,7 +19,8 @@ var TaskFileDownloadComponent = React.createClass({
   getInitialState: function () {
     return {
       file: this.getFile(),
-      fileIsRequestedByUser: false
+      fileIsRequestedByUser: false,
+      fileRequestFailed: false
     };
   },
 
@@ -61,7 +63,8 @@ var TaskFileDownloadComponent = React.createClass({
 
     this.setState({
       file: file,
-      fileIsRequestedByUser: fileIsRequestedByUser
+      fileIsRequestedByUser: fileIsRequestedByUser,
+      fileRequestFailed: false
     });
 
   },
@@ -71,16 +74,14 @@ var TaskFileDownloadComponent = React.createClass({
       return;
     }
 
-    DialogActions
-      .alert(`Request failed or timed out for task ID ${request.taskId}`);
-
     MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_COMPLETE,
       this.onMesosRequestTaskFilesComplete);
     MesosStore.removeListener(MesosEvents.REQUEST_TASK_FILES_ERROR,
       this.onMesosRequestTaskFilesError);
 
     this.setState({
-      fileIsRequestedByUser: false
+      fileIsRequestedByUser: false,
+      fileRequestFailed: true
     });
   },
 
@@ -108,27 +109,27 @@ var TaskFileDownloadComponent = React.createClass({
     var props = this.props;
     var name = props.fileName;
     var file = state.file;
+    var fileIsRequestedByUser = state.fileIsRequestedByUser;
+    var fileRequestFailed = state.fileRequestFailed;
     var href = "";
-
-    if (this.state.fileIsRequestedByUser === true) {
-      return (
-        <span>
-          <i className="icon icon-small loading" />
-        </span>
-      )
-    }
 
     if (file) {
       href = file.downloadURI;
     }
 
+    var iconClassName = classNames("icon", "icon-mini", {
+      "loading": fileIsRequestedByUser,
+      "warning": !fileIsRequestedByUser && fileRequestFailed,
+      "file": !fileIsRequestedByUser && !fileRequestFailed
+    });
+
     return (
-      <a className="task-file-download"
-          href={href}
-          onClick={this.handleClick}
-          download={name}>
-        <i className="icon icon-mini file" /> {name}
-      </a>
+      <TooltipComponent disabled={fileIsRequestedByUser || !fileRequestFailed}>
+        <a href={href}
+            onClick={this.handleClick}>
+          <i className={iconClassName}/> {name}
+        </a>
+      </TooltipComponent>
     );
   }
 });
