@@ -688,13 +688,13 @@ describe("Task file download component", function () {
   });
 
   it("has correct download link", function () {
-    expect(this.component.props().href)
+    expect(this.component.props().children.props.href)
       .to.equal("//mesos-agent:5050/files/download?" +
       "path=%2Ffile%2Fpath%2Ffilename");
   });
 
   it("has correct label", function () {
-    expect(this.component.text().trim())
+    expect(this.component.props().children.props.children[2])
       .to.equal("filename");
   });
 
