@@ -51,18 +51,19 @@ var ModalComponent = React.createClass({
   },
 
   render: function () {
-    var modalDialogClassName =
-      "modal-dialog " + modalSizeClassName(this.props.size);
+    var props = this.props;
+    var isInState = this.state.isIn;
 
-    var modalBackdropClassName = classNames({
-      "modal-backdrop fade": true,
-      "in": this.state.isIn
+    var modalClassName = classNames("modal fade", {
+      "in": isInState,
+      "modal-centered": props.centered
     });
 
-    var modalClassName = classNames({
-      "modal fade": true,
-      "in": this.state.isIn,
-      "modal-centered": this.props.centered
+    var modalDialogClassName = classNames("modal-dialog",
+        modalSizeClassName(props.size));
+
+    var modalBackdropClassName = classNames("modal-backdrop fade", {
+      "in": isInState
     });
 
     return (
@@ -74,7 +75,7 @@ var ModalComponent = React.createClass({
             tabIndex="-1">
           <div className={modalDialogClassName}>
             <div className="modal-content">
-              {this.props.children}
+              {props.children}
             </div>
           </div>
         </div>
