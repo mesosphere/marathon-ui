@@ -191,7 +191,7 @@ var TaskDetailComponent = React.createClass({
           <dt>Version</dt>
           <dd>
             <time dateTime={task.version}>
-              {new Date(task.version).toLocaleString()}
+              {task.version}
             </time>
           </dd>
           <dt>Health</dt>

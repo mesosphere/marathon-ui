@@ -2,6 +2,9 @@
 ### Changed
 - \#2651 - Improve ui scale error messages
 
+### Fixed
+- \#2892 - Version in task detail component shouldn't be localised
+
 ## 0.14.1 - 2015-12-17
 ### Added
 - \#2772 - URI fields should be links
