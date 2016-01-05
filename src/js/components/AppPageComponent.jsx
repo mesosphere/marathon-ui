@@ -184,7 +184,7 @@ var AppPageComponent = React.createClass({
       const dialogId = DialogActions.
         confirm(`There is a deployment in progress that changes ${appId}.
           If you want to stop this deployment and force a new one to scale it,
-          press the OK button.`);
+          press the OK button.`, "Scale forcefully");
       DialogStore.handleUserResponse(dialogId, function () {
         AppsActions.scaleApp(appId, instances, true);
       });

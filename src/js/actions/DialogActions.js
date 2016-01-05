@@ -22,7 +22,8 @@ var DialogActions = {
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.CONFIRM_SHOW,
       dialogId: dialogId,
-      message: message
+      message: message,
+      successButtonLabel: successButtonLabel
     });
     return dialogId;
   },
