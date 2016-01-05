@@ -1,3 +1,7 @@
+## Unversioned
+### Changed
+- \#2651 - Improve ui scale error messages
+
 ## 0.14.1 - 2015-12-17
 ### Added
 - \#2772 - URI fields should be links

@@ -182,8 +182,8 @@ var AppPageComponent = React.createClass({
     if (statusCode === 409) {
       let appId = this.state.appId;
       const dialogId = DialogActions.
-        confirm(`Failed to scale ${appId}. If you want to stop any current
-          deployment of the app and force a new one to scale it,
+        confirm(`There is a deployment in progress that changes ${appId}.
+          If you want to stop this deployment and force a new one to scale it,
           press the OK button.`);
       DialogStore.handleUserResponse(dialogId, function () {
         AppsActions.scaleApp(appId, instances, true);
