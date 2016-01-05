@@ -58,6 +58,31 @@ describe("Dialog store", function () {
       });
     });
 
+    it("show sends correct successButtonLabel default value", function (done) {
+      var id = DialogActions.confirm("");
+
+      DialogStore.once(DialogEvents.CONFIRM_SHOW, function (message,
+          dialogId,
+          successButtonLabel) {
+        expectAsync(function () {
+          expect(successButtonLabel).to.equal("OK");
+        }, done);
+      });
+    });
+
+    it("show sends correct successButtonLabel not default value",
+        function (done) {
+      var id = DialogActions.confirm("", "TEST");
+
+      DialogStore.once(DialogEvents.CONFIRM_SHOW, function (message,
+          dialogId,
+          successButtonLabel) {
+        expectAsync(function () {
+          expect(successButtonLabel).to.equal("TEST");
+        }, done);
+      });
+    });
+
     it("show sends correct dialogId", function (done) {
       var id = DialogActions.confirm("");
 
