@@ -331,7 +331,7 @@ var AppPageComponent = React.createClass({
       return null;
     }
 
-    return (<AppPageControlsComponent appId={state.appId} model={state.app} />);
+    return (<AppPageControlsComponent model={state.app} />);
   },
 
   getTaskDetailComponent: function () {
