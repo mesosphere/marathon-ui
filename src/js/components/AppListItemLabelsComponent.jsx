@@ -154,10 +154,10 @@ var AppListItemLabelsComponent = React.createClass({
           alignment="right"
           ref="labelsDropdown"
           visible={labelsDropdownVisible}>
-          <h5>All Labels</h5>
-          <ul>
-            {dropdownNodes}
-          </ul>
+        <h5>All Labels</h5>
+        <ul>
+          {dropdownNodes}
+        </ul>
       </PopoverComponent>
     );
 
@@ -171,7 +171,6 @@ var AppListItemLabelsComponent = React.createClass({
         {labelNodes}
         {showMore}
         {labelsDropdown}
-
       </div>
     );
   }
