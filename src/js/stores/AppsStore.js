@@ -87,7 +87,7 @@ function getAppHealth(app) {
   });
 
   healthData.push({
-    quantity: Math.max(0, (app.instances - tasksSum)),
+    quantity: Math.max(0, app.instances - tasksSum),
     state: HealthStatus.UNSCHEDULED
   });
 
