@@ -147,11 +147,7 @@ var AppListItemComponent = React.createClass({
     );
   },
 
-  handleBreadcrumbClick: function (event) {
-    event.stopPropagation();
-  },
-
-  onClick: function () {
+  handleAppRowClick: function () {
     var model = this.props.model;
     var router = this.context.router;
     if (model.isGroup) {
@@ -163,6 +159,10 @@ var AppListItemComponent = React.createClass({
     } else {
       router.transitionTo("app", {appId: encodeURIComponent(model.id)});
     }
+  },
+
+  handleBreadcrumbClick: function (event) {
+    event.stopPropagation();
   },
 
   getHealthBar: function () {
@@ -227,7 +227,7 @@ var AppListItemComponent = React.createClass({
     return (
       // Set `title` on cells that potentially overflow so hovering on the
       // cells will reveal their full contents.
-      <tr onClick={this.onClick} className={className}>
+      <tr onClick={this.handleAppRowClick} className={className}>
         <td className="icon-cell">
           {this.getIcon()}
         </td>
