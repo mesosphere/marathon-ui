@@ -394,7 +394,7 @@ var AppListComponent = React.createClass({
         state.fetchState !== States.STATE_LOADING
     });
 
-    var totalColSpan = 8;
+    var totalColumnSpan = 8;
 
     return (
       <table className={tableClassSet}>
@@ -450,32 +450,32 @@ var AppListComponent = React.createClass({
         </thead>
         <tbody>
           <tr className={loadingClassSet}>
-            <td className="text-center text-muted" colSpan={totalColSpan}>
+            <td className="text-center text-muted" colSpan={totalColumnSpan}>
               Loading apps...
             </td>
           </tr>
           <tr className={noAppsClassSet}>
-            <td className="text-center" colSpan={totalColSpan}>
+            <td className="text-center" colSpan={totalColumnSpan}>
               No running apps.
             </td>
           </tr>
           <tr className={noRunningAppsClassSet}>
-            <td className="text-center" colSpan={totalColSpan}>
+            <td className="text-center" colSpan={totalColumnSpan}>
               No apps match your query.
             </td>
           </tr>
           <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan={totalColSpan}>
+            <td className="text-center text-danger" colSpan={totalColumnSpan}>
               {`Error fetching apps. ${Messages.RETRY_REFRESH}`}
             </td>
           </tr>
           <tr className={unauthorizedClassSet}>
-            <td className="text-center text-danger" colSpan={totalColSpan}>
+            <td className="text-center text-danger" colSpan={totalColumnSpan}>
               {`Error fetching apps. ${Messages.UNAUTHORIZED}`}
             </td>
           </tr>
           <tr className={forbiddenClassSet}>
-            <td className="text-center text-danger" colSpan={totalColSpan}>
+            <td className="text-center text-danger" colSpan={totalColumnSpan}>
               {`Error fetching apps. ${Messages.FORBIDDEN}`}
             </td>
           </tr>

@@ -248,14 +248,14 @@ var AppListItemComponent = React.createClass({
       return null;
     }
 
-    let props = this.props;
+    let model = this.props.model;
 
     let suspendAppClassSet = classNames({
-      "disabled": props.model.instances < 1
+      "disabled": model.instances < 1
     });
 
     let resetDelayClassSet = classNames({
-      "hidden": props.model.status !== AppStatus.DELAYED
+      "hidden": model.status !== AppStatus.DELAYED
     });
 
     return (
