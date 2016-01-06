@@ -1,6 +1,8 @@
 var classNames = require("classnames");
 var React = require("react/addons");
 
+var PopoverComponent = require("./PopoverComponent");
+
 var OnClickOutsideMixin = require("react-onclickoutside");
 var Util = require("../helpers/Util");
 
@@ -75,7 +77,6 @@ var AppListItemLabelsComponent = React.createClass({
     }
 
     let dropdownNode = React.findDOMNode(this.refs.labelsDropdown);
-    let leftArrowNode = React.findDOMNode(this.refs.leftArrow);
 
     let id = dropdownNode.attributes["data-reactid"].value;
 
@@ -97,12 +98,10 @@ var AppListItemLabelsComponent = React.createClass({
     if (offsetTop >= viewportHeight) {
       const marginTop = height - _initialTopMargins[id] * 2;
       dropdownNode.style.marginTop = `-${marginTop}px`;
-      leftArrowNode.style.marginTop = `${marginTop}px`;
       _reversedDropdowns[id] = true;
     } else {
       const marginTop = _initialTopMargins[id];
       dropdownNode.style.marginTop = `-${marginTop}px`;
-      leftArrowNode.style.marginTop = `${marginTop}px`;
       _reversedDropdowns[id] = false;
     }
   },
@@ -147,19 +146,19 @@ var AppListItemLabelsComponent = React.createClass({
       ));
     });
 
-    let labelsDropdownClassName = classNames("labels-dropdown", {
-      "visible": this.state.isDropdownVisible &&
-        numberOfVisibleLabels < labelNodes.length
-    });
+    let labelsDropdownVisible = this.state.isDropdownVisible &&
+      numberOfVisibleLabels < labelNodes.length;
 
     let labelsDropdown = (
-      <div className={labelsDropdownClassName} ref="labelsDropdown">
-        <span className="left-arrow" ref="leftArrow"></span>
-        <h5>All Labels</h5>
-        <ul>
-          {dropdownNodes}
-        </ul>
-      </div>
+      <PopoverComponent className="labels-dropdown"
+          alignment="right"
+          ref="labelsDropdown"
+          visible={labelsDropdownVisible}>
+          <h5>All Labels</h5>
+          <ul>
+            {dropdownNodes}
+          </ul>
+      </PopoverComponent>
     );
 
     // Keep the parent's ref for measurements, but handle events internally
@@ -172,6 +171,7 @@ var AppListItemLabelsComponent = React.createClass({
         {labelNodes}
         {showMore}
         {labelsDropdown}
+
       </div>
     );
   }
