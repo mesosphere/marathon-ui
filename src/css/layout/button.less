@@ -30,6 +30,10 @@
   background-color: transparent;
   border-color: @btn-default-border-color;
   color: @btn-default-text-color;
+
+  &.btn-inverse {
+    color: @btn-default-inverse-text-color;
+  }
 }
 
 .btn-default.disabled,
@@ -45,6 +49,12 @@
   background-color: @btn-default-active-bg-color;
   border-color: @btn-default-active-bg-color;
   color: @btn-default-active-text-color;
+
+  &.btn-inverse {
+    background-color: transparent;
+    border-color: @btn-default-inverse-active-border-color;
+    color: @btn-default-inverse-active-text-color;
+  }
 }
 
 .btn-success {
