@@ -1,4 +1,7 @@
 ## Unversioned
+### Added
+- \#2814 - Add contextual dropdown menu to Application List items
+
 ### Changed
 - \#2651 - Improve ui scale error messages
 - \#2832 - Convert all confirm dialogs to have meaningful action button labels
