@@ -81,14 +81,12 @@ var AppPageControlsComponent = React.createClass({
           </button>
           <ul className={dropdownClassSet}>
             <li className={suspendAppClassSet}>
-              <a href="#"
-                  onClick={this.handleSuspendApp}>
+              <a href="#" onClick={this.handleSuspendApp}>
                 Suspend
               </a>
             </li>
             <li>
-              <a href="#"
-                  onClick={this.handleDestroyApp}>
+              <a href="#" onClick={this.handleDestroyApp}>
                 <span className="text-danger">Destroy</span>
               </a>
             </li>

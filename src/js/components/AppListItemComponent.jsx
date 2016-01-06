@@ -2,6 +2,7 @@ var classNames = require("classnames");
 var React = require("react/addons");
 var OnClickOutsideMixin = require("react-onclickoutside");
 
+var AppActionsHandlerMixin = require("../mixins/AppActionsHandlerMixin");
 var AppHealthBarWithTooltipComponent =
   require("./AppHealthBarWithTooltipComponent");
 var AppListItemLabelsComponent =
@@ -17,7 +18,10 @@ var DOMUtil = require("../helpers/DOMUtil");
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
 
-  mixins: [OnClickOutsideMixin],
+  mixins: [
+    AppActionsHandlerMixin,
+    OnClickOutsideMixin
+  ],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -258,27 +262,27 @@ var AppListItemComponent = React.createClass({
       <div className="dropdown">
         <ul className="dropdown-menu">
           <li>
-            <a href="#" onClick="">
+            <a href="#" onClick={this.handleScaleApp}>
               Scale
             </a>
           </li>
           <li>
-            <a href="#" onClick="">
+            <a href="#" onClick={this.handleRestartApp}>
               Restart
             </a>
           </li>
           <li className={suspendAppClassSet}>
-            <a href="#" onClick="">
+            <a href="#" onClick={this.handleSuspendApp}>
               Suspend
             </a>
           </li>
           <li className={resetDelayClassSet}>
-            <a href="#" onClick="">
+            <a href="#" onClick={this.handleResetDelay}>
               Reset Delay
             </a>
           </li>
           <li>
-            <a href="#" onClick="">
+            <a href="#" onClick={this.handleDestroyApp}>
               <span className="text-danger">Destroy</span>
             </a>
           </li>
