@@ -1,7 +1,12 @@
 var AppsActions = require("../actions/AppsActions");
+var AppsEvents = require("../events/AppsEvents");
+var AppsStore = require("../stores/AppsStore");
 var DialogActions = require("../actions/DialogActions");
 var DialogStore = require("../stores/DialogStore");
+var Messages = require("../constants/Messages");
 var QueueActions = require("../actions/QueueActions");
+var QueueEvents = require("../events/QueueEvents");
+var QueueStore = require("../stores/QueueStore");
 
 var AppActionsHandlerMixin = {
   componentWillMount: function () {
@@ -10,6 +15,28 @@ var AppActionsHandlerMixin = {
         "The AppActionsHandlerMixin needs a defined model-property"
       );
     }
+  },
+
+  addScaleAppListener: function () {
+    AppsStore.once(AppsEvents.SCALE_APP_ERROR,
+      this.onScaleAppError);
+  },
+
+  addRestartAppListener: function () {
+    AppsStore.once(AppsEvents.RESTART_APP_ERROR,
+      this.onRestartAppError);
+  },
+
+  addDeleteAppListener: function () {
+    AppsStore.once(AppsEvents.DELETE_APP_ERROR,
+      this.onDeleteAppError);
+  },
+
+  addResetDelayListener: function () {
+    AppsStore.once(AppsEvents.RESET_DELAY,
+      this.onResetDelaySuccess);
+    AppsStore.once(AppsEvents.RESET_DELAY_ERROR,
+      this.onResetDelayError);
   },
 
   handleDestroyApp: function (event) {
@@ -22,11 +49,15 @@ var AppActionsHandlerMixin = {
         "Destroy");
 
     DialogStore.handleUserResponse(dialogId, () => {
+      this.addDeleteAppListener();
+
       AppsActions.deleteApp(appId);
     });
   },
 
   handleResetDelay: function () {
+    this.addResetDelayListener();
+
     QueueActions.resetDelay(this.props.model.id);
   },
 
@@ -37,6 +68,8 @@ var AppActionsHandlerMixin = {
       DialogActions.confirm(`Restart app '${appId}'?`, "Restart");
 
     DialogStore.handleUserResponse(dialogId, () => {
+      this.addRestartAppListener();
+
       AppsActions.restartApp(appId);
     });
   },
@@ -55,6 +88,8 @@ var AppActionsHandlerMixin = {
     DialogStore.handleUserResponse(dialogId, instancesString => {
       if (instancesString != null && instancesString !== "") {
         let instances = parseInt(instancesString, 10);
+
+        this.addScaleAppListener();
 
         AppsActions.scaleApp(model.id, instances);
       }
@@ -75,9 +110,75 @@ var AppActionsHandlerMixin = {
         "Suspend");
 
     DialogStore.handleUserResponse(dialogId, () => {
+      this.addScaleAppListener();
+
       AppsActions.scaleApp(model.id, 0);
     });
   },
+
+  onScaleAppError: function (errorMessage, statusCode, instances) {
+    if (statusCode === 409) {
+      let appId = this.props.model.id;
+      const dialogId = DialogActions.
+        confirm(`There is a deployment in progress that changes ${appId}.
+          If you want to stop this deployment and force a new one to scale it,
+          press the 'Scale forcefully' button.`, "Scale forcefully");
+      DialogStore.handleUserResponse(dialogId, () => {
+        this.addScaleAppListener();
+
+        AppsActions.scaleApp(appId, instances, true);
+      });
+    } else if (statusCode === 401) {
+      DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Not scaling: ${Messages.FORBIDDEN}`);
+    } else {
+      DialogActions.alert(`Not scaling:
+          ${errorMessage.message || errorMessage}`);
+    }
+  },
+
+  onRestartAppError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
+      DialogActions.alert(`Error restarting app: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Error restarting app: ${Messages.FORBIDDEN}`);
+    } else {
+      DialogActions.alert(
+        `Error restarting app: ${errorMessage.message || errorMessage}`
+      );
+    }
+  },
+
+  onDeleteAppError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
+      DialogActions.alert(`Error destroying app: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Error destroying app: ${Messages.FORBIDDEN}`);
+    } else {
+      DialogActions.alert(
+        `Error destroying app: ${errorMessage.message || errorMessage}`
+      );
+    }
+  },
+
+  onResetDelayError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
+      DialogActions.alert(`Error resetting delay on app:
+        ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Error resetting delay on app:
+        ${Messages.FORBIDDEN}`);
+    } else {
+      DialogActions.alert(
+        `Error resetting delay on app: ${errorMessage.message || errorMessage}`
+      );
+    }
+  },
+
+  onResetDelaySuccess: function () {
+    DialogActions.alert("Delay reset succesfully");
+  }
 };
 
 module.exports = AppActionsHandlerMixin;

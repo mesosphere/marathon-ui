@@ -2,7 +2,6 @@ var React = require("react/addons");
 
 var AppsActions = require("../actions/AppsActions");
 var AppsEvents = require("../events/AppsEvents");
-var TaskEvents = require("../events/TasksEvents");
 var AppsStore = require("../stores/AppsStore");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var AppHealthBarComponent = require("./AppHealthBarComponent");
@@ -23,8 +22,6 @@ var AppHealthDetailComponent = require("./AppHealthDetailComponent");
 var TogglableTabsComponent = require("../components/TogglableTabsComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
-var QueueEvents = require("../events/QueueEvents");
-var QueueStore = require("../stores/QueueStore");
 var TasksActions = require("../actions/TasksActions");
 var TasksEvents = require("../events/TasksEvents");
 
@@ -100,14 +97,8 @@ var AppPageComponent = React.createClass({
   componentWillMount: function () {
     AppsStore.on(AppsEvents.CHANGE, this.onAppChange);
     AppsStore.on(AppsEvents.REQUEST_APP_ERROR, this.onAppRequestError);
-    AppsStore.on(AppsEvents.SCALE_APP_ERROR, this.onScaleAppError);
-    AppsStore.on(AppsEvents.RESTART_APP_ERROR, this.onRestartAppError);
-    AppsStore.on(AppsEvents.DELETE_APP_ERROR, this.onDeleteAppError);
-    AppsStore.on(TaskEvents.DELETE_ERROR, this.onKillTaskError);
     AppsStore.on(AppsEvents.DELETE_APP, this.onDeleteAppSuccess);
     AppsStore.on(TasksEvents.DELETE_ERROR, this.onDeleteTaskError);
-    QueueStore.on(QueueEvents.RESET_DELAY_ERROR, this.onResetDelayError);
-    QueueStore.on(QueueEvents.RESET_DELAY, this.onResetDelaySuccess);
   },
 
   componentWillUnmount: function () {
@@ -115,20 +106,10 @@ var AppPageComponent = React.createClass({
       this.onAppChange);
     AppsStore.removeListener(AppsEvents.REQUEST_APP_ERROR,
       this.onAppRequestError);
-    AppsStore.removeListener(AppsEvents.SCALE_APP_ERROR,
-      this.onScaleAppError);
-    AppsStore.removeListener(AppsEvents.RESTART_APP_ERROR,
-      this.onRestartAppError);
-    AppsStore.removeListener(AppsEvents.DELETE_APP_ERROR,
-      this.onDeleteAppError);
     AppsStore.removeListener(AppsEvents.DELETE_APP,
       this.onDeleteAppSuccess);
-    AppsStore.removeListener(TaskEvents.DELETE_ERROR,
-      this.onKillTaskError);
-    QueueStore.removeListener(QueueEvents.RESET_DELAY_ERROR,
-      this.onResetDelayError);
-    QueueStore.removeListener(QueueEvents.RESET_DELAY,
-      this.onResetDelaySuccess);
+    AppsStore.removeListener(TasksEvents.DELETE_ERROR,
+      this.onDeleteTaskError);
   },
 
   componentWillReceiveProps: function () {
@@ -178,62 +159,6 @@ var AppPageComponent = React.createClass({
     });
   },
 
-  onScaleAppError: function (errorMessage, statusCode, instances) {
-    if (statusCode === 409) {
-      let appId = this.state.appId;
-      const dialogId = DialogActions.
-        confirm(`There is a deployment in progress that changes ${appId}.
-          If you want to stop this deployment and force a new one to scale it,
-          press the 'Scale forcefully' button.`, "Scale forcefully");
-      DialogStore.handleUserResponse(dialogId, function () {
-        AppsActions.scaleApp(appId, instances, true);
-      });
-    } else if (statusCode === 401) {
-      DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
-    } else if (statusCode === 403) {
-      DialogActions.alert(`Not scaling: ${Messages.FORBIDDEN}`);
-    } else {
-      DialogActions.alert(`Not scaling:
-          ${errorMessage.message || errorMessage}`);
-    }
-  },
-
-  onRestartAppError: function (errorMessage, statusCode) {
-    if (statusCode === 401) {
-      DialogActions.alert(`Error restarting app: ${Messages.UNAUTHORIZED}`);
-    } else if (statusCode === 403) {
-      DialogActions.alert(`Error restarting app: ${Messages.FORBIDDEN}`);
-    } else {
-      DialogActions.alert(
-        `Error restarting app: ${errorMessage.message || errorMessage}`
-      );
-    }
-  },
-
-  onDeleteAppError: function (errorMessage, statusCode) {
-    if (statusCode === 401) {
-      DialogActions.alert(`Error destroying app: ${Messages.UNAUTHORIZED}`);
-    } else if (statusCode === 403) {
-      DialogActions.alert(`Error destroying app: ${Messages.FORBIDDEN}`);
-    } else {
-      DialogActions.alert(
-        `Error destroying app: ${errorMessage.message || errorMessage}`
-      );
-    }
-  },
-
-  onKillTaskError: function (errorMessage, statusCode) {
-    if (statusCode === 401) {
-      DialogActions.alert(`Error killing task: ${Messages.UNAUTHORIZED}`);
-    } else if (statusCode === 403) {
-      DialogActions.alert(`Error killing task: ${Messages.FORBIDDEN}`);
-    } else {
-      DialogActions.alert(
-        `Error killing task: ${errorMessage.message || errorMessage}`
-      );
-    }
-  },
-
   onDeleteAppSuccess: function () {
     this.context.router.transitionTo("apps");
   },
@@ -256,24 +181,6 @@ var AppPageComponent = React.createClass({
     } else {
       DialogActions.alert(`Not scaling:
           ${errorMessage.message || errorMessage}`);
-    }
-  },
-
-  onResetDelaySuccess: function () {
-    DialogActions.alert("Delay reset succesfully");
-  },
-
-  onResetDelayError: function (errorMessage, statusCode) {
-    if (statusCode === 401) {
-      DialogActions.alert(`Error resetting delay on app:
-        ${Messages.UNAUTHORIZED}`);
-    } else if (statusCode === 403) {
-      DialogActions.alert(`Error resetting delay on app:
-        ${Messages.FORBIDDEN}`);
-    } else {
-      DialogActions.alert(
-        `Error resetting delay on app: ${errorMessage.message || errorMessage}`
-      );
     }
   },
 
