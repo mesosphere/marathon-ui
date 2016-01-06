@@ -1,4 +1,5 @@
 var expect = require("chai").expect;
+var nock = require("nock");
 
 var config = require("../js/config/config");
 
@@ -7,29 +8,21 @@ var DCOSActions = require("../js/actions/DCOSActions");
 var DCOSEvents = require("../js/events/DCOSEvents");
 
 var expectAsync = require("./helpers/expectAsync");
-var HttpServer = require("./helpers/HttpServer").HttpServer;
 
-var server = new HttpServer(config.localTestserverURI);
+var server = config.localTestserverURI;
+config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("DCOS", function () {
 
   describe("Actions", function () {
 
-    beforeEach(function (done) {
-      this.server = server
-        .setup({build: "info"}, 200)
-        .start(done);
-    });
-
-    afterEach(function (done) {
-      this.server.stop(done);
-    });
-
     describe("on request build information", function () {
 
       it("retrieves build infotmation", function (done) {
-
-        this.server.setup({build:"info"}, 200);
+        nock(config.apiURL)
+          .filteringPath((path) => "/")
+          .get("/")
+          .reply(200, {build: "info"});
 
         var dispatchToken = AppDispatcher.register(function (action) {
           if (action.actionType ===
@@ -46,8 +39,10 @@ describe("DCOS", function () {
       });
 
       it("handles failure gracefully", function (done) {
-
-        this.server.setup({message:"not-found"}, 404);
+        nock(config.apiURL)
+          .filteringPath((path) => "/")
+          .get("/")
+          .reply(404, {message: "not-found"});
 
         var dispatchToken = AppDispatcher.register(function (action) {
           if (action.actionType ===

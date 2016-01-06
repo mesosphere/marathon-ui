@@ -1,55 +1,43 @@
 var _ = require("underscore");
 var expect = require("chai").expect;
+var expectAsync = require("./helpers/expectAsync");
+var shallow = require("enzyme").shallow;
+var nock = require("nock");
+var describeWithDOM = require("enzyme").describeWithDOM;
 
 var React = require("react/addons");
-var TestUtils = React.addons.TestUtils;
 
 var config = require("../js/config/config");
-var AboutModalComponent = require("../js/components/modals/AboutModalComponent");
+var AboutModalComponent = require(
+  "../js/components/modals/AboutModalComponent");
 var InfoActions = require("../js/actions/InfoActions");
 var InfoEvents = require("../js/events/InfoEvents");
 var InfoStore = require("../js/stores/InfoStore");
+var ObjectDlComponent = require("../js/components/ObjectDlComponent");
 
-var ShallowUtils = require("./helpers/ShallowUtils");
-var expectAsync = require("./helpers/expectAsync");
-var HttpServer = require("./helpers/HttpServer").HttpServer;
-
-var server = new HttpServer(config.localTestserverURI);
+var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("Info", function () {
 
-  beforeEach(function (done) {
-    this.server = server
-    .setup({
-      "name": "Marathon"
-    }, 200)
-    .start(function () {
-      InfoStore.once(InfoEvents.CHANGE, done);
-      InfoActions.requestInfo();
-    });
-  });
-
-  afterEach(function (done) {
-    this.server.stop(done);
+  before(function (done) {
+    nock(config.apiURL)
+      .get("/v2/info")
+      .reply(200, {"name": "Marathon"});
+    InfoStore.once(InfoEvents.CHANGE, done);
+    InfoActions.requestInfo();
   });
 
   describe("on info request", function () {
 
-    it("updates the InfoStore on success", function (done) {
-      InfoStore.once(InfoEvents.CHANGE, function () {
-        expectAsync(function () {
-          expect(InfoStore.info.name).to.equal("Marathon");
-        }, done);
-      });
-
-      InfoActions.requestInfo();
+    it("updates the InfoStore on success", function () {
+      expect(InfoStore.info.name).to.equal("Marathon");
     });
 
     it("handles failure gracefully", function (done) {
-      this.server.setup({
-        message: "Guru Meditation"
-      }, 404);
+      nock(config.apiURL)
+        .get("/v2/info")
+        .reply(404, {message: "Guru Meditation"});
 
       InfoStore.once(InfoEvents.REQUEST_ERROR, function (error) {
         expectAsync(function () {
@@ -64,9 +52,9 @@ describe("Info", function () {
 
 });
 
-describe("About Modal", function () {
+describeWithDOM("About Modal", function () {
 
-  beforeEach(function () {
+  before(function () {
     InfoStore.info = {
       "version": "1.2.3",
       "frameworkId": "framework1",
@@ -81,45 +69,43 @@ describe("About Modal", function () {
       }
     };
 
-    this.renderer = TestUtils.createRenderer();
-    this.renderer.render(<AboutModalComponent onDestroy={_.noop} />);
-    this.modal = this.renderer.getRenderOutput();
-
-    this.modalBody = ShallowUtils.findOne(this.modal, "modal-body");
-    this.modalBodyText = ShallowUtils.getText(this.modalBody);
-
-    this.configDLs = _.filter(this.modalBody.props.children, function (child) {
-      return child.type.displayName === "ObjectDlComponent";
-    });
+    this.component = shallow(<AboutModalComponent onDestroy={_.noop} />);
+    this.nodes = {
+      modalTitleText: this.component.find(".modal-title").text(),
+      modalBodyText: this.component.find(".modal-body").text(),
+      objectDlComponents: this.component.find(ObjectDlComponent)
+    };
   });
 
-  afterEach(function () {
-    this.renderer.unmount();
+  after(function () {
+    this.component.instance().componentWillUnmount();
   });
 
   it("displays the current Marathon version", function () {
-    var modalTitle = ShallowUtils.findOne(this.modal, "modal-title");
-    var titleText = ShallowUtils.getText(modalTitle);
-    expect(titleText).to.equal("Version 1.2.3");
+    expect(this.nodes.modalTitleText).to.equal("Version 1.2.3");
   });
 
   it("displays the current framework id", function () {
-    expect(this.modalBodyText).to.contain("framework1");
+    expect(this.nodes.modalBodyText).to.contain("framework1");
   });
 
   it("displays the current leader", function () {
-    expect(this.modalBodyText).to.contain("leader1.dcos.io");
+    expect(this.nodes.modalBodyText).to.contain("leader1.dcos.io");
   });
 
   it("displays the fields in the marathon config", function () {
-    expect(this.configDLs[0]._store.props.object).to.deep.equal({
+    var objectDlComponent = this.nodes.objectDlComponents.first();
+    var props = objectDlComponent.first().props().object;
+    expect(props).to.deep.equal({
       "marathon_field_1": "mf1",
       "marathon_field_2": "mf2"
     });
   });
 
   it("displays the fields in the zookeeper config", function () {
-    expect(this.configDLs[1]._store.props.object).to.deep.equal({
+    var objectDlComponent = this.nodes.objectDlComponents.at(1);
+    var props = objectDlComponent.first().props().object;
+    expect(props).to.deep.equal({
       "zookeeper_field_1": "zk1",
       "zookeeper_field_2": "zk2"
     });
