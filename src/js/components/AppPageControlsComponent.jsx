@@ -15,8 +15,8 @@ var AppPageControlsComponent = React.createClass({
   mixins: [OnClickOutsideMixin],
 
   propTypes: {
-    app: React.PropTypes.object.isRequired,
-    appId: React.PropTypes.string.isRequired
+    appId: React.PropTypes.string.isRequired,
+    model: React.PropTypes.object.isRequired
   },
 
   getInitialState: function () {
@@ -28,7 +28,7 @@ var AppPageControlsComponent = React.createClass({
   getResetDelayButton: function () {
     var props = this.props;
 
-    if (props.app.status !== AppStatus.DELAYED) {
+    if (props.model.status !== AppStatus.DELAYED) {
       return null;
     }
 
@@ -55,7 +55,7 @@ var AppPageControlsComponent = React.createClass({
 
     const dialogId =
       DialogActions.prompt("Scale to how many instances?",
-          props.app.instances.toString(), {
+          props.model.instances.toString(), {
             type: "number",
             min: "0"
           }
@@ -75,7 +75,7 @@ var AppPageControlsComponent = React.createClass({
 
     var props = this.props;
 
-    if (props.app.instances < 1) {
+    if (props.model.instances < 1) {
       return;
     }
 
@@ -127,7 +127,7 @@ var AppPageControlsComponent = React.createClass({
     }, "dropdown-menu");
 
     var suspendAppClassSet = classNames({
-      "disabled": props.app.instances < 1
+      "disabled": props.model.instances < 1
     });
 
     return (
