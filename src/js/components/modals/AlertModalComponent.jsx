@@ -1,6 +1,6 @@
 var React = require("react/addons");
-var Util = require("../../helpers/Util");
 
+var Util = require("../../helpers/Util");
 var ModalComponent = require("../ModalComponent");
 
 var AlertModalComponent = React.createClass({
@@ -9,7 +9,8 @@ var AlertModalComponent = React.createClass({
   propTypes: {
     dismissButtonLabel: React.PropTypes.string,
     message: React.PropTypes.string,
-    onDestroy: React.PropTypes.func
+    onDestroy: React.PropTypes.func,
+    title: React.PropTypes.string
   },
 
   componentDidMount: function () {
@@ -20,7 +21,8 @@ var AlertModalComponent = React.createClass({
     return {
       dismissButtonLabel: "OK",
       message: "",
-      onDestroy: Util.noop
+      onDestroy: Util.noop,
+      title: ""
     };
   },
 
@@ -34,21 +36,24 @@ var AlertModalComponent = React.createClass({
     return (
       <ModalComponent
           centered={true}
+          className="dialog"
           dismissOnClickOutside={true}
           ref="modalComponent"
-          size="sm"
           onDestroy={props.onDestroy}>
-        <div className="modal-body reduced-padding">
+        <div className="modal-header">
+          {props.title}
+        </div>
+        <div className="modal-body">
           {props.message}
-          <div className="modal-controls fixed-height">
-            <button
-                className="btn btn-sm btn-default pull-right"
-                ref="button"
-                type="button"
-                onClick={this.handleDestroy}>
-              {props.dismissButtonLabel}
-            </button>
-          </div>
+        </div>
+        <div className="modal-footer">
+          <button
+            className="btn btn-lg btn-default btn-inverse"
+            ref="button"
+            type="button"
+            onClick={this.handleDestroy}>
+            {props.dismissButtonLabel}
+          </button>
         </div>
       </ModalComponent>
     );

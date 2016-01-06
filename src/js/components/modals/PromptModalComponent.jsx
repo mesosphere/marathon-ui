@@ -1,6 +1,6 @@
 var React = require("react/addons");
-var Util = require("../../helpers/Util");
 
+var Util = require("../../helpers/Util");
 var ModalComponent = require("../ModalComponent");
 
 var PromptModalComponent = React.createClass({
@@ -11,7 +11,8 @@ var PromptModalComponent = React.createClass({
     inputProps: React.PropTypes.object,
     message: React.PropTypes.string,
     onConfirm: React.PropTypes.func,
-    onDestroy: React.PropTypes.func
+    onDestroy: React.PropTypes.func,
+    title: React.PropTypes.string
   },
 
   getDefaultProps: function () {
@@ -20,7 +21,8 @@ var PromptModalComponent = React.createClass({
       message: "",
       inputType: {type: "text"},
       onConfirm: Util.noop,
-      onDestroy: Util.noop
+      onDestroy: Util.noop,
+      title: ""
     };
   },
 
@@ -45,34 +47,39 @@ var PromptModalComponent = React.createClass({
   },
 
   render: function () {
+    var props = this.props;
+
     return (
       <ModalComponent
           centered={true}
+          className="dialog"
           dismissOnClickOutside={true}
           ref="modalComponent"
-          size="sm"
-          onDestroy={this.props.onDestroy}>
-        <div className="modal-body reduced-padding">
-          <label>{this.props.message}</label>
-          <input className="form-control"
-            {...this.props.inputProps}
+          onDestroy={props.onDestroy}>
+        <div className="modal-header">
+          {props.title}
+        </div>
+        <div className="modal-body">
+          <label>{props.message}</label>
+          <input className="form-control form-control-inverse"
+            {...props.inputProps}
             ref="textInput"
             onKeyUp={this.onKeyUp}
-            defaultValue={this.props.defaultValue} />
-          <div className="modal-controls fixed-height">
-            <button
-                className="btn btn-sm btn-success pull-right"
-                type="button"
-                onClick={this.handleConfirm}>
-              OK
-            </button>
-            <button
-                className="btn btn-sm btn-default pull-right"
-                type="button"
-                onClick={this.handleDestroy}>
-              Cancel
-            </button>
-          </div>
+            defaultValue={props.defaultValue} />
+        </div>
+        <div className="modal-footer">
+          <button
+            className="btn btn-lg btn-success btn-inverse"
+            type="button"
+            onClick={this.handleConfirm}>
+            OK
+          </button>
+          <button
+            className="btn btn-lg btn-default btn-inverse"
+            type="button"
+            onClick={this.handleDestroy}>
+            Cancel
+          </button>
         </div>
       </ModalComponent>
     );

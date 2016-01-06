@@ -1,6 +1,6 @@
 var React = require("react/addons");
-var Util = require("../../helpers/Util");
 
+var Util = require("../../helpers/Util");
 var ModalComponent = require("../ModalComponent");
 
 var ConfirmModalComponent = React.createClass({
@@ -10,7 +10,8 @@ var ConfirmModalComponent = React.createClass({
     message: React.PropTypes.string,
     onConfirm: React.PropTypes.func,
     onDestroy: React.PropTypes.func,
-    successButtonLabel: React.PropTypes.string
+    successButtonLabel: React.PropTypes.string,
+    title: React.PropTypes.string
   },
 
   componentDidMount: function () {
@@ -22,7 +23,8 @@ var ConfirmModalComponent = React.createClass({
       message: "",
       onConfirm: Util.noop,
       onDestroy: Util.noop,
-      successButtonLabel: "OK"
+      successButtonLabel: "OK",
+      title: ""
     };
   },
 
@@ -40,29 +42,32 @@ var ConfirmModalComponent = React.createClass({
     return (
       <ModalComponent
           centered={true}
+          className="dialog"
           dismissOnClickOutside={true}
           ref="modalComponent"
-          size="sm"
           onDestroy={props.onDestroy}>
-        <div className="modal-body reduced-padding">
+        <div className="modal-header">
+          {props.title}
+        </div>
+        <div className="modal-body">
           {props.message}
-          <div className="modal-controls fixed-height">
-            <button
-                className="btn btn-sm  btn-success pull-right"
-                ref="confirmButton"
-                tabIndex="2"
-                type="button"
-                onClick={this.handleConfirm}>
-              {props.successButtonLabel}
-            </button>
-            <button
-                className="btn btn-sm btn-default pull-right"
-                tabIndex="1"
-                type="button"
-                onClick={this.handleDestroy}>
-              Cancel
-            </button>
-          </div>
+        </div>
+        <div className="modal-footer">
+          <button
+            className="btn btn-lg btn-success btn-inverse"
+            ref="confirmButton"
+            tabIndex="2"
+            type="button"
+            onClick={this.handleConfirm}>
+            {props.successButtonLabel}
+          </button>
+          <button
+            className="btn btn-lg btn-default btn-inverse"
+            tabIndex="1"
+            type="button"
+            onClick={this.handleDestroy}>
+            Cancel
+          </button>
         </div>
       </ModalComponent>
     );

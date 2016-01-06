@@ -11,6 +11,7 @@ var ModalComponent = React.createClass({
   propTypes: {
     centered: React.PropTypes.bool,
     children: React.PropTypes.node,
+    className: React.PropTypes.string,
     dismissOnClickOutside: React.PropTypes.bool,
     onDestroy: React.PropTypes.func,
     size: React.PropTypes.string
@@ -54,7 +55,7 @@ var ModalComponent = React.createClass({
     var props = this.props;
     var isInState = this.state.isIn;
 
-    var modalClassName = classNames("modal fade", {
+    var modalClassName = classNames("modal fade", props.className, {
       "in": isInState,
       "modal-centered": props.centered
     });
