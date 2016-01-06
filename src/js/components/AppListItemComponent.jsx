@@ -121,9 +121,9 @@ var AppListItemComponent = React.createClass({
   getIcon: function () {
     var model = this.props.model;
     if (model.isGroup) {
-      return (<i className="icon icon-small group"></i>);
+      return <i className="icon icon-small group"></i>;
     }
-    return (<i className="icon icon-small app" title="Application"></i>);
+    return <i className="icon icon-small app" title="Application"></i>;
   },
 
   getLabels: function () {
@@ -247,6 +247,9 @@ var AppListItemComponent = React.createClass({
           </span> of {model.instances}
         </td>
         {this.getHealthBar()}
+        <td className="text-right">
+          <i className="icon icon-mini dots"></i>
+        </td>
       </tr>
     );
   }
