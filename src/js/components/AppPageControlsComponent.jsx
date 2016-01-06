@@ -145,7 +145,7 @@ var AppPageControlsComponent = React.createClass({
           <button className="btn btn-lg btn-default"
               onClick={this.toggleDropdown}>
             <i className="icon icon-mini gear"></i>
-            <span className="caret"/>
+            <span className="caret" />
           </button>
           <ul className={dropdownClassSet}>
             <li className={suspendAppClassSet}>

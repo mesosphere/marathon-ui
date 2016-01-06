@@ -1,11 +1,13 @@
 var classNames = require("classnames");
 var React = require("react/addons");
+var OnClickOutsideMixin = require("react-onclickoutside");
 
 var AppHealthBarWithTooltipComponent =
   require("./AppHealthBarWithTooltipComponent");
 var AppListItemLabelsComponent =
   require("../components/AppListItemLabelsComponent");
 var AppListViewTypes = require("../constants/AppListViewTypes");
+var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var Util = require("../helpers/Util");
@@ -14,6 +16,8 @@ var DOMUtil = require("../helpers/DOMUtil");
 
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
+
+  mixins: [OnClickOutsideMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -33,6 +37,7 @@ var AppListItemComponent = React.createClass({
 
   getInitialState: function () {
     return {
+      isActionsDropdownActivated: false,
       numberOfVisibleLabels: -1
     };
   },
@@ -66,6 +71,11 @@ var AppListItemComponent = React.createClass({
     }
 
     if (this.state.numberOfVisibleLabels !== nextState.numberOfVisibleLabels) {
+      return true;
+    }
+
+    if (this.state.isActionsDropdownActivated !==
+        nextState.isActionsDropdownActivated) {
       return true;
     }
 
@@ -147,6 +157,14 @@ var AppListItemComponent = React.createClass({
     );
   },
 
+  handleActionsClick: function (event) {
+    event.stopPropagation();
+
+    this.setState({
+      isActionsDropdownActivated: !this.state.isActionsDropdownActivated
+    });
+  },
+
   handleAppRowClick: function () {
     var model = this.props.model;
     var router = this.context.router;
@@ -163,6 +181,12 @@ var AppListItemComponent = React.createClass({
 
   handleBreadcrumbClick: function (event) {
     event.stopPropagation();
+  },
+
+  handleClickOutside: function () {
+    this.setState({
+      isActionsDropdownActivated: false
+    });
   },
 
   getHealthBar: function () {
@@ -215,6 +239,54 @@ var AppListItemComponent = React.createClass({
     );
   },
 
+  getDropdownMenu: function () {
+    if (!this.state.isActionsDropdownActivated) {
+      return null;
+    }
+
+    let props = this.props;
+
+    let suspendAppClassSet = classNames({
+      "disabled": props.model.instances < 1
+    });
+
+    let resetDelayClassSet = classNames({
+      "hidden": props.model.status !== AppStatus.DELAYED
+    });
+
+    return (
+      <div className="dropdown">
+        <ul className="dropdown-menu">
+          <li>
+            <a href="#" onClick="">
+              Scale
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick="">
+              Restart
+            </a>
+          </li>
+          <li className={suspendAppClassSet}>
+            <a href="#" onClick="">
+              Suspend
+            </a>
+          </li>
+          <li className={resetDelayClassSet}>
+            <a href="#" onClick="">
+              Reset Delay
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick="">
+              <span className="text-danger">Destroy</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    );
+  },
+
   render: function () {
     var props = this.props;
     var model = props.model;
@@ -247,8 +319,10 @@ var AppListItemComponent = React.createClass({
           </span> of {model.instances}
         </td>
         {this.getHealthBar()}
-        <td className="text-right">
+        <td className="actions-cell"
+            onClick={this.handleActionsClick}>
           <i className="icon icon-mini dots"></i>
+          {this.getDropdownMenu()}
         </td>
       </tr>
     );
