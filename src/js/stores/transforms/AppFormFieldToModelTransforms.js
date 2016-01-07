@@ -91,6 +91,7 @@ const AppFormFieldToModelTransforms = {
       if (row.protocol === HealthCheckProtocols.COMMAND) {
         delete row.path;
         delete row.portIndex;
+        delete row.port;
 
         row.command = {
           value: row.command
@@ -109,7 +110,8 @@ const AppFormFieldToModelTransforms = {
       "intervalSeconds",
       "maxConsecutiveFailures",
       "timeoutSeconds",
-      "portIndex"]
+      "portIndex",
+      "port"]
         .forEach((key) => {
           if (row[key] != null &&
               !Util.isStringAndEmpty(row[key].toString().trim())) {

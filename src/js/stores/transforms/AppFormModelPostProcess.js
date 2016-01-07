@@ -1,6 +1,7 @@
 var Util = require("../../helpers/Util");
 
 var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
+var HealthCheckPortTypes = require("../../constants/HealthCheckPortTypes");
 
 const healthChecksRowScheme = require("../schemes/healthChecksRowScheme");
 
@@ -58,12 +59,20 @@ const AppFormModelPostProcess = {
     let isEmpty = hc.protocol === HealthCheckProtocols.HTTP &&
       hc.path == null || Util.isStringAndEmpty(healthChecks.path) &&
       ["portIndex",
+      "port",
       "gracePeriodSeconds",
       "intervalSeconds",
       "timeoutSeconds",
       "maxConsecutiveFailures",
       "ignoreHttp1xx"]
         .every((key) => hc[key] === healthChecksRowScheme[key]);
+
+    if (hc.portType === HealthCheckPortTypes.PORT_INDEX) {
+      delete hc.port;
+    } else if (hc.portType === HealthCheckPortTypes.PORT_NUMBER) {
+      delete hc.portIndex;
+    }
+    delete hc.portType;
 
     if (isEmpty) {
       app.healthChecks = [];

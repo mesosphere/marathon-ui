@@ -111,6 +111,77 @@ describe("App Form Model Post Process", function () {
       expect(app.healthChecks).to.deep.equal(app.healthChecks);
     });
 
+    describe("only contains the specified port field", function () {
+      it("Port Number", function () {
+        var healthCheckWithPortNumber = {
+          healthChecks: [{
+            "path": "/",
+            "protocol": "HTTP",
+            "portIndex": 0,
+            "port": 8080,
+            "portType": "PORT_NUMBER",
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 20,
+            "maxConsecutiveFailures": 3,
+            "ignoreHttp1xx": false
+          }]
+        };
+
+        var expectedObjectWithoutPortIndex = {
+          "path": "/",
+          "protocol": "HTTP",
+          "port": 8080,
+          "gracePeriodSeconds": 300,
+          "intervalSeconds": 60,
+          "timeoutSeconds": 20,
+          "maxConsecutiveFailures": 3,
+          "ignoreHttp1xx": false
+        };
+
+        AppFormModelPostProcess.healthChecks(healthCheckWithPortNumber);
+
+        expect(healthCheckWithPortNumber.healthChecks[0])
+          .to.deep.equal(expectedObjectWithoutPortIndex);
+      });
+
+      it("Port Index", function () {
+        var healthCheckWithPortIndex = {
+          healthChecks: [{
+            "path": "/",
+            "protocol": "HTTP",
+            "portIndex": 1,
+            "port": 8080,
+            "portType": "PORT_INDEX",
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 20,
+            "maxConsecutiveFailures": 3,
+            "ignoreHttp1xx": false
+          }]
+        };
+
+        var expectedObjectWithoutPortNumber = {
+          "path": "/",
+          "protocol": "HTTP",
+          "portIndex": 1,
+          "gracePeriodSeconds": 300,
+          "intervalSeconds": 60,
+          "timeoutSeconds": 20,
+          "maxConsecutiveFailures": 3,
+          "ignoreHttp1xx": false
+        };
+
+        AppFormModelPostProcess.healthChecks(healthCheckWithPortIndex);
+
+        expect(healthCheckWithPortIndex.healthChecks[0])
+          .to.deep.equal(expectedObjectWithoutPortNumber);
+      });
+
+    });
+
+
+
   });
 
 });
