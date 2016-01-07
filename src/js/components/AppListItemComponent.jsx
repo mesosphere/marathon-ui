@@ -42,7 +42,8 @@ var AppListItemComponent = React.createClass({
   getInitialState: function () {
     return {
       isActionsDropdownActivated: false,
-      numberOfVisibleLabels: -1
+      numberOfVisibleLabels: -1,
+      actionsDropdownTopAligned: false
     };
   },
 
@@ -59,6 +60,8 @@ var AppListItemComponent = React.createClass({
     if (this.didPropsChange(prevProps)) {
       this.updateNumberOfVisibleLabels();
     }
+
+    this.recalculateDropdownPosition();
   },
 
   componentWillUnmount: function () {
@@ -80,6 +83,11 @@ var AppListItemComponent = React.createClass({
 
     if (this.state.isActionsDropdownActivated !==
         nextState.isActionsDropdownActivated) {
+      return true;
+    }
+
+    if (this.state.actionsDropdownTopAligned !==
+        nextState.actionsDropdownTopAligned) {
       return true;
     }
 
@@ -227,9 +235,13 @@ var AppListItemComponent = React.createClass({
       "hidden": model.status !== AppStatus.DELAYED
     });
 
+    let dropdownClassName = classNames({
+      top: this.state.actionsDropdownTopAligned
+    }, "dropdown");
+
     return (
-      <div className="dropdown">
-        <ul className="dropdown-menu">
+      <div className={dropdownClassName} ref="dropdown">
+        <ul className="dropdown-menu" ref="dropdown-menu">
           <li>
             <a href="#" onClick={this.handleScaleApp}>
               Scale
@@ -303,6 +315,33 @@ var AppListItemComponent = React.createClass({
         <AppStatusComponent model={this.props.model} />
       </td>
     );
+  },
+
+  recalculateDropdownPosition: function () {
+    if (global.window == null) {
+      return;
+    }
+
+    let componentNode = React.findDOMNode(this.refs.dropdown);
+
+    if (componentNode == null) {
+      return;
+    }
+
+    let topAligned = false;
+
+    let contentNode = React.findDOMNode(this.refs["dropdown-menu"]);
+    let componentPosition = componentNode.getBoundingClientRect();
+    let contentHeight = contentNode.clientHeight;
+
+    if (componentPosition.bottom + contentHeight >=
+        document.documentElement.clientHeight) {
+      topAligned = true;
+    }
+
+    if (topAligned !== this.state.actionsDropdownTopAligned) {
+      this.setState({actionsDropdownTopAligned: topAligned});
+    }
   },
 
   render: function () {

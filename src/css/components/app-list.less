@@ -111,12 +111,17 @@
     &.actions-cell {
       .dropdown {
         margin: 0;
+
+        .dropdown-menu {
+          left: 100%;
+          transform: translateX(-100%);
+        }
+
+        &.top .dropdown-menu {
+          transform: translate(-100%, calc(-100% - @base-spacing-unit*2));
+        }
       }
 
-      .dropdown-menu {
-        left: 100%;
-        transform: translateX(-100%);
-      }
     }
   }
 }
