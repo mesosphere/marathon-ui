@@ -459,7 +459,7 @@ describe("App Form Validators", function () {
         expect(healthChecksPort({
           protocol: "HTTP",
           portType: HealthCheckPortTypes.PORT_NUMBER,
-          port: "70000"
+          port: "65536"
         })).to.be.false;
         expect(healthChecksPort({
           protocol: "HTTP",
