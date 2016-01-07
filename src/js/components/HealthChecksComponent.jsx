@@ -4,6 +4,7 @@ var React = require("react/addons");
 var DuplicableRowsMixin = require("../mixins/DuplicableRowsMixin");
 var FormGroupComponent = require("../components/FormGroupComponent");
 var HealthCheckProtocols = require("../constants/HealthCheckProtocols");
+var HealthCheckPortTypes = require("../constants/HealthCheckPortTypes");
 
 const healthChecksRowScheme =
   require("../stores/schemes/healthChecksRowScheme");
@@ -73,7 +74,14 @@ var HealthChecksComponent = React.createClass({
 
     var portIndexClassSet = classNames({
       "col-sm-2": true,
-      "hidden": row.protocol === HealthCheckProtocols.COMMAND
+      "hidden": row.protocol === HealthCheckProtocols.COMMAND ||
+        row.portType === HealthCheckPortTypes.PORT_NUMBER
+    });
+
+    var portClassSet = classNames({
+      "col-sm-2": true,
+      "hidden": row.protocol === HealthCheckProtocols.COMMAND ||
+        row.portType === HealthCheckPortTypes.PORT_INDEX
     });
 
     return (
@@ -165,6 +173,8 @@ var HealthChecksComponent = React.createClass({
                 <input ref={`timeoutSeconds${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
+          </div>
+          <div className="row">
             <div className="col-sm-4">
               <FormGroupComponent
                 errorMessage={
@@ -186,6 +196,35 @@ var HealthChecksComponent = React.createClass({
                 label="Port Index"
                 value={row.portIndex}>
                 <input ref={`portIndex${i}`} {...numberInputAttributes} />
+              </FormGroupComponent>
+            </div>
+            <div className={portClassSet}>
+              <FormGroupComponent
+                errorMessage={
+                  getErrorMessage(`${fieldsetId}.${i}.port`)
+                }
+                fieldId={`${fieldsetId}.${i}.port`}
+                label="Port Number"
+                value={row.port}>
+                <input ref={`port${i}`} {...numberInputAttributes} />
+              </FormGroupComponent>
+            </div>
+            <div className="col-sm-3">
+              <FormGroupComponent
+                errorMessage={
+                  getErrorMessage(`${fieldsetId}.${i}.portType`)
+                }
+                fieldId={`${fieldsetId}.${i}.portType`}
+                label="Port Type"
+                value={row.portType}>
+                <select defaultValue={row.portType} ref={`portType${i}`}>
+                  <option value={HealthCheckPortTypes.PORT_INDEX}>
+                    Port Index
+                  </option>
+                  <option value={HealthCheckPortTypes.PORT_NUMBER}>
+                    Port Number
+                  </option>
+                </select>
               </FormGroupComponent>
             </div>
           </div>
