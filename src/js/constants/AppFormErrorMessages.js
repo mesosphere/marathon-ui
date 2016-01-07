@@ -38,6 +38,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
     "Command must not be emtpy",
     "Path must not be emtpy",
     "Port Index must be a non-negative number",
+    "Port Number must be a valid port between 0 - 65535",
     "Grace Period must be a non-negative number",
     "Interval must be a non-negative number",
     "Timeout must be a non-negative number",
