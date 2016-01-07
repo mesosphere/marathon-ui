@@ -1,6 +1,8 @@
 ## Unversioned
 ### Added
 - \#2814 - Add contextual dropdown menu to Application List items
+- \#2733 - Allow configuration of "port" instead of "portIndex" for HTTP/TCP
+  health checks
 
 ### Changed
 - \#2651 - Improve ui scale error messages
