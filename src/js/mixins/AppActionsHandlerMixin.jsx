@@ -119,10 +119,12 @@ var AppActionsHandlerMixin = {
   onScaleAppError: function (errorMessage, statusCode, instances) {
     if (statusCode === 409) {
       let appId = this.props.model.id;
+
       const dialogId = DialogActions.
         confirm(`There is a deployment in progress that changes ${appId}.
           If you want to stop this deployment and force a new one to scale it,
           press the 'Scale forcefully' button.`, "Scale forcefully");
+
       DialogStore.handleUserResponse(dialogId, () => {
         this.addScaleAppListener();
 
