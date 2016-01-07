@@ -194,7 +194,7 @@ var HealthChecksComponent = React.createClass({
                 }
                 fieldId={`${fieldsetId}.${i}.portIndex`}
                 label="Port Index"
-                value={row.portIndex}>
+                value={row.portIndex || 0}>
                 <input ref={`portIndex${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
@@ -205,7 +205,7 @@ var HealthChecksComponent = React.createClass({
                 }
                 fieldId={`${fieldsetId}.${i}.port`}
                 label="Port Number"
-                value={row.port}>
+                value={row.port || 0}>
                 <input ref={`port${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
