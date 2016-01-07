@@ -78,7 +78,7 @@ var HealthChecksComponent = React.createClass({
         row.portType === HealthCheckPortTypes.PORT_NUMBER
     });
 
-    var portClassSet = classNames({
+    var portNumberClassSet = classNames({
       "col-sm-2": true,
       "hidden": row.protocol === HealthCheckProtocols.COMMAND ||
         row.portType === HealthCheckPortTypes.PORT_INDEX
@@ -198,7 +198,7 @@ var HealthChecksComponent = React.createClass({
                 <input ref={`portIndex${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
-            <div className={portClassSet}>
+            <div className={portNumberClassSet}>
               <FormGroupComponent
                 errorMessage={
                   getErrorMessage(`${fieldsetId}.${i}.port`)
