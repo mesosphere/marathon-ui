@@ -301,8 +301,6 @@ var AppListItemComponent = React.createClass({
     });
 
     return (
-      // Set `title` on cells that potentially overflow so hovering on the
-      // cells will reveal their full contents.
       <tr onClick={this.handleAppRowClick} className={className}>
         <td className="icon-cell">
           {this.getIcon()}
