@@ -414,6 +414,7 @@ describe("App Form Model To Field Transform", function () {
             "path": "/",
             "protocol": "COMMAND",
             "portIndex": 0,
+            "portType": "PORT_INDEX",
             "command": "true",
             "gracePeriodSeconds": 300,
             "intervalSeconds": 60,
@@ -422,6 +423,70 @@ describe("App Form Model To Field Transform", function () {
             "ignoreHttp1xx": false
           }]);
       });
+
+      describe("only contains the specified port field", function () {
+        it("Port Number", function () {
+          var expectedHealthCheckWithPortNumberType = [{
+            "consecutiveKey": 0,
+            "path": "/",
+            "protocol": "HTTP",
+            "port": 8080,
+            "portType": "PORT_NUMBER",
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 20,
+            "maxConsecutiveFailures": 3,
+            "ignoreHttp1xx": false
+          }];
+
+          var ObjectWithoutPortNumberType = [{
+            "path": "/",
+            "protocol": "HTTP",
+            "port": 8080,
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 20,
+            "maxConsecutiveFailures": 3,
+            "ignoreHttp1xx": false
+          }];
+
+          expect(AppFormTransforms.ModelToField.healthChecks(
+            ObjectWithoutPortNumberType
+          )).to.deep.equal(expectedHealthCheckWithPortNumberType);
+        });
+
+        it("Port Index", function () {
+          var expectedHealthCheckWithPortIndexType = [{
+            "consecutiveKey": 0,
+            "path": "/",
+            "protocol": "HTTP",
+            "portIndex": 1,
+            "portType": "PORT_INDEX",
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 20,
+            "maxConsecutiveFailures": 3,
+            "ignoreHttp1xx": false
+          }];
+
+          var objectWithoutPortIndexType = [{
+            "path": "/",
+            "protocol": "HTTP",
+            "portIndex": 1,
+            "gracePeriodSeconds": 300,
+            "intervalSeconds": 60,
+            "timeoutSeconds": 20,
+            "maxConsecutiveFailures": 3,
+            "ignoreHttp1xx": false
+          }];
+
+          expect(AppFormTransforms.ModelToField.healthChecks(
+            objectWithoutPortIndexType
+          )).to.deep.equal(expectedHealthCheckWithPortIndexType);
+        });
+
+      });
+
     });
 
     it("ports array to string", function () {
