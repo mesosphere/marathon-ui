@@ -98,69 +98,6 @@ var AppListItemComponent = React.createClass({
     requestAnimationFrame(this.updateNumberOfVisibleLabels);
   },
 
-  updateNumberOfVisibleLabels: function () {
-    var labels = this.props.model.labels;
-
-    if (labels == null || Object.keys(labels).length === 0) {
-      this.setState({numberOfVisibleLabels: 0});
-      return;
-    }
-
-    let refs = this.refs;
-
-    let cellNode = React.findDOMNode(refs.nameCell);
-    let nameNode = React.findDOMNode(refs.nameNode);
-    let moreNode = React.findDOMNode(refs.moreLabel);
-
-    let availableWidth = DOMUtil.getInnerWidth(cellNode) -
-      DOMUtil.getOuterWidth(nameNode) -
-      DOMUtil.getOuterWidth(moreNode);
-
-    let labelsWidth = 0;
-    let numberOfVisibleLabels = 0;
-    let labelNodes = React.findDOMNode(refs.labels).querySelectorAll(".badge");
-
-    // labelNodes is not an Array, but a NodeList
-    [...labelNodes].forEach(label => {
-      labelsWidth += DOMUtil.getOuterWidth(label);
-      if (labelsWidth > availableWidth) {
-        return true;
-      }
-      numberOfVisibleLabels++;
-    });
-
-    this.setState({numberOfVisibleLabels: numberOfVisibleLabels});
-  },
-
-  getIcon: function () {
-    var model = this.props.model;
-    if (model.isGroup) {
-      return <i className="icon icon-small group"></i>;
-    }
-    return <i className="icon icon-small app" title="Application"></i>;
-  },
-
-  getLabels: function () {
-    var labels = this.props.model.labels;
-    if (labels == null || Object.keys(labels).length === 0) {
-      return null;
-    }
-
-    var moreLabelClassName = classNames("badge more", {
-      "visible": Object.keys(labels).length > this.state.numberOfVisibleLabels
-    });
-
-    return (
-     <AppListItemLabelsComponent ref="labels"
-          labels={this.props.model.labels}
-          numberOfVisibleLabels={this.state.numberOfVisibleLabels}>
-        <span className={moreLabelClassName} ref="moreLabel">
-          &hellip;
-        </span>
-     </AppListItemLabelsComponent>
-    );
-  },
-
   handleActionsClick: function (event) {
     event.stopPropagation();
 
@@ -193,20 +130,38 @@ var AppListItemComponent = React.createClass({
     });
   },
 
-  getHealthBar: function () {
-    return (
-      <td className="text-right health-bar-column">
-        <AppHealthBarWithTooltipComponent model={this.props.model} />
-      </td>
-    );
-  },
+  updateNumberOfVisibleLabels: function () {
+    var labels = this.props.model.labels;
 
-  getStatus: function () {
-    return (
-      <td className="text-right status">
-        <AppStatusComponent model={this.props.model} />
-      </td>
-    );
+    if (labels == null || Object.keys(labels).length === 0) {
+      this.setState({numberOfVisibleLabels: 0});
+      return;
+    }
+
+    let refs = this.refs;
+
+    let cellNode = React.findDOMNode(refs.nameCell);
+    let nameNode = React.findDOMNode(refs.nameNode);
+    let moreNode = React.findDOMNode(refs.moreLabel);
+
+    let availableWidth = DOMUtil.getInnerWidth(cellNode) -
+      DOMUtil.getOuterWidth(nameNode) -
+      DOMUtil.getOuterWidth(moreNode);
+
+    let labelsWidth = 0;
+    let numberOfVisibleLabels = 0;
+    let labelNodes = React.findDOMNode(refs.labels).querySelectorAll(".badge");
+
+    // labelNodes is not an Array, but a NodeList
+    [...labelNodes].forEach(label => {
+      labelsWidth += DOMUtil.getOuterWidth(label);
+      if (labelsWidth > availableWidth) {
+        return true;
+      }
+      numberOfVisibleLabels++;
+    });
+
+    this.setState({numberOfVisibleLabels: numberOfVisibleLabels});
   },
 
   getAppName: function () {
@@ -288,6 +243,51 @@ var AppListItemComponent = React.createClass({
           </li>
         </ul>
       </div>
+    );
+  },
+
+  getHealthBar: function () {
+    return (
+      <td className="text-right health-bar-column">
+        <AppHealthBarWithTooltipComponent model={this.props.model} />
+      </td>
+    );
+  },
+
+  getIcon: function () {
+    var model = this.props.model;
+    if (model.isGroup) {
+      return <i className="icon icon-small group"></i>;
+    }
+    return <i className="icon icon-small app" title="Application"></i>;
+  },
+
+  getLabels: function () {
+    var labels = this.props.model.labels;
+    if (labels == null || Object.keys(labels).length === 0) {
+      return null;
+    }
+
+    var moreLabelClassName = classNames("badge more", {
+      "visible": Object.keys(labels).length > this.state.numberOfVisibleLabels
+    });
+
+    return (
+     <AppListItemLabelsComponent ref="labels"
+          labels={this.props.model.labels}
+          numberOfVisibleLabels={this.state.numberOfVisibleLabels}>
+        <span className={moreLabelClassName} ref="moreLabel">
+          &hellip;
+        </span>
+     </AppListItemLabelsComponent>
+    );
+  },
+
+  getStatus: function () {
+    return (
+      <td className="text-right status">
+        <AppStatusComponent model={this.props.model} />
+      </td>
     );
   },
 
