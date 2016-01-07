@@ -394,6 +394,8 @@ var AppListComponent = React.createClass({
         state.fetchState !== States.STATE_LOADING
     });
 
+    var totalColumnSpan = 8;
+
     return (
       <table className={tableClassSet}>
         <colgroup>
@@ -404,6 +406,7 @@ var AppListComponent = React.createClass({
           <col className="status-col" />
           <col className="instances-col" />
           <col className="health-col" />
+          <col className="actions-col" />
         </colgroup>
         <thead>
           <tr>
@@ -437,7 +440,7 @@ var AppListComponent = React.createClass({
                 {this.getCaret("tasksRunning")} Running Instances
               </span>
             </th>
-            <th className="health-cell">
+            <th className="health-cell" colSpan="2">
               <span onClick={this.sortBy.bind(null, "healthWeight")}
                   className={headerClassSet}>
                 Health {this.getCaret("healthWeight")}
@@ -447,30 +450,32 @@ var AppListComponent = React.createClass({
         </thead>
         <tbody>
           <tr className={loadingClassSet}>
-            <td className="text-center text-muted" colSpan="7">
+            <td className="text-center text-muted" colSpan={totalColumnSpan}>
               Loading apps...
             </td>
           </tr>
           <tr className={noAppsClassSet}>
-            <td className="text-center" colSpan="7">No running apps.</td>
+            <td className="text-center" colSpan={totalColumnSpan}>
+              No running apps.
+            </td>
           </tr>
           <tr className={noRunningAppsClassSet}>
-            <td className="text-center" colSpan="7">
+            <td className="text-center" colSpan={totalColumnSpan}>
               No apps match your query.
             </td>
           </tr>
           <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan="7">
+            <td className="text-center text-danger" colSpan={totalColumnSpan}>
               {`Error fetching apps. ${Messages.RETRY_REFRESH}`}
             </td>
           </tr>
           <tr className={unauthorizedClassSet}>
-            <td className="text-center text-danger" colSpan="7">
+            <td className="text-center text-danger" colSpan={totalColumnSpan}>
               {`Error fetching apps. ${Messages.UNAUTHORIZED}`}
             </td>
           </tr>
           <tr className={forbiddenClassSet}>
-            <td className="text-center text-danger" colSpan="7">
+            <td className="text-center text-danger" colSpan={totalColumnSpan}>
               {`Error fetching apps. ${Messages.FORBIDDEN}`}
             </td>
           </tr>

@@ -1,11 +1,14 @@
 var classNames = require("classnames");
 var React = require("react/addons");
+var OnClickOutsideMixin = require("react-onclickoutside");
 
+var AppActionsHandlerMixin = require("../mixins/AppActionsHandlerMixin");
 var AppHealthBarWithTooltipComponent =
   require("./AppHealthBarWithTooltipComponent");
 var AppListItemLabelsComponent =
   require("../components/AppListItemLabelsComponent");
 var AppListViewTypes = require("../constants/AppListViewTypes");
+var AppStatus = require("../constants/AppStatus");
 var AppStatusComponent = require("../components/AppStatusComponent");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var Util = require("../helpers/Util");
@@ -14,6 +17,11 @@ var DOMUtil = require("../helpers/DOMUtil");
 
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
+
+  mixins: [
+    AppActionsHandlerMixin,
+    OnClickOutsideMixin
+  ],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -33,7 +41,9 @@ var AppListItemComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      numberOfVisibleLabels: -1
+      isActionsDropdownActivated: false,
+      numberOfVisibleLabels: -1,
+      actionsDropdownTopAligned: false
     };
   },
 
@@ -50,6 +60,8 @@ var AppListItemComponent = React.createClass({
     if (this.didPropsChange(prevProps)) {
       this.updateNumberOfVisibleLabels();
     }
+
+    this.recalculateDropdownPosition();
   },
 
   componentWillUnmount: function () {
@@ -69,6 +81,16 @@ var AppListItemComponent = React.createClass({
       return true;
     }
 
+    if (this.state.isActionsDropdownActivated !==
+        nextState.isActionsDropdownActivated) {
+      return true;
+    }
+
+    if (this.state.actionsDropdownTopAligned !==
+        nextState.actionsDropdownTopAligned) {
+      return true;
+    }
+
     return this.didPropsChange(nextProps);
   },
 
@@ -82,6 +104,38 @@ var AppListItemComponent = React.createClass({
 
   handleResize: function () {
     requestAnimationFrame(this.updateNumberOfVisibleLabels);
+  },
+
+  handleActionsClick: function (event) {
+    event.stopPropagation();
+
+    this.setState({
+      isActionsDropdownActivated: !this.state.isActionsDropdownActivated
+    });
+  },
+
+  handleAppRowClick: function () {
+    var model = this.props.model;
+    var router = this.context.router;
+    if (model.isGroup) {
+      let query = router.getCurrentQuery();
+      let param = {
+        groupId: encodeURIComponent(model.id)
+      };
+      router.transitionTo("group", param, query);
+    } else {
+      router.transitionTo("app", {appId: encodeURIComponent(model.id)});
+    }
+  },
+
+  handleBreadcrumbClick: function (event) {
+    event.stopPropagation();
+  },
+
+  handleClickOutside: function () {
+    this.setState({
+      isActionsDropdownActivated: false
+    });
   },
 
   updateNumberOfVisibleLabels: function () {
@@ -118,65 +172,16 @@ var AppListItemComponent = React.createClass({
     this.setState({numberOfVisibleLabels: numberOfVisibleLabels});
   },
 
-  getIcon: function () {
-    var model = this.props.model;
-    if (model.isGroup) {
-      return (<i className="icon icon-small group"></i>);
-    }
-    return (<i className="icon icon-small app" title="Application"></i>);
-  },
-
-  getLabels: function () {
-    var labels = this.props.model.labels;
-    if (labels == null || Object.keys(labels).length === 0) {
-      return null;
+  getActionsCell: function () {
+    if (this.props.model.isGroup) {
+      return <td className="actions-cell"></td>;
     }
 
-    var moreLabelClassName = classNames("badge more", {
-      "visible": Object.keys(labels).length > this.state.numberOfVisibleLabels
-    });
-
     return (
-     <AppListItemLabelsComponent ref="labels"
-          labels={this.props.model.labels}
-          numberOfVisibleLabels={this.state.numberOfVisibleLabels}>
-        <span className={moreLabelClassName} ref="moreLabel">
-          &hellip;
-        </span>
-     </AppListItemLabelsComponent>
-    );
-  },
-
-  handleBreadcrumbClick: function (event) {
-    event.stopPropagation();
-  },
-
-  onClick: function () {
-    var model = this.props.model;
-    var router = this.context.router;
-    if (model.isGroup) {
-      let query = router.getCurrentQuery();
-      let param = {
-        groupId: encodeURIComponent(model.id)
-      };
-      router.transitionTo("group", param, query);
-    } else {
-      router.transitionTo("app", {appId: encodeURIComponent(model.id)});
-    }
-  },
-
-  getHealthBar: function () {
-    return (
-      <td className="text-right health-bar-column">
-        <AppHealthBarWithTooltipComponent model={this.props.model} />
-      </td>
-    );
-  },
-
-  getStatus: function () {
-    return (
-      <td className="text-right status">
-        <AppStatusComponent model={this.props.model} />
+      <td className="actions-cell"
+          onClick={this.handleActionsClick}>
+        <i className="icon icon-mini dots"></i>
+        {this.getDropdownMenu()}
       </td>
     );
   },
@@ -215,19 +220,141 @@ var AppListItemComponent = React.createClass({
     );
   },
 
+  getDropdownMenu: function () {
+    if (!this.state.isActionsDropdownActivated) {
+      return null;
+    }
+
+    let model = this.props.model;
+
+    let suspendAppClassSet = classNames({
+      "disabled": model.instances < 1
+    });
+
+    let resetDelayClassSet = classNames({
+      "hidden": model.status !== AppStatus.DELAYED
+    });
+
+    let dropdownClassName = classNames({
+      top: this.state.actionsDropdownTopAligned
+    }, "dropdown");
+
+    return (
+      <div className={dropdownClassName} ref="dropdown">
+        <ul className="dropdown-menu" ref="dropdown-menu">
+          <li>
+            <a href="#" onClick={this.handleScaleApp}>
+              Scale
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick={this.handleRestartApp}>
+              Restart
+            </a>
+          </li>
+          <li className={suspendAppClassSet}>
+            <a href="#" onClick={this.handleSuspendApp}>
+              Suspend
+            </a>
+          </li>
+          <li className={resetDelayClassSet}>
+            <a href="#" onClick={this.handleResetDelay}>
+              Reset Delay
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick={this.handleDestroyApp}>
+              <span className="text-danger">Destroy</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    );
+  },
+
+  getHealthBar: function () {
+    return (
+      <td className="text-right health-bar-column">
+        <AppHealthBarWithTooltipComponent model={this.props.model} />
+      </td>
+    );
+  },
+
+  getIcon: function () {
+    var model = this.props.model;
+    if (model.isGroup) {
+      return <i className="icon icon-small group"></i>;
+    }
+    return <i className="icon icon-small app" title="Application"></i>;
+  },
+
+  getLabels: function () {
+    var labels = this.props.model.labels;
+    if (labels == null || Object.keys(labels).length === 0) {
+      return null;
+    }
+
+    var moreLabelClassName = classNames("badge more", {
+      "visible": Object.keys(labels).length > this.state.numberOfVisibleLabels
+    });
+
+    return (
+     <AppListItemLabelsComponent ref="labels"
+          labels={this.props.model.labels}
+          numberOfVisibleLabels={this.state.numberOfVisibleLabels}>
+        <span className={moreLabelClassName} ref="moreLabel">
+          &hellip;
+        </span>
+     </AppListItemLabelsComponent>
+    );
+  },
+
+  getStatus: function () {
+    return (
+      <td className="text-right status">
+        <AppStatusComponent model={this.props.model} />
+      </td>
+    );
+  },
+
+  recalculateDropdownPosition: function () {
+    if (global.window == null) {
+      return;
+    }
+
+    let componentNode = React.findDOMNode(this.refs.dropdown);
+
+    if (componentNode == null) {
+      return;
+    }
+
+    let topAligned = false;
+
+    let contentNode = React.findDOMNode(this.refs["dropdown-menu"]);
+    let componentPosition = componentNode.getBoundingClientRect();
+    let contentHeight = contentNode.clientHeight;
+
+    if (componentPosition.bottom + contentHeight >=
+        document.documentElement.clientHeight) {
+      topAligned = true;
+    }
+
+    if (topAligned !== this.state.actionsDropdownTopAligned) {
+      this.setState({actionsDropdownTopAligned: topAligned});
+    }
+  },
+
   render: function () {
     var props = this.props;
     var model = props.model;
 
-    var className = classNames({
+    var rowTypeClassName = classNames({
       "group": model.isGroup,
       "app": !model.isGroup
     });
 
     return (
-      // Set `title` on cells that potentially overflow so hovering on the
-      // cells will reveal their full contents.
-      <tr onClick={this.onClick} className={className}>
+      <tr onClick={this.handleAppRowClick} className={rowTypeClassName}>
         <td className="icon-cell">
           {this.getIcon()}
         </td>
@@ -247,6 +374,7 @@ var AppListItemComponent = React.createClass({
           </span> of {model.instances}
         </td>
         {this.getHealthBar()}
+        {this.getActionsCell()}
       </tr>
     );
   }

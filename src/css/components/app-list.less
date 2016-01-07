@@ -36,7 +36,7 @@
     }
 
     &.actions-col {
-      width: @base-spacing-unit*8;
+      width: @base-spacing-unit*4;
     }
 
   }
@@ -106,6 +106,22 @@
           }
         }
       }
+    }
+
+    &.actions-cell {
+      .dropdown {
+        margin: 0;
+
+        .dropdown-menu {
+          left: 100%;
+          transform: translateX(-100%);
+        }
+
+        &.top .dropdown-menu {
+          transform: translate(-100%, calc(-100% - @base-spacing-unit*2));
+        }
+      }
+
     }
   }
 }

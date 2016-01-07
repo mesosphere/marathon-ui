@@ -2,21 +2,20 @@ var classNames = require("classnames");
 var OnClickOutsideMixin = require("react-onclickoutside");
 var React = require("react");
 
+var AppActionsHandlerMixin = require("../mixins/AppActionsHandlerMixin");
 var AppStatus = require("../constants/AppStatus");
-var AppsActions = require("../actions/AppsActions");
-var DialogActions = require("../actions/DialogActions");
-var DialogStore = require("../stores/DialogStore");
-var QueueActions = require("../actions/QueueActions");
 
 var AppPageControlsComponent = React.createClass({
 
   displayName: "AppPageControlsComponent",
 
-  mixins: [OnClickOutsideMixin],
+  mixins: [
+    AppActionsHandlerMixin,
+    OnClickOutsideMixin
+  ],
 
   propTypes: {
-    app: React.PropTypes.object.isRequired,
-    appId: React.PropTypes.string.isRequired
+    model: React.PropTypes.object.isRequired
   },
 
   getInitialState: function () {
@@ -28,7 +27,7 @@ var AppPageControlsComponent = React.createClass({
   getResetDelayButton: function () {
     var props = this.props;
 
-    if (props.app.status !== AppStatus.DELAYED) {
+    if (props.model.status !== AppStatus.DELAYED) {
       return null;
     }
 
@@ -46,73 +45,6 @@ var AppPageControlsComponent = React.createClass({
     });
   },
 
-  handleResetDelay: function () {
-    QueueActions.resetDelay(this.props.appId);
-  },
-
-  handleScaleApp: function () {
-    var props = this.props;
-
-    const dialogId =
-      DialogActions.prompt("Scale to how many instances?",
-          props.app.instances.toString(), {
-            type: "number",
-            min: "0"
-          }
-      );
-
-    DialogStore.handleUserResponse(dialogId, instancesString => {
-      if (instancesString != null && instancesString !== "") {
-        let instances = parseInt(instancesString, 10);
-
-        AppsActions.scaleApp(props.appId, instances);
-      }
-    });
-  },
-
-  handleSuspendApp: function (event) {
-    event.preventDefault();
-
-    var props = this.props;
-
-    if (props.app.instances < 1) {
-      return;
-    }
-
-    const dialogId =
-      DialogActions.confirm("Suspend app by scaling to 0 instances?",
-        "Suspend");
-
-    DialogStore.handleUserResponse(dialogId, () => {
-      AppsActions.scaleApp(props.appId, 0);
-    });
-  },
-
-  handleRestartApp: function () {
-    var appId = this.props.appId;
-
-    const dialogId =
-      DialogActions.confirm(`Restart app '${appId}'?`, "Restart");
-
-    DialogStore.handleUserResponse(dialogId, () => {
-      AppsActions.restartApp(appId);
-    });
-  },
-
-  handleDestroyApp: function (event) {
-    event.preventDefault();
-
-    var appId = this.props.appId;
-
-    const dialogId =
-      DialogActions.confirm(`Destroy app '${appId}'? This is irreversible.`,
-        "Destroy");
-
-    DialogStore.handleUserResponse(dialogId, () => {
-      AppsActions.deleteApp(appId);
-    });
-  },
-
   toggleDropdown: function () {
     this.setState({
       isDropdownActivated: !this.state.isDropdownActivated
@@ -127,7 +59,7 @@ var AppPageControlsComponent = React.createClass({
     }, "dropdown-menu");
 
     var suspendAppClassSet = classNames({
-      "disabled": props.app.instances < 1
+      "disabled": props.model.instances < 1
     });
 
     return (
@@ -145,18 +77,16 @@ var AppPageControlsComponent = React.createClass({
           <button className="btn btn-lg btn-default"
               onClick={this.toggleDropdown}>
             <i className="icon icon-mini gear"></i>
-            <span className="caret"/>
+            <span className="caret" />
           </button>
           <ul className={dropdownClassSet}>
             <li className={suspendAppClassSet}>
-              <a href="#"
-                  onClick={this.handleSuspendApp}>
+              <a href="#" onClick={this.handleSuspendApp}>
                 Suspend
               </a>
             </li>
             <li>
-              <a href="#"
-                  onClick={this.handleDestroyApp}>
+              <a href="#" onClick={this.handleDestroyApp}>
                 <span className="text-danger">Destroy</span>
               </a>
             </li>
