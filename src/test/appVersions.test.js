@@ -16,8 +16,6 @@ var AppVersionListComponent =
 var AppVersionListItemComponent =
   require("../js/components/AppVersionListItemComponent");
 
-var TestUtil = require("./helpers/TestUtil");
-
 var server = config.localTestserverURI;
 config.apiURL = `http://${server.address}:${server.port}/`;
 
@@ -210,7 +208,7 @@ describeWithDOM("App Version List component", function () {
   });
 
   after(function () {
-    TestUtil.getComponentDOMInstance(this.component).componentWillUnmount();
+    this.component.instance().componentWillUnmount();
   });
 
   it("has correct AppVersionListItemComponents", function () {
@@ -287,7 +285,7 @@ describeWithDOM("App Version component", function () {
   });
 
   after(function () {
-    TestUtil.getComponentDOMInstance(this.component).componentWillUnmount();
+    this.component.instance().componentWillUnmount();
   });
 
   it("shows the app ID", function () {
