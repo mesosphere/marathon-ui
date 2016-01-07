@@ -67,14 +67,10 @@ var PopoverComponent = React.createClass({
 
   render: function () {
     var props = this.props;
-    var alignment = this.state.alignment;
+
     var className = classNames("popover", props.className, {
-      "visible": props.visible,
-      "default": alignment === DEFAULT_ALIGNED,
-      "top": alignment === TOP_ALIGNED,
-      "bottom": alignment === BOTTOM_ALIGNED,
-      "right": alignment === RIGHT_ALIGNED,
-    });
+      "visible": props.visible
+    }, this.state.alignment);
 
     return (
       <div className={className} ref="component">
