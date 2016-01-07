@@ -164,6 +164,20 @@ var AppListItemComponent = React.createClass({
     this.setState({numberOfVisibleLabels: numberOfVisibleLabels});
   },
 
+  getActionsCell: function () {
+    if (this.props.model.isGroup) {
+      return <td className="actions-cell"></td>;
+    }
+
+    return (
+      <td className="actions-cell"
+          onClick={this.handleActionsClick}>
+        <i className="icon icon-mini dots"></i>
+        {this.getDropdownMenu()}
+      </td>
+    );
+  },
+
   getAppName: function () {
     var props = this.props;
     var model = props.model;
@@ -295,13 +309,13 @@ var AppListItemComponent = React.createClass({
     var props = this.props;
     var model = props.model;
 
-    var className = classNames({
+    var rowTypeClassName = classNames({
       "group": model.isGroup,
       "app": !model.isGroup
     });
 
     return (
-      <tr onClick={this.handleAppRowClick} className={className}>
+      <tr onClick={this.handleAppRowClick} className={rowTypeClassName}>
         <td className="icon-cell">
           {this.getIcon()}
         </td>
@@ -321,11 +335,7 @@ var AppListItemComponent = React.createClass({
           </span> of {model.instances}
         </td>
         {this.getHealthBar()}
-        <td className="actions-cell"
-            onClick={this.handleActionsClick}>
-          <i className="icon icon-mini dots"></i>
-          {this.getDropdownMenu()}
-        </td>
+        {this.getActionsCell()}
       </tr>
     );
   }
