@@ -151,7 +151,6 @@ var AppListItemLabelsComponent = React.createClass({
 
     let labelsDropdown = (
       <PopoverComponent className="labels-dropdown"
-          alignment="right"
           ref="labelsDropdown"
           visible={labelsDropdownVisible}>
         <h5>All Labels</h5>

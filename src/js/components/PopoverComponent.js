@@ -6,13 +6,11 @@ var Util = require("../helpers/Util");
 const DEFAULT_ALIGNED = "default";
 const TOP_ALIGNED = "top";
 const BOTTOM_ALIGNED = "bottom";
-const RIGHT_ALIGNED = "right";
 
 var PopoverComponent = React.createClass({
   displayName: "PopoverComponent",
 
   propTypes: {
-    alignment: React.PropTypes.string,
     children: React.PropTypes.node,
     className: React.PropTypes.string,
     visible: React.PropTypes.bool
@@ -45,11 +43,6 @@ var PopoverComponent = React.createClass({
     let contentNode = React.findDOMNode(this.refs.content);
     let componentPosition = componentNode.getBoundingClientRect();
     let contentHeight = contentNode.clientHeight;
-
-    if (this.props.alignment === RIGHT_ALIGNED) {
-      this.setState({alignment: RIGHT_ALIGNED});
-      return;
-    }
 
     if (componentPosition.top <= contentHeight) {
       this.setState({alignment: BOTTOM_ALIGNED});
