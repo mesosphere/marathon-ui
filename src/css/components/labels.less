@@ -55,13 +55,46 @@
       li {
         display: block;
         margin: 0 0 @base-spacing-unit 0;
-        
+
         &:last-child {
           margin: 0;
         }
 
         .badge {
           margin: 0;
+        }
+      }
+    }
+
+    &.popover {
+
+      & .content {
+        left: 100%;
+        transform: none;
+        margin-top: -@base-spacing-unit*2;
+        margin-left: @base-spacing-unit*2;
+
+        &:before {
+          border-right-color: @navbar-bg-color;
+          border-top-color: transparent;
+          right: 100%;
+          left: auto;
+          top: @base-spacing-unit*2;
+          content: " ";
+        }
+      }
+
+      &.default .content {
+        top: 0;
+        bottom: auto;
+      }
+
+      &.top .content{
+        margin-bottom: -@base-spacing-unit*4;
+
+        &:before {
+          bottom: @base-spacing-unit*2;
+          top: auto;
         }
       }
     }
