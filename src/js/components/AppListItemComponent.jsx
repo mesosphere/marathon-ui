@@ -108,6 +108,7 @@ var AppListItemComponent = React.createClass({
 
   handleActionsClick: function (event) {
     event.stopPropagation();
+    event.preventDefault();
 
     this.setState({
       isActionsDropdownActivated: !this.state.isActionsDropdownActivated
