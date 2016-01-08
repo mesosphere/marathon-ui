@@ -1,5 +1,6 @@
 var Util = require("../../helpers/Util");
 var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
+var HealthCheckPortTypes = require("../../constants/HealthCheckPortTypes");
 var ValidConstraints = require("../../constants/ValidConstraints");
 
 function isValidPort(value) {
@@ -111,8 +112,16 @@ const AppFormValidators = {
 
   healthChecksPortIndex: (obj) => {
     return obj.protocol !== HealthCheckProtocols.HTTP &&
-        obj.protocol !== HealthCheckProtocols.TCP ||
+      obj.protocol !== HealthCheckProtocols.TCP ||
+      obj.portType !== HealthCheckPortTypes.PORT_INDEX ||
       !!obj.portIndex.toString().match(/^[0-9]+$/);
+  },
+
+  healthChecksPort: (obj) => {
+    return obj.protocol !== HealthCheckProtocols.HTTP &&
+      obj.protocol !== HealthCheckProtocols.TCP ||
+      obj.portType !== HealthCheckPortTypes.PORT_NUMBER ||
+      isValidPort(obj.port);
   },
 
   healthChecksGracePeriod: (obj) => {

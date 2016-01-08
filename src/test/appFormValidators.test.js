@@ -1,12 +1,13 @@
 var expect = require("chai").expect;
 
 var AppFormValidators = require("../js/stores/validators/AppFormValidators");
+var HealthCheckPortTypes = require("../js/constants/HealthCheckPortTypes");
 
 describe("App Form Validators", function () {
 
   describe("expects", function () {
 
-    before(function() {
+    before(function () {
       this.v = AppFormValidators;
     })
 
@@ -402,29 +403,79 @@ describe("App Form Validators", function () {
       it("port index to be valid", function () {
         expect(this.v.healthChecksPortIndex({
           protocol: "TCP",
+          portType: HealthCheckPortTypes.PORT_INDEX,
           portIndex: 1
         }))
           .to.be.true;
         expect(this.v.healthChecksPortIndex({
           protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_INDEX,
           portIndex: 0
         }))
           .to.be.true;
         expect(this.v.healthChecksPortIndex({
           protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_INDEX,
           portIndex: "abc"
         }))
           .to.be.false;
         expect(this.v.healthChecksPortIndex({
           protocol: "TCP",
+          portType: HealthCheckPortTypes.PORT_INDEX,
           portIndex: 0.5
         }))
           .to.be.false;
         expect(this.v.healthChecksPortIndex({
           protocol: "COMMAND",
+          portType: HealthCheckPortTypes.PORT_INDEX,
           portIndex: "abc"
         }))
           .to.be.true;
+      });
+
+      it("port number to be a valid port", function () {
+        let healthChecksPort = this.v.healthChecksPort;
+
+        expect(healthChecksPort({
+          protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_NUMBER,
+          port: "NaN 666"
+        })).to.be.false;
+        expect(healthChecksPort({
+          protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_NUMBER,
+          port: -5
+        })).to.be.false;
+        expect(healthChecksPort({
+          protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_NUMBER,
+          port: 0.1
+        })).to.be.false;
+        expect(healthChecksPort({
+          protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_NUMBER,
+          port: "0.0001"
+        })).to.be.false;
+        expect(healthChecksPort({
+          protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_NUMBER,
+          port: "65536"
+        })).to.be.false;
+        expect(healthChecksPort({
+          protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_NUMBER,
+          port: 0
+        })).to.be.true;
+        expect(healthChecksPort({
+          protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_NUMBER,
+          port: "2"
+        })).to.be.true;
+        expect(healthChecksPort({
+          protocol: "HTTP",
+          portType: HealthCheckPortTypes.PORT_NUMBER,
+          port: ""
+        })).to.be.true;
       });
 
       it("grace period to be valid", function () {

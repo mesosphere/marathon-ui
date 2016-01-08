@@ -65,6 +65,7 @@ const validationRules = {
     AppFormValidators.healthChecksCommandNotEmpty,
     AppFormValidators.healthChecksPathNotEmpty,
     AppFormValidators.healthChecksPortIndex,
+    AppFormValidators.healthChecksPort,
     AppFormValidators.healthChecksGracePeriod,
     AppFormValidators.healthChecksInterval,
     AppFormValidators.healthChecksTimeout,
@@ -150,6 +151,8 @@ const responseAttributePathToFieldIdMap = {
     "healthChecks.{INDEX}.path",
   "/healthChecks({INDEX})/intervalSeconds":
     "healthChecks.{INDEX}.intervalSeconds",
+  "/healthChecks({INDEX})/port":
+    "healthChecks.{INDEX}.port",
   "/healthChecks({INDEX})/portIndex":
     "healthChecks.{INDEX}.portIndex",
   "/healthChecks({INDEX})/timeoutSeconds":

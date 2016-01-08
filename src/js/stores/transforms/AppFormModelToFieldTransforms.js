@@ -1,4 +1,5 @@
 var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
+var HealthCheckPortTypes = require("../../constants/HealthCheckPortTypes");
 var Util = require("../../helpers/Util");
 
 const AppFormModelToFieldTransforms = {
@@ -57,6 +58,12 @@ const AppFormModelToFieldTransforms = {
     return healthChecks
       .map((row, i) => {
         row.consecutiveKey = i;
+
+        if (row.portIndex != null) {
+          row.portType = HealthCheckPortTypes.PORT_INDEX;
+        } else if (row.port != null) {
+          row.portType = HealthCheckPortTypes.PORT_NUMBER;
+        }
 
         if (row.protocol === HealthCheckProtocols.COMMAND) {
           if (Util.isObject(row.command)) {
