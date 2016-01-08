@@ -317,7 +317,10 @@ var AppPageComponent = React.createClass({
                 fields={[
                   HealthStatus.HEALTHY,
                   HealthStatus.UNHEALTHY,
-                  HealthStatus.UNKNOWN
+                  HealthStatus.UNKNOWN,
+                  HealthStatus.STAGED,
+                  HealthStatus.OVERCAPACITY,
+                  HealthStatus.UNSCHEDULED
                 ]}
                 model={model} />
             </div>
