@@ -3,6 +3,7 @@
 - \#2814 - Add contextual dropdown menu to Application List items
 - \#2733 - Allow configuration of "port" instead of "portIndex" for HTTP/TCP
   health checks
+- \#2906 - Show health status bar breakdown on application detail view
 
 ### Changed
 - \#2651 - Improve ui scale error messages
