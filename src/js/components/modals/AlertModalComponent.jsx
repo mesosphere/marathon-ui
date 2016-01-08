@@ -7,31 +7,37 @@ var AlertModalComponent = React.createClass({
   displayName: "AlertModalComponent",
 
   propTypes: {
-    dismissButtonLabel: React.PropTypes.string,
-    message: React.PropTypes.string,
-    onDestroy: React.PropTypes.func,
-    title: React.PropTypes.string
+    data: React.PropTypes.shape({
+      actionButtonLabel: React.PropTypes.string.isRequired,
+      message: React.PropTypes.string.isRequired,
+      title: React.PropTypes.string.isRequired
+    }),
+    onAccept: React.PropTypes.func,
+    onDismiss: React.PropTypes.func
+  },
+
+  getDefaultProps: function () {
+    return {
+      data: null,
+      onAccept: Util.noop,
+      onDismiss: Util.noop
+    }
   },
 
   componentDidMount: function () {
     React.findDOMNode(this.refs.button).focus();
   },
 
-  getDefaultProps: function () {
-    return {
-      dismissButtonLabel: "OK",
-      message: "",
-      onDestroy: Util.noop,
-      title: ""
-    };
+  handleAccept: function () {
+    this.props.onAccept();
   },
 
-  handleDestroy: function () {
-    this.refs.modalComponent.destroy();
+  handleDismiss: function () {
+    this.props.onDismiss();
   },
 
   render: function () {
-    var props = this.props;
+    var data = this.props.data;
 
     return (
       <ModalComponent
@@ -39,20 +45,20 @@ var AlertModalComponent = React.createClass({
           className="dialog"
           dismissOnClickOutside={true}
           ref="modalComponent"
-          onDestroy={props.onDestroy}>
+          onDestroy={this.handleDismiss}>
         <div className="modal-header">
-          {props.title}
+          {data.title}
         </div>
         <div className="modal-body">
-          {props.message}
+          {data.message}
         </div>
         <div className="modal-footer">
           <button
             className="btn btn-lg btn-default btn-inverse"
             ref="button"
             type="button"
-            onClick={this.handleDestroy}>
-            {props.dismissButtonLabel}
+            onClick={this.handleAccept}>
+            {data.actionButtonLabel}
           </button>
         </div>
       </ModalComponent>

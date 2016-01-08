@@ -2,52 +2,52 @@ var React = require("react/addons");
 
 var Util = require("../../helpers/Util");
 var ModalComponent = require("../ModalComponent");
+var dialogScheme = require("../../stores/schemes/dialogScheme");
 
 var PromptModalComponent = React.createClass({
   displayName: "PromptModalComponent",
 
   propTypes: {
-    defaultValue: React.PropTypes.string,
-    inputProps: React.PropTypes.object,
-    message: React.PropTypes.string,
-    onConfirm: React.PropTypes.func,
-    onDestroy: React.PropTypes.func,
-    title: React.PropTypes.string
+    data: React.PropTypes.shape({
+      actionButtonLabel: React.PropTypes.string.isRequired,
+      inputProperties: React.PropTypes.object.isRequired,
+      message: React.PropTypes.string.isRequired,
+      title: React.PropTypes.string.isRequired
+    }),
+    onAccept: React.PropTypes.func,
+    onDismiss: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
-      defaultValue: "",
-      message: "",
-      inputType: {type: "text"},
-      onConfirm: Util.noop,
-      onDestroy: Util.noop,
-      title: ""
-    };
+      data: null,
+      onAccept: Util.noop,
+      onDismiss: Util.noop
+    }
   },
 
   componentDidMount: function () {
-    let input = React.findDOMNode(this.refs.textInput);
+    let input = React.findDOMNode(this.refs.input);
     input.focus();
     input.select();
   },
 
-  handleDestroy: function () {
-    this.refs.modalComponent.destroy();
+  handleAccept: function () {
+    this.props.onAccept(React.findDOMNode(this.refs.input).value);
   },
 
-  handleConfirm: function () {
-    this.props.onConfirm(React.findDOMNode(this.refs.textInput).value);
+  handleDismiss: function () {
+    this.props.onDismiss();
   },
 
-  onKeyUp: function (event) {
+  handleKeyUp: function (event) {
     if (event.keyCode === 13) {
-      this.handleConfirm();
+      this.handleAccept();
     }
   },
 
   render: function () {
-    var props = this.props;
+    var data = this.props.data;
 
     return (
       <ModalComponent
@@ -55,29 +55,28 @@ var PromptModalComponent = React.createClass({
           className="dialog"
           dismissOnClickOutside={true}
           ref="modalComponent"
-          onDestroy={props.onDestroy}>
+          onDestroy={this.handleDismiss}>
         <div className="modal-header">
-          {props.title}
+          {data.title}
         </div>
         <div className="modal-body">
-          <label>{props.message}</label>
+          <label>{data.message}</label>
           <input className="form-control form-control-inverse"
-            {...props.inputProps}
-            ref="textInput"
-            onKeyUp={this.onKeyUp}
-            defaultValue={props.defaultValue} />
+            {...data.inputProperties}
+            ref="input"
+            onKeyUp={this.handleKeyUp} />
         </div>
         <div className="modal-footer">
           <button
             className="btn btn-lg btn-success btn-inverse"
             type="button"
-            onClick={this.handleConfirm}>
-            OK
+            onClick={this.handleAccept}>
+            {data.actionButtonLabel}
           </button>
           <button
             className="btn btn-lg btn-default btn-inverse"
             type="button"
-            onClick={this.handleDestroy}>
+            onClick={this.handleDismiss}>
             Cancel
           </button>
         </div>

@@ -7,37 +7,37 @@ var ConfirmModalComponent = React.createClass({
   displayName: "ConfirmModalComponent",
 
   propTypes: {
-    message: React.PropTypes.string,
-    onConfirm: React.PropTypes.func,
-    onDestroy: React.PropTypes.func,
-    successButtonLabel: React.PropTypes.string,
-    title: React.PropTypes.string
-  },
-
-  componentDidMount: function () {
-    React.findDOMNode(this.refs.confirmButton).focus();
+    data: React.PropTypes.shape({
+      actionButtonLabel: React.PropTypes.string.isRequired,
+      message: React.PropTypes.string.isRequired,
+      title: React.PropTypes.string.isRequired
+    }),
+    onAccept: React.PropTypes.func,
+    onDismiss: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
-      message: "",
-      onConfirm: Util.noop,
-      onDestroy: Util.noop,
-      successButtonLabel: "OK",
-      title: ""
-    };
+      data: null,
+      onAccept: Util.noop,
+      onDismiss: Util.noop
+    }
   },
 
-  handleDestroy: function () {
-    this.refs.modalComponent.destroy();
+  componentDidMount: function () {
+    React.findDOMNode(this.refs.acceptButton).focus();
   },
 
-  handleConfirm: function () {
-    this.props.onConfirm();
+  handleAccept: function () {
+    this.props.onAccept();
+  },
+
+  handleDismiss: function () {
+    this.props.onDismiss();
   },
 
   render: function () {
-    var props = this.props;
+    var data = this.props.data;
 
     return (
       <ModalComponent
@@ -45,27 +45,27 @@ var ConfirmModalComponent = React.createClass({
           className="dialog"
           dismissOnClickOutside={true}
           ref="modalComponent"
-          onDestroy={props.onDestroy}>
+          onDestroy={this.handleDismiss}>
         <div className="modal-header">
-          {props.title}
+          {data.title}
         </div>
         <div className="modal-body">
-          {props.message}
+          {data.message}
         </div>
         <div className="modal-footer">
           <button
             className="btn btn-lg btn-success btn-inverse"
-            ref="confirmButton"
+            ref="acceptButton"
             tabIndex="2"
             type="button"
-            onClick={this.handleConfirm}>
-            {props.successButtonLabel}
+            onClick={this.handleAccept}>
+            {data.actionButtonLabel}
           </button>
           <button
             className="btn btn-lg btn-default btn-inverse"
             tabIndex="1"
             type="button"
-            onClick={this.handleDestroy}>
+            onClick={this.handleDismiss}>
             Cancel
           </button>
         </div>

@@ -5,6 +5,7 @@ var TestUtils = React.addons.TestUtils;
 var DialogActions = require("../js/actions/DialogActions");
 var DialogEvents = require("../js/events/DialogEvents");
 var DialogStore = require("../js/stores/DialogStore");
+var DialogTypes = require("../js/constants/DialogTypes");
 
 var expectAsync = require("./helpers/expectAsync");
 
@@ -12,265 +13,676 @@ describe("Dialog store", function () {
 
   describe("alert", function () {
 
-    it("show sends correct message", function (done) {
-      DialogActions.alert("test alert");
+    describe("show dialog", function () {
 
-      DialogStore.once(DialogEvents.ALERT_SHOW, function (message) {
-        expectAsync(function () {
-          expect(message).to.equal("test alert");
-        }, done);
+      it("sends correct dialog type", function (done) {
+        DialogActions.alert({message: "test alert"});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.type).to.equal(DialogTypes.ALERT);
+          }, done);
+        });
       });
+
+      it("sends correct message", function (done) {
+        DialogActions.alert({message: "test alert"});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.message).to.equal("test alert");
+          }, done);
+        });
+      });
+
+      it("sends correct message using the old action api",
+        function (done) {
+          DialogActions.alert("test alert");
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.message).to.equal("test alert");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct default action button label",
+        function (done) {
+          DialogActions.alert({message: "test alert"});
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.actionButtonLabel).to.equal("OK");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct default action button label using the old action api",
+        function (done) {
+          DialogActions.alert("test alert");
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.actionButtonLabel).to.equal("OK");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct custom action button label", function (done) {
+        DialogActions.alert({
+          actionButtonLabel: "CUSTOM",
+          message: "test alert"
+        });
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.actionButtonLabel).to.equal("CUSTOM");
+          }, done);
+        });
+      });
+
+      it("sends correct custom action button label using the old action api",
+        function (done) {
+          DialogActions.alert("test alert", "CUSTOM");
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.actionButtonLabel).to.equal("CUSTOM");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct dialog id", function (done) {
+        var id = DialogActions.alert({
+          actionButtonLabel: "CUSTOM",
+          message: "test alert"
+        });
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+      });
+
+      it("sends correct dialog id using the old action api", function (done) {
+        var id = DialogActions.alert("test alert", "CUSTOM");
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+      });
+
     });
 
-    it("show sends correct default dismiss Button label", function (done) {
-      var id = DialogActions.alert("");
+    describe("accept dialog", function () {
 
-      DialogStore.once(DialogEvents.ALERT_SHOW, function (message, dialogId,
-          dismissButtonLabel) {
-        expectAsync(function () {
-          expect(dismissButtonLabel).to.equal("OK");
-        }, done);
+      it("sends correct dialog id", function (done) {
+        var id = DialogActions.alert({
+          actionButtonLabel: "CUSTOM",
+          message: "test alert"
+        });
+
+        DialogStore.once(DialogEvents.ACCEPT_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.acceptDialog({id: id});
       });
+
+      it("sends correct dialog id using the old action api", function (done) {
+        var id = DialogActions.alert("test alert", "CUSTOM");
+
+        DialogStore.once(DialogEvents.ACCEPT_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.acceptDialog({id: id});
+      });
+
+      it("handles user response", function (done) {
+        var id = DialogActions.alert({
+          message: "test message"
+        });
+
+        DialogStore.handleUserResponse(id, done);
+
+        DialogActions.acceptDialog({id: id});
+      });
+
     });
 
-    it("show sends correct custom dismiss Button label", function (done) {
-      var id = DialogActions.alert("", "CUSTOM");
+    describe("dismiss dialog", function () {
 
-      DialogStore.once(DialogEvents.ALERT_SHOW, function (message, dialogId,
-          dismissButtonLabel) {
-        expectAsync(function () {
-          expect(dismissButtonLabel).to.equal("CUSTOM");
-        }, done);
-      });
-    });
+      it("sends correct dialog id", function (done) {
+        var id = DialogActions.alert({
+          actionButtonLabel: "CUSTOM",
+          message: "test alert"
+        });
 
-    it("show sends correct dialogId", function (done) {
-      var id = DialogActions.alert("");
-
-      DialogStore.once(DialogEvents.ALERT_SHOW, function (message, dialogId) {
-        expectAsync(function () {
-          expect(dialogId).to.equal(id);
-        }, done);
-      });
-    });
-
-    it("dismiss sends correct dialogId", function (done) {
-      var id = DialogActions.alert("");
-
-      DialogStore.once(DialogEvents.ALERT_DISMISS, function (dialogId) {
-        expectAsync(function () {
-          expect(dialogId).to.equal(id);
-        }, done);
+        DialogStore.once(DialogEvents.DISMISS_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.dismissDialog({id: id});
       });
 
-      DialogActions.alertDismiss(id);
+      it("sends correct dialog id using the old action api", function (done) {
+        var id = DialogActions.alert("test alert", "CUSTOM");
+
+        DialogStore.once(DialogEvents.DISMISS_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.dismissDialog({id: id});
+      });
+
+      it("handles user response", function (done) {
+        var id = DialogActions.alert({
+          message: "test message"
+        });
+
+        DialogStore.handleUserResponse(id, function () {
+          done(new Error("Accept-handler should not be called"));
+        }, done);
+
+        DialogActions.dismissDialog({id: id});
+      });
+
     });
 
   });
 
   describe("confirm", function () {
 
-    it("show sends correct message", function (done) {
-      DialogActions.confirm("test confirm");
+    describe("show dialog", function () {
 
-      DialogStore.once(DialogEvents.CONFIRM_SHOW, function (message) {
-        expectAsync(function () {
-          expect(message).to.equal("test confirm");
-        }, done);
+      it("sends correct dialog type", function (done) {
+        DialogActions.confirm({message: "test confirm"});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.type).to.equal(DialogTypes.CONFIRM);
+          }, done);
+        });
       });
-    });
 
-    it("show sends correct successButtonLabel default value", function (done) {
-      var id = DialogActions.confirm("");
+      it("sends correct message", function (done) {
+        DialogActions.confirm({message: "test confirm"});
 
-      DialogStore.once(DialogEvents.CONFIRM_SHOW, function (message,
-          dialogId,
-          successButtonLabel) {
-        expectAsync(function () {
-          expect(successButtonLabel).to.equal("OK");
-        }, done);
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.message).to.equal("test confirm");
+          }, done);
+        });
       });
-    });
 
-    it("show sends correct successButtonLabel not default value",
+      it("sends correct message using the old action api",
         function (done) {
-      var id = DialogActions.confirm("", "TEST");
+          DialogActions.confirm("test confirm");
 
-      DialogStore.once(DialogEvents.CONFIRM_SHOW, function (message,
-          dialogId,
-          successButtonLabel) {
-        expectAsync(function () {
-          expect(successButtonLabel).to.equal("TEST");
-        }, done);
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.message).to.equal("test confirm");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct default action button label",
+        function (done) {
+          DialogActions.confirm({message: "test confirm"});
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.actionButtonLabel).to.equal("OK");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct default action button label using the old action api",
+        function (done) {
+          DialogActions.confirm("test confirm");
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.actionButtonLabel).to.equal("OK");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct custom action button label", function (done) {
+        DialogActions.confirm({
+          actionButtonLabel: "CUSTOM",
+          message: "test confirm"
+        });
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.actionButtonLabel).to.equal("CUSTOM");
+          }, done);
+        });
       });
+
+      it("sends correct custom action button label using the old action api",
+        function (done) {
+          DialogActions.confirm("test confirm", "CUSTOM");
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.actionButtonLabel).to.equal("CUSTOM");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct dialog id", function (done) {
+        var id = DialogActions.confirm({
+          actionButtonLabel: "CUSTOM",
+          message: "test confirm"
+        });
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+      });
+
+      it("sends correct dialog id using the old action api", function (done) {
+        var id = DialogActions.confirm("test confirm", "CUSTOM");
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+      });
+
     });
 
-    it("show sends correct dialogId", function (done) {
-      var id = DialogActions.confirm("");
+    describe("accept dialog", function () {
 
-      DialogStore.once(DialogEvents.CONFIRM_SHOW, function (message, dialogId) {
-        expectAsync(function () {
-          expect(dialogId).to.equal(id);
-        }, done);
+      it("sends correct dialog id", function (done) {
+        var id = DialogActions.confirm({
+          actionButtonLabel: "CUSTOM",
+          message: "test message"
+        });
+
+        DialogStore.once(DialogEvents.ACCEPT_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.acceptDialog({id: id});
       });
+
+      it("sends correct dialog id using the old action api", function (done) {
+        var id = DialogActions.confirm("test message", "CUSTOM");
+
+        DialogStore.once(DialogEvents.ACCEPT_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.acceptDialog({id: id});
+      });
+
+      it("handles user response", function (done) {
+        var id = DialogActions.confirm({
+          message: "test message"
+        });
+
+        DialogStore.handleUserResponse(id, done);
+
+        DialogActions.acceptDialog({id: id});
+      });
+
     });
 
-    it("dismiss sends correct dialogId", function (done) {
-      var id = DialogActions.confirm("");
+    describe("dismiss dialog", function () {
 
-      DialogStore.once(DialogEvents.CONFIRM_DISMISS, function (dialogId) {
-        expectAsync(function () {
-          expect(dialogId).to.equal(id);
-        }, done);
+      it("sends correct dialog id", function (done) {
+        var id = DialogActions.confirm({
+          actionButtonLabel: "CUSTOM",
+          message: "test message",
+        });
+
+        DialogStore.once(DialogEvents.DISMISS_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.dismissDialog({id: id});
       });
 
-      DialogActions.confirmDismiss(id);
-    });
+      it("sends correct dialog id using the old action api", function (done) {
+        var id = DialogActions.confirm("test message", "CUSTOM");
 
-    it("accept sends correct dialogId", function (done) {
-      var id = DialogActions.confirm("");
-
-      DialogStore.once(DialogEvents.CONFIRM_ACCEPT, function (dialogId) {
-        expectAsync(function () {
-          expect(dialogId).to.equal(id);
-        }, done);
+        DialogStore.once(DialogEvents.DISMISS_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.dismissDialog({id: id});
       });
 
-      DialogActions.confirmAccept(id);
+      it("handles user response", function (done) {
+        var id = DialogActions.confirm({
+          message: "test message"
+        });
+
+        DialogStore.handleUserResponse(id, function () {
+          done(new Error("Accept-handler should not be called"));
+        }, done);
+
+        DialogActions.dismissDialog({id: id});
+      });
+
     });
 
   });
 
   describe("prompt", function () {
 
-    it("show sends correct message", function (done) {
-      DialogActions.prompt("test prompt");
+    describe("show dialog", function () {
 
-      DialogStore.once(DialogEvents.PROMPT_SHOW, function (message) {
-        expectAsync(function () {
-          expect(message).to.equal("test prompt");
+      it("sends correct dialog type", function (done) {
+        DialogActions.prompt({message: "test prompt"});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.type).to.equal(DialogTypes.PROMPT);
+          }, done);
+        });
+      });
+
+      it("sends correct message", function (done) {
+        DialogActions.prompt({
+          message: "test message"
+        });
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.message).to.equal("test message");
+          }, done);
+        });
+      });
+
+      it("sends correct message using the old action api",
+        function (done) {
+          DialogActions.prompt("test prompt");
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.message).to.equal("test prompt");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct title", function (done) {
+        DialogActions.prompt({message: "test message", title: "prompt"});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.title).to.equal("prompt");
+          }, done);
+        });
+      });
+
+      it("sends correct default action button label",
+        function (done) {
+          DialogActions.prompt({message: "test message"});
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.actionButtonLabel).to.equal("OK");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct default action button label using the old action api",
+        function (done) {
+          DialogActions.prompt("test prompt");
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.actionButtonLabel).to.equal("OK");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct custom action button label", function (done) {
+        DialogActions.prompt({
+          actionButtonLabel: "CUSTOM"
+        });
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.actionButtonLabel).to.equal("CUSTOM");
+          }, done);
+        });
+      });
+
+      it("sends correct default value", function (done) {
+        DialogActions.prompt({
+          inputProperties: {
+            defaultValue: "value",
+            type: "text"
+          },
+          message: "test message",
+          title: "prompt"
+        });
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.inputProperties.defaultValue).to.equal("value");
+          }, done);
+        });
+      });
+
+      it("sends correct default value using the old action api",
+        function (done) {
+          DialogActions.prompt("test prompt", "test");
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.inputProperties.defaultValue).to.equal("test");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct default type if input properties is undefined",
+        function (done) {
+          DialogActions.prompt({
+            message: "test message",
+            title: "prompt"
+          });
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.inputProperties.type).to.equal("text");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct default type using the old action api",
+        function (done) {
+          DialogActions.prompt("test prompt");
+
+          DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+            expectAsync(function () {
+              expect(dialogData.inputProperties.type).to.equal("text");
+            }, done);
+          });
+        }
+      );
+
+      it("sends correct defined type", function (done) {
+        DialogActions.prompt({
+          inputProperties: {
+            defaultValue: 0,
+            type: "number"
+          },
+          message: "test message",
+          title: "prompt"
+        });
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.inputProperties.type).equal("number");
+          }, done);
+        });
+      });
+
+      it("sends correct defined type using the old api", function (done) {
+        DialogActions.prompt("test prompt", "test value", {type: "number"});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.inputProperties.type).equal("number");
+          }, done);
+        });
+      });
+
+      it("sends correct dialog id", function (done) {
+        var id = DialogActions.prompt({
+          actionButtonLabel: "CUSTOM",
+          message: "test message"
+        });
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+      });
+
+      it("sends correct dialog id using the old action api", function (done) {
+        var id = DialogActions.prompt("test message", "CUSTOM");
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+      });
+
+    });
+
+    describe("accept dialog", function () {
+
+      it("sends correct value", function (done) {
+        var id = DialogActions.prompt({
+          message: "test message"
+        });
+
+        DialogStore.once(DialogEvents.ACCEPT_DIALOG,
+          function (dialogData, value) {
+            expectAsync(function () {
+              expect(value).to.equal("test");
+            }, done);
+          }
+        );
+        DialogActions.acceptDialog({id: id}, "test");
+      });
+
+      it("sends correct dialog id", function (done) {
+        var id = DialogActions.prompt({
+          actionButtonLabel: "CUSTOM",
+          message: "test message"
+        });
+
+        DialogStore.once(DialogEvents.ACCEPT_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.acceptDialog({id: id}, "test");
+      });
+
+      it("sends correct dialog id using the old action api", function (done) {
+        var id = DialogActions.prompt("test alert", "CUSTOM");
+
+        DialogStore.once(DialogEvents.ACCEPT_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.acceptDialog({id: id});
+      });
+
+      it("handles user response", function (done) {
+        var id = DialogActions.prompt({
+          message: "test message"
+        });
+
+        DialogStore.handleUserResponse(id, function (value) {
+          expectAsync(function () {
+            expect(value).to.equal("test");
+          }, done);
+        });
+
+        DialogActions.acceptDialog({id: id}, "test");
+      });
+
+    });
+
+    describe("dismiss dialog", function () {
+
+      it("sends correct dialog id", function (done) {
+        var id = DialogActions.prompt({
+          actionButtonLabel: "CUSTOM",
+          message: "test message"
+        });
+
+        DialogStore.once(DialogEvents.DISMISS_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.dismissDialog({id: id});
+      });
+
+      it("sends correct dialog id using the old action api", function (done) {
+        var id = DialogActions.prompt("test message", "CUSTOM");
+
+        DialogStore.once(DialogEvents.DISMISS_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+        DialogActions.dismissDialog({id: id});
+      });
+
+      it("handles user response", function (done) {
+        var id = DialogActions.prompt({
+          message: "test message"
+        });
+
+        DialogStore.handleUserResponse(id, function () {
+          done(new Error("Accept-handler should not be called"));
         }, done);
+
+        DialogActions.dismissDialog({id: id});
       });
-    });
-
-    it("show sends correct default value", function (done) {
-      DialogActions.prompt("test prompt", "test value");
-
-      DialogStore.once(DialogEvents.PROMPT_SHOW, function (message, value) {
-        expectAsync(function () {
-          expect(value).to.equal("test value");
-        }, done);
-      });
-    });
-
-    it("show sends correct default type", function (done) {
-      DialogActions.prompt("test prompt");
-
-      DialogStore.once(DialogEvents.PROMPT_SHOW,
-          function (message, value, id, inputProps) {
-        expectAsync(function () {
-          expect(inputProps).to.deep.equal({type: "text"});
-        }, done);
-      });
-    });
-
-    it("show sends correct defined type", function (done) {
-      DialogActions.prompt("test prompt", "test value", {type: "number"});
-
-      DialogStore.once(DialogEvents.PROMPT_SHOW,
-          function (message, value, id, inputProps) {
-        expectAsync(function () {
-          expect(inputProps).to.deep.equal({type: "number"});
-        }, done);
-      });
-    });
-
-    it("show sends correct dialogId", function (done) {
-      var id = DialogActions.prompt("");
-
-      DialogStore.once(DialogEvents.PROMPT_SHOW,
-          function (message, value, dialogId) {
-        expectAsync(function () {
-          expect(dialogId).to.equal(id);
-        }, done);
-      });
-    });
-
-    it("dismiss sends correct dialogId", function (done) {
-      var id = DialogActions.prompt("");
-
-      DialogStore.once(DialogEvents.PROMPT_DISMISS, function (dialogId) {
-        expectAsync(function () {
-          expect(dialogId).to.equal(id);
-        }, done);
-      });
-
-      DialogActions.promptDismiss(id);
-    });
-
-    it("accept sends correct dialogId", function (done) {
-      var id = DialogActions.prompt("");
-
-      DialogStore.once(DialogEvents.PROMPT_ACCEPT, function (dialogId) {
-        expectAsync(function () {
-          expect(dialogId).to.equal(id);
-        }, done);
-      });
-
-      DialogActions.promptAccept(id);
-    });
-
-    it("accept sends correct value", function (done) {
-      var id = DialogActions.prompt("", "");
-
-      DialogStore.once(DialogEvents.PROMPT_ACCEPT, function (dialogId, value) {
-        expectAsync(function () {
-          expect(value).to.equal("test value");
-        }, done);
-      });
-
-      DialogActions.promptAccept(id, "test value");
-    });
-
-  });
-
-  it("dismiss the latest dialog", function (done) {
-    DialogActions.confirm("test alert 1");
-    var id2 = DialogActions.alert("test alert 2");
-
-    DialogStore.once(DialogEvents.ALERT_DISMISS, function (dialogId) {
-      expectAsync(function () {
-        expect(dialogId).to.equal(id2);
-      }, done);
-    });
-
-    DialogActions.dismissLatest();
-  });
-
-  describe("handles user response correctly", function () {
-
-    it("on accept", function (done) {
-      var dialogId = DialogActions.prompt("prompt");
-
-      DialogStore.handleUserResponse(dialogId, function (value) {
-        expectAsync(function () {
-          expect(value).to.equal("test value");
-        }, done);
-      });
-
-      DialogActions.promptAccept(dialogId, "test value");
-    });
-
-    it("on dismiss", function (done) {
-      var dialogId = DialogActions.prompt("prompt");
-
-      DialogStore.handleUserResponse(dialogId, function () {
-        done(new Error("Accept-handler should not be called"));
-      }, function () {
-        done();
-      });
-
-      DialogActions.promptDismiss(dialogId);
     });
 
   });

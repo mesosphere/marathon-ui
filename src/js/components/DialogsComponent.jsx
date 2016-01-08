@@ -15,137 +15,77 @@ var DialogsComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      dialog: null,
-      currentId: null
+      dialogData: null
     };
   },
 
   componentWillMount: function () {
-    DialogStore.on(DialogEvents.ALERT_SHOW, this.onDialogAlertShow);
-    DialogStore.on(DialogEvents.ALERT_DISMISS, this.onDialogClose);
-    DialogStore.on(DialogEvents.CONFIRM_SHOW, this.onDialogConfirmShow);
-    DialogStore.on(DialogEvents.CONFIRM_DISMISS, this.onDialogClose);
-    DialogStore.on(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
-    DialogStore.on(DialogEvents.PROMPT_SHOW, this.onDialogPromptShow);
-    DialogStore.on(DialogEvents.PROMPT_DISMISS, this.onDialogClose);
-    DialogStore.on(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
+    DialogStore.on(DialogEvents.SHOW_DIALOG, this.onDialogShow);
+    DialogStore.on(DialogEvents.ACCEPT_DIALOG, this.onDialogClose);
+    DialogStore.on(DialogEvents.DISMISS_DIALOG, this.onDialogClose);
   },
 
   componentWillUnmount: function () {
-    DialogStore.removeListener(DialogEvents.ALERT_SHOW, this.onDialogAlertShow);
-    DialogStore.removeListener(
-      DialogEvents.ALERT_DISMISS,
-      this.onDialogAlertClose
-    );
-    DialogStore.removeListener(
-      DialogEvents.CONFIRM_SHOW,
-      this.onDialogConfirmShow
-    );
-    DialogStore.removeListener(
-      DialogEvents.CONFIRM_DISMISS,
-      this.onDialogClose
-    );
-    DialogStore.removeListener(DialogEvents.CONFIRM_ACCEPT, this.onDialogClose);
-    DialogStore.removeListener(
-      DialogEvents.PROMPT_SHOW,
-      this.onDialogPromptShow
-    );
-    DialogStore.removeListener(DialogEvents.PROMPT_DISMISS, this.onDialogClose);
-    DialogStore.removeListener(DialogEvents.PROMPT_ACCEPT, this.onDialogClose);
+    DialogStore.removeListener(DialogEvents.SHOW_DIALOG, this.onDialogShow);
+    DialogStore.removeListener(DialogEvents.ACCEPT_DIALOG, this.onDialogClose);
+    DialogStore.removeListener(DialogEvents.DISMISS_DIALOG, this.onDialogClose);
   },
 
-  onDialogAlertShow: function (message, dialogId, dismissButtonLabel) {
+  onDialogShow: function (dialogData) {
     this.setState({
-      dialog: {
-        type: DialogTypes.ALERT,
-        message: message,
-        dismissButtonLabel: dismissButtonLabel
-      },
-      currentId: dialogId
+      dialogData: dialogData
     });
   },
 
-  onDialogConfirmShow: function (message, dialogId, successButtonLabel) {
-    this.setState({
-      dialog: {
-        type: DialogTypes.CONFIRM,
-        message: message,
-        successButtonLabel: successButtonLabel
-      },
-      currentId: dialogId
-    });
-  },
+  onDialogClose: function (dialogData) {
+    var currentDialogData = this.state.dialogData;
 
-  onDialogPromptShow: function (message, defaultValue, dialogId, inputProps) {
-    this.setState({
-      dialog: {
-        type: DialogTypes.PROMPT,
-        message: message,
-        defaultValue: defaultValue,
-        inputProps: inputProps
-      },
-      currentId: dialogId
-    });
-  },
-
-  onDialogClose: function (dialogId) {
-    if (dialogId !== this.state.currentId) {
-      return null;
+    if (dialogData == null || currentDialogData == null) {
+      return;
     }
+
+    if (currentDialogData.id !== dialogData.id) {
+      return;
+    }
+
     this.setState({
-      dialog: null,
-      currentId: null
+      dialogData: null
     });
   },
 
-  handleAlertDismiss: function () {
-    DialogActions.alertDismiss(this.state.currentId);
+  handleAcceptDialog: function (value = null) {
+    DialogActions.acceptDialog(this.state.dialogData, value);
   },
 
-  handleConfirmDismiss: function () {
-    DialogActions.confirmDismiss(this.state.currentId);
-  },
-
-  handleConfirmAccept: function () {
-    DialogActions.confirmAccept(this.state.currentId);
-  },
-
-  handlePromptDismiss: function () {
-    DialogActions.promptDismiss(this.state.currentId);
-  },
-
-  handlePromptAccept: function (value) {
-    DialogActions.promptAccept(this.state.currentId, value);
+  handleDismissDialog: function () {
+    DialogActions.dismissDialog(this.state.dialogData);
   },
 
   getDialog: function () {
-    var dialog = this.state.dialog;
+    var dialogData = this.state.dialogData;
 
-    if (dialog == null) {
+    if (dialogData == null) {
       return null;
     }
 
-    switch (dialog.type) {
+    switch (dialogData.type) {
       case DialogTypes.ALERT:
         return (
-          <AlertModalComponent dismissButtonLabel={dialog.dismissButtonLabel}
-            message={dialog.message}
-            onDestroy={this.handleAlertDismiss} />
+          <AlertModalComponent data={dialogData}
+              onAccept={this.handleAcceptDialog}
+              onDismiss={this.handleDismissDialog} />
         );
       case DialogTypes.CONFIRM:
         return (
-          <ConfirmModalComponent message={dialog.message}
-            onConfirm={this.handleConfirmAccept}
-            onDestroy={this.handleConfirmDismiss}
-            successButtonLabel={dialog.successButtonLabel} />
+          <ConfirmModalComponent data={dialogData}
+              onAccept={this.handleAcceptDialog}
+              onDismiss={this.handleDismissDialog}  />
         );
       case DialogTypes.PROMPT:
         return (
-          <PromptModalComponent message={dialog.message}
-            defaultValue={dialog.defaultValue}
-            inputProps={dialog.inputProps}
-            onConfirm={this.handlePromptAccept}
-            onDestroy={this.handlePromptDismiss} />
+          <PromptModalComponent data={dialogData}
+              onAccept={this.handleAcceptDialog}
+              onDismiss={this.handleDismissDialog}  />
         );
       default:
         return null;

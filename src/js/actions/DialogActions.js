@@ -1,72 +1,84 @@
+var Util = require("../helpers/Util");
 var AppDispatcher = require("../AppDispatcher");
 var DialogEvents = require("../events/DialogEvents");
+var DialogTypes = require("../constants/DialogTypes");
+var dialogScheme = require("../stores/schemes/dialogScheme");
 
 var DialogActions = {
-  alert: function (message, dismissButtonLabel = "OK") {
-    const dialogId = Symbol(message);
+  dialog: function (data) {
+    var dialog = Util.extendObject(dialogScheme, data,
+      {id: Symbol("dialogId")});
+
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.ALERT_SHOW,
-      dialogId: dialogId,
-      dismissButtonLabel: dismissButtonLabel,
-      message: message
+      actionType: DialogEvents.SHOW_DIALOG,
+      dialog: dialog
     });
-    return dialogId;
+
+    return dialog.id;
   },
-  alertDismiss: function (dialogId) {
+
+  dismissDialog: function (dialog) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.ALERT_DISMISS,
-      dialogId: dialogId
-    });
-  },
-  confirm: function (message, successButtonLabel = "OK") {
-    const dialogId = Symbol(message);
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM_SHOW,
-      dialogId: dialogId,
-      message: message,
-      successButtonLabel: successButtonLabel
-    });
-    return dialogId;
-  },
-  confirmDismiss: function (dialogId) {
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM_DISMISS,
-      dialogId: dialogId
+      actionType: DialogEvents.DISMISS_DIALOG,
+      dialog: dialog
     });
   },
-  confirmAccept: function (dialogId) {
+
+  acceptDialog: function (dialog, value) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM_ACCEPT,
-      dialogId: dialogId
-    });
-  },
-  prompt: function (message, defaultValue = "", inputProps = {type: "text"}) {
-    const dialogId = Symbol(message);
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT_SHOW,
-      defaultValue: defaultValue,
-      dialogId: dialogId,
-      inputProps: inputProps,
-      message: message
-    });
-    return dialogId;
-  },
-  promptDismiss: function (dialogId) {
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT_DISMISS,
-      dialogId: dialogId
-    });
-  },
-  promptAccept: function (dialogId, value) {
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT_ACCEPT,
-      dialogId: dialogId,
+      actionType: DialogEvents.ACCEPT_DIALOG,
+      dialog: dialog,
       value: value
     });
   },
+
   dismissLatest: function () {
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.DISMISS_LATEST
+    });
+  },
+
+  alert: function (...data) {
+    if (Util.isObject(data[0])) {
+      return this.dialog(Object.assign(data[0], {type: DialogTypes.ALERT}));
+    }
+
+    let [message, actionButtonLabel = "OK"] = data;
+
+    return this.dialog({
+      actionButtonLabel: actionButtonLabel,
+      message: message,
+      type: DialogTypes.ALERT
+    });
+  },
+
+  confirm: function (...data) {
+    if (Util.isObject(data[0])) {
+      return this.dialog(Object.assign(data[0], {type: DialogTypes.CONFIRM}));
+    }
+
+    let [message, actionButtonLabel = "OK"] = data;
+
+    return this.dialog({
+      actionButtonLabel: actionButtonLabel,
+      message: message,
+      type: DialogTypes.CONFIRM
+    });
+  },
+
+  prompt: function (...data) {
+    if (Util.isObject(data[0])) {
+      return this.dialog(Object.assign(data[0], {type: DialogTypes.PROMPT}));
+    }
+
+    let [message, defaultValue = "",
+      inputProperties = {type: "text"}] = data;
+
+    return this.dialog({
+      message: message,
+      inputProperties: Object.assign(inputProperties,
+        {defaultValue: defaultValue}),
+      type: DialogTypes.PROMPT
     });
   }
 };
