@@ -4,41 +4,52 @@
  */
 @brand-primary: #2f81f7;
 @primary-bg-color: #232937;
+
 @sidebar-bg-color: #1c202b;
 @sidebar-heading-color: #5E646C;
+
 @navbar-inactive-color: #8E929B;
 @navbar-bg-color: #13161d;
 @navbar-active-color: #FFFFFF;
-@navbar-border-color: #1c202b;
+@navbar-border-color: #3c4457;
+
 @btn-default-border-color: #3C4355;
 @btn-default-text-color: #FFFFFF;
 @btn-default-active-bg-color: #3C4355;
 @btn-default-active-text-color: #FFFFFF;
-@badge-bg-color: #626876;
+
+@badge-bg-color: @table-header-color;
 @badge-indicator-bg-color: #E4F342;
-@badge-indicator-text-color: @sidebar-bg-color;
+@badge-indicator-text-color: @table-text-color;
+@filter-text-muted-color: #75787F;
+
 @breadcrumb-text-color: #C3C9D7;
+
 @checkbox-active-color: #2f81f7;
+
 @link-color: #FFFFFF;
 @text-color-muted: #8E929B; 
 @text-color-danger-light: #FD5B77;
+
 @dropdown-bg-color: #FFFFFF;
 @dropdown-separator-color: #DADCDE;
-@table-header-color: #2B3141;
-@table-highlight-color: #2B3141;
-@table-border-color: #2e3343;
+
+@table-header-color: rgba(255,255,255,.05);
+@table-highlight-color: rgba(255,255,255,.02);
+@table-border-color: rgba(255,255,255,.02);
 @table-text-color: #898d98;
+
 @app-status-waiting-color: #E4F342;
 @app-status-deploying-color: #E4F342;
 @app-status-running-color: #2f81f7;
 @app-status-delayed-color: #f33745;
 @app-status-suspended-color: @text-color-muted;
-@health-bar-inner-color: #1C202B;
-@filter-text-muted-color: #75787F;
+
 // Health is specific to tasks, and distinct from app status
+@health-bar-inner-color: #1C202B;
 @task-health-healthy-color: #27c97b;
 @task-health-unhealthy-color: #f33745;
-@task-health-unknown-color: #434853;
+@task-health-unknown-color: #323a4e;
 @task-health-staged-color: #fedf57;
 @task-health-over-capacity-color: #4CA0FF;
 @task-health-unscheduled-color: #1C202B;

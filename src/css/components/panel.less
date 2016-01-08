@@ -8,7 +8,7 @@
 
 .panel-group .panel-inverse {
   border-radius: 0;
-  border-top: solid 1px #3d4045;
+  border-top: solid 1px #3c4457;
   border-bottom-width: 0;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -18,7 +18,7 @@
   color: #8e929b;
   font-weight: bold;
   border-top: solid 0 transparent;
-  border-bottom: solid 1px #3d4045;
+  // border-bottom: solid 1px #3c4457;
 }
 
 .panel-group .panel-inverse + .panel-inverse {
@@ -31,11 +31,11 @@
 }
 
 .panel-body {
-  background-color: #222224;
+  background-color: #282e3e;
 }
 
 .panel-inverse:not(.panel-header) .panel-heading:hover {
-  background-color: #454a50;
+  background-color: @table-highlight-color;
 }
 
 .panel-inverse .panel-body {
@@ -51,7 +51,7 @@
   .panel-heading {
     color: @link-color;
   }
-  background-color: @navbar-bg-color;
+  background-color: @sidebar-bg-color;
   border-radius: 0;
   border: none;
 
