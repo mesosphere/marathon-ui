@@ -1,8 +1,8 @@
 var React = require("react/addons");
 var classNames = require("classnames");
 
-var Util = require("../../helpers/Util");
-var ModalComponent = require("../ModalComponent");
+var Util = require("../helpers/Util");
+var ModalComponent = require("../components/ModalComponent");
 
 var ConfirmModalComponent = React.createClass({
   displayName: "ConfirmModalComponent",

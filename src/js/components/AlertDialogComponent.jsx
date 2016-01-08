@@ -1,16 +1,15 @@
 var React = require("react/addons");
 var classNames = require("classnames");
 
-var Util = require("../../helpers/Util");
-var ModalComponent = require("../ModalComponent");
+var Util = require("../helpers/Util");
+var ModalComponent = require("../components/ModalComponent");
 
-var PromptModalComponent = React.createClass({
-  displayName: "PromptModalComponent",
+var AlertModalComponent = React.createClass({
+  displayName: "AlertModalComponent",
 
   propTypes: {
     data: React.PropTypes.shape({
       actionButtonLabel: React.PropTypes.string.isRequired,
-      inputProperties: React.PropTypes.object.isRequired,
       message: React.PropTypes.string.isRequired,
       state: React.PropTypes.string.isRequired,
       title: React.PropTypes.string.isRequired
@@ -28,23 +27,15 @@ var PromptModalComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    let input = React.findDOMNode(this.refs.input);
-    input.focus();
-    input.select();
+    React.findDOMNode(this.refs.button).focus();
   },
 
   handleAccept: function () {
-    this.props.onAccept(React.findDOMNode(this.refs.input).value);
+    this.props.onAccept();
   },
 
   handleDismiss: function () {
     this.props.onDismiss();
-  },
-
-  handleKeyUp: function (event) {
-    if (event.keyCode === 13) {
-      this.handleAccept();
-    }
   },
 
   render: function () {
@@ -62,24 +53,15 @@ var PromptModalComponent = React.createClass({
           {data.title}
         </div>
         <div className="modal-body">
-          <label>{data.message}</label>
-          <input className="form-control form-control-inverse"
-            {...data.inputProperties}
-            ref="input"
-            onKeyUp={this.handleKeyUp} />
+          {data.message}
         </div>
         <div className="modal-footer">
           <button
             className="btn btn-lg btn-success btn-inverse"
+            ref="button"
             type="button"
             onClick={this.handleAccept}>
             {data.actionButtonLabel}
-          </button>
-          <button
-            className="btn btn-lg btn-default btn-inverse"
-            type="button"
-            onClick={this.handleDismiss}>
-            Cancel
           </button>
         </div>
       </ModalComponent>
@@ -87,4 +69,4 @@ var PromptModalComponent = React.createClass({
   }
 });
 
-module.exports = PromptModalComponent;
+module.exports = AlertModalComponent;

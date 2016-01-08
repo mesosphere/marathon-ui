@@ -1,9 +1,9 @@
 var React = require("react/addons");
 
-var AlertModalComponent = require("../components/modals/AlertModalComponent");
+var AlertModalComponent = require("../components/AlertDialogComponent");
 var ConfirmModalComponent =
-  require("../components/modals/ConfirmModalComponent");
-var PromptModalComponent = require("../components/modals/PromptModalComponent");
+  require("../components/ConfirmDialoglComponent");
+var PromptModalComponent = require("../components/PromptDialogComponent");
 
 var DialogActions = require("../actions/DialogActions");
 var DialogEvents = require("../events/DialogEvents");
