@@ -84,6 +84,11 @@ var HealthChecksComponent = React.createClass({
         row.portType === HealthCheckPortTypes.PORT_INDEX
     });
 
+    var portTypeClassSet = classNames({
+      "col-sm-3": true,
+      "hidden": row.protocol === HealthCheckProtocols.COMMAND
+    });
+
     return (
       <div key={row.consecutiveKey} className={rowClassSet}>
         <button type="button" className="close"
@@ -209,7 +214,7 @@ var HealthChecksComponent = React.createClass({
                 <input ref={`port${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
-            <div className="col-sm-3">
+            <div className={portTypeClassSet}>
               <FormGroupComponent
                 errorMessage={
                   getErrorMessage(`${fieldsetId}.${i}.portType`)
