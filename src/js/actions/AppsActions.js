@@ -80,13 +80,19 @@ var AppsActions = {
         });
       });
   },
-  restartApp: function (appId) {
+  restartApp: function (appId, force = false) {
+    var url = `${config.apiURL}v2/apps/${appId}/restart`;
+
+    if (force) {
+      url = url + "?force=true";
+    }
+
     this.request({
       method: "POST",
       data: {
-        force: false
+        force: force
       },
-      url: `${config.apiURL}v2/apps/${appId}/restart`
+      url: url
     })
       .success(function (app) {
         AppDispatcher.dispatch({
@@ -104,9 +110,11 @@ var AppsActions = {
   },
   scaleApp: function (appId, instances, force = false) {
     var url = `${config.apiURL}v2/apps/${appId}`;
+
     if (force) {
       url = url + "?force=true";
     }
+
     this.request({
       method: "PUT",
       data: {

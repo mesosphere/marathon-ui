@@ -141,7 +141,20 @@ var AppActionsHandlerMixin = {
   },
 
   onRestartAppError: function (errorMessage, statusCode) {
-    if (statusCode === 401) {
+    if (statusCode === 409) {
+      let appId = this.props.model.id;
+
+      const dialogId = DialogActions.
+        confirm(`There is a deployment in progress that changes ${appId}.
+          If you want to stop this deployment and force a restart,
+          press the 'Restart forcefully' button.`, "Restart forcefully");
+
+      DialogStore.handleUserResponse(dialogId, () => {
+        this.addRestartAppListener();
+
+        AppsActions.restartApp(appId, true);
+      });
+    } else if (statusCode === 401) {
       DialogActions.alert(`Error restarting app: ${Messages.UNAUTHORIZED}`);
     } else if (statusCode === 403) {
       DialogActions.alert(`Error restarting app: ${Messages.FORBIDDEN}`);

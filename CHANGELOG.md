@@ -4,6 +4,7 @@
 - \#2733 - Allow configuration of "port" instead of "portIndex" for HTTP/TCP
   health checks
 - \#2906 - Show health status bar breakdown on application detail view
+- \#2841 - Add a restart forcefully function
 
 ### Changed
 - \#2651 - Improve ui scale error messages
