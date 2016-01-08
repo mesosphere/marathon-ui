@@ -77,19 +77,17 @@ function getAppHealth(app) {
     {quantity: app.tasksStaged || 0, state: HealthStatus.STAGED}
   ];
 
-  var tasksSum = 0;
-  for (let i = 0; i < healthData.length; i++) {
-    let capacityLeft = Math.max(0, app.instances - tasksSum);
-    tasksSum += healthData[i].quantity;
-    healthData[i].quantity = Math.min(capacityLeft, healthData[i].quantity);
-  }
+  var tasksSum = healthData.reduce((sum, healthNode) => {
+    return sum + healthNode.quantity;
+  }, 0);
 
-  var overCapacity = Math.max(0, tasksSum - app.instances);
-  healthData.push({quantity: overCapacity, state: HealthStatus.OVERCAPACITY});
-
-  var unscheduled = Math.max(0, (app.instances - tasksSum));
   healthData.push({
-    quantity: unscheduled,
+    quantity: Math.max(0, tasksSum - app.instances),
+    state: HealthStatus.OVERCAPACITY
+  });
+
+  healthData.push({
+    quantity: Math.max(0, app.instances - tasksSum),
     state: HealthStatus.UNSCHEDULED
   });
 

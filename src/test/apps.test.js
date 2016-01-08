@@ -286,14 +286,14 @@ describe("Apps", function () {
       });
 
       it("has correct health weight", function () {
-        expect(AppsStore.apps[0].healthWeight).to.equal(16);
+        expect(AppsStore.apps[0].healthWeight).to.equal(18);
       });
 
       it("has correct health data object", function () {
         expect(AppsStore.apps[0].health).to.deep.equal([
           {quantity: 0, state: HealthStatus.HEALTHY},
           {quantity: 0, state: HealthStatus.UNHEALTHY},
-          {quantity: 0, state: HealthStatus.UNKNOWN},
+          {quantity: 1, state: HealthStatus.UNKNOWN},
           {quantity: 0, state: HealthStatus.STAGED},
           {quantity: 1, state: HealthStatus.OVERCAPACITY},
           {quantity: 0, state: HealthStatus.UNSCHEDULED}
@@ -1465,4 +1465,3 @@ describe("Breadcrumb Component", function () {
   });
 
 });
-
