@@ -1,8 +1,8 @@
 var React = require("react/addons");
+var classNames = require("classnames");
 
 var Util = require("../../helpers/Util");
 var ModalComponent = require("../ModalComponent");
-var dialogScheme = require("../../stores/schemes/dialogScheme");
 
 var PromptModalComponent = React.createClass({
   displayName: "PromptModalComponent",
@@ -12,6 +12,7 @@ var PromptModalComponent = React.createClass({
       actionButtonLabel: React.PropTypes.string.isRequired,
       inputProperties: React.PropTypes.object.isRequired,
       message: React.PropTypes.string.isRequired,
+      state: React.PropTypes.string.isRequired,
       title: React.PropTypes.string.isRequired
     }),
     onAccept: React.PropTypes.func,
@@ -48,11 +49,12 @@ var PromptModalComponent = React.createClass({
 
   render: function () {
     var data = this.props.data;
+    var className = classNames("dialog", data.state);
 
     return (
       <ModalComponent
           centered={true}
-          className="dialog"
+          className={className}
           dismissOnClickOutside={true}
           ref="modalComponent"
           onDestroy={this.handleDismiss}>

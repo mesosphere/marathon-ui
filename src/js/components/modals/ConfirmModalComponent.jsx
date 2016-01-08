@@ -1,4 +1,5 @@
 var React = require("react/addons");
+var classNames = require("classnames");
 
 var Util = require("../../helpers/Util");
 var ModalComponent = require("../ModalComponent");
@@ -10,6 +11,7 @@ var ConfirmModalComponent = React.createClass({
     data: React.PropTypes.shape({
       actionButtonLabel: React.PropTypes.string.isRequired,
       message: React.PropTypes.string.isRequired,
+      state: React.PropTypes.string.isRequired,
       title: React.PropTypes.string.isRequired
     }),
     onAccept: React.PropTypes.func,
@@ -38,11 +40,12 @@ var ConfirmModalComponent = React.createClass({
 
   render: function () {
     var data = this.props.data;
+    var className = classNames("dialog", data.state);
 
     return (
       <ModalComponent
           centered={true}
-          className="dialog"
+          className={className}
           dismissOnClickOutside={true}
           ref="modalComponent"
           onDestroy={this.handleDismiss}>

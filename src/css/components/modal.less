@@ -170,4 +170,48 @@
   .modal-footer {
     background-color: @modal-dialog-footer-color;
   }
+
+  &.warning {
+    .modal-header {
+      color: @modal-dialog-warning-color
+    }
+
+    .modal-content::before{
+      background-color: @modal-dialog-warning-color;
+    }
+
+    .modal-footer .btn-default:hover {
+      border-color: @modal-dialog-warning-color;
+    }
+
+    .modal-footer .btn-success {
+      background-color: @modal-dialog-warning-color;
+      border-color: @modal-dialog-warning-color;
+
+      &:hover {
+        background-color: lighten(@modal-dialog-warning-color,10%);
+        border-color: lighten(@modal-dialog-warning-color,10%);
+      }
+    }
+  }
+
+  &.danger {
+    .modal-header {
+      color: @modal-dialog-danger-color
+    }
+
+    .modal-footer .btn-default:hover {
+      border-color: @modal-dialog-danger-color;
+    }
+
+    .modal-content::before, .modal-footer .btn-success {
+      background-color: @modal-dialog-danger-color;
+      border-color: @modal-dialog-danger-color;
+
+      &:hover {
+        background-color: lighten(@modal-dialog-danger-color,10%);
+        border-color: lighten(@modal-dialog-danger-color,10%);
+      }
+    }
+  }
 }

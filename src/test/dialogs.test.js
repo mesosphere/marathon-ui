@@ -6,6 +6,7 @@ var DialogActions = require("../js/actions/DialogActions");
 var DialogEvents = require("../js/events/DialogEvents");
 var DialogStore = require("../js/stores/DialogStore");
 var DialogTypes = require("../js/constants/DialogTypes");
+var DialogStates = require("../js/constants/DialogStates");
 
 var expectAsync = require("./helpers/expectAsync");
 
@@ -115,6 +116,36 @@ describe("Dialog store", function () {
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
             expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+      });
+
+      it("sends default dialog state", function (done) {
+        DialogActions.alert({message: "test"});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.state).to.equal(DialogStates.INFO);
+          }, done);
+        });
+      });
+
+      it("sends warning dialog state", function (done) {
+        DialogActions.alert({message: "test", state:DialogStates.WARNING});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.state).to.equal(DialogStates.WARNING);
+          }, done);
+        });
+      });
+
+      it("sends warning danger state", function (done) {
+        DialogActions.alert({message: "test", state:DialogStates.DANGER});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.state).to.equal(DialogStates.DANGER);
           }, done);
         });
       });
@@ -307,6 +338,36 @@ describe("Dialog store", function () {
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
             expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+      });
+
+      it("sends default dialog state", function (done) {
+        DialogActions.confirm({message: "test"});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.state).to.equal(DialogStates.INFO);
+          }, done);
+        });
+      });
+
+      it("sends warning dialog state", function (done) {
+        DialogActions.confirm({message: "test", state:DialogStates.WARNING});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.state).to.equal(DialogStates.WARNING);
+          }, done);
+        });
+      });
+
+      it("sends warning danger state", function (done) {
+        DialogActions.confirm({message: "test", state:DialogStates.DANGER});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.state).to.equal(DialogStates.DANGER);
           }, done);
         });
       });
@@ -581,6 +642,36 @@ describe("Dialog store", function () {
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
             expect(dialogData.id).to.equal(id);
+          }, done);
+        });
+      });
+
+      it("sends default dialog state", function (done) {
+        DialogActions.prompt({message: "test"});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.state).to.equal(DialogStates.INFO);
+          }, done);
+        });
+      });
+
+      it("sends warning dialog state", function (done) {
+        DialogActions.prompt({message: "test", state:DialogStates.WARNING});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.state).to.equal(DialogStates.WARNING);
+          }, done);
+        });
+      });
+
+      it("sends warning danger state", function (done) {
+        DialogActions.prompt({message: "test", state:DialogStates.DANGER});
+
+        DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
+          expectAsync(function () {
+            expect(dialogData.state).to.equal(DialogStates.DANGER);
           }, done);
         });
       });

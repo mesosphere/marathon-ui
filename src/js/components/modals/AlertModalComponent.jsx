@@ -1,4 +1,5 @@
 var React = require("react/addons");
+var classNames = require("classnames");
 
 var Util = require("../../helpers/Util");
 var ModalComponent = require("../ModalComponent");
@@ -10,6 +11,7 @@ var AlertModalComponent = React.createClass({
     data: React.PropTypes.shape({
       actionButtonLabel: React.PropTypes.string.isRequired,
       message: React.PropTypes.string.isRequired,
+      state: React.PropTypes.string.isRequired,
       title: React.PropTypes.string.isRequired
     }),
     onAccept: React.PropTypes.func,
@@ -38,11 +40,12 @@ var AlertModalComponent = React.createClass({
 
   render: function () {
     var data = this.props.data;
+    var className = classNames("dialog", data.state);
 
     return (
       <ModalComponent
           centered={true}
-          className="dialog"
+          className={className}
           dismissOnClickOutside={true}
           ref="modalComponent"
           onDestroy={this.handleDismiss}>
@@ -54,7 +57,7 @@ var AlertModalComponent = React.createClass({
         </div>
         <div className="modal-footer">
           <button
-            className="btn btn-lg btn-default btn-inverse"
+            className="btn btn-lg btn-success btn-inverse"
             ref="button"
             type="button"
             onClick={this.handleAccept}>
