@@ -5,6 +5,8 @@
   health checks
 - \#2906 - Show health status bar breakdown on application detail view
 - \#2841 - Add a restart forcefully function
+- \#2770 - Allow users to delete groups
+- \#2944 - Allow users to scale a group
 
 ### Changed
 - \#2651 - Improve ui scale error messages

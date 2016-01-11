@@ -15,7 +15,8 @@ AppDispatcher.register(function (action) {
     case GroupsEvents.SCALE_ERROR:
       GroupsStore.emit(
         GroupsEvents.SCALE_ERROR,
-        action.data.body
+        action.data.body,
+        action.data.status
       );
       break;
     case GroupsEvents.DELETE_SUCCESS:
@@ -26,7 +27,8 @@ AppDispatcher.register(function (action) {
     case GroupsEvents.DELETE_ERROR:
       GroupsStore.emit(
         GroupsEvents.DELETE_ERROR,
-        action.data.body
+        action.data.body,
+        action.data.status
       );
       break;
   }

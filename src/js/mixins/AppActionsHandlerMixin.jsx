@@ -3,6 +3,9 @@ var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
 var DialogActions = require("../actions/DialogActions");
 var DialogStore = require("../stores/DialogStore");
+var GroupsActions = require("../actions/GroupsActions");
+var GroupsEvents = require("../events/GroupsEvents");
+var GroupsStore = require("../stores/GroupsStore");
 var Messages = require("../constants/Messages");
 var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
@@ -22,6 +25,11 @@ var AppActionsHandlerMixin = {
       this.onScaleAppError);
   },
 
+  addScaleGroupListener: function () {
+    GroupsStore.once(GroupsEvents.SCALE_ERROR,
+      this.onScaleGroupError);
+  },
+
   addRestartAppListener: function () {
     AppsStore.once(AppsEvents.RESTART_APP_ERROR,
       this.onRestartAppError);
@@ -30,6 +38,11 @@ var AppActionsHandlerMixin = {
   addDeleteAppListener: function () {
     AppsStore.once(AppsEvents.DELETE_APP_ERROR,
       this.onDeleteAppError);
+  },
+
+  addDeleteGroupListener: function () {
+    GroupsStore.once(GroupsEvents.DELETE_ERROR,
+      this.onDeleteGroupError);
   },
 
   addResetDelayListener: function () {
@@ -52,6 +65,23 @@ var AppActionsHandlerMixin = {
       this.addDeleteAppListener();
 
       AppsActions.deleteApp(appId);
+    });
+  },
+
+  handleDestroyGroup: function (event) {
+    event.preventDefault();
+
+    var groupId = this.props.model.id;
+
+    const dialogId =
+      DialogActions.confirm(`Destroy group '${groupId}' with all it's ` +
+        `contents? This is irreversible.`,
+        "Destroy");
+
+    DialogStore.handleUserResponse(dialogId, () => {
+      this.addDeleteGroupListener();
+
+      GroupsActions.deleteGroup(groupId);
     });
   },
 
@@ -96,6 +126,33 @@ var AppActionsHandlerMixin = {
     });
   },
 
+  handleScaleGroup: function () {
+    var model = this.props.model;
+
+    if (model.instances < 1) {
+      return;
+    }
+
+    const dialogId =
+      DialogActions.prompt("Please provide a scaling factor for all " +
+          "applications in this group.",
+        "1.0", {
+          type: "number",
+          min: "0"
+        }
+      );
+
+    DialogStore.handleUserResponse(dialogId, scaleByString => {
+      if (scaleByString != null && scaleByString !== "") {
+        let scaleBy = parseFloat(scaleByString);
+
+        this.addScaleGroupListener();
+
+        GroupsActions.scaleGroup(model.id, scaleBy);
+      }
+    });
+  },
+
   handleSuspendApp: function (event) {
     event.preventDefault();
 
@@ -116,6 +173,26 @@ var AppActionsHandlerMixin = {
     });
   },
 
+  handleSuspendGroup: function (event) {
+    event.preventDefault();
+
+    var model = this.props.model;
+
+    if (model.instances < 1) {
+      return;
+    }
+
+    const dialogId =
+      DialogActions.confirm("Suspend all apps by scaling the group to 0?",
+        "Suspend");
+
+    DialogStore.handleUserResponse(dialogId, () => {
+      this.addScaleGroupListener();
+
+      GroupsActions.scaleGroup(model.id, 0);
+    });
+  },
+
   onScaleAppError: function (errorMessage, statusCode, instances) {
     if (statusCode === 409) {
       let appId = this.props.model.id;
@@ -131,6 +208,17 @@ var AppActionsHandlerMixin = {
         AppsActions.scaleApp(appId, instances, true);
       });
     } else if (statusCode === 401) {
+      DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Not scaling: ${Messages.FORBIDDEN}`);
+    } else {
+      DialogActions.alert(`Not scaling:
+          ${errorMessage.message || errorMessage}`);
+    }
+  },
+
+  onScaleGroupError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
       DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
     } else if (statusCode === 403) {
       DialogActions.alert(`Not scaling: ${Messages.FORBIDDEN}`);
@@ -173,6 +261,18 @@ var AppActionsHandlerMixin = {
     } else {
       DialogActions.alert(
         `Error destroying app: ${errorMessage.message || errorMessage}`
+      );
+    }
+  },
+
+  onDeleteGroupError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
+      DialogActions.alert(`Error destroying group: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Error destroying group: ${Messages.FORBIDDEN}`);
+    } else {
+      DialogActions.alert(
+        `Error destroying group: ${errorMessage.message || errorMessage}`
       );
     }
   },

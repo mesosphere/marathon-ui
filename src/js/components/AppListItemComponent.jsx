@@ -174,10 +174,6 @@ var AppListItemComponent = React.createClass({
   },
 
   getActionsCell: function () {
-    if (this.props.model.isGroup) {
-      return <td className="actions-cell"></td>;
-    }
-
     return (
       <td className="actions-cell" title="More Actions"
           onClick={this.handleActionsClick}>
@@ -228,7 +224,7 @@ var AppListItemComponent = React.createClass({
 
     let model = this.props.model;
 
-    let suspendAppClassSet = classNames({
+    let disabledClassSet = classNames({
       "disabled": model.instances < 1
     });
 
@@ -239,6 +235,30 @@ var AppListItemComponent = React.createClass({
     let dropdownClassName = classNames({
       top: this.state.actionsDropdownTopAligned
     }, "dropdown");
+
+    if (this.props.model.isGroup) {
+      return (
+        <div className={dropdownClassName} ref="dropdown">
+          <ul className="dropdown-menu" ref="dropdown-menu">
+            <li className={disabledClassSet}>
+              <a href="#" onClick={this.handleScaleGroup}>
+                Scale By
+              </a>
+            </li>
+            <li className={disabledClassSet}>
+              <a href="#" onClick={this.handleSuspendGroup}>
+                Suspend
+              </a>
+            </li>
+            <li>
+              <a href="#" onClick={this.handleDestroyGroup}>
+                <span className="text-danger">Destroy</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      );
+    }
 
     return (
       <div className={dropdownClassName} ref="dropdown">
@@ -253,7 +273,7 @@ var AppListItemComponent = React.createClass({
               Restart
             </a>
           </li>
-          <li className={suspendAppClassSet}>
+          <li className={disabledClassSet}>
             <a href="#" onClick={this.handleSuspendApp}>
               Suspend
             </a>
