@@ -179,7 +179,7 @@ var AppListItemComponent = React.createClass({
     }
 
     return (
-      <td className="actions-cell"
+      <td className="actions-cell" title="More Actions"
           onClick={this.handleActionsClick}>
         <i className="icon icon-mini dots"></i>
         {this.getDropdownMenu()}
