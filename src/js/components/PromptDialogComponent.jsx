@@ -14,14 +14,13 @@ var PromptDialogComponent = React.createClass({
       message: React.PropTypes.string.isRequired,
       severity: React.PropTypes.string.isRequired,
       title: React.PropTypes.string.isRequired
-    }),
+    }).isRequired,
     onAccept: React.PropTypes.func,
     onDismiss: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
-      data: null,
       onAccept: Util.noop,
       onDismiss: Util.noop
     }
