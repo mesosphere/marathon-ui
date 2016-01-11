@@ -14,6 +14,7 @@
 ### Fixed
 - \#2892 - Version in task detail component shouldn't be localised
 - \#2893 - App page component should display the right number of tasks
+- \#2949 - AjaxWrapper does't handle TypeError correctly
 
 ## 0.14.1 - 2015-12-17
 ### Added
