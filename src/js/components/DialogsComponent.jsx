@@ -1,9 +1,9 @@
 var React = require("react/addons");
 
-var AlertModalComponent = require("../components/AlertDialogComponent");
-var ConfirmModalComponent =
+var AlertDialogComponent = require("../components/AlertDialogComponent");
+var ConfirmDialogComponent =
   require("../components/ConfirmDialoglComponent");
-var PromptModalComponent = require("../components/PromptDialogComponent");
+var PromptDialogComponent = require("../components/PromptDialogComponent");
 
 var DialogActions = require("../actions/DialogActions");
 var DialogEvents = require("../events/DialogEvents");
@@ -71,19 +71,19 @@ var DialogsComponent = React.createClass({
     switch (dialogData.type) {
       case DialogTypes.ALERT:
         return (
-          <AlertModalComponent data={dialogData}
+          <AlertDialogComponent data={dialogData}
               onAccept={this.handleAcceptDialog}
               onDismiss={this.handleDismissDialog} />
         );
       case DialogTypes.CONFIRM:
         return (
-          <ConfirmModalComponent data={dialogData}
+          <ConfirmDialogComponent data={dialogData}
               onAccept={this.handleAcceptDialog}
               onDismiss={this.handleDismissDialog}  />
         );
       case DialogTypes.PROMPT:
         return (
-          <PromptModalComponent data={dialogData}
+          <PromptDialogComponent data={dialogData}
               onAccept={this.handleAcceptDialog}
               onDismiss={this.handleDismissDialog}  />
         );

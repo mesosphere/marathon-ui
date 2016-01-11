@@ -4,8 +4,8 @@ var classNames = require("classnames");
 var Util = require("../helpers/Util");
 var ModalComponent = require("../components/ModalComponent");
 
-var ConfirmModalComponent = React.createClass({
-  displayName: "ConfirmModalComponent",
+var ConfirmDialogComponent = React.createClass({
+  displayName: "ConfirmDialogComponent",
 
   propTypes: {
     data: React.PropTypes.shape({
@@ -77,4 +77,4 @@ var ConfirmModalComponent = React.createClass({
   }
 });
 
-module.exports = ConfirmModalComponent;
+module.exports = ConfirmDialogComponent;

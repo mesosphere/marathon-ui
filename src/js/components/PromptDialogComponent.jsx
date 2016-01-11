@@ -4,8 +4,8 @@ var classNames = require("classnames");
 var Util = require("../helpers/Util");
 var ModalComponent = require("../components/ModalComponent");
 
-var PromptModalComponent = React.createClass({
-  displayName: "PromptModalComponent",
+var PromptDialogComponent = React.createClass({
+  displayName: "PromptDialogComponent",
 
   propTypes: {
     data: React.PropTypes.shape({
@@ -87,4 +87,4 @@ var PromptModalComponent = React.createClass({
   }
 });
 
-module.exports = PromptModalComponent;
+module.exports = PromptDialogComponent;

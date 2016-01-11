@@ -4,8 +4,8 @@ var classNames = require("classnames");
 var Util = require("../helpers/Util");
 var ModalComponent = require("../components/ModalComponent");
 
-var AlertModalComponent = React.createClass({
-  displayName: "AlertModalComponent",
+var AlertDialogComponent = React.createClass({
+  displayName: "AlertDialogComponent",
 
   propTypes: {
     data: React.PropTypes.shape({
@@ -69,4 +69,4 @@ var AlertModalComponent = React.createClass({
   }
 });
 
-module.exports = AlertModalComponent;
+module.exports = AlertDialogComponent;
