@@ -174,10 +174,6 @@ var AppListItemComponent = React.createClass({
   },
 
   getActionsCell: function () {
-    if (this.props.model.isGroup) {
-      return <td className="actions-cell"></td>;
-    }
-
     return (
       <td className="actions-cell" title="More Actions"
           onClick={this.handleActionsClick}>
@@ -239,6 +235,20 @@ var AppListItemComponent = React.createClass({
     let dropdownClassName = classNames({
       top: this.state.actionsDropdownTopAligned
     }, "dropdown");
+
+    if (this.props.model.isGroup) {
+      return (
+        <div className={dropdownClassName} ref="dropdown">
+          <ul className="dropdown-menu" ref="dropdown-menu">
+            <li>
+              <a href="#" onClick={this.handleDestroyGroup}>
+                <span className="text-danger">Destroy</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      );
+    }
 
     return (
       <div className={dropdownClassName} ref="dropdown">
