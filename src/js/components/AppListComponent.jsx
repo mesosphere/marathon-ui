@@ -448,8 +448,6 @@ var AppListComponent = React.createClass({
         state.fetchState !== States.STATE_LOADING
     });
 
-    var inlineDialog = this.getInlineDialog(appNodes);
-
     return (
       <div>
         <table className={tableClassSet}>
@@ -507,7 +505,7 @@ var AppListComponent = React.createClass({
             {appNodes}
           </tbody>
         </table>
-        {inlineDialog}
+        {this.getInlineDialog(appNodes)}
       </div>
     );
   }
