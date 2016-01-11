@@ -10,9 +10,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 85vh;
-  width: 100vw;
+  height: 50vh;
   text-align: center;
+
+  .inline-dialog {
+    align-items: center;
+    border: 1px solid @badge-bg-color;
+    border-radius: @base-spacing-unit;
+    display: flex;
+    flex-direction: column;
+    height: @inline-dialog-height;
+    justify-content: center;
+    padding: 0 @horizontal-spacing-unit*10;
+    width: @inline-dialog-width;
+
+    &.muted {
+      border-style: dashed;
+    }
+
+    &.error {
+      h3 {
+        color: @text-color-danger-light;
+      }
+    }
+  }
 }
 
 .overflow-ellipsis {
