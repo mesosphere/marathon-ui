@@ -5,7 +5,7 @@ var DialogTypes = require("../constants/DialogTypes");
 var dialogScheme = require("../stores/schemes/dialogScheme");
 
 var DialogActions = {
-  dialog: function (data) {
+  showDialog: function (data) {
     var dialog = Util.extendObject(dialogScheme, data,
       {id: Symbol("dialogId")});
 
@@ -40,12 +40,13 @@ var DialogActions = {
 
   alert: function (...data) {
     if (Util.isObject(data[0])) {
-      return this.dialog(Object.assign(data[0], {type: DialogTypes.ALERT}));
+      return this.showDialog(Object.assign(data[0],
+        {type: DialogTypes.ALERT}));
     }
 
     let [message, actionButtonLabel = "OK"] = data;
 
-    return this.dialog({
+    return this.showDialog({
       actionButtonLabel: actionButtonLabel,
       message: message,
       type: DialogTypes.ALERT
@@ -54,12 +55,13 @@ var DialogActions = {
 
   confirm: function (...data) {
     if (Util.isObject(data[0])) {
-      return this.dialog(Object.assign(data[0], {type: DialogTypes.CONFIRM}));
+      return this.showDialog(Object.assign(data[0],
+        {type: DialogTypes.CONFIRM}));
     }
 
     let [message, actionButtonLabel = "OK"] = data;
 
-    return this.dialog({
+    return this.showDialog({
       actionButtonLabel: actionButtonLabel,
       message: message,
       type: DialogTypes.CONFIRM
@@ -68,13 +70,14 @@ var DialogActions = {
 
   prompt: function (...data) {
     if (Util.isObject(data[0])) {
-      return this.dialog(Object.assign(data[0], {type: DialogTypes.PROMPT}));
+      return this.showDialog(Object.assign(data[0],
+        {type: DialogTypes.PROMPT}));
     }
 
     let [message, defaultValue = "",
       inputProperties = {type: "text"}] = data;
 
-    return this.dialog({
+    return this.showDialog({
       message: message,
       inputProperties: Object.assign(inputProperties,
         {defaultValue: defaultValue}),
