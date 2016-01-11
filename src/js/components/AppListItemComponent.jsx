@@ -224,7 +224,7 @@ var AppListItemComponent = React.createClass({
 
     let model = this.props.model;
 
-    let suspendAppClassSet = classNames({
+    let disabledClassSet = classNames({
       "disabled": model.instances < 1
     });
 
@@ -240,6 +240,16 @@ var AppListItemComponent = React.createClass({
       return (
         <div className={dropdownClassName} ref="dropdown">
           <ul className="dropdown-menu" ref="dropdown-menu">
+            <li className={disabledClassSet}>
+              <a href="#" onClick={this.handleScaleGroup}>
+                Scale By
+              </a>
+            </li>
+            <li className={disabledClassSet}>
+              <a href="#" onClick={this.handleSuspendGroup}>
+                Suspend
+              </a>
+            </li>
             <li>
               <a href="#" onClick={this.handleDestroyGroup}>
                 <span className="text-danger">Destroy</span>
@@ -263,7 +273,7 @@ var AppListItemComponent = React.createClass({
               Restart
             </a>
           </li>
-          <li className={suspendAppClassSet}>
+          <li className={disabledClassSet}>
             <a href="#" onClick={this.handleSuspendApp}>
               Suspend
             </a>
