@@ -52,6 +52,13 @@ var ajaxWrapper = function (opts = {}) {
 
   var parseResponse = function (xhr, callback) {
     response.status = xhr.status;
+
+    if (Util.isError(xhr)) {
+      response.body = xhr.message;
+      callback(response);
+      return;
+    }
+
     xhr.json().then(
       function (body) {
         response.body = body;

@@ -14,6 +14,9 @@ var Util = {
   isArray: Array.isArray || function (obj) {
     return toString.call(obj) === "[object Array]";
   },
+  isError: function (obj) {
+    return toString.call(obj) === "[object Error]";
+  },
   isNumber: function (obj) {
     return toString.call(obj) === "[object Number]";
   },
