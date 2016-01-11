@@ -448,62 +448,62 @@ var AppListComponent = React.createClass({
 
     return (
       <div>
-      <table className={tableClassSet}>
-        <colgroup>
-          <col className="icon-col" />
-          <col className="name-col" />
-          <col className="cpu-col" />
-          <col className="ram-col" />
-          <col className="status-col" />
-          <col className="instances-col" />
-          <col className="health-col" />
-          <col className="actions-col" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th className="text-left name-cell" colSpan="2">
-              <span onClick={this.sortBy.bind(null, "id")}
-                  className={headerClassSet}>
-                Name {this.getCaret("id")}
-              </span>
-            </th>
-            <th className="text-right cpu-cell">
-              <span onClick={this.sortBy.bind(null, "totalCpus")}
-                  className={headerClassSet}>
-                {this.getCaret("totalCpus")} CPU
-              </span>
-            </th>
-            <th className="text-right ram-cell">
-              <span onClick={this.sortBy.bind(null, "totalMem")}
+        <table className={tableClassSet}>
+          <colgroup>
+            <col className="icon-col" />
+            <col className="name-col" />
+            <col className="cpu-col" />
+            <col className="ram-col" />
+            <col className="status-col" />
+            <col className="instances-col" />
+            <col className="health-col" />
+            <col className="actions-col" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className="text-left name-cell" colSpan="2">
+                <span onClick={this.sortBy.bind(null, "id")}
                     className={headerClassSet}>
-                {this.getCaret("totalMem")} Memory
-              </span>
-            </th>
-            <th className="status-cell">
-              <span onClick={this.sortBy.bind(null, "status")}
+                  Name {this.getCaret("id")}
+                </span>
+              </th>
+              <th className="text-right cpu-cell">
+                <span onClick={this.sortBy.bind(null, "totalCpus")}
                     className={headerClassSet}>
-                Status {this.getCaret("status")}
-              </span>
-            </th>
-            <th className="text-right instances-cell">
-              <span onClick={this.sortBy.bind(null, "tasksRunning")}
-                  className={headerClassSet}>
-                {this.getCaret("tasksRunning")} Running Instances
-              </span>
-            </th>
-            <th className="health-cell" colSpan="2">
-              <span onClick={this.sortBy.bind(null, "healthWeight")}
-                  className={headerClassSet}>
-                Health {this.getCaret("healthWeight")}
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {appNodes}
-        </tbody>
-      </table>
-      {inlineDialog}
+                  {this.getCaret("totalCpus")} CPU
+                </span>
+              </th>
+              <th className="text-right ram-cell">
+                <span onClick={this.sortBy.bind(null, "totalMem")}
+                      className={headerClassSet}>
+                  {this.getCaret("totalMem")} Memory
+                </span>
+              </th>
+              <th className="status-cell">
+                <span onClick={this.sortBy.bind(null, "status")}
+                      className={headerClassSet}>
+                  Status {this.getCaret("status")}
+                </span>
+              </th>
+              <th className="text-right instances-cell">
+                <span onClick={this.sortBy.bind(null, "tasksRunning")}
+                    className={headerClassSet}>
+                  {this.getCaret("tasksRunning")} Running Instances
+                </span>
+              </th>
+              <th className="health-cell" colSpan="2">
+                <span onClick={this.sortBy.bind(null, "healthWeight")}
+                    className={headerClassSet}>
+                  Health {this.getCaret("healthWeight")}
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {appNodes}
+          </tbody>
+        </table>
+        {inlineDialog}
       </div>
     );
   }

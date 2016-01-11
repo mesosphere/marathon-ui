@@ -2,7 +2,6 @@ var classNames = require("classnames");
 var React = require("react/addons");
 var Link = require("react-router").Link;
 
-
 var CenteredInlineDialogComponent = React.createClass({
   displayName: "CenteredInlineDialogComponent",
 
