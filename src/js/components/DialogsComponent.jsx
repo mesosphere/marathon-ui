@@ -72,20 +72,20 @@ var DialogsComponent = React.createClass({
       case DialogTypes.ALERT:
         return (
           <AlertDialogComponent data={dialogData}
-              onAccept={this.handleAcceptDialog}
-              onDismiss={this.handleDismissDialog} />
+            onAccept={this.handleAcceptDialog}
+            onDismiss={this.handleDismissDialog} />
         );
       case DialogTypes.CONFIRM:
         return (
           <ConfirmDialogComponent data={dialogData}
-              onAccept={this.handleAcceptDialog}
-              onDismiss={this.handleDismissDialog}  />
+            onAccept={this.handleAcceptDialog}
+            onDismiss={this.handleDismissDialog}  />
         );
       case DialogTypes.PROMPT:
         return (
           <PromptDialogComponent data={dialogData}
-              onAccept={this.handleAcceptDialog}
-              onDismiss={this.handleDismissDialog}  />
+            onAccept={this.handleAcceptDialog}
+            onDismiss={this.handleDismissDialog}  />
         );
       default:
         return null;

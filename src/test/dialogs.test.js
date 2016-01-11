@@ -353,7 +353,10 @@ describe("Dialog store", function () {
       });
 
       it("sends warning dialog severity", function (done) {
-        DialogActions.confirm({message: "test", severity:DialogSeverity.WARNING});
+        DialogActions.confirm({
+          message: "test",
+          severity:DialogSeverity.WARNING
+        });
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
@@ -363,7 +366,10 @@ describe("Dialog store", function () {
       });
 
       it("sends warning danger severity", function (done) {
-        DialogActions.confirm({message: "test", severity:DialogSeverity.DANGER});
+        DialogActions.confirm({
+          message: "test",
+          severity:DialogSeverity.DANGER
+        });
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
@@ -657,7 +663,10 @@ describe("Dialog store", function () {
       });
 
       it("sends warning dialog severity", function (done) {
-        DialogActions.prompt({message: "test", severity:DialogSeverity.WARNING});
+        DialogActions.prompt({
+          message: "test",
+          severity:DialogSeverity.WARNING
+        });
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
