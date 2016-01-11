@@ -11,7 +11,7 @@ var ConfirmDialogComponent = React.createClass({
     data: React.PropTypes.shape({
       actionButtonLabel: React.PropTypes.string.isRequired,
       message: React.PropTypes.string.isRequired,
-      state: React.PropTypes.string.isRequired,
+      severity: React.PropTypes.string.isRequired,
       title: React.PropTypes.string.isRequired
     }),
     onAccept: React.PropTypes.func,
@@ -40,7 +40,7 @@ var ConfirmDialogComponent = React.createClass({
 
   render: function () {
     var data = this.props.data;
-    var className = classNames("dialog", data.state);
+    var className = classNames("dialog", data.severity);
 
     return (
       <ModalComponent

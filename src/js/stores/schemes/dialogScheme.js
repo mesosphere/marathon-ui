@@ -1,6 +1,6 @@
 var Util = require("../../helpers/Util");
 var DialogTypes = require("../../constants/DialogTypes");
-var DialogStates = require("../../constants/DialogStates");
+var DialogSeverity = require("../../constants/DialogSeverity");
 
 const dialogScheme = {
   actionButtonLabel: "OK",
@@ -10,7 +10,7 @@ const dialogScheme = {
     type: "text"
   },
   message: "",
-  state: DialogStates.INFO,
+  severity: DialogSeverity.INFO,
   title: "",
   type: DialogTypes.ALERT
 };

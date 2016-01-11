@@ -6,7 +6,7 @@ var DialogActions = require("../js/actions/DialogActions");
 var DialogEvents = require("../js/events/DialogEvents");
 var DialogStore = require("../js/stores/DialogStore");
 var DialogTypes = require("../js/constants/DialogTypes");
-var DialogStates = require("../js/constants/DialogStates");
+var DialogSeverity = require("../js/constants/DialogSeverity");
 
 var expectAsync = require("./helpers/expectAsync");
 
@@ -120,32 +120,32 @@ describe("Dialog store", function () {
         });
       });
 
-      it("sends default dialog state", function (done) {
+      it("sends default dialog severity", function (done) {
         DialogActions.alert({message: "test"});
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
-            expect(dialogData.state).to.equal(DialogStates.INFO);
+            expect(dialogData.severity).to.equal(DialogSeverity.INFO);
           }, done);
         });
       });
 
-      it("sends warning dialog state", function (done) {
-        DialogActions.alert({message: "test", state:DialogStates.WARNING});
+      it("sends warning dialog severity", function (done) {
+        DialogActions.alert({message: "test", severity:DialogSeverity.WARNING});
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
-            expect(dialogData.state).to.equal(DialogStates.WARNING);
+            expect(dialogData.severity).to.equal(DialogSeverity.WARNING);
           }, done);
         });
       });
 
-      it("sends warning danger state", function (done) {
-        DialogActions.alert({message: "test", state:DialogStates.DANGER});
+      it("sends warning danger severity", function (done) {
+        DialogActions.alert({message: "test", severity:DialogSeverity.DANGER});
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
-            expect(dialogData.state).to.equal(DialogStates.DANGER);
+            expect(dialogData.severity).to.equal(DialogSeverity.DANGER);
           }, done);
         });
       });
@@ -342,32 +342,32 @@ describe("Dialog store", function () {
         });
       });
 
-      it("sends default dialog state", function (done) {
+      it("sends default dialog severity", function (done) {
         DialogActions.confirm({message: "test"});
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
-            expect(dialogData.state).to.equal(DialogStates.INFO);
+            expect(dialogData.severity).to.equal(DialogSeverity.INFO);
           }, done);
         });
       });
 
-      it("sends warning dialog state", function (done) {
-        DialogActions.confirm({message: "test", state:DialogStates.WARNING});
+      it("sends warning dialog severity", function (done) {
+        DialogActions.confirm({message: "test", severity:DialogSeverity.WARNING});
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
-            expect(dialogData.state).to.equal(DialogStates.WARNING);
+            expect(dialogData.severity).to.equal(DialogSeverity.WARNING);
           }, done);
         });
       });
 
-      it("sends warning danger state", function (done) {
-        DialogActions.confirm({message: "test", state:DialogStates.DANGER});
+      it("sends warning danger severity", function (done) {
+        DialogActions.confirm({message: "test", severity:DialogSeverity.DANGER});
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
-            expect(dialogData.state).to.equal(DialogStates.DANGER);
+            expect(dialogData.severity).to.equal(DialogSeverity.DANGER);
           }, done);
         });
       });
@@ -646,32 +646,32 @@ describe("Dialog store", function () {
         });
       });
 
-      it("sends default dialog state", function (done) {
+      it("sends default dialog severity", function (done) {
         DialogActions.prompt({message: "test"});
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
-            expect(dialogData.state).to.equal(DialogStates.INFO);
+            expect(dialogData.severity).to.equal(DialogSeverity.INFO);
           }, done);
         });
       });
 
-      it("sends warning dialog state", function (done) {
-        DialogActions.prompt({message: "test", state:DialogStates.WARNING});
+      it("sends warning dialog severity", function (done) {
+        DialogActions.prompt({message: "test", severity:DialogSeverity.WARNING});
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
-            expect(dialogData.state).to.equal(DialogStates.WARNING);
+            expect(dialogData.severity).to.equal(DialogSeverity.WARNING);
           }, done);
         });
       });
 
-      it("sends warning danger state", function (done) {
-        DialogActions.prompt({message: "test", state:DialogStates.DANGER});
+      it("sends warning danger severity", function (done) {
+        DialogActions.prompt({message: "test", severity:DialogSeverity.DANGER});
 
         DialogStore.once(DialogEvents.SHOW_DIALOG, function (dialogData) {
           expectAsync(function () {
-            expect(dialogData.state).to.equal(DialogStates.DANGER);
+            expect(dialogData.severity).to.equal(DialogSeverity.DANGER);
           }, done);
         });
       });
