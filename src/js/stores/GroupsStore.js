@@ -20,8 +20,7 @@ AppDispatcher.register(function (action) {
       break;
     case GroupsEvents.DELETE_SUCCESS:
       GroupsStore.emit(
-        GroupsEvents.DELETE_SUCCESS,
-        action.appId
+        GroupsEvents.DELETE_SUCCESS
       );
       break;
     case GroupsEvents.DELETE_ERROR:
