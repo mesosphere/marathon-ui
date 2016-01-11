@@ -74,23 +74,27 @@ describe("Groups", function () {
       GroupsAction.deleteGroup("/group-non-existent");
     });
 
-    it("emits an error on a non-existing group with statuscode 404",
-      function (done) {
-      nock(config.apiURL)
-        .delete("/v2/groups//group-non-existent")
-        .reply(404, {
-          "message": "Group '/group-non-existent' does not exist"
+    [403, 401, 404].forEach(status => {
+      it("emits an error on a non-existing group with statuscode " + status,
+        function (done) {
+          nock(config.apiURL)
+            .delete("/v2/groups//group-non-existent")
+            .reply(status, {
+              "message": "Group '/group-non-existent' does not exist"
+            });
+
+          GroupsStore.once(GroupsEvents.DELETE_ERROR,
+            function (error, statusCode) {
+              expectAsync(function () {
+
+                expect(statusCode)
+                  .to.equal(status);
+              }, done);
+            }
+          );
+
+          GroupsAction.deleteGroup("/group-non-existent");
         });
-
-      GroupsStore.once(GroupsEvents.DELETE_ERROR, function (error, statusCode) {
-        expectAsync(function () {
-
-          expect(statusCode)
-            .to.equal(404);
-        }, done);
-      });
-
-      GroupsAction.deleteGroup("/group-non-existent");
     });
   });
 });
