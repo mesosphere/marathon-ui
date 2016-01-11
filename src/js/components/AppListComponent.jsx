@@ -351,9 +351,8 @@ var AppListComponent = React.createClass({
     return null;
   },
 
-  render: function () {
+  getInlineDialog: function (appNodes = []) {
     var state = this.state;
-    var appNodes = this.getAppListItems();
 
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
@@ -367,6 +366,76 @@ var AppListComponent = React.createClass({
       state.fetchState === States.STATE_UNAUTHORIZED;
     var pageHasForbiddenError = state.fetchState === States.STATE_FORBIDDEN;
 
+    if (pageIsLoading) {
+      return (
+        <CenteredInlineDialogComponent title="Loading Applications..."
+          message="Please wait while applications are being retrieved." />
+      );
+    }
+
+    if (pageHasNoRunningApps) {
+      let message = "Do more with Marathon by creating and organizing " +
+        "your applications.";
+      return (
+        <CenteredInlineDialogComponent additionalClasses="muted"
+          title="No Applications Created"
+          message={message}>
+          <Link className="btn btn-lg btn-success"
+            to="apps"
+            query={{modal: "new-app"}}>
+            Create Application
+          </Link>
+        </CenteredInlineDialogComponent>
+      );
+    }
+
+    if (pageHasNoMatchingApps) {
+      return (
+        <CenteredInlineDialogComponent title="No Applications Found"
+          message="No applications match your criteria.">
+          <Link className="btn btn-lg btn-success"
+            to="apps">
+            Show all Applications
+          </Link>
+        </CenteredInlineDialogComponent>
+      );
+    }
+
+    if (pageHasGenericError) {
+      return (
+        <CenteredInlineDialogComponent title="Error Fetching Applications"
+          additionalClasses="error"
+          message={Messages.RETRY_REFRESH}>
+          <Link className="btn btn-lg btn-default" to="/">
+            Refresh Applications
+          </Link>
+        </CenteredInlineDialogComponent>
+      );
+    }
+
+    if (pageHasUnauthorizedError) {
+      return (
+        <CenteredInlineDialogComponent title="Error Fetching Applications"
+          additionalClasses="error"
+          message={Messages.UNAUTHORIZED} />
+      );
+    }
+
+    if (pageHasForbiddenError) {
+      return (
+        <CenteredInlineDialogComponent title="Error Fetching Applications"
+          additionalClasses="error"
+          message={Messages.FORBIDDEN} />
+      );
+    }
+
+    return null;
+  },
+
+  render: function () {
+    var state = this.state;
+    var appNodes = this.getAppListItems();
+
     var headerClassSet = classNames({
       "clickable": true,
       "dropup": !state.sortDescending
@@ -379,72 +448,7 @@ var AppListComponent = React.createClass({
         state.fetchState !== States.STATE_LOADING
     });
 
-    var totalColumnSpan = 8;
-
-    var inlineDialog = null;
-
-    if (pageIsLoading) {
-      inlineDialog = (
-        <CenteredInlineDialogComponent title="Loading Applications..."
-          message="Please wait while applications are being retrieved." />
-      );
-    }
-
-    if (pageHasNoRunningApps) {
-      let message = "Do more with Marathon by creating and organizing " +
-        "your applications.";
-      inlineDialog = (
-        <CenteredInlineDialogComponent additionalClasses="muted"
-            title="No Applications Created"
-            message={message}>
-          <Link className="btn btn-lg btn-success"
-              to="apps"
-              query={{modal: "new-app"}}>
-            Create Application
-          </Link>
-        </CenteredInlineDialogComponent>
-      );
-    }
-
-    if (pageHasNoMatchingApps) {
-      inlineDialog = (
-        <CenteredInlineDialogComponent title="No Applications Found"
-            message="No applications match your criteria.">
-          <Link className="btn btn-lg btn-success"
-            to="apps">
-            Show all Applications
-          </Link>
-        </CenteredInlineDialogComponent>
-      );
-    }
-
-    if (pageHasGenericError) {
-      inlineDialog = (
-        <CenteredInlineDialogComponent title="Error Fetching Applications"
-            additionalClasses="error"
-            message={Messages.RETRY_REFRESH}>
-          <Link className="btn btn-lg btn-default" to="/">
-            Refresh Applications
-          </Link>
-        </CenteredInlineDialogComponent>
-      );
-    }
-
-    if (pageHasUnauthorizedError) {
-      inlineDialog = (
-        <CenteredInlineDialogComponent title="Error Fetching Applications"
-          additionalClasses="error"
-          message={Messages.UNAUTHORIZED} />
-      );
-    }
-
-    if (pageHasForbiddenError) {
-      inlineDialog = (
-        <CenteredInlineDialogComponent title="Error Fetching Applications"
-          additionalClasses="error"
-          message={Messages.FORBIDDEN} />
-      );
-    }
+    var inlineDialog = this.getInlineDialog(appNodes);
 
     return (
       <div>
