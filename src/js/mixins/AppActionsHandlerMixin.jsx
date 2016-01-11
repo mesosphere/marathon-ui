@@ -3,6 +3,9 @@ var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
 var DialogActions = require("../actions/DialogActions");
 var DialogStore = require("../stores/DialogStore");
+var GroupsActions = require("../actions/GroupsActions");
+var GroupsEvents = require("../events/GroupsEvents");
+var GroupsStore = require("../stores/GroupsStore");
 var Messages = require("../constants/Messages");
 var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
@@ -32,6 +35,11 @@ var AppActionsHandlerMixin = {
       this.onDeleteAppError);
   },
 
+  addDeleteGroupListener: function () {
+    GroupsStore.once(GroupsEvents.DELETE_ERROR,
+      this.onDeleteGroupError);
+  },
+
   addResetDelayListener: function () {
     AppsStore.once(AppsEvents.RESET_DELAY,
       this.onResetDelaySuccess);
@@ -52,6 +60,23 @@ var AppActionsHandlerMixin = {
       this.addDeleteAppListener();
 
       AppsActions.deleteApp(appId);
+    });
+  },
+
+  handleDestroyGroup: function (event) {
+    event.preventDefault();
+
+    var groupId = this.props.model.id;
+
+    const dialogId =
+      DialogActions.confirm(`Destroy group '${groupId}' with all containing ` +
+        `applications? This is irreversible.`,
+        "Destroy");
+
+    DialogStore.handleUserResponse(dialogId, () => {
+      this.addDeleteGroupListener();
+
+      GroupsActions.deleteGroup(groupId);
     });
   },
 
@@ -173,6 +198,18 @@ var AppActionsHandlerMixin = {
     } else {
       DialogActions.alert(
         `Error destroying app: ${errorMessage.message || errorMessage}`
+      );
+    }
+  },
+
+  onDeleteGroupError: function (errorMessage, statusCode) {
+    if (statusCode === 401) {
+      DialogActions.alert(`Error destroying group: ${Messages.UNAUTHORIZED}`);
+    } else if (statusCode === 403) {
+      DialogActions.alert(`Error destroying group: ${Messages.FORBIDDEN}`);
+    } else {
+      DialogActions.alert(
+        `Error destroying group: ${errorMessage.message || errorMessage}`
       );
     }
   },
