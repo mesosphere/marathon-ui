@@ -74,8 +74,8 @@ var AppActionsHandlerMixin = {
     var groupId = this.props.model.id;
 
     const dialogId =
-      DialogActions.confirm(`Destroy group '${groupId}' with all containing ` +
-        `applications? This is irreversible.`,
+      DialogActions.confirm(`Destroy group '${groupId}' with all it's ` +
+        `contents? This is irreversible.`,
         "Destroy");
 
     DialogStore.handleUserResponse(dialogId, () => {
