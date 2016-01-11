@@ -129,6 +129,10 @@ var AppActionsHandlerMixin = {
   handleScaleGroup: function () {
     var model = this.props.model;
 
+    if (model.instances < 1) {
+      return;
+    }
+
     const dialogId =
       DialogActions.prompt("Please provide a scaling factor for all " +
           "applications in this group.",
