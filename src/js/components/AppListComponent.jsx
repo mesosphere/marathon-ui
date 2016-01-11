@@ -1,5 +1,6 @@
 var classNames = require("classnames");
 var lazy = require("lazy.js");
+var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppListViewTypes = require("../constants/AppListViewTypes");
@@ -9,6 +10,7 @@ var HealthStatus = require("../constants/HealthStatus");
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var AppListItemComponent = require("./AppListItemComponent");
+var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
 
 var AppsActions = require("../actions/AppsActions");
 var AppsStore = require("../stores/AppsStore");
@@ -355,32 +357,15 @@ var AppListComponent = React.createClass({
 
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
-
-    var loadingClassSet = classNames({
-      "hidden": !pageIsLoading
-    });
-
-    var noAppsClassSet = classNames({
-      "hidden": pageIsLoading || pageHasApps ||
-        state.fetchState === States.STATE_UNAUTHORIZED ||
-        state.fetchState === States.STATE_FORBIDDEN
-    });
-
-    var noRunningAppsClassSet = classNames({
-      "hidden": !pageHasApps || appNodes.length > 0
-    });
-
-    var errorClassSet = classNames({
-      "hidden": state.fetchState !== States.STATE_ERROR
-    });
-
-    var unauthorizedClassSet = classNames({
-      "hidden": state.fetchState !== States.STATE_UNAUTHORIZED
-    });
-
-    var forbiddenClassSet = classNames({
-      "hidden": state.fetchState !== States.STATE_FORBIDDEN
-    });
+    var pageHasNoRunningApps = !pageIsLoading &&
+      !pageHasApps &&
+      state.fetchState !== States.STATE_UNAUTHORIZED &&
+      state.fetchState !== States.STATE_FORBIDDEN;
+    var pageHasNoMatchingApps = pageHasApps && appNodes.length === 0;
+    var pageHasGenericError = state.fetchState === States.STATE_ERROR;
+    var pageHasUnauthorizedError =
+      state.fetchState === States.STATE_UNAUTHORIZED;
+    var pageHasForbiddenError = state.fetchState === States.STATE_FORBIDDEN;
 
     var headerClassSet = classNames({
       "clickable": true,
@@ -396,7 +381,73 @@ var AppListComponent = React.createClass({
 
     var totalColumnSpan = 8;
 
+    var inlineDialog = null;
+
+    if (pageIsLoading) {
+      inlineDialog = (
+        <CenteredInlineDialogComponent title="Loading Applications..."
+          message="Please wait while applications are being retrieved." />
+      );
+    }
+
+    if (pageHasNoRunningApps) {
+      let message = "Do more with Marathon by creating and organizing " +
+        "your applications.";
+      inlineDialog = (
+        <CenteredInlineDialogComponent additionalClasses="muted"
+            title="No Applications Created"
+            message={message}>
+          <Link className="btn btn-lg btn-success"
+              to="apps"
+              query={{modal: "new-app"}}>
+            Create Application
+          </Link>
+        </CenteredInlineDialogComponent>
+      );
+    }
+
+    if (pageHasNoMatchingApps) {
+      inlineDialog = (
+        <CenteredInlineDialogComponent title="No Applications Found"
+            message="No applications match your criteria.">
+          <Link className="btn btn-lg btn-success"
+            to="apps">
+            Show all Applications
+          </Link>
+        </CenteredInlineDialogComponent>
+      );
+    }
+
+    if (pageHasGenericError) {
+      inlineDialog = (
+        <CenteredInlineDialogComponent title="Error Fetching Applications"
+            additionalClasses="error"
+            message={Messages.RETRY_REFRESH}>
+          <Link className="btn btn-lg btn-default" to="/">
+            Refresh Applications
+          </Link>
+        </CenteredInlineDialogComponent>
+      );
+    }
+
+    if (pageHasUnauthorizedError) {
+      inlineDialog = (
+        <CenteredInlineDialogComponent title="Error Fetching Applications"
+          additionalClasses="error"
+          message={Messages.UNAUTHORIZED} />
+      );
+    }
+
+    if (pageHasForbiddenError) {
+      inlineDialog = (
+        <CenteredInlineDialogComponent title="Error Fetching Applications"
+          additionalClasses="error"
+          message={Messages.FORBIDDEN} />
+      );
+    }
+
     return (
+      <div>
       <table className={tableClassSet}>
         <colgroup>
           <col className="icon-col" />
@@ -449,39 +500,11 @@ var AppListComponent = React.createClass({
           </tr>
         </thead>
         <tbody>
-          <tr className={loadingClassSet}>
-            <td className="text-center text-muted" colSpan={totalColumnSpan}>
-              Loading apps...
-            </td>
-          </tr>
-          <tr className={noAppsClassSet}>
-            <td className="text-center" colSpan={totalColumnSpan}>
-              No running apps.
-            </td>
-          </tr>
-          <tr className={noRunningAppsClassSet}>
-            <td className="text-center" colSpan={totalColumnSpan}>
-              No apps match your query.
-            </td>
-          </tr>
-          <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan={totalColumnSpan}>
-              {`Error fetching apps. ${Messages.RETRY_REFRESH}`}
-            </td>
-          </tr>
-          <tr className={unauthorizedClassSet}>
-            <td className="text-center text-danger" colSpan={totalColumnSpan}>
-              {`Error fetching apps. ${Messages.UNAUTHORIZED}`}
-            </td>
-          </tr>
-          <tr className={forbiddenClassSet}>
-            <td className="text-center text-danger" colSpan={totalColumnSpan}>
-              {`Error fetching apps. ${Messages.FORBIDDEN}`}
-            </td>
-          </tr>
           {appNodes}
         </tbody>
       </table>
+      {inlineDialog}
+      </div>
     );
   }
 });
