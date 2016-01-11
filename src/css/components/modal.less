@@ -50,10 +50,7 @@
         padding-right: 0px;
       }
       .field-row {
-        padding-top: @modal-body-padding;
-        padding-left: @modal-body-padding;
-        padding-right: @modal-body-padding;
-        padding-bottom: @modal-body-padding;
+        padding: @modal-body-padding;
       }
       .field-row:first-child {
         padding-top: 0px;
@@ -124,6 +121,50 @@
   color: @modal-dialog-text-color;
   font-size: @modal-font-size;
 
+  &.warning {
+    .modal-header {
+      color: @modal-dialog-warning-color
+    }
+
+    .modal-content::before{
+      background-color: @modal-dialog-warning-color;
+    }
+
+    .modal-footer .btn-default:hover {
+      border-color: @modal-dialog-warning-color;
+    }
+
+    .modal-footer .btn-success {
+      background-color: @modal-dialog-warning-color;
+      border-color: @modal-dialog-warning-color;
+
+      &:hover {
+        background-color: lighten(@modal-dialog-warning-color,10%);
+        border-color: lighten(@modal-dialog-warning-color,10%);
+      }
+    }
+  }
+
+  &.danger {
+    .modal-header {
+      color: @modal-dialog-danger-color
+    }
+
+    .modal-footer .btn-default:hover {
+      border-color: @modal-dialog-danger-color;
+    }
+
+    .modal-content::before, .modal-footer .btn-success {
+      background-color: @modal-dialog-danger-color;
+      border-color: @modal-dialog-danger-color;
+
+      &:hover {
+        background-color: lighten(@modal-dialog-danger-color,10%);
+        border-color: lighten(@modal-dialog-danger-color,10%);
+      }
+    }
+  }
+
   .modal-header {
     background-color: transparent;
     color: @modal-dialog-info-color;
@@ -171,47 +212,4 @@
     background-color: @modal-dialog-footer-color;
   }
 
-  &.warning {
-    .modal-header {
-      color: @modal-dialog-warning-color
-    }
-
-    .modal-content::before{
-      background-color: @modal-dialog-warning-color;
-    }
-
-    .modal-footer .btn-default:hover {
-      border-color: @modal-dialog-warning-color;
-    }
-
-    .modal-footer .btn-success {
-      background-color: @modal-dialog-warning-color;
-      border-color: @modal-dialog-warning-color;
-
-      &:hover {
-        background-color: lighten(@modal-dialog-warning-color,10%);
-        border-color: lighten(@modal-dialog-warning-color,10%);
-      }
-    }
-  }
-
-  &.danger {
-    .modal-header {
-      color: @modal-dialog-danger-color
-    }
-
-    .modal-footer .btn-default:hover {
-      border-color: @modal-dialog-danger-color;
-    }
-
-    .modal-content::before, .modal-footer .btn-success {
-      background-color: @modal-dialog-danger-color;
-      border-color: @modal-dialog-danger-color;
-
-      &:hover {
-        background-color: lighten(@modal-dialog-danger-color,10%);
-        border-color: lighten(@modal-dialog-danger-color,10%);
-      }
-    }
-  }
 }

@@ -24,7 +24,6 @@ function removeDialog(dialog) {
 }
 
 var DialogStore = lazy(EventEmitter.prototype).extend({
-
   handleUserResponse: function (dialogId,
     acceptCallback,
     dismissCallback = Util.noop

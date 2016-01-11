@@ -35,7 +35,7 @@ var ModalComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      isIn: false
+      isInTransition: false
     };
   },
 
@@ -48,23 +48,23 @@ var ModalComponent = React.createClass({
   },
 
   transitionIn: function () {
-    this.setState({isIn: true});
+    this.setState({isInTransition: true});
   },
 
   render: function () {
     var props = this.props;
-    var isInState = this.state.isIn;
+    var isInTransition = this.state.isInTransition;
 
     var modalClassName = classNames("modal fade", props.className, {
-      "in": isInState,
+      "in": isInTransition,
       "modal-centered": props.centered
     });
 
     var modalDialogClassName = classNames("modal-dialog",
-        modalSizeClassName(props.size));
+          modalSizeClassName(props.size));
 
     var modalBackdropClassName = classNames("modal-backdrop fade", {
-      "in": isInState
+      "in": isInTransition
     });
 
     return (

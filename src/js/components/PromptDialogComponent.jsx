@@ -27,7 +27,7 @@ var PromptDialogComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    let input = React.findDOMNode(this.refs.input);
+    var input = React.findDOMNode(this.refs.input);
     input.focus();
     input.select();
   },
