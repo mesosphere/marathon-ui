@@ -117,7 +117,7 @@ var Marathon = React.createClass({
       if (this.state.modal != null) {
         this.handleModalDestroy();
       }
-      DialogActions.dismissLatest();
+      DialogActions.dismissLatestDialog();
     }.bind(this));
 
     Mousetrap.bind("c", function () {
