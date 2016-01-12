@@ -361,10 +361,6 @@ var AppListComponent = React.createClass({
       state.fetchState !== States.STATE_UNAUTHORIZED &&
       state.fetchState !== States.STATE_FORBIDDEN;
     var pageHasNoMatchingApps = pageHasApps && appNodes.length === 0;
-    var pageHasGenericError = state.fetchState === States.STATE_ERROR;
-    var pageHasUnauthorizedError =
-      state.fetchState === States.STATE_UNAUTHORIZED;
-    var pageHasForbiddenError = state.fetchState === States.STATE_FORBIDDEN;
 
     if (pageIsLoading) {
       return (
@@ -401,34 +397,6 @@ var AppListComponent = React.createClass({
       );
     }
 
-    if (pageHasGenericError) {
-      return (
-        <CenteredInlineDialogComponent title="Error Fetching Applications"
-          additionalClasses="error"
-          message={Messages.RETRY_REFRESH}>
-          <Link className="btn btn-lg btn-default" to="/">
-            Refresh Applications
-          </Link>
-        </CenteredInlineDialogComponent>
-      );
-    }
-
-    if (pageHasUnauthorizedError) {
-      return (
-        <CenteredInlineDialogComponent title="Error Fetching Applications"
-          additionalClasses="error"
-          message={Messages.UNAUTHORIZED} />
-      );
-    }
-
-    if (pageHasForbiddenError) {
-      return (
-        <CenteredInlineDialogComponent title="Error Fetching Applications"
-          additionalClasses="error"
-          message={Messages.FORBIDDEN} />
-      );
-    }
-
     return null;
   },
 
@@ -441,12 +409,26 @@ var AppListComponent = React.createClass({
       "dropup": !state.sortDescending
     });
 
+    var errorClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_ERROR
+    });
+
+    var unauthorizedClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_UNAUTHORIZED
+    });
+
+    var forbiddenClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_FORBIDDEN
+    });
+
     var tableClassSet = classNames({
       "table table-fixed app-list": true,
       "table-hover table-selectable":
         state.apps.length !== 0 &&
         state.fetchState !== States.STATE_LOADING
     });
+
+    var totalColumnSpan = 8;
 
     return (
       <div>
@@ -502,6 +484,21 @@ var AppListComponent = React.createClass({
             </tr>
           </thead>
           <tbody>
+            <tr className={errorClassSet}>
+              <td className="text-center text-danger" colSpan={totalColumnSpan}>
+                {`Error fetching apps. ${Messages.RETRY_REFRESH}`}
+              </td>
+            </tr>
+            <tr className={unauthorizedClassSet}>
+              <td className="text-center text-danger" colSpan={totalColumnSpan}>
+                {`Error fetching apps. ${Messages.UNAUTHORIZED}`}
+              </td>
+            </tr>
+            <tr className={forbiddenClassSet}>
+              <td className="text-center text-danger" colSpan={totalColumnSpan}>
+                {`Error fetching apps. ${Messages.FORBIDDEN}`}
+              </td>
+            </tr>
             {appNodes}
           </tbody>
         </table>

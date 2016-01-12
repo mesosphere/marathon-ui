@@ -95,15 +95,11 @@ var TaskListComponent = React.createClass({
     var props = this.props;
     var tasksLength = props.tasks.length;
     var pageIsLoading = props.fetchState === States.STATE_LOADING;
-    var pageHasGenericError = props.fetchState === States.STATE_ERROR;
-    var pageHasUnauthorizedError =
-      props.fetchState === States.STATE_UNAUTHORIZED;
-    var pageHasForbiddenError = props.fetchState === States.STATE_FORBIDDEN;
     var pageHasNoTasks = tasksLength === 0 &&
       !pageIsLoading &&
-      !pageHasGenericError &&
-      !pageHasUnauthorizedError &&
-      !pageHasForbiddenError;
+      props.fetchState !== States.STATE_ERROR &&
+      props.fetchState !== States.STATE_UNAUTHORIZED &&
+      props.fetchState !== States.STATE_FORBIDDEN;
 
     if (pageIsLoading) {
       return (
@@ -119,23 +115,6 @@ var TaskListComponent = React.createClass({
       );
     }
 
-    if (pageHasGenericError || pageHasForbiddenError ||
-        pageHasUnauthorizedError) {
-      let error = Messages.RETRY_REFRESH;
-
-      if (pageHasForbiddenError) {
-        error = Messages.FORBIDDEN;
-      }
-      if (pageHasUnauthorizedError) {
-        error = Messages.UNAUTHORIZED;
-      }
-      return (
-        <CenteredInlineDialogComponent title="Error Fetching Tasks"
-          additionalClasses="error"
-          message={error} />
-      );
-    }
-
     return null;
   },
 
@@ -143,10 +122,29 @@ var TaskListComponent = React.createClass({
     var props = this.props;
     var tasksLength = props.tasks.length;
     var hasHealth = !!props.hasHealth;
+    var hasError = props.fetchState === States.STATE_ERROR;
+    var isUnauthorized =
+      props.fetchState === States.STATE_UNAUTHORIZED;
+    var isForbidden = props.fetchState === States.STATE_FORBIDDEN;
 
     var headerClassSet = classNames({
       "clickable": true,
       "dropup": !this.state.sortDescending
+    });
+
+    var errorClassSet = classNames({
+      "fluid-container": true,
+      "hidden": !hasError
+    });
+
+    var unauthorizedClassSet = classNames({
+      "fluid-container": true,
+      "hidden": !isUnauthorized
+    });
+
+    var forbiddenClassSet = classNames({
+      "fluid-container": true,
+      "hidden": !isForbidden
     });
 
     var hasHealthClassSet = classNames({
@@ -155,6 +153,21 @@ var TaskListComponent = React.createClass({
 
     return (
       <div>
+        <div className={errorClassSet}>
+          <p className="text-center text-danger">
+            {`Error fetching tasks. ${Messages.RETRY_REFRESH}`}
+          </p>
+        </div>
+        <div className={unauthorizedClassSet}>
+          <p className="text-center text-danger">
+            {`Error fetching tasks. ${Messages.UNAUTHORIZED}`}
+          </p>
+        </div>
+        <div className={forbiddenClassSet}>
+          <p className="text-center text-danger">
+            {`Error fetching tasks. ${Messages.FORBIDDEN}`}
+          </p>
+        </div>
         <table className="table table-unstyled task-list">
           <thead>
             <tr>

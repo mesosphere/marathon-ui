@@ -139,53 +139,31 @@ var DeploymentListComponent = React.createClass({
       );
     }
 
-    if (pageHasGenericError) {
-      return (
-        <CenteredInlineDialogComponent title="Error Fetching Deployments"
-          additionalClasses="error"
-          message={Messages.RETRY_REFRESH}>
-          <Link className="btn btn-lg btn-default" to="deployments">
-            Refresh Deployments
-          </Link>
-        </CenteredInlineDialogComponent>
-      );
-    }
-
-    if (pageHasUnauthorizedError) {
-      return (
-        <CenteredInlineDialogComponent title="Error Fetching Deployments"
-          additionalClasses="error"
-          message={Messages.UNAUTHORIZED} />
-      );
-    }
-
-    if (pageHasForbiddenError) {
-      return (
-        <CenteredInlineDialogComponent title="Error Fetching Deployments"
-          additionalClasses="error"
-          message={Messages.FORBIDDEN} />
-      );
-    }
-
-    if (pageHasErrorMessage) {
-      return (
-        <CenteredInlineDialogComponent title="Error Fetching Deployments"
-          additionalClasses="error"
-          message={state.errorMessage} />
-      );
-    }
-
     return null;
   },
 
   render: function () {
     var state = this.state;
 
-    var pageIsLoading = state.fetchState === States.STATE_LOADING;
-
     var headerClassSet = classNames({
       "clickable": true,
       "dropup": !state.sortDescending
+    });
+
+    var errorClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_ERROR
+    });
+
+    var unauthorizedClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_UNAUTHORIZED
+    });
+
+    var forbiddenClassSet = classNames({
+      "hidden": state.fetchState !== States.STATE_FORBIDDEN
+    });
+
+    var errorMessageClassSet = classNames({
+      "hidden": state.errorMessage === ""
     });
 
     return (
@@ -229,6 +207,26 @@ var DeploymentListComponent = React.createClass({
             </tr>
           </thead>
           <tbody>
+            <tr className={errorMessageClassSet}>
+              <td className="text-center text-danger" colSpan="5">
+                {state.errorMessage}
+              </td>
+            </tr>
+            <tr className={errorClassSet}>
+              <td className="text-center text-danger" colSpan="5">
+                {`Error fetching deployments. ${Messages.RETRY_REFRESH}`}
+              </td>
+            </tr>
+            <tr className={unauthorizedClassSet}>
+              <td className="text-center text-danger" colSpan="6">
+                {`Error fetching deployments. ${Messages.UNAUTHORIZED}`}
+              </td>
+            </tr>
+            <tr className={forbiddenClassSet}>
+              <td className="text-center text-danger" colSpan="6">
+                {`Error fetching deployments. ${Messages.FORBIDDEN}`}
+              </td>
+            </tr>
             {this.getDeploymentNodes()}
           </tbody>
         </table>
