@@ -38,7 +38,7 @@ var AlertDialogComponent = React.createClass({
       <ModalComponent
           centered={true}
           className={className}
-          dismissOnClickOutside={true}
+          dismissOnClickOutside={false}
           ref="modalComponent"
           onDestroy={props.onDismiss}>
         <div className="modal-header">
