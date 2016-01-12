@@ -13,6 +13,7 @@
 - \#2832 - Convert all confirm dialogs to have meaningful action button labels
 - \#2844 - Show error icon for failing Mesos logs
 - \#2511 - Improve UI error messages
+- \#2831 - Convert alert, confirm and prompt dialogs to new design
 
 ### Fixed
 - \#2892 - Version in task detail component shouldn't be localised

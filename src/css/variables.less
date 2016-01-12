@@ -17,6 +17,11 @@
 @btn-default-text-color: #FFFFFF;
 @btn-default-active-bg-color: #3C4355;
 @btn-default-active-text-color: #FFFFFF;
+@btn-default-inverse-text-color: #5E646C;
+@btn-default-inverse-active-border-color: @brand-primary;
+@btn-default-inverse-active-text-color: @btn-default-inverse-text-color;
+
+@form-control-inverse-border-color: @brand-primary;
 
 @badge-bg-color: @table-header-color;
 @badge-indicator-bg-color: #fedf57;
@@ -28,7 +33,7 @@
 @checkbox-active-color: #2f81f7;
 
 @link-color: #FFFFFF;
-@text-color-muted: #8E929B; 
+@text-color-muted: #8E929B;
 @text-color-danger-light: #FD5B77;
 
 @dropdown-bg-color: #FFFFFF;
@@ -54,6 +59,12 @@
 @task-health-over-capacity-color: #4CA0FF;
 @task-health-unscheduled-color: #1C202B;
 @task-health-running-color: #8E929B;
+@modal-dialog-bg-color: #FFFFFF;
+@modal-dialog-text-color: #5E646C;
+@modal-dialog-footer-color: #F3F3F3;
+@modal-dialog-info-color: #2568F5;
+@modal-dialog-warning-color: #FF6500;
+@modal-dialog-danger-color: #F72546;
 
 /* ==============
  * Layout
@@ -79,6 +90,8 @@
 @font-size-icon: 16px;
 @small-font-size: 12px;
 @xsmall-font-size: 10px;
+@modal-font-size: 16px;
+@modal-font-size-header: @font-size-h1;
 
 /* ==============
  * Misc
@@ -123,11 +136,22 @@
  * Health Bar
  * ==============
  */
-@health-bar-width: @base-spacing-unit * 22;
+@health-bar-width: @base-spacing-unit*22;
 
 /* ==============
  * Popover
  * ==============
  */
 @popover-border-radius: 2px;
-@popover-width: @base-spacing-unit * 25;
+@popover-width: @base-spacing-unit*25;
+
+/* ==============
+ * Modal
+ * ==============
+ */
+@modal-border-radius: 6px;
+@modal-body-padding: 20px;
+@modal-footer-padding: 33px;
+@modal-dialog-padding: @modal-footer-padding;
+@modal-dialog-width: 536px;
+@modal-dialog-height: 232px;

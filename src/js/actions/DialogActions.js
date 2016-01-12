@@ -1,70 +1,85 @@
+var Util = require("../helpers/Util");
 var AppDispatcher = require("../AppDispatcher");
 var DialogEvents = require("../events/DialogEvents");
+var DialogTypes = require("../constants/DialogTypes");
+var dialogScheme = require("../stores/schemes/dialogScheme");
+
+function showDialog(data) {
+  var dialog = Util.extendObject(dialogScheme, data,
+    {id: Symbol("dialogId")});
+
+  AppDispatcher.dispatchNext({
+    actionType: DialogEvents.SHOW_DIALOG,
+    dialog: dialog
+  });
+
+  return dialog.id;
+}
 
 var DialogActions = {
-  alert: function (message, dismissButtonLabel = "OK") {
-    const dialogId = Symbol(message);
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.ALERT_SHOW,
-      dialogId: dialogId,
-      dismissButtonLabel: dismissButtonLabel,
-      message: message
-    });
-    return dialogId;
-  },
-  alertDismiss: function (dialogId) {
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.ALERT_DISMISS,
-      dialogId: dialogId
-    });
-  },
-  confirm: function (message, successButtonLabel = "OK") {
-    const dialogId = Symbol(message);
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM_SHOW,
-      dialogId: dialogId,
+  alert: function (...data) {
+    if (Util.isObject(data[0])) {
+      return showDialog(Object.assign(data[0],
+        {type: DialogTypes.ALERT}));
+    }
+
+    let [message, actionButtonLabel = "OK"] = data;
+
+    return showDialog({
+      actionButtonLabel: actionButtonLabel,
       message: message,
-      successButtonLabel: successButtonLabel
-    });
-    return dialogId;
-  },
-  confirmDismiss: function (dialogId) {
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM_DISMISS,
-      dialogId: dialogId
+      type: DialogTypes.ALERT
     });
   },
-  confirmAccept: function (dialogId) {
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.CONFIRM_ACCEPT,
-      dialogId: dialogId
+
+  confirm: function (...data) {
+    if (Util.isObject(data[0])) {
+      return showDialog(Object.assign(data[0],
+        {type: DialogTypes.CONFIRM}));
+    }
+
+    let [message, actionButtonLabel = "OK"] = data;
+
+    return showDialog({
+      actionButtonLabel: actionButtonLabel,
+      message: message,
+      type: DialogTypes.CONFIRM
     });
   },
-  prompt: function (message, defaultValue = "", inputProps = {type: "text"}) {
-    const dialogId = Symbol(message);
-    AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT_SHOW,
-      defaultValue: defaultValue,
-      dialogId: dialogId,
-      inputProps: inputProps,
-      message: message
+
+  prompt: function (...data) {
+    if (Util.isObject(data[0])) {
+      return showDialog(Object.assign(data[0],
+        {type: DialogTypes.PROMPT}));
+    }
+
+    let [message, defaultValue = "",
+      inputProperties = {type: "text"}] = data;
+
+    return showDialog({
+      message: message,
+      inputProperties: Object.assign(inputProperties,
+        {defaultValue: defaultValue}),
+      type: DialogTypes.PROMPT
     });
-    return dialogId;
   },
-  promptDismiss: function (dialogId) {
+
+  dismissDialog: function (dialog) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT_DISMISS,
-      dialogId: dialogId
+      actionType: DialogEvents.DISMISS_DIALOG,
+      dialog: dialog
     });
   },
-  promptAccept: function (dialogId, value) {
+
+  acceptDialog: function (dialog, value) {
     AppDispatcher.dispatchNext({
-      actionType: DialogEvents.PROMPT_ACCEPT,
-      dialogId: dialogId,
+      actionType: DialogEvents.ACCEPT_DIALOG,
+      dialog: dialog,
       value: value
     });
   },
-  dismissLatest: function () {
+
+  dismissLatestDialog: function () {
     AppDispatcher.dispatchNext({
       actionType: DialogEvents.DISMISS_LATEST
     });

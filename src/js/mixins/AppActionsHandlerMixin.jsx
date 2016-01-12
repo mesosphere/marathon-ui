@@ -292,7 +292,7 @@ var AppActionsHandlerMixin = {
   },
 
   onResetDelaySuccess: function () {
-    DialogActions.alert("Delay reset succesfully");
+    DialogActions.alert("Delay reset successfully");
   }
 };
 

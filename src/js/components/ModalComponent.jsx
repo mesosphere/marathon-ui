@@ -11,6 +11,7 @@ var ModalComponent = React.createClass({
   propTypes: {
     centered: React.PropTypes.bool,
     children: React.PropTypes.node,
+    className: React.PropTypes.string,
     dismissOnClickOutside: React.PropTypes.bool,
     onDestroy: React.PropTypes.func,
     size: React.PropTypes.string
@@ -34,7 +35,7 @@ var ModalComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      isIn: false
+      isInTransition: false
     };
   },
 
@@ -47,22 +48,23 @@ var ModalComponent = React.createClass({
   },
 
   transitionIn: function () {
-    this.setState({isIn: true});
+    this.setState({isInTransition: true});
   },
 
   render: function () {
-    var modalDialogClassName =
-      "modal-dialog " + modalSizeClassName(this.props.size);
+    var props = this.props;
+    var isInTransition = this.state.isInTransition;
 
-    var modalBackdropClassName = classNames({
-      "modal-backdrop fade": true,
-      "in": this.state.isIn
+    var modalClassName = classNames("modal fade", props.className, {
+      "in": isInTransition,
+      "modal-centered": props.centered
     });
 
-    var modalClassName = classNames({
-      "modal fade": true,
-      "in": this.state.isIn,
-      "modal-centered": this.props.centered
+    var modalDialogClassName = classNames("modal-dialog",
+          modalSizeClassName(props.size));
+
+    var modalBackdropClassName = classNames("modal-backdrop fade", {
+      "in": isInTransition
     });
 
     return (
@@ -74,7 +76,7 @@ var ModalComponent = React.createClass({
             tabIndex="-1">
           <div className={modalDialogClassName}>
             <div className="modal-content">
-              {this.props.children}
+              {props.children}
             </div>
           </div>
         </div>
