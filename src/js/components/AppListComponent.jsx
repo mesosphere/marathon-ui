@@ -1,5 +1,6 @@
 var classNames = require("classnames");
 var lazy = require("lazy.js");
+var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var AppListViewTypes = require("../constants/AppListViewTypes");
@@ -9,6 +10,7 @@ var HealthStatus = require("../constants/HealthStatus");
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 var AppListItemComponent = require("./AppListItemComponent");
+var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
 
 var AppsActions = require("../actions/AppsActions");
 var AppsStore = require("../stores/AppsStore");
@@ -349,25 +351,62 @@ var AppListComponent = React.createClass({
     return null;
   },
 
+  getInlineDialog: function (appNodes = []) {
+    var state = this.state;
+
+    var pageIsLoading = state.fetchState === States.STATE_LOADING;
+    var pageHasApps = state.apps.length > 0;
+    var pageHasNoRunningApps = !pageIsLoading &&
+      !pageHasApps &&
+      state.fetchState !== States.STATE_UNAUTHORIZED &&
+      state.fetchState !== States.STATE_FORBIDDEN;
+    var pageHasNoMatchingApps = pageHasApps && appNodes.length === 0;
+
+    if (pageIsLoading) {
+      return (
+        <CenteredInlineDialogComponent title="Loading Applications..."
+          message="Please wait while applications are being retrieved." />
+      );
+    }
+
+    if (pageHasNoRunningApps) {
+      let message = "Do more with Marathon by creating and organizing " +
+        "your applications.";
+      return (
+        <CenteredInlineDialogComponent additionalClasses="muted"
+          title="No Applications Created"
+          message={message}>
+          <Link className="btn btn-lg btn-success"
+            to="apps"
+            query={{modal: "new-app"}}>
+            Create Application
+          </Link>
+        </CenteredInlineDialogComponent>
+      );
+    }
+
+    if (pageHasNoMatchingApps) {
+      return (
+        <CenteredInlineDialogComponent title="No Applications Found"
+          message="No applications match your criteria.">
+          <Link className="btn btn-lg btn-success"
+            to="apps">
+            Show all Applications
+          </Link>
+        </CenteredInlineDialogComponent>
+      );
+    }
+
+    return null;
+  },
+
   render: function () {
     var state = this.state;
     var appNodes = this.getAppListItems();
 
-    var pageIsLoading = state.fetchState === States.STATE_LOADING;
-    var pageHasApps = state.apps.length > 0;
-
-    var loadingClassSet = classNames({
-      "hidden": !pageIsLoading
-    });
-
-    var noAppsClassSet = classNames({
-      "hidden": pageIsLoading || pageHasApps ||
-        state.fetchState === States.STATE_UNAUTHORIZED ||
-        state.fetchState === States.STATE_FORBIDDEN
-    });
-
-    var noRunningAppsClassSet = classNames({
-      "hidden": !pageHasApps || appNodes.length > 0
+    var headerClassSet = classNames({
+      "clickable": true,
+      "dropup": !state.sortDescending
     });
 
     var errorClassSet = classNames({
@@ -382,11 +421,6 @@ var AppListComponent = React.createClass({
       "hidden": state.fetchState !== States.STATE_FORBIDDEN
     });
 
-    var headerClassSet = classNames({
-      "clickable": true,
-      "dropup": !state.sortDescending
-    });
-
     var tableClassSet = classNames({
       "table table-fixed app-list": true,
       "table-hover table-selectable":
@@ -397,91 +431,79 @@ var AppListComponent = React.createClass({
     var totalColumnSpan = 8;
 
     return (
-      <table className={tableClassSet}>
-        <colgroup>
-          <col className="icon-col" />
-          <col className="name-col" />
-          <col className="cpu-col" />
-          <col className="ram-col" />
-          <col className="status-col" />
-          <col className="instances-col" />
-          <col className="health-col" />
-          <col className="actions-col" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th className="text-left name-cell" colSpan="2">
-              <span onClick={this.sortBy.bind(null, "id")}
-                  className={headerClassSet}>
-                Name {this.getCaret("id")}
-              </span>
-            </th>
-            <th className="text-right cpu-cell">
-              <span onClick={this.sortBy.bind(null, "totalCpus")}
-                  className={headerClassSet}>
-                {this.getCaret("totalCpus")} CPU
-              </span>
-            </th>
-            <th className="text-right ram-cell">
-              <span onClick={this.sortBy.bind(null, "totalMem")}
+      <div>
+        <table className={tableClassSet}>
+          <colgroup>
+            <col className="icon-col" />
+            <col className="name-col" />
+            <col className="cpu-col" />
+            <col className="ram-col" />
+            <col className="status-col" />
+            <col className="instances-col" />
+            <col className="health-col" />
+            <col className="actions-col" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className="text-left name-cell" colSpan="2">
+                <span onClick={this.sortBy.bind(null, "id")}
                     className={headerClassSet}>
-                {this.getCaret("totalMem")} Memory
-              </span>
-            </th>
-            <th className="status-cell">
-              <span onClick={this.sortBy.bind(null, "status")}
+                  Name {this.getCaret("id")}
+                </span>
+              </th>
+              <th className="text-right cpu-cell">
+                <span onClick={this.sortBy.bind(null, "totalCpus")}
                     className={headerClassSet}>
-                Status {this.getCaret("status")}
-              </span>
-            </th>
-            <th className="text-right instances-cell">
-              <span onClick={this.sortBy.bind(null, "tasksRunning")}
-                  className={headerClassSet}>
-                {this.getCaret("tasksRunning")} Running Instances
-              </span>
-            </th>
-            <th className="health-cell" colSpan="2">
-              <span onClick={this.sortBy.bind(null, "healthWeight")}
-                  className={headerClassSet}>
-                Health {this.getCaret("healthWeight")}
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className={loadingClassSet}>
-            <td className="text-center text-muted" colSpan={totalColumnSpan}>
-              Loading apps...
-            </td>
-          </tr>
-          <tr className={noAppsClassSet}>
-            <td className="text-center" colSpan={totalColumnSpan}>
-              No running apps.
-            </td>
-          </tr>
-          <tr className={noRunningAppsClassSet}>
-            <td className="text-center" colSpan={totalColumnSpan}>
-              No apps match your query.
-            </td>
-          </tr>
-          <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan={totalColumnSpan}>
-              {`Error fetching apps. ${Messages.RETRY_REFRESH}`}
-            </td>
-          </tr>
-          <tr className={unauthorizedClassSet}>
-            <td className="text-center text-danger" colSpan={totalColumnSpan}>
-              {`Error fetching apps. ${Messages.UNAUTHORIZED}`}
-            </td>
-          </tr>
-          <tr className={forbiddenClassSet}>
-            <td className="text-center text-danger" colSpan={totalColumnSpan}>
-              {`Error fetching apps. ${Messages.FORBIDDEN}`}
-            </td>
-          </tr>
-          {appNodes}
-        </tbody>
-      </table>
+                  {this.getCaret("totalCpus")} CPU
+                </span>
+              </th>
+              <th className="text-right ram-cell">
+                <span onClick={this.sortBy.bind(null, "totalMem")}
+                      className={headerClassSet}>
+                  {this.getCaret("totalMem")} Memory
+                </span>
+              </th>
+              <th className="status-cell">
+                <span onClick={this.sortBy.bind(null, "status")}
+                      className={headerClassSet}>
+                  Status {this.getCaret("status")}
+                </span>
+              </th>
+              <th className="text-right instances-cell">
+                <span onClick={this.sortBy.bind(null, "tasksRunning")}
+                    className={headerClassSet}>
+                  {this.getCaret("tasksRunning")} Running Instances
+                </span>
+              </th>
+              <th className="health-cell" colSpan="2">
+                <span onClick={this.sortBy.bind(null, "healthWeight")}
+                    className={headerClassSet}>
+                  Health {this.getCaret("healthWeight")}
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className={errorClassSet}>
+              <td className="text-center text-danger" colSpan={totalColumnSpan}>
+                {`Error fetching apps. ${Messages.RETRY_REFRESH}`}
+              </td>
+            </tr>
+            <tr className={unauthorizedClassSet}>
+              <td className="text-center text-danger" colSpan={totalColumnSpan}>
+                {`Error fetching apps. ${Messages.UNAUTHORIZED}`}
+              </td>
+            </tr>
+            <tr className={forbiddenClassSet}>
+              <td className="text-center text-danger" colSpan={totalColumnSpan}>
+                {`Error fetching apps. ${Messages.FORBIDDEN}`}
+              </td>
+            </tr>
+            {appNodes}
+          </tbody>
+        </table>
+        {this.getInlineDialog(appNodes)}
+      </div>
     );
   }
 });

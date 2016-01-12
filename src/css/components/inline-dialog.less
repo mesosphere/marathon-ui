@@ -1,0 +1,19 @@
+/* ==============
+ * Inline Dialogs
+ * ==============
+ */
+.inline-dialog {
+  align-items: center;
+  border: 1px solid @badge-bg-color;
+  border-radius: @base-spacing-unit;
+  display: flex;
+  flex-direction: column;
+  height: @inline-dialog-height;
+  justify-content: center;
+  padding: 0 @horizontal-spacing-unit*10;
+  width: @inline-dialog-width;
+
+  &.muted {
+    border-style: dashed;
+  }
+}

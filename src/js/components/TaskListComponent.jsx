@@ -4,6 +4,8 @@ var React = require("react/addons");
 
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
+
+var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
 var TaskListItemComponent = require("../components/TaskListItemComponent");
 
 var TaskListComponent = React.createClass({
@@ -89,25 +91,45 @@ var TaskListComponent = React.createClass({
     }) == null;
   },
 
+  getInlineDialog: function () {
+    var props = this.props;
+    var tasksLength = props.tasks.length;
+    var pageIsLoading = props.fetchState === States.STATE_LOADING;
+    var pageHasNoTasks = tasksLength === 0 &&
+      !pageIsLoading &&
+      props.fetchState !== States.STATE_ERROR &&
+      props.fetchState !== States.STATE_UNAUTHORIZED &&
+      props.fetchState !== States.STATE_FORBIDDEN;
+
+    if (pageIsLoading) {
+      return (
+        <CenteredInlineDialogComponent title="Loading Tasks..."
+          message="Please wait while tasks are being retrieved." />
+      );
+    }
+
+    if (pageHasNoTasks) {
+      return (
+        <CenteredInlineDialogComponent title="No Tasks Running"
+          message="Running tasks will be shown here." />
+      );
+    }
+
+    return null;
+  },
+
   render: function () {
     var props = this.props;
     var tasksLength = props.tasks.length;
     var hasHealth = !!props.hasHealth;
     var hasError = props.fetchState === States.STATE_ERROR;
-    var isUnauthorized = props.fetchState === States.STATE_UNAUTHORIZED;
+    var isUnauthorized =
+      props.fetchState === States.STATE_UNAUTHORIZED;
     var isForbidden = props.fetchState === States.STATE_FORBIDDEN;
 
     var headerClassSet = classNames({
       "clickable": true,
       "dropup": !this.state.sortDescending
-    });
-
-    var loadingClassSet = classNames({
-      "hidden": props.fetchState !== States.STATE_LOADING
-    });
-
-    var noTasksClassSet = classNames({
-      "hidden": tasksLength !== 0 || hasError || isUnauthorized || isForbidden
     });
 
     var errorClassSet = classNames({
@@ -197,19 +219,10 @@ var TaskListComponent = React.createClass({
             </tr>
           </thead>
           <tbody>
-            <tr className={noTasksClassSet}>
-              <td className="text-center" colSpan="8">
-                No tasks running.
-              </td>
-            </tr>
-            <tr className={loadingClassSet}>
-              <td className="text-center text-muted" colSpan="8">
-                Loading tasks...
-              </td>
-            </tr>
             {this.getTasks()}
           </tbody>
         </table>
+        {this.getInlineDialog()}
       </div>
     );
   }

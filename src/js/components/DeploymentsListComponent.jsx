@@ -1,10 +1,12 @@
 var classNames = require("classnames");
 var lazy = require("lazy.js");
+var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 
+var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
 var DeploymentComponent = require("../components/DeploymentComponent");
 var DeploymentStore = require("../stores/DeploymentStore");
 var DeploymentEvents = require("../events/DeploymentEvents");
@@ -110,18 +112,42 @@ var DeploymentListComponent = React.createClass({
     return null;
   },
 
+  getInlineDialog: function () {
+    var state = this.state;
+    var pageIsLoading = state.fetchState === States.STATE_LOADING;
+    var pageHasNoDeployments = !pageIsLoading &&
+      state.deployments.length === 0 &&
+      state.fetchState !== States.STATE_UNAUTHORIZED &&
+      state.fetchState !== States.STATE_FORBIDDEN;
+    var pageHasGenericError = state.fetchState === States.STATE_ERROR;
+    var pageHasUnauthorizedError =
+      state.fetchState === States.STATE_UNAUTHORIZED;
+    var pageHasForbiddenError = state.fetchState === States.STATE_FORBIDDEN;
+    var pageHasErrorMessage = state.errorMessage !== "";
+
+    if (pageIsLoading) {
+      return (
+        <CenteredInlineDialogComponent title="Loading Deployments..."
+          message="Please wait while deployments are being retrieved." />
+      );
+    }
+
+    if (pageHasNoDeployments) {
+      return (
+        <CenteredInlineDialogComponent title="No Deployments"
+          message="Active deployments will be shown here." />
+      );
+    }
+
+    return null;
+  },
+
   render: function () {
     var state = this.state;
-
-    var pageIsLoading = state.fetchState === States.STATE_LOADING;
 
     var headerClassSet = classNames({
       "clickable": true,
       "dropup": !state.sortDescending
-    });
-
-    var loadingClassSet = classNames({
-      "hidden": !pageIsLoading
     });
 
     var errorClassSet = classNames({
@@ -136,89 +162,76 @@ var DeploymentListComponent = React.createClass({
       "hidden": state.fetchState !== States.STATE_FORBIDDEN
     });
 
-    var noDeploymentsClassSet = classNames({
-      "hidden": pageIsLoading || state.deployments.length !== 0 ||
-        state.fetchState === States.STATE_UNAUTHORIZED ||
-        state.fetchState === States.STATE_FORBIDDEN
-    });
-
     var errorMessageClassSet = classNames({
       "hidden": state.errorMessage === ""
     });
 
     return (
-      <table className="table table-fixed">
-        <colgroup>
-          <col style={{width: "28%"}} />
-          <col style={{width: "18%"}} />
-          <col style={{width: "18%"}} />
-          <col style={{width: "18%"}} />
-          <col style={{width: "18%"}} />
-        </colgroup>
-        <thead>
-          <tr>
-            <th>
-              <span onClick={this.sortBy.bind(null, "id")}
-                  className={headerClassSet}>
-                Deployment ID {this.getCaret("id")}
-              </span>
-            </th>
-            <th>
-              <span onClick={this.sortBy.bind(null, "affectedAppsString")}
-                  className={headerClassSet}>
-                Affected Applications {this.getCaret("affectedAppsString")}
-              </span>
-            </th>
-            <th>
-              <span onClick={this.sortBy.bind(null, "currentActionsString")}
-                  className={headerClassSet}>
-                {this.getCaret("currentActionsString")} Action
-              </span>
-            </th>
-            <th className="text-right">
-              <span onClick={this.sortBy.bind(null, "currentStep")}
-                  className={headerClassSet}>
-                {this.getCaret("currentStep")} Progress
-              </span>
-            </th>
-            <th>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className={loadingClassSet}>
-            <td className="text-center text-muted" colSpan="5">
-              Loading deployments...
-            </td>
-          </tr>
-          <tr className={noDeploymentsClassSet}>
-            <td className="text-center" colSpan="5">
-              No deployments in progress.
-            </td>
-          </tr>
-          <tr className={errorMessageClassSet}>
-            <td className="text-center text-danger" colSpan="5">
-              {state.errorMessage}
-            </td>
-          </tr>
-          <tr className={errorClassSet}>
-            <td className="text-center text-danger" colSpan="5">
-              {`Error fetching deployments. ${Messages.RETRY_REFRESH}`}
-            </td>
-          </tr>
-          <tr className={unauthorizedClassSet}>
-            <td className="text-center text-danger" colSpan="6">
-              {`Error fetching deployments. ${Messages.UNAUTHORIZED}`}
-            </td>
-          </tr>
-          <tr className={forbiddenClassSet}>
-            <td className="text-center text-danger" colSpan="6">
-              {`Error fetching deployments. ${Messages.FORBIDDEN}`}
-            </td>
-          </tr>
-          {this.getDeploymentNodes()}
-        </tbody>
-      </table>
+      <div>
+        <table className="table table-fixed">
+          <colgroup>
+            <col style={{width: "28%"}} />
+            <col style={{width: "18%"}} />
+            <col style={{width: "18%"}} />
+            <col style={{width: "18%"}} />
+            <col style={{width: "18%"}} />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>
+                <span onClick={this.sortBy.bind(null, "id")}
+                    className={headerClassSet}>
+                  Deployment ID {this.getCaret("id")}
+                </span>
+              </th>
+              <th>
+                <span onClick={this.sortBy.bind(null, "affectedAppsString")}
+                    className={headerClassSet}>
+                  Affected Applications {this.getCaret("affectedAppsString")}
+                </span>
+              </th>
+              <th>
+                <span onClick={this.sortBy.bind(null, "currentActionsString")}
+                    className={headerClassSet}>
+                  {this.getCaret("currentActionsString")} Action
+                </span>
+              </th>
+              <th className="text-right">
+                <span onClick={this.sortBy.bind(null, "currentStep")}
+                    className={headerClassSet}>
+                  {this.getCaret("currentStep")} Progress
+                </span>
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className={errorMessageClassSet}>
+              <td className="text-center text-danger" colSpan="5">
+                {state.errorMessage}
+              </td>
+            </tr>
+            <tr className={errorClassSet}>
+              <td className="text-center text-danger" colSpan="5">
+                {`Error fetching deployments. ${Messages.RETRY_REFRESH}`}
+              </td>
+            </tr>
+            <tr className={unauthorizedClassSet}>
+              <td className="text-center text-danger" colSpan="6">
+                {`Error fetching deployments. ${Messages.UNAUTHORIZED}`}
+              </td>
+            </tr>
+            <tr className={forbiddenClassSet}>
+              <td className="text-center text-danger" colSpan="6">
+                {`Error fetching deployments. ${Messages.FORBIDDEN}`}
+              </td>
+            </tr>
+            {this.getDeploymentNodes()}
+          </tbody>
+        </table>
+        {this.getInlineDialog()}
+      </div>
     );
   }
 });
