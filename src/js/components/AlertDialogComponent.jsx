@@ -29,16 +29,9 @@ var AlertDialogComponent = React.createClass({
     React.findDOMNode(this.refs.button).focus();
   },
 
-  handleAccept: function () {
-    this.props.onAccept();
-  },
-
-  handleDismiss: function () {
-    this.props.onDismiss();
-  },
-
   render: function () {
-    var data = this.props.data;
+    var props = this.props;
+    var data = props.data;
     var className = classNames("dialog", data.severity);
 
     return (
@@ -47,7 +40,7 @@ var AlertDialogComponent = React.createClass({
           className={className}
           dismissOnClickOutside={true}
           ref="modalComponent"
-          onDestroy={this.handleDismiss}>
+          onDestroy={props.onDismiss}>
         <div className="modal-header">
           {data.title}
         </div>
@@ -59,7 +52,7 @@ var AlertDialogComponent = React.createClass({
             className="btn btn-lg btn-success btn-inverse"
             ref="button"
             type="button"
-            onClick={this.handleAccept}>
+            onClick={props.onAccept}>
             {data.actionButtonLabel}
           </button>
         </div>

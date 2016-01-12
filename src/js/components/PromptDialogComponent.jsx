@@ -36,10 +36,6 @@ var PromptDialogComponent = React.createClass({
     this.props.onAccept(React.findDOMNode(this.refs.input).value);
   },
 
-  handleDismiss: function () {
-    this.props.onDismiss();
-  },
-
   handleKeyUp: function (event) {
     if (event.keyCode === 13) {
       this.handleAccept();
@@ -47,7 +43,8 @@ var PromptDialogComponent = React.createClass({
   },
 
   render: function () {
-    var data = this.props.data;
+    var props = this.props;
+    var data = props.data;
     var className = classNames("dialog", data.severity);
 
     return (
@@ -56,7 +53,7 @@ var PromptDialogComponent = React.createClass({
           className={className}
           dismissOnClickOutside={true}
           ref="modalComponent"
-          onDestroy={this.handleDismiss}>
+          onDestroy={props.onDismiss}>
         <div className="modal-header">
           {data.title}
         </div>
@@ -77,7 +74,7 @@ var PromptDialogComponent = React.createClass({
           <button
             className="btn btn-lg btn-default btn-inverse"
             type="button"
-            onClick={this.handleDismiss}>
+            onClick={props.onDismiss}>
             Cancel
           </button>
         </div>

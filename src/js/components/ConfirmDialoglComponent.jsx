@@ -29,16 +29,9 @@ var ConfirmDialogComponent = React.createClass({
     React.findDOMNode(this.refs.acceptButton).focus();
   },
 
-  handleAccept: function () {
-    this.props.onAccept();
-  },
-
-  handleDismiss: function () {
-    this.props.onDismiss();
-  },
-
   render: function () {
-    var data = this.props.data;
+    var props = this.props;
+    var data = props.data;
     var className = classNames("dialog", data.severity);
 
     return (
@@ -47,7 +40,7 @@ var ConfirmDialogComponent = React.createClass({
           className={className}
           dismissOnClickOutside={true}
           ref="modalComponent"
-          onDestroy={this.handleDismiss}>
+          onDestroy={props.onDismiss}>
         <div className="modal-header">
           {data.title}
         </div>
@@ -60,14 +53,14 @@ var ConfirmDialogComponent = React.createClass({
             ref="acceptButton"
             tabIndex="2"
             type="button"
-            onClick={this.handleAccept}>
+            onClick={props.onAccept}>
             {data.actionButtonLabel}
           </button>
           <button
             className="btn btn-lg btn-default btn-inverse"
             tabIndex="1"
             type="button"
-            onClick={this.handleDismiss}>
+            onClick={props.onDismiss}>
             Cancel
           </button>
         </div>
