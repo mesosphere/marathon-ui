@@ -6,7 +6,7 @@ var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 
 var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
-var TaskListItemComponent = require("../components/TaskListItemComponent");
+var TaskListItemComponent = require("./TaskListItemComponent");
 
 var TaskListComponent = React.createClass({
   displayName: "TaskListComponent",
