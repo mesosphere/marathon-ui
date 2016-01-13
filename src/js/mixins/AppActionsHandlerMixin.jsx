@@ -47,9 +47,9 @@ var AppActionsHandlerMixin = {
   },
 
   addResetDelayListener: function () {
-    AppsStore.once(AppsEvents.RESET_DELAY,
+    QueueStore.once(QueueEvents.RESET_DELAY,
       this.onResetDelaySuccess);
-    AppsStore.once(AppsEvents.RESET_DELAY_ERROR,
+    QueueStore.once(QueueEvents.RESET_DELAY_ERROR,
       this.onResetDelayError);
   },
 
