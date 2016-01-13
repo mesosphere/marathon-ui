@@ -14,6 +14,7 @@
 - \#2844 - Show error icon for failing Mesos logs
 - \#2511 - Improve UI error messages
 - \#2831 - Convert alert, confirm and prompt dialogs to new design
+- \#2909 - Update dialog messages
 
 ### Fixed
 - \#2892 - Version in task detail component shouldn't be localised
