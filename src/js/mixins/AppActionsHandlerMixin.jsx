@@ -12,6 +12,26 @@ var QueueActions = require("../actions/QueueActions");
 var QueueEvents = require("../events/QueueEvents");
 var QueueStore = require("../stores/QueueStore");
 
+var bindOneTimeEvents = function (store, resolverEvents, handlers) {
+  var eventHandlers = [];
+
+  resolverEvents.forEach((event, index) => {
+    eventHandlers.push(function (...args) {
+      if (handlers[index] != null) {
+        handlers[index](...args);
+      }
+
+      eventHandlers.forEach((eventHandler, i) => {
+        store.removeListener(resolverEvents[i], eventHandler);
+      });
+
+      eventHandlers = undefined;
+    });
+
+    store.on(event, eventHandlers[index]);
+  });
+}
+
 var AppActionsHandlerMixin = {
   componentWillMount: function () {
     if (this.props.model == null) {
@@ -22,35 +42,58 @@ var AppActionsHandlerMixin = {
   },
 
   addScaleAppListener: function () {
-    AppsStore.once(AppsEvents.SCALE_APP_ERROR,
-      this.onScaleAppError);
+    bindOneTimeEvents(AppsStore, [
+      AppsEvents.SCALE_APP_ERROR,
+      AppsEvents.SCALE_APP
+    ], [
+      this.onScaleAppError
+    ]);
   },
 
   addScaleGroupListener: function () {
-    GroupsStore.once(GroupsEvents.SCALE_ERROR,
-      this.onScaleGroupError);
+    bindOneTimeEvents(GroupsStore, [
+      GroupsEvents.SCALE_ERROR,
+      GroupsEvents.SCALE_SUCCESS
+    ], [
+      this.onScaleGroupError
+    ]);
   },
 
   addRestartAppListener: function () {
-    AppsStore.once(AppsEvents.RESTART_APP_ERROR,
-      this.onRestartAppError);
+    bindOneTimeEvents(AppsStore, [
+      AppsEvents.RESTART_APP_ERROR,
+      AppsEvents.RESTART_APP
+    ], [
+      this.onRestartAppError
+    ]);
   },
 
   addDeleteAppListener: function () {
-    AppsStore.once(AppsEvents.DELETE_APP_ERROR,
-      this.onDeleteAppError);
+    bindOneTimeEvents(AppsStore, [
+      AppsEvents.DELETE_APP_ERROR,
+      AppsEvents.DELETE_APP
+    ], [
+      this.onDeleteAppError
+    ]);
   },
 
   addDeleteGroupListener: function () {
-    GroupsStore.once(GroupsEvents.DELETE_ERROR,
-      this.onDeleteGroupError);
+    bindOneTimeEvents(GroupsStore, [
+      GroupsEvents.DELETE_ERROR,
+      GroupsEvents.DELETE_SUCCESS
+    ], [
+      this.onDeleteGroupError
+    ]);
   },
 
   addResetDelayListener: function () {
-    QueueStore.once(QueueEvents.RESET_DELAY,
-      this.onResetDelaySuccess);
-    QueueStore.once(QueueEvents.RESET_DELAY_ERROR,
-      this.onResetDelayError);
+    bindOneTimeEvents(QueueStore, [
+      QueueEvents.RESET_DELAY_ERROR,
+      QueueEvents.RESET_DELAY
+    ], [
+      this.onResetDelayError,
+      this.onResetDelaySuccess
+    ]);
   },
 
   handleDestroyApp: function (event) {
