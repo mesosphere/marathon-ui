@@ -30,7 +30,19 @@ var bindOneTimeEvents = function (store, resolverEvents, handlers) {
 
     store.on(event, eventHandlers[index]);
   });
-}
+};
+
+var callErrorDialog = function (settings) {
+  var message = Messages[settings.statusCode] ||
+    settings.errorMessage.message ||
+    settings.errorMessage;
+
+  DialogActions.alert({
+    message: `${settings.messagePrefix}${message}`,
+    severity: DialogSeverity.DANGER,
+    title: settings.title
+  });
+};
 
 var AppActionsHandlerMixin = {
   componentWillMount: function () {
@@ -281,58 +293,31 @@ var AppActionsHandlerMixin = {
 
         AppsActions.scaleApp(appId, instances, true);
       });
-    } else if (statusCode === 401) {
-      DialogActions.alert({
-        message: `Error scaling ${appId}: ${Messages.UNAUTHORIZED}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Scaling Application"
-      });
-    } else if (statusCode === 403) {
-      DialogActions.alert({
-        message: `Error scaling ${appId}: ${Messages.FORBIDDEN}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Scaling Application"
-      });
-    } else {
-      DialogActions.alert({
-        message: `Error scaling ${appId}:
-          ${errorMessage.message || errorMessage}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Scaling Application"
-      });
+
+      return;
     }
+
+    callErrorDialog({
+      errorMessage: errorMessage,
+      messagePrefix: `Error scaling ${appId}: `,
+      statusCode: statusCode,
+      title: "Error Scaling Application"
+    });
   },
 
   onScaleGroupError: function (errorMessage, statusCode) {
-    var groupId = this.props.model.id;
-
-    if (statusCode === 401) {
-      DialogActions.alert({
-        message: `Error scaling ${groupId}: ${Messages.UNAUTHORIZED}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Scaling Group"
-      });
-    } else if (statusCode === 403) {
-      DialogActions.alert({
-        message: `Error scaling ${groupId}: ${Messages.FORBIDDEN}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Scaling Group"
-      });
-    } else {
-      DialogActions.alert({
-        message: `Error scaling ${groupId}:
-          ${errorMessage.message || errorMessage}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Scaling Group"
-      });
-    }
+    callErrorDialog({
+      errorMessage: errorMessage,
+      messagePrefix: `Error scaling ${this.props.model.id}: `,
+      statusCode: statusCode,
+      title: "Error Scaling Group"
+    });
   },
 
   onRestartAppError: function (errorMessage, statusCode) {
     var appId = this.props.model.id;
 
     if (statusCode === 409) {
-
       const dialogId = DialogActions.confirm({
         actionButtonLabel: "Stop Current Deployment and Restart",
         message: `In order to restart ${appId}, the current deployment will have
@@ -347,108 +332,49 @@ var AppActionsHandlerMixin = {
 
         AppsActions.restartApp(appId, true);
       });
-    } else if (statusCode === 401) {
-      DialogActions.alert({
-        message: `Error restating ${appId}: ${Messages.UNAUTHORIZED}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Restarting Application"
-      });
-    } else if (statusCode === 403) {
-      DialogActions.alert({
-        message: `Error restating ${appId}: ${Messages.FORBIDDEN}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Restarting Application"
-      });
-    } else {
-      DialogActions.alert({
-        message: `Error restating ${appId}:
-          ${errorMessage.message || errorMessage}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Restarting Application"
-      });
+
+      return;
     }
+
+    callErrorDialog({
+      errorMessage: errorMessage,
+      messagePrefix: `Error restarting ${appId}: `,
+      statusCode: statusCode,
+      title: "Error Restarting Application"
+    });
   },
 
   onDeleteAppError: function (errorMessage, statusCode) {
-    var appId = this.props.model.id;
-
-    if (statusCode === 401) {
-      DialogActions.alert({
-        message: `Error destroying ${appId}: ${Messages.UNAUTHORIZED}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Destroying Application"
-      });
-    } else if (statusCode === 403) {
-      DialogActions.alert({
-        message: `Error destroying ${appId}: ${Messages.FORBIDDEN}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Destroying Application"
-      });
-    } else {
-      DialogActions.alert({
-        message: `Error destroying ${appId}:
-          ${errorMessage.message || errorMessage}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Destroying Application"
-      });
-    }
+    callErrorDialog({
+      errorMessage: errorMessage,
+      messagePrefix: `Error destroying ${this.props.model.id}: `,
+      statusCode: statusCode,
+      title: "Error Destroying Application"
+    });
   },
 
   onDeleteGroupError: function (errorMessage, statusCode) {
-    var groupId = this.props.model.id;
-
-    if (statusCode === 401) {
-      DialogActions.alert({
-        message: `Error destroying ${groupId}: ${Messages.UNAUTHORIZED}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Destroying Group"
-      });
-    } else if (statusCode === 403) {
-      DialogActions.alert({
-        message: `Error destroying ${groupId}: ${Messages.FORBIDDEN}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Destroying Group"
-      });
-    } else {
-      DialogActions.alert({
-        message: `Error destroying ${groupId}:
-          ${errorMessage.message || errorMessage}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Destroying Group"
-      });
-    }
+    callErrorDialog({
+      errorMessage: errorMessage,
+      messagePrefix: `Error destroying ${this.props.model.id}: `,
+      statusCode: statusCode,
+      title: "Error Destroying Group"
+    });
   },
 
   onResetDelayError: function (errorMessage, statusCode) {
-    var appId = this.props.model.id;
-
-    if (statusCode === 401) {
-      DialogActions.alert({
-        message: `Error resetting ${appId} delay: ${Messages.UNAUTHORIZED}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Resetting Delay"
-      });
-    } else if (statusCode === 403) {
-      DialogActions.alert({
-        message: `Error resetting ${appId} delay: ${Messages.FORBIDDEN}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Resetting Delay"
-      });
-    } else {
-      DialogActions.alert({
-        message: `Error resetting ${appId} delay:
-          ${errorMessage.message || errorMessage}`,
-        severity: DialogSeverity.DANGER,
-        title: "Error Resetting Delay"
-      });
-    }
+    callErrorDialog({
+      errorMessage: errorMessage,
+      messagePrefix: `Error resetting ${this.props.model.id} delay: `,
+      statusCode: statusCode,
+      title: "Error Resetting Delay"
+    });
   },
 
   onResetDelaySuccess: function () {
-    var appId = this.props.model.id;
-
     DialogActions.alert({
-      message: `Application Delay for ${appId} was reset successfully.`,
+      message:
+        `Application Delay for ${this.props.model.id} was reset successfully.`,
       title: "Reset Successful"
     });
   }
