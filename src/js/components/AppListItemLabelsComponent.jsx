@@ -28,26 +28,6 @@ var AppListItemLabelsComponent = React.createClass({
     };
   },
 
-  componentDidMount: function () {
-    var id = React.findDOMNode(this.refs.labelsDropdown)
-      .attributes["data-reactid"].value;
-    _initialTopMargins[id] = null;
-    _reversedDropdowns[id] = false;
-  },
-
-  componentDidUpdate: function () {
-    if (this.state.isDropdownVisible === true) {
-      this.recalculateDropdownPosition();
-    }
-  },
-
-  componentWillUnmount: function () {
-    var id = React.findDOMNode(this.refs.labelsDropdown)
-      .attributes["data-reactid"].value;
-    delete _initialTopMargins[id];
-    delete _reversedDropdowns[id];
-  },
-
   shouldComponentUpdate(nextProps, nextState) {
     return this.didPropsChange(nextProps, nextState);
   },
@@ -69,41 +49,6 @@ var AppListItemLabelsComponent = React.createClass({
     this.setState({
       isDropdownVisible: !this.state.isDropdownVisible
     });
-  },
-
-  recalculateDropdownPosition: function () {
-    if (global.window == null) {
-      return;
-    }
-
-    let dropdownNode = React.findDOMNode(this.refs.labelsDropdown);
-
-    let id = dropdownNode.attributes["data-reactid"].value;
-
-    // First time the dropdown becomes visible: get its initial top offset
-    if (_initialTopMargins[id] == null) {
-      _initialTopMargins[id] = Math.abs(dropdownNode.offsetTop);
-    }
-
-    let height = dropdownNode.offsetHeight;
-    let viewportHeight = document.documentElement.clientHeight;
-    let offsetTop = 0;
-
-    if (_reversedDropdowns[id] === true) {
-      offsetTop = dropdownNode.getBoundingClientRect().bottom + height;
-    } else {
-      offsetTop = dropdownNode.getBoundingClientRect().top + height;
-    }
-
-    if (offsetTop >= viewportHeight) {
-      const marginTop = height - _initialTopMargins[id] * 2;
-      dropdownNode.style.marginTop = `-${marginTop}px`;
-      _reversedDropdowns[id] = true;
-    } else {
-      const marginTop = _initialTopMargins[id];
-      dropdownNode.style.marginTop = `-${marginTop}px`;
-      _reversedDropdowns[id] = false;
-    }
   },
 
   render: function () {

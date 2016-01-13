@@ -13,6 +13,7 @@ var AppStatusComponent = require("../components/AppStatusComponent");
 var BreadcrumbComponent = require("../components/BreadcrumbComponent");
 var Util = require("../helpers/Util");
 var PathUtil = require("../helpers/PathUtil");
+var PopoverComponent = require("./PopoverComponent");
 var DOMUtil = require("../helpers/DOMUtil");
 
 var AppListItemComponent = React.createClass({
@@ -60,8 +61,6 @@ var AppListItemComponent = React.createClass({
     if (this.didPropsChange(prevProps)) {
       this.updateNumberOfVisibleLabels();
     }
-
-    this.recalculateDropdownPosition();
   },
 
   componentWillUnmount: function () {
@@ -218,10 +217,6 @@ var AppListItemComponent = React.createClass({
   },
 
   getDropdownMenu: function () {
-    if (!this.state.isActionsDropdownActivated) {
-      return null;
-    }
-
     let model = this.props.model;
 
     let disabledClassSet = classNames({
@@ -232,13 +227,10 @@ var AppListItemComponent = React.createClass({
       "hidden": model.status !== AppStatus.DELAYED
     });
 
-    let dropdownClassName = classNames({
-      top: this.state.actionsDropdownTopAligned
-    }, "dropdown");
-
     if (this.props.model.isGroup) {
       return (
-        <div className={dropdownClassName} ref="dropdown">
+        <PopoverComponent visible={this.state.isActionsDropdownActivated}
+            className="dropdown" ref="dropdown">
           <ul className="dropdown-menu" ref="dropdown-menu">
             <li className={disabledClassSet}>
               <a href="#" onClick={this.handleScaleGroup}>
@@ -256,12 +248,13 @@ var AppListItemComponent = React.createClass({
               </a>
             </li>
           </ul>
-        </div>
+        </PopoverComponent>
       );
     }
 
     return (
-      <div className={dropdownClassName} ref="dropdown">
+      <PopoverComponent visible={this.state.isActionsDropdownActivated}
+          className="dropdown" ref="dropdown">
         <ul className="dropdown-menu" ref="dropdown-menu">
           <li>
             <a href="#" onClick={this.handleScaleApp}>
@@ -289,7 +282,7 @@ var AppListItemComponent = React.createClass({
             </a>
           </li>
         </ul>
-      </div>
+      </PopoverComponent>
     );
   },
 
@@ -336,33 +329,6 @@ var AppListItemComponent = React.createClass({
         <AppStatusComponent model={this.props.model} />
       </td>
     );
-  },
-
-  recalculateDropdownPosition: function () {
-    if (global.window == null) {
-      return;
-    }
-
-    let componentNode = React.findDOMNode(this.refs.dropdown);
-
-    if (componentNode == null) {
-      return;
-    }
-
-    let topAligned = false;
-
-    let contentNode = React.findDOMNode(this.refs["dropdown-menu"]);
-    let componentPosition = componentNode.getBoundingClientRect();
-    let contentHeight = contentNode.clientHeight;
-
-    if (componentPosition.bottom + contentHeight >=
-        document.documentElement.clientHeight) {
-      topAligned = true;
-    }
-
-    if (topAligned !== this.state.actionsDropdownTopAligned) {
-      this.setState({actionsDropdownTopAligned: topAligned});
-    }
   },
 
   render: function () {

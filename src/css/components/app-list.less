@@ -109,16 +109,31 @@
     }
 
     &.actions-cell {
-      .dropdown {
+      .dropdown.popover {
         margin: 0;
 
-        .dropdown-menu {
+        .content {
+          background-color: transparent;
+          border-radius: 0;
+          min-width: auto;
+          padding: 0;
           left: 100%;
-          transform: translateX(-100%);
+          transform: translate(-100%, 100%);
+
+
+          &:before, &:after {
+            display: none;
+          }
         }
 
-        &.top .dropdown-menu {
-          transform: translate(-100%, calc(-100% - @base-spacing-unit*2));
+        .dropdown-menu {
+          left: auto;
+          transform: none;
+          position: relative;
+        }
+
+        &.top .content {
+          transform: translate(-100%, calc(-@base-spacing-unit*2));
         }
       }
 
