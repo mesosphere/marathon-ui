@@ -141,6 +141,14 @@
       &:hover {
         background-color: lighten(@modal-dialog-warning-color,10%);
         border-color: lighten(@modal-dialog-warning-color,10%);
+
+        &:focus{
+          outline-color: lighten(@modal-dialog-warning-color,10%);
+        }
+      }
+
+      &:focus{
+        outline-color: @modal-dialog-warning-color;
       }
     }
   }
@@ -161,6 +169,14 @@
       &:hover {
         background-color: lighten(@modal-dialog-danger-color,10%);
         border-color: lighten(@modal-dialog-danger-color,10%);
+
+        &:focus{
+          outline-color: lighten(@modal-dialog-danger-color,10%);
+        }
+      }
+
+      &:focus{
+        outline-color: @modal-dialog-danger-color;
       }
     }
   }
