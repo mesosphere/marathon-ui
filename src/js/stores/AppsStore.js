@@ -275,7 +275,8 @@ AppDispatcher.register(function (action) {
       );
       break;
     case AppsEvents.SCALE_APP:
-      AppsStore.emit(AppsEvents.SCALE_APP);
+      AppsStore.emit(AppsEvents.SCALE_APP, action.data.body,
+        action.appId, action.instances);
       break;
     case AppsEvents.SCALE_APP_ERROR:
       AppsStore.emit(AppsEvents.SCALE_APP_ERROR, action.data.body,

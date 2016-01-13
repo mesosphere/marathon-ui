@@ -6,8 +6,7 @@ var Moment = require("moment");
 var AppsStore = require("../stores/AppsStore");
 var HealthStatus = require("../constants/HealthStatus");
 var TaskStatus = require("../constants/TaskStatus");
-var TaskFileDownloadComponent =
-  require("../components/TaskFileDownloadComponent");
+var TaskFileDownloadComponent = require("./TaskFileDownloadComponent");
 
 function joinNodes(nodes, separator = ", ") {
   var lastIndex = nodes.length - 1;
