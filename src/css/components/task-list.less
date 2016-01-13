@@ -14,4 +14,43 @@
   .unknown {
     color: @task-health-unknown-color;
   }
+
+  .placeholder-top {
+    height: @base-font-size;
+    max-width: 300px;
+    width: 80%;
+    .animated-placeholder;
+  }
+  .placeholder-bottom {
+    height: @base-font-size;
+    margin-top: 4px;
+    max-width: 120px;
+    width: 55%;
+    .animated-placeholder;
+  }
+
+  @keyframes placeHolderShimmer{
+    0%{
+      background-position: -468px 0
+    }
+    100%{
+      background-position: 468px 0
+    }
+  }
+
+  .animated-placeholder {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: linear-gradient(
+      to right,
+      @table-header-color 8%,
+      darken(@table-text-color,20%) 16%,
+      @table-header-color 33%
+    );
+    background-size: 800px 200px;
+    position: relative;
+  }
 }
