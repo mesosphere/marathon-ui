@@ -137,7 +137,8 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("g v", function () {
-      DialogActions.alert(`The UI version is ${config.version}`);
+      DialogActions.alert({message:`You're running version ${config.version}.`,
+        title: "Marathon UI"});
     });
 
     Mousetrap.bind("shift+,", function () {

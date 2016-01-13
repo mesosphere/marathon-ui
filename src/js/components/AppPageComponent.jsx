@@ -12,6 +12,7 @@ var AppDebugInfoComponent = require("../components/AppDebugInfoComponent");
 var AppVersionListComponent = require("../components/AppVersionListComponent");
 var DialogActions = require("../actions/DialogActions");
 var DialogStore = require("../stores/DialogStore");
+var DialogSeverity = require("../constants/DialogSeverity");
 var HealthStatus = require("../constants/HealthStatus");
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
@@ -164,23 +165,39 @@ var AppPageComponent = React.createClass({
   },
 
   onDeleteTaskError: function (errorMessage, statusCode, taskIds) {
+    var appId = this.state.appId;
     if (statusCode === 409) {
-      let appId = this.state.appId;
-      const dialogId = DialogActions.
-      confirm(`Failed to kill task and scale ${appId}. If you want to stop any
-        current deployment of the app and force a new one to kill the task and
-        scale it, press the 'Kill and scale forcefully' button.`,
-          "Kill and scale forcefully");
+      const dialogId = DialogActions.confirm({
+        actionButtonLabel: "Stop Current Deployment and Scale",
+        message: `In order to the kill the tasks and scale the ${appId} to a new
+          number of instances, the current deployment will have to be forcefully
+          stopped, and a new one started. Please be cautious, as this could
+          result in unwanted states.`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Killing Task and Scaling Application"
+      });
+
       DialogStore.handleUserResponse(dialogId, function () {
         TasksActions.deleteTasksAndScale(appId, taskIds, true);
       });
     } else if (statusCode === 401) {
-      DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
+      DialogActions.alert({
+        message: `Error scaling ${appId}: ${Messages.UNAUTHORIZED}`,
+        severity: DialogSeverity.DANGER,
+        title:"Error Killing Task and Scaling Application"
+      });
     } else if (statusCode === 403) {
-      DialogActions.alert(`Not scaling: ${Messages.FORBIDDEN}`);
+      DialogActions.alert({
+        message: `Error scaling ${appId}: ${Messages.FORBIDDEN}`,
+        severity: DialogSeverity.DANGER,
+        title:"Error Killing Task and Scaling Application"
+      });
     } else {
-      DialogActions.alert(`Not scaling:
-          ${errorMessage.message || errorMessage}`);
+      DialogActions.alert({
+        message: `Error scaling: ${errorMessage.message || errorMessage}`,
+        severity: DialogSeverity.DANGER,
+        title:"Error Killing Task and Scaling Application"
+      });
     }
   },
 
