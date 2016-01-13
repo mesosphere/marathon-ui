@@ -1,6 +1,7 @@
 var React = require("react/addons");
 var classNames = require("classnames");
 
+var DialogSeverity = require("../constants/DialogSeverity");
 var Util = require("../helpers/Util");
 var ModalComponent = require("../components/ModalComponent");
 
@@ -26,7 +27,9 @@ var AlertDialogComponent = React.createClass({
   },
 
   componentDidMount: function () {
-    React.findDOMNode(this.refs.button).focus();
+    if (this.props.data.severity === DialogSeverity.INFO) {
+      React.findDOMNode(this.refs.button).focus();
+    }
   },
 
   render: function () {
