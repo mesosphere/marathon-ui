@@ -363,9 +363,17 @@ var AppListComponent = React.createClass({
     var pageHasNoMatchingApps = pageHasApps && appNodes.length === 0;
 
     if (pageIsLoading) {
+      let message = "Please wait while applications are being retrieved";
+      let title = "Loading Applications...";
+
       return (
-        <CenteredInlineDialogComponent title="Loading Applications..."
-          message="Please wait while applications are being retrieved." />
+        <CenteredInlineDialogComponent>
+          <div>
+            <i className="icon icon-large loading"></i>
+            <h3 className="h3">{title}</h3>
+            <p className="muted">{message}</p>
+          </div>
+        </CenteredInlineDialogComponent>
       );
     }
 

@@ -126,9 +126,17 @@ var DeploymentListComponent = React.createClass({
     var pageHasErrorMessage = state.errorMessage !== "";
 
     if (pageIsLoading) {
+      let message = "Please wait while deployments are being retrieved";
+      let title = "Loading Deployments...";
+
       return (
-        <CenteredInlineDialogComponent title="Loading Deployments..."
-          message="Please wait while deployments are being retrieved." />
+        <CenteredInlineDialogComponent>
+          <div>
+            <i className="icon icon-large loading"></i>
+            <h3 className="h3">{title}</h3>
+            <p className="muted">{message}</p>
+          </div>
+        </CenteredInlineDialogComponent>
       );
     }
 
