@@ -3,6 +3,7 @@ var AppsEvents = require("../events/AppsEvents");
 var AppsStore = require("../stores/AppsStore");
 var DialogActions = require("../actions/DialogActions");
 var DialogStore = require("../stores/DialogStore");
+var DialogSeverity = require("../constants/DialogSeverity");
 var GroupsActions = require("../actions/GroupsActions");
 var GroupsEvents = require("../events/GroupsEvents");
 var GroupsStore = require("../stores/GroupsStore");
@@ -57,9 +58,13 @@ var AppActionsHandlerMixin = {
 
     var appId = this.props.model.id;
 
-    const dialogId =
-      DialogActions.confirm(`Destroy app '${appId}'? This is irreversible.`,
-        "Destroy");
+    const dialogId = DialogActions.confirm({
+      actionButtonLabel: "Destroy Application",
+      message: `Are you sure you want to destroy ${appId}. Please note this
+        action is irreversible.`,
+      severity: DialogSeverity.DANGER,
+      title: "Destroy Application"
+    });
 
     DialogStore.handleUserResponse(dialogId, () => {
       this.addDeleteAppListener();
@@ -73,10 +78,12 @@ var AppActionsHandlerMixin = {
 
     var groupId = this.props.model.id;
 
-    const dialogId =
-      DialogActions.confirm(`Destroy group '${groupId}' with all it's ` +
-        `contents? This is irreversible.`,
-        "Destroy");
+    const dialogId = DialogActions.confirm({
+      actionButtonLabel: "Destroy Group",
+      message: `Are you sure you want to destroy ${groupId} including all it's
+        applications. Please note this action is irreversible.`,
+      severity: DialogSeverity.DANGER,
+      title: "Destroy Group"});
 
     DialogStore.handleUserResponse(dialogId, () => {
       this.addDeleteGroupListener();
@@ -94,8 +101,11 @@ var AppActionsHandlerMixin = {
   handleRestartApp: function () {
     var appId = this.props.model.id;
 
-    const dialogId =
-      DialogActions.confirm(`Restart app '${appId}'?`, "Restart");
+    const dialogId = DialogActions.confirm({
+      actionButtonLabel: "Restart Application",
+      message: `Are you sure you want to restart ${appId}?`,
+      title: "Restart Application"
+    });
 
     DialogStore.handleUserResponse(dialogId, () => {
       this.addRestartAppListener();
@@ -107,13 +117,16 @@ var AppActionsHandlerMixin = {
   handleScaleApp: function () {
     var model = this.props.model;
 
-    const dialogId =
-      DialogActions.prompt("Scale to how many instances?",
-          model.instances.toString(), {
-            type: "number",
-            min: "0"
-          }
-      );
+    const dialogId = DialogActions.prompt({
+      actionButtonLabel:"Scale Application",
+      inputProperties: {
+        defaultValue: model.instances.toString(),
+        type: "number",
+        min: "0"
+      },
+      message: "How many instances would you like to scale to?",
+      title: "Scale Application"
+    });
 
     DialogStore.handleUserResponse(dialogId, instancesString => {
       if (instancesString != null && instancesString !== "") {
@@ -133,14 +146,17 @@ var AppActionsHandlerMixin = {
       return;
     }
 
-    const dialogId =
-      DialogActions.prompt("Please provide a scaling factor for all " +
-          "applications in this group.",
-        "1.0", {
-          type: "number",
-          min: "0"
-        }
-      );
+    const dialogId = DialogActions.prompt({
+      actionButtonLabel:"Scale Group",
+      inputProperties: {
+        defaultValue: "1.0",
+        type: "number",
+        min: "0"
+      },
+      message: "By which factor would you like to scale all applications " +
+        "within this group?",
+      title: "Scale Group"
+    });
 
     DialogStore.handleUserResponse(dialogId, scaleByString => {
       if (scaleByString != null && scaleByString !== "") {
@@ -162,14 +178,19 @@ var AppActionsHandlerMixin = {
       return;
     }
 
-    const dialogId =
-      DialogActions.confirm("Suspend app by scaling to 0 instances?",
-        "Suspend");
+    let appId = model.id;
+
+    const dialogId = DialogActions.confirm({
+      actionButtonLabel: "Suspend Application",
+      message: `Are you sure you want to suspend ${appId} by scaling to 0
+      instances?`,
+      title: "Suspend Application"
+    });
 
     DialogStore.handleUserResponse(dialogId, () => {
       this.addScaleAppListener();
 
-      AppsActions.scaleApp(model.id, 0);
+      AppsActions.scaleApp(appId, 0);
     });
   },
 
@@ -182,25 +203,35 @@ var AppActionsHandlerMixin = {
       return;
     }
 
-    const dialogId =
-      DialogActions.confirm("Suspend all apps by scaling the group to 0?",
-        "Suspend");
+    let groupId = model.id;
+
+    const dialogId = DialogActions.confirm({
+      actionButtonLabel: "Suspend Group",
+      message: `Are you sure you want to suspend all application within
+        ${groupId} by scaling to 0 instances?`,
+      title: "Suspend Group"
+    });
 
     DialogStore.handleUserResponse(dialogId, () => {
       this.addScaleGroupListener();
 
-      GroupsActions.scaleGroup(model.id, 0);
+      GroupsActions.scaleGroup(groupId, 0);
     });
   },
 
   onScaleAppError: function (errorMessage, statusCode, instances) {
-    if (statusCode === 409) {
-      let appId = this.props.model.id;
+    var appId = this.props.model.id;
 
-      const dialogId = DialogActions.
-        confirm(`There is a deployment in progress that changes ${appId}.
-          If you want to stop this deployment and force a new one to scale it,
-          press the 'Scale forcefully' button.`, "Scale forcefully");
+    if (statusCode === 409) {
+      const dialogId = DialogActions.confirm({
+        actionButtonLabel: "Stop Current Deployment and Scale",
+        message: `In order to scale ${appId} to a new number of instances, the
+          current deployment will have to be forcefully stopped, and a new
+          one started. Please be cautious, as this could result in unwanted
+          states.`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Scaling Application"
+      });
 
       DialogStore.handleUserResponse(dialogId, () => {
         this.addScaleAppListener();
@@ -208,34 +239,65 @@ var AppActionsHandlerMixin = {
         AppsActions.scaleApp(appId, instances, true);
       });
     } else if (statusCode === 401) {
-      DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
+      DialogActions.alert({
+        message: `Error scaling ${appId}: ${Messages.UNAUTHORIZED}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Scaling Application"
+      });
     } else if (statusCode === 403) {
-      DialogActions.alert(`Not scaling: ${Messages.FORBIDDEN}`);
+      DialogActions.alert({
+        message: `Error scaling ${appId}: ${Messages.FORBIDDEN}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Scaling Application"
+      });
     } else {
-      DialogActions.alert(`Not scaling:
-          ${errorMessage.message || errorMessage}`);
+      DialogActions.alert({
+        message: `Error scaling ${appId}:
+          ${errorMessage.message || errorMessage}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Scaling Application"
+      });
     }
   },
 
   onScaleGroupError: function (errorMessage, statusCode) {
+    var groupId = this.props.model.id;
+
     if (statusCode === 401) {
-      DialogActions.alert(`Not scaling: ${Messages.UNAUTHORIZED}`);
+      DialogActions.alert({
+        message: `Error scaling ${groupId}: ${Messages.UNAUTHORIZED}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Scaling Group"
+      });
     } else if (statusCode === 403) {
-      DialogActions.alert(`Not scaling: ${Messages.FORBIDDEN}`);
+      DialogActions.alert({
+        message: `Error scaling ${groupId}: ${Messages.FORBIDDEN}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Scaling Group"
+      });
     } else {
-      DialogActions.alert(`Not scaling:
-          ${errorMessage.message || errorMessage}`);
+      DialogActions.alert({
+        message: `Error scaling ${groupId}:
+          ${errorMessage.message || errorMessage}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Scaling Group"
+      });
     }
   },
 
   onRestartAppError: function (errorMessage, statusCode) {
-    if (statusCode === 409) {
-      let appId = this.props.model.id;
+    var appId = this.props.model.id;
 
-      const dialogId = DialogActions.
-        confirm(`There is a deployment in progress that changes ${appId}.
-          If you want to stop this deployment and force a restart,
-          press the 'Restart forcefully' button.`, "Restart forcefully");
+    if (statusCode === 409) {
+
+      const dialogId = DialogActions.confirm({
+        actionButtonLabel: "Stop Current Deployment and Restart",
+        message: `In order to restart ${appId}, the current deployment will have
+          to be forcefully stopped. Please be cautious, as this could result in
+          unwanted states.`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Restarting Application"
+      });
 
       DialogStore.handleUserResponse(dialogId, () => {
         this.addRestartAppListener();
@@ -243,56 +305,109 @@ var AppActionsHandlerMixin = {
         AppsActions.restartApp(appId, true);
       });
     } else if (statusCode === 401) {
-      DialogActions.alert(`Error restarting app: ${Messages.UNAUTHORIZED}`);
+      DialogActions.alert({
+        message: `Error restating ${appId}: ${Messages.UNAUTHORIZED}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Restarting Application"
+      });
     } else if (statusCode === 403) {
-      DialogActions.alert(`Error restarting app: ${Messages.FORBIDDEN}`);
+      DialogActions.alert({
+        message: `Error restating ${appId}: ${Messages.FORBIDDEN}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Restarting Application"
+      });
     } else {
-      DialogActions.alert(
-        `Error restarting app: ${errorMessage.message || errorMessage}`
-      );
+      DialogActions.alert({
+        message: `Error restating ${appId}:
+          ${errorMessage.message || errorMessage}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Restarting Application"
+      });
     }
   },
 
   onDeleteAppError: function (errorMessage, statusCode) {
+    var appId = this.props.model.id;
+
     if (statusCode === 401) {
-      DialogActions.alert(`Error destroying app: ${Messages.UNAUTHORIZED}`);
+      DialogActions.alert({
+        message: `Error destroying ${appId}: ${Messages.UNAUTHORIZED}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Destroying Application"
+      });
     } else if (statusCode === 403) {
-      DialogActions.alert(`Error destroying app: ${Messages.FORBIDDEN}`);
+      DialogActions.alert({
+        message: `Error destroying ${appId}: ${Messages.FORBIDDEN}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Destroying Application"
+      });
     } else {
-      DialogActions.alert(
-        `Error destroying app: ${errorMessage.message || errorMessage}`
-      );
+      DialogActions.alert({
+        message: `Error destroying ${appId}:
+          ${errorMessage.message || errorMessage}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Destroying Application"
+      });
     }
   },
 
   onDeleteGroupError: function (errorMessage, statusCode) {
+    var groupId = this.props.model.id;
+
     if (statusCode === 401) {
-      DialogActions.alert(`Error destroying group: ${Messages.UNAUTHORIZED}`);
+      DialogActions.alert({
+        message: `Error destroying ${groupId}: ${Messages.UNAUTHORIZED}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Destroying Group"
+      });
     } else if (statusCode === 403) {
-      DialogActions.alert(`Error destroying group: ${Messages.FORBIDDEN}`);
+      DialogActions.alert({
+        message: `Error destroying ${groupId}: ${Messages.FORBIDDEN}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Destroying Group"
+      });
     } else {
-      DialogActions.alert(
-        `Error destroying group: ${errorMessage.message || errorMessage}`
-      );
+      DialogActions.alert({
+        message: `Error destroying ${groupId}:
+          ${errorMessage.message || errorMessage}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Destroying Group"
+      });
     }
   },
 
   onResetDelayError: function (errorMessage, statusCode) {
+    var appId = this.props.model.id;
+
     if (statusCode === 401) {
-      DialogActions.alert(`Error resetting delay on app:
-        ${Messages.UNAUTHORIZED}`);
+      DialogActions.alert({
+        message: `Error resetting ${appId} delay: ${Messages.UNAUTHORIZED}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Resetting Delay"
+      });
     } else if (statusCode === 403) {
-      DialogActions.alert(`Error resetting delay on app:
-        ${Messages.FORBIDDEN}`);
+      DialogActions.alert({
+        message: `Error resetting ${appId} delay: ${Messages.FORBIDDEN}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Resetting Delay"
+      });
     } else {
-      DialogActions.alert(
-        `Error resetting delay on app: ${errorMessage.message || errorMessage}`
-      );
+      DialogActions.alert({
+        message: `Error resetting ${appId} delay:
+          ${errorMessage.message || errorMessage}`,
+        severity: DialogSeverity.DANGER,
+        title: "Error Resetting Delay"
+      });
     }
   },
 
   onResetDelaySuccess: function () {
-    DialogActions.alert("Delay reset successfully");
+    var appId = this.props.model.id;
+
+    DialogActions.alert({
+      message: `Application Delay for ${appId} was reset successfully.`,
+      title: "Reset Successful"
+    });
   }
 };
 

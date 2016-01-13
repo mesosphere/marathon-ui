@@ -5,6 +5,7 @@ var React = require("react/addons");
 var DeploymentActions = require("../actions/DeploymentActions");
 var DialogActions = require("../actions/DialogActions");
 var DialogStore = require("../stores/DialogStore");
+var DialogSeverity = require("../constants/DialogSeverity");
 
 var DeploymentComponent = React.createClass({
   displayName: "DeploymentComponent",
@@ -22,11 +23,14 @@ var DeploymentComponent = React.createClass({
   handleRevertDeployment: function () {
     var model = this.props.model;
 
-    const dialogId = DialogActions.confirm(
-      `Rollback deployment of applications: '${model.affectedAppsString}'?
-      Destroying this deployment will create and start a new
-      deployment to revert the affected app to its previous version.`,
-        "Rollback deployment");
+    const dialogId = DialogActions.confirm({
+      actionButtonLabel:"Rollback deployment",
+      message: `Are you sure you want to rollback? This will stop the current
+        deployment of ${model.affectedAppsString} and start a new deployment to
+        revert the affected applications to its previous version.`,
+      severity: DialogSeverity.WARNING,
+      title: "Rollback Deployment"
+    });
 
     DialogStore.handleUserResponse(dialogId, function () {
       this.setState({loading: true});
@@ -37,11 +41,14 @@ var DeploymentComponent = React.createClass({
   handleStopDeployment: function () {
     var model = this.props.model;
 
-    const dialogId = DialogActions.confirm(
-      `Stop deployment of applications: '${model.affectedAppsString}'?
-      This will stop the deployment immediately and leave it in the
-      current state.`,
-        "Stop deployment");
+    const dialogId = DialogActions.confirm({
+      actionButtonLabel:"Stop Deployment",
+      message: `Are you sure you want to stop? This will stop the deployment of
+        ${model.affectedAppsString} immediately and leave the applications in
+        their current state.`,
+      severity: DialogSeverity.WARNING,
+      title: "Stop Deployment"
+    });
 
     DialogStore.handleUserResponse(dialogId, function () {
       this.setState({loading: true});

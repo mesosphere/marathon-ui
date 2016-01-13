@@ -5,6 +5,7 @@ var AppVersionsActions = require("../../actions/AppVersionsActions");
 var AppVersionsEvents = require("../../events/AppVersionsEvents");
 var AppVersionsStore = require("../../stores/AppVersionsStore");
 var DialogActions = require("../../actions/DialogActions");
+var DialogSeverity = require("../../constants/DialogSeverity");
 
 var AppModalComponent = require("./AppModalComponent");
 
@@ -73,8 +74,11 @@ var EditAppModalComponent = React.createClass({
 
   onRequestAppVersionError: function () {
     var props = this.props;
-    DialogActions.alert(`Could not fetch app '${props.appId}' version ` +
-      `for editing: ${props.appVersion}`);
+    DialogActions.alert({
+      message: `Error fetching version ${props.appVersion} for ${props.appId}.`,
+      severity: DialogSeverity.DANGER,
+      title: "Error Loading Configuration"
+    });
     props.onDestroy();
   },
 

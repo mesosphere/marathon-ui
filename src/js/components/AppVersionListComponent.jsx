@@ -11,6 +11,7 @@ var AppVersionComponent = require("../components/AppVersionComponent");
 var AppVersionListItemComponent =
   require("../components/AppVersionListItemComponent");
 var DialogActions = require("../actions/DialogActions");
+var DialogSeverity = require("../constants/DialogSeverity");
 var PagedContentComponent = require("../components/PagedContentComponent");
 var PagedNavComponent = require("../components/PagedNavComponent");
 
@@ -82,10 +83,12 @@ var AppVersionListComponent = React.createClass({
       return;
     }
 
-    DialogActions.alert(
-      "Could not update to chosen version:" +
-          (errorMessage.message || errorMessage)
-    );
+    DialogActions.alert({
+      message: `Error updating application to chosen version:
+        ${errorMessage.message || errorMessage}`,
+      severity: DialogSeverity.DANGER,
+      title: "Error Updating Application"
+    });
   },
 
   handleRefresh: function () {
