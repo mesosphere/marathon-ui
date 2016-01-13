@@ -4,4 +4,7 @@ const Messages = {
   RETRY_REFRESH: "Refresh to try again."
 };
 
+Messages[401] = Messages.UNAUTHORIZED;
+Messages[403] = Messages.FORBIDDEN;
+
 module.exports = Object.freeze(Messages);
