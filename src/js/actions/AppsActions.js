@@ -129,7 +129,8 @@ var AppsActions = {
         AppDispatcher.dispatch({
           actionType: AppsEvents.SCALE_APP,
           data: app,
-          appId: appId
+          appId: appId,
+          instances: instances
         });
       })
       .error(function (error) {
