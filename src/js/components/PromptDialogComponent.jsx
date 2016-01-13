@@ -1,6 +1,7 @@
 var React = require("react/addons");
 var classNames = require("classnames");
 
+var DialogSeverity = require("../constants/DialogSeverity");
 var Util = require("../helpers/Util");
 var ModalComponent = require("../components/ModalComponent");
 
