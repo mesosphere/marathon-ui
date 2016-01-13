@@ -918,7 +918,7 @@ describe("Dialog components", function () {
 
   });
 
-  describeWithDOM("prompt", function () {
+  describe("prompt", function () {
     var PromptDialogComponent =
       require("../js/components/PromptDialogComponent");
 

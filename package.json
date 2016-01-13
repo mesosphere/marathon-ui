@@ -60,6 +60,7 @@
     "gulp-util": "^3.0.5",
     "gulp-zip": "^3.0.2",
     "ionicons": "^2.0.1",
+    "jsdom": "^6.5.1",
     "json-loader": "^0.5.2",
     "mocha": "^2.3.4",
     "mocha-teamcity-reporter": "0.0.4",
@@ -76,7 +77,7 @@
     "clean": "rm -rf dist release",
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "shrinkwrap": "npm-shrinkwrap --dev",
-    "test": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill src/test/**/*.test.* src/test/*.test.*",
+    "test": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill --require src/test/environment/jsdom  src/test/**/*.test.* src/test/*.test.*",
     "serve": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve",
     "livereload": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp livereload"
   }

@@ -52,7 +52,7 @@ describe("Info", function () {
 
 });
 
-describeWithDOM("About Modal", function () {
+describe("About Modal", function () {
 
   before(function () {
     InfoStore.info = {
