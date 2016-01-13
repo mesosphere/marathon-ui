@@ -2,11 +2,15 @@ var classNames = require("classnames");
 var lazy = require("lazy.js");
 var React = require("react/addons");
 
+var AppsEvents = require("../events/AppsEvents");
+var AppsStore = require("../stores/AppsStore");
 var Messages = require("../constants/Messages");
 var States = require("../constants/States");
 
 var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
 var TaskListItemComponent = require("./TaskListItemComponent");
+var PlaceholderTaskListItemComponent =
+  require("./PlaceholderTaskListItemComponent");
 
 var TaskListComponent = React.createClass({
   displayName: "TaskListComponent",
@@ -26,8 +30,17 @@ var TaskListComponent = React.createClass({
   getInitialState: function () {
     return {
       sortKey: "updatedAt",
-      sortDescending: false
+      sortDescending: false,
+      targetInstances: 0
     };
+  },
+
+  componentWillMount: function () {
+    AppsStore.on(AppsEvents.SCALE_APP, this.onScaleApp);
+  },
+
+  componentWillUnmount: function () {
+    AppsStore.removeListener(AppsEvents.SCALE_APP, this.onScaleApp);
   },
 
   handleThToggleClick: function (event) {
@@ -47,17 +60,23 @@ var TaskListComponent = React.createClass({
     });
   },
 
+  onScaleApp: function (data, appId, instances) {
+    this.setState({targetInstances: instances});
+  },
+
   getTasks: function () {
     var props = this.props;
     var state = this.state;
-    var dropCount = this.props.currentPage * this.props.itemsPerPage;
+    var itemsPerPage = props.itemsPerPage;
+    var dropCount = props.currentPage * itemsPerPage;
     var hasHealth = !!props.hasHealth;
     var sortKey = state.sortKey;
+    var targetInstances = state.targetInstances;
 
-    return lazy(this.props.tasks)
+    var nodes = lazy(props.tasks)
       .sortBy(app => app[sortKey], state.sortDescending)
       .drop(dropCount)
-      .take(this.props.itemsPerPage)
+      .take(itemsPerPage)
       .map(function (task) {
         var isActive = props.selectedTasks[task.id] === true;
 
@@ -69,10 +88,22 @@ var TaskListComponent = React.createClass({
             key={task.id}
             onToggle={props.onTaskToggle}
             task={task}
-            taskHealthMessage={props.getTaskHealthMessage(task.id)}/>
+            taskHealthMessage={props.getTaskHealthMessage(task.id)} />
         );
       })
       .value();
+
+    if (targetInstances > props.tasks.length && nodes.length < itemsPerPage) {
+      let numPlaceholders = Math.min(itemsPerPage - nodes.length,
+        targetInstances - nodes.length);
+
+      for (let i = 0; i < numPlaceholders; i++) {
+        nodes.push(<PlaceholderTaskListItemComponent key={i}/>);
+      }
+    }
+    nodes.push(<PlaceholderTaskListItemComponent key={123}/>);
+
+    return nodes;
   },
 
   getCaret: function (sortKey) {
