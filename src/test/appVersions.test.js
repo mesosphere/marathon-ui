@@ -194,7 +194,7 @@ describe("AppVersions", function () {
 
 });
 
-describeWithDOM("App Version List component", function () {
+describe("App Version List component", function () {
 
   before(function () {
     AppVersionsStore.currentAppId = "/app-test";
@@ -225,7 +225,7 @@ describeWithDOM("App Version List component", function () {
 
 });
 
-describeWithDOM("App Version component", function () {
+describe("App Version component", function () {
 
   before(function () {
     this.model = {

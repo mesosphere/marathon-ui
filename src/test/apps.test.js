@@ -844,7 +844,7 @@ describe("Apps", function () {
 
   });
 
-  describeWithDOM("on app apply", function () {
+  describe("on app apply", function () {
 
     before(function (done) {
       var nockResponse = {
@@ -944,7 +944,7 @@ describe("Apps", function () {
 
 });
 
-describeWithDOM("Groups", function () {
+describe("Groups", function () {
 
   var apps = [
     {id: "/app-1", instances: 1, mem: 16, cpus: 1},
@@ -1166,7 +1166,7 @@ describe("App Health Bar", function () {
     });
   });
 
-  describeWithDOM("with tooltip", function () {
+  describe("with tooltip", function () {
     var PopoverComponent = require("../js/components/PopoverComponent");
 
     before(function () {
