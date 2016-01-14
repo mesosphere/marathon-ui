@@ -1,19 +1,6 @@
-## Unversioned
-### Added
-- \#2772 - URI fields should be links
-- \#2775 - Syntax highlighting for JSON fragments in configuration
-- \#2809 - Health filter in sidebar
-- \#2824 - Add UI option for Docker forcePullImage
-- \#2721 - Provide log download links for easier task debugging
-
-### Changed
-- \#2764 - Make health status bar wider
-
-### Fixed
-- \#2755 - Memory leak in Marathon UI
-- \#2845 - Misleading error feedback in app creation modal on port conflict
-- \#2812 - Cannot change configuration of Marathon app after deployment
-- \#2821 - Tooltip content update issue
+## 0.14.2 - 2016-01-14
+This is a minor bugfix release addressing some issues introduced by changes
+made in 0.14.0.
 
 ## 0.14.0 - 2015-12-07
 ### Added
