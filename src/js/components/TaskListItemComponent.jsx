@@ -74,9 +74,9 @@ var TaskListItemComponent = React.createClass({
   },
 
   getEndpoints: function () {
-    var task = this.props.task;
+    var app = AppsStore.getCurrentApp(this.props.appId);
 
-    if (task.ipAddresses == null) {
+    if (app.ipAddress == null) {
       return this.getHostAndPorts();
     }
 
