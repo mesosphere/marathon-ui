@@ -1179,13 +1179,6 @@ describe("App Health Bar", function () {
       React.unmountComponentAtNode(this.component.instance().getDOMNode());
     });
 
-    it("has health details", function () {
-      expect(this.component
-        .find(AppHealthDetailComponent)
-        .length
-      ).to.equal(1);
-    });
-
     it("has healthbar", function () {
       expect(this.component
         .find(AppHealthBarComponent)
@@ -1193,13 +1186,12 @@ describe("App Health Bar", function () {
       ).to.equal(1);
     });
 
-    it("shows the tooltip on hover", function () {
+    it("shows the popover with health details on hover", function () {
       this.component.simulate("mouseOver");
       expect(this.component
-        .find(PopoverComponent)
-        .props()
-        .visible
-      ).to.be.true;
+        .find(AppHealthDetailComponent)
+        .length
+      ).to.equal(1)
     });
 
   });
