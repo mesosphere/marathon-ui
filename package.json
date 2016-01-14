@@ -13,7 +13,7 @@
     "url": "git://github.com/mesosphere/marathon-ui.git"
   },
   "dependencies": {
-    "babel": "^5.6.14",
+    "babel-cli": "^6.4.0",
     "babel-polyfill": "^6.2.0",
     "classnames": "^2.1.2",
     "eslint": "^1.10.1",
@@ -61,6 +61,7 @@
     "gulp-zip": "^3.0.2",
     "ionicons": "^2.0.1",
     "jsdom": "^6.5.1",
+    "istanbul": "^1.0.0-alpha.2",
     "json-loader": "^0.5.2",
     "mocha": "^2.3.4",
     "mocha-teamcity-reporter": "0.0.4",
@@ -79,6 +80,9 @@
     "shrinkwrap": "npm-shrinkwrap --dev",
     "test": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill --require src/test/environment/jsdom  src/test/**/*.test.* src/test/*.test.*",
     "serve": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve",
-    "livereload": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp livereload"
+    "livereload": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp livereload",
+    "cover:prepare": "rm -Rf coverage",
+    "cover:run": "babel-node ./node_modules/istanbul/lib/cli cover --include-all-sources true node_modules/mocha/bin/_mocha -- src/test/*.test.* src/test/**/*.test.*",
+    "cover": "npm run cover:prepare; npm run cover:run"
   }
 }
