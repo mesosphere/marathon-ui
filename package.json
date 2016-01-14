@@ -62,6 +62,7 @@
     "ionicons": "^2.0.1",
     "jsdom": "^6.5.1",
     "istanbul": "^1.0.0-alpha.2",
+    "istanbul-coveralls": "^1.0.3",
     "json-loader": "^0.5.2",
     "mocha": "^2.3.4",
     "mocha-teamcity-reporter": "0.0.4",
@@ -83,6 +84,7 @@
     "livereload": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp livereload",
     "cover:prepare": "rm -Rf coverage",
     "cover:run": "babel-node ./node_modules/istanbul/lib/cli cover --include-all-sources true node_modules/mocha/bin/_mocha -- src/test/*.test.* src/test/**/*.test.*",
+    "cover:report": "npm run cover; istanbul-coveralls",
     "cover": "npm run cover:prepare; npm run cover:run"
   }
 }
