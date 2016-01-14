@@ -1,4 +1,8 @@
-## Unversioned
+## 0.14.2 - 2016-01-14
+### Fixed
+- \#2972 - Add more inline task information
+
+## 0.14.1 - 2015-12-17
 ### Added
 - \#2772 - URI fields should be links
 - \#2775 - Syntax highlighting for JSON fragments in configuration
