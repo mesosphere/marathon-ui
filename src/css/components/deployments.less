@@ -4,11 +4,18 @@
  */
 
 .text-right.deployment-buttons {
-  vertical-align: middle;
+  vertical-align: top;
 
   .loading-bar {
     height: 10px;
     display: inline-block;
     width: 100%;
+  }
+}
+
+.deployments.table > tbody > tr {
+  > td {
+    padding-bottom: @base-spacing-unit;
+    vertical-align: top;
   }
 }

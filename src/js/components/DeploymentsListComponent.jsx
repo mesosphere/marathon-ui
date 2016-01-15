@@ -168,7 +168,7 @@ var DeploymentListComponent = React.createClass({
 
     return (
       <div>
-        <table className="table table-fixed">
+        <table className="table table-fixed deployments">
           <colgroup>
             <col style={{width: "28%"}} />
             <col style={{width: "18%"}} />
