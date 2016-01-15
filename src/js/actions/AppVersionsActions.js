@@ -1,8 +1,8 @@
-var ajaxWrapper = require("../helpers/ajaxWrapper");
+import ajaxWrapper from "../helpers/ajaxWrapper";
 
-var config = require("../config/config");
-var AppDispatcher = require("../AppDispatcher");
-var AppVersionsEvents = require("../events/AppVersionsEvents");
+import config from "../config/config";
+import AppDispatcher from "../AppDispatcher";
+import AppVersionsEvents from "../events/AppVersionsEvents";
 
 var AppVersionsActions = {
   requestAppVersions: function (appId) {
@@ -48,4 +48,4 @@ var AppVersionsActions = {
   request: ajaxWrapper
 };
 
-module.exports = AppVersionsActions;
+export default AppVersionsActions;

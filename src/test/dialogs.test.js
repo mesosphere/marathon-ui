@@ -1,17 +1,18 @@
-var describeWithDOM = require("enzyme").describeWithDOM;
-var mount = require("enzyme").mount;
-var shallow = require("enzyme").shallow;
-var expect = require("chai").expect;
-var React = require("react/addons");
+import {expect} from "chai";
+import {mount, shallow} from "enzyme";
+import React from "react/addons";
 var TestUtils = React.addons.TestUtils;
+import expectAsync from "./helpers/expectAsync";
 
-var DialogActions = require("../js/actions/DialogActions");
-var DialogEvents = require("../js/events/DialogEvents");
-var DialogStore = require("../js/stores/DialogStore");
-var DialogTypes = require("../js/constants/DialogTypes");
-var DialogSeverity = require("../js/constants/DialogSeverity");
+import DialogActions from "../js/actions/DialogActions";
+import DialogEvents from "../js/events/DialogEvents";
+import DialogStore from "../js/stores/DialogStore";
+import DialogTypes from "../js/constants/DialogTypes";
+import DialogSeverity from "../js/constants/DialogSeverity";
 
-var expectAsync = require("./helpers/expectAsync");
+import AlertDialogComponent from "../js/components/AlertDialogComponent";
+import ConfirmDialoglComponent from "../js/components/ConfirmDialoglComponent";
+import PromptDialogComponent from "../js/components/PromptDialogComponent";
 
 describe("Dialog store", function () {
 
@@ -795,7 +796,6 @@ describe("Dialog store", function () {
 describe("Dialog components", function () {
 
   describe("alert", function () {
-    var AlertDialogComponent = require("../js/components/AlertDialogComponent");
 
     var dialogData = {
       actionButtonLabel: "Test Button Label",
@@ -850,8 +850,6 @@ describe("Dialog components", function () {
   });
 
   describe("confirm", function () {
-    var ConfirmDialoglComponent =
-      require("../js/components/ConfirmDialoglComponent");
 
     var dialogData = {
       actionButtonLabel: "Test Button Label",
@@ -919,8 +917,6 @@ describe("Dialog components", function () {
   });
 
   describe("prompt", function () {
-    var PromptDialogComponent =
-      require("../js/components/PromptDialogComponent");
 
     var dialogData = {
       actionButtonLabel: "Test Button Label",

@@ -1,15 +1,15 @@
-var Link = require("react-router").Link;
-var React = require("react/addons");
+import {Link} from "react-router";
+import React from "react/addons";
 
-var FilterTypes = require("../constants/FilterTypes");
-var SidebarHealthFilterComponent =
-  require("../components/SidebarHealthFilterComponent");
-var SidebarLabelsFilterComponent =
-  require("../components/SidebarLabelsFilterComponent");
-var SidebarStatusFilterComponent =
-  require("../components/SidebarStatusFilterComponent");
+import FilterTypes from "../constants/FilterTypes";
+import SidebarHealthFilterComponent
+  from "../components/SidebarHealthFilterComponent";
+import SidebarLabelsFilterComponent
+  from "../components/SidebarLabelsFilterComponent";
+import SidebarStatusFilterComponent
+  from "../components/SidebarStatusFilterComponent";
 
-var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 var SidebarComponent = React.createClass({
   displayName: "SidebarComponent",
@@ -88,4 +88,4 @@ var SidebarComponent = React.createClass({
   }
 });
 
-module.exports = SidebarComponent;
+export default SidebarComponent;

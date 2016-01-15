@@ -1,9 +1,9 @@
-var classNames = require("classnames");
-var OnClickOutsideMixin = require("react-onclickoutside");
-var React = require("react");
+import classNames from "classnames";
+import OnClickOutsideMixin from "react-onclickoutside";
+import React from "react";
 
-var AppActionsHandlerMixin = require("../mixins/AppActionsHandlerMixin");
-var AppStatus = require("../constants/AppStatus");
+import AppActionsHandlerMixin from "../mixins/AppActionsHandlerMixin";
+import AppStatus from "../constants/AppStatus";
 
 var AppPageControlsComponent = React.createClass({
 
@@ -97,4 +97,4 @@ var AppPageControlsComponent = React.createClass({
   }
 });
 
-module.exports = AppPageControlsComponent;
+export default AppPageControlsComponent;

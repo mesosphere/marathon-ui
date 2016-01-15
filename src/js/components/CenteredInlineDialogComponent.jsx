@@ -1,6 +1,6 @@
-var classNames = require("classnames");
-var React = require("react/addons");
-var Link = require("react-router").Link;
+import classNames from "classnames";
+import React from "react/addons";
+import {Link} from "react-router";
 
 var CenteredInlineDialogComponent = React.createClass({
   displayName: "CenteredInlineDialogComponent",
@@ -29,4 +29,4 @@ var CenteredInlineDialogComponent = React.createClass({
   }
 });
 
-module.exports = CenteredInlineDialogComponent;
+export default CenteredInlineDialogComponent;

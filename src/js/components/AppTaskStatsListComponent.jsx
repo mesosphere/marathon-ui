@@ -1,6 +1,6 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var AppTaskStatsComponent = require("../components/AppTaskStatsComponent");
+import AppTaskStatsComponent from "../components/AppTaskStatsComponent";
 
 const keyCaptionMap = {
   startedAfterLastScaling: "Started After Last Scaling",
@@ -66,4 +66,4 @@ var AppTaskStatsListComponent = React.createClass({
   }
 });
 
-module.exports = AppTaskStatsListComponent;
+export default AppTaskStatsListComponent;

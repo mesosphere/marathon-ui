@@ -1,11 +1,11 @@
-var expect = require("chai").expect;
-var expectAsync = require("./helpers/expectAsync");
-var nock = require("nock");
+import {expect} from "chai";
+import nock from "nock";
+import expectAsync from "./helpers/expectAsync";
 
-var config = require("../js/config/config");
-var GroupsAction = require("../js/actions/GroupsActions");
-var GroupsEvents = require("../js/events/GroupsEvents");
-var GroupsStore = require("../js/stores/GroupsStore");
+import config from "../js/config/config";
+import GroupsAction from "../js/actions/GroupsActions";
+import GroupsEvents from "../js/events/GroupsEvents";
+import GroupsStore from "../js/stores/GroupsStore";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";

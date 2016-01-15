@@ -1,8 +1,8 @@
-var classNames = require("classnames");
-var React = require("react/addons");
-var Link = require("react-router").Link;
+import classNames from "classnames";
+import React from "react/addons";
+import {Link} from "react-router";
 
-var PathUtil = require("../helpers/PathUtil");
+import PathUtil from "../helpers/PathUtil";
 
 const COLLAPSE_BUFFER = 12;
 const PADDED_ICON_WIDTH = 24; // 16px icon + 8px padding
@@ -232,4 +232,4 @@ var BreadcrumbComponent = React.createClass({
   }
 });
 
-module.exports = BreadcrumbComponent;
+export default BreadcrumbComponent;

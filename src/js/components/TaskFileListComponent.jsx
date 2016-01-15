@@ -1,11 +1,11 @@
-var React = require("react/addons");
-var classNames = require("classnames");
-var lazy = require("lazy.js");
+import React from "react/addons";
+import classNames from "classnames";
+import lazy from "lazy.js";
 
-var Util = require("../helpers/Util");
-var MesosActions = require("../actions/MesosActions");
-var MesosEvents = require("../events/MesosEvents");
-var MesosStore = require("../stores/MesosStore");
+import Util from "../helpers/Util";
+import MesosActions from "../actions/MesosActions";
+import MesosEvents from "../events/MesosEvents";
+import MesosStore from "../stores/MesosStore";
 
 var TaskFileListComponent = React.createClass({
   displayName: "TaskFileListComponent",
@@ -192,4 +192,4 @@ var TaskFileListComponent = React.createClass({
   }
 });
 
-module.exports = TaskFileListComponent;
+export default TaskFileListComponent;

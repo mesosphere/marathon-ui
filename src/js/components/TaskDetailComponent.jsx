@@ -1,15 +1,15 @@
-var classNames = require("classnames");
-var Link = require("react-router").Link;
-var objectPath = require("object-path");
-var React = require("react/addons");
+import classNames from "classnames";
+import {Link} from "react-router";
+import objectPath from "object-path";
+import React from "react/addons";
 
-var AppsStore = require("../stores/AppsStore");
-var States = require("../constants/States");
-var TimeFieldComponent = require("../components/TimeFieldComponent");
-var TaskHealthComponent = require("../components/TaskHealthComponent");
-var TaskMesosUrlComponent = require("../components/TaskMesosUrlComponent");
-var TaskFileListComponent = require("../components/TaskFileListComponent");
-var HealthStatus = require("../constants/HealthStatus");
+import AppsStore from "../stores/AppsStore";
+import States from "../constants/States";
+import TimeFieldComponent from "../components/TimeFieldComponent";
+import TaskHealthComponent from "../components/TaskHealthComponent";
+import TaskMesosUrlComponent from "../components/TaskMesosUrlComponent";
+import TaskFileListComponent from "../components/TaskFileListComponent";
+import HealthStatus from "../constants/HealthStatus";
 
 var TaskDetailComponent = React.createClass({
   displayName: "TaskDetailComponent",
@@ -224,4 +224,4 @@ var TaskDetailComponent = React.createClass({
   }
 });
 
-module.exports = TaskDetailComponent;
+export default TaskDetailComponent;

@@ -1,7 +1,7 @@
-var Util = require("../../helpers/Util");
-var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
-var HealthCheckPortTypes = require("../../constants/HealthCheckPortTypes");
-var ValidConstraints = require("../../constants/ValidConstraints");
+import Util from "../../helpers/Util";
+import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
+import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
+import ValidConstraints from "../../constants/ValidConstraints";
 
 function isValidPort(value) {
   if (value == null || Util.isStringAndEmpty(value)) {
@@ -156,4 +156,4 @@ const AppFormValidators = {
       .every((port) => port.toString().trim().match(/^[0-9]+$/))
 };
 
-module.exports = Object.freeze(AppFormValidators);
+export default Object.freeze(AppFormValidators);

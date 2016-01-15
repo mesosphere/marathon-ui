@@ -3,4 +3,4 @@ const TaskStatus = {
   STARTED: "Started"
 };
 
-module.exports = Object.freeze(TaskStatus);
+export default Object.freeze(TaskStatus);

@@ -1,10 +1,10 @@
-var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
+import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
 
-const dockerRowSchemes = require("../schemes/dockerRowSchemes");
-const healthChecksRowScheme = require("../schemes/healthChecksRowScheme");
+import dockerRowSchemes from "../schemes/dockerRowSchemes";
+import healthChecksRowScheme from "../schemes/healthChecksRowScheme";
 
-var Util = require("../../helpers/Util");
-var lazy = require("lazy.js");
+import Util from "../../helpers/Util";
+import lazy from "lazy.js";
 
 function ensureObjectScheme(row, scheme) {
   return Object.keys(row).reduce((obj, key) => {
@@ -147,4 +147,4 @@ const AppFormFieldToModelTransforms = {
     .value()
 };
 
-module.exports = Object.freeze(AppFormFieldToModelTransforms);
+export default Object.freeze(AppFormFieldToModelTransforms);

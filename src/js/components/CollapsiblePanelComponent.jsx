@@ -1,5 +1,5 @@
-var classNames = require("classnames");
-var React = require("react");
+import classNames from "classnames";
+import React from "react";
 
 var CollapsiblePanelComponent = React.createClass({
   displayName: "CollapsiblePanelComponent",
@@ -65,4 +65,4 @@ var CollapsiblePanelComponent = React.createClass({
   }
 });
 
-module.exports = CollapsiblePanelComponent;
+export default CollapsiblePanelComponent;

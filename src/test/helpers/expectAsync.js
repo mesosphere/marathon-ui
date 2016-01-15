@@ -1,5 +1,5 @@
 // Allows the use of chai assertions inside an async block
-function expectAsync (fn, done) {
+function expectAsync(fn, done) {
   try {
     fn();
     done()
@@ -9,4 +9,4 @@ function expectAsync (fn, done) {
   }
 }
 
-module.exports = expectAsync;
+export default expectAsync;

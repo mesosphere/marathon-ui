@@ -1,6 +1,6 @@
-var AppDispatcher = require("../AppDispatcher");
-var ajaxWrapper = require("../helpers/ajaxWrapper");
-var DCOSEvents = require("../events/DCOSEvents");
+import AppDispatcher from "../AppDispatcher";
+import ajaxWrapper from "../helpers/ajaxWrapper";
+import DCOSEvents from "../events/DCOSEvents";
 
 var DCOSActions = {
   requestBuildInformation: function (host) {
@@ -21,4 +21,4 @@ var DCOSActions = {
   request: ajaxWrapper
 };
 
-module.exports = DCOSActions;
+export default DCOSActions;

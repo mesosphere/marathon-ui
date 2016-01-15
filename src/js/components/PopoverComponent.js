@@ -1,7 +1,7 @@
-var React = require("react/addons");
-var classNames = require("classnames");
+import React from "react/addons";
+import classNames from "classnames";
 
-var Util = require("../helpers/Util");
+import Util from "../helpers/Util";
 
 const DEFAULT_ALIGNED = "default";
 const TOP_ALIGNED = "top";
@@ -78,4 +78,4 @@ var PopoverComponent = React.createClass({
   }
 });
 
-module.exports = PopoverComponent;
+export default PopoverComponent;

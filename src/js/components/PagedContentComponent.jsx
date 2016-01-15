@@ -1,6 +1,6 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: "PagedContentComponent",
 
   propTypes: {

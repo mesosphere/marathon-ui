@@ -18,4 +18,4 @@ const AppsEvents = {
   UPDATE_APPS_FILTER_COUNT: "APPS_EVENT_UPDATE_APPS_FILTER_COUNT"
 };
 
-module.exports = Object.freeze(AppsEvents);
+export default Object.freeze(AppsEvents);

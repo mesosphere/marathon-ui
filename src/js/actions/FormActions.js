@@ -1,5 +1,5 @@
-var AppDispatcher = require("../AppDispatcher");
-var FormsEvents = require("../events/FormEvents");
+import AppDispatcher from "../AppDispatcher";
+import FormsEvents from "../events/FormEvents";
 
 var FormActions = {
   insert: function (fieldId, value, index = null) {
@@ -28,4 +28,4 @@ var FormActions = {
   }
 };
 
-module.exports = FormActions;
+export default FormActions;

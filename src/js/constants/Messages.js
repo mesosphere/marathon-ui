@@ -7,4 +7,4 @@ const Messages = {
 Messages[401] = Messages.UNAUTHORIZED;
 Messages[403] = Messages.FORBIDDEN;
 
-module.exports = Object.freeze(Messages);
+export default Object.freeze(Messages);

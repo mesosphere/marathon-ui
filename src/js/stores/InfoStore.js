@@ -1,8 +1,8 @@
-var EventEmitter = require("events").EventEmitter;
-var lazy = require("lazy.js");
+import {EventEmitter} from "events";
+import lazy from "lazy.js";
 
-var AppDispatcher = require("../AppDispatcher");
-var InfoEvents = require("../events/InfoEvents");
+import AppDispatcher from "../AppDispatcher";
+import InfoEvents from "../events/InfoEvents";
 
 var InfoStore = lazy(EventEmitter.prototype).extend({
   info: {}
@@ -21,4 +21,4 @@ InfoStore.dispatchToken = AppDispatcher.register(function (action) {
   }
 });
 
-module.exports = InfoStore;
+export default InfoStore;

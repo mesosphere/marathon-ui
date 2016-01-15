@@ -1,12 +1,12 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var AppVersionsActions = require("../actions/AppVersionsActions");
-var AppVersionsEvents = require("../events/AppVersionsEvents");
-var AppVersionsStore = require("../stores/AppVersionsStore");
-var AppVersionComponent = require("../components/AppVersionComponent");
-var Messages = require("../constants/Messages");
-var States = require("../constants/States");
+import AppVersionsActions from "../actions/AppVersionsActions";
+import AppVersionsEvents from "../events/AppVersionsEvents";
+import AppVersionsStore from "../stores/AppVersionsStore";
+import AppVersionComponent from "../components/AppVersionComponent";
+import Messages from "../constants/Messages";
+import States from "../constants/States";
 
 var AppVersionListItemComponent = React.createClass({
   displayName: "AppVersionListItemComponent",
@@ -171,4 +171,4 @@ var AppVersionListItemComponent = React.createClass({
   }
 });
 
-module.exports = AppVersionListItemComponent;
+export default AppVersionListItemComponent;

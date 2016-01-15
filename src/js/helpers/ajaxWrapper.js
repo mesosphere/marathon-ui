@@ -1,5 +1,5 @@
-var fetch = require("isomorphic-fetch");
-var Util = require("./Util");
+import fetch from "isomorphic-fetch";
+import Util from "./Util";
 
 var uniqueCalls = [];
 
@@ -116,4 +116,4 @@ var ajaxWrapper = function (opts = {}) {
   return api;
 };
 
-module.exports = ajaxWrapper;
+export default ajaxWrapper;

@@ -1,8 +1,8 @@
-var Util = require("../helpers/Util");
-var AppDispatcher = require("../AppDispatcher");
-var DialogEvents = require("../events/DialogEvents");
-var DialogTypes = require("../constants/DialogTypes");
-var dialogScheme = require("../stores/schemes/dialogScheme");
+import Util from "../helpers/Util";
+import AppDispatcher from "../AppDispatcher";
+import DialogEvents from "../events/DialogEvents";
+import DialogTypes from "../constants/DialogTypes";
+import dialogScheme from "../stores/schemes/dialogScheme";
 
 function showDialog(data) {
   var dialog = Util.extendObject(dialogScheme, data,
@@ -86,4 +86,4 @@ var DialogActions = {
   }
 };
 
-module.exports = DialogActions;
+export default DialogActions;

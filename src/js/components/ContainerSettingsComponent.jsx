@@ -1,12 +1,12 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var ContainerConstants = require("../constants/ContainerConstants");
-var DuplicableRowControls = require("../components/DuplicableRowControls");
-var DuplicableRowsMixin = require("../mixins/DuplicableRowsMixin");
-var dockerRowSchemes = require("../stores/schemes/dockerRowSchemes");
-var FormActions = require("../actions/FormActions");
-var FormGroupComponent = require("../components/FormGroupComponent");
+import ContainerConstants from "../constants/ContainerConstants";
+import DuplicableRowControls from "../components/DuplicableRowControls";
+import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
+import dockerRowSchemes from "../stores/schemes/dockerRowSchemes";
+import FormActions from "../actions/FormActions";
+import FormGroupComponent from "../components/FormGroupComponent";
 
 const portInputAttributes = {
   min: 0,
@@ -359,4 +359,4 @@ var ContainerSettingsComponent = React.createClass({
   }
 });
 
-module.exports = ContainerSettingsComponent;
+export default ContainerSettingsComponent;

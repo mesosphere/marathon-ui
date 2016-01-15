@@ -23,4 +23,4 @@ var DOMUtil = {
   }
 };
 
-module.exports = DOMUtil;
+export default DOMUtil;

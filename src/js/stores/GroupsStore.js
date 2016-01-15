@@ -1,9 +1,9 @@
-var EventEmitter = require("events").EventEmitter;
+import {EventEmitter} from "events";
 
-var AppDispatcher = require("../AppDispatcher");
-var GroupsEvents = require("../events/GroupsEvents");
+import AppDispatcher from "../AppDispatcher";
+import GroupsEvents from "../events/GroupsEvents";
 
-var Util = require("../helpers/Util");
+import Util from "../helpers/Util";
 
 var GroupsStore = Util.extendObject(EventEmitter.prototype, {});
 
@@ -34,4 +34,4 @@ AppDispatcher.register(function (action) {
   }
 });
 
-module.exports = GroupsStore;
+export default GroupsStore;

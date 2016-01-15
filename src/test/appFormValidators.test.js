@@ -1,7 +1,7 @@
-var expect = require("chai").expect;
+import {expect} from "chai";
 
-var AppFormValidators = require("../js/stores/validators/AppFormValidators");
-var HealthCheckPortTypes = require("../js/constants/HealthCheckPortTypes");
+import AppFormValidators from "../js/stores/validators/AppFormValidators";
+import HealthCheckPortTypes from "../js/constants/HealthCheckPortTypes";
 
 describe("App Form Validators", function () {
 

@@ -1,9 +1,9 @@
-var EventEmitter = require("events").EventEmitter;
-var lazy = require("lazy.js");
+import {EventEmitter} from "events";
+import lazy from "lazy.js";
 
-var AppDispatcher = require("../AppDispatcher");
-var appScheme = require("../stores/schemes/appScheme");
-var AppVersionsEvents = require("../events/AppVersionsEvents");
+import AppDispatcher from "../AppDispatcher";
+import appScheme from "../stores/schemes/appScheme";
+import AppVersionsEvents from "../events/AppVersionsEvents";
 
 function processAppVersion(appVersion) {
   return lazy(appScheme).extend(appVersion).value();
@@ -70,4 +70,4 @@ AppDispatcher.register(function (action) {
   }
 });
 
-module.exports = AppVersionsStore;
+export default AppVersionsStore;

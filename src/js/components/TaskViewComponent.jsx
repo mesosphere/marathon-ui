@@ -1,10 +1,10 @@
-var lazy = require("lazy.js");
-var React = require("react/addons");
+import lazy from "lazy.js";
+import React from "react/addons";
 
-var AppsActions = require("../actions/AppsActions");
-var PagedNavComponent = require("../components/PagedNavComponent");
-var TasksActions = require("../actions/TasksActions");
-var TaskListComponent = require("../components/TaskListComponent");
+import AppsActions from "../actions/AppsActions";
+import PagedNavComponent from "../components/PagedNavComponent";
+import TasksActions from "../actions/TasksActions";
+import TaskListComponent from "../components/TaskListComponent";
 
 var TaskViewComponent = React.createClass({
   displayName: "TaskViewComponent",
@@ -174,4 +174,4 @@ var TaskViewComponent = React.createClass({
   }
 });
 
-module.exports = TaskViewComponent;
+export default TaskViewComponent;

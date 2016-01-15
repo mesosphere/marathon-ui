@@ -1,6 +1,6 @@
-var Util = require("../../helpers/Util");
-var DialogTypes = require("../../constants/DialogTypes");
-var DialogSeverity = require("../../constants/DialogSeverity");
+import Util from "../../helpers/Util";
+import DialogTypes from "../../constants/DialogTypes";
+import DialogSeverity from "../../constants/DialogSeverity";
 
 const dialogScheme = {
   actionButtonLabel: "OK",
@@ -15,4 +15,4 @@ const dialogScheme = {
   type: DialogTypes.ALERT
 };
 
-module.exports = Util.deepFreeze(dialogScheme);
+export default Util.deepFreeze(dialogScheme);

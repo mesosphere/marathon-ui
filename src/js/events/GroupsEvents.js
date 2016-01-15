@@ -5,4 +5,4 @@ const GroupsEvents = {
   DELETE_ERROR: "GROUPS_EVENTS_DELETE_ERROR"
 };
 
-module.exports = Object.freeze(GroupsEvents);
+export default Object.freeze(GroupsEvents);

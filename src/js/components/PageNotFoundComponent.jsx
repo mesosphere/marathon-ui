@@ -1,6 +1,6 @@
-var React = require("react/addons");
-var Link = require("react-router").Link;
-var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
+import React from "react/addons";
+import {Link} from "react-router";
+import CenteredInlineDialogComponent from "./CenteredInlineDialogComponent";
 
 var PageNotFoundComponent = React.createClass({
   displayName: "PageNotFoundComponent",
@@ -23,4 +23,4 @@ var PageNotFoundComponent = React.createClass({
   }
 });
 
-module.exports = PageNotFoundComponent;
+export default PageNotFoundComponent;

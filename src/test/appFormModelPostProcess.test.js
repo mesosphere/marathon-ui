@@ -1,7 +1,7 @@
-var expect = require("chai").expect;
+import {expect} from "chai";
 
-var AppFormModelPostProcess =
-  require("../js/stores/transforms/AppFormModelPostProcess");
+import AppFormModelPostProcess
+  from "../js/stores/transforms/AppFormModelPostProcess";
 
 describe("App Form Model Post Process", function () {
 
