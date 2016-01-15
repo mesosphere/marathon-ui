@@ -61,7 +61,7 @@ var PopoverComponent = React.createClass({
   render: function () {
     var props = this.props;
 
-    if(!props.visible){
+    if (!props.visible) {
       return null;
     }
 
