@@ -1,10 +1,9 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var DuplicableRowControls = require("../components/DuplicableRowControls");
-var DuplicableRowsMixin = require("../mixins/DuplicableRowsMixin");
-var FormGroupComponent =
-  require("../components/FormGroupComponent");
+import DuplicableRowControls from "../components/DuplicableRowControls";
+import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
+import FormGroupComponent from "../components/FormGroupComponent";
 
 var OptionalEnvironmentComponent = React.createClass({
   displayName: "OptionalEnvironmentComponent",
@@ -101,4 +100,4 @@ var OptionalEnvironmentComponent = React.createClass({
   }
 });
 
-module.exports = OptionalEnvironmentComponent;
+export default OptionalEnvironmentComponent;

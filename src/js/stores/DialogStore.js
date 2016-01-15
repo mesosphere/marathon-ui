@@ -1,10 +1,10 @@
-var EventEmitter = require("events").EventEmitter;
-var lazy = require("lazy.js");
-var Util = require("../helpers/Util");
+import {EventEmitter} from "events";
+import lazy from "lazy.js";
+import Util from "../helpers/Util";
 
-var AppDispatcher = require("../AppDispatcher");
-var DialogEvents = require("../events/DialogEvents");
-var DialogTypes = require("../constants/DialogTypes");
+import AppDispatcher from "../AppDispatcher";
+import DialogEvents from "../events/DialogEvents";
+import DialogTypes from "../constants/DialogTypes";
 
 var dialogs = [];
 
@@ -76,4 +76,4 @@ AppDispatcher.register(function (action) {
   }
 });
 
-module.exports = DialogStore;
+export default DialogStore;

@@ -7,4 +7,4 @@ const AppVersionsEvents = {
   REQUEST_ONE_ERROR: "APP_VERSIONS_EVENTS_REQUEST_ONE_ERROR"
 };
 
-module.exports = Object.freeze(AppVersionsEvents);
+export default Object.freeze(AppVersionsEvents);

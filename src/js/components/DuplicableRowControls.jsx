@@ -1,5 +1,5 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
 var DuplicableRowControls = React.createClass({
   displayName: "DuplicableRowControls",
@@ -32,4 +32,4 @@ var DuplicableRowControls = React.createClass({
   }
 });
 
-module.exports = DuplicableRowControls;
+export default DuplicableRowControls;

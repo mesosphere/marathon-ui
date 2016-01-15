@@ -1,22 +1,22 @@
-var classNames = require("classnames");
-var lazy = require("lazy.js");
-var Link = require("react-router").Link;
-var React = require("react/addons");
+import classNames from "classnames";
+import lazy from "lazy.js";
+import {Link} from "react-router";
+import React from "react/addons";
 
-var AppListViewTypes = require("../constants/AppListViewTypes");
-var AppStatus = require("../constants/AppStatus");
-var FilterTypes = require("../constants/FilterTypes");
-var HealthStatus = require("../constants/HealthStatus");
-var Messages = require("../constants/Messages");
-var States = require("../constants/States");
-var AppListItemComponent = require("./AppListItemComponent");
-var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
+import AppListViewTypes from "../constants/AppListViewTypes";
+import AppStatus from "../constants/AppStatus";
+import FilterTypes from "../constants/FilterTypes";
+import HealthStatus from "../constants/HealthStatus";
+import Messages from "../constants/Messages";
+import States from "../constants/States";
+import AppListItemComponent from "./AppListItemComponent";
+import CenteredInlineDialogComponent from "./CenteredInlineDialogComponent";
 
-var AppsActions = require("../actions/AppsActions");
-var AppsStore = require("../stores/AppsStore");
-var AppsEvents = require("../events/AppsEvents");
+import AppsActions from "../actions/AppsActions";
+import AppsStore from "../stores/AppsStore";
+import AppsEvents from "../events/AppsEvents";
 
-var Util = require("../helpers/Util");
+import Util from "../helpers/Util";
 
 function getGroupStatus(groupStatus, appStatus) {
   if (appStatus === AppStatus.DEPLOYING ||
@@ -516,4 +516,4 @@ var AppListComponent = React.createClass({
   }
 });
 
-module.exports = AppListComponent;
+export default AppListComponent;

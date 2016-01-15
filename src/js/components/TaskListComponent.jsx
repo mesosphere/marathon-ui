@@ -1,12 +1,12 @@
-var classNames = require("classnames");
-var lazy = require("lazy.js");
-var React = require("react/addons");
+import classNames from "classnames";
+import lazy from "lazy.js";
+import React from "react/addons";
 
-var Messages = require("../constants/Messages");
-var States = require("../constants/States");
+import Messages from "../constants/Messages";
+import States from "../constants/States";
 
-var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
-var TaskListItemComponent = require("../components/TaskListItemComponent");
+import CenteredInlineDialogComponent from "./CenteredInlineDialogComponent";
+import TaskListItemComponent from "../components/TaskListItemComponent";
 
 var TaskListComponent = React.createClass({
   displayName: "TaskListComponent",
@@ -236,4 +236,4 @@ var TaskListComponent = React.createClass({
   }
 });
 
-module.exports = TaskListComponent;
+export default TaskListComponent;

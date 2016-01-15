@@ -3,4 +3,4 @@ const TasksEvents = {
   DELETE_ERROR: "TASKS_EVENTS_DELETE_ERROR"
 };
 
-module.exports = Object.freeze(TasksEvents);
+export default Object.freeze(TasksEvents);

@@ -1,5 +1,5 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
 var FormGroupComponent = React.createClass({
   displayName: "FormGroupComponent",
@@ -79,4 +79,4 @@ var FormGroupComponent = React.createClass({
   }
 });
 
-module.exports = FormGroupComponent;
+export default FormGroupComponent;

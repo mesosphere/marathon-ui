@@ -1,4 +1,4 @@
-var Util = require("../../helpers/Util");
+import Util from "../../helpers/Util";
 
 const deploymentScheme = {
   affectedApps: [],
@@ -10,4 +10,4 @@ const deploymentScheme = {
   version: null
 };
 
-module.exports = Util.deepFreeze(deploymentScheme);
+export default Util.deepFreeze(deploymentScheme);

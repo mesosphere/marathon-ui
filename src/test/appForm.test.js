@@ -1,15 +1,15 @@
-var expect = require("chai").expect;
-var config = require("../js/config/config");
+import {expect} from "chai";
+import nock from "nock";
+import expectAsync from "./helpers/expectAsync";
 
-var expectAsync = require("./helpers/expectAsync");
-var FormActions = require("../js/actions/FormActions");
-var FormEvents = require("../js/events/FormEvents");
-var AppsActions = require("../js/actions/AppsActions");
-var AppsEvents = require("../js/events/AppsEvents");
-var AppsStore = require("../js/stores/AppsStore");
-var AppFormErrorMessages = require("../js/constants/AppFormErrorMessages");
-var AppFormStore = require("../js/stores/AppFormStore");
-var nock = require("nock");
+import config from "../js/config/config";
+import FormActions from "../js/actions/FormActions";
+import FormEvents from "../js/events/FormEvents";
+import AppsActions from "../js/actions/AppsActions";
+import AppsEvents from "../js/events/AppsEvents";
+import AppsStore from "../js/stores/AppsStore";
+import AppFormErrorMessages from "../js/constants/AppFormErrorMessages";
+import AppFormStore from "../js/stores/AppFormStore";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";

@@ -3,4 +3,4 @@ const HealthCheckPortTypes = {
   PORT_NUMBER: "PORT_NUMBER"
 };
 
-module.exports = Object.freeze(HealthCheckPortTypes);
+export default Object.freeze(HealthCheckPortTypes);

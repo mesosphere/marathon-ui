@@ -6,4 +6,4 @@ const FormEvents = {
   UPDATE: "FORM_EVENTS_UPDATE"
 };
 
-module.exports = Object.freeze(FormEvents);
+export default Object.freeze(FormEvents);

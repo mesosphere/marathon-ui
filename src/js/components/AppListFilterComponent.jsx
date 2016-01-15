@@ -1,10 +1,10 @@
-var classNames = require("classnames");
-var React = require("react/addons");
-var Mousetrap = require("mousetrap");
+import classNames from "classnames";
+import React from "react/addons";
+import Mousetrap from "mousetrap";
 
-var FilterTypes = require("../constants/FilterTypes");
+import FilterTypes from "../constants/FilterTypes";
 
-var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 var AppListFilterComponent = React.createClass({
   displayName: "AppListFilterComponent",
@@ -143,4 +143,4 @@ var AppListFilterComponent = React.createClass({
   }
 });
 
-module.exports = AppListFilterComponent;
+export default AppListFilterComponent;

@@ -1,11 +1,11 @@
-var classNames = require("classnames");
-var Link = require("react-router").Link;
-var React = require("react/addons");
+import classNames from "classnames";
+import {Link} from "react-router";
+import React from "react/addons";
 
-var DeploymentActions = require("../actions/DeploymentActions");
-var DialogActions = require("../actions/DialogActions");
-var DialogStore = require("../stores/DialogStore");
-var DialogSeverity = require("../constants/DialogSeverity");
+import DeploymentActions from "../actions/DeploymentActions";
+import DialogActions from "../actions/DialogActions";
+import DialogStore from "../stores/DialogStore";
+import DialogSeverity from "../constants/DialogSeverity";
 
 var DeploymentComponent = React.createClass({
   displayName: "DeploymentComponent",
@@ -129,4 +129,4 @@ var DeploymentComponent = React.createClass({
   }
 });
 
-module.exports = DeploymentComponent;
+export default DeploymentComponent;

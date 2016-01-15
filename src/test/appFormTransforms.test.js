@@ -1,7 +1,6 @@
-var expect = require("chai").expect;
+import {expect} from "chai";
 
-var AppFormTransforms =
-  require("../js/stores/transforms/AppFormTransforms");
+import AppFormTransforms from "../js/stores/transforms/AppFormTransforms";
 
 describe("App Form Field to Model Transform", function () {
 

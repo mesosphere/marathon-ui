@@ -1,8 +1,7 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var FormActions = require("../actions/FormActions");
-var FormGroupComponent =
-  require("../components/FormGroupComponent");
+import FormActions from "../actions/FormActions";
+import FormGroupComponent from "../components/FormGroupComponent";
 
 var OptionalSettingsComponent = React.createClass({
   displayName: "OptionalSettingsComponent",
@@ -103,4 +102,4 @@ var OptionalSettingsComponent = React.createClass({
   }
 });
 
-module.exports = OptionalSettingsComponent;
+export default OptionalSettingsComponent;

@@ -1,10 +1,10 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var AppHealthBarComponent = require("./AppHealthBarComponent");
-var AppHealthDetailComponent = require("./AppHealthDetailComponent");
-var PopoverComponent = require("./PopoverComponent");
-var Util = require("../helpers/Util");
-var HealthStatus = require("../constants/HealthStatus");
+import AppHealthBarComponent from "./AppHealthBarComponent";
+import AppHealthDetailComponent from "./AppHealthDetailComponent";
+import PopoverComponent from "./PopoverComponent";
+import Util from "../helpers/Util";
+import HealthStatus from "../constants/HealthStatus";
 
 var AppHealthBarWithTooltipComponent = React.createClass({
   displayName: "AppHealthBarWithTooltipComponent",
@@ -62,4 +62,4 @@ var AppHealthBarWithTooltipComponent = React.createClass({
   }
 });
 
-module.exports = AppHealthBarWithTooltipComponent;
+export default AppHealthBarWithTooltipComponent;

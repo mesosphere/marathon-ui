@@ -3,4 +3,4 @@ const AppListViewTypes = {
   GROUPED_LIST: "GROUPED_LIST"
 };
 
-module.exports = Object.freeze(AppListViewTypes);
+export default Object.freeze(AppListViewTypes);

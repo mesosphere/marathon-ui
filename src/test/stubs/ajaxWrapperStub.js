@@ -17,4 +17,4 @@ var ajaxWrapperStub = function (executor) {
     return promise;
   }
 };
-module.exports = ajaxWrapperStub;
+export default ajaxWrapperStub;

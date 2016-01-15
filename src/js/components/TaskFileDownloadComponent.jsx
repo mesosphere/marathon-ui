@@ -1,11 +1,11 @@
-var React = require("react/addons");
-var classNames = require("classnames");
+import React from "react/addons";
+import classNames from "classnames";
 
-var MesosActions = require("../actions/MesosActions");
-var MesosEvents = require("../events/MesosEvents");
-var MesosStore = require("../stores/MesosStore");
-var PopoverComponent = require("../components/PopoverComponent");
-var TooltipComponent = require("../components/TooltipComponent");
+import MesosActions from "../actions/MesosActions";
+import MesosEvents from "../events/MesosEvents";
+import MesosStore from "../stores/MesosStore";
+import PopoverComponent from "../components/PopoverComponent";
+import TooltipComponent from "../components/TooltipComponent";
 
 var TaskFileDownloadComponent = React.createClass({
   displayName: "TaskFileDownloadComponent",
@@ -134,4 +134,4 @@ var TaskFileDownloadComponent = React.createClass({
   }
 });
 
-module.exports = TaskFileDownloadComponent;
+export default TaskFileDownloadComponent;

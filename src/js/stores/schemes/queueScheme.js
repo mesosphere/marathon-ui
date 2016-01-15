@@ -1,8 +1,8 @@
-var Util = require("../../helpers/Util");
+import Util from "../../helpers/Util";
 
 const queueScheme = {
   app: {},
   delay: {}
 };
 
-module.exports = Util.deepFreeze(queueScheme);
+export default Util.deepFreeze(queueScheme);

@@ -1,7 +1,7 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var HealthStatus = require("../constants/HealthStatus");
+import HealthStatus from "../constants/HealthStatus";
 
 var healthStatusLabels = {
   [HealthStatus.HEALTHY]: "Healthy",
@@ -83,4 +83,4 @@ var AppHealthDetailComponent = React.createClass({
 
 });
 
-module.exports = AppHealthDetailComponent;
+export default AppHealthDetailComponent;

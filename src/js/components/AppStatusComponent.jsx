@@ -1,12 +1,12 @@
-var classNames = require("classnames");
-var moment = require("moment");
-var React = require("react/addons");
+import classNames from "classnames";
+import moment from "moment";
+import React from "react/addons";
 
-var AppStatus = require("../constants/AppStatus");
-var QueueStore = require("../stores/QueueStore");
-var Util = require("../helpers/Util");
+import AppStatus from "../constants/AppStatus";
+import QueueStore from "../stores/QueueStore";
+import Util from "../helpers/Util";
 
-var statusNameMapping = require("../constants/LabelMapping").statusNameMapping;
+import {statusNameMapping} from "../constants/LabelMapping";
 
 var statusClassNameMapping = {
   [AppStatus.RUNNING]: "running",
@@ -83,4 +83,4 @@ var AppStatusComponent = React.createClass({
   }
 });
 
-module.exports = AppStatusComponent;
+export default AppStatusComponent;

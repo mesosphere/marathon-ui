@@ -13,4 +13,4 @@ const MesosEvents = Object.freeze({
   REQUEST_FILES_ERROR: "MESOS_EVENTS_REQUEST_FILES_ERROR"
 });
 
-module.exports = MesosEvents;
+export default MesosEvents;

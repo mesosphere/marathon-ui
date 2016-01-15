@@ -1,4 +1,4 @@
-var Util = require("../../helpers/Util");
+import Util from "../../helpers/Util";
 
 const dockerRowSchemes = {
   dockerPortMappings: {
@@ -18,4 +18,4 @@ const dockerRowSchemes = {
   }
 };
 
-module.exports = Util.deepFreeze(dockerRowSchemes);
+export default Util.deepFreeze(dockerRowSchemes);

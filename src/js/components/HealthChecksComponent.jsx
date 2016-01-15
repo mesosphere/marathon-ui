@@ -1,13 +1,12 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var DuplicableRowsMixin = require("../mixins/DuplicableRowsMixin");
-var FormGroupComponent = require("../components/FormGroupComponent");
-var HealthCheckProtocols = require("../constants/HealthCheckProtocols");
-var HealthCheckPortTypes = require("../constants/HealthCheckPortTypes");
+import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
+import FormGroupComponent from "../components/FormGroupComponent";
+import HealthCheckProtocols from "../constants/HealthCheckProtocols";
+import HealthCheckPortTypes from "../constants/HealthCheckPortTypes";
 
-const healthChecksRowScheme =
-  require("../stores/schemes/healthChecksRowScheme");
+import healthChecksRowScheme from "../stores/schemes/healthChecksRowScheme";
 
 const numberInputAttributes = {
   min: 0,
@@ -287,4 +286,4 @@ var HealthChecksComponent = React.createClass({
   }
 });
 
-module.exports = HealthChecksComponent;
+export default HealthChecksComponent;

@@ -1,9 +1,9 @@
-var React = require("react/addons");
-var classNames = require("classnames");
+import React from "react/addons";
+import classNames from "classnames";
 
-var DialogSeverity = require("../constants/DialogSeverity");
-var Util = require("../helpers/Util");
-var ModalComponent = require("../components/ModalComponent");
+import DialogSeverity from "../constants/DialogSeverity";
+import Util from "../helpers/Util";
+import ModalComponent from "../components/ModalComponent";
 
 var AlertDialogComponent = React.createClass({
   displayName: "AlertDialogComponent",
@@ -64,4 +64,4 @@ var AlertDialogComponent = React.createClass({
   }
 });
 
-module.exports = AlertDialogComponent;
+export default AlertDialogComponent;

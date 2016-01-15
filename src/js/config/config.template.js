@@ -5,4 +5,4 @@ var configDev = {
   // If the UI is served through a proxied URL, this can be set here.
   rootUrl: ""
 };
-module.exports = configDev;
+export default configDev;

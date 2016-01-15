@@ -1,7 +1,7 @@
-var Util = require("../../helpers/Util");
+import Util from "../../helpers/Util";
 
-var AppTypes = require("../../constants/AppTypes");
-var AppStatus = require("../../constants/AppStatus");
+import AppTypes from "../../constants/AppTypes";
+import AppStatus from "../../constants/AppStatus";
 
 const appScheme = {
   cmd: null,
@@ -32,4 +32,4 @@ const appScheme = {
   type: AppTypes.CGROUP
 };
 
-module.exports = Util.deepFreeze(appScheme);
+export default Util.deepFreeze(appScheme);

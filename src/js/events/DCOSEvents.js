@@ -4,4 +4,4 @@ const DCOSEvents = Object.freeze({
   REQUEST_BUILD_INFORMATION_ERROR: "DCOS_EVENTS_REQUEST_BUILD_INFORMATION_ERROR"
 });
 
-module.exports = DCOSEvents;
+export default DCOSEvents;

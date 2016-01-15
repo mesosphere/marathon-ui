@@ -1,4 +1,4 @@
-var objectPath = require("object-path");
+import objectPath from "object-path";
 
 var consecutiveNumber = 0;
 // Use ``Object.prototype.toString``, as the *global* ``window.toString``
@@ -173,4 +173,4 @@ var Util = {
   }
 };
 
-module.exports = Util;
+export default Util;

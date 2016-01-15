@@ -1,12 +1,12 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var AppsStore = require("../stores/AppsStore");
-var AppsEvents = require("../events/AppsEvents");
-var FilterTypes = require("../constants/FilterTypes");
-var HealthStatus = require("../constants/HealthStatus");
+import AppsStore from "../stores/AppsStore";
+import AppsEvents from "../events/AppsEvents";
+import FilterTypes from "../constants/FilterTypes";
+import HealthStatus from "../constants/HealthStatus";
 
-var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 var healthNameMapping = {
   [HealthStatus.HEALTHY]: "Healthy",
@@ -155,4 +155,4 @@ var SidebarHealthFilterComponent = React.createClass({
 
 });
 
-module.exports = SidebarHealthFilterComponent;
+export default SidebarHealthFilterComponent;

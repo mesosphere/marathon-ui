@@ -1,13 +1,13 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var AppsStore = require("../stores/AppsStore");
-var AppsEvents = require("../events/AppsEvents");
-var FilterTypes = require("../constants/FilterTypes");
+import AppsStore from "../stores/AppsStore";
+import AppsEvents from "../events/AppsEvents";
+import FilterTypes from "../constants/FilterTypes";
 
-var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
-var statusNameMapping = require("../constants/LabelMapping").statusNameMapping;
+import {statusNameMapping} from "../constants/LabelMapping";
 
 var SidebarStatusFilterComponent = React.createClass({
   displayName: "SidebarStatusFilterComponent",
@@ -147,4 +147,4 @@ var SidebarStatusFilterComponent = React.createClass({
 
 });
 
-module.exports = SidebarStatusFilterComponent;
+export default SidebarStatusFilterComponent;

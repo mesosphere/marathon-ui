@@ -1,30 +1,30 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var AppsActions = require("../actions/AppsActions");
-var AppsEvents = require("../events/AppsEvents");
-var AppsStore = require("../stores/AppsStore");
-var BreadcrumbComponent = require("../components/BreadcrumbComponent");
-var AppHealthBarComponent = require("./AppHealthBarComponent");
-var AppPageControlsComponent = require("./AppPageControlsComponent");
-var AppStatusComponent = require("../components/AppStatusComponent");
-var AppVersionsActions = require("../actions/AppVersionsActions");
-var AppDebugInfoComponent = require("../components/AppDebugInfoComponent");
-var AppVersionListComponent = require("../components/AppVersionListComponent");
-var DialogActions = require("../actions/DialogActions");
-var DialogStore = require("../stores/DialogStore");
-var DialogSeverity = require("../constants/DialogSeverity");
-var HealthStatus = require("../constants/HealthStatus");
-var Messages = require("../constants/Messages");
-var States = require("../constants/States");
-var TabPaneComponent = require("../components/TabPaneComponent");
-var TaskDetailComponent = require("../components/TaskDetailComponent");
-var TaskViewComponent = require("../components/TaskViewComponent");
-var AppHealthDetailComponent = require("./AppHealthDetailComponent");
-var TogglableTabsComponent = require("../components/TogglableTabsComponent");
-var Util = require("../helpers/Util");
-var PathUtil = require("../helpers/PathUtil");
-var TasksActions = require("../actions/TasksActions");
-var TasksEvents = require("../events/TasksEvents");
+import AppsActions from "../actions/AppsActions";
+import AppsEvents from "../events/AppsEvents";
+import AppsStore from "../stores/AppsStore";
+import BreadcrumbComponent from "../components/BreadcrumbComponent";
+import AppHealthBarComponent from "./AppHealthBarComponent";
+import AppPageControlsComponent from "./AppPageControlsComponent";
+import AppStatusComponent from "../components/AppStatusComponent";
+import AppVersionsActions from "../actions/AppVersionsActions";
+import AppDebugInfoComponent from "../components/AppDebugInfoComponent";
+import AppVersionListComponent from "../components/AppVersionListComponent";
+import DialogActions from "../actions/DialogActions";
+import DialogStore from "../stores/DialogStore";
+import DialogSeverity from "../constants/DialogSeverity";
+import HealthStatus from "../constants/HealthStatus";
+import Messages from "../constants/Messages";
+import States from "../constants/States";
+import TabPaneComponent from "../components/TabPaneComponent";
+import TaskDetailComponent from "../components/TaskDetailComponent";
+import TaskViewComponent from "../components/TaskViewComponent";
+import AppHealthDetailComponent from "./AppHealthDetailComponent";
+import TogglableTabsComponent from "../components/TogglableTabsComponent";
+import Util from "../helpers/Util";
+import PathUtil from "../helpers/PathUtil";
+import TasksActions from "../actions/TasksActions";
+import TasksEvents from "../events/TasksEvents";
 
 var tabsTemplate = [
   {id: "apps/:appId", text: "Instances"},
@@ -350,4 +350,4 @@ var AppPageComponent = React.createClass({
   }
 });
 
-module.exports = AppPageComponent;
+export default AppPageComponent;

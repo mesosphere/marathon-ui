@@ -1,5 +1,5 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
 var PagedNavComponent = React.createClass({
   displayName: "PagedNavComponent",
@@ -149,4 +149,4 @@ var PagedNavComponent = React.createClass({
   }
 });
 
-module.exports = PagedNavComponent;
+export default PagedNavComponent;

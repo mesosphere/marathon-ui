@@ -1,19 +1,19 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var States = require("../constants/States");
-var AppsStore = require("../stores/AppsStore");
-var AppVersionsActions = require("../actions/AppVersionsActions");
-var AppsEvents = require("../events/AppsEvents");
-var AppVersionsEvents = require("../events/AppVersionsEvents");
-var AppVersionsStore = require("../stores/AppVersionsStore");
-var AppVersionComponent = require("../components/AppVersionComponent");
-var AppVersionListItemComponent =
-  require("../components/AppVersionListItemComponent");
-var DialogActions = require("../actions/DialogActions");
-var DialogSeverity = require("../constants/DialogSeverity");
-var PagedContentComponent = require("../components/PagedContentComponent");
-var PagedNavComponent = require("../components/PagedNavComponent");
+import States from "../constants/States";
+import AppsStore from "../stores/AppsStore";
+import AppVersionsActions from "../actions/AppVersionsActions";
+import AppsEvents from "../events/AppsEvents";
+import AppVersionsEvents from "../events/AppVersionsEvents";
+import AppVersionsStore from "../stores/AppVersionsStore";
+import AppVersionComponent from "../components/AppVersionComponent";
+import AppVersionListItemComponent
+  from "../components/AppVersionListItemComponent";
+import DialogActions from "../actions/DialogActions";
+import DialogSeverity from "../constants/DialogSeverity";
+import PagedContentComponent from "../components/PagedContentComponent";
+import PagedNavComponent from "../components/PagedNavComponent";
 
 var AppVersionListComponent = React.createClass({
   displayName: "AppVersionListComponent",
@@ -201,4 +201,4 @@ var AppVersionListComponent = React.createClass({
   }
 });
 
-module.exports = AppVersionListComponent;
+export default AppVersionListComponent;

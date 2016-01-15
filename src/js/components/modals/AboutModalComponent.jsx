@@ -1,14 +1,14 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var InfoActions = require("../../actions/InfoActions");
-var InfoEvents = require("../../events/InfoEvents");
-var InfoStore = require("../../stores/InfoStore");
-var ModalComponent = require("../ModalComponent");
-var ObjectDlComponent = require("../ObjectDlComponent");
-var UnspecifiedNodeComponent =
-  require("../../components/UnspecifiedNodeComponent");
+import InfoActions from "../../actions/InfoActions";
+import InfoEvents from "../../events/InfoEvents";
+import InfoStore from "../../stores/InfoStore";
+import ModalComponent from "../ModalComponent";
+import ObjectDlComponent from "../ObjectDlComponent";
+import UnspecifiedNodeComponent from
+  "../../components/UnspecifiedNodeComponent";
 
-var config = require("../../config/config");
+import config from "../../config/config";
 
 var AboutModalComponent = React.createClass({
   displayName: "AboutModalComponent",
@@ -89,4 +89,4 @@ var AboutModalComponent = React.createClass({
   }
 });
 
-module.exports = AboutModalComponent;
+export default AboutModalComponent;
