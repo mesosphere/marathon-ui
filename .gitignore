@@ -12,3 +12,4 @@ npm-debug.log
 .idea/*
 
 src/js/config/config.dev.js
+coverage/
