@@ -1,8 +1,8 @@
-var semver = require("semver");
+import semver from "semver";
 
-var AppDispatcher = require("../AppDispatcher");
-var JSONPUtil = require("../helpers/JSONPUtil");
-var MesosEvents = require("../events/MesosEvents");
+import AppDispatcher from "../AppDispatcher";
+import JSONPUtil from "../helpers/JSONPUtil";
+import MesosEvents from "../events/MesosEvents";
 
 var MesosActions = {
   requestVersionInformation: function (host) {
@@ -76,4 +76,4 @@ var MesosActions = {
   request: JSONPUtil.request
 };
 
-module.exports = MesosActions;
+export default MesosActions;

@@ -1,29 +1,26 @@
-var classNames = require("classnames");
-var React = require("react/addons");
-var Util = require("../../helpers/Util");
+import classNames from "classnames";
+import React from "react/addons";
+import Util from "../../helpers/Util";
 
-var AppsActions = require("../../actions/AppsActions");
-var AppsEvents = require("../../events/AppsEvents");
-var AppFormErrorMessages = require("../../constants/AppFormErrorMessages");
-var AppFormStore = require("../../stores/AppFormStore");
-var AppsStore = require("../../stores/AppsStore");
-var CollapsiblePanelComponent =
-  require("../../components/CollapsiblePanelComponent");
-var ContainerSettingsComponent =
-  require("../../components/ContainerSettingsComponent");
-var FormActions = require("../../actions/FormActions");
-var FormEvents = require("../../events/FormEvents");
-var HealthChecksComponent =
-  require("../../components/HealthChecksComponent");
-var ModalComponent = require("../../components/ModalComponent");
-var OptionalEnvironmentComponent =
-  require("../../components/OptionalEnviromentComponent");
-var OptionalLabelsComponent =
-  require("../../components/OptionalLabelsComponent");
-var OptionalSettingsComponent =
-  require("../../components/OptionalSettingsComponent");
-var FormGroupComponent =
-  require("../../components/FormGroupComponent");
+import AppsActions from "../../actions/AppsActions";
+import AppsEvents from "../../events/AppsEvents";
+import AppFormErrorMessages from "../../constants/AppFormErrorMessages";
+import AppFormStore from "../../stores/AppFormStore";
+import AppsStore from "../../stores/AppsStore";
+import CollapsiblePanelComponent
+  from "../../components/CollapsiblePanelComponent";
+import ContainerSettingsComponent
+  from "../../components/ContainerSettingsComponent";
+import FormActions from "../../actions/FormActions";
+import FormEvents from "../../events/FormEvents";
+import HealthChecksComponent from "../../components/HealthChecksComponent";
+import ModalComponent from "../../components/ModalComponent";
+import OptionalEnvironmentComponent
+  from "../../components/OptionalEnviromentComponent";
+import OptionalLabelsComponent from "../../components/OptionalLabelsComponent";
+import OptionalSettingsComponent
+  from "../../components/OptionalSettingsComponent";
+import FormGroupComponent from "../../components/FormGroupComponent";
 
 var AppModalComponent = React.createClass({
   displayName: "AppModalComponent",
@@ -367,4 +364,4 @@ var AppModalComponent = React.createClass({
   }
 });
 
-module.exports = AppModalComponent;
+export default AppModalComponent;

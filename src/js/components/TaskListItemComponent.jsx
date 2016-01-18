@@ -1,13 +1,12 @@
-var classNames = require("classnames");
-var objectPath = require("object-path");
-var React = require("react/addons");
-var Moment = require("moment");
+import classNames from "classnames";
+import objectPath from "object-path";
+import React from "react/addons";
+import Moment from "moment";
 
-var AppsStore = require("../stores/AppsStore");
-var HealthStatus = require("../constants/HealthStatus");
-var TaskStatus = require("../constants/TaskStatus");
-var TaskFileDownloadComponent =
-  require("../components/TaskFileDownloadComponent");
+import AppsStore from "../stores/AppsStore";
+import HealthStatus from "../constants/HealthStatus";
+import TaskStatus from "../constants/TaskStatus";
+import TaskFileDownloadComponent from "../components/TaskFileDownloadComponent";
 
 function joinNodes(nodes, separator = ", ") {
   var lastIndex = nodes.length - 1;
@@ -231,4 +230,4 @@ var TaskListItemComponent = React.createClass({
   }
 });
 
-module.exports = TaskListItemComponent;
+export default TaskListItemComponent;

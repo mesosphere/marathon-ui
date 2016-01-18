@@ -1,7 +1,6 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var UnspecifiedNodeComponent =
-  require("../components/UnspecifiedNodeComponent");
+import UnspecifiedNodeComponent from "../components/UnspecifiedNodeComponent";
 
 function formatKey(key) {
   return key.split("_").map(function (piece) {
@@ -53,4 +52,4 @@ var ObjectDlComponent = React.createClass({
   }
 });
 
-module.exports = ObjectDlComponent;
+export default ObjectDlComponent;

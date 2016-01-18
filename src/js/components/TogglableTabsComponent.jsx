@@ -1,9 +1,9 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var NavTabsComponent = require("../components/NavTabsComponent");
+import NavTabsComponent from "../components/NavTabsComponent";
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: "TogglableTabsComponent",
 
   propTypes: {

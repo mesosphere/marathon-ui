@@ -8,4 +8,4 @@ const DeploymentEvents = {
   STOP_ERROR: "DEPLOYMENT_EVENTS_STOP_ERROR"
 };
 
-module.exports = Object.freeze(DeploymentEvents);
+export default Object.freeze(DeploymentEvents);

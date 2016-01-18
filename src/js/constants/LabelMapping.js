@@ -1,15 +1,11 @@
-var Util = require("../helpers/Util");
+import Util from "../helpers/Util";
 
-var AppStatus = require("../constants/AppStatus");
+import AppStatus from "../constants/AppStatus";
 
-const LabelMapping = {
-  statusNameMapping: {
-    [AppStatus.RUNNING]: "Running",
-    [AppStatus.DEPLOYING]: "Deploying",
-    [AppStatus.SUSPENDED]: "Suspended",
-    [AppStatus.DELAYED]: "Delayed",
-    [AppStatus.WAITING]: "Waiting"
-  }
-};
-
-module.exports = Util.deepFreeze(LabelMapping);
+export const statusNameMapping = Util.deepFreeze({
+  [AppStatus.RUNNING]: "Running",
+  [AppStatus.DEPLOYING]: "Deploying",
+  [AppStatus.SUSPENDED]: "Suspended",
+  [AppStatus.DELAYED]: "Delayed",
+  [AppStatus.WAITING]: "Waiting"
+});

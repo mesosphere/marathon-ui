@@ -1,4 +1,4 @@
-var React = require("react/addons");
+import React from "react/addons";
 
 var TimeFieldComponent = React.createClass({
   displayName: "TimeFieldComponent",
@@ -29,4 +29,4 @@ var TimeFieldComponent = React.createClass({
   }
 });
 
-module.exports = TimeFieldComponent;
+export default TimeFieldComponent;

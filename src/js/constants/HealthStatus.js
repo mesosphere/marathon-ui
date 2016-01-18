@@ -7,4 +7,4 @@ const HealthStatus = {
   UNSCHEDULED: "unscheduled"
 };
 
-module.exports = Object.freeze(HealthStatus);
+export default Object.freeze(HealthStatus);

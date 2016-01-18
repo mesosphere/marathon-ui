@@ -17,4 +17,4 @@ var PathUtil = {
   }
 };
 
-module.exports = PathUtil;
+export default PathUtil;

@@ -1,9 +1,9 @@
-var Util = require("../../helpers/Util");
+import Util from "../../helpers/Util";
 
-var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
-var HealthCheckPortTypes = require("../../constants/HealthCheckPortTypes");
+import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
+import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
 
-const healthChecksRowScheme = require("../schemes/healthChecksRowScheme");
+import healthChecksRowScheme from "../schemes/healthChecksRowScheme";
 
 function hasOnlyEmptyValues(obj) {
   return obj == null || Util.isObject(obj) &&
@@ -80,4 +80,4 @@ const AppFormModelPostProcess = {
   }
 };
 
-module.exports = Object.freeze(AppFormModelPostProcess);
+export default Object.freeze(AppFormModelPostProcess);

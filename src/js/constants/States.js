@@ -6,4 +6,4 @@ const States = {
   STATE_FORBIDDEN: 4
 };
 
-module.exports = Object.freeze(States);
+export default Object.freeze(States);

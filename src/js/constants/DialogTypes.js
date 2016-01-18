@@ -4,4 +4,4 @@ const DialogTypes = {
   PROMPT: "prompt"
 };
 
-module.exports = Object.freeze(DialogTypes);
+export default Object.freeze(DialogTypes);

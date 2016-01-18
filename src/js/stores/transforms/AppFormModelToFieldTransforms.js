@@ -1,6 +1,6 @@
-var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
-var HealthCheckPortTypes = require("../../constants/HealthCheckPortTypes");
-var Util = require("../../helpers/Util");
+import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
+import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
+import Util from "../../helpers/Util";
 
 const AppFormModelToFieldTransforms = {
   acceptedResourceRoles: (acceptedResourceRoles) => {
@@ -80,4 +80,4 @@ const AppFormModelToFieldTransforms = {
     .join(", ")
 };
 
-module.exports = Object.freeze(AppFormModelToFieldTransforms);
+export default Object.freeze(AppFormModelToFieldTransforms);

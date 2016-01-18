@@ -1,13 +1,13 @@
-var classNames = require("classnames");
-var lazy = require("lazy.js");
-var OnClickOutsideMixin = require("react-onclickoutside");
-var React = require("react/addons");
+import classNames from "classnames";
+import lazy from "lazy.js";
+import OnClickOutsideMixin from "react-onclickoutside";
+import React from "react/addons";
 
-var AppsStore = require("../stores/AppsStore");
-var AppsEvents = require("../events/AppsEvents");
-var FilterTypes = require("../constants/FilterTypes");
+import AppsStore from "../stores/AppsStore";
+import AppsEvents from "../events/AppsEvents";
+import FilterTypes from "../constants/FilterTypes";
 
-var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 var SidebarLabelsFilterComponent = React.createClass({
   displayName: "SidebarLabelsFilterComponent",
@@ -259,4 +259,4 @@ var SidebarLabelsFilterComponent = React.createClass({
 
 });
 
-module.exports = SidebarLabelsFilterComponent;
+export default SidebarLabelsFilterComponent;

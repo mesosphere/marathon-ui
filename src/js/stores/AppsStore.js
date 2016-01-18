@@ -1,17 +1,17 @@
-var EventEmitter = require("events").EventEmitter;
-var lazy = require("lazy.js");
+import {EventEmitter} from "events";
+import lazy from "lazy.js";
 
-var AppDispatcher = require("../AppDispatcher");
-var AppsEvents = require("../events/AppsEvents");
-var appScheme = require("../stores/schemes/appScheme");
-var AppTypes = require("../constants/AppTypes");
-var ContainerConstants = require("../constants/ContainerConstants");
-var AppStatus = require("../constants/AppStatus");
-var HealthStatus = require("../constants/HealthStatus");
-var TasksEvents = require("../events/TasksEvents");
-var TaskStatus = require("../constants/TaskStatus");
-var QueueStore = require("./QueueStore");
-var QueueEvents = require("../events/QueueEvents");
+import AppDispatcher from "../AppDispatcher";
+import AppsEvents from "../events/AppsEvents";
+import appScheme from "../stores/schemes/appScheme";
+import AppTypes from "../constants/AppTypes";
+import ContainerConstants from "../constants/ContainerConstants";
+import AppStatus from "../constants/AppStatus";
+import HealthStatus from "../constants/HealthStatus";
+import TasksEvents from "../events/TasksEvents";
+import TaskStatus from "../constants/TaskStatus";
+import QueueStore from "./QueueStore";
+import QueueEvents from "../events/QueueEvents";
 
 const healthWeights = Object.freeze({
   [HealthStatus.UNHEALTHY]: 32,
@@ -318,4 +318,4 @@ AppDispatcher.register(function (action) {
   }
 });
 
-module.exports = AppsStore;
+export default AppsStore;

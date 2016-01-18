@@ -4,4 +4,4 @@ const DialogSeverity = {
   WARNING: "warning"
 };
 
-module.exports = Object.freeze(DialogSeverity);
+export default Object.freeze(DialogSeverity);

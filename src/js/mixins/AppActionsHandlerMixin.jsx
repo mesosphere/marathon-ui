@@ -1,16 +1,16 @@
-var AppsActions = require("../actions/AppsActions");
-var AppsEvents = require("../events/AppsEvents");
-var AppsStore = require("../stores/AppsStore");
-var DialogActions = require("../actions/DialogActions");
-var DialogStore = require("../stores/DialogStore");
-var DialogSeverity = require("../constants/DialogSeverity");
-var GroupsActions = require("../actions/GroupsActions");
-var GroupsEvents = require("../events/GroupsEvents");
-var GroupsStore = require("../stores/GroupsStore");
-var Messages = require("../constants/Messages");
-var QueueActions = require("../actions/QueueActions");
-var QueueEvents = require("../events/QueueEvents");
-var QueueStore = require("../stores/QueueStore");
+import AppsActions from "../actions/AppsActions";
+import AppsEvents from "../events/AppsEvents";
+import AppsStore from "../stores/AppsStore";
+import DialogActions from "../actions/DialogActions";
+import DialogStore from "../stores/DialogStore";
+import DialogSeverity from "../constants/DialogSeverity";
+import GroupsActions from "../actions/GroupsActions";
+import GroupsEvents from "../events/GroupsEvents";
+import GroupsStore from "../stores/GroupsStore";
+import Messages from "../constants/Messages";
+import QueueActions from "../actions/QueueActions";
+import QueueEvents from "../events/QueueEvents";
+import QueueStore from "../stores/QueueStore";
 
 var bindOneTimeEvents = function (store, resolverEvents, handlers) {
   var eventHandlers = [];
@@ -380,4 +380,4 @@ var AppActionsHandlerMixin = {
   }
 };
 
-module.exports = AppActionsHandlerMixin;
+export default AppActionsHandlerMixin;

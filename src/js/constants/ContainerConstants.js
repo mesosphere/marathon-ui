@@ -1,4 +1,4 @@
-var Util = require("../helpers/Util");
+import Util from "../helpers/Util";
 
 const ContainerConstants = {
   NETWORK: {
@@ -22,4 +22,4 @@ const ContainerConstants = {
   }
 };
 
-module.exports = Util.deepFreeze(ContainerConstants);
+export default Util.deepFreeze(ContainerConstants);

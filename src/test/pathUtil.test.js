@@ -1,5 +1,5 @@
-var expect = require("chai").expect;
-var PathUtil = require("../js/helpers/PathUtil");
+import {expect} from "chai";
+import PathUtil from "../js/helpers/PathUtil";
 
 describe("Path", function () {
   describe("getRelativePath", function () {

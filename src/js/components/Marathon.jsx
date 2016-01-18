@@ -1,25 +1,23 @@
-var config = require("../config/config");
+import config from "../config/config";
 
-var Link = require("react-router").Link;
-var Mousetrap = require("mousetrap");
-require("mousetrap/plugins/global-bind/mousetrap-global-bind");
-var React = require("react/addons");
-var RouteHandler = require("react-router").RouteHandler;
+import React from "react/addons";
+import {Link, RouteHandler} from "react-router";
+import Mousetrap from "mousetrap";
+import "mousetrap/plugins/global-bind/mousetrap-global-bind";
 
-var AboutModalComponent = require("../components/modals/AboutModalComponent");
-var AppModalComponent = require("../components/modals/AppModalComponent");
-var DialogsComponent = require("../components/DialogsComponent");
-var EditAppModalComponent =
-  require("../components/modals/EditAppModalComponent");
-var HelpModalComponent = require("../components/modals/HelpModalComponent");
-var NavTabsComponent = require("../components/NavTabsComponent");
+import AboutModalComponent from "../components/modals/AboutModalComponent";
+import AppModalComponent from "../components/modals/AppModalComponent";
+import DialogsComponent from "../components/DialogsComponent";
+import EditAppModalComponent from "../components/modals/EditAppModalComponent";
+import HelpModalComponent from "../components/modals/HelpModalComponent";
+import NavTabsComponent from "../components/NavTabsComponent";
 
-var AppsActions = require("../actions/AppsActions");
-var DeploymentActions = require("../actions/DeploymentActions");
-var DialogActions = require("../actions/DialogActions");
-var QueueActions = require("../actions/QueueActions");
+import AppsActions from "../actions/AppsActions";
+import DeploymentActions from "../actions/DeploymentActions";
+import DialogActions from "../actions/DialogActions";
+import QueueActions from "../actions/QueueActions";
 
-var tabs = require("../constants/tabs");
+import tabs from "../constants/tabs";
 
 var Marathon = React.createClass({
   displayName: "Marathon",
@@ -281,4 +279,4 @@ var Marathon = React.createClass({
   }
 });
 
-module.exports = Marathon;
+export default Marathon;

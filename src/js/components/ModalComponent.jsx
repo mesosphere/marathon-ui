@@ -1,6 +1,6 @@
-var Util = require("../helpers/Util");
-var classNames = require("classnames");
-var React = require("react/addons");
+import Util from "../helpers/Util";
+import classNames from "classnames";
+import React from "react/addons";
 
 function modalSizeClassName(size) {
   return (size == null) ? "" : "modal-" + size;
@@ -86,4 +86,4 @@ var ModalComponent = React.createClass({
   }
 });
 
-module.exports = ModalComponent;
+export default ModalComponent;

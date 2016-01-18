@@ -1,6 +1,6 @@
-var classNames = require("classnames");
-var React = require("react/addons");
-var AppStatus = require("../constants/AppStatus");
+import classNames from "classnames";
+import React from "react/addons";
+import AppStatus from "../constants/AppStatus";
 
 function roundWorkaround(x) {
   return Math.floor(x * 1000) / 1000;
@@ -64,4 +64,4 @@ var AppHealthBarComponent = React.createClass({
 
 });
 
-module.exports = AppHealthBarComponent;
+export default AppHealthBarComponent;

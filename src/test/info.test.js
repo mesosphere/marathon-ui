@@ -1,19 +1,17 @@
-var _ = require("underscore");
-var expect = require("chai").expect;
-var expectAsync = require("./helpers/expectAsync");
-var shallow = require("enzyme").shallow;
-var nock = require("nock");
-var describeWithDOM = require("enzyme").describeWithDOM;
+import {expect} from "chai";
+import {shallow} from "enzyme";
+import nock from "nock";
+import _ from "underscore";
+import React from "react/addons";
+import expectAsync from "./helpers/expectAsync";
 
-var React = require("react/addons");
 
-var config = require("../js/config/config");
-var AboutModalComponent = require(
-  "../js/components/modals/AboutModalComponent");
-var InfoActions = require("../js/actions/InfoActions");
-var InfoEvents = require("../js/events/InfoEvents");
-var InfoStore = require("../js/stores/InfoStore");
-var ObjectDlComponent = require("../js/components/ObjectDlComponent");
+import config from "../js/config/config";
+import AboutModalComponent from "../js/components/modals/AboutModalComponent";
+import InfoActions from "../js/actions/InfoActions";
+import InfoEvents from "../js/events/InfoEvents";
+import InfoStore from "../js/stores/InfoStore";
+import ObjectDlComponent from "../js/components/ObjectDlComponent";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";

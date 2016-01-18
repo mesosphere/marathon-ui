@@ -1,23 +1,22 @@
-var expect = require("chai").expect;
-var expectAsync = require("./helpers/expectAsync");
-var nock = require("nock");
-var React = require("react/addons");
+import {expect} from "chai";
+import nock from "nock";
+import React from "react/addons";
+import expectAsync from "./helpers/expectAsync";
 
-var config = require("../js/config/config");
+import config from "../js/config/config";
+import AppDispatcher from "../js/AppDispatcher";
+import ajaxWrapper from "../js/helpers/ajaxWrapper";
+import JSONPUtil from "../js/helpers/JSONPUtil";
+import InfoActions from "../js/actions/InfoActions";
+import InfoStore from "../js/stores/InfoStore";
+import InfoEvents from "../js/events/InfoEvents";
+import DCOSActions from "../js/actions/DCOSActions";
+import MesosActions from "../js/actions/MesosActions";
+import MesosStore from "../js/stores/MesosStore";
+import MesosEvents from "../js/events/MesosEvents";
 
-var AppDispatcher = require("../js/AppDispatcher");
-var ajaxWrapper = require("../js/helpers/ajaxWrapper");
-var JSONPUtil = require("../js/helpers/JSONPUtil");
-var InfoActions = require("../js/actions/InfoActions");
-var InfoStore = require("../js/stores/InfoStore");
-var InfoEvents = require("../js/events/InfoEvents");
-var DCOSActions = require("../js/actions/DCOSActions");
-var MesosActions = require("../js/actions/MesosActions");
-var MesosStore = require("../js/stores/MesosStore");
-var MesosEvents = require("../js/events/MesosEvents");
-
-var ajaxWrapperStub = require("./stubs/ajaxWrapperStub");
-var JSONPUtilRequestStub = require("./stubs/JSONPUtilRequestStub");
+import ajaxWrapperStub from "./stubs/ajaxWrapperStub";
+import JSONPUtilRequestStub from "./stubs/JSONPUtilRequestStub";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";

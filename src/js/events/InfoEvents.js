@@ -4,4 +4,4 @@ const InfoEvents = {
   REQUEST_ERROR: "INFO_EVENTS_REQUEST_ERROR"
 };
 
-module.exports = Object.freeze(InfoEvents);
+export default Object.freeze(InfoEvents);

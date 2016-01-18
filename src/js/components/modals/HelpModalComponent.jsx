@@ -1,6 +1,6 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var ModalComponent = require("../ModalComponent");
+import ModalComponent from "../ModalComponent";
 
 var HelpModalComponent = React.createClass({
   displayName: "HelpModalComponent",
@@ -50,4 +50,4 @@ var HelpModalComponent = React.createClass({
   }
 });
 
-module.exports = HelpModalComponent;
+export default HelpModalComponent;

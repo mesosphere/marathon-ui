@@ -9,4 +9,4 @@ const AppStatus = {
   WAITING: 4
 };
 
-module.exports = Object.freeze(AppStatus);
+export default Object.freeze(AppStatus);

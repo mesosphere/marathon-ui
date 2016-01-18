@@ -1,8 +1,8 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var InfoActions = require("../actions/InfoActions");
-var InfoEvents = require("../events/InfoEvents");
-var InfoStore = require("../stores/InfoStore");
+import InfoActions from "../actions/InfoActions";
+import InfoEvents from "../events/InfoEvents";
+import InfoStore from "../stores/InfoStore";
 
 var TaskMesosUrlComponent = React.createClass({
   displayName: "TaskMesosUrlComponent",
@@ -74,4 +74,4 @@ var TaskMesosUrlComponent = React.createClass({
   }
 });
 
-module.exports = TaskMesosUrlComponent;
+export default TaskMesosUrlComponent;

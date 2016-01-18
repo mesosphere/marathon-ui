@@ -1,14 +1,12 @@
-var React = require("react/addons");
-var Moment = require("moment");
+import React from "react/addons";
+import Moment from "moment";
 
-var AppsStore = require("../stores/AppsStore");
-var AppsActions = require("../actions/AppsActions");
-var AppsEvents = require("../events/AppsEvents");
-var AppTaskStatsListComponent =
-  require("../components/AppTaskStatsListComponent");
-var TaskMesosUrlComponent = require("../components/TaskMesosUrlComponent");
-var UnspecifiedNodeComponent =
-  require("../components/UnspecifiedNodeComponent");
+import AppsStore from "../stores/AppsStore";
+import AppsActions from "../actions/AppsActions";
+import AppsEvents from "../events/AppsEvents";
+import AppTaskStatsListComponent from "../components/AppTaskStatsListComponent";
+import TaskMesosUrlComponent from "../components/TaskMesosUrlComponent";
+import UnspecifiedNodeComponent from "../components/UnspecifiedNodeComponent";
 
 function invalidateValue(value, suffix) {
   if (value == null || value === "") {
@@ -170,4 +168,4 @@ var AppDebugInfoComponent = React.createClass({
   }
 });
 
-module.exports = AppDebugInfoComponent;
+export default AppDebugInfoComponent;

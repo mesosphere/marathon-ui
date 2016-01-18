@@ -6,4 +6,4 @@ const QueueEvents = {
   RESET_DELAY_ERROR: "QUEUE_EVENTS_RESET_DELAY_ERROR"
 };
 
-module.exports = Object.freeze(QueueEvents);
+export default Object.freeze(QueueEvents);

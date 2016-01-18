@@ -1,14 +1,13 @@
-var classNames = require("classnames");
-var highlight = require("highlight.js");
-var Link = require("react-router").Link;
-var React = require("react/addons");
-var url = require("url");
+import classNames from "classnames";
+import highlight from "highlight.js";
+import {Link} from "react-router";
+import React from "react/addons";
+import url from "url";
 
-var AppsActions = require("../actions/AppsActions");
-var AppsEvents = require("../events/AppsEvents");
-var AppsStore = require("../stores/AppsStore");
-var UnspecifiedNodeComponent =
-  require("../components/UnspecifiedNodeComponent");
+import AppsActions from "../actions/AppsActions";
+import AppsEvents from "../events/AppsEvents";
+import AppsStore from "../stores/AppsStore";
+import UnspecifiedNodeComponent from "../components/UnspecifiedNodeComponent";
 
 function invalidateValue(value, suffix) {
   if (value == null) {
@@ -282,4 +281,4 @@ var AppVersionComponent = React.createClass({
   }
 });
 
-module.exports = AppVersionComponent;
+export default AppVersionComponent;

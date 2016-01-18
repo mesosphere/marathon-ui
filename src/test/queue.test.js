@@ -1,11 +1,11 @@
-var expect = require("chai").expect;
-var expectAsync = require("./helpers/expectAsync");
-var nock = require("nock");
+import {expect} from "chai";
+import nock from "nock";
+import expectAsync from "./helpers/expectAsync";
 
-var config = require("../js/config/config");
-var QueueActions = require("../js/actions/QueueActions");
-var QueueEvents = require("../js/events/QueueEvents");
-var QueueStore = require("../js/stores/QueueStore");
+import config from "../js/config/config";
+import QueueActions from "../js/actions/QueueActions";
+import QueueEvents from "../js/events/QueueEvents";
+import QueueStore from "../js/stores/QueueStore";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";

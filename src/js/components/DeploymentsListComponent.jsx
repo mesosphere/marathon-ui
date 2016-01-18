@@ -1,15 +1,15 @@
-var classNames = require("classnames");
-var lazy = require("lazy.js");
-var Link = require("react-router").Link;
-var React = require("react/addons");
+import classNames from "classnames";
+import lazy from "lazy.js";
+import {Link} from "react-router";
+import React from "react/addons";
 
-var Messages = require("../constants/Messages");
-var States = require("../constants/States");
+import Messages from "../constants/Messages";
+import States from "../constants/States";
 
-var CenteredInlineDialogComponent = require("./CenteredInlineDialogComponent");
-var DeploymentComponent = require("../components/DeploymentComponent");
-var DeploymentStore = require("../stores/DeploymentStore");
-var DeploymentEvents = require("../events/DeploymentEvents");
+import CenteredInlineDialogComponent from "./CenteredInlineDialogComponent";
+import DeploymentComponent from "../components/DeploymentComponent";
+import DeploymentStore from "../stores/DeploymentStore";
+import DeploymentEvents from "../events/DeploymentEvents";
 
 var DeploymentListComponent = React.createClass({
   displayName: "DeploymentListComponent",
@@ -236,4 +236,4 @@ var DeploymentListComponent = React.createClass({
   }
 });
 
-module.exports = DeploymentListComponent;
+export default DeploymentListComponent;

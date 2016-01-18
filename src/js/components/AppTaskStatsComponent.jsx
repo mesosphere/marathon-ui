@@ -1,6 +1,6 @@
-var classNames = require("classnames");
-var React = require("react/addons");
-var Moment = require("moment");
+import classNames from "classnames";
+import React from "react/addons";
+import Moment from "moment";
 
 var AppTaskStatsComponent = React.createClass({
   displayName: "AppTaskStatsComponent",
@@ -132,4 +132,4 @@ var AppTaskStatsComponent = React.createClass({
   }
 });
 
-module.exports = AppTaskStatsComponent;
+export default AppTaskStatsComponent;
