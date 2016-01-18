@@ -1,5 +1,4 @@
 import packageJSON from "../../../package.json";
-import configDev from "./config.dev";
 
 var config = {
   // @@ENV gets replaced by build system
@@ -21,12 +20,4 @@ var config = {
     `${packageJSON.version}-SNAPSHOT`
 };
 
-if (process.env.GULP_ENV === "development") {
-  try {
-    config = Object.assign(config, configDev);
-  } catch (e) {
-    console.info("You could copy config.template.js to config.dev.js " +
-      "to enable a development configuration.");
-  }
-}
 export default config;
