@@ -3,6 +3,7 @@ import nock from "nock";
 import expectAsync from "./helpers/expectAsync";
 
 import config from "../js/config/config";
+
 import QueueActions from "../js/actions/QueueActions";
 import QueueEvents from "../js/events/QueueEvents";
 import QueueStore from "../js/stores/QueueStore";

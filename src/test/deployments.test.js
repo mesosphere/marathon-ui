@@ -6,6 +6,7 @@ import React from "react/addons";
 import expectAsync from "./helpers/expectAsync";
 
 import config from "../js/config/config";
+
 import DeploymentActions from "../js/actions/DeploymentActions";
 import DeploymentComponent from "../js/components/DeploymentComponent";
 import NavTabsComponent from "../js/components/NavTabsComponent";

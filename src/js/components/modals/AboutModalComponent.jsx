@@ -1,14 +1,14 @@
 import React from "react/addons";
 
+import config from "../../config/config";
+
 import InfoActions from "../../actions/InfoActions";
 import InfoEvents from "../../events/InfoEvents";
 import InfoStore from "../../stores/InfoStore";
 import ModalComponent from "../ModalComponent";
 import ObjectDlComponent from "../ObjectDlComponent";
-import UnspecifiedNodeComponent from
-  "../../components/UnspecifiedNodeComponent";
-
-import config from "../../config/config";
+import UnspecifiedNodeComponent
+  from "../../components/UnspecifiedNodeComponent";
 
 var AboutModalComponent = React.createClass({
   displayName: "AboutModalComponent",

@@ -5,12 +5,14 @@ import React from "react/addons";
 import expectAsync from "./helpers/expectAsync";
 
 import config from "../js/config/config";
+
 import AppVersionsActions from "../js/actions/AppVersionsActions";
 import AppVersionsEvents from "../js/events/AppVersionsEvents";
 import AppVersionsStore from "../js/stores/AppVersionsStore";
 import AppVersionComponent from "../js/components/AppVersionComponent";
 import AppVersionListComponent from "../js/components/AppVersionListComponent";
-import AppVersionListItemComponent from "../js/components/AppVersionListItemComponent";
+import AppVersionListItemComponent
+  from "../js/components/AppVersionListItemComponent";
 
 var server = config.localTestserverURI;
 config.apiURL = `http://${server.address}:${server.port}/`;

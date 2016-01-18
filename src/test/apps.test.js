@@ -8,6 +8,7 @@ import expectAsync from "./helpers/expectAsync";
 import * as ShallowUtils from "./helpers/ShallowUtils";
 
 import config from "../js/config/config";
+
 import Util from "../js/helpers/Util";
 import AppTypes from "../js/constants/AppTypes";
 import AppsActions from "../js/actions/AppsActions";

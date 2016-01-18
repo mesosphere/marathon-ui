@@ -3,6 +3,7 @@ import nock from "nock";
 import expectAsync from "./helpers/expectAsync";
 
 import config from "../js/config/config";
+
 import AppDispatcher from "../js/AppDispatcher";
 import DCOSActions from "../js/actions/DCOSActions";
 import DCOSEvents from "../js/events/DCOSEvents";

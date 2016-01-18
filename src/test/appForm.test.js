@@ -3,6 +3,7 @@ import nock from "nock";
 import expectAsync from "./helpers/expectAsync";
 
 import config from "../js/config/config";
+
 import FormActions from "../js/actions/FormActions";
 import FormEvents from "../js/events/FormEvents";
 import AppsActions from "../js/actions/AppsActions";

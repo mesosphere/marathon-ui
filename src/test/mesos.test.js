@@ -2,10 +2,11 @@ import {expect} from "chai";
 import nock from "nock";
 import React from "react/addons";
 import expectAsync from "./helpers/expectAsync";
+import ajaxWrapper from "../js/helpers/ajaxWrapper";
 
 import config from "../js/config/config";
+
 import AppDispatcher from "../js/AppDispatcher";
-import ajaxWrapper from "../js/helpers/ajaxWrapper";
 import JSONPUtil from "../js/helpers/JSONPUtil";
 import InfoActions from "../js/actions/InfoActions";
 import InfoStore from "../js/stores/InfoStore";

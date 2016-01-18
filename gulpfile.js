@@ -1,6 +1,6 @@
 var autoprefixer = require("gulp-autoprefixer");
 var connect = require("gulp-connect");
-var header = require('gulp-header');
+var header = require("gulp-header");
 var browserSync = require("browser-sync");
 var eslintFormatter = require("eslint/lib/formatters/stylish");
 var gulp = require("gulp");
@@ -176,7 +176,7 @@ gulp.task("minify-js", ["webpack"], function () {
 
   return gulp.src(dirs.dist + "/" + files.mainJs + ".js")
     .pipe(uglify())
-    .pipe(header(banner, { pkg : packageInfo } ))
+    .pipe(header(banner, {pkg : packageInfo}))
     .pipe(gulp.dest(dirs.dist));
 });
 
@@ -187,10 +187,10 @@ gulp.task("images", function () {
 
 gulp.task("fonts", function () {
   return gulp.src([
-      dirs.ionicons + "/**/*.*",
-      dirs.sourceSansPro + "/" + files.sourceSansPro,
-      dirs.sourceSansPro + "/" + files.sourceSansProBold
-    ]).pipe(gulp.dest(dirs.dist + "/" + dirs.fontsDist));
+    dirs.ionicons + "/**/*.*",
+    dirs.sourceSansPro + "/" + files.sourceSansPro,
+    dirs.sourceSansPro + "/" + files.sourceSansProBold
+  ]).pipe(gulp.dest(dirs.dist + "/" + dirs.fontsDist));
 });
 
 gulp.task("index", function () {

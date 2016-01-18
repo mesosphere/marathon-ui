@@ -3,6 +3,7 @@ import nock from "nock";
 import expectAsync from "./helpers/expectAsync";
 
 import config from "../js/config/config";
+
 import GroupsAction from "../js/actions/GroupsActions";
 import GroupsEvents from "../js/events/GroupsEvents";
 import GroupsStore from "../js/stores/GroupsStore";

@@ -1,9 +1,9 @@
-import config from "../config/config";
-
 import React from "react/addons";
 import {Link, RouteHandler} from "react-router";
 import Mousetrap from "mousetrap";
 import "mousetrap/plugins/global-bind/mousetrap-global-bind";
+
+import config from "../config/config";
 
 import AboutModalComponent from "../components/modals/AboutModalComponent";
 import AppModalComponent from "../components/modals/AppModalComponent";

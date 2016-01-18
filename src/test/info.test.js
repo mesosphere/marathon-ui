@@ -5,8 +5,8 @@ import _ from "underscore";
 import React from "react/addons";
 import expectAsync from "./helpers/expectAsync";
 
-
 import config from "../js/config/config";
+
 import AboutModalComponent from "../js/components/modals/AboutModalComponent";
 import InfoActions from "../js/actions/InfoActions";
 import InfoEvents from "../js/events/InfoEvents";

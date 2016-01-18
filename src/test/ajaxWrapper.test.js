@@ -1,10 +1,10 @@
 import {expect} from "chai";
 import nock from "nock";
-
-import ajaxWrapper from "../js/helpers/ajaxWrapper";
 import expectAsync from "./helpers/expectAsync";
 
 import config from "../js/config/config";
+
+import ajaxWrapper from "../js/helpers/ajaxWrapper";
 
 var server = config.localTestserverURI;
 config.apiURL = `http://${server.address}:${server.port}/`;

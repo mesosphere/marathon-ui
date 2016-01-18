@@ -6,6 +6,7 @@ import React from "react/addons";
 import _ from "underscore";
 
 import config from "../js/config/config";
+
 import AppDispatcher from "../js/AppDispatcher";
 import States from "../js/constants/States";
 import AppsActions from "../js/actions/AppsActions";

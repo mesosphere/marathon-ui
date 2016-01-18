@@ -2,9 +2,9 @@ import {expect} from "chai";
 import nock from "nock";
 import {shallow} from "enzyme";
 import React from "react/addons";
-var TestUtils = React.addons.TestUtils;
 
 import config from "../js/config/config";
+
 import Util from "../js/helpers/Util";
 import appScheme from "../js/stores/schemes/appScheme";
 import InfoStore from "../js/stores/InfoStore";
