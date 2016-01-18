@@ -8,6 +8,7 @@ var gutil = require("gulp-util");
 var less = require("gulp-less");
 var minifyCSS = require("gulp-minify-css");
 var path = require("path");
+var fs = require("fs");
 var replace = require("gulp-replace");
 var uglify = require("gulp-uglify");
 var webpack = require("webpack");
@@ -40,8 +41,17 @@ var files = {
 };
 
 var webpackWatch = false;
+var configFilePath = path.resolve(dirs.js + "/config/config.js");
 if (process.env.GULP_ENV === "development") {
   webpackWatch = true;
+  try {
+    var devConfigFilePath = path.resolve(dirs.js + "/config/config.dev.js");
+    fs.accessSync(devConfigFilePath);
+    configFilePath = devConfigFilePath;
+  } catch (e) {
+    console.info("You could copy config.template.js to config.dev.js " +
+      "to enable a development configuration.");
+  }
 }
 
 var webpackConfig = {
@@ -83,6 +93,13 @@ var webpackConfig = {
       }
     ]
   },
+  plugins: [
+    new webpack.NormalModuleReplacementPlugin(/\/config\/config(\.js)?$/,
+      function (result) {
+        result.request = configFilePath;
+      }
+    )
+  ],
   resolve: {
     extensions: ["", ".jsx", ".js"]
   },
