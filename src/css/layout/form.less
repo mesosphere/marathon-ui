@@ -7,10 +7,10 @@
 }
 
 .form-control {
-  background: #f6f6f6;
-  border-color: #5e646c;
-  color: #555;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.2);
+  background: @black-haze;
+  border-color: @shuttle-gray;
+  color: @chicago;
+  box-shadow: inset 0 4px 4px fade(@black, 20%);
 
   &.form-control-inverse {
     background: transparent;
@@ -38,7 +38,7 @@
   }
 
   input[type="checkbox"]:checked + label::after {
-    color: #fff;
+    color: @white;
     content: "\f383";
     font-family: "Ionicons";
     font-size: 12px;
@@ -103,7 +103,7 @@
 }
 
 .help-block {
-  color: #8e929b;
+  color: @oslo-gray;
 }
 
 .has-error .help-block,
@@ -112,5 +112,5 @@
 .has-error .checkbox,
 .has-error .radio-inline,
 .has-error .checkbox-inline {
-  color: #d9534f;
+  color: @roman;
 }
