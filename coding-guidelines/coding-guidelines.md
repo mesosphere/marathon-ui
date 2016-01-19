@@ -57,7 +57,7 @@ One var, let or const per variable and line.
 Examples:
 ```JS
 var camelCase = "{value}";
-let CamelCase = "{value}";
+let CamelCase = new Object();
 const SOME_CONSTANT = "constant value";
 ```
 
