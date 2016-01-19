@@ -1,4 +1,19 @@
 # Coding Guidelines
+## Table of Contents
+
+- [General](#general)
+- [Comments](#comments)
+- [Strings](#strings)
+- [Variables and Attribute names](#variables-and-attribute-names)
+- [Object Literals](#object-literals)
+- [Indentation and Line-Breaks](#indentation-and-line-breaks)
+- [Functions](#functions)
+- [Control Statements](#control-statements)
+- [JSDoc](#jsdoc)
+- [JSX](#jsx)
+	- [Self contained elements](#self-contained-elements)
+	- [Non self contained elements](#non-self-contained-elements)
+
 ## General
 We are using the eslintrc to lint our code. All basic rules are defined there, some important rules are:
   - Max line length is 80 characters.
@@ -9,6 +24,22 @@ We prefer a functional approach and try to use the abstractions over
 normal control statements. Functions and code must be
 self-descriptive, use JSDoc blocks only if necessary.
 
+## Comments
+Rules:
+- Comments must be prefixed with a space sign.
+- The `*` sign is a exception to the rule.
+
+Examples:
+```JS
+// Single line Comment
+
+//* A Exception to the space rule
+
+/**
+* Block Comment
+*/
+```
+
 ## Strings
  - Strings are defined with double quotes.
  - Use template strings if variables are used.
@@ -17,6 +48,33 @@ Example:
 ```JS
 var string = `Hello ${world}!`;
 ```
+
+## Variables and Attribute names
+Variable names always use camelCase names, except Constants which use UPPER_CASE.
+One var, let or const per variable and line.
+
+Examples:
+```JS
+var camelCase = "{value}";
+let CamelCase = "{value}";
+const SOME_CONSTANT = "constant value";
+```
+
+## Object Literals
+Object literals must have no space after the '{' or before the '}' signs.
+
+Valid Example
+```JS
+var objectLiteral = {"key": "value", "key2": "value2"};
+
+var objectLiteral = {
+  "key": "value",
+  "key2": "value2",
+  "key3": "value3",
+  "key4": "value4"
+};
+```
+
 
 ## Indentation and Line-Breaks
 Rules:
@@ -101,23 +159,7 @@ var es6 = (parameter, index) => {
 }
 ```
 
-## Comments
-Rules:
-  - Comments must be prefixed with a space sign.
-    - The `*` sign is a exception to the rule.
-
-Examples:
-```JS
-// Single line Comment
-
-//* A Exception to the space rule
-
-/**
- * Block Comment
- */
-```
-
-## If, loops, switch blocks
+## Control Statements
 Rules:
   - Space after the keyword
   - Space before opening parentheses
@@ -160,32 +202,6 @@ switch (a) {
 for (var a = 10; a !== 0; a--) {
   // Statements
 }
-```
-
-## Variables and Attribute names
-Variable names always use camelCase names, except Constants which use UPPER_CASE.
-One var, let or const per variable and line.
-
-Examples:
-```JS
-var camelCase = "{value}";
-let CamelCase = "{value}";
-const SOME_CONSTANT = "constant value";
-```
-
-## Object Literals
-Object literals must have no space after the '{' or before the '}' signs.
-
-Valid Example
-```JS
-var objectLiteral = {"key": "value", "key2": "value2"};
-
-var objectLiteral = {
-  "key": "value",
-  "key2": "value2",
-  "key3": "value3",
-  "key4": "value4"
-};
 ```
 
 ## JSDoc
