@@ -4,15 +4,16 @@
 - [General](#general)
 - [Comments](#comments)
 - [Strings](#strings)
-- [Variables and Attribute names](#variables-and-attribute-names)
+- [Variables and Attribute Names](#variables-and-attribute-names)
 - [Object Literals](#object-literals)
-- [Indentation and Line-Breaks](#indentation-and-line-breaks)
+- [Indentation and Line Breaks](#indentation-and-line-breaks)
 - [Functions](#functions)
 - [Control Statements](#control-statements)
 - [JSDoc](#jsdoc)
 - [JSX](#jsx)
-	- [Self contained elements](#self-contained-elements)
-	- [Non self contained elements](#non-self-contained-elements)
+	- [Self Contained Elements](#self-contained-elements)
+	- [Non Self Contained Elements](#non-self-contained-elements)
+
 
 ## General
 We are using the eslintrc to lint our code. All basic rules are defined there, some important rules are:
@@ -49,7 +50,7 @@ Example:
 var string = `Hello ${world}!`;
 ```
 
-## Variables and Attribute names
+## Variables and Attribute Names
 Variable names always use camelCase names, except Constants which use UPPER_CASE.
 One var, let or const per variable and line.
 
@@ -76,7 +77,7 @@ var objectLiteral = {
 ```
 
 
-## Indentation and Line-Breaks
+## Indentation and Line Breaks
 Rules:
 - Line breaks are only done if needed.
 - Strings are split at the latest possible position.
@@ -249,8 +250,8 @@ function test(number, callback) {
 
 ## JSX
 
-### Self contained elements
-On self contained elements attributes must be indented with 2 spaces.
+### Self Contained Elements
+On self contained element attributes must be indented with 2 spaces.
 
 Example:
 ```JS
@@ -259,7 +260,7 @@ Example:
   onDismiss={this.handleDismissDialog} />
 ```
 
-### Non self contained elements
+### Non Self Contained Elements
 On elements which are not self contained the indentation of attributes must be 4 spaces. And the childNodes must have a indentation of 2 spaces to the element and -2 spaces to the attributes.
 
 Example:
