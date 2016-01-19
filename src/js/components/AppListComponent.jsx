@@ -2,6 +2,7 @@ import classNames from "classnames";
 import lazy from "lazy.js";
 import {Link} from "react-router";
 import React from "react/addons";
+import {score} from "fuzzaldrin";
 
 import AppListViewTypes from "../constants/AppListViewTypes";
 import AppStatus from "../constants/AppStatus";
@@ -186,7 +187,10 @@ var AppListComponent = React.createClass({
 
     if (filterText != null && filterText !== "") {
       nodesSequence = nodesSequence
-        .filter(app => app.id.indexOf(filterText) !== -1);
+        .filter(app => {
+          return score(app.id, filterText) > 0.02;
+        });
+
     } else if (currentGroup !== "/") {
       nodesSequence = nodesSequence
         .filter(app => app.id.startsWith(currentGroup));
@@ -304,6 +308,15 @@ var AppListComponent = React.createClass({
         .sortBy((app) => {
           return app[sortKey];
         }, state.sortDescending);
+
+      let filterText = props.filters[FilterTypes.TEXT];
+      if (filterText != null && sortKey === "id") {
+        nodesSequence = nodesSequence.sort((a, b) => {
+          return score(a.id, filterText) > score(b.id, filterText)
+            ? -1 * sortDirection
+            : 1  * sortDirection;
+        });
+      }
 
     // Grouped node view
     } else {
