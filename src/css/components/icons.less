@@ -12,6 +12,68 @@
     height: 100%;
   }
 
+  // Temporary icon styling as discussed in #2392 will be removed
+  // if we have the SVGs in place.
+  &.running {
+    background-image: url("img/icons/icon-mini-running-color.png");
+    background-size: contain;
+  }
+
+  &.deploying {
+    background-image: url("img/icons/icon-mini-deploying-color.png");
+    background-size: contain;
+  }
+
+  &.suspended {
+    background-image: url("img/icons/icon-mini-suspended-color.png");
+    background-size: contain;
+  }
+
+  &.delayed {
+    background-image: url("img/icons/icon-mini-delayed-color.png");
+    background-size: contain;
+  }
+
+  &.waiting {
+    background-image: url("img/icons/icon-mini-waiting-color.png");
+    background-size: contain;
+  }
+
+  &.gear {
+    background-image: url("img/icons/icon-mini-gear.svg");
+    background-size: contain;
+  }
+
+  &.file {
+    background-image: url("img/icons/icon-mini-file.svg");
+    background-size: contain;
+  }
+
+  &.warning {
+    background-image: url("img/icons/icon-warning.svg");
+    background-size: contain;
+  }
+
+  &.dots {
+    background-image: url("img/icons/icon-mini-ellipse-white.svg");
+    background-size: contain;
+  }
+
+  &.loading {
+    background-image: url("img/icons/icon-loading.svg");
+    background-size: contain;
+  }
+
+  &.group {
+    background-image: url("img/icons/icon-small-group.svg");
+    background-size: contain;
+  }
+
+  &.app {
+    background-image: url("img/icons/icon-small-app.svg");
+    background-size: contain;
+  }
+
   &.icon-mini {
     font-size: floor(@icon-mini-height*@icon-mini-scale);
     line-height: floor(@icon-mini-height*@icon-mini-scale);
@@ -22,58 +84,6 @@
       line-height: floor(floor(@icon-mini-height*@icon-mini-scale)
         + (@icon-mini-offset*@icon-mini-scale));
 
-    }
-
-    // Temporary icon styling as discussed in #2392 will be removed
-    // if we have the SVGs in place.
-    &.running {
-      background-image: url("img/icons/icon-mini-running-color.png");
-      background-size: contain;
-    }
-
-    &.deploying {
-      background-image: url("img/icons/icon-mini-deploying-color.png");
-      background-size: contain;
-    }
-
-    &.suspended {
-      background-image: url("img/icons/icon-mini-suspended-color.png");
-      background-size: contain;
-    }
-
-    &.delayed {
-      background-image: url("img/icons/icon-mini-delayed-color.png");
-      background-size: contain;
-    }
-
-    &.waiting {
-      background-image: url("img/icons/icon-mini-waiting-color.png");
-      background-size: contain;
-    }
-
-    &.gear {
-      background-image: url("img/icons/icon-mini-gear.svg");
-      background-size: contain;
-    }
-
-    &.file {
-      background-image: url("img/icons/icon-mini-file.svg");
-      background-size: contain;
-    }
-
-    &.loading {
-      background-image: url("img/icons/icon-loading.svg");
-      background-size: contain;
-    }
-
-    &.warning {
-      background-image: url("img/icons/icon-warning.svg");
-      background-size: contain;
-    }
-
-    &.dots {
-      background-image: url("img/icons/icon-mini-ellipse-white.svg");
-      background-size: contain;
     }
   }
 
@@ -87,17 +97,6 @@
       line-height: floor(floor(@icon-small-height*@icon-small-scale)
         + (@icon-small-offset*@icon-small-scale));
     }
-
-    &.group {
-      background-image: url("img/icons/icon-small-group.svg");
-      background-size: contain;
-    }
-
-    &.app {
-      background-image: url("img/icons/icon-small-app.svg");
-      background-size: contain;
-    }
-
   }
 
   &.icon-medium {
@@ -109,7 +108,6 @@
     &:before {
       line-height: floor(floor(@icon-medium-height*@icon-medium-scale)
         + (@icon-medium-offset*@icon-medium-scale));
-
     }
 
   }

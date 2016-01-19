@@ -102,9 +102,17 @@ var TaskListComponent = React.createClass({
       props.fetchState !== States.STATE_FORBIDDEN;
 
     if (pageIsLoading) {
+      let message = "Please wait while tasks are being retrieved";
+      let title = "Loading Tasks...";
+
       return (
-        <CenteredInlineDialogComponent title="Loading Tasks..."
-          message="Please wait while tasks are being retrieved." />
+        <CenteredInlineDialogComponent>
+          <div>
+            <i className="icon icon-large loading"></i>
+            <h3 className="h3">{title}</h3>
+            <p className="muted">{message}</p>
+          </div>
+        </CenteredInlineDialogComponent>
       );
     }
 
