@@ -16,6 +16,7 @@
 - \#2831 - Convert alert, confirm and prompt dialogs to new design
 - \#2909 - Update dialog messages
 - \#2655 - Never preselect dangerous actions in modal dialogs
+- \#3018 - Better search result ranking and fuzzy matching
 
 ### Fixed
 - \#2892 - Version in task detail component shouldn't be localised
