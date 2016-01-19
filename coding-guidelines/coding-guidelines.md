@@ -143,21 +143,21 @@ function test() {
 
 function test() { var a = 10; return a; }
 
-var test = function () { var b = 10; return b; }
+var test = function () { var b = 10; return b; };
 
 var es6 = parameter => parameter();
 
 var es6 = parameter => {
   parameter();
   return false;
-}
+};
 
 var es6 = (parameter, index) => parameter(index);
 
 var es6 = (parameter, index) => {
   parameter(index);
   return false;
-}
+};
 ```
 
 ## Control Statements
