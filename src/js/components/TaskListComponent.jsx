@@ -69,7 +69,7 @@ var TaskListComponent = React.createClass({
             key={task.id}
             onToggle={props.onTaskToggle}
             task={task}
-            taskHealthMessage={props.getTaskHealthMessage(task.id)}/>
+            taskHealthMessage={props.getTaskHealthMessage(task.id)} />
         );
       })
       .value();
@@ -179,10 +179,9 @@ var TaskListComponent = React.createClass({
         <table className="table table-unstyled task-list">
           <thead>
             <tr>
-              <th
-                className={headerClassSet}
-                width="1"
-                onClick={this.handleThToggleClick}>
+              <th className={headerClassSet}
+                  width="1"
+                  onClick={this.handleThToggleClick}>
                 <input type="checkbox"
                   checked={this.allTasksSelected(tasksLength)}
                   disabled={tasksLength === 0}

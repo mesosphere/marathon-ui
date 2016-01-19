@@ -41,7 +41,7 @@ var AppListFilterComponent = React.createClass({
 
   shouldComponentUpdate: function (nextProps, nextState) {
     return this.state.filterText !== nextState.filterText ||
-        this.state.activated !== nextState.activated;
+      this.state.activated !== nextState.activated;
   },
 
   updateFilterText: function () {

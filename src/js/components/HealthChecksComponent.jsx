@@ -98,12 +98,12 @@ var HealthChecksComponent = React.createClass({
           <div className="row">
             <div className="col-sm-3">
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.protocol`)
-                }
-                fieldId={`${fieldsetId}.${i}.protocol`}
-                label="Protocol"
-                value={row.protocol}>
+                  errorMessage={
+                    getErrorMessage(`${fieldsetId}.${i}.protocol`)
+                  }
+                  fieldId={`${fieldsetId}.${i}.protocol`}
+                  label="Protocol"
+                  value={row.protocol}>
                 <select defaultValue={row.protocol} ref={`protocol${i}`}>
                   <option value={HealthCheckProtocols.COMMAND}>COMMAND</option>
                   <option value={HealthCheckProtocols.HTTP}>HTTP</option>
@@ -115,13 +115,13 @@ var HealthChecksComponent = React.createClass({
           <div className={pathClassSet}>
             <div className="col-sm-12">
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.path`)
-                }
-                fieldId={`${fieldsetId}.${i}.path`}
-                label="Path"
-                help={`Example: "/path/to/health".`}
-                value={row.path}>
+                  errorMessage={
+                    getErrorMessage(`${fieldsetId}.${i}.path`)
+                  }
+                  fieldId={`${fieldsetId}.${i}.path`}
+                  label="Path"
+                  help={`Example: "/path/to/health".`}
+                  value={row.path}>
                 <input ref={`path${i}`} />
               </FormGroupComponent>
             </div>
@@ -129,13 +129,13 @@ var HealthChecksComponent = React.createClass({
           <div className={commandClassSet}>
             <div className="col-sm-12">
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.command`)
-                }
-                fieldId={`${fieldsetId}.${i}.command`}
-                label="Command"
-                help={`Example: "curl -f -X GET http://$HOST:$PORT0/health"`}
-                value={row.command}>
+                  errorMessage={
+                    getErrorMessage(`${fieldsetId}.${i}.command`)
+                  }
+                  fieldId={`${fieldsetId}.${i}.command`}
+                  label="Command"
+                  help={`Example: "curl -f -X GET http://$HOST:$PORT0/health"`}
+                  value={row.command}>
                 <input ref={`command${i}`} />
               </FormGroupComponent>
             </div>
@@ -143,38 +143,38 @@ var HealthChecksComponent = React.createClass({
           <div className="row">
             <div className="col-sm-2">
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.gracePeriodSeconds`)
-                }
-                fieldId={`${fieldsetId}.${i}.gracePeriodSeconds`}
-                label="Grace Period"
-                help="seconds"
-                value={row.gracePeriodSeconds}>
+                  errorMessage={
+                    getErrorMessage(`${fieldsetId}.${i}.gracePeriodSeconds`)
+                  }
+                  fieldId={`${fieldsetId}.${i}.gracePeriodSeconds`}
+                  label="Grace Period"
+                  help="seconds"
+                  value={row.gracePeriodSeconds}>
                 <input ref={`gracePeriodSeconds${i}`}
                   {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
             <div className="col-sm-2">
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.intervalSeconds`)
-                }
-                fieldId={`${fieldsetId}.${i}.intervalSeconds`}
-                label="Interval"
-                help="seconds"
-                value={row.intervalSeconds}>
+                  errorMessage={
+                    getErrorMessage(`${fieldsetId}.${i}.intervalSeconds`)
+                  }
+                  fieldId={`${fieldsetId}.${i}.intervalSeconds`}
+                  label="Interval"
+                  help="seconds"
+                  value={row.intervalSeconds}>
                 <input ref={`intervalSeconds${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
             <div className="col-sm-2">
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.timeoutSeconds`)
-                }
-                fieldId={`${fieldsetId}.${i}.timeoutSeconds`}
-                label="Timeout"
-                help="seconds"
-                value={row.timeoutSeconds}>
+                  errorMessage={
+                    getErrorMessage(`${fieldsetId}.${i}.timeoutSeconds`)
+                  }
+                  fieldId={`${fieldsetId}.${i}.timeoutSeconds`}
+                  label="Timeout"
+                  help="seconds"
+                  value={row.timeoutSeconds}>
                 <input ref={`timeoutSeconds${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
@@ -182,46 +182,46 @@ var HealthChecksComponent = React.createClass({
           <div className="row">
             <div className="col-sm-4">
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.maxConsecutiveFailures`)
-                }
-                fieldId={`${fieldsetId}.${i}.maxConsecutiveFailures`}
-                label="Max. Consecutive Failures"
-                value={row.maxConsecutiveFailures}>
+                  errorMessage={
+                    getErrorMessage(`${fieldsetId}.${i}.maxConsecutiveFailures`)
+                  }
+                  fieldId={`${fieldsetId}.${i}.maxConsecutiveFailures`}
+                  label="Max. Consecutive Failures"
+                  value={row.maxConsecutiveFailures}>
                 <input ref={`maxConsecutiveFailures${i}`}
                   {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
             <div className={portIndexClassSet}>
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.portIndex`)
-                }
-                fieldId={`${fieldsetId}.${i}.portIndex`}
-                label="Port Index"
-                value={row.portIndex || 0}>
+                  errorMessage={
+                    getErrorMessage(`${fieldsetId}.${i}.portIndex`)
+                  }
+                  fieldId={`${fieldsetId}.${i}.portIndex`}
+                  label="Port Index"
+                  value={row.portIndex || 0}>
                 <input ref={`portIndex${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
             <div className={portNumberClassSet}>
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.port`)
-                }
-                fieldId={`${fieldsetId}.${i}.port`}
-                label="Port Number"
-                value={row.port || 0}>
-                <input ref={`port${i}`} {...numberInputAttributes} />
+                    errorMessage={
+                      getErrorMessage(`${fieldsetId}.${i}.port`)
+                    }
+                    fieldId={`${fieldsetId}.${i}.port`}
+                    label="Port Number"
+                    value={row.port || 0}>
+                  <input ref={`port${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
             <div className={portTypeClassSet}>
               <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.portType`)
-                }
-                fieldId={`${fieldsetId}.${i}.portType`}
-                label="Port Type"
-                value={row.portType}>
+                  errorMessage={
+                    getErrorMessage(`${fieldsetId}.${i}.portType`)
+                  }
+                  fieldId={`${fieldsetId}.${i}.portType`}
+                  label="Port Type"
+                  value={row.portType}>
                 <select defaultValue={row.portType} ref={`portType${i}`}>
                   <option value={HealthCheckPortTypes.PORT_INDEX}>
                     Port Index
@@ -236,12 +236,12 @@ var HealthChecksComponent = React.createClass({
           <div className={pathClassSet}>
             <div className="col-sm-12">
               <FormGroupComponent className="checkbox-form-group"
-                errorMessage={getErrorMessage(
-                  `${fieldsetId}.${i}.ignoreHttp1xx`
-                  )}
-                fieldId={`${fieldsetId}.${i}.ignoreHttp1xx`}
-                label="Ignore HTTP informational status codes 100 to 199."
-                value={row.ignoreHttp1xx}>
+                  errorMessage={getErrorMessage(
+                    `${fieldsetId}.${i}.ignoreHttp1xx`
+                    )}
+                  fieldId={`${fieldsetId}.${i}.ignoreHttp1xx`}
+                  label="Ignore HTTP informational status codes 100 to 199."
+                  value={row.ignoreHttp1xx}>
                 <input ref={`ignoreHttp1xx${i}`} type="checkbox" />
               </FormGroupComponent>
             </div>

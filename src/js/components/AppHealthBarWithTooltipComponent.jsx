@@ -41,7 +41,7 @@ var AppHealthBarWithTooltipComponent = React.createClass({
 
     return (
       <div onMouseOver={this.handleMouseOverHealthBar}
-           onMouseOut={this.handleMouseOutHealthBar}>
+          onMouseOut={this.handleMouseOutHealthBar}>
         <PopoverComponent visible={this.state.isPopoverVisible}
             className="app-health-detail-popover">
           <AppHealthDetailComponent

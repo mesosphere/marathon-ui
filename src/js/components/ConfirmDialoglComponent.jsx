@@ -38,8 +38,7 @@ var ConfirmDialogComponent = React.createClass({
     var className = classNames("dialog", data.severity);
 
     return (
-      <ModalComponent
-          centered={true}
+      <ModalComponent centered={true}
           className={className}
           dismissOnClickOutside={false}
           ref="modalComponent"
@@ -51,19 +50,17 @@ var ConfirmDialogComponent = React.createClass({
           {data.message}
         </div>
         <div className="modal-footer">
-          <button
-            className="btn btn-lg btn-success btn-inverse"
-            ref="acceptButton"
-            tabIndex="2"
-            type="button"
-            onClick={props.onAccept}>
+          <button className="btn btn-lg btn-success btn-inverse"
+              ref="acceptButton"
+              tabIndex="2"
+              type="button"
+              onClick={props.onAccept}>
             {data.actionButtonLabel}
           </button>
-          <button
-            className="btn btn-lg btn-default btn-inverse"
-            tabIndex="1"
-            type="button"
-            onClick={props.onDismiss}>
+          <button className="btn btn-lg btn-default btn-inverse"
+              tabIndex="1"
+              type="button"
+              onClick={props.onDismiss}>
             Cancel
           </button>
         </div>

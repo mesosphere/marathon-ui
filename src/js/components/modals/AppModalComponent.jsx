@@ -232,11 +232,10 @@ var AppModalComponent = React.createClass({
     );
 
     return (
-      <ModalComponent
-        dismissOnClickOutside={false}
-        ref="modalComponent"
-        size="md"
-        onDestroy={this.props.onDestroy}>
+      <ModalComponent dismissOnClickOutside={false}
+          ref="modalComponent"
+          size="md"
+          onDestroy={this.props.onDestroy}>
         <form method="post" role="form" onSubmit={this.handleSubmit}>
           <div className="modal-header">
             <button type="button" className="close"
@@ -295,12 +294,12 @@ var AppModalComponent = React.createClass({
               </div>
             </div>
             <FormGroupComponent
-              errorMessage={this.getErrorMessage("cmd")}
-              fieldId="cmd"
-              label="Command"
-              help="May be left blank if a container image is supplied"
-              value={state.fields.cmd}
-              onChange={this.handleFieldUpdate}>
+                errorMessage={this.getErrorMessage("cmd")}
+                fieldId="cmd"
+                label="Command"
+                help="May be left blank if a container image is supplied"
+                value={state.fields.cmd}
+                onChange={this.handleFieldUpdate}>
               <textarea style={{resize: "vertical"}} />
             </FormGroupComponent>
             <div className="row full-bleed">

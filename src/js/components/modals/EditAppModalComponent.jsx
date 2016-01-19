@@ -90,8 +90,7 @@ var EditAppModalComponent = React.createClass({
     }
 
     return (
-      <AppModalComponent
-        app={state.app}
+      <AppModalComponent app={state.app}
         onDestroy={this.props.onDestroy} />
     );
   }

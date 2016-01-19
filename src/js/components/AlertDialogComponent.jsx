@@ -52,10 +52,10 @@ var AlertDialogComponent = React.createClass({
         </div>
         <div className="modal-footer">
           <button
-            className="btn btn-lg btn-success btn-inverse"
-            ref="button"
-            type="button"
-            onClick={props.onAccept}>
+              className="btn btn-lg btn-success btn-inverse"
+              ref="button"
+              type="button"
+              onClick={props.onAccept}>
             {data.actionButtonLabel}
           </button>
         </div>

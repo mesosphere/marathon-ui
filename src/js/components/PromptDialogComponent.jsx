@@ -66,16 +66,14 @@ var PromptDialogComponent = React.createClass({
             onKeyUp={this.handleKeyUp} />
         </div>
         <div className="modal-footer">
-          <button
-            className="btn btn-lg btn-success btn-inverse"
-            type="button"
-            onClick={this.handleAccept}>
+          <button className="btn btn-lg btn-success btn-inverse"
+              type="button"
+              onClick={this.handleAccept}>
             {data.actionButtonLabel}
           </button>
-          <button
-            className="btn btn-lg btn-default btn-inverse"
-            type="button"
-            onClick={props.onDismiss}>
+          <button className="btn btn-lg btn-default btn-inverse"
+              type="button"
+              onClick={props.onDismiss}>
             Cancel
           </button>
         </div>

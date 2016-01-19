@@ -125,8 +125,7 @@ var TaskFileDownloadComponent = React.createClass({
 
     return (
       <TooltipComponent disabled={fileIsRequestedByUser || !fileRequestFailed}>
-        <a href={href}
-            onClick={this.handleClick}>
+        <a href={href} onClick={this.handleClick}>
           <i className={iconClassName}/> {name}
         </a>
       </TooltipComponent>

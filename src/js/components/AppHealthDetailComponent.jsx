@@ -52,8 +52,7 @@ var AppHealthDetailComponent = React.createClass({
 
     var itemClasses = classNames(
       "health-breakdown-item",
-      `health-breakdown-item-${state}`,
-      {
+      `health-breakdown-item-${state}`, {
         "health-breakdown-item-empty": isEmpty,
         "health-breakdown-item-impermanent": !isPermanent
       }

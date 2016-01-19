@@ -29,8 +29,7 @@ var AppTaskStatsListComponent = React.createClass({
     }
 
     return (
-      <AppTaskStatsComponent
-        caption={keyCaptionMap[key]}
+      <AppTaskStatsComponent caption={keyCaptionMap[key]}
         taskStats={taskStats} />
     );
   },

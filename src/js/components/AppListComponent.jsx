@@ -189,7 +189,7 @@ var AppListComponent = React.createClass({
         .filter(app => app.id.indexOf(filterText) !== -1);
     } else if (currentGroup !== "/") {
       nodesSequence = nodesSequence
-          .filter(app => app.id.startsWith(currentGroup));
+        .filter(app => app.id.startsWith(currentGroup));
     }
 
     nodesSequence.each(app => {
@@ -382,11 +382,11 @@ var AppListComponent = React.createClass({
         "your applications.";
       return (
         <CenteredInlineDialogComponent additionalClasses="muted"
-          title="No Applications Created"
-          message={message}>
+            title="No Applications Created"
+            message={message}>
           <Link className="btn btn-lg btn-success"
-            to="apps"
-            query={{modal: "new-app"}}>
+              to="apps"
+              query={{modal: "new-app"}}>
             Create Application
           </Link>
         </CenteredInlineDialogComponent>
@@ -396,9 +396,9 @@ var AppListComponent = React.createClass({
     if (pageHasNoMatchingApps) {
       return (
         <CenteredInlineDialogComponent title="No Applications Found"
-          message="No applications match your criteria.">
+            message="No applications match your criteria.">
           <Link className="btn btn-lg btn-success"
-            to="apps">
+              to="apps">
             Show all Applications
           </Link>
         </CenteredInlineDialogComponent>
@@ -467,13 +467,13 @@ var AppListComponent = React.createClass({
               </th>
               <th className="text-right ram-cell">
                 <span onClick={this.sortBy.bind(null, "totalMem")}
-                      className={headerClassSet}>
+                    className={headerClassSet}>
                   {this.getCaret("totalMem")} Memory
                 </span>
               </th>
               <th className="status-cell">
                 <span onClick={this.sortBy.bind(null, "status")}
-                      className={headerClassSet}>
+                    className={headerClassSet}>
                   Status {this.getCaret("status")}
                 </span>
               </th>

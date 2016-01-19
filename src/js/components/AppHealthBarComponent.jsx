@@ -46,8 +46,7 @@ var AppHealthBarComponent = React.createClass({
       }
 
       return (
-        <div
-          className={classNames(classSet)}
+        <div className={classNames(classSet)}
           style={{width: width + "%"}}
           key={i} />
       );

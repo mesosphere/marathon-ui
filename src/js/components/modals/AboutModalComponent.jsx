@@ -55,8 +55,7 @@ var AboutModalComponent = React.createClass({
     var zookeeperConfig = this.state.info.zookeeper_config;
     var logoPath = config.rootUrl + "img/marathon-logo.png";
     return (
-      <ModalComponent
-          onDestroy={this.props.onDestroy}
+      <ModalComponent onDestroy={this.props.onDestroy}
           size="lg">
         <div className="modal-header modal-header-blend">
           <button type="button" className="close"

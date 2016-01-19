@@ -15,22 +15,19 @@ var TaskHealthComponent = React.createClass({
     if (healthCheckResults != null) {
       healthNodeList = healthCheckResults.map(function (cResult, index) {
         if (cResult != null) {
-          var timeNodes = [
-            {
-              label: "First success",
-              time: cResult.firstSuccess
-            }, {
-              label: "Last success",
-              time: cResult.lastSuccess
-            }, {
-              label: "Last failure",
-              time: cResult.lastFailure
-            }
-          ];
+          var timeNodes = [{
+            label: "First success",
+            time: cResult.firstSuccess
+          }, {
+            label: "Last success",
+            time: cResult.lastSuccess
+          }, {
+            label: "Last failure",
+            time: cResult.lastFailure
+          }];
           var timeFields = timeNodes.map(function (timeNode, i) {
             return (
-              <TimeFieldComponent
-                key={i}
+              <TimeFieldComponent key={i}
                 label={timeNode.label}
                 time={timeNode.time} />
             );

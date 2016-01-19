@@ -17,9 +17,7 @@ var HelpModalComponent = React.createClass({
 
   render: function () {
     return (
-      <ModalComponent
-          onDestroy={this.props.onDestroy}
-          ref="modalComponent">
+      <ModalComponent onDestroy={this.props.onDestroy} ref="modalComponent">
         <div className="modal-header">
           <button type="button" className="close"
             aria-hidden="true" onClick={this.destroy}>&times;</button>

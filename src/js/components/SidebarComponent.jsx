@@ -60,9 +60,9 @@ var SidebarComponent = React.createClass({
     return (
       <nav className="sidebar">
         <Link to={path}
-          query={newAppModalQuery}
-          className="btn btn-success create-app"
-          activeClassName="create-app-active">
+            query={newAppModalQuery}
+            className="btn btn-success create-app"
+            activeClassName="create-app-active">
           Create
         </Link>
         <div className="flex-row">

@@ -104,8 +104,7 @@ var AppVersionListComponent = React.createClass({
 
     return appVersions.map(function (versionTimestamp) {
       return (
-        <AppVersionListItemComponent
-          appId={props.appId}
+        <AppVersionListItemComponent appId={props.appId}
           appVersionTimestamp={versionTimestamp}
           key={versionTimestamp} />
       );
@@ -118,8 +117,7 @@ var AppVersionListComponent = React.createClass({
     // at least two pages
     if (appVersions.length > itemsPerPage) {
       return (
-        <PagedNavComponent
-          className="pull-right"
+        <PagedNavComponent className="pull-right"
           currentPage={this.state.currentPage}
           onPageChange={this.handlePageChange}
           itemsPerPage={itemsPerPage}
@@ -158,8 +156,7 @@ var AppVersionListComponent = React.createClass({
               {this.getPagedNav(appVersions)}
             </div>
           </div>
-          <PagedContentComponent
-              currentPage={state.currentPage}
+          <PagedContentComponent currentPage={state.currentPage}
               itemsPerPage={state.itemsPerPage}>
             <p className={loadingClassSet}>Loading versions...</p>
             <p className={errorClassSet}>Error fetching app versions</p>
@@ -192,8 +189,7 @@ var AppVersionListComponent = React.createClass({
             ↻ Refresh
           </button>
         </h5>
-        <AppVersionComponent
-          appVersion={currentVersion}
+        <AppVersionComponent appVersion={currentVersion}
           currentVersion={true} />
         {this.getAppVersionTable()}
       </div>
