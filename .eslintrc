@@ -28,6 +28,7 @@
     "indent": [2, 2, {"SwitchCase": 1, "VariableDeclarator": 1}],
     "camelcase": [2, {"properties": "always"}],
     "strict": [2, "never"], // <-- fix
+    "block-spacing": [2, "always"],
     "no-mixed-spaces-and-tabs": [2],
     "no-trailing-spaces": [2, { "skipBlankLines": false }],
     "no-underscore-dangle": 2,
