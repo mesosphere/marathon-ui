@@ -1,38 +1,36 @@
 # Coding Guidelines
+# General
+We prefer a functional approach and try to use the abstractions over
+normal control statements. Functions and code must be
+self-descriptive, use JSDoc blocks only if necessary.
 
-## Line length
-One Line in JavaScript should have a maximal length of 80 characters.
+
+## Strings
+ - Strings are defined with double quotes.
+ - Use template strings if variables are used.
+
+Example:
+```JS
+var string = `Hello ${world}!`;
+```
 
 ## Indentation and Line-Breaks
 Rules:
-- Indentation is done with 2 spaces in most cases.
-- Line breaks are only done if needed, try to use the 80 character limit.
-- Strings are splitted at the latest possible position.
+- Line breaks are only done if needed.
+- Strings are split at the latest possible position.
   - At the latest whitespace character.
   - The second line is indented with 2 spaces.
-- Object Literals are kept on one line if possible.
+  ```JS
+    var longString = "A Very long string which is longer then one line, which is 80 characters " +
+      "in this case. This demonstrates how the second line is indented";
+  ```
+- Object literals are kept on one line if possible.
   - If the line gets to long put each attribute on a single line.
-  - Multi level object literals should be splitted in to multiple lines. Each level in the object should have 2 spaces as indentation.
+  - Multi level object literals must be split in to multiple lines.
+    - Each level in the object must have 2 spaces as indentation.
 
 Examples:
 ```JS
-switch (a) {
-  case "a":
-    break;
-  case "b":
-    break;
-}
-
-var a,
-  b,
-  c;
-
-function test() {
-  var a,
-    b,
-    c;
-}
-
 test(
   "A Very long string which is longer then one line, which is 80 characters " +
     "in this case. This demonstrates how the second line is indented",
@@ -60,19 +58,19 @@ test({
 });
 ```
 
-## Whitespace
-Rules:
-- No Trailing spaces should be used at the end of a line.
-- No multiple Blank lines.
-
 ## Functions
 Rules:
-  - Function blocks should have a space before the definition.
-  - Function should have a space before the opening parentheses.
-  - Named Functions should not have a space before the opening function parentheses.
+  - Function blocks must have a space before the definition.
+  - Function must have a space before the opening parenthesis.
+  - Named functions must not have a space before the opening function brackets.
   - Functions can be on a single line.
-  - Anonymous Functions need to have a space before the opening function parentheses.
-  - Arrow functions do have the same constraints
+    - If they are there must be a whitespace inside the curly brackets.
+  - Anonymous functions need to have a space before the opening function bracket.
+  - Arrow functions
+    - can be on a single line.
+    - must omit the parameter brackets if only one parameter is present.
+    - must omit curly brackets if only one statement is given.
+    - must have whitespace around the parameter definition
 
 Examples:
 ```JS
@@ -82,7 +80,7 @@ function test() {
 
 function test() { var a = 10; return a; }
 
-var test = function () {var b = 10; return b;}
+var test = function () { var b = 10; return b; }
 
 var es6 = parameter => parameter();
 
@@ -101,18 +99,14 @@ var es6 = (parameter, index) => {
 
 ## Comments
 Rules:
-  - Comments should be prefixed with a space sign.
-  - The `*` sign is a exception to the rule.
+  - Comments must be prefixed with a space sign.
+    - The `*` sign is a exception to the rule.
 
 Examples:
 ```JS
 // Single line Comment
 
 //* A Exception to the space rule
-
-/*
-  Comment Block with no space
-*/
 
 /**
  * Block Comment
@@ -124,6 +118,7 @@ Rules:
   - Space after the keyword
   - Space before opening parentheses
   - Strict equal (`===` or `!==`)
+    - exception to this rule is null checking
 
 Examples:
 ```JS
@@ -132,6 +127,20 @@ if (a === b) {
 }
 
 if (true !== false) {
+  // Statements
+}
+
+if (a == null) {
+  // Statements
+} else {
+  // Statements
+}
+
+if (true !== false) {
+  // Statements
+} else if(false === true) {
+  // Statements
+} else {
   // Statements
 }
 
@@ -149,22 +158,19 @@ for (var a = 10; a !== 0; a--) {
 }
 ```
 
-## Strings
-Strings are defined with double quotes.
-
 ## Variables and Attribute names
-Variables always use camelCase names.
-May have a underscore dangle.
+Variable names always use camelCase names, except Constants which use UPPER_CASE.
+One var, let or const per variable and line.
+
 Examples:
 ```JS
-var camelCase = "{value}",
-  _camelCase = "{value}",
-  CamelCase = "{test}",
-  camelCase_ = "{test}";
+var camelCase = "{value}";
+let CamelCase = "{value}";
+const SOME_CONSTANT = "constant value";
 ```
 
 ## Object Literals
-Object literals should have no space after the '{' or before the '}' signs.
+Object literals must have no space after the '{' or before the '}' signs.
 
 Valid Example
 ```JS
@@ -172,13 +178,16 @@ var objectLiteral = {"key": "value", "key2": "value2"};
 
 var objectLiteral = {
   "key": "value",
-  "key2": "value2"
+  "key2": "value2",
+  "key3": "value3",
+  "key4": "value4"
 };
 ```
 
 ## JSDoc
-If there is a return there should be a type and description.
-If there is one or multiple parameter/s there should be a name, type and description for each one.
+JSDoc block should not be needed if they are needed to these rules apply:
+  - If there is a return there must be a type and description.
+  - If there is one or multiple parameter/s there must be a name, type and description for each one.
 
 Example:
 ```JS
@@ -221,7 +230,7 @@ function test(number, callback) {
 ## JSX
 
 ### Self contained elements
-On self contained elements attributes should be indented with 2 spaces.
+On self contained elements attributes must be indented with 2 spaces.
 
 Example:
 ```JS
@@ -231,7 +240,7 @@ Example:
 ```
 
 ### Non self contained elements
-On elements which are not self contained the indentation of attributes should be 4 spaces. And the childNodes should have a indentation of 2 spaces to the element and -2 spaces to the attributes.
+On elements which are not self contained the indentation of attributes must be 4 spaces. And the childNodes must have a indentation of 2 spaces to the element and -2 spaces to the attributes.
 
 Example:
 ```JS
