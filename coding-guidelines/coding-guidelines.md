@@ -242,7 +242,7 @@ function test(a) {
 function test(number, callback) {
   var counter;
   for (counter = 0; counter <= number; counter++) {
-    a();
+    callback();
   }
   return "done";
 }
