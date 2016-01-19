@@ -1,8 +1,14 @@
 # Coding Guidelines
 # General
+We are using the eslintrc to lint our code. All basic rules are defined there, some important rules are:
+  - Max line length is 80 characters.
+  - Indentation is 2 spaces.
+  - No multiple empty lines.
+
 We prefer a functional approach and try to use the abstractions over
 normal control statements. Functions and code must be
 self-descriptive, use JSDoc blocks only if necessary.
+
 
 
 ## Strings
