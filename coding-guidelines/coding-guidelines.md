@@ -206,14 +206,14 @@ for (var a = 10; a !== 0; a--) {
 ```
 
 ## JSDoc
-JSDoc block should not be needed if they are needed to these rules apply:
+JSDoc blocks should be avoided in favor to code descriptiveness. If the are necessary these rules apply:
   - If there is a return there must be a type and description.
   - If there is one or multiple parameter/s there must be a name, type and description for each one.
 
 Example:
 ```JS
 /**
- * Description of what the function does
+ * Description how the function behaves.
  *
  * @param {Function} a A function containing a callback.
  */
@@ -222,7 +222,7 @@ function b(a) {
 }
 
 /**
- * Description of what the function does.
+ * Description how the function behaves.
  *
  * @param {Function} a A function containing a callback.
  * @return {String} Returns a String containing "done".
@@ -233,7 +233,7 @@ function test(a) {
 }
 
 /**
- * Description of what the function does.
+ * Description how the function behaves.
  *
  * @param {Number} a A Number on how often the b should be called.
  * @param {Function} callback A function containing a callback function.
