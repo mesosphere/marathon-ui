@@ -21,7 +21,7 @@ We are using the eslintrc to lint our code. All basic rules are defined there, s
   - Indentation is 2 spaces.
   - No multiple empty lines.
 
-We prefer a functional approach and try to use the abstractions over
+We prefer a functional approach and try to use these abstractions over
 normal control statements. Functions and code must be
 self-descriptive, use JSDoc blocks only if necessary.
 
@@ -95,8 +95,8 @@ Rules:
 Examples:
 ```JS
 test(
-  "A Very long string which is longer then one line, which is 80 characters " +
-    "in this case. This demonstrates how the second line is indented",
+  "A very long string that is longer then one line, which is 80 characters " +
+    "in this case. This demonstrates how the second line is indented.",
   "Another string parameter.",
   {and: "a Literal Object", as: "a parameter", type: "short"},
   {
@@ -206,7 +206,7 @@ for (var a = 10; a !== 0; a--) {
 ```
 
 ## JSDoc
-JSDoc blocks should be avoided in favor to code descriptiveness. If the are necessary these rules apply:
+JSDoc blocks should be avoided in favor to code descriptiveness. If they are necessary these rules apply:
   - If there is a return there must be a type and description.
   - If there is one or multiple parameter/s there must be a name, type and description for each one.
 
