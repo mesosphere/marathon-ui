@@ -225,10 +225,25 @@ gulp.task("replace-js-strings", ["webpack", "minify-js"], function () {
     .pipe(gulp.dest(dirs.dist));
 });
 
+gulp.task("version-check", function () {
+  var shrinkwrapVersion = require("./npm-shrinkwrap")["node-version"];
+  var packageVersion = require("./package").engines.node;
+  var nodeVersion = process.version;
+  if (shrinkwrapVersion !== nodeVersion ||
+    nodeVersion !== "v" + packageVersion) {
+    throw(
+      "\nPackage engine version is " + packageVersion + "\n" +
+      "Shrinkwrap version is " + shrinkwrapVersion + "\n" +
+      "Current Node version is " + nodeVersion
+    );
+  }
+});
+
 gulp.task("serve", ["default", "connect:server", "watch"]);
 gulp.task("livereload", ["default", "browsersync", "watch"]);
 
 var tasks = [
+  "version-check",
   "webpack",
   "less",
   "images",

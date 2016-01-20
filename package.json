@@ -1,6 +1,9 @@
 {
   "name": "marathon-ui",
   "version": "0.16.0",
+  "engines": {
+    "node": "5.2.0"
+  },
   "description": "The web UI for Mesosphere's Marathon.",
   "main": "dist/main.js",
   "keywords": [
@@ -78,7 +81,7 @@
     "build": "gulp",
     "clean": "rm -rf dist release",
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
-    "shrinkwrap": "npm-shrinkwrap --dev",
+    "shrinkwrap": "gulp version-check && npm-shrinkwrap --dev",
     "test": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill --require src/test/environment/jsdom  src/test/**/*.test.* src/test/*.test.*",
     "lint": "eslint src/**/*.js*",
     "serve": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve",
