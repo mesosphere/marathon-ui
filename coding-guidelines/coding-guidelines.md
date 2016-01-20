@@ -99,8 +99,7 @@ test(
   "A very long string that is longer then one line, which is 80 characters " +
     "in this case. This demonstrates how the second line is indented.",
   "Another string parameter.",
-  {and: "a Literal Object", as: "a parameter", type: "short"},
-  {
+  {and: "a Literal Object", as: "a parameter", type: "short"}, {
     yet: "another long parameter Object",
     which: "needs to be split in multiple",
     lines: 3
