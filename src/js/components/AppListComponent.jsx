@@ -188,7 +188,7 @@ var AppListComponent = React.createClass({
     if (filterText != null && filterText !== "") {
       nodesSequence = nodesSequence
         .filter(app => {
-          return score(app.id, filterText) > 0.02;
+          return score(app.id, filterText) > 0.004;
         });
 
     } else if (currentGroup !== "/") {
