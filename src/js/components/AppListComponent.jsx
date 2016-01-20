@@ -2,6 +2,7 @@ import classNames from "classnames";
 import lazy from "lazy.js";
 import {Link} from "react-router";
 import React from "react/addons";
+import {score} from "fuzzaldrin";
 
 import AppListViewTypes from "../constants/AppListViewTypes";
 import AppStatus from "../constants/AppStatus";
@@ -186,7 +187,10 @@ var AppListComponent = React.createClass({
 
     if (filterText != null && filterText !== "") {
       nodesSequence = nodesSequence
-        .filter(app => app.id.indexOf(filterText) !== -1);
+        .filter(app => {
+          return score(app.id, filterText) > 0.004;
+        });
+
     } else if (currentGroup !== "/") {
       nodesSequence = nodesSequence
         .filter(app => app.id.startsWith(currentGroup));
@@ -305,6 +309,15 @@ var AppListComponent = React.createClass({
           return app[sortKey];
         }, state.sortDescending);
 
+      let filterText = props.filters[FilterTypes.TEXT];
+      if (filterText != null && sortKey === "id") {
+        nodesSequence = nodesSequence.sort((a, b) => {
+          return score(a.id, filterText) > score(b.id, filterText)
+            ? -1
+            : 1;
+        });
+      }
+
     // Grouped node view
     } else {
       nodesSequence = lazy(this.getGroupedNodes(state.apps, filterCounts))
@@ -343,7 +356,10 @@ var AppListComponent = React.createClass({
   },
 
   getCaret: function (sortKey) {
-    if (sortKey === this.state.sortKey) {
+    var filterText = this.props.filters[FilterTypes.TEXT];
+
+    if (sortKey === this.state.sortKey &&
+        (sortKey !== "id" || filterText == null || filterText === "")) {
       return (
         <span className="caret"></span>
       );
