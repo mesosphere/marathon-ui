@@ -4,7 +4,7 @@ before_script:
   - npm cache clear
   - npm install -g gulp
 node_js:
-  - "5.2.0"
+  - "5.4.1"
 script: npm install && npm run dist
 after_success: npm run cover:report
 notifications:
