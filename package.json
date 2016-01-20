@@ -80,6 +80,7 @@
     "dist": "export GULP_ENV=\"production\" && npm run clean && npm run test && npm run build",
     "shrinkwrap": "npm-shrinkwrap --dev",
     "test": "mocha --ui exports --reporter src/test/reporter/reporterSwitch --require babel-core/register --require babel-polyfill --require src/test/environment/jsdom  src/test/**/*.test.* src/test/*.test.*",
+    "lint": "eslint src/**/*.js*",
     "serve": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp serve",
     "livereload": "export GULP_ENV=\"development\" DISABLE_SOURCE_MAP=false && gulp livereload",
     "cover:prepare": "rm -Rf coverage",
