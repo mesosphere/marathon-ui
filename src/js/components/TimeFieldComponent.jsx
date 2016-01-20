@@ -12,15 +12,17 @@ var TimeFieldComponent = React.createClass({
   render: function () {
     var time = this.props.time;
 
-    var timeField = time != null
-      ? (
-          <dd>
-            <time dateTime={time}>
-              {new Date(time).toLocaleString()}
-            </time>
-          </dd>
-        )
-      : <dd className="text-muted">None</dd>;
+    var timeField = (
+      <dd>
+        <time dateTime={time}>
+          {new Date(time).toLocaleString()}
+        </time>
+      </dd>
+    );
+
+    if (time == null) {
+      timeField = <dd className="text-muted">None</dd>;
+    }
 
     return (
       <div>
