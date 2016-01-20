@@ -1,13 +1,13 @@
-var React = require("react/addons");
-var Util = require("../../helpers/Util");
+import React from "react/addons";
+import Util from "../../helpers/Util";
 
-var AppVersionsActions = require("../../actions/AppVersionsActions");
-var AppVersionsEvents = require("../../events/AppVersionsEvents");
-var AppVersionsStore = require("../../stores/AppVersionsStore");
-var DialogActions = require("../../actions/DialogActions");
-var DialogSeverity = require("../../constants/DialogSeverity");
+import AppVersionsActions from "../../actions/AppVersionsActions";
+import AppVersionsEvents from "../../events/AppVersionsEvents";
+import AppVersionsStore from "../../stores/AppVersionsStore";
+import DialogActions from "../../actions/DialogActions";
+import DialogSeverity from "../../constants/DialogSeverity";
 
-var AppModalComponent = require("./AppModalComponent");
+import AppModalComponent from "./AppModalComponent";
 
 var EditAppModalComponent = React.createClass({
   displayName: "EditAppModalComponent",
@@ -97,4 +97,4 @@ var EditAppModalComponent = React.createClass({
   }
 });
 
-module.exports = EditAppModalComponent;
+export default EditAppModalComponent;

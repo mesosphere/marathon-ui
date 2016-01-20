@@ -1,7 +1,7 @@
-var Link = require("react-router").Link;
-var React = require("react/addons");
+import {Link} from "react-router";
+import React from "react/addons";
 
-var Util = require("../helpers/Util");
+import Util from "../helpers/Util";
 
 function encodeValuesToURIComponents(values) {
   if (Util.isArray(values)) {
@@ -73,4 +73,4 @@ var QueryParamsMixin = {
   }
 };
 
-module.exports = QueryParamsMixin;
+export default QueryParamsMixin;

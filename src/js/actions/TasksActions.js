@@ -1,8 +1,9 @@
-var ajaxWrapper = require("../helpers/ajaxWrapper");
+import ajaxWrapper from "../helpers/ajaxWrapper";
 
-var config = require("../config/config");
-var AppDispatcher = require("../AppDispatcher");
-var TasksEvents = require("../events/TasksEvents");
+import config from "../config/config";
+
+import AppDispatcher from "../AppDispatcher";
+import TasksEvents from "../events/TasksEvents";
 
 var TasksActions = {
   deleteTasks: function (appId, taskIds = []) {
@@ -57,4 +58,4 @@ var TasksActions = {
   request: ajaxWrapper
 };
 
-module.exports = TasksActions;
+export default TasksActions;

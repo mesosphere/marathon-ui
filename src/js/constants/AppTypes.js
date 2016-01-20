@@ -3,4 +3,4 @@ const AppTypes = {
   DOCKER: "DOCKER"
 };
 
-module.exports = Object.freeze(AppTypes);
+export default Object.freeze(AppTypes);

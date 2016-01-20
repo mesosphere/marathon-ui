@@ -1,14 +1,10 @@
-require("babel-polyfill");
-var React = require("react/addons");
-var Router = require("react-router");
-var Redirect = Router.Redirect;
-var Route = Router.Route;
-var NotFoundRoute = Router.NotFoundRoute;
-
-var AppPageComponent = require("./components/AppPageComponent");
-var PageNotFoundComponent = require("./components/PageNotFoundComponent");
-var TabPanesComponent = require("./components/TabPanesComponent");
-var Marathon = require("./components/Marathon");
+import "babel-polyfill";
+import React from "react/addons";
+import Router, {Redirect, Route, NotFoundRoute} from "react-router";
+import AppPageComponent from "./components/AppPageComponent";
+import PageNotFoundComponent from "./components/PageNotFoundComponent";
+import TabPanesComponent from "./components/TabPanesComponent";
+import Marathon from "./components/Marathon";
 
 var routes = (
   <Route name="home" path="/" handler={Marathon}>

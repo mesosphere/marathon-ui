@@ -1,5 +1,5 @@
-var expect = require("chai").expect;
-var Util = require("../js/helpers/Util");
+import {expect} from "chai";
+import Util from "../js/helpers/Util";
 
 describe("Util", function () {
 

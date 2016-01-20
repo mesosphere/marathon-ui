@@ -1,8 +1,9 @@
-var ajaxWrapper = require("../helpers/ajaxWrapper");
+import ajaxWrapper from "../helpers/ajaxWrapper";
 
-var config = require("../config/config");
-var AppDispatcher = require("../AppDispatcher");
-var AppsEvents = require("../events/AppsEvents");
+import config from "../config/config";
+
+import AppDispatcher from "../AppDispatcher";
+import AppsEvents from "../events/AppsEvents";
 
 var AppsActions = {
   requestApps: function () {
@@ -187,4 +188,4 @@ var AppsActions = {
   request: ajaxWrapper
 };
 
-module.exports = AppsActions;
+export default AppsActions;

@@ -1,18 +1,16 @@
-var expect = require("chai").expect;
-var nock = require("nock");
-var shallow = require("enzyme").shallow;
+import {expect} from "chai";
+import nock from "nock";
+import {shallow} from "enzyme";
+import React from "react/addons";
 
-var React = require("react/addons");
-var TestUtils = React.addons.TestUtils;
+import config from "../js/config/config";
 
-var config = require("../js/config/config");
-var Util = require("../js/helpers/Util");
-var appScheme = require("../js/stores/schemes/appScheme");
-var InfoStore = require("../js/stores/InfoStore");
-var AppsStore = require("../js/stores/AppsStore");
-var AppDebugInfoComponent = require("../js/components/AppDebugInfoComponent");
-var AppTaskStatsListComponent =
-  require("../js/components/AppTaskStatsListComponent");
+import Util from "../js/helpers/Util";
+import appScheme from "../js/stores/schemes/appScheme";
+import InfoStore from "../js/stores/InfoStore";
+import AppsStore from "../js/stores/AppsStore";
+import AppDebugInfoComponent from "../js/components/AppDebugInfoComponent";
+import AppTaskStatsListComponent from "../js/components/AppTaskStatsListComponent";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";

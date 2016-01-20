@@ -1,7 +1,7 @@
-var Util = require("../../helpers/Util");
+import Util from "../../helpers/Util";
 
-var HealthCheckProtocols = require("../../constants/HealthCheckProtocols");
-var HealthCheckPortTypes = require("../../constants/HealthCheckPortTypes");
+import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
+import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
 
 const healthChecksRowScheme = {
   protocol: HealthCheckProtocols.HTTP,
@@ -17,4 +17,4 @@ const healthChecksRowScheme = {
   ignoreHttp1xx: false
 };
 
-module.exports = Util.deepFreeze(healthChecksRowScheme);
+export default Util.deepFreeze(healthChecksRowScheme);

@@ -1,20 +1,20 @@
-var classNames = require("classnames");
-var React = require("react/addons");
-var OnClickOutsideMixin = require("react-onclickoutside");
+import classNames from "classnames";
+import React from "react/addons";
+import OnClickOutsideMixin from "react-onclickoutside";
 
-var AppActionsHandlerMixin = require("../mixins/AppActionsHandlerMixin");
-var AppHealthBarWithTooltipComponent =
-  require("./AppHealthBarWithTooltipComponent");
-var AppListItemLabelsComponent =
-  require("../components/AppListItemLabelsComponent");
-var AppListViewTypes = require("../constants/AppListViewTypes");
-var AppStatus = require("../constants/AppStatus");
-var AppStatusComponent = require("../components/AppStatusComponent");
-var BreadcrumbComponent = require("../components/BreadcrumbComponent");
-var Util = require("../helpers/Util");
-var PathUtil = require("../helpers/PathUtil");
-var PopoverComponent = require("./PopoverComponent");
-var DOMUtil = require("../helpers/DOMUtil");
+import AppActionsHandlerMixin from "../mixins/AppActionsHandlerMixin";
+import AppHealthBarWithTooltipComponent
+  from "./AppHealthBarWithTooltipComponent";
+import AppListItemLabelsComponent
+  from "../components/AppListItemLabelsComponent";
+import AppListViewTypes from "../constants/AppListViewTypes";
+import AppStatus from "../constants/AppStatus";
+import AppStatusComponent from "../components/AppStatusComponent";
+import BreadcrumbComponent from "../components/BreadcrumbComponent";
+import Util from "../helpers/Util";
+import PathUtil from "../helpers/PathUtil";
+import PopoverComponent from "./PopoverComponent";
+import DOMUtil from "../helpers/DOMUtil";
 
 var AppListItemComponent = React.createClass({
   displayName: "AppListItemComponent",
@@ -367,4 +367,4 @@ var AppListItemComponent = React.createClass({
   }
 });
 
-module.exports = AppListItemComponent;
+export default AppListItemComponent;

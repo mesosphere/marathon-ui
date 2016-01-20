@@ -1,39 +1,37 @@
-var _ = require("underscore");
-var config = require("../js/config/config");
-var describeWithDOM = require("enzyme").describeWithDOM;
-var expect = require("chai").expect;
-var expectAsync = require("./helpers/expectAsync");
-var mount = require("enzyme").mount;
-var nock = require("nock");
-var render = require("enzyme").render;
-var shallow = require("enzyme").shallow;
-var Util = require("../js/helpers/Util");
+import {expect} from "chai";
+import nock from "nock";
+import {mount, render, shallow} from "enzyme";
+import _ from "underscore";
+import React from "react/addons";
+var TestUtils = React.addons.TestUtils;
+import expectAsync from "./helpers/expectAsync";
+import * as ShallowUtils from "./helpers/ShallowUtils";
 
-var React = require("react/addons");
+import config from "../js/config/config";
 
-var AppTypes = require("../js/constants/AppTypes");
-
-var AppsActions = require("../js/actions/AppsActions");
-var AppDispatcher = require("../js/AppDispatcher");
-var BreadcrumbComponent = require("../js/components/BreadcrumbComponent.jsx");
-var AppListComponent = require("../js/components/AppListComponent");
-var AppListItemComponent = require("../js/components/AppListItemComponent");
-var AppHealthBarComponent =
-  require("../js/components/AppHealthBarComponent");
-var AppHealthBarWithTooltipComponent =
-  require("../js/components/AppHealthBarWithTooltipComponent");
-var AppHealthDetailComponent =
-  require("../js/components/AppHealthDetailComponent");
-var AppPageComponent = require("../js/components/AppPageComponent");
-var AppStatusComponent = require("../js/components/AppStatusComponent");
-var appScheme = require("../js/stores/schemes/appScheme");
-var AppsEvents = require("../js/events/AppsEvents");
-var AppsStore = require("../js/stores/AppsStore");
-var AppStatus = require("../js/constants/AppStatus");
-var HealthStatus = require("../js/constants/HealthStatus");
-var QueueActions = require("../js/actions/QueueActions");
-var QueueStore = require("../js/stores/QueueStore");
-var States = require("../js/constants/States");
+import Util from "../js/helpers/Util";
+import AppTypes from "../js/constants/AppTypes";
+import AppsActions from "../js/actions/AppsActions";
+import AppDispatcher from "../js/AppDispatcher";
+import BreadcrumbComponent from "../js/components/BreadcrumbComponent.jsx";
+import AppListComponent from "../js/components/AppListComponent";
+import AppListItemComponent from "../js/components/AppListItemComponent";
+import AppHealthBarComponent from "../js/components/AppHealthBarComponent";
+import AppHealthBarWithTooltipComponent
+  from "../js/components/AppHealthBarWithTooltipComponent";
+import AppHealthDetailComponent
+  from "../js/components/AppHealthDetailComponent";
+import AppPageComponent from "../js/components/AppPageComponent";
+import AppStatusComponent from "../js/components/AppStatusComponent";
+import appScheme from "../js/stores/schemes/appScheme";
+import AppsEvents from "../js/events/AppsEvents";
+import AppsStore from "../js/stores/AppsStore";
+import AppStatus from "../js/constants/AppStatus";
+import HealthStatus from "../js/constants/HealthStatus";
+import QueueActions from "../js/actions/QueueActions";
+import QueueStore from "../js/stores/QueueStore";
+import States from "../js/constants/States";
+import PopoverComponent from "../js/components/PopoverComponent";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
@@ -1167,7 +1165,6 @@ describe("App Health Bar", function () {
   });
 
   describe("with tooltip", function () {
-    var PopoverComponent = require("../js/components/PopoverComponent");
 
     before(function () {
       this.component = mount(
@@ -1389,8 +1386,6 @@ describe("App Status component", function () {
 * the BreadcrumbComponent testing once we upgrade to ReactRouter 1.x
 */
 describe("Breadcrumb Component", function () {
-  var TestUtils = React.addons.TestUtils;
-  var ShallowUtils = require("./helpers/ShallowUtils");
 
   before(function () {
     this.renderComponent = (group, app, task) => {

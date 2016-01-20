@@ -1,8 +1,9 @@
-var ajaxWrapper = require("../helpers/ajaxWrapper");
+import ajaxWrapper from "../helpers/ajaxWrapper";
 
-var config = require("../config/config");
-var AppDispatcher = require("../AppDispatcher");
-var InfoEvents = require("../events/InfoEvents");
+import config from "../config/config";
+
+import AppDispatcher from "../AppDispatcher";
+import InfoEvents from "../events/InfoEvents";
 
 var InfoActions = {
   requestInfo: function () {
@@ -25,4 +26,4 @@ var InfoActions = {
   request: ajaxWrapper
 };
 
-module.exports = InfoActions;
+export default InfoActions;

@@ -1,8 +1,9 @@
-var ajaxWrapper = require("../helpers/ajaxWrapper");
+import ajaxWrapper from "../helpers/ajaxWrapper";
 
-var config = require("../config/config");
-var AppDispatcher = require("../AppDispatcher");
-var GroupsEvents = require("../events/GroupsEvents");
+import config from "../config/config";
+
+import AppDispatcher from "../AppDispatcher";
+import GroupsEvents from "../events/GroupsEvents";
 
 var GroupsActions = {
   scaleGroup: function (groupId, scaleBy) {
@@ -50,4 +51,4 @@ var GroupsActions = {
   request: ajaxWrapper
 };
 
-module.exports = GroupsActions;
+export default GroupsActions;

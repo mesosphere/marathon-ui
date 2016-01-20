@@ -3,4 +3,4 @@ var tabs = [
   {id: "/deployments", text: "Deployments"}
 ];
 
-module.exports = tabs;
+export default tabs;

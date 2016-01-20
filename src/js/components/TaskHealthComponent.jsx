@@ -1,5 +1,5 @@
-var React = require("react/addons");
-var TimeFieldComponent = require("../components/TimeFieldComponent");
+import React from "react/addons";
+import TimeFieldComponent from "../components/TimeFieldComponent";
 
 var TaskHealthComponent = React.createClass({
   displayName: "TaskHealthComponent",
@@ -64,4 +64,4 @@ var TaskHealthComponent = React.createClass({
   }
 });
 
-module.exports = TaskHealthComponent;
+export default TaskHealthComponent;

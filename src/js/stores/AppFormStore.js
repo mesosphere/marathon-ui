@@ -1,16 +1,16 @@
-var EventEmitter = require("events").EventEmitter;
-var lazy = require("lazy.js");
-var objectPath = require("object-path");
-var Util = require("../helpers/Util");
+import {EventEmitter} from "events";
+import lazy from "lazy.js";
+import objectPath from "object-path";
+import Util from "../helpers/Util";
 
-var AppDispatcher = require("../AppDispatcher");
-var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
-var AppFormTransforms = require("./transforms/AppFormTransforms");
-var AppFormModelPostProcess = require("./transforms/AppFormModelPostProcess");
-var AppFormValidators = require("./validators/AppFormValidators");
-var AppsStore = require("./AppsStore");
-var AppsEvents = require("../events/AppsEvents");
-var FormEvents = require("../events/FormEvents");
+import AppDispatcher from "../AppDispatcher";
+import AppFormErrorMessages from "../constants/AppFormErrorMessages";
+import AppFormTransforms from "./transforms/AppFormTransforms";
+import AppFormModelPostProcess from "./transforms/AppFormModelPostProcess";
+import AppFormValidators from "./validators/AppFormValidators";
+import AppsStore from "./AppsStore";
+import AppsEvents from "../events/AppsEvents";
+import FormEvents from "../events/FormEvents";
 
 const defaultFieldValues = Object.freeze({
   cpus: 0.1,
@@ -447,4 +447,4 @@ AppDispatcher.register(function (action) {
   }
 });
 
-module.exports = AppFormStore;
+export default AppFormStore;

@@ -1,15 +1,15 @@
-var EventEmitter = require("events").EventEmitter;
-var semver = require("semver");
+import {EventEmitter} from "events";
+import semver from "semver";
 
-var AppDispatcher = require("../AppDispatcher");
-var Util = require("../helpers/Util");
-var InfoStore = require("../stores/InfoStore");
-var InfoActions = require("../actions/InfoActions");
-var InfoEvents = require("../events/InfoEvents");
-var DCOSActions = require("../actions/DCOSActions");
-var DCOSEvents = require("../events/DCOSEvents");
-var MesosActions = require("../actions/MesosActions");
-var MesosEvents = require("../events/MesosEvents");
+import AppDispatcher from "../AppDispatcher";
+import Util from "../helpers/Util";
+import InfoStore from "../stores/InfoStore";
+import InfoActions from "../actions/InfoActions";
+import InfoEvents from "../events/InfoEvents";
+import DCOSActions from "../actions/DCOSActions";
+import DCOSEvents from "../events/DCOSEvents";
+import MesosActions from "../actions/MesosActions";
+import MesosEvents from "../events/MesosEvents";
 
 const FILES_TTL = 60000; // in ms
 const STATE_TTL = 60000;
@@ -364,5 +364,5 @@ AppDispatcher.register(function (action) {
   }
 });
 
-module.exports = MesosStore;
+export default MesosStore;
 

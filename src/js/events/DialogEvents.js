@@ -5,4 +5,4 @@ const DialogEvents = {
   DISMISS_LATEST: "DIALOG_EVENTS_DISMISS_LATEST"
 };
 
-module.exports = Object.freeze(DialogEvents);
+export default Object.freeze(DialogEvents);

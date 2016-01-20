@@ -1,18 +1,17 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var AppListFilterComponent = require("../components/AppListFilterComponent");
-var AppListComponent = require("../components/AppListComponent");
-var BreadcrumbComponent = require("../components/BreadcrumbComponent");
-var DeploymentsListComponent =
-  require("../components/DeploymentsListComponent");
-var FilterTypes = require("../constants/FilterTypes");
-var SidebarComponent = require("../components/SidebarComponent");
-var TabPaneComponent = require("../components/TabPaneComponent");
-var TogglableTabsComponent = require("../components/TogglableTabsComponent");
-var Util = require("../helpers/Util");
-var tabs = require("../constants/tabs");
+import AppListFilterComponent from "../components/AppListFilterComponent";
+import AppListComponent from "../components/AppListComponent";
+import BreadcrumbComponent from "../components/BreadcrumbComponent";
+import DeploymentsListComponent from "../components/DeploymentsListComponent";
+import FilterTypes from "../constants/FilterTypes";
+import SidebarComponent from "../components/SidebarComponent";
+import TabPaneComponent from "../components/TabPaneComponent";
+import TogglableTabsComponent from "../components/TogglableTabsComponent";
+import Util from "../helpers/Util";
+import tabs from "../constants/tabs";
 
-var QueryParamsMixin = require("../mixins/QueryParamsMixin");
+import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 var TabPanesComponent = React.createClass({
   displayName: "TabPanesComponent",
@@ -123,4 +122,4 @@ var TabPanesComponent = React.createClass({
   }
 });
 
-module.exports = TabPanesComponent;
+export default TabPanesComponent;

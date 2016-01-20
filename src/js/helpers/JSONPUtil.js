@@ -31,4 +31,4 @@ const JSONPUtil = {
   }
 };
 
-module.exports = JSONPUtil;
+export default JSONPUtil;

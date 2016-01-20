@@ -1,4 +1,4 @@
-var _ = require("underscore");
+import _ from "underscore";
 
 function getClassNames(component) {
   if (component.props == null || component.props.className == null) {
@@ -9,7 +9,7 @@ function getClassNames(component) {
     .match(/\S+/g);
 }
 
-function findAll(component, className) {
+export function findAll(component, className) {
   return _.reduce(component.props.children, function (matches, child) {
     if (child != null && child.props != null) {
       var classes = getClassNames(child);
@@ -23,11 +23,11 @@ function findAll(component, className) {
   }, []);
 }
 
-function findOne(component, className) {
+export function findOne(component, className) {
   return _.first(findAll(component, className));
 }
 
-function getText(component) {
+export function getText(component) {
   if (typeof (component) === "string") {
     return component;
   }
@@ -37,9 +37,3 @@ function getText(component) {
     }, "");
   }
 }
-
-module.exports = {
-  findAll: findAll,
-  findOne: findOne,
-  getText: getText
-};

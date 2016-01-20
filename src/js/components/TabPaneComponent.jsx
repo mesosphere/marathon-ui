@@ -1,5 +1,5 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
 var TabPaneComponent = React.createClass({
   displayName: "TabPaneComponent",
@@ -38,4 +38,4 @@ var TabPaneComponent = React.createClass({
   }
 });
 
-module.exports = TabPaneComponent;
+export default TabPaneComponent;

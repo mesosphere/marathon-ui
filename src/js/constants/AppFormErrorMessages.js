@@ -1,7 +1,7 @@
-var Messages = require("../constants/Messages");
-var Util = require("../helpers/Util");
+import Messages from "../constants/Messages";
+import Util from "../helpers/Util";
 
-const ValidConstraints = require("./ValidConstraints");
+import ValidConstraints from "./ValidConstraints";
 
 const applicationFieldValidationErrors = Util.deepFreeze({
   appId: [
@@ -90,4 +90,4 @@ const AppFormErrorMessages = {
   }
 };
 
-module.exports = Util.deepFreeze(AppFormErrorMessages);
+export default Util.deepFreeze(AppFormErrorMessages);

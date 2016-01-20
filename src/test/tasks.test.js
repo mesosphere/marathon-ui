@@ -1,29 +1,30 @@
-var _ = require("underscore");
-var expect = require("chai").expect;
-var expectAsync = require("./helpers/expectAsync");
-var nock = require("nock");
-var shallow = require("enzyme").shallow;
+import {expect} from "chai";
+import expectAsync from "./helpers/expectAsync";
+import nock from "nock";
+import {shallow} from "enzyme";
+import React from "react/addons";
+import _ from "underscore";
 
-var React = require("react/addons");
+import config from "../js/config/config";
 
-var config = require("../js/config/config");
-var AppDispatcher = require("../js/AppDispatcher");
-var States = require("../js/constants/States");
-var AppsActions = require("../js/actions/AppsActions");
-var AppsStore = require("../js/stores/AppsStore");
-var AppsEvents = require("../js/events/AppsEvents");
-var InfoStore = require("../js/stores/InfoStore");
-var MesosStore = require("../js/stores/MesosStore");
-var MesosEvents = require("../js/events/MesosEvents");
-var TasksActions = require("../js/actions/TasksActions");
-var TasksEvents = require("../js/events/TasksEvents");
-var TaskListItemComponent = require("../js/components/TaskListItemComponent");
-var TaskDetailComponent = require("../js/components/TaskDetailComponent");
-var TaskListComponent = require("../js/components/TaskListComponent");
-var TaskMesosUrlComponent = require("../js/components/TaskMesosUrlComponent");
-var TaskFileListComponent = require("../js/components/TaskFileListComponent");
-var TaskFileDownloadComponent =
-  require("../js/components/TaskFileDownloadComponent");
+import AppDispatcher from "../js/AppDispatcher";
+import States from "../js/constants/States";
+import AppsActions from "../js/actions/AppsActions";
+import AppsStore from "../js/stores/AppsStore";
+import AppsEvents from "../js/events/AppsEvents";
+import InfoStore from "../js/stores/InfoStore";
+import MesosStore from "../js/stores/MesosStore";
+import MesosEvents from "../js/events/MesosEvents";
+import TasksActions from "../js/actions/TasksActions";
+import TasksEvents from "../js/events/TasksEvents";
+import TaskListItemComponent from "../js/components/TaskListItemComponent";
+import TaskDetailComponent from "../js/components/TaskDetailComponent";
+import TaskListComponent from "../js/components/TaskListComponent";
+import TaskMesosUrlComponent from "../js/components/TaskMesosUrlComponent";
+import TaskFileListComponent from "../js/components/TaskFileListComponent";
+import TaskFileDownloadComponent
+  from "../js/components/TaskFileDownloadComponent";
+import TimeFieldComponent from "../js/components/TimeFieldComponent";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
@@ -279,7 +280,6 @@ describe("Task Detail component", function () {
   });
 
   it("has the correct timefields", function () {
-    var TimeFieldComponent = require("../js/components/TimeFieldComponent");
     var timeFields = this.component
       .find(".task-details")
       .find(TimeFieldComponent);

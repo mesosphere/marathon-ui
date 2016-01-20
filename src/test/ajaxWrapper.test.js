@@ -1,9 +1,10 @@
-var expect = require("chai").expect;
-var ajaxWrapper = require("../js/helpers/ajaxWrapper");
-var config = require("../js/config/config");
+import {expect} from "chai";
+import nock from "nock";
+import expectAsync from "./helpers/expectAsync";
 
-var expectAsync = require("./helpers/expectAsync");
-var nock = require("nock");
+import config from "../js/config/config";
+
+import ajaxWrapper from "../js/helpers/ajaxWrapper";
 
 var server = config.localTestserverURI;
 config.apiURL = `http://${server.address}:${server.port}/`;

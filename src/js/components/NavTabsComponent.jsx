@@ -1,8 +1,8 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var DeploymentEvents = require("../events/DeploymentEvents");
-var DeploymentStore = require("../stores/DeploymentStore");
+import DeploymentEvents from "../events/DeploymentEvents";
+import DeploymentStore from "../stores/DeploymentStore";
 
 var NavTabsComponent = React.createClass({
   displayName: "NavTabsComponent",
@@ -81,4 +81,4 @@ var NavTabsComponent = React.createClass({
   }
 });
 
-module.exports = NavTabsComponent;
+export default NavTabsComponent;

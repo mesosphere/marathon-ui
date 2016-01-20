@@ -1,9 +1,9 @@
-var AppFormFieldToModelTransforms = require("./AppFormFieldToModelTransforms");
-var AppFormModelToFieldTransforms = require("./AppFormModelToFieldTransforms");
+import AppFormFieldToModelTransforms from "./AppFormFieldToModelTransforms";
+import AppFormModelToFieldTransforms from "./AppFormModelToFieldTransforms";
 
 const AppFormTransforms = {
   FieldToModel: AppFormFieldToModelTransforms,
   ModelToField: AppFormModelToFieldTransforms
 };
 
-module.exports = Object.freeze(AppFormTransforms);
+export default Object.freeze(AppFormTransforms);

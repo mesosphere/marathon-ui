@@ -1,20 +1,21 @@
-var _ = require("underscore");
-var expect = require("chai").expect;
-var expectAsync = require("./helpers/expectAsync");
-var nock = require("nock");
-var shallow = require("enzyme").shallow;
-var React = require("react/addons");
+import {expect} from "chai";
+import nock from "nock";
+import {shallow} from "enzyme";
+import _ from "underscore";
+import React from "react/addons";
+import expectAsync from "./helpers/expectAsync";
 
-var config = require("../js/config/config");
-var DeploymentActions = require("../js/actions/DeploymentActions");
-var DeploymentComponent = require("../js/components/DeploymentComponent");
-var NavTabsComponent = require("../js/components/NavTabsComponent");
-var DeploymentEvents = require("../js/events/DeploymentEvents");
-var DeploymentStore = require("../js/stores/DeploymentStore");
+import config from "../js/config/config";
+
+import DeploymentActions from "../js/actions/DeploymentActions";
+import DeploymentComponent from "../js/components/DeploymentComponent";
+import NavTabsComponent from "../js/components/NavTabsComponent";
+import DeploymentEvents from "../js/events/DeploymentEvents";
+import DeploymentStore from "../js/stores/DeploymentStore";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";
-var tabs = require("../js/constants/tabs");
+import tabs from "../js/constants/tabs";
 
 describe("Deployments", function () {
 

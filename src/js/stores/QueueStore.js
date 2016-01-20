@@ -1,10 +1,10 @@
-var EventEmitter = require("events").EventEmitter;
+import {EventEmitter} from "events";
 
-var AppDispatcher = require("../AppDispatcher");
-var QueueEvents = require("../events/QueueEvents");
-var queueScheme = require("./schemes/queueScheme");
+import AppDispatcher from "../AppDispatcher";
+import QueueEvents from "../events/QueueEvents";
+import queueScheme from "./schemes/queueScheme";
 
-var Util = require("../helpers/Util");
+import Util from "../helpers/Util";
 
 function processQueue(queue = []) {
   return queue.map(function (entry) {
@@ -58,4 +58,4 @@ AppDispatcher.register(function (action) {
   }
 });
 
-module.exports = QueueStore;
+export default QueueStore;

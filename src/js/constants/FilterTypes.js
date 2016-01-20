@@ -5,4 +5,4 @@ const FilterTypes = {
   TEXT: "filterText"
 };
 
-module.exports = Object.freeze(FilterTypes);
+export default Object.freeze(FilterTypes);

@@ -1,9 +1,9 @@
-var EventEmitter = require("events").EventEmitter;
-var lazy = require("lazy.js");
+import {EventEmitter} from "events";
+import lazy from "lazy.js";
 
-var AppDispatcher = require("../AppDispatcher");
-var DeploymentEvents = require("../events/DeploymentEvents");
-var deploymentScheme = require("./schemes/deploymentScheme");
+import AppDispatcher from "../AppDispatcher";
+import DeploymentEvents from "../events/DeploymentEvents";
+import deploymentScheme from "./schemes/deploymentScheme";
 
 function processDeployments(deployments) {
   return lazy(deployments).map(function (deployment) {
@@ -66,4 +66,4 @@ AppDispatcher.register(function (action) {
   }
 });
 
-module.exports = DeploymentStore;
+export default DeploymentStore;

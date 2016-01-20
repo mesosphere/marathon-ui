@@ -1,13 +1,12 @@
-var expect = require("chai").expect;
-var nock = require("nock");
+import {expect} from "chai";
+import nock from "nock";
+import expectAsync from "./helpers/expectAsync";
 
-var config = require("../js/config/config");
+import config from "../js/config/config";
 
-var AppDispatcher = require("../js/AppDispatcher");
-var DCOSActions = require("../js/actions/DCOSActions");
-var DCOSEvents = require("../js/events/DCOSEvents");
-
-var expectAsync = require("./helpers/expectAsync");
+import AppDispatcher from "../js/AppDispatcher";
+import DCOSActions from "../js/actions/DCOSActions";
+import DCOSEvents from "../js/events/DCOSEvents";
 
 var server = config.localTestserverURI;
 config.apiURL = "http://" + server.address + ":" + server.port + "/";

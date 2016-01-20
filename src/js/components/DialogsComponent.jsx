@@ -1,14 +1,13 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var AlertDialogComponent = require("../components/AlertDialogComponent");
-var ConfirmDialogComponent =
-  require("../components/ConfirmDialoglComponent");
-var PromptDialogComponent = require("../components/PromptDialogComponent");
+import AlertDialogComponent from "../components/AlertDialogComponent";
+import ConfirmDialogComponent from "../components/ConfirmDialoglComponent";
+import PromptDialogComponent from "../components/PromptDialogComponent";
 
-var DialogActions = require("../actions/DialogActions");
-var DialogEvents = require("../events/DialogEvents");
-var DialogStore = require("../stores/DialogStore");
-var DialogTypes = require("../constants/DialogTypes");
+import DialogActions from "../actions/DialogActions";
+import DialogEvents from "../events/DialogEvents";
+import DialogStore from "../stores/DialogStore";
+import DialogTypes from "../constants/DialogTypes";
 
 var DialogsComponent = React.createClass({
   displayName: "DialogsComponent",
@@ -97,4 +96,4 @@ var DialogsComponent = React.createClass({
   }
 });
 
-module.exports = DialogsComponent;
+export default DialogsComponent;

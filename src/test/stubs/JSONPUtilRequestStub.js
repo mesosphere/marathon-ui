@@ -18,4 +18,4 @@ var JSONPUtilStub = function (executor) {
   }
 };
 
-module.exports = JSONPUtilStub;
+export default JSONPUtilStub;

@@ -1,6 +1,6 @@
-var React = require("react/addons");
-var classNames = require("classnames");
-var PopoverComponent = require("../components/PopoverComponent");
+import React from "react/addons";
+import classNames from "classnames";
+import PopoverComponent from "../components/PopoverComponent";
 
 var TooltipComponent = React.createClass({
   displayName: "TooltipComponent",
@@ -53,4 +53,4 @@ var TooltipComponent = React.createClass({
 
 });
 
-module.exports = TooltipComponent;
+export default TooltipComponent;

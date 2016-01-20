@@ -1,8 +1,9 @@
-var ajaxWrapper = require("../helpers/ajaxWrapper");
+import ajaxWrapper from "../helpers/ajaxWrapper";
 
-var config = require("../config/config");
-var AppDispatcher = require("../AppDispatcher");
-var QueueEvents = require("../events/QueueEvents");
+import config from "../config/config";
+
+import AppDispatcher from "../AppDispatcher";
+import QueueEvents from "../events/QueueEvents";
 
 var QueueActions = {
   requestQueue: function () {
@@ -44,4 +45,4 @@ var QueueActions = {
   request: ajaxWrapper
 };
 
-module.exports = QueueActions;
+export default QueueActions;

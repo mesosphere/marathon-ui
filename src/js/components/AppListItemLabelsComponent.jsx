@@ -1,10 +1,10 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+import classNames from "classnames";
+import React from "react/addons";
 
-var PopoverComponent = require("./PopoverComponent");
+import PopoverComponent from "./PopoverComponent";
 
-var OnClickOutsideMixin = require("react-onclickoutside");
-var Util = require("../helpers/Util");
+import OnClickOutsideMixin from "react-onclickoutside";
+import Util from "../helpers/Util";
 
 // Keep track of post-render initial margin value, on a per-reactid basis
 var _initialTopMargins = [];
@@ -120,4 +120,4 @@ var AppListItemLabelsComponent = React.createClass({
   }
 });
 
-module.exports = AppListItemLabelsComponent;
+export default AppListItemLabelsComponent;

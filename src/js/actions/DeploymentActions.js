@@ -1,8 +1,9 @@
-var ajaxWrapper = require("../helpers/ajaxWrapper");
+import ajaxWrapper from "../helpers/ajaxWrapper";
 
-var config = require("../config/config");
-var AppDispatcher = require("../AppDispatcher");
-var DeploymentEvents = require("../events/DeploymentEvents");
+import config from "../config/config";
+
+import AppDispatcher from "../AppDispatcher";
+import DeploymentEvents from "../events/DeploymentEvents";
 
 var DeploymentActions = {
   requestDeployments: function () {
@@ -63,4 +64,4 @@ var DeploymentActions = {
   request: ajaxWrapper
 };
 
-module.exports = DeploymentActions;
+export default DeploymentActions;

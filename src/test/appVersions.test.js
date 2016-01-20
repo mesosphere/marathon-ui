@@ -1,20 +1,18 @@
-var describeWithDOM = require("enzyme").describeWithDOM;
-var expect = require("chai").expect;
-var expectAsync = require("./helpers/expectAsync");
-var mount = require("enzyme").mount;
-var nock = require("nock");
+import {expect} from "chai";
+import {mount} from "enzyme";
+import nock from "nock";
+import React from "react/addons";
+import expectAsync from "./helpers/expectAsync";
 
-var React = require("react/addons");
+import config from "../js/config/config";
 
-var config = require("../js/config/config");
-var AppVersionsActions = require("../js/actions/AppVersionsActions");
-var AppVersionsEvents = require("../js/events/AppVersionsEvents");
-var AppVersionsStore = require("../js/stores/AppVersionsStore");
-var AppVersionComponent = require("../js/components/AppVersionComponent");
-var AppVersionListComponent =
-  require("../js/components/AppVersionListComponent");
-var AppVersionListItemComponent =
-  require("../js/components/AppVersionListItemComponent");
+import AppVersionsActions from "../js/actions/AppVersionsActions";
+import AppVersionsEvents from "../js/events/AppVersionsEvents";
+import AppVersionsStore from "../js/stores/AppVersionsStore";
+import AppVersionComponent from "../js/components/AppVersionComponent";
+import AppVersionListComponent from "../js/components/AppVersionListComponent";
+import AppVersionListItemComponent
+  from "../js/components/AppVersionListItemComponent";
 
 var server = config.localTestserverURI;
 config.apiURL = `http://${server.address}:${server.port}/`;

@@ -4,4 +4,4 @@ const HealthCheckProtocols = {
   COMMAND: "COMMAND"
 };
 
-module.exports = Object.freeze(HealthCheckProtocols);
+export default Object.freeze(HealthCheckProtocols);

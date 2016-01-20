@@ -1,4 +1,4 @@
-var React = require("react/addons");
+import React from "react/addons";
 
 var UnspecifiedNodeComponent = React.createClass({
   displayName: "UnspecifiedNodeComponent",
@@ -28,4 +28,4 @@ var UnspecifiedNodeComponent = React.createClass({
   }
 });
 
-module.exports = UnspecifiedNodeComponent;
+export default UnspecifiedNodeComponent;

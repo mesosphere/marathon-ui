@@ -1,9 +1,9 @@
-var React = require("react/addons");
+import React from "react/addons";
 
-var AppFormErrorMessages = require("../constants/AppFormErrorMessages");
-var FormActions = require("../actions/FormActions");
+import AppFormErrorMessages from "../constants/AppFormErrorMessages";
+import FormActions from "../actions/FormActions";
 
-var Util = require("../helpers/Util");
+import Util from "../helpers/Util";
 
 var DuplicableRowsMixin = {
   propTypes: {
@@ -153,4 +153,4 @@ var DuplicableRowsMixin = {
 
 };
 
-module.exports = DuplicableRowsMixin;
+export default DuplicableRowsMixin;

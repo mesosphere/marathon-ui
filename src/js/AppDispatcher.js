@@ -1,9 +1,10 @@
-var dispatcher = new (require("flux").Dispatcher)();
+import {Dispatcher} from "flux";
 
+var dispatcher = new Dispatcher();
 dispatcher.dispatchNext = function (obj) {
   setTimeout(function () {
     dispatcher.dispatch(obj);
   });
 };
 
-module.exports = dispatcher;
+export default dispatcher;
