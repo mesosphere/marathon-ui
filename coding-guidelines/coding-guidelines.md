@@ -9,6 +9,7 @@
 - [Indentation and Line Breaks](#indentation-and-line-breaks)
 - [Functions](#functions)
 - [Control Statements](#control-statements)
+  - [Ternaries](#ternaries)
 - [JSDoc](#jsdoc)
 - [JSX](#jsx)
 	- [Self Contained Elements](#self-contained-elements)
@@ -84,7 +85,7 @@ Rules:
   - At the latest whitespace character.
   - The second line is indented with 2 spaces.
   ```JS
-    var longString = "A Very long string which is longer then one line, which is 80 characters " +
+    var longString = "A very long string which is longer then one line, which is 80 characters " +
       "in this case. This demonstrates how the second line is indented";
   ```
 - Object literals are kept on one line if possible.
@@ -246,6 +247,18 @@ function test(number, callback) {
   }
   return "done";
 }
+```
+
+### Ternaries
+Rules:
+  - We are using ternaries only for single line values.
+	- Operators are placed at the beginning of the line.
+	- Use ternaries sparingly.
+
+```JS
+var title = !Util.isStringAndEmpty(props.title)
+	? <h3 className="h3">{props.title}</h3>
+	: null;
 ```
 
 ## JSX
