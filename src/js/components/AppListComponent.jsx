@@ -313,8 +313,8 @@ var AppListComponent = React.createClass({
       if (filterText != null && sortKey === "id") {
         nodesSequence = nodesSequence.sort((a, b) => {
           return score(a.id, filterText) > score(b.id, filterText)
-            ? -1 * sortDirection
-            : 1  * sortDirection;
+            ? -1
+            : 1;
         });
       }
 
@@ -356,7 +356,10 @@ var AppListComponent = React.createClass({
   },
 
   getCaret: function (sortKey) {
-    if (sortKey === this.state.sortKey) {
+    var filterText = this.props.filters[FilterTypes.TEXT];
+
+    if (sortKey === this.state.sortKey &&
+        (sortKey !== "id" || filterText == null || filterText === "")) {
       return (
         <span className="caret"></span>
       );
