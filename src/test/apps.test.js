@@ -1043,6 +1043,115 @@ describe("App component", function () {
 
 });
 
+describe("App List component", function () {
+
+  var apps = [
+    {id: "/app-alpha", instances: 1, mem: 16, cpus: 1},
+    {id: "/app-beta", instances: 1, mem: 16, cpus: 1},
+    {id: "/apps/sleep", instances: 1, mem: 16, cpus: 1},
+    {id: "/group/apps/sleepz", instances: 1, mem: 16, cpus: 1}
+  ];
+
+  before(function () {
+    AppDispatcher.dispatch({
+      actionType: AppsEvents.REQUEST_APPS,
+      data: {body: {apps: apps}}
+    });
+  });
+
+  it("displays the right entries", function () {
+    this.component = mount(<AppListComponent currentGroup="/" />);
+
+    var appNames = this.component
+      .find(AppListItemComponent)
+      .map(appNode => appNode.find(".name-cell").text());
+
+    expect(appNames).to.deep.equal([
+      "apps", "group", "app-alpha", "app-beta"
+    ]);
+    this.component.instance().componentWillUnmount();
+  });
+
+  // The following cannot use mount() due to the BreadcrumbComponent's Link
+  // (see Breadcrumb Component tests)
+  describe("when the user enters a text filter", function () {
+    it("displays the exact search result match", function () {
+      var filters = {
+        filterText: "app-alpha"
+      };
+
+      this.component = shallow(<AppListComponent filters={filters}
+        currentGroup="/" />);
+
+      var appNames = this.component
+        .find(AppListItemComponent)
+        .map(app => app.props().model.id);
+
+      expect(appNames).to.deep.equal([
+        "/app-alpha"
+      ]);
+      this.component.instance().componentWillUnmount();
+    });
+
+    it("handles fuzzy search input", function () {
+      var filters = {
+        filterText: "appsleep"
+      };
+
+      this.component = shallow(<AppListComponent filters={filters}
+        currentGroup="/" />);
+
+      var appNames = this.component
+        .find(AppListItemComponent)
+        .map(app => app.props().model.id);
+
+      expect(appNames).to.deep.equal([
+        "/apps/sleep",
+        "/group/apps/sleepz"
+      ]);
+      this.component.instance().componentWillUnmount();
+    });
+
+    it("shows the best match first", function () {
+      var filters = {
+        filterText: "app"
+      };
+
+      this.component = shallow(<AppListComponent filters={filters}
+        currentGroup="/" />);
+
+      var appNames = this.component
+        .find(AppListItemComponent)
+        .map(app => app.props().model.id);
+
+      expect(appNames).to.deep.equal([
+        "/app-beta",
+        "/app-alpha",
+        "/apps/sleep",
+        "/group/apps/sleepz"
+      ]);
+      this.component.instance().componentWillUnmount();
+    });
+
+    it("returns 0 results when no matches are found", function () {
+      var filters = {
+        filterText: "nope"
+      };
+
+      this.component = shallow(<AppListComponent filters={filters}
+        currentGroup="/" />);
+
+      var appNames = this.component
+        .find(AppListItemComponent)
+        .map(app => app.props().model.id);
+
+      expect(appNames).to.have.length(0);
+      this.component.instance().componentWillUnmount();
+    });
+  });
+
+});
+
 describe("App Health Bar", function () {
 
   var model = {
