@@ -1045,11 +1045,15 @@ describe("App component", function () {
 
 describe("App List component", function () {
 
+  var longestAppId = "/omega/long-group-name-1/long-group-name-2/" +
+    "long-group-name-3/long-group-name-4/long-group-name-5/" +
+    "long-group-name-6/ok-that-should-do";
   var apps = [
     {id: "/app-alpha", instances: 1, mem: 16, cpus: 1},
     {id: "/app-beta", instances: 1, mem: 16, cpus: 1},
     {id: "/apps/sleep", instances: 1, mem: 16, cpus: 1},
-    {id: "/group/apps/sleepz", instances: 1, mem: 16, cpus: 1}
+    {id: "/group/apps/sleepz", instances: 1, mem: 16, cpus: 1},
+    {id: longestAppId, instances: 1, mem: 16, cpus: 1}
   ];
 
   before(function () {
@@ -1067,7 +1071,7 @@ describe("App List component", function () {
       .map(appNode => appNode.find(".name-cell").text());
 
     expect(appNames).to.deep.equal([
-      "apps", "group", "app-alpha", "app-beta"
+      "apps", "group", "omega", "app-alpha", "app-beta"
     ]);
     this.component.instance().componentWillUnmount();
   });
@@ -1109,6 +1113,22 @@ describe("App List component", function () {
         "/apps/sleep",
         "/group/apps/sleepz"
       ]);
+      this.component.instance().componentWillUnmount();
+    });
+
+    it("shows the right result for deeply nested paths", function () {
+      var filters = {
+        filterText: "omega"
+      };
+
+      this.component = shallow(<AppListComponent filters={filters}
+        currentGroup="/" />);
+
+      var appNames = this.component
+        .find(AppListItemComponent)
+        .map(app => app.props().model.id);
+
+      expect(appNames).to.deep.equal([longestAppId]);
       this.component.instance().componentWillUnmount();
     });
 
