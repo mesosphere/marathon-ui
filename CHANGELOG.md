@@ -1,4 +1,4 @@
-## Unversioned
+## 0.15.0 - 2016-01-20
 ### Added
 - \#2814 - Add contextual dropdown menu to Application List items
 - \#2733 - Allow configuration of "port" instead of "portIndex" for HTTP/TCP
