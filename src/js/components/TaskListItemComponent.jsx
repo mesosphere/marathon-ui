@@ -194,7 +194,7 @@ var TaskListItemComponent = React.createClass({
             onChange={this.handleCheckboxClick} />
         </td>
         <td>
-            <a href={taskURI}>{taskId}</a>
+          <a href={taskURI}>{taskId}</a>
           <br />
           {this.getEndpoints()}
         </td>
@@ -213,8 +213,7 @@ var TaskListItemComponent = React.createClass({
           <TaskFileDownloadComponent task={task} fileName="stdout" />
         </td>
         <td className="text-right">
-          <span
-            title={version}>
+          <span title={version}>
             {new Moment(version).fromNow()}
           </span>
         </td>

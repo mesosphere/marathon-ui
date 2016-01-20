@@ -79,7 +79,7 @@ var AppListItemLabelsComponent = React.createClass({
 
       labelNodes.push((
         <span key={i} className={labelClassName} title={labelText}
-          ref={`label${i}`}>
+            ref={`label${i}`}>
           {labelText}
         </span>
       ));

@@ -284,7 +284,7 @@ var AppPageComponent = React.createClass({
           onTabClick={this.handleTabClick}
           tabs={state.tabs} >
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(state.appId)}>
+            id={"apps/" + encodeURIComponent(state.appId)}>
           <TaskViewComponent
             appId={state.appId}
             fetchState={state.fetchState}
@@ -293,11 +293,11 @@ var AppPageComponent = React.createClass({
             tasks={model.tasks} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(state.appId) + "/configuration"}>
+            id={"apps/" + encodeURIComponent(state.appId) + "/configuration"}>
           <AppVersionListComponent appId={state.appId} />
         </TabPaneComponent>
         <TabPaneComponent
-          id={"apps/" + encodeURIComponent(state.appId) + "/debug"}>
+            id={"apps/" + encodeURIComponent(state.appId) + "/debug"}>
           <AppDebugInfoComponent appId={state.appId} />
         </TabPaneComponent>
       </TogglableTabsComponent>

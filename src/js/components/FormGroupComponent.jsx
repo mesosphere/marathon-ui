@@ -50,8 +50,7 @@ var FormGroupComponent = React.createClass({
 
     var child = React.Children.only(props.children);
     var formControlChild = React.cloneElement(
-      child,
-      {
+      child, {
         className: "form-control",
         id: fieldId,
         onChange: this.handleChange,

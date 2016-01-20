@@ -40,7 +40,7 @@ var TooltipComponent = React.createClass({
 
     return (
       <div onMouseOver={this.handleMouseOver}
-           onMouseOut={this.handleMouseOut}>
+          onMouseOut={this.handleMouseOut}>
         <PopoverComponent
             className={classNames("tooltip", props.className)}
             visible={!props.disabled && this.state.isPopoverVisible}>

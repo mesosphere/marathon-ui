@@ -202,8 +202,7 @@ var Marathon = React.createClass({
 
   getHelpModal: function () {
     return (
-      <HelpModalComponent
-        onDestroy={this.handleModalDestroy} />
+      <HelpModalComponent onDestroy={this.handleModalDestroy} />
     );
   },
 
@@ -213,16 +212,13 @@ var Marathon = React.createClass({
       : null;
 
     return (
-      <AppModalComponent
-        app={app}
-        onDestroy={this.handleModalDestroy} />
+      <AppModalComponent app={app} onDestroy={this.handleModalDestroy} />
     );
   },
 
   getEditAppModal: function (appId, appVersion) {
     return (
-      <EditAppModalComponent
-        appId={appId}
+      <EditAppModalComponent appId={appId}
         appVersion={appVersion}
         onDestroy={this.handleModalDestroy} />
     );
@@ -244,21 +240,18 @@ var Marathon = React.createClass({
                 <img width="160" height="27" alt="Marathon" src={logoPath} />
               </a>
             </div>
-            <NavTabsComponent
-              activeTabId={state.activeTabId}
+            <NavTabsComponent activeTabId={state.activeTabId}
               className="navbar-nav nav-tabs-unbordered"
               tabs={tabs} />
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <Link
-                    to={router.getCurrentPathname()}
+                <Link to={router.getCurrentPathname()}
                     query={{modal: "about"}}>
                   About
                 </Link>
               </li>
               <li>
-                <a href="../help"
-                  target="_blank">
+                <a href="../help" target="_blank">
                   API Reference
                 </a>
               </li>

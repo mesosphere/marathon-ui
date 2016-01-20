@@ -101,8 +101,7 @@ var AppVersionListItemComponent = React.createClass({
     if (state.fetchState !== States.STATE_LOADING &&
         state.fetchState !== States.STATE_ERROR) {
       return (
-        <AppVersionComponent
-          className="dl-unstyled"
+        <AppVersionComponent className="dl-unstyled"
           appVersion={state.appVersion} />
       );
     }

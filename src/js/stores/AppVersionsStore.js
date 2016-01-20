@@ -49,10 +49,10 @@ AppDispatcher.register(function (action) {
       break;
     case AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR:
       AppVersionsStore.emit(
-          AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
-          action.data.body,
-          action.appId
-        );
+        AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR,
+        action.data.body,
+        action.appId
+      );
       break;
     case AppVersionsEvents.REQUEST_ONE:
       AppVersionsStore.resetOnAppChange(action.appId);

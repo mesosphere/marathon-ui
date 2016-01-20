@@ -31,15 +31,15 @@ var ObjectDlComponent = React.createClass({
     if (this.props.object != null) {
       dlNodes = [];
       Object.keys(this.props.object).sort().forEach(function (key) {
+        var ddElement = this.props.object[key] == null
+          ? <UnspecifiedNodeComponent tag="span" />
+          : prettyPrint(this.props.object[key]);
+
         dlNodes.push(
           <dt key={key} title={key}>{formatKey(key)}</dt>
         );
         dlNodes.push(
-          <dd key={key + "_val"}>
-            {this.props.object[key] == null ?
-              <UnspecifiedNodeComponent tag="span" /> :
-              prettyPrint(this.props.object[key])}
-          </dd>
+          <dd key={key + "_val"}>{ddElement}</dd>
         );
       }, this);
     }

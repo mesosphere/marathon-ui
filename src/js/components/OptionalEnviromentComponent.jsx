@@ -45,22 +45,21 @@ var OptionalEnvironmentComponent = React.createClass({
 
     return (
       <div key={row.consecutiveKey} className={rowClassSet}>
-        <fieldset
-            className="row duplicable-row"
+        <fieldset className="row duplicable-row"
             onChange={this.handleChange.bind(null, i)}>
           <div className="col-sm-6 add-colon">
             <FormGroupComponent
-              fieldId={`env.key.${i}`}
-              label="Key"
-              value={row.key}>
+                fieldId={`env.key.${i}`}
+                label="Key"
+                value={row.key}>
               <input ref={`key${i}`} />
             </FormGroupComponent>
           </div>
           <div className="col-sm-6">
             <FormGroupComponent
-              fieldId={`env.value.${i}`}
-              label="Value"
-              value={row.value}>
+                fieldId={`env.value.${i}`}
+                label="Value"
+                value={row.value}>
               <input ref={`value${i}`} />
             </FormGroupComponent>
             <DuplicableRowControls
