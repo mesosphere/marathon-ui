@@ -12,6 +12,7 @@ var fs = require("fs");
 var replace = require("gulp-replace");
 var uglify = require("gulp-uglify");
 var webpack = require("webpack");
+var WebpackNotifierPlugin = require('webpack-notifier');
 var zip = require("gulp-zip");
 
 var packageInfo = require("./package");
@@ -105,6 +106,13 @@ var webpackConfig = {
   },
   watch: webpackWatch
 };
+
+if (process.env.NOTIFY === "true") {
+  webpackConfig.plugins.push(new WebpackNotifierPlugin({
+    alwaysNotify: true,
+    title: "Marathon UI - " + packageInfo.version
+  }));
+}
 
 // Use webpack to compile jsx into js,
 gulp.task("webpack", function (callback) {
