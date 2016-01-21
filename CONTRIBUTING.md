@@ -51,29 +51,9 @@ If you want to add a new npm package to 'node_modules':
         npm shrinkwrap --dev
 
 #### Editor Configuration
-
-There is an ```.editorconfig```-file to apply editor settings on various editors.
-
-##### Sublime Text specific configuration
-
-1. Add the following to your Sublime Text User Settings:
-
-  ```json
-  {
-    ...
-    "rulers": [80], // lines no longer than 80 chars
-    "tab_size": 2, // use two spaces for indentation
-    "translate_tabs_to_spaces": true, // use spaces for indentation
-    "ensure_newline_at_eof_on_save": true, // add newline on save
-    "trim_trailing_white_space_on_save": true, // trim trailing white space on save
-    "default_line_ending": "unix"
-  }
-  ```
-
-2. Add Sublime-linter with eslint:
-
-  1. Installing SublimeLinter is straightforward using Sublime Package Manager, see [instructions](http://sublimelinter.readthedocs.org/en/latest/installation.html#installing-via-pc)
-  2. Follow the instructions for [SublimeLinter-eslint](https://github.com/roadhump/SublimeLinter-eslint)
+There is an [.editorconfig](https://github.com/mesosphere/marathon-ui/blob/master/.editorconfig)
+file to apply editor settings on various editors. Please refer to the [Editorconfig](http://editorconfig.org/#overview)
+homepage for a list of supported editors and setup instructions.
 
 #### Coding Guidelines
 Follow our [Coding Guidelines](https://github.com/mesosphere/marathon-ui/blob/master/coding-guidelines.md)
