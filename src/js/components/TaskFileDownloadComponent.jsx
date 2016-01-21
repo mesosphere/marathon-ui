@@ -4,7 +4,6 @@ import classNames from "classnames";
 import MesosActions from "../actions/MesosActions";
 import MesosEvents from "../events/MesosEvents";
 import MesosStore from "../stores/MesosStore";
-import PopoverComponent from "../components/PopoverComponent";
 import TooltipComponent from "../components/TooltipComponent";
 
 var TaskFileDownloadComponent = React.createClass({

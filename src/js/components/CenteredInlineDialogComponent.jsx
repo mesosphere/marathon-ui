@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import React from "react/addons";
-import {Link} from "react-router";
 
 import Util from "../helpers/Util";
 

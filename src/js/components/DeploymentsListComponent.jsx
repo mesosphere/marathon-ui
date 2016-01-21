@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import lazy from "lazy.js";
-import {Link} from "react-router";
 import React from "react/addons";
 
 import Messages from "../constants/Messages";
@@ -119,11 +118,6 @@ var DeploymentListComponent = React.createClass({
       state.deployments.length === 0 &&
       state.fetchState !== States.STATE_UNAUTHORIZED &&
       state.fetchState !== States.STATE_FORBIDDEN;
-    var pageHasGenericError = state.fetchState === States.STATE_ERROR;
-    var pageHasUnauthorizedError =
-      state.fetchState === States.STATE_UNAUTHORIZED;
-    var pageHasForbiddenError = state.fetchState === States.STATE_FORBIDDEN;
-    var pageHasErrorMessage = state.errorMessage !== "";
 
     if (pageIsLoading) {
       let message = "Please wait while deployments are being retrieved";

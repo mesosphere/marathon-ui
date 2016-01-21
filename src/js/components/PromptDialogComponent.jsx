@@ -1,7 +1,6 @@
 import React from "react/addons";
 import classNames from "classnames";
 
-import DialogSeverity from "../constants/DialogSeverity";
 import Util from "../helpers/Util";
 import ModalComponent from "../components/ModalComponent";
 
