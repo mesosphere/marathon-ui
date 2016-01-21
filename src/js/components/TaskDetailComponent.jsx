@@ -170,7 +170,7 @@ var TaskDetailComponent = React.createClass({
 
     var ipAddressFields = this.getIpAddresses();
     if (ipAddressFields != null && ipAddressFields.length > 0) {
-      ipAddressFields.unshift(<dt key="ip-addresses">IP Addresses</dt>)
+      ipAddressFields.unshift(<dt key="ip-addresses">IP Addresses</dt>);
     }
 
     return (

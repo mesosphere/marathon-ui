@@ -97,7 +97,7 @@ function getNodeURLFromState(nodeId, state) {
   }
 
   if (environment === DCOS_ENVIRONMENT) {
-    return `/slave/${nodeId}`
+    return `/slave/${nodeId}`;
   }
 
   let agent = state.slaves.find((slave) => {
@@ -126,9 +126,9 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
   let framework = null;
 
   if (state.frameworks != null) {
-    framework = state.frameworks.find(matchFramework)
+    framework = state.frameworks.find(matchFramework);
   } else if (state.completed_frameworks != null) {
-    framework = state.completed_frameworks.find(matchFramework)
+    framework = state.completed_frameworks.find(matchFramework);
   }
 
   if (framework == null) {
@@ -142,9 +142,9 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
   let executor = null;
 
   if (framework.executors != null) {
-    executor = framework.executors.find(matchExecutor)
+    executor = framework.executors.find(matchExecutor);
   } else if (framework.completed_executors != null) {
-    executor = framework.completed_executors.find(matchExecutor)
+    executor = framework.completed_executors.find(matchExecutor);
   }
 
   if (executor == null) {

@@ -24,7 +24,7 @@ var PromptDialogComponent = React.createClass({
     return {
       onAccept: Util.noop,
       onDismiss: Util.noop
-    }
+    };
   },
 
   componentDidMount: function () {
