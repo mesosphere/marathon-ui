@@ -17,7 +17,9 @@
 
 
 ## General
-We are using the eslintrc to lint our code. All basic rules are defined there, some important rules are:
+We use [ESLint](http://eslint.org/) to lint our Javascript. All basic rules are
+defined in the [.eslintrc](https://github.com/mesosphere/marathon-ui/blob/master/.eslintrc)
+file, the most important rules are:
   - Max line length is 80 characters.
   - Indentation is 2 spaces.
   - No multiple empty lines.
