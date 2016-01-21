@@ -240,8 +240,8 @@ gulp.task("version-check", function () {
   if (shrinkwrapNodeVersion !== nodeVersion ||
     nodeVersion !== "v" + packageNodeVersion) {
     throw(
-      "\nPackage Node engine version is " + packageVersion + "\n" +
-      "Shrinkwrap Node version is " + shrinkwrapVersion + "\n" +
+      "\nPackage Node engine version is " + packageNodeVersion + "\n" +
+      "Shrinkwrap Node version is " + shrinkwrapNodeVersion + "\n" +
       "Current Node version is " + nodeVersion
     );
   }
