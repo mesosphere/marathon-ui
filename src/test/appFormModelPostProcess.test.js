@@ -180,8 +180,28 @@ describe("App Form Model Post Process", function () {
 
     });
 
+  });
 
+  it("only contains an uris array", function () {
+    var app = {
+      fetch: [],
+      uris: ["test"]
+    };
 
+    AppFormModelPostProcess.fetch(app);
+
+    expect(app.fetch).to.be.undefined;
+  });
+
+  it("only contains an fetch array", function () {
+    var app = {
+      fetch: ["test"],
+      uris: []
+    };
+
+    AppFormModelPostProcess.fetch(app);
+
+    expect(app.uris).to.be.undefined;
   });
 
 });
