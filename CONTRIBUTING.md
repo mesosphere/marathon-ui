@@ -50,7 +50,7 @@ If you want to add a new npm package to 'node_modules':
 
         npm shrinkwrap --dev
 
-#### <a name="guidelines"></a> Coding Guidelines
+#### Editor Configuration
 
 There is an ```.editorconfig```-file to apply editor settings on various editors.
 
@@ -75,6 +75,8 @@ There is an ```.editorconfig```-file to apply editor settings on various editors
   1. Installing SublimeLinter is straightforward using Sublime Package Manager, see [instructions](http://sublimelinter.readthedocs.org/en/latest/installation.html#installing-via-pc)
   2. Follow the instructions for [SublimeLinter-eslint](https://github.com/roadhump/SublimeLinter-eslint)
 
+#### Coding Guidelines
+Follow our [Coding Guidelines](https://github.com/mesosphere/marathon-ui/blob/master/coding-guidelines.md)
 
 #### Submitting a Pull Request
 Before you submit your pull request consider the following guidelines:
@@ -88,8 +90,6 @@ Before you submit your pull request consider the following guidelines:
      ```
 
 * Create your patch, including [appropriate test cases](#testing)
-
-* Follow our [Coding Guidelines](#guidelines)
 
 * Commit your changes using a descriptive commit message
 
