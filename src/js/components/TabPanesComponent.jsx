@@ -1,6 +1,5 @@
 import React from "react/addons";
 
-import AppListFilterComponent from "../components/AppListFilterComponent";
 import AppListComponent from "../components/AppListComponent";
 import BreadcrumbComponent from "../components/BreadcrumbComponent";
 import DeploymentsListComponent from "../components/DeploymentsListComponent";
@@ -10,6 +9,10 @@ import TabPaneComponent from "../components/TabPaneComponent";
 import TogglableTabsComponent from "../components/TogglableTabsComponent";
 import Util from "../helpers/Util";
 import tabs from "../constants/tabs";
+
+import AppsFiltersStore from "../stores/AppsFiltersStore";
+import AppsFiltersActions from "../actions/AppsFiltersActions";
+import AppsFiltersEvents from "../events/AppsFiltersEvents";
 
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
@@ -35,6 +38,14 @@ var TabPanesComponent = React.createClass({
 
   componentWillMount: function () {
     this.updateCurrentGroup();
+    //
+  },
+
+  componentWillUnmount: function () {
+    AppsFiltersStore.removeListener(
+      AppsFiltersEvents.CHANGE,
+      this.render
+     );
   },
 
   getContextualBar: function () {
@@ -73,11 +84,7 @@ var TabPanesComponent = React.createClass({
   },
 
   updateFilters: function (filters) {
-    this.setState(function (prevState) {
-      return {
-        filters: Object.assign({}, prevState.filters, filters)
-      };
-    });
+    AppsFiltersActions.setFilters(filters);
   },
 
   getTabId: function () {
@@ -105,12 +112,8 @@ var TabPanesComponent = React.createClass({
             <main>
               <div className="contextual-bar">
                 {this.getContextualBar()}
-                <div className="app-list-controls">
-                  <AppListFilterComponent onChange={this.updateFilters} />
-                </div>
               </div>
-              <AppListComponent currentGroup={state.currentGroup}
-                filters={state.filters} />
+              <AppListComponent currentGroup={state.currentGroup} />
             </main>
           </div>
         </TabPaneComponent>

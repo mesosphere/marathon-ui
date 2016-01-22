@@ -5,17 +5,20 @@ import "mousetrap/plugins/global-bind/mousetrap-global-bind";
 
 import config from "../config/config";
 
+import AppListFilterComponent from "../components/AppListFilterComponent";
 import AboutModalComponent from "../components/modals/AboutModalComponent";
 import AppModalComponent from "../components/modals/AppModalComponent";
 import DialogsComponent from "../components/DialogsComponent";
 import EditAppModalComponent from "../components/modals/EditAppModalComponent";
 import HelpModalComponent from "../components/modals/HelpModalComponent";
 import NavTabsComponent from "../components/NavTabsComponent";
+import PopoverComponent from "./PopoverComponent";
 
 import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
 import DialogActions from "../actions/DialogActions";
 import QueueActions from "../actions/QueueActions";
+import AppsFiltersActions from "../actions/AppsFiltersActions";
 
 import tabs from "../constants/tabs";
 
@@ -31,6 +34,8 @@ var Marathon = React.createClass({
       activeAppId: null,
       activeAppView: null,
       activeTabId: null,
+      filters: null,
+      helpMenuVisible: false,
       modal: null
     };
   },
@@ -91,7 +96,7 @@ var Marathon = React.createClass({
       activeAppId: appId,
       activeAppView: view,
       activeTabId: activeTabId,
-      modal: modal
+      modal: modal,
     });
   },
 
@@ -224,6 +229,24 @@ var Marathon = React.createClass({
     );
   },
 
+  updateFilters: function (filters) {
+    var router = this.context.router;
+    var params = router.getCurrentParams();
+    var query = router.getCurrentQuery();
+
+    if (params != null && filters.filterText !== "") {
+      this.context.router.transitionTo("apps", params, query);
+    }
+
+    AppsFiltersActions.setFilters(filters);
+  },
+
+  toggleHelpMenu: function () {
+    this.setState({
+      helpMenuVisible: !this.state.helpMenuVisible
+    });
+  },
+
   render: function () {
     var state = this.state;
     var router = this.context.router;
@@ -243,25 +266,38 @@ var Marathon = React.createClass({
             <NavTabsComponent activeTabId={state.activeTabId}
               className="navbar-nav nav-tabs-unbordered"
               tabs={tabs} />
-            <ul className="nav navbar-nav navbar-right">
-              <li>
-                <Link to={router.getCurrentPathname()}
+            <div className="nav navbar-nav navbar-right">
+              <AppListFilterComponent onChange={this.updateFilters} />
+              <div className="help-menu icon help"
+                  onClick={this.toggleHelpMenu}
+                >
+                Help
+              </div>
+              <PopoverComponent visible={this.state.helpMenuVisible}
+              className="help-menu dropdown">
+                <ul className="dropdown-menu">
+                  <li>
+                    <Link to={router.getCurrentPathname()}
                     query={{modal: "about"}}>
-                  About
-                </Link>
-              </li>
-              <li>
-                <a href="../help" target="_blank">
-                  API Reference
-                </a>
-              </li>
-              <li>
-                <a href="https://mesosphere.github.io/marathon/docs/"
+                      About
+                    </Link>
+                  </li>
+                  <li>
+                    <a href="../help" target="_blank">
+                      API Reference
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://mesosphere.github.io/marathon/docs/"
                     target="_blank">
-                  Documentation
-                </a>
-              </li>
-            </ul>
+                      Documentation
+                    </a>
+                  </li>
+                </ul>
+              </PopoverComponent>
+
+            </div>
+
           </div>
         </nav>
         <RouteHandler />
