@@ -4,7 +4,6 @@ import Util from "../helpers/Util";
 
 import AppDispatcher from "../AppDispatcher";
 import DialogEvents from "../events/DialogEvents";
-import DialogTypes from "../constants/DialogTypes";
 
 var dialogs = [];
 

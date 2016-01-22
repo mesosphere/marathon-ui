@@ -159,16 +159,16 @@ var Marathon = React.createClass({
   },
 
   startPolling: function () {
-    if (this._interval == null) {
+    if (this.interval == null) {
       this.poll();
-      this._interval = setInterval(this.poll, config.updateInterval);
+      this.interval = setInterval(this.poll, config.updateInterval);
     }
   },
 
   stopPolling: function () {
-    if (this._interval != null) {
-      clearInterval(this._interval);
-      this._interval = null;
+    if (this.interval != null) {
+      clearInterval(this.interval);
+      this.interval = null;
     }
   },
 

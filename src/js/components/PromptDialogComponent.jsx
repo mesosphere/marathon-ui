@@ -1,7 +1,6 @@
 import React from "react/addons";
 import classNames from "classnames";
 
-import DialogSeverity from "../constants/DialogSeverity";
 import Util from "../helpers/Util";
 import ModalComponent from "../components/ModalComponent";
 
@@ -24,7 +23,7 @@ var PromptDialogComponent = React.createClass({
     return {
       onAccept: Util.noop,
       onDismiss: Util.noop
-    }
+    };
   },
 
   componentDidMount: function () {

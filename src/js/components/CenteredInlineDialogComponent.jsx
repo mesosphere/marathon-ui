@@ -1,8 +1,7 @@
 import classNames from "classnames";
 import React from "react/addons";
-import {Link} from "react-router";
 
-import Util from "../helpers/Util"
+import Util from "../helpers/Util";
 
 var CenteredInlineDialogComponent = React.createClass({
   displayName: "CenteredInlineDialogComponent",

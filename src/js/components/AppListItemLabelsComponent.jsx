@@ -6,11 +6,6 @@ import PopoverComponent from "./PopoverComponent";
 import OnClickOutsideMixin from "react-onclickoutside";
 import Util from "../helpers/Util";
 
-// Keep track of post-render initial margin value, on a per-reactid basis
-var _initialTopMargins = [];
-// Keep track of reversed dropdown state without modifying the DOM
-var _reversedDropdowns = [];
-
 var AppListItemLabelsComponent = React.createClass({
   displayName: "AppListItemLabelsComponent",
 

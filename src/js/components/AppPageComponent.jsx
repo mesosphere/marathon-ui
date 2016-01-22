@@ -1,6 +1,5 @@
 import React from "react/addons";
 
-import AppsActions from "../actions/AppsActions";
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
 import BreadcrumbComponent from "../components/BreadcrumbComponent";
