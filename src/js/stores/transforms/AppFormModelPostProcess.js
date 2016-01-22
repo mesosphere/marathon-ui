@@ -47,6 +47,17 @@ const AppFormModelPostProcess = {
       }
     }
   },
+  fetch: (app) => {
+    // This is a quickfix for mesosphere/marathon#3054
+    // Please remove this after there is a better solution
+    if (Util.isArray(app.fetch) && Util.isArray(app.uris)) {
+      if (app.fetch.length === 0) {
+        delete app.fetch;
+      } else if (app.uris.length === 0) {
+        delete app.uris;
+      }
+    }
+  },
   healthChecks: (app) => {
     var healthChecks = app.healthChecks;
 
