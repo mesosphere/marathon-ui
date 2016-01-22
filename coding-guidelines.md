@@ -256,8 +256,8 @@ Rules:
 
 ```JS
 var title = !Util.isStringAndEmpty(props.title)
-	? <h3 className="h3">{props.title}</h3>
-	: null;
+  ? <h3 className="h3">{props.title}</h3>
+  : null;
 ```
 
 ## JSX
