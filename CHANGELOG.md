@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- \#3605 - Prevent ctrl-c keyboard shortcut from showing the Create modal dialog
+
 ## 0.15.0 - 2016-01-20
 ### Added
 - \#2814 - Add contextual dropdown menu to Application List items
