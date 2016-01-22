@@ -122,7 +122,7 @@ var Marathon = React.createClass({
 
     Mousetrap.bind("c", function () {
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-app"});
-    }, "keyup");
+    }, "keypress");
 
     Mousetrap.bind("g a", function () {
       if (this.state.modal == null) {
