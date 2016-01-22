@@ -1,0 +1,34 @@
+/* =============
+ * Help Menu
+ * =============
+ */
+.help-menu {
+  float: left;
+  margin: 19px;
+  cursor: pointer;
+  color: transparent;
+  background-position: center left;
+  &.dropdown.popover.bottom {
+    margin: 0;
+
+    .content {
+      background-color: transparent;
+      border-radius: 0;
+      min-width: auto;
+      padding: 0;
+      left: 100%;
+      transform: translate(-115%, 50%);
+
+
+      &:before, &:after {
+        display: none;
+      }
+    }
+
+    .dropdown-menu {
+      left: auto;
+      transform: none;
+      position: relative;
+    }
+  }
+}
