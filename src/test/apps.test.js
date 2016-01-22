@@ -1174,88 +1174,90 @@ describe("App List component", function () {
 
 describe("App Health Bar", function () {
 
-  var model = {
-    id: "app-123",
-    instances: 5,
-    health: [
-      {state: HealthStatus.HEALTHY, quantity: 2},
-      {state: HealthStatus.UNHEALTHY, quantity: 2},
-      {state: HealthStatus.UNKNOWN, quantity: 1},
-      {state: HealthStatus.STAGED, quantity: 1},
-      {state: HealthStatus.OVERCAPACITY, quantity: 2},
-      {state: HealthStatus.UNSCHEDULED, quantity: 2}
-    ]
-  };
+  describe("running app with 5 instances", function () {
 
-  before(function () {
-    this.component = shallow(<AppHealthBarComponent model={model} />);
-  });
-
-  after(function () {
-    this.component = null;
-  });
-
-  it("health bar for healthy tasks has correct width", function () {
-    var width = this.component
-      .find(".progress-bar")
-      .at(0)
-      .props()
-      .style.width;
-    expect(width).to.equal("20%");
-  });
-
-  it("health bar for unhealthy tasks has correct width", function () {
-    var width = this.component
-      .find(".progress-bar")
-      .at(1)
-      .props()
-      .style.width;
-    expect(width).to.equal("20%");
-  });
-
-  it("health bar for running tasks has correct width", function () {
-    var width = this.component
-      .find(".progress-bar")
-      .at(2)
-      .props()
-      .style.width;
-    expect(width).to.equal("10%");
-  });
-
-  it("health bar for staged tasks has correct width", function () {
-    var width = this.component
-      .find(".progress-bar")
-      .at(3)
-      .props()
-      .style.width;
-    expect(width).to.equal("10%");
-  });
-
-  it("health bar for over capacity tasks has correct width", function () {
-    var width = this.component
-      .find(".progress-bar")
-      .at(4)
-      .props()
-      .style.width;
-    expect(width).to.equal("20%");
-  });
-
-  it("health bar for unscheduled tasks has correct width", function () {
-    var width = this.component
-      .find(".progress-bar")
-      .at(5)
-      .props()
-      .style.width;
-    expect(width).to.equal("20%");
-  });
-
-  describe("detail", function () {
+    var model = {
+      id: "app-123",
+      instances: 5,
+      health: [
+        {state: HealthStatus.HEALTHY, quantity: 2},
+        {state: HealthStatus.UNHEALTHY, quantity: 2},
+        {state: HealthStatus.UNKNOWN, quantity: 1},
+        {state: HealthStatus.STAGED, quantity: 1},
+        {state: HealthStatus.OVERCAPACITY, quantity: 2},
+        {state: HealthStatus.UNSCHEDULED, quantity: 2}
+      ]
+    };
 
     before(function () {
-      this.component = shallow(
-        <AppHealthDetailComponent
-          className="list-unstyled"
-          fields={[
+      this.component = shallow(<AppHealthBarComponent model={model}/>);
+    });
+
+    after(function () {
+      this.component = null;
+    });
+
+    it("health bar for healthy tasks has correct width", function () {
+      var width = this.component
+        .find(".progress-bar")
+        .at(0)
+        .props()
+        .style.width;
+      expect(width).to.equal("20%");
+    });
+
+    it("health bar for unhealthy tasks has correct width", function () {
+      var width = this.component
+        .find(".progress-bar")
+        .at(1)
+        .props()
+        .style.width;
+      expect(width).to.equal("20%");
+    });
+
+    it("health bar for running tasks has correct width", function () {
+      var width = this.component
+        .find(".progress-bar")
+        .at(2)
+        .props()
+        .style.width;
+      expect(width).to.equal("10%");
+    });
+
+    it("health bar for staged tasks has correct width", function () {
+      var width = this.component
+        .find(".progress-bar")
+        .at(3)
+        .props()
+        .style.width;
+      expect(width).to.equal("10%");
+    });
+
+    it("health bar for over capacity tasks has correct width", function () {
+      var width = this.component
+        .find(".progress-bar")
+        .at(4)
+        .props()
+        .style.width;
+      expect(width).to.equal("20%");
+    });
+
+    it("health bar for unscheduled tasks has correct width", function () {
+      var width = this.component
+        .find(".progress-bar")
+        .at(5)
+        .props()
+        .style.width;
+      expect(width).to.equal("20%");
+    });
+
+    describe("detail", function () {
+
+      before(function () {
+        this.component = shallow(
+          <AppHealthDetailComponent
+            className="list-unstyled"
+            fields={[
             HealthStatus.HEALTHY,
             HealthStatus.UNHEALTHY,
             HealthStatus.UNKNOWN,
@@ -1263,64 +1265,329 @@ describe("App Health Bar", function () {
             HealthStatus.OVERCAPACITY,
             HealthStatus.UNSCHEDULED
           ]}
-          model={model} />
-      );
+            model={model}/>
+        );
+      });
+
+      after(function () {
+        this.component = null;
+      });
+
+      it("Healthy tasks are reported correctly", function () {
+        expect(
+          this.component.find(".health-breakdown-item-healthy")
+            .text()
+        ).to.equal("2 Healthy(40%)");
+      });
+
+      it("Unhealthy tasks are reported correctly", function () {
+        expect(
+          this.component.find(".health-breakdown-item-unhealthy")
+            .text()
+        ).to.equal("2 Unhealthy(40%)");
+      });
+
+      it("Unknown tasks are reported correctly", function () {
+        expect(
+          this.component.find(".health-breakdown-item-unknown")
+            .text()
+        ).to.equal("1 Unknown(20%)");
+      });
     });
 
-    after(function () {
-      this.component = null;
-    });
+    describe("with tooltip", function () {
 
-    it("Healthy tasks are reported correctly", function () {
-      expect(
-        this.component.find(".health-breakdown-item-healthy")
-          .text()
-      ).to.equal("2 Healthy(40%)");
-    });
+      before(function () {
+        this.component = mount(
+          <AppHealthBarWithTooltipComponent model={model}/>
+        );
+      });
 
-    it("Unhealthy tasks are reported correctly", function () {
-      expect(
-        this.component.find(".health-breakdown-item-unhealthy")
-          .text()
-      ).to.equal("2 Unhealthy(40%)");
-    });
+      after(function () {
+        React.unmountComponentAtNode(this.component.instance().getDOMNode());
+      });
 
-    it("Unknown tasks are reported correctly", function () {
-      expect(
-        this.component.find(".health-breakdown-item-unknown")
-          .text()
-      ).to.equal("1 Unknown(20%)");
+      it("has healthbar", function () {
+        expect(this.component
+          .find(AppHealthBarComponent)
+          .length
+        ).to.equal(1);
+      });
+
+      it("shows the popover with health details on hover", function () {
+        this.component.simulate("mouseOver");
+        expect(this.component
+          .find(AppHealthDetailComponent)
+          .length
+        ).to.equal(1)
+      });
     });
   });
+  describe("running app scaled down to 0 instances from 2",
+    function () {
 
-  describe("with tooltip", function () {
+      var model = {
+        id: "app-123",
+        instances: 0,
+        health: [
+          {state: HealthStatus.HEALTHY, quantity: 2},
+          {state: HealthStatus.UNHEALTHY, quantity: 0},
+          {state: HealthStatus.UNKNOWN, quantity: 0},
+          {state: HealthStatus.STAGED, quantity: 0},
+          {state: HealthStatus.OVERCAPACITY, quantity: 2},
+          {state: HealthStatus.UNSCHEDULED, quantity: 0}
+        ]
+      };
 
-    before(function () {
-      this.component = mount(
-        <AppHealthBarWithTooltipComponent model={model}/>
-      );
-    });
+      before(function () {
+        this.component = shallow(<AppHealthBarComponent model={model}/>);
+      });
 
-    after(function () {
-      React.unmountComponentAtNode(this.component.instance().getDOMNode());
-    });
+      after(function () {
+        this.component = null;
+      });
 
-    it("has healthbar", function () {
-      expect(this.component
-        .find(AppHealthBarComponent)
-        .length
-      ).to.equal(1);
-    });
+      it("health bar for healthy tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(0)
+          .props()
+          .style.width;
+        expect(width).to.equal("50%");
+      });
 
-    it("shows the popover with health details on hover", function () {
-      this.component.simulate("mouseOver");
-      expect(this.component
-        .find(AppHealthDetailComponent)
-        .length
-      ).to.equal(1)
-    });
+      it("health bar for unhealthy tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(1)
+          .props()
+          .style.width;
+        expect(width).to.equal("0%");
+      });
 
-  });
+      it("health bar for running tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(2)
+          .props()
+          .style.width;
+        expect(width).to.equal("0%");
+      });
+
+      it("health bar for staged tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(3)
+          .props()
+          .style.width;
+        expect(width).to.equal("0%");
+      });
+
+      it("health bar for over capacity tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(4)
+          .props()
+          .style.width;
+        expect(width).to.equal("50%");
+      });
+
+      it("health bar for unscheduled tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(5)
+          .props()
+          .style.width;
+        expect(width).to.equal("0%");
+      });
+
+      describe("detail", function () {
+
+        before(function () {
+          this.component = shallow(
+            <AppHealthDetailComponent
+              className="list-unstyled"
+              fields={[
+              HealthStatus.HEALTHY,
+              HealthStatus.UNHEALTHY,
+              HealthStatus.UNKNOWN,
+              HealthStatus.STAGED,
+              HealthStatus.OVERCAPACITY,
+              HealthStatus.UNSCHEDULED
+            ]}
+              model={model}/>
+          );
+        });
+
+        after(function () {
+          this.component = null;
+        });
+
+        it("Healthy tasks are reported correctly", function () {
+          expect(
+            this.component.find(".health-breakdown-item-healthy")
+              .text()
+          ).to.equal("2 Healthy(200%)");
+        });
+
+        it("Unhealthy tasks are reported correctly", function () {
+          expect(
+            this.component.find(".health-breakdown-item-unhealthy")
+              .text()
+          ).to.equal("0 Unhealthy(0%)");
+        });
+
+        it("Unknown tasks are reported correctly", function () {
+          expect(
+            this.component.find(".health-breakdown-item-unknown")
+              .text()
+          ).to.equal("0 Unknown(0%)");
+        });
+
+        it("Overcapacity tasks are reported correctly", function () {
+          expect(
+            this.component.find(".health-breakdown-item-over-capacity")
+              .text()
+          ).to.equal("2 Over Capacity(200%)");
+        });
+
+      });
+
+    }
+  );
+  describe("running app scaled down to 5 instances from 10",
+    function () {
+
+      var model = {
+        id: "app-123",
+        instances: 5,
+        health: [
+          {state: HealthStatus.HEALTHY, quantity: 10},
+          {state: HealthStatus.UNHEALTHY, quantity: 0},
+          {state: HealthStatus.UNKNOWN, quantity: 0},
+          {state: HealthStatus.STAGED, quantity: 0},
+          {state: HealthStatus.OVERCAPACITY, quantity: 5},
+          {state: HealthStatus.UNSCHEDULED, quantity: 0}
+        ]
+      };
+
+      before(function () {
+        this.component = shallow(<AppHealthBarComponent model={model}/>);
+      });
+
+      after(function () {
+        this.component = null;
+      });
+
+      it("health bar for healthy tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(0)
+          .props()
+          .style.width;
+        expect(width).to.equal("66.666%");
+      });
+
+      it("health bar for unhealthy tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(1)
+          .props()
+          .style.width;
+        expect(width).to.equal("0%");
+      });
+
+      it("health bar for running tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(2)
+          .props()
+          .style.width;
+        expect(width).to.equal("0%");
+      });
+
+      it("health bar for staged tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(3)
+          .props()
+          .style.width;
+        expect(width).to.equal("0%");
+      });
+
+      it("health bar for over capacity tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(4)
+          .props()
+          .style.width;
+        expect(width).to.equal("33.333%");
+      });
+
+      it("health bar for unscheduled tasks has correct width", function () {
+        var width = this.component
+          .find(".progress-bar")
+          .at(5)
+          .props()
+          .style.width;
+        expect(width).to.equal("0%");
+      });
+
+      describe("detail", function () {
+
+        before(function () {
+          this.component = shallow(
+            <AppHealthDetailComponent
+              className="list-unstyled"
+              fields={[
+              HealthStatus.HEALTHY,
+              HealthStatus.UNHEALTHY,
+              HealthStatus.UNKNOWN,
+              HealthStatus.STAGED,
+              HealthStatus.OVERCAPACITY,
+              HealthStatus.UNSCHEDULED
+            ]}
+              model={model}/>
+          );
+        });
+
+        after(function () {
+          this.component = null;
+        });
+
+        it("Healthy tasks are reported correctly", function () {
+          expect(
+            this.component.find(".health-breakdown-item-healthy")
+              .text()
+          ).to.equal("10 Healthy(200%)");
+        });
+
+        it("Unhealthy tasks are reported correctly", function () {
+          expect(
+            this.component.find(".health-breakdown-item-unhealthy")
+              .text()
+          ).to.equal("0 Unhealthy(0%)");
+        });
+
+        it("Unknown tasks are reported correctly", function () {
+          expect(
+            this.component.find(".health-breakdown-item-unknown")
+              .text()
+          ).to.equal("0 Unknown(0%)");
+        });
+
+        it("Overcapacity tasks are reported correctly", function () {
+          expect(
+            this.component.find(".health-breakdown-item-over-capacity")
+              .text()
+          ).to.equal("5 Over Capacity(100%)");
+        });
+
+      });
+
+    }
+  );
+
 });
 
 describe("App Page component", function () {
@@ -1376,34 +1643,34 @@ describe("App Page component", function () {
   });
 
   it("returns the right shorthand health message for failing tasks",
-      function () {
-    expect(this.component
-      .instance()
-      .getTaskHealthMessage("test-task-1")
-    ).to.equal("Unhealthy");
-  });
-
-  it("returns the right health message for tasks with unknown health",
-      function () {
-    var app = Util.extendObject(appScheme, {
-      id: "/test-app-1",
-      status: AppStatus.RUNNING,
-      tasks: [
-        {
-          id: "test-task-1",
-          appId: "/test-app-1",
-          healthStatus: HealthStatus.UNKNOWN
-        }
-      ]
+    function () {
+      expect(this.component
+        .instance()
+        .getTaskHealthMessage("test-task-1")
+      ).to.equal("Unhealthy");
     });
 
-    AppsStore.apps = [app];
+  it("returns the right health message for tasks with unknown health",
+    function () {
+      var app = Util.extendObject(appScheme, {
+        id: "/test-app-1",
+        status: AppStatus.RUNNING,
+        tasks: [
+          {
+            id: "test-task-1",
+            appId: "/test-app-1",
+            healthStatus: HealthStatus.UNKNOWN
+          }
+        ]
+      });
 
-    expect(this.component
-      .instance()
-      .getTaskHealthMessage("test-task-1")
-    ).to.equal("Unknown");
-  });
+      AppsStore.apps = [app];
+
+      expect(this.component
+        .instance()
+        .getTaskHealthMessage("test-task-1")
+      ).to.equal("Unknown");
+    });
 
   it("returns the right health message for healthy tasks", function () {
     var app = Util.extendObject(appScheme, {
