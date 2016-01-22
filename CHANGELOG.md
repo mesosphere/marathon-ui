@@ -1,6 +1,9 @@
 ## Unversioned
 ### Fixed
 - \#3605 - Prevent ctrl-c keyboard shortcut from showing the Create modal dialog
+- \#3054 - Empty - non set- application attributes are accidentaly submited
+  by the UI
+- \#3064 - Labels dropdown menu not showing up
 
 ## 0.15.0 - 2016-01-20
 ### Added
