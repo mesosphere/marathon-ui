@@ -43,7 +43,7 @@ var AppHealthDetailComponent = React.createClass({
 
   renderItem: function (state) {
     var health = this.getHealth(state);
-    var totalInstances = this.props.model.instances;
+    var totalInstances = this.props.model.instances || 1;
     var instances = health.quantity;
     var percentage = Math.round((instances / totalInstances) * 100);
     var label = healthStatusLabels[state];
