@@ -89,13 +89,15 @@ var TaskDetailComponent = React.createClass({
     var task = props.task;
     var ipAddresses = task.ipAddresses;
 
-    if (ipAddresses == null) {
+    if (ipAddresses == null || ipAddresses.length === 0) {
       return null;
     }
 
-    return ipAddresses.map(address => (
-      <dd key={address.ipAddress}>{address.ipAddress}</dd>
-    ));
+    return ipAddresses
+      .filter(address => address.ipAddress != null)
+      .map(address => (
+        <dd key={address.ipAddress}>{address.ipAddress}</dd>
+      ));
   },
 
   getPorts: function () {
