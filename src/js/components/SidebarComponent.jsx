@@ -21,8 +21,7 @@ var SidebarComponent = React.createClass({
   },
 
   propTypes: {
-    groupId: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func.isRequired
+    groupId: React.PropTypes.string.isRequired
   },
 
   getInitialState: function () {
@@ -33,16 +32,6 @@ var SidebarComponent = React.createClass({
         [FilterTypes.STATUS]: []
       }
     };
-  },
-
-  updateFilter: function (filterName, filter) {
-    var filters = Object.assign({}, this.state.filters, {
-      [filterName]: filter
-    });
-
-    this.setState({
-      filters: filters
-    }, this.props.onChange(filters));
   },
 
   render: function () {
@@ -69,20 +58,17 @@ var SidebarComponent = React.createClass({
           <h3 className="small-caps">Status</h3>
           {this.getClearLinkForFilter(FilterTypes.STATUS)}
         </div>
-        <SidebarStatusFilterComponent
-          onChange={this.updateFilter.bind(null, FilterTypes.STATUS)} />
+        <SidebarStatusFilterComponent />
         <div className="flex-row">
           <h3 className="small-caps">Health</h3>
           {this.getClearLinkForFilter(FilterTypes.HEALTH)}
         </div>
-        <SidebarHealthFilterComponent
-          onChange={this.updateFilter.bind(null, FilterTypes.HEALTH)} />
+        <SidebarHealthFilterComponent />
         <div className="flex-row">
           <h3 className="small-caps">Label</h3>
           {this.getClearLinkForFilter(FilterTypes.LABELS)}
         </div>
-        <SidebarLabelsFilterComponent
-          onChange={this.updateFilter.bind(null, FilterTypes.LABELS)} />
+        <SidebarLabelsFilterComponent />
       </nav>
     );
   }

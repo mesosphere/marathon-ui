@@ -50,6 +50,11 @@ var QueryParamsMixin = {
     );
   },
 
+  getQueryParamObject: function () {
+    var router = this.context.router;
+    return router.getCurrentQuery();
+  },
+
   getQueryParamValue: function (paramKey) {
     var router = this.context.router;
     return router.getCurrentQuery()[paramKey];

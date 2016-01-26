@@ -11,10 +11,6 @@ var AppListFilterComponent = React.createClass({
 
   mixins: [QueryParamsMixin],
 
-  propTypes: {
-    onChange: React.PropTypes.func.isRequired
-  },
-
   getInitialState: function () {
     return {
       activated: false,
@@ -59,13 +55,11 @@ var AppListFilterComponent = React.createClass({
         filterText: filterText,
         activated: filterText !== "" || state.focused
       });
-      this.props.onChange({[FilterTypes.TEXT]: filterText});
     }
   },
 
   handleClearFilterText: function () {
     this.setQueryParam(FilterTypes.TEXT, "");
-    this.props.onChange({[FilterTypes.TEXT]: ""});
   },
 
   handleFilterTextChange: function (event) {
@@ -81,7 +75,6 @@ var AppListFilterComponent = React.createClass({
     event.preventDefault();
     var filterText = this.state.filterText;
     this.setQueryParam(FilterTypes.TEXT, filterText);
-    this.props.onChange({[FilterTypes.TEXT]: filterText});
   },
 
   handleKeyDown: function (event) {

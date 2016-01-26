@@ -19,7 +19,6 @@ import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
 import DialogActions from "../actions/DialogActions";
 import QueueActions from "../actions/QueueActions";
-import AppsFiltersActions from "../actions/AppsFiltersActions";
 
 import tabs from "../constants/tabs";
 
@@ -230,18 +229,6 @@ var Marathon = React.createClass({
     );
   },
 
-  updateFilters: function (filters) {
-    var router = this.context.router;
-    var params = router.getCurrentParams();
-    var query = router.getCurrentQuery();
-
-    if (params != null && filters.filterText !== "") {
-      this.context.router.transitionTo("apps", params, query);
-    }
-
-    AppsFiltersActions.setFilters(filters);
-  },
-
   toggleHelpMenu: function () {
     this.setState({
       helpMenuVisible: !this.state.helpMenuVisible
@@ -271,7 +258,7 @@ var Marathon = React.createClass({
               className="navbar-nav nav-tabs-unbordered"
               tabs={tabs} />
             <div className="nav navbar-nav navbar-right">
-              <AppListFilterComponent onChange={this.updateFilters} />
+              <AppListFilterComponent />
               <div className={helpMenuClassName}
                   onClick={this.toggleHelpMenu}
                 >

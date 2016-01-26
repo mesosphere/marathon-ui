@@ -10,10 +10,6 @@ import TogglableTabsComponent from "../components/TogglableTabsComponent";
 import Util from "../helpers/Util";
 import tabs from "../constants/tabs";
 
-import AppsFiltersStore from "../stores/AppsFiltersStore";
-import AppsFiltersActions from "../actions/AppsFiltersActions";
-import AppsFiltersEvents from "../events/AppsFiltersEvents";
-
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 var TabPanesComponent = React.createClass({
@@ -41,13 +37,6 @@ var TabPanesComponent = React.createClass({
     //
   },
 
-  componentWillUnmount: function () {
-    AppsFiltersStore.removeListener(
-      AppsFiltersEvents.CHANGE,
-      this.render
-     );
-  },
-
   getContextualBar: function () {
     var state = this.state;
 
@@ -69,7 +58,7 @@ var TabPanesComponent = React.createClass({
   },
 
   updateCurrentGroup: function () {
-    var {groupId} = this.context.router.getCurrentParams();
+    var {groupId} = this.getQueryParamObject();
     if (groupId == null) {
       groupId = "/";
     }
@@ -83,12 +72,8 @@ var TabPanesComponent = React.createClass({
     });
   },
 
-  updateFilters: function (filters) {
-    AppsFiltersActions.setFilters(filters);
-  },
-
   getTabId: function () {
-    var path = this.context.router.getCurrentPathname();
+    var path = this.getQueryParamObject();
 
     var hasTab = tabs.find(tab => tab.id === path);
 
@@ -107,8 +92,7 @@ var TabPanesComponent = React.createClass({
           className="container-fluid content">
         <TabPaneComponent id={tabs[0].id} className="flex-container">
           <div className="wrapper">
-            <SidebarComponent groupId={state.currentGroup}
-              onChange={this.updateFilters} />
+            <SidebarComponent groupId={state.currentGroup} />
             <main>
               <div className="contextual-bar">
                 {this.getContextualBar()}

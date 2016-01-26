@@ -16,7 +16,7 @@ import CenteredInlineDialogComponent from "./CenteredInlineDialogComponent";
 import AppsActions from "../actions/AppsActions";
 import AppsStore from "../stores/AppsStore";
 import AppsEvents from "../events/AppsEvents";
-import AppsFiltersStore from "../stores/AppsFiltersStore";
+import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 import Util from "../helpers/Util";
 
@@ -100,6 +100,8 @@ var AppListComponent = React.createClass({
     currentGroup: React.PropTypes.string.isRequired
   },
 
+  mixins: [QueryParamsMixin],
+
   getDefaultProps: function () {
     return {
       filters: {}
@@ -168,7 +170,9 @@ var AppListComponent = React.createClass({
   },
 
   hasFilters: function () {
-    return Object.values(AppsFiltersStore.filters).some(filter => {
+    var filters = this.getQueryParamObject();
+
+    return Object.values(filters).some(filter => {
       return filter != null &&
         (Util.isArray(filter) && filter.length > 0) ||
         (Util.isString(filter) && filter !== "");
@@ -178,7 +182,7 @@ var AppListComponent = React.createClass({
   filterNodes: function (nodesSequence, filterCounts) {
     var props = this.props;
     var currentGroup = props.currentGroup;
-    var filters = AppsFiltersStore.filters;
+    var filters = this.getQueryParamObject();;
 
     var filterHealth = filters[FilterTypes.HEALTH];
     var filterText = filters[FilterTypes.TEXT];
@@ -357,7 +361,7 @@ var AppListComponent = React.createClass({
   },
 
   getCaret: function (sortKey) {
-    var filterText = AppsFiltersStore.filters[FilterTypes.TEXT];
+    var filterText = this.getQueryParamValue([FilterTypes.TEXT]);
 
     if (sortKey === this.state.sortKey &&
         (sortKey !== "id" || filterText == null || filterText === "")) {
