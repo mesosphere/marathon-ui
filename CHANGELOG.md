@@ -32,6 +32,10 @@
 - \#2893 - App page component should display the right number of tasks
 - \#2949 - AjaxWrapper does't handle TypeError correctly
 
+## 0.14.3 - 2016-01-26
+### Fixed
+- \#2973 - Prevent breaking task info table if IP address is not present
+
 ## 0.14.2 - 2016-01-14
 ### Fixed
 - \#2972 - Add more inline task information
