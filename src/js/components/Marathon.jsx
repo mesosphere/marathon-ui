@@ -278,7 +278,7 @@ var Marathon = React.createClass({
                 <span className="caret"></span>
               </div>
               <PopoverComponent visible={this.state.helpMenuVisible}
-              className="help-menu-context dropdown">
+              className="help-menu-dropdown">
                 <ul className="dropdown-menu">
                   <li>
                     <Link to={router.getCurrentPathname()}
