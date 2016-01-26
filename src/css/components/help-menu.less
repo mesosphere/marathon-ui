@@ -4,11 +4,16 @@
  */
 .help-menu {
   float: left;
-  margin: 19px;
+  margin: @base-spacing-unit * 2.5 @base-spacing-unit;
+  width: @base-spacing-unit * 2.5;
+  padding: 0 @base-spacing-unit * 2.5;
   cursor: pointer;
-  color: transparent;
+  color: @manatee;
   background-position: center left;
-  &.dropdown.popover.bottom {
+  &.active {
+    color: @white;
+  }
+  &-context.dropdown.popover.bottom {
     margin: 0;
 
     .content {
@@ -17,7 +22,7 @@
       min-width: auto;
       padding: 0;
       left: 100%;
-      transform: translate(-115%, 50%);
+      transform: translate(-110%, 50%);
 
 
       &:before, &:after {

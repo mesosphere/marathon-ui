@@ -4,6 +4,7 @@ import Mousetrap from "mousetrap";
 import "mousetrap/plugins/global-bind/mousetrap-global-bind";
 
 import config from "../config/config";
+import classNames from "classnames";
 
 import AppListFilterComponent from "../components/AppListFilterComponent";
 import AboutModalComponent from "../components/modals/AboutModalComponent";
@@ -250,6 +251,9 @@ var Marathon = React.createClass({
   render: function () {
     var state = this.state;
     var router = this.context.router;
+    var helpMenuClassName = classNames("help-menu icon help", {
+      "active": this.state.helpMenuVisible
+    });
 
     var logoPath = config.rootUrl + "img/marathon-logo.png";
 
@@ -268,13 +272,13 @@ var Marathon = React.createClass({
               tabs={tabs} />
             <div className="nav navbar-nav navbar-right">
               <AppListFilterComponent onChange={this.updateFilters} />
-              <div className="help-menu icon help"
+              <div className={helpMenuClassName}
                   onClick={this.toggleHelpMenu}
                 >
-                Help
+                <span className="caret"></span>
               </div>
               <PopoverComponent visible={this.state.helpMenuVisible}
-              className="help-menu dropdown">
+              className="help-menu-context dropdown">
                 <ul className="dropdown-menu">
                   <li>
                     <Link to={router.getCurrentPathname()}
