@@ -97,7 +97,7 @@ var Marathon = React.createClass({
       activeAppId: appId,
       activeAppView: view,
       activeTabId: activeTabId,
-      modal: modal,
+      modal: modal
     });
   },
 
