@@ -34,7 +34,6 @@ var TabPanesComponent = React.createClass({
 
   componentWillMount: function () {
     this.updateCurrentGroup();
-    //
   },
 
   getContextualBar: function () {
