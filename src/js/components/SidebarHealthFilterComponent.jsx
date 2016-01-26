@@ -22,10 +22,6 @@ var SidebarHealthFilterComponent = React.createClass({
 
   mixins: [QueryParamsMixin],
 
-  propTypes: {
-    onChange: React.PropTypes.func.isRequired
-  },
-
   getInitialState: function () {
     return {
       appsHealthCount: {},
@@ -98,7 +94,7 @@ var SidebarHealthFilterComponent = React.createClass({
     if (stringify(selectedHealth) !== stringify(state.selectedHealth)) {
       this.setState({
         selectedHealth: selectedHealth
-      }, this.props.onChange(selectedHealth));
+      });
     }
   },
 
