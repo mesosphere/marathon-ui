@@ -97,7 +97,8 @@ var AppListComponent = React.createClass({
   },
 
   propTypes: {
-    currentGroup: React.PropTypes.string.isRequired
+    currentGroup: React.PropTypes.string.isRequired,
+    filters: React.PropTypes.object
   },
 
   mixins: [QueryParamsMixin],
@@ -170,7 +171,7 @@ var AppListComponent = React.createClass({
   },
 
   hasFilters: function () {
-    var filters = this.getQueryParamObject();
+    var filters = Object.assign(this.getQueryParamObject(), this.props.filters);
 
     return Object.values(filters).some(filter => {
       return filter != null &&
@@ -182,7 +183,7 @@ var AppListComponent = React.createClass({
   filterNodes: function (nodesSequence, filterCounts) {
     var props = this.props;
     var currentGroup = props.currentGroup;
-    var filters = this.getQueryParamObject();;
+    var filters = Object.assign(this.getQueryParamObject(), this.props.filters);
 
     var filterHealth = filters[FilterTypes.HEALTH];
     var filterText = filters[FilterTypes.TEXT];
