@@ -14,9 +14,6 @@ var SidebarStatusFilterComponent = React.createClass({
 
   mixins: [QueryParamsMixin],
 
-  propTypes: {
-  },
-
   getInitialState: function () {
     return {
       appsStatusesCount: {},
