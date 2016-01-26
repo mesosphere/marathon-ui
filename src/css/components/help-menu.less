@@ -4,15 +4,17 @@
  */
 .help-menu {
   float: left;
-  margin: @base-spacing-unit * 2.5 @base-spacing-unit;
-  width: @base-spacing-unit * 2.5;
-  padding: 0 @base-spacing-unit * 2.5;
+  margin: @base-spacing-unit*2.5 @base-spacing-unit;
+  width: @base-spacing-unit*2.5;
+  padding: 0 @base-spacing-unit*2.5;
   cursor: pointer;
   color: @manatee;
   background-position: center left;
+
   &.active {
     color: @white;
   }
+
   &-dropdown.popover.bottom {
     margin: 0;
 
@@ -23,7 +25,6 @@
       padding: 0;
       left: 100%;
       transform: translate(-110%, 50%);
-
 
       &:before, &:after {
         display: none;
