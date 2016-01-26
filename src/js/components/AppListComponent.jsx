@@ -175,6 +175,7 @@ var AppListComponent = React.createClass({
 
     return Object.values(filters).some(filter => {
       return filter != null &&
+        Object.values(FilterTypes).some(filterType => filterType === filter) &&
         (Util.isArray(filter) && filter.length > 0) ||
         (Util.isString(filter) && filter !== "");
     });
