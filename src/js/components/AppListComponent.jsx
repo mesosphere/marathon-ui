@@ -375,7 +375,8 @@ var AppListComponent = React.createClass({
     var pageHasNoRunningApps = !pageIsLoading &&
       !pageHasApps &&
       state.fetchState !== States.STATE_UNAUTHORIZED &&
-      state.fetchState !== States.STATE_FORBIDDEN;
+      state.fetchState !== States.STATE_FORBIDDEN &&
+      state.fetchState !== States.STATE_ERROR;
     var pageHasNoMatchingApps = pageHasApps && appNodes.length === 0;
 
     if (pageIsLoading) {
