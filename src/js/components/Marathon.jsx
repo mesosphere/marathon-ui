@@ -299,9 +299,7 @@ var Marathon = React.createClass({
                   </li>
                 </ul>
               </PopoverComponent>
-
             </div>
-
           </div>
         </nav>
         <RouteHandler />
