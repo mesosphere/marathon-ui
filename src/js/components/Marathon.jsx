@@ -260,8 +260,7 @@ var Marathon = React.createClass({
             <div className="nav navbar-nav navbar-right">
               <AppListFilterComponent />
               <div className={helpMenuClassName}
-                  onClick={this.toggleHelpMenu}
-                >
+                  onClick={this.toggleHelpMenu}>
                 <span className="caret"></span>
               </div>
               <PopoverComponent visible={this.state.helpMenuVisible}
@@ -269,7 +268,7 @@ var Marathon = React.createClass({
                 <ul className="dropdown-menu">
                   <li>
                     <Link to={router.getCurrentPathname()}
-                    query={{modal: "about"}}>
+                        query={{modal: "about"}}>
                       About
                     </Link>
                   </li>
@@ -280,7 +279,7 @@ var Marathon = React.createClass({
                   </li>
                   <li>
                     <a href="https://mesosphere.github.io/marathon/docs/"
-                    target="_blank">
+                        target="_blank">
                       Documentation
                     </a>
                   </li>
