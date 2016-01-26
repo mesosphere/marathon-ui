@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- \#3093 - Don't display "Create an Application" together with "Loading error"
+
 ## 0.15.1 - 2016-01-22
 ### Fixed
 - \#3605 - Prevent ctrl-c keyboard shortcut from showing the Create modal dialog
