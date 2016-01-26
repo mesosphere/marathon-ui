@@ -8,7 +8,8 @@ var TooltipComponent = React.createClass({
   propTypes: {
     children: React.PropTypes.node.isRequired,
     className: React.PropTypes.string,
-    disabled: React.PropTypes.bool
+    disabled: React.PropTypes.bool,
+    message: React.PropTypes.node.isRequired
   },
 
   getDefaultProps: function () {
@@ -44,7 +45,7 @@ var TooltipComponent = React.createClass({
         <PopoverComponent
             className={classNames("tooltip", props.className)}
             visible={!props.disabled && this.state.isPopoverVisible}>
-          Sorry there was a problem retrieving file. Click to retry.
+          {props.message}
         </PopoverComponent>
         {props.children}
       </div>

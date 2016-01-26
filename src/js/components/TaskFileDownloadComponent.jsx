@@ -111,6 +111,8 @@ var TaskFileDownloadComponent = React.createClass({
     var fileIsRequestedByUser = state.fileIsRequestedByUser;
     var fileRequestFailed = state.fileRequestFailed;
     var href = "";
+    var errorMessage = "Sorry there was a problem retrieving file. " +
+      "Click to retry.";
 
     if (file) {
       href = file.downloadURI;
@@ -123,7 +125,8 @@ var TaskFileDownloadComponent = React.createClass({
     });
 
     return (
-      <TooltipComponent disabled={fileIsRequestedByUser || !fileRequestFailed}>
+      <TooltipComponent disabled={fileIsRequestedByUser || !fileRequestFailed}
+          message={errorMessage}>
         <a href={href} onClick={this.handleClick}>
           <i className={iconClassName}/> {name}
         </a>
