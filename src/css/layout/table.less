@@ -12,7 +12,7 @@
   border-top: none;
   border-bottom: 1px solid @table-border-color;
   line-height: inherit;
-  padding: @base-spacing-unit*2 @base-spacing-unit;
+  padding: 16px;
   vertical-align: middle;
 }
 
@@ -45,4 +45,24 @@
 
 .table-selectable tr > td {
   cursor: pointer;
+}
+
+.table > thead > tr  > th {
+  text-transform: uppercase;
+  font-family: "Helvetica Neue";
+  font-weight: 500;
+  font-size: 14.3px;
+  line-height: 17.6px;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  color: #848995;
+  text-rendering: optimizeLegibility;
+
+}
+
+.table > thead > tr > th:first-child {
+  border-top-left-radius: 4.8px;
+}
+
+.table > thead > tr > th:last-child {
+  border-top-right-radius: 4.8px;
 }
