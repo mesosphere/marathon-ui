@@ -473,8 +473,7 @@ var AppListComponent = React.createClass({
     var statusTooltipMessage = (
       <span>
         At-a-glance overview of the global application or group state.
-        Includes Running, Deploying, Suspended, Delayed and Waiting.
-        <a href={statusDocsURL} target="_blank">Read more</a>.
+         <a href={statusDocsURL} target="_blank">Read more</a>.
       </span>
     );
 
@@ -483,9 +482,7 @@ var AppListComponent = React.createClass({
     var healthTooltipMessage = (
       <span>
         General health condition of the application tasks.
-        Includes Healthy, Unhealthy, Unknown, Staged, Overcapacity and
-        Unscheduled.
-        <a href={healthDocsURL} target="_blank">Read more</a>.
+         <a href={healthDocsURL} target="_blank">Read more</a>.
       </span>
     );
 
