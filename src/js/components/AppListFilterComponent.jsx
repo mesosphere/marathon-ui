@@ -58,10 +58,14 @@ var AppListFilterComponent = React.createClass({
     }
   },
 
-  updateFilters: function () {
+  updateFilters: function (key, value) {
     var router = this.context.router;
     var params = router.getCurrentParams();
     var query = router.getCurrentQuery();
+
+    if (key && value) {
+      query[key] = value;
+    }
 
     if (params != null && query.filterText !== "") {
       this.context.router.transitionTo("apps", params, query);
@@ -69,8 +73,7 @@ var AppListFilterComponent = React.createClass({
   },
 
   handleClearFilterText: function () {
-    this.setQueryParam(FilterTypes.TEXT, "");
-    this.updateFilters();
+    this.updateFilters(FilterTypes.TEXT, "");
   },
 
   handleFilterTextChange: function (event) {
@@ -85,8 +88,7 @@ var AppListFilterComponent = React.createClass({
   handleSubmit: function (event) {
     event.preventDefault();
     var filterText = this.state.filterText;
-    this.setQueryParam(FilterTypes.TEXT, filterText);
-    this.updateFilters();
+    this.updateFilters(FilterTypes.TEXT, filterText);
   },
 
   handleKeyDown: function (event) {
