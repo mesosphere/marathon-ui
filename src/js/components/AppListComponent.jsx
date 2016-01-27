@@ -6,6 +6,7 @@ import {score} from "fuzzaldrin";
 
 import AppListViewTypes from "../constants/AppListViewTypes";
 import AppStatus from "../constants/AppStatus";
+import ExternalLinks from "../constants/ExternalLinks";
 import FilterTypes from "../constants/FilterTypes";
 import HealthStatus from "../constants/HealthStatus";
 import Messages from "../constants/Messages";
@@ -468,21 +469,17 @@ var AppListComponent = React.createClass({
 
     var totalColumnSpan = 8;
 
-    var statusDocsURL = "https://mesosphere.github.io/marathon/docs/" +
-      "marathon-ui.html#application-status-reference";
     var statusTooltipMessage = (
       <span>
         At-a-glance overview of the global application or group state.
-         <a href={statusDocsURL} target="_blank">Read more</a>.
+        <a href={ExternalLinks.DOCS_STATUS} target="_blank">Read more</a>.
       </span>
     );
 
-    var healthDocsURL = "https://mesosphere.github.io/marathon/docs/" +
-      "marathon-ui.html#application-health-reference";
     var healthTooltipMessage = (
       <span>
         General health condition of the application tasks.
-         <a href={healthDocsURL} target="_blank">Read more</a>.
+        <a href={ExternalLinks.DOCS_HEALTH} target="_blank">Read more</a>.
       </span>
     );
 
