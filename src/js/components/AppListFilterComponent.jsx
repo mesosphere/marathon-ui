@@ -64,10 +64,14 @@ var AppListFilterComponent = React.createClass({
     var query = router.getCurrentQuery();
 
     if (key != null && value != null) {
-      query[key] = value;
+      if (value === "") {
+        delete query[key];
+      } else {
+        query[key] = value;
+      }
     }
 
-    if (params != null && query.filterText !== "") {
+    if (params != null) {
       router.transitionTo("apps", params, query);
     }
   },
