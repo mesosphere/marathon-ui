@@ -2,6 +2,8 @@ import React from "react/addons";
 import classNames from "classnames";
 import TimerMixin from "react-timer-mixin";
 
+import Util from "../helpers/Util";
+
 import PopoverComponent from "../components/PopoverComponent";
 
 var popOverDisplayTimer = null;
@@ -47,9 +49,11 @@ var TooltipComponent = React.createClass({
 
   render: function () {
     var props = this.props;
-    var message = React.cloneElement(props.message, {
-      onClick: e => e.stopPropagation()
-    });
+    var message = Util.isString(props.message)
+      ? props.message
+      : React.cloneElement(props.message, {
+        onClick: e => e.stopPropagation()
+      });
 
     return (
       <div className="tooltip-container"
