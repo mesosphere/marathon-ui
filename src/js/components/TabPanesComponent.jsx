@@ -1,6 +1,5 @@
 import React from "react/addons";
 
-import AppListFilterComponent from "../components/AppListFilterComponent";
 import AppListComponent from "../components/AppListComponent";
 import BreadcrumbComponent from "../components/BreadcrumbComponent";
 import DeploymentsListComponent from "../components/DeploymentsListComponent";
@@ -58,7 +57,7 @@ var TabPanesComponent = React.createClass({
   },
 
   updateCurrentGroup: function () {
-    var {groupId} = this.context.router.getCurrentParams();
+    var {groupId} = this.getQueryParamObject();
     if (groupId == null) {
       groupId = "/";
     }
@@ -72,16 +71,8 @@ var TabPanesComponent = React.createClass({
     });
   },
 
-  updateFilters: function (filters) {
-    this.setState(function (prevState) {
-      return {
-        filters: Object.assign({}, prevState.filters, filters)
-      };
-    });
-  },
-
   getTabId: function () {
-    var path = this.context.router.getCurrentPathname();
+    var path = this.getQueryParamObject();
 
     var hasTab = tabs.find(tab => tab.id === path);
 
@@ -100,17 +91,12 @@ var TabPanesComponent = React.createClass({
           className="container-fluid content">
         <TabPaneComponent id={tabs[0].id} className="flex-container">
           <div className="wrapper">
-            <SidebarComponent groupId={state.currentGroup}
-              onChange={this.updateFilters} />
+            <SidebarComponent groupId={state.currentGroup} />
             <main>
               <div className="contextual-bar">
                 {this.getContextualBar()}
-                <div className="app-list-controls">
-                  <AppListFilterComponent onChange={this.updateFilters} />
-                </div>
               </div>
-              <AppListComponent currentGroup={state.currentGroup}
-                filters={state.filters} />
+              <AppListComponent currentGroup={state.currentGroup} />
             </main>
           </div>
         </TabPaneComponent>

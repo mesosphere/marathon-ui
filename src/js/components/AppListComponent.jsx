@@ -16,6 +16,7 @@ import CenteredInlineDialogComponent from "./CenteredInlineDialogComponent";
 import AppsActions from "../actions/AppsActions";
 import AppsStore from "../stores/AppsStore";
 import AppsEvents from "../events/AppsEvents";
+import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 import Util from "../helpers/Util";
 
@@ -92,19 +93,18 @@ var AppListComponent = React.createClass({
   displayName: "AppListComponent",
 
   contextTypes: {
-    router: React.PropTypes.func
+    router: React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      // This is needed for the tests, the context differs there.
+      React.PropTypes.object
+    ])
   },
 
   propTypes: {
-    currentGroup: React.PropTypes.string.isRequired,
-    filters: React.PropTypes.object
+    currentGroup: React.PropTypes.string.isRequired
   },
 
-  getDefaultProps: function () {
-    return {
-      filters: {}
-    };
-  },
+  mixins: [QueryParamsMixin],
 
   getInitialState: function () {
     var fetchState = States.STATE_LOADING;
@@ -168,17 +168,28 @@ var AppListComponent = React.createClass({
   },
 
   hasFilters: function () {
-    return Object.values(this.props.filters).some(filter => {
-      return filter != null &&
-        (Util.isArray(filter) && filter.length > 0) ||
-        (Util.isString(filter) && filter !== "");
+    var filters = this.getQueryParamObject();
+
+    filters = Object.values(FilterTypes)
+      .reduce((returnObject, key) => {
+        var filter = filters[key];
+        if (filter != null) {
+          returnObject[key] = filter;
+        }
+        return returnObject;
+      }, {});
+
+    return Object.values(filters).some(filterValue => {
+      return filterValue != null &&
+        (Util.isArray(filterValue) && filterValue.length > 0) ||
+        (Util.isString(filterValue) && filterValue !== "");
     });
   },
 
   filterNodes: function (nodesSequence, filterCounts) {
     var props = this.props;
     var currentGroup = props.currentGroup;
-    var filters = props.filters;
+    var filters = this.getQueryParamObject();
 
     var filterHealth = filters[FilterTypes.HEALTH];
     var filterText = filters[FilterTypes.TEXT];
@@ -304,12 +315,13 @@ var AppListComponent = React.createClass({
     // Global search view - only display filtered apps
     if (this.hasFilters()) {
       appListViewType = AppListViewTypes.APP_LIST;
+
       nodesSequence = this.filterNodes(lazy(state.apps), filterCounts)
         .sortBy((app) => {
           return app[sortKey];
         }, state.sortDescending);
 
-      let filterText = props.filters[FilterTypes.TEXT];
+      let filterText = this.getQueryParamValue(FilterTypes.TEXT);
       if (filterText != null && sortKey === "id") {
         nodesSequence = nodesSequence.sort((a, b) => {
           return score(a.id, filterText) > score(b.id, filterText)
@@ -356,7 +368,7 @@ var AppListComponent = React.createClass({
   },
 
   getCaret: function (sortKey) {
-    var filterText = this.props.filters[FilterTypes.TEXT];
+    var filterText = this.getQueryParamValue([FilterTypes.TEXT]);
 
     if (sortKey === this.state.sortKey &&
         (sortKey !== "id" || filterText == null || filterText === "")) {

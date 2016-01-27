@@ -1,4 +1,7 @@
 ## Unversioned
+### Added
+- \#3017 - Move application Search Bar to the Header
+
 ### Changed
 - \#3078 - Always show download button for logs
 

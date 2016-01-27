@@ -14,10 +14,6 @@ var SidebarLabelsFilterComponent = React.createClass({
 
   mixins: [OnClickOutsideMixin, QueryParamsMixin],
 
-  propTypes: {
-    onChange: React.PropTypes.func.isRequired
-  },
-
   getInitialState: function () {
     var labels = this.getAvailableLabels();
 
@@ -101,7 +97,7 @@ var SidebarLabelsFilterComponent = React.createClass({
     if (stringify(selectedLabels) !== stringify(state.selectedLabels)) {
       this.setState({
         selectedLabels: selectedLabels
-      }, this.props.onChange(selectedLabels));
+      });
     }
   },
 

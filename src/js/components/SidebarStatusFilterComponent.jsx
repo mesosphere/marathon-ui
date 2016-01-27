@@ -14,10 +14,6 @@ var SidebarStatusFilterComponent = React.createClass({
 
   mixins: [QueryParamsMixin],
 
-  propTypes: {
-    onChange: React.PropTypes.func.isRequired
-  },
-
   getInitialState: function () {
     return {
       appsStatusesCount: {},
@@ -90,7 +86,7 @@ var SidebarStatusFilterComponent = React.createClass({
     if (stringify(selectedStatus) !== stringify(state.selectedStatus)) {
       this.setState({
         selectedStatus: selectedStatus
-      }, this.props.onChange(selectedStatus));
+      });
     }
   },
 

@@ -11,10 +11,6 @@ var AppListFilterComponent = React.createClass({
 
   mixins: [QueryParamsMixin],
 
-  propTypes: {
-    onChange: React.PropTypes.func.isRequired
-  },
-
   getInitialState: function () {
     return {
       activated: false,
@@ -59,13 +55,29 @@ var AppListFilterComponent = React.createClass({
         filterText: filterText,
         activated: filterText !== "" || state.focused
       });
-      this.props.onChange({[FilterTypes.TEXT]: filterText});
+    }
+  },
+
+  updateFilters: function (key, value) {
+    var router = this.context.router;
+    var params = router.getCurrentParams();
+    var query = router.getCurrentQuery();
+
+    if (key != null && value != null) {
+      if (value === "") {
+        delete query[key];
+      } else {
+        query[key] = value;
+      }
+    }
+
+    if (params != null) {
+      router.transitionTo("apps", params, query);
     }
   },
 
   handleClearFilterText: function () {
-    this.setQueryParam(FilterTypes.TEXT, "");
-    this.props.onChange({[FilterTypes.TEXT]: ""});
+    this.updateFilters(FilterTypes.TEXT, "");
   },
 
   handleFilterTextChange: function (event) {
@@ -80,8 +92,7 @@ var AppListFilterComponent = React.createClass({
   handleSubmit: function (event) {
     event.preventDefault();
     var filterText = this.state.filterText;
-    this.setQueryParam(FilterTypes.TEXT, filterText);
-    this.props.onChange({[FilterTypes.TEXT]: filterText});
+    this.updateFilters(FilterTypes.TEXT, filterText);
   },
 
   handleKeyDown: function (event) {

@@ -1,16 +1,18 @@
 import React from "react/addons";
-import {Link, RouteHandler} from "react-router";
+import {RouteHandler} from "react-router";
 import Mousetrap from "mousetrap";
 import "mousetrap/plugins/global-bind/mousetrap-global-bind";
 
 import config from "../config/config";
 
+import AppListFilterComponent from "../components/AppListFilterComponent";
 import AboutModalComponent from "../components/modals/AboutModalComponent";
 import AppModalComponent from "../components/modals/AppModalComponent";
 import DialogsComponent from "../components/DialogsComponent";
 import EditAppModalComponent from "../components/modals/EditAppModalComponent";
 import HelpModalComponent from "../components/modals/HelpModalComponent";
 import NavTabsComponent from "../components/NavTabsComponent";
+import HelpMenu from "./HelpMenu";
 
 import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
@@ -31,6 +33,8 @@ var Marathon = React.createClass({
       activeAppId: null,
       activeAppView: null,
       activeTabId: null,
+      filters: null,
+      helpMenuVisible: false,
       modal: null
     };
   },
@@ -226,7 +230,6 @@ var Marathon = React.createClass({
 
   render: function () {
     var state = this.state;
-    var router = this.context.router;
 
     var logoPath = config.rootUrl + "img/marathon-logo.png";
 
@@ -243,25 +246,11 @@ var Marathon = React.createClass({
             <NavTabsComponent activeTabId={state.activeTabId}
               className="navbar-nav nav-tabs-unbordered"
               tabs={tabs} />
-            <ul className="nav navbar-nav navbar-right">
-              <li>
-                <Link to={router.getCurrentPathname()}
-                    query={{modal: "about"}}>
-                  About
-                </Link>
-              </li>
-              <li>
-                <a href="../help" target="_blank">
-                  API Reference
-                </a>
-              </li>
-              <li>
-                <a href="https://mesosphere.github.io/marathon/docs/"
-                    target="_blank">
-                  Documentation
-                </a>
-              </li>
-            </ul>
+            <div className="nav navbar-nav navbar-right">
+              <AppListFilterComponent />
+
+              <HelpMenu />
+            </div>
           </div>
         </nav>
         <RouteHandler />

@@ -1,0 +1,42 @@
+/* =============
+ * Help Menu
+ * =============
+ */
+.help-menu {
+  margin: @base-spacing-unit*2+1 @base-spacing-unit;
+  width: @base-spacing-unit*2.5;
+  padding: 0 @base-spacing-unit*2.5;
+  cursor: pointer;
+  color: @manatee;
+  background-position: center left;
+
+  &.active {
+    color: @white;
+  }
+
+  &-dropdown.popover.bottom, &-dropdown.popover.default {
+    margin: 0;
+
+    .content {
+      background-color: transparent;
+      border-radius: 0;
+      min-width: auto;
+      padding: 0;
+      left: 100%;
+      transform: translate(-90%, 10%);
+
+      &:before, &:after {
+        display: none;
+      }
+    }
+
+    .dropdown-menu {
+      left: auto;
+      transform: none;
+      position: relative;
+      border-color: @white;
+      border-radius: 2px;
+      display: block;
+    }
+  }
+}
