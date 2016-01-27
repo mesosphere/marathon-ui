@@ -170,11 +170,19 @@ var AppListComponent = React.createClass({
   hasFilters: function () {
     var filters = this.getQueryParamObject();
 
-    return Object.values(filters).some(filter => {
-      return filter != null &&
-        Object.values(FilterTypes).some(filterType => filterType === filter) &&
-        (Util.isArray(filter) && filter.length > 0) ||
-        (Util.isString(filter) && filter !== "");
+    filters = Object.values(FilterTypes)
+      .reduce((returnObject, key) => {
+        var filter = filters[key];
+        if (filter != null) {
+          returnObject[key] = filter;
+        }
+        return returnObject;
+      }, {});
+
+    return Object.values(filters).some(filterValue => {
+      return filterValue != null &&
+        (Util.isArray(filterValue) && filterValue.length > 0) ||
+        (Util.isString(filterValue) && filterValue !== "");
     });
   },
 
