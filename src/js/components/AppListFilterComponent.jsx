@@ -63,7 +63,7 @@ var AppListFilterComponent = React.createClass({
     var params = router.getCurrentParams();
     var query = router.getCurrentQuery();
 
-    if (key && value) {
+    if (key != null && value != null) {
       query[key] = value;
     }
 
