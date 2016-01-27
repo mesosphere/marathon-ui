@@ -1,10 +1,9 @@
 import React from "react/addons";
-import {Link, RouteHandler} from "react-router";
+import {RouteHandler} from "react-router";
 import Mousetrap from "mousetrap";
 import "mousetrap/plugins/global-bind/mousetrap-global-bind";
 
 import config from "../config/config";
-import classNames from "classnames";
 
 import AppListFilterComponent from "../components/AppListFilterComponent";
 import AboutModalComponent from "../components/modals/AboutModalComponent";
@@ -13,7 +12,7 @@ import DialogsComponent from "../components/DialogsComponent";
 import EditAppModalComponent from "../components/modals/EditAppModalComponent";
 import HelpModalComponent from "../components/modals/HelpModalComponent";
 import NavTabsComponent from "../components/NavTabsComponent";
-import PopoverComponent from "./PopoverComponent";
+import HelpMenu from "./HelpMenu";
 
 import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
@@ -229,18 +228,8 @@ var Marathon = React.createClass({
     );
   },
 
-  toggleHelpMenu: function () {
-    this.setState({
-      helpMenuVisible: !this.state.helpMenuVisible
-    });
-  },
-
   render: function () {
     var state = this.state;
-    var router = this.context.router;
-    var helpMenuClassName = classNames("help-menu icon help", {
-      "active": this.state.helpMenuVisible
-    });
 
     var logoPath = config.rootUrl + "img/marathon-logo.png";
 
@@ -259,32 +248,8 @@ var Marathon = React.createClass({
               tabs={tabs} />
             <div className="nav navbar-nav navbar-right">
               <AppListFilterComponent />
-              <div className={helpMenuClassName}
-                  onClick={this.toggleHelpMenu}>
-                <span className="caret"></span>
-              </div>
-              <PopoverComponent visible={this.state.helpMenuVisible}
-              className="help-menu-dropdown">
-                <ul className="dropdown-menu">
-                  <li>
-                    <Link to={router.getCurrentPathname()}
-                        query={{modal: "about"}}>
-                      About
-                    </Link>
-                  </li>
-                  <li>
-                    <a href="../help" target="_blank">
-                      API Reference
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://mesosphere.github.io/marathon/docs/"
-                        target="_blank">
-                      Documentation
-                    </a>
-                  </li>
-                </ul>
-              </PopoverComponent>
+
+              <HelpMenu />
             </div>
           </div>
         </nav>
