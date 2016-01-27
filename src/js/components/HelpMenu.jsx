@@ -40,10 +40,9 @@ var HelpMenu = React.createClass({
     });
 
     return (
-        <div className={helpMenuClassName}
-             onClick={this.toggleHelpMenu}>
-          <span className="caret"></span>
-
+      <div className={helpMenuClassName}
+          onClick={this.toggleHelpMenu}>
+        <span className="caret"></span>
         <PopoverComponent visible={this.state.helpMenuVisible}
             className="help-menu-dropdown">
           <ul className="dropdown-menu">
