@@ -81,6 +81,20 @@
     background-size: contain;
   }
 
+  &.icon-xs {
+    font-size: floor(@icon-xs-height*@icon-xs-scale);
+    line-height: floor(@icon-xs-height*@icon-xs-scale);
+    margin-top: floor(@font-size-icon - @icon-xs-height)*-1;
+    width: floor(@icon-xs-width*@icon-xs-scale);
+    height: floor(@icon-xs-height*@icon-xs-scale);
+
+    &:before {
+      line-height: floor(floor(@icon-xs-height*@icon-xs-scale)
+        + (@icon-xs-offset*@icon-xs-scale));
+
+    }
+  }
+
   &.icon-mini {
     font-size: floor(@icon-mini-height*@icon-mini-scale);
     line-height: floor(@icon-mini-height*@icon-mini-scale);
