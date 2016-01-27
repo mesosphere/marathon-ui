@@ -99,16 +99,18 @@ Before you submit your pull request consider the following guidelines:
 
 That's it! Thank you for your contribution!
 
-#### <a name="testing"></a> Testing approach
+#### Testing 
 
-Use the [BDD style](http://guide.agilealliance.org/guide/bdd.html) of testing.
-Tests should be organised around scenarios rather than rigidly around class
-structure and method names, for example "Creating an application" rather than
-"Application#initialize". Test for correct error handling as well as correct
-behaviour. Mock where necessary, but not as a matter of course.
+Tests are organised following two different approaches: [BDD style](http://guide.agilealliance.org/guide/bdd.html) and [Unit Tests](http://guide.agilealliance.org/guide/unittest.html). Our aim is to write unit tests that verify every single unit is working as expected in isolation, as well as creating scenarios that ensure all the moving parts play well together.
 
-Keep tests short, clean, and descriptive. Aim for high code coverage, but don't
-worry about achieving 100% coverage. Try to keep tests flexible. Test the
-interface, not the implementation.
+Keep all tests short, clean, and descriptive. Aim for high code coverage, but don't worry about achieving 100%. Try to keep tests flexible. Test the
+interface, not the implementation. Make sure that tests can be run in any order and that tests consistently return the same result. No random numbers and such. Aim to ensure that tests run quickly to keep the feedback loop tight.
 
-Aim to ensure that tests run quickly to keep the feedback loop tight.
+##### Units 
+
+Unit tests should only test a single unit of work, therefore any dependency should be mocked or stubbed. These tests live under `src/test/units` and the filenames always match the component being tested, for example `AboutModalComponent.test.js`.
+
+##### Scenarios
+
+These tests should be organised around scenarios rather than rigidly around class structure and method names, for example "create application" rather than "Application#initialize". Test all components involved, test for correct behaviour as well as correct error handling. Mock where necessary, but not as a matter of course. Scenarios are found in `src/test/scenarios`.
+
