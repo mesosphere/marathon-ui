@@ -93,21 +93,18 @@ var AppListComponent = React.createClass({
   displayName: "AppListComponent",
 
   contextTypes: {
-    router: React.PropTypes.func
+    router: React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      // This is needed for the tests, the context differs there.
+      React.PropTypes.object
+    ])
   },
 
   propTypes: {
-    currentGroup: React.PropTypes.string.isRequired,
-    filters: React.PropTypes.object
+    currentGroup: React.PropTypes.string.isRequired
   },
 
   mixins: [QueryParamsMixin],
-
-  getDefaultProps: function () {
-    return {
-      filters: {}
-    };
-  },
 
   getInitialState: function () {
     var fetchState = States.STATE_LOADING;
@@ -171,7 +168,7 @@ var AppListComponent = React.createClass({
   },
 
   hasFilters: function () {
-    var filters = Object.assign(this.getQueryParamObject(), this.props.filters);
+    var filters = this.getQueryParamObject();
 
     return Object.values(filters).some(filter => {
       return filter != null &&
@@ -184,7 +181,7 @@ var AppListComponent = React.createClass({
   filterNodes: function (nodesSequence, filterCounts) {
     var props = this.props;
     var currentGroup = props.currentGroup;
-    var filters = Object.assign(this.getQueryParamObject(), this.props.filters);
+    var filters = this.getQueryParamObject();
 
     var filterHealth = filters[FilterTypes.HEALTH];
     var filterText = filters[FilterTypes.TEXT];
@@ -316,7 +313,7 @@ var AppListComponent = React.createClass({
           return app[sortKey];
         }, state.sortDescending);
 
-      let filterText = props.filters[FilterTypes.TEXT];
+      let filterText = this.getQueryParamValue(FilterTypes.TEXT);
       if (filterText != null && sortKey === "id") {
         nodesSequence = nodesSequence.sort((a, b) => {
           return score(a.id, filterText) > score(b.id, filterText)

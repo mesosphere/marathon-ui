@@ -114,12 +114,19 @@ describe("AppListComponent", function () {
   describe("when the user enters a text filter", function () {
 
     it("displays the exact search result match", function () {
-      var filters = {
-        filterText: "app-exact"
+      var context = {
+        router: {
+          getCurrentQuery: function () {
+            return {
+              filterText: "app-exact"
+            };
+          }
+        }
       };
 
       this.component = shallow(
-        <AppListComponent filters={filters} currentGroup="/" />
+        <AppListComponent currentGroup="/" />,
+        {context}
       );
 
       var appNames = this.component
@@ -133,12 +140,20 @@ describe("AppListComponent", function () {
     });
 
     it("handles fuzzy search input", function () {
-      var filters = {
-        filterText: "appsleep"
+      var context = {
+        router: {
+          getCurrentQuery: function () {
+            return {
+              filterText: "appsleep"
+            };
+          }
+        }
       };
 
-      this.component = shallow(<AppListComponent filters={filters}
-                                                 currentGroup="/" />);
+      this.component = shallow(
+        <AppListComponent currentGroup="/" />,
+        {context}
+      );
 
       var appNames = this.component
         .find(AppListItemComponent)
@@ -152,12 +167,20 @@ describe("AppListComponent", function () {
     });
 
     it("shows the right result for deeply nested paths", function () {
-      var filters = {
-        filterText: "app-omega"
+      var context = {
+        router: {
+          getCurrentQuery: function () {
+            return {
+              filterText: "app-omega"
+            };
+          }
+        }
       };
 
-      this.component = shallow(<AppListComponent filters={filters}
-                                                 currentGroup="/" />);
+      this.component = shallow(
+        <AppListComponent currentGroup="/" />,
+        {context}
+      );
 
       var appNames = this.component
         .find(AppListItemComponent)
@@ -170,12 +193,20 @@ describe("AppListComponent", function () {
     });
 
     it("shows the best match first", function () {
-      var filters = {
-        filterText: "app"
+      var context = {
+        router: {
+          getCurrentQuery: function () {
+            return {
+              filterText: "app"
+            };
+          }
+        }
       };
 
-      this.component = shallow(<AppListComponent filters={filters}
-                                                 currentGroup="/" />);
+      this.component = shallow(
+        <AppListComponent currentGroup="/" />,
+        {context}
+      );
 
       var appNames = this.component
         .find(AppListItemComponent)
@@ -197,12 +228,20 @@ describe("AppListComponent", function () {
     });
 
     it("returns 0 results when no matches are found", function () {
-      var filters = {
-        filterText: "nope"
+      var context = {
+        router: {
+          getCurrentQuery: function () {
+            return {
+              filterText: "nope"
+            };
+          }
+        }
       };
 
-      this.component = shallow(<AppListComponent filters={filters}
-                                                 currentGroup="/" />);
+      this.component = shallow(
+        <AppListComponent currentGroup="/" />,
+        {context}
+      );
 
       var appNames = this.component
         .find(AppListItemComponent)
