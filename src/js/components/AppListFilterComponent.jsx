@@ -68,7 +68,7 @@ var AppListFilterComponent = React.createClass({
     }
 
     if (params != null && query.filterText !== "") {
-      this.context.router.transitionTo("apps", params, query);
+      router.transitionTo("apps", params, query);
     }
   },
 
