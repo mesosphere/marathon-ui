@@ -31,6 +31,7 @@ var AppListItemComponent = React.createClass({
   propTypes: {
     currentGroup: React.PropTypes.string.isRequired,
     model: React.PropTypes.object.isRequired,
+    sortKey: React.PropTypes.string,
     viewType: React.PropTypes.string
   },
 
@@ -97,6 +98,7 @@ var AppListItemComponent = React.createClass({
     var props = this.props;
 
     return props.viewType !== nextProps.viewType ||
+      props.sortKey !== nextProps.sortKey ||
       !Util.compareProperties(props.model, nextProps.model, "status",
       "tasksRunning", "health", "totalMem", "totalCpus", "instances", "labels");
   },
@@ -173,8 +175,11 @@ var AppListItemComponent = React.createClass({
   },
 
   getActionsCell: function () {
+    var classSet = classNames("actions-cell", {
+      "table-column-sorted": this.props.sortKey === "healthWeight"
+    });
     return (
-      <td className="actions-cell" title="More Actions"
+      <td className={classSet} title="More Actions"
           onClick={this.handleActionsClick}>
         <i className="icon icon-mini dots"></i>
         {this.getDropdownMenu()}
@@ -186,12 +191,21 @@ var AppListItemComponent = React.createClass({
     var props = this.props;
     var model = props.model;
 
+
+
     if (props.viewType === AppListViewTypes.APP_LIST) {
       var groupId = model.id;
       var appName = PathUtil.getAppName(model.id);
 
+      let idClassSet = classNames(
+        "overflow-ellipsis name-cell global-app-list",
+        {
+          "table-column-sorted": props.sortKey === "id"
+        }
+      );
+
       return (
-        <td className="overflow-ellipsis name-cell global-app-list"
+        <td className={idClassSet}
             title={model.id} ref="nameCell">
           <span className="name" ref="nameNode">
             {appName}
@@ -204,11 +218,14 @@ var AppListItemComponent = React.createClass({
         </td>
       );
     }
+    let idClassSet = classNames("overflow-ellipsis name-cell", {
+      "table-column-sorted": props.sortKey === "id"
+    });
 
     let relativeAppName =
       PathUtil.getRelativePath(model.id, props.currentGroup);
     return (
-      <td className="overflow-ellipsis name-cell"
+      <td className={idClassSet}
           title={model.id} ref="nameCell">
         <span className="name" ref="nameNode">{relativeAppName}</span>
         {this.getLabels()}
@@ -287,8 +304,11 @@ var AppListItemComponent = React.createClass({
   },
 
   getHealthBar: function () {
+    var classSet = classNames("text-right health-bar-column", {
+      "table-column-sorted": this.props.sortKey === "healthWeight"
+    });
     return (
-      <td className="text-right health-bar-column">
+      <td className={classSet}>
         <AppHealthBarWithTooltipComponent model={this.props.model} />
       </td>
     );
@@ -324,8 +344,12 @@ var AppListItemComponent = React.createClass({
   },
 
   getStatus: function () {
+    var classSet = classNames("status-cell", {
+      "table-column-sorted": this.props.sortKey === "status"
+    });
+
     return (
-      <td className="text-right status">
+      <td className={classSet}>
         <AppStatusComponent model={this.props.model} />
       </td>
     );
@@ -334,28 +358,45 @@ var AppListItemComponent = React.createClass({
   render: function () {
     var props = this.props;
     var model = props.model;
+    var sortKey = props.sortKey;
 
     var rowTypeClassName = classNames({
       "group": model.isGroup,
       "app": !model.isGroup
     });
 
+    var iconClassSet = classNames("icon-cell", {
+      "table-column-sorted": sortKey === "id"
+    });
+
+    var cpuClassSet = classNames("text-right total cpu-cell", {
+      "table-column-sorted": sortKey === "totalCpus"
+    });
+
+    var memClassSet = classNames("text-right total ram", {
+      "table-column-sorted": sortKey === "totalMem"
+    });
+
+    var tasksClassSet = classNames("text-right instances-cell", {
+      "table-column-sorted": sortKey === "tasksRunning"
+    });
+
     return (
       <tr onClick={this.handleAppRowClick} className={rowTypeClassName}>
-        <td className="icon-cell">
+        <td className={iconClassSet}>
           {this.getIcon()}
         </td>
         {this.getAppName()}
-        <td className="text-right total cpu-cell">
+        <td className={cpuClassSet}>
           {parseFloat(model.totalCpus).toFixed(1)}
         </td>
-        <td className="text-right total ram">
+        <td className={memClassSet}>
           <span title={`${model.totalMem} MiB`}>
             {`${Util.filesize(model.totalMem * Math.pow(1024, 2), 0)}`}
           </span>
         </td>
         {this.getStatus()}
-        <td className="text-right instances-cell">
+        <td className={tasksClassSet}>
           <span>
             {model.tasksRunning}
           </span> of {model.instances}

@@ -21,7 +21,9 @@
   font-weight: normal;
   border: none;
   background-color: @table-header-color;
-
+  &.table-column-sorted{
+    background-color: fadein(@table-header-color, 5);
+  }
 }
 
 .table > tbody > tr > td > .list-inline,
@@ -43,6 +45,11 @@
   background-color: @table-highlight-color;
 }
 
+.table > tbody > tr > td {
+  &.table-column-sorted{
+    background-color: fadein(@table-highlight-color, 1);
+  }
+}
 .table-selectable tr > td {
   cursor: pointer;
 }
