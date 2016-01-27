@@ -12,6 +12,7 @@ import Messages from "../constants/Messages";
 import States from "../constants/States";
 import AppListItemComponent from "./AppListItemComponent";
 import CenteredInlineDialogComponent from "./CenteredInlineDialogComponent";
+import TooltipComponent from "../components/TooltipComponent";
 
 import AppsActions from "../actions/AppsActions";
 import AppsStore from "../stores/AppsStore";
@@ -467,6 +468,27 @@ var AppListComponent = React.createClass({
 
     var totalColumnSpan = 8;
 
+    var statusDocsURL = "https://mesosphere.github.io/marathon/docs/" +
+      "marathon-ui.html#application-status-reference";
+    var statusTooltipMessage = (
+      <span>
+        At-a-glance overview of the global application or group state.
+        Includes Running, Deploying, Suspended, Delayed and Waiting.
+        <a href={statusDocsURL} target="_blank">Read more</a>.
+      </span>
+    );
+
+    var healthDocsURL = "https://mesosphere.github.io/marathon/docs/" +
+      "marathon-ui.html#application-health-reference";
+    var healthTooltipMessage = (
+      <span>
+        General health condition of the application tasks.
+        Includes Healthy, Unhealthy, Unknown, Staged, Overcapacity and
+        Unscheduled.
+        <a href={healthDocsURL} target="_blank">Read more</a>.
+      </span>
+    );
+
     return (
       <div>
         <table className={tableClassSet}>
@@ -501,10 +523,14 @@ var AppListComponent = React.createClass({
                 </span>
               </th>
               <th className="status-cell">
-                <span onClick={this.sortBy.bind(null, "status")}
+                <div onClick={this.sortBy.bind(null, "status")}
                     className={headerClassSet}>
-                  Status {this.getCaret("status")}
-                </span>
+                  <div>Status</div>
+                  <TooltipComponent message={statusTooltipMessage}>
+                    <i className="icon icon-xs help" />
+                  </TooltipComponent>
+                  {this.getCaret("status")}
+                </div>
               </th>
               <th className="text-right instances-cell">
                 <span onClick={this.sortBy.bind(null, "tasksRunning")}
@@ -513,10 +539,14 @@ var AppListComponent = React.createClass({
                 </span>
               </th>
               <th className="health-cell" colSpan="2">
-                <span onClick={this.sortBy.bind(null, "healthWeight")}
+                <div onClick={this.sortBy.bind(null, "healthWeight")}
                     className={headerClassSet}>
-                  Health {this.getCaret("healthWeight")}
-                </span>
+                  <div>Health</div>
+                  <TooltipComponent message={healthTooltipMessage}>
+                    <i className="icon icon-xs help" />
+                  </TooltipComponent>
+                  {this.getCaret("healthWeight")}
+                </div>
               </th>
             </tr>
           </thead>
