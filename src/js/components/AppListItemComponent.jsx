@@ -176,7 +176,7 @@ var AppListItemComponent = React.createClass({
 
   getActionsCell: function () {
     var classSet = classNames("actions-cell", {
-      "table-column-sorted": this.props.sortKey === "healthWeight"
+      "cell-highlighted": this.props.sortKey === "healthWeight"
     });
     return (
       <td className={classSet} title="More Actions"
@@ -198,7 +198,7 @@ var AppListItemComponent = React.createClass({
       let idClassSet = classNames(
         "overflow-ellipsis name-cell global-app-list",
         {
-          "table-column-sorted": props.sortKey === "id"
+          "cell-highlighted": props.sortKey === "id"
         }
       );
 
@@ -217,7 +217,7 @@ var AppListItemComponent = React.createClass({
       );
     }
     let idClassSet = classNames("overflow-ellipsis name-cell", {
-      "table-column-sorted": props.sortKey === "id"
+      "cell-highlighted": props.sortKey === "id"
     });
 
     let relativeAppName =
@@ -303,7 +303,7 @@ var AppListItemComponent = React.createClass({
 
   getHealthBar: function () {
     var classSet = classNames("text-right health-bar-column", {
-      "table-column-sorted": this.props.sortKey === "healthWeight"
+      "cell-highlighted": this.props.sortKey === "healthWeight"
     });
     return (
       <td className={classSet}>
@@ -343,7 +343,7 @@ var AppListItemComponent = React.createClass({
 
   getStatus: function () {
     var classSet = classNames("status-cell", {
-      "table-column-sorted": this.props.sortKey === "status"
+      "cell-highlighted": this.props.sortKey === "status"
     });
 
     return (
@@ -364,19 +364,19 @@ var AppListItemComponent = React.createClass({
     });
 
     var iconClassSet = classNames("icon-cell", {
-      "table-column-sorted": sortKey === "id"
+      "cell-highlighted": sortKey === "id"
     });
 
     var cpuClassSet = classNames("text-right total cpu-cell", {
-      "table-column-sorted": sortKey === "totalCpus"
+      "cell-highlighted": sortKey === "totalCpus"
     });
 
     var memClassSet = classNames("text-right total ram", {
-      "table-column-sorted": sortKey === "totalMem"
+      "cell-highlighted": sortKey === "totalMem"
     });
 
     var tasksClassSet = classNames("text-right instances-cell", {
-      "table-column-sorted": sortKey === "tasksRunning"
+      "cell-highlighted": sortKey === "tasksRunning"
     });
 
     return (

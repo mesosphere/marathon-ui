@@ -83,31 +83,31 @@ var TaskFileListComponent = React.createClass({
     var sortKey = state.sortKey;
 
     var idClassSet = classNames({
-      "table-column-sorted": sortKey === "name"
+      "cell-highlighted": sortKey === "name"
     });
 
     var modeClassSet = classNames({
-      "table-column-sorted": sortKey === "mode"
+      "cell-highlighted": sortKey === "mode"
     });
 
     var nlinkClassSet = classNames({
-      "table-column-sorted": sortKey === "nlink"
+      "cell-highlighted": sortKey === "nlink"
     });
 
     var uidClassSet = classNames({
-      "table-column-sorted": sortKey === "uid"
+      "cell-highlighted": sortKey === "uid"
     });
 
     var gidClassSet = classNames({
-      "table-column-sorted": sortKey === "gid"
+      "cell-highlighted": sortKey === "gid"
     });
 
     var sizeClassSet = classNames("text-right", {
-      "table-column-sorted": sortKey === "size"
+      "cell-highlighted": sortKey === "size"
     });
 
     var mtimeClassSet = classNames("text-right", {
-      "table-column-sorted": sortKey === "mtime"
+      "cell-highlighted": sortKey === "mtime"
     });
 
     if (files != null) {
@@ -168,31 +168,31 @@ var TaskFileListComponent = React.createClass({
     });
 
     var idClassSet = classNames({
-      "table-column-sorted": state.sortKey === "name"
+      "cell-highlighted": state.sortKey === "name"
     });
 
     var modeClassSet = classNames({
-      "table-column-sorted": state.sortKey === "mode"
+      "cell-highlighted": state.sortKey === "mode"
     });
 
     var nlinkClassSet = classNames({
-      "table-column-sorted": state.sortKey === "nlink"
+      "cell-highlighted": state.sortKey === "nlink"
     });
 
     var uidClassSet = classNames({
-      "table-column-sorted": state.sortKey === "uid"
+      "cell-highlighted": state.sortKey === "uid"
     });
 
     var gidClassSet = classNames({
-      "table-column-sorted": state.sortKey === "gid"
+      "cell-highlighted": state.sortKey === "gid"
     });
 
     var sizeClassSet = classNames("text-right", {
-      "table-column-sorted": state.sortKey === "size"
+      "cell-highlighted": state.sortKey === "size"
     });
 
     var mtimeClassSet = classNames("text-right", {
-      "table-column-sorted": state.sortKey === "mtime"
+      "cell-highlighted": state.sortKey === "mtime"
     });
 
     return (

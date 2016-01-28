@@ -469,27 +469,27 @@ var AppListComponent = React.createClass({
     });
 
     var idClassSet = classNames("text-left name-cell", {
-      "table-column-sorted": state.sortKey === "id"
+      "cell-highlighted": state.sortKey === "id"
     });
 
     var cpuClassSet = classNames("text-right cpu-cell", {
-      "table-column-sorted": state.sortKey === "totalCpus"
+      "cell-highlighted": state.sortKey === "totalCpus"
     });
 
     var memClassSet = classNames("text-right ram-cell", {
-      "table-column-sorted": state.sortKey === "totalMem"
+      "cell-highlighted": state.sortKey === "totalMem"
     });
 
     var statusClassSet = classNames("status-cell", {
-      "table-column-sorted": state.sortKey === "status"
+      "cell-highlighted": state.sortKey === "status"
     });
 
     var tasksClassSet = classNames("text-right instances-cell", {
-      "table-column-sorted": state.sortKey === "tasksRunning"
+      "cell-highlighted": state.sortKey === "tasksRunning"
     });
 
     var healthClassSet = classNames("health-cell", {
-      "table-column-sorted": state.sortKey === "healthWeight"
+      "cell-highlighted": state.sortKey === "healthWeight"
     });
 
     var totalColumnSpan = 8;

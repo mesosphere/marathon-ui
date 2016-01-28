@@ -98,7 +98,7 @@ describe("AppListItemComponent", function () {
         );
 
         expect(component.find(testCase.cssClass).get(0).attribs.class)
-          .to.contain("table-column-sorted");
+          .to.contain("cell-highlighted");
       });
     });
   });

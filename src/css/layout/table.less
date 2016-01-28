@@ -21,7 +21,7 @@
   font-weight: normal;
   border: none;
   background-color: @table-header-color;
-  &.table-column-sorted{
+  &.cell-highlighted {
     background-color: fadein(@table-header-color, 5);
   }
 }
@@ -46,7 +46,7 @@
 }
 
 .table > tbody > tr > td {
-  &.table-column-sorted{
+  &.cell-highlighted {
     background-color: fadein(@table-highlight-color, 1);
   }
 }

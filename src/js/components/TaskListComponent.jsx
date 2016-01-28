@@ -159,23 +159,23 @@ var TaskListComponent = React.createClass({
 
     var hasHealthClassSet = classNames({
       "hidden": !hasHealth,
-      "table-column-sorted": state.sortKey === "healthStatus"
+      "cell-highlighted": state.sortKey === "healthStatus"
     });
 
     var idClassSet = classNames({
-      "table-column-sorted": state.sortKey === "id"
+      "cell-highlighted": state.sortKey === "id"
     });
 
     var statusClassSet = classNames("text-center", {
-      "table-column-sorted": state.sortKey === "status"
+      "cell-highlighted": state.sortKey === "status"
     });
 
     var versionClassSet = classNames("text-right", {
-      "table-column-sorted": state.sortKey === "version"
+      "cell-highlighted": state.sortKey === "version"
     });
 
     var updatedAtClassSet = classNames("text-right", {
-      "table-column-sorted": state.sortKey === "updatedAt"
+      "cell-highlighted": state.sortKey === "updatedAt"
     });
 
     return (

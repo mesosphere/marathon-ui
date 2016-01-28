@@ -171,12 +171,12 @@ var TaskListItemComponent = React.createClass({
       "unhealthy": taskHealth === HealthStatus.UNHEALTHY,
       "healthy": taskHealth === HealthStatus.HEALTHY,
       "unknown": taskHealth === HealthStatus.UNKNOWN,
-      "table-column-sorted": sortKey === "healthStatus"
+      "cell-highlighted": sortKey === "healthStatus"
     });
 
     var statusClassSet = classNames({
       "text-warning": task.status === TaskStatus.STAGED,
-      "table-column-sorted": sortKey === "status"
+      "cell-highlighted": sortKey === "status"
     });
 
     var updatedAtNodeClassSet = classNames({
@@ -192,15 +192,15 @@ var TaskListItemComponent = React.createClass({
     }
 
     var idClassSet = classNames({
-      "table-column-sorted": sortKey === "id"
+      "cell-highlighted": sortKey === "id"
     });
 
     var versionClassSet = classNames("text-right", {
-      "table-column-sorted": sortKey === "version"
+      "cell-highlighted": sortKey === "version"
     });
 
     var updatedAtClassSet = classNames("text-right", {
-      "table-column-sorted": sortKey === "updatedAt"
+      "cell-highlighted": sortKey === "updatedAt"
     });
 
     return (
