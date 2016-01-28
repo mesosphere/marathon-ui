@@ -1,0 +1,69 @@
+{
+  "parser": "babel-eslint",
+
+  "ecmaFeatures": {
+    "jsx": true,
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "destructuring": true,
+    "objectLiteralComputedProperties": true,
+    "templateStrings": true,
+    "defaultParams": true,
+    "restParams": true
+  },
+
+  "env": {
+    "browser": true,
+    "mocha": true,
+    "node": true
+  },
+
+  "plugins": [
+    "react"
+  ],
+
+  "rules": {
+    "no-unused-vars": [1],
+    "no-console": [1],
+    "eqeqeq": [2, "smart"],
+    "quotes": [2, "double"],
+    "indent": [2, 2, {"SwitchCase": 1, "VariableDeclarator": 1}],
+    "camelcase": [2, {"properties": "always"}],
+    "strict": [2, "never"], // <-- fix
+    "block-spacing": [2, "always"],
+    "no-mixed-spaces-and-tabs": [2],
+    "no-trailing-spaces": [2, { "skipBlankLines": false }],
+    "no-underscore-dangle": 2,
+    "no-multiple-empty-lines": [2, {"max": 1}],
+    "no-empty": [2],
+    "one-var": [2, "never"],
+    "object-curly-spacing": [2, "never"],
+    "space-after-keywords": [2, "always"],
+    "space-before-blocks": [2, "always"],
+    "space-before-function-paren": [2, {
+      "anonymous": "always", "named": "never"
+    }],
+    "spaced-comment": [2, "always", { "exceptions": ["*"]}],
+    "semi": [2, "always"],
+    "max-len": [2, 80, 4],
+    "valid-jsdoc": [2, {
+      "requireReturn": false,
+      "requireParamDescription": false
+    }],
+
+    // React plugin
+    "react/display-name": [2, {"acceptTranspilerName": true}],
+    "jsx-quotes": [2, "prefer-double"],
+    "react/jsx-no-undef": 2,
+    "react/jsx-uses-vars": [2, {"vars": "all", "args": "after-used"}],
+    "react/jsx-sort-prop-types": 2,
+    "react/no-did-mount-set-state": 2,
+    "react/no-did-update-set-state": 2,
+    "react/no-direct-mutation-state": 2,
+    "react/no-multi-comp": [2, {"ignoreStateless": true}],
+    "react/prop-types": 2,
+    "react/react-in-jsx-scope": 2,
+    "react/self-closing-comp": 2,
+    "react/wrap-multilines": 2
+  }
+}
