@@ -42,9 +42,38 @@
   }
 
   & tr td:first-child,
-  & tr th:first-child
-  {
+  & tr th:first-child {
     padding-left: @base-spacing-unit*2;
+  }
+
+  & > thead > tr > th {
+    &.status-cell, &.health-cell {
+      .clickable {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+
+        > div {
+          margin-right: @horizontal-spacing-unit*0.5;
+        }
+
+        .tooltip-container {
+          .icon {
+            opacity: .6;
+          }
+
+          &:hover {
+            .icon {
+              opacity: 1;
+            }
+          }
+
+          .content a {
+            margin-left: @horizontal-spacing-unit*0.5;
+          }
+        }
+      }
+    }
   }
   /* Cells */
   & > tbody > tr > td,

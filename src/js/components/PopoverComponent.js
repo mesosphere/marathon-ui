@@ -13,6 +13,8 @@ var PopoverComponent = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     className: React.PropTypes.string,
+    onMouseEnter: React.PropTypes.func,
+    onMouseLeave: React.PropTypes.func,
     visible: React.PropTypes.bool
   },
 
@@ -70,7 +72,10 @@ var PopoverComponent = React.createClass({
 
     return (
       <div className={className} ref="component">
-        <div className="content" ref="content">
+        <div className="content"
+          onMouseEnter={props.onMouseEnter}
+          onMouseLeave={props.onMouseLeave}
+          ref="content">
           {props.children}
         </div>
       </div>
