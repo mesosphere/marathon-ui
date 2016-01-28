@@ -1,3 +1,7 @@
+## 0.15.2 - 2016-01-28
+### Fixed
+- \#3054 - Avoid manipulating `fetch` values directly; keep using `uris` field
+
 ## 0.15.1 - 2016-01-22
 ### Fixed
 - \#3605 - Prevent ctrl-c keyboard shortcut from showing the Create modal dialog
