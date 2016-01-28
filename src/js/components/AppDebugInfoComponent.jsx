@@ -63,6 +63,9 @@ var AppDebugInfoComponent = React.createClass({
     }
 
     const timestamp = lastTaskFailure.timestamp;
+    const timeStampText = new Date(timestamp) > new Date()
+      ? "Just Now"
+      : new Moment(timestamp).fromNow();
     const version = lastTaskFailure.version;
 
     return (
@@ -77,7 +80,7 @@ var AppDebugInfoComponent = React.createClass({
         {invalidateValue(lastTaskFailure.host)}
         <dt>Timestamp</dt>
         <dd>
-          <span>{timestamp}</span> ({new Moment(timestamp).fromNow()})
+          <span>{timestamp}</span> ({timeStampText})
         </dd>
         <dt>Version</dt>
         <dd>
