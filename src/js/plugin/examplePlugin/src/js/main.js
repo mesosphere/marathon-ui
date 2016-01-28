@@ -1,9 +1,7 @@
-import "babel-polyfill";
+import ExamplePluginComponent from "./components/ExamplePluginComponent";
 
-console.log("Example Plugin Loaded");
-
-global.onmessage = function (e) {
-  console.log("PluginDispatcher received",
-   e.data.PluginDispatcher);
-  global.PluginDispatcher = e.data.PluginDispatcher;
-};
+global.PluginDispatcher.dispatch({
+  eventType: "INJECT_COMPONENT",
+  placeId: "SIDEBAR_BOTTOM",
+  component: ExamplePluginComponent
+});

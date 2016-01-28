@@ -35,12 +35,10 @@ AppDispatcher.register(function (action) {
       break;
     case PluginEvents.REQUEST_SUCCESS:
       pluginsLoaded.push(action.metaInfo);
-      console.log("SUCCESS", action.metaInfo);
       loadNextPlugin();
       break;
     case PluginEvents.REQUEST_ERROR:
       pluginsErrored.push(action.metaInfo);
-      console.log("ERROR", action.metaInfo, action.error);
       loadNextPlugin();
       break;
   }
