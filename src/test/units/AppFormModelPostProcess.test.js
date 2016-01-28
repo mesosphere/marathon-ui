@@ -193,15 +193,4 @@ describe("App Form Model Post Process", function () {
     expect(app.fetch).to.be.undefined;
   });
 
-  it("only contains an fetch array", function () {
-    var app = {
-      fetch: ["test"],
-      uris: []
-    };
-
-    AppFormModelPostProcess.fetch(app);
-
-    expect(app.uris).to.be.undefined;
-  });
-
 });
