@@ -8,6 +8,7 @@
 ### Fixed
 - \#3093 - Don't display "Create an Application" together with "Loading error"
 - \#2907 - Add tooltip with help links to Status and Health columns in App list
+- \#3054 - Avoid manipulating `fetch` values directly; keep using `uris` field
 
 ## 0.15.1 - 2016-01-22
 ### Fixed
