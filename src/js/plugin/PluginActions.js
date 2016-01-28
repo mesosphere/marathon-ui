@@ -1,6 +1,7 @@
 import ajaxWrapper from "../helpers/ajaxWrapper";
 
 import AppDispatcher from "../AppDispatcher";
+import JSONPUtil from "../helpers/JSONPUtil";
 
 import PluginEvents from "../events/PluginEvents";
 
@@ -28,19 +29,22 @@ var PluginActions = {
     */
   },
   startPlugin: function (pluginInfo) {
-    var myWorker = new Worker(pluginInfo.uri);
-
-    /*
-    Error handling missing
-    */
-
-    myWorker.postMessage({PluginDispatcher});
-
-    AppDispatcher.dispatchNext({
-      actionType: PluginEvents.REQUEST_SUCCESS,
-      metaInfo: pluginInfo
-    });
-
+    this.request(pluginInfo.uri).then(
+      function (data) {
+        AppDispatcher.dispatch({
+          actionType: PluginEvents.REQUEST_SUCCESS,
+          data: data,
+          metaInfo: pluginInfo
+        });
+      },
+      function (error) {
+        AppDispatcher.dispatch({
+          actionType: PluginEvents.REQUEST_ERROR,
+          data: error,
+          metaInfo: pluginInfo
+        });
+      }
+    );
     /*
     this.request({
       headers: {
@@ -65,7 +69,7 @@ var PluginActions = {
       });
     */
   },
-  request: ajaxWrapper
+  request: JSONPUtil.request
 };
 
 export default PluginActions;
