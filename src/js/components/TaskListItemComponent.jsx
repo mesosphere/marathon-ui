@@ -30,6 +30,7 @@ var TaskListItemComponent = React.createClass({
     hasHealth: React.PropTypes.bool,
     isActive: React.PropTypes.bool.isRequired,
     onToggle: React.PropTypes.func.isRequired,
+    sortKey: React.PropTypes.string,
     task: React.PropTypes.object.isRequired,
     taskHealthMessage: React.PropTypes.string
   },
@@ -151,6 +152,7 @@ var TaskListItemComponent = React.createClass({
 
   render: function () {
     var task = this.props.task;
+    var sortKey = this.props.sortKey;
     var hasHealth = !!this.props.hasHealth;
     var version = new Date(task.version).toISOString();
     var taskId = task.id;
@@ -168,11 +170,13 @@ var TaskListItemComponent = React.createClass({
       "hidden": !hasHealth,
       "unhealthy": taskHealth === HealthStatus.UNHEALTHY,
       "healthy": taskHealth === HealthStatus.HEALTHY,
-      "unknown": taskHealth === HealthStatus.UNKNOWN
+      "unknown": taskHealth === HealthStatus.UNKNOWN,
+      "table-column-sorted": sortKey === "healthStatus"
     });
 
     var statusClassSet = classNames({
-      "text-warning": task.status === TaskStatus.STAGED
+      "text-warning": task.status === TaskStatus.STAGED,
+      "table-column-sorted": sortKey === "status"
     });
 
     var updatedAtNodeClassSet = classNames({
@@ -181,10 +185,23 @@ var TaskListItemComponent = React.createClass({
 
     var updatedAtISO;
     var updatedAtLocal;
+
     if (task.updatedAt != null) {
       updatedAtISO = new Date(task.updatedAt).toISOString();
       updatedAtLocal = new Date(task.updatedAt).toLocaleString();
     }
+
+    var idClassSet = classNames({
+      "table-column-sorted": sortKey === "id"
+    });
+
+    var versionClassSet = classNames("text-right", {
+      "table-column-sorted": sortKey === "version"
+    });
+
+    var updatedAtClassSet = classNames("text-right", {
+      "table-column-sorted": sortKey === "updatedAt"
+    });
 
     return (
       <tr className={listItemClassSet}>
@@ -193,7 +210,7 @@ var TaskListItemComponent = React.createClass({
             checked={this.props.isActive}
             onChange={this.handleCheckboxClick} />
         </td>
-        <td>
+        <td className={idClassSet}>
           <a href={taskURI}>{taskId}</a>
           <br />
           {this.getEndpoints()}
@@ -212,12 +229,12 @@ var TaskListItemComponent = React.createClass({
         <td className="text-center">
           <TaskFileDownloadComponent task={task} fileName="stdout" />
         </td>
-        <td className="text-right">
+        <td className={versionClassSet}>
           <span title={version}>
             {new Moment(version).fromNow()}
           </span>
         </td>
-        <td className="text-right">
+        <td className={updatedAtClassSet}>
           <time className={updatedAtNodeClassSet}
               dateTime={updatedAtISO}
               title={updatedAtISO}>

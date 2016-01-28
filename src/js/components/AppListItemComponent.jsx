@@ -191,8 +191,6 @@ var AppListItemComponent = React.createClass({
     var props = this.props;
     var model = props.model;
 
-
-
     if (props.viewType === AppListViewTypes.APP_LIST) {
       var groupId = model.id;
       var appName = PathUtil.getAppName(model.id);
