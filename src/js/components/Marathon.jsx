@@ -248,7 +248,6 @@ var Marathon = React.createClass({
               tabs={tabs} />
             <div className="nav navbar-nav navbar-right">
               <AppListFilterComponent />
-
               <HelpMenu />
             </div>
           </div>
