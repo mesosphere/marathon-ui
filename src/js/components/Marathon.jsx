@@ -19,6 +19,8 @@ import DeploymentActions from "../actions/DeploymentActions";
 import DialogActions from "../actions/DialogActions";
 import QueueActions from "../actions/QueueActions";
 
+import PluginStore from "../plugin/PluginStore";
+
 import tabs from "../constants/tabs";
 
 var Marathon = React.createClass({
@@ -45,6 +47,8 @@ var Marathon = React.createClass({
     this.bindKeyboardShortcuts();
 
     this.startPolling();
+
+    PluginStore.bootstrap();
   },
 
   componentWillReceiveProps: function () {
