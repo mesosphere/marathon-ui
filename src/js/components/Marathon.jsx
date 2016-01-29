@@ -19,7 +19,7 @@ import DeploymentActions from "../actions/DeploymentActions";
 import DialogActions from "../actions/DialogActions";
 import QueueActions from "../actions/QueueActions";
 
-import PluginStore from "../plugin/PluginStore";
+import PluginStore from "../stores/PluginStore";
 
 import tabs from "../constants/tabs";
 

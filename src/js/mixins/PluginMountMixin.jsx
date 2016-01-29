@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React from "react/addons";
+/* eslint-enable no-unused-vars */
 import PluginDispatcher from "../plugin/PluginDispatcher";
 
 var PluginMountMixin = {
@@ -19,7 +21,6 @@ var PluginMountMixin = {
           if (event.placeId === place.id) {
             let Component = event.component;
             this.pluginPlace[place.key].push(<Component key="test" />);
-            console.log("YES");
             this.forceUpdate();
           }
         }

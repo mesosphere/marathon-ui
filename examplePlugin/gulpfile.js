@@ -1,7 +1,6 @@
 var autoprefixer = require("gulp-autoprefixer");
 var connect = require("gulp-connect");
 var header = require("gulp-header");
-var browserSync = require("browser-sync");
 var eslintFormatter = require("eslint/lib/formatters/stylish");
 var gulp = require("gulp");
 var gutil = require("gulp-util");
@@ -23,11 +22,7 @@ var dirs = {
   dist: "dist",
   styles: "./src/css",
   img: "./src/img",
-  imgDist: "img",
-  sourceSansPro: "./node_modules/source-sans-pro/WOFF/OTF",
-  ionicons: "./node_modules/ionicons/fonts",
-  fontsDist: "fonts",
-  release: "./release"
+  imgDist: "img"
 };
 
 var files = {
@@ -35,13 +30,10 @@ var files = {
   mainJsDist: "main",
   mainLess: "main",
   mainCssDist: "main",
-  index: "index.html",
-  sourceSansPro: "SourceSansPro-Regular.otf.woff",
-  sourceSansProBold: "SourceSansPro-Bold.otf.woff",
   eslintRc: "./.eslintrc"
 };
 
-var webpackWatch = false;
+var webpackWatch = true;
 
 var webpackConfig = {
   entry: dirs.js + "/" + files.mainJs + ".js",
@@ -109,9 +101,6 @@ gulp.task("webpack", function (callback) {
       // This runs on initial gulp webpack load.
       isFirstRun = false;
       callback();
-    } else {
-      // This runs after webpack's internal watch rebuild.
-      browserSync.reload();
     }
   });
 });
@@ -122,8 +111,7 @@ gulp.task("less", function () {
       paths: [dirs.styles] // @import paths
     }))
     .pipe(autoprefixer())
-    .pipe(gulp.dest(dirs.dist))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest(dirs.dist));
 });
 
 gulp.task("minify-css", ["less"], function () {
@@ -133,16 +121,8 @@ gulp.task("minify-css", ["less"], function () {
 });
 
 gulp.task("minify-js", ["webpack"], function () {
-  var banner = "/**\n" +
-    " * <%= pkg.name %> - <%= pkg.description %>\n" +
-    " * @version v@@TEAMCITY_UI_VERSION\n" +
-    " * @buildnumber @@TEAMCITY_BUILDNUMBER\n" +
-    " * @branchname @@TEAMCITY_BRANCHNAME\n" +
-    " */\n";
-
   return gulp.src(dirs.dist + "/" + files.mainJs + ".js")
     .pipe(uglify())
-    .pipe(header(banner, {pkg : packageInfo}))
     .pipe(gulp.dest(dirs.dist));
 });
 
