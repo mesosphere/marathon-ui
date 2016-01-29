@@ -24,16 +24,6 @@ var SidebarComponent = React.createClass({
     groupId: React.PropTypes.string.isRequired
   },
 
-  getInitialState: function () {
-    return {
-      filters: {
-        [FilterTypes.HEALTH]: [],
-        [FilterTypes.LABELS]: [],
-        [FilterTypes.STATUS]: []
-      }
-    };
-  },
-
   render: function () {
     var path = this.context.router.getCurrentPathname();
     var props = this.props;

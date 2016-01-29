@@ -25,16 +25,16 @@ var QueryParamsMixin = {
   getClearLinkForFilter: function (filterQueryParamKey,
       caption = "Clear",
       className = null) {
-    var state = this.state;
-
-    if (state.filters[filterQueryParamKey].length === 0) {
-      return null;
-    }
 
     let router = this.context.router;
     let currentPathname = router.getCurrentPathname();
     let query = Object.assign({}, router.getCurrentQuery());
     let params = router.getCurrentParams();
+
+    if (query[filterQueryParamKey] == null ||
+        query[filterQueryParamKey].length === 0) {
+      return null;
+    }
 
     if (query[filterQueryParamKey] != null) {
       delete query[filterQueryParamKey];
