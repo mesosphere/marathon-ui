@@ -1,5 +1,5 @@
 import AppDispatcher from "../AppDispatcher";
-import PluginActions from "./PluginActions";
+import PluginActions from "../actions/PluginActions";
 import PluginEvents from "../events/PluginEvents";
 
 import Util from "../helpers/Util";
@@ -9,15 +9,11 @@ var pluginsToLoad = [];
 var pluginsLoaded = [];
 var pluginsErrored = [];
 
-function loadPlugin(pluginInfo) {
-  PluginActions.startPlugin(pluginInfo);
-}
-
 function loadNextPlugin() {
   if (pluginsToLoad.length === 0) {
     return;
   }
-  loadPlugin(pluginsToLoad.shift());
+  PluginActions.requestPlugin(pluginsToLoad.shift());
 }
 
 var PluginStore = {
@@ -39,6 +35,7 @@ AppDispatcher.register(function (action) {
       break;
     case PluginEvents.REQUEST_ERROR:
       pluginsErrored.push(action.metaInfo);
+      console.log("Could not load plugin: ", action.metaInfo);
       loadNextPlugin();
       break;
   }

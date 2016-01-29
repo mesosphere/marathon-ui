@@ -1,17 +1,12 @@
-import ajaxWrapper from "../helpers/ajaxWrapper";
-
 import AppDispatcher from "../AppDispatcher";
 import JSONPUtil from "../helpers/JSONPUtil";
-
 import PluginEvents from "../events/PluginEvents";
-
-import PluginDispatcher from "./PluginDispatcher";
 
 // Comes from the API later on
 var sampleListOfPlugins = [{
   hash: "pluginHash",
   name: "UI Sample Plugin",
-  uri: "http://localhost:5000/plugin/example-1/main.js"
+  uri: "http://localhost:4202/main.js"
 }];
 
 var PluginActions = {
@@ -28,12 +23,11 @@ var PluginActions = {
     });
     */
   },
-  startPlugin: function (pluginInfo) {
+  requestPlugin: function (pluginInfo) {
     this.request(pluginInfo.uri).then(
-      function (data) {
+      function () {
         AppDispatcher.dispatch({
           actionType: PluginEvents.REQUEST_SUCCESS,
-          data: data,
           metaInfo: pluginInfo
         });
       },
@@ -45,29 +39,6 @@ var PluginActions = {
         });
       }
     );
-    /*
-    this.request({
-      headers: {
-        "Accept": "application/javascript",
-        "Content-Type": "application/javascript"
-      },
-      url: pluginInfo.uri
-    })
-      .success(function (data) {
-        AppDispatcher.dispatch({
-          actionType: PluginEvents.REQUEST_SUCCESS,
-          data: data,
-          metaInfo: pluginInfo
-        });
-      })
-      .error(function (error) {
-        AppDispatcher.dispatch({
-          actionType: PluginEvents.REQUEST_ERROR,
-          data: error,
-          metaInfo: pluginInfo
-        });
-      });
-    */
   },
   request: JSONPUtil.request
 };
