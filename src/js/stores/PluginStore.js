@@ -1,4 +1,6 @@
 import AppDispatcher from "../AppDispatcher";
+import DialogActions from "../actions/DialogActions";
+import DialogSeverity from "../constants/DialogSeverity";
 import PluginActions from "../actions/PluginActions";
 import PluginEvents from "../events/PluginEvents";
 
@@ -35,7 +37,11 @@ AppDispatcher.register(function (action) {
       break;
     case PluginEvents.REQUEST_ERROR:
       pluginsErrored.push(action.metaInfo);
-      console.log("Could not load plugin: ", action.metaInfo);
+      DialogActions.alert({
+        title: `Could not load plugin`,
+        message: `${action.metaInfo.name} (${action.metaInfo.hash})`,
+        severity: DialogSeverity.WARNING
+      });
       loadNextPlugin();
       break;
   }
