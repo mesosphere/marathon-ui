@@ -21,6 +21,7 @@ import QueueActions from "../actions/QueueActions";
 
 import "../plugin/PluginInterface";
 import PluginStore from "../stores/PluginStore";
+import PluginEvents from "../events/PluginEvents";
 
 import tabs from "../constants/tabs";
 
@@ -47,7 +48,9 @@ var Marathon = React.createClass({
 
     this.bindKeyboardShortcuts();
 
-    this.startPolling();
+    PluginStore.on(PluginEvents.BOOTSTRAP_COMPLETE, () => {
+      this.startPolling();
+    });
 
     PluginStore.bootstrap();
   },
@@ -106,8 +109,9 @@ var Marathon = React.createClass({
 
   componentDidUpdate: function (prevProps, prevState) {
     /* eslint-disable eqeqeq */
-    if (prevState.activeAppId != this.state.activeAppId ||
-      prevState.activeTabId != this.state.activeTabId) {
+    if ((prevState.activeAppId != this.state.activeAppId ||
+        prevState.activeTabId != this.state.activeTabId) &&
+        PluginStore.isBootstrapComplete()) {
       this.resetPolling();
     }
     /* eslint-enable eqeqeq */
