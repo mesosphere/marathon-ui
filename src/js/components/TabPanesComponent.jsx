@@ -23,8 +23,7 @@ var TabPanesComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      currentGroup: "/",
-      filters: {}
+      currentGroup: "/"
     };
   },
 
@@ -38,16 +37,17 @@ var TabPanesComponent = React.createClass({
 
   getContextualBar: function () {
     var state = this.state;
+    var filters = this.getQueryParamObject();
 
-    if (state.filters[FilterTypes.TEXT] == null ||
-        Util.isStringAndEmpty(state.filters[FilterTypes.TEXT])) {
+    if (filters[FilterTypes.TEXT] == null ||
+        Util.isStringAndEmpty(filters[FilterTypes.TEXT])) {
       return <BreadcrumbComponent groupId={state.currentGroup} />;
     }
 
     return (
         <p className="breadcrumb">
           <span>
-            {`Search results for "${state.filters[FilterTypes.TEXT]}"`}
+            {`Search results for "${filters[FilterTypes.TEXT]}"`}
           </span>
           {this.getClearLinkForFilter(FilterTypes.TEXT,
             "Clear search",
