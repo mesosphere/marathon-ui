@@ -4,6 +4,7 @@ import Util from "../../helpers/Util";
 
 import AppsActions from "../../actions/AppsActions";
 import AppConfigEditFormComponent from "../AppConfigEditFormComponent";
+import AppConfigJSONEditorComponent from "../AppConfigJSONEditorComponent";
 import AppsEvents from "../../events/AppsEvents";
 import AppFormErrorMessages from "../../constants/AppFormErrorMessages";
 import AppFormStore from "../../stores/AppFormStore";
@@ -136,6 +137,12 @@ var AppModalComponent = React.createClass({
     );
   },
 
+  handleModeToggle: function (event) {
+    event.preventDefault();
+    if (event.metaKey || event.ctrlKey) {
+      this.setState({jsonMode: !this.state.jsonMode});
+    }
+  },
 
   handleAppConfigChange: function (app, isValid = true) {
     this.setState({app: app, appIsValid: isValid});
@@ -160,6 +167,10 @@ var AppModalComponent = React.createClass({
       onChange: this.handleAppConfigChange,
       onError: this.handleAppConfigError
     };
+    var appConfigEditor = state.jsonMode
+      ? <AppConfigJSONEditorComponent {...appConfigProps} />
+      : <AppConfigEditFormComponent {...appConfigProps} />;
+
     var cancelButton = (
       <button className="btn btn-default"
           type="button"
@@ -177,13 +188,12 @@ var AppModalComponent = React.createClass({
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>
-            <h3 className="modal-title">{modalTitle}</h3>
+            <h3 className="modal-title" onClick={this.handleModeToggle}>
+              {modalTitle}
+            </h3>
           </div>
           <div className="modal-body reduced-padding">
-            <AppConfigEditFormComponent
-              app={state.app}
-              onChange={this.handleAppConfigChange}
-              onError={this.handleAppConfigError} />
+            {appConfigEditor}
             <div className="modal-controls">
               {this.getGeneralErrorBlock()}
               {this.getSubmitButton()} {cancelButton}
