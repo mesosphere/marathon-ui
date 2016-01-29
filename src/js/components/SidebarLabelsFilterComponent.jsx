@@ -148,6 +148,14 @@ var SidebarLabelsFilterComponent = React.createClass({
     });
   },
 
+  getSelectedLabelsText: function (count = 1) {
+    var labelIndicator = "Label";
+    if (count > 1) {
+      labelIndicator = labelIndicator + "s";
+    }
+    return `${count} ${labelIndicator} Selected`;
+  },
+
   getDropdownButton: function () {
     var state = this.state;
     if (state.availableLabels == null || state.availableLabels.length === 0) {
@@ -158,25 +166,9 @@ var SidebarLabelsFilterComponent = React.createClass({
       );
     }
 
-    let selectedLabelsText = state.selectedLabels.reduce((memo, label) => {
-      let [key, value] = label;
-      let labelText = key;
-      if (value != null) {
-        labelText = `${key}:${value}`;
-      }
-
-      if (memo.length === 0) {
-        memo = labelText;
-        return memo;
-      }
-
-      memo = `${memo}, ${labelText}`;
-      return memo;
-    }, "");
-
-    if (selectedLabelsText === "") {
-      selectedLabelsText = "Select";
-    }
+    let selectedLabelsText = state.selectedLabels.length > 0
+      ? this.getSelectedLabelsText(state.selectedLabels.length)
+      : "Select";
 
     return (
       <div className="btn btn-default dropdown-toggle"
