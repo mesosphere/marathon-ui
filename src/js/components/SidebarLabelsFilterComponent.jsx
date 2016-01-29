@@ -182,40 +182,61 @@ var SidebarLabelsFilterComponent = React.createClass({
 
   getOptions: function () {
     var state = this.state;
-    if (state.availableLabels == null || state.availableLabels.length === 0) {
+    var availableLabels = state.availableLabels.slice();
+
+    if (availableLabels == null || availableLabels.length === 0) {
       return null;
     }
 
-    let options = state.availableLabels.map((label, i) => {
-      let [key, value] = label;
-      let optionText = key;
-      let filterText = state.filterText;
+    let options = availableLabels
+      .sort((a, b) => {
+        var isSelectedA = lazy(state.selectedLabels).find(a) != null;
+        var isSelectedB = lazy(state.selectedLabels).find(b) != null;
 
-      if (value != null && value !== "") {
-        optionText = `${key}:${value}`;
-      }
+        if (isSelectedA && isSelectedB) {
+          return a[0].localeCompare(b[0]);
+        }
 
-      if (filterText !== "" &&
-        optionText.search(new RegExp(filterText, "i")) === -1) {
-        return null;
-      }
+        if (!isSelectedA && isSelectedB) {
+          return 1;
+        }
 
-      let checkboxProps = {
-        type: "checkbox",
-        id: `label-${optionText}-${i}`,
-        checked: lazy(state.selectedLabels).find(label) != null
-      };
+        if (isSelectedA && !isSelectedB) {
+          return -1;
+        }
+      })
+      .map((label, i) => {
+        var [key, value] = label;
+        var optionText = key;
+        var filterText = state.filterText;
 
-      return (
-        <li className="checkbox" key={i}>
-          <input {...checkboxProps}
-            onChange={this.handleChange.bind(this, label)} />
-          <label htmlFor={`label-${optionText}-${i}`} title={optionText}>
-            <span>{optionText}</span>
-          </label>
-        </li>
-      );
-    });
+        if (value != null && value !== "") {
+          optionText = `${key}:${value}`;
+        }
+
+        if (filterText !== "" &&
+          optionText.search(new RegExp(filterText, "i")) === -1) {
+          return null;
+        }
+
+        var isSelected = lazy(state.selectedLabels).find(label) != null;
+
+        var checkboxProps = {
+          type: "checkbox",
+          id: `label-${optionText}-${i}`,
+          checked: isSelected
+        };
+
+        return (
+          <li className="checkbox" key={i}>
+            <input {...checkboxProps}
+              onChange={this.handleChange.bind(this, label)} />
+            <label htmlFor={`label-${optionText}-${i}`} title={optionText}>
+              <span>{optionText}</span>
+            </label>
+          </li>
+        );
+      });
 
     let dropdownClassSet = classNames({
       "hidden": !this.state.activated
