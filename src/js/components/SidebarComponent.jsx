@@ -54,10 +54,6 @@ var SidebarComponent = React.createClass({
           {this.getClearLinkForFilter(FilterTypes.HEALTH)}
         </div>
         <SidebarHealthFilterComponent />
-        <div className="flex-row">
-          <h3 className="small-caps">Label</h3>
-          {this.getClearLinkForFilter(FilterTypes.LABELS)}
-        </div>
         <SidebarLabelsFilterComponent />
       </nav>
     );
