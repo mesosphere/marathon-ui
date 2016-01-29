@@ -5,6 +5,7 @@ import PluginEvents from "../events/PluginEvents";
 // Comes from the API later on
 var sampleListOfPlugins = [{
   hash: "pluginHash",
+  id: "examplePlugin-0.0.1",
   name: "UI Sample Plugin",
   uri: "http://localhost:4202/main.js"
 }];
