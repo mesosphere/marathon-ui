@@ -9,15 +9,14 @@ var AppConfigJSONEditorComponent = React.createClass({
 
   propTypes: {
     app: React.PropTypes.object,
-    onChange: React.PropTypes.func,
+    onChange: React.PropTypes.func.isRequired,
+    // Not currently used; supplied for parity with AppConfigEditForm
     onError: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
-      app: {id: ""},
-      onChange: Util.noop,
-      onError: Util.noop
+      app: {id: ""}
     };
   },
 

@@ -24,15 +24,13 @@ var AppConfigEditFormComponent = React.createClass({
 
   propTypes: {
     app: React.PropTypes.object,
-    onChange: React.PropTypes.func,
-    onError: React.PropTypes.func
+    onChange: React.PropTypes.func.isRequired,
+    onError: React.PropTypes.func.isRequired
   },
 
   getDefaultProps: function () {
     return {
-      app: null,
-      onChange: Util.noop,
-      onError: Util.noop
+      app: null
     };
   },
 
