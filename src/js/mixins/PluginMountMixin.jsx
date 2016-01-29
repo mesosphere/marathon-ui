@@ -3,6 +3,8 @@ import React from "react/addons";
 /* eslint-enable no-unused-vars */
 import PluginDispatcher from "../plugin/PluginDispatcher";
 
+import Util from "../helpers/Util";
+
 var PluginMountMixin = {
   componentWillMount: function () {
     this.pluginPlace = {};
@@ -20,7 +22,8 @@ var PluginMountMixin = {
         if (event.eventType === "INJECT_COMPONENT") {
           if (event.placeId === place.id) {
             let Component = event.component;
-            this.pluginPlace[place.key].push(<Component key="test" />);
+            let componentKey = `${Component.displayName}-${Util.getUniqueId()}`;
+            this.pluginPlace[place.key].push(<Component key={componentKey} />);
             this.forceUpdate();
           }
         }
