@@ -23,6 +23,18 @@ function loadNextPlugin() {
   PluginActions.requestPlugin(pluginsToLoad.shift());
 }
 
+function checkForStartupCompleteAndEmit() {
+  let allStarted = pluginsMetaData.every(plugin => {
+    return pluginsStarted.includes(plugin.id) ||
+      pluginsErrored.some(errored => errored.id === plugin.id);
+  });
+
+  if (allStarted) {
+    bootstrapComplete = true;
+    PluginStore.emit(PluginEvents.BOOTSTRAP_COMPLETE);
+  }
+}
+
 var PluginStore = Util.extendObject(EventEmitter.prototype, {
   bootstrap: function () {
     PluginActions.requestMetaInfo();
@@ -36,15 +48,7 @@ PluginDispatcher.register(function (event) {
   switch (event.eventType) {
     case "STARTUP_COMPLETE":
       pluginsStarted.push(event.pluginId);
-
-      let allStarted = pluginsMetaData.every(plugin => {
-        return pluginsStarted.includes(plugin.id);
-      });
-
-      if (allStarted) {
-        bootstrapComplete = true;
-        PluginStore.emit(PluginEvents.BOOTSTRAP_COMPLETE);
-      }
+      checkForStartupCompleteAndEmit();
       break;
   }
 });
@@ -62,6 +66,7 @@ AppDispatcher.register(function (action) {
       break;
     case PluginEvents.REQUEST_ERROR:
       pluginsErrored.push(action.metaInfo);
+      checkForStartupCompleteAndEmit();
       DialogActions.alert({
         title: `Could not load plugin`,
         message: `${action.metaInfo.name} (${action.metaInfo.hash})`,
