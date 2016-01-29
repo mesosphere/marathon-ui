@@ -2,6 +2,8 @@ import AceEditor from "react-ace";
 import "brace/mode/json";
 import "brace/theme/monokai";
 import React from "react/addons";
+
+import AppDefaultFields from "../constants/AppDefaultFields";
 import Util from "../helpers/Util";
 
 var AppConfigJSONEditorComponent = React.createClass({
@@ -16,7 +18,7 @@ var AppConfigJSONEditorComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
-      app: {id: ""}
+      app: null
     };
   },
 
@@ -37,7 +39,7 @@ var AppConfigJSONEditorComponent = React.createClass({
   getPrettyPrintedDefinition: function () {
     // without this check, we would just show 'null' when creating a new app
     let app = this.props.app == null
-      ? AppConfigJSONEditorComponent.getDefaultProps().app
+      ? AppDefaultFields
       : this.props.app;
     return JSON.stringify(app, null, 2);
   },
