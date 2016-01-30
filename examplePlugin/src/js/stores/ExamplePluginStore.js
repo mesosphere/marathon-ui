@@ -2,9 +2,7 @@ import {EventEmitter} from "events";
 
 import ExamplePluginEvents from "../events/ExamplePluginEvents";
 
-var MarathonUIPluginAPI = global.MarathonUIPluginAPI;
-var PluginDispatcher = MarathonUIPluginAPI.PluginDispatcher;
-var PluginEvents = MarathonUIPluginAPI.PluginEvents;
+var {PluginDispatcher, PluginEvents} = global.MarathonUIPluginAPI;
 
 var ExamplePluginStore = Object.assign({}, EventEmitter.prototype, {
   apps: []

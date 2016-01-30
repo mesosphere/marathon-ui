@@ -1,8 +1,6 @@
 import ExamplePluginComponent from "./components/ExamplePluginComponent";
 
-var MarathonUIPluginAPI = global.MarathonUIPluginAPI;
-var PluginHelper = MarathonUIPluginAPI.PluginHelper;
-var PluginMountPoints = MarathonUIPluginAPI.PluginMountPoints;
+var {PluginHelper, PluginMountPoints} = global.MarathonUIPluginAPI;
 
 PluginHelper.registerMe("examplePlugin-0.0.1");
 
