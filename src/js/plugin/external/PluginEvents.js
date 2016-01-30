@@ -1,22 +1,7 @@
-const PluginEvents = {};
+import Util from "../../helpers/Util";
 
-// Make the properties of the object read-only, but the object extensible.
-Object.defineProperty(PluginEvents, "add", {
-  enumerable: false,
-  configurable: false,
-  writable: false,
-  value: function (key) {
-    Object.defineProperty(PluginEvents, key, {
-      enumerable: false,
-      configurable: false,
-      writable: false,
-      value: "PLUGIN_EVENT_" + key
-    });
-  }
-});
+const PluginEvents = Util.objectCreateWithAdder("PLUGIN_EVENTS_");
 
-var add = PluginEvents.add;
-
-add("APPS_STORE_CHANGE");
+["APPS_STORE_CHANGE"].forEach(PluginEvents.add);
 
 export default PluginEvents;
