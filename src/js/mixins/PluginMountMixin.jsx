@@ -6,14 +6,14 @@ import PluginComponentStore from "../stores/PluginComponentStore";
 
 import Util from "../helpers/Util";
 
-var mountComponents = function () {
-  if (typeof this.pluginPlaces !== "function") {
-    return;
-  }
+function mountComponent(component, place) {
+  var Component = component.component;
+  var componentKey = `${Component.displayName}-${Util.getUniqueId()}`;
+  place.push(<Component key={componentKey} />);
+}
 
-  var places = this.pluginPlaces();
-
-  places.forEach(place => {
+function mountComponents() {
+  this.pluginPlaces().forEach(place => {
     this.pluginPlace[place.key] = [];
 
     var components = PluginComponentStore.getComponents()
@@ -22,36 +22,39 @@ var mountComponents = function () {
       });
 
     components.forEach(component => {
-      var Component = component.component;
-      var componentKey = `${Component.displayName}-${Util.getUniqueId()}`;
-      this.pluginPlace[place.key].push(<Component key={componentKey} />);
+      mountComponent(component, this.pluginPlace[place.key]);
     });
 
     if (components.length !== 0) {
       this.forceUpdate();
     }
   });
-};
+}
 
 var PluginMountMixin = {
   componentWillMount: function () {
     this.pluginPlace = {};
 
-    mountComponents.call(this);
-
-    PluginComponentStore.on(PluginComponentEvents.CHANGE, this.addComponent);
-  },
-
-  componentWillUnmount: function () {
-    PluginComponentStore.removeListener(PluginComponentEvents.CHANGE,
-      this.addComponent);
-  },
-
-  addComponent: function (component) {
     if (typeof this.pluginPlaces !== "function") {
       return;
     }
 
+    mountComponents.call(this);
+
+    PluginComponentStore.on(PluginComponentEvents.CHANGE,
+      this.handleComponentChange);
+  },
+
+  componentWillUnmount: function () {
+    if (typeof this.pluginPlaces !== "function") {
+      return;
+    }
+
+    PluginComponentStore.removeListener(PluginComponentEvents.CHANGE,
+      this.handleComponentChange);
+  },
+
+  handleComponentChange: function (component) {
     var place =
       this.pluginPlaces().find(place => place.id === component.placeId);
 
@@ -59,9 +62,8 @@ var PluginMountMixin = {
       return;
     }
 
-    let Component = component.component;
-    let componentKey = `${Component.displayName}-${Util.getUniqueId()}`;
-    this.pluginPlace[place.key].push(<Component key={componentKey} />);
+    mountComponent(component, this.pluginPlace[place.key]);
+
     this.forceUpdate();
   },
 
