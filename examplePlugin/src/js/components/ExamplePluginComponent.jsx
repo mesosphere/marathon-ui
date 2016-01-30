@@ -3,10 +3,7 @@ import React from "react/addons";
 import ExamplePluginStore from "../stores/ExamplePluginStore";
 import ExamplePluginEvents from "../events/ExamplePluginEvents";
 
-var MarathonUIPluginAPI = global.MarathonUIPluginAPI;
-var PluginActions = MarathonUIPluginAPI.PluginActions;
-var PluginDispatcher = MarathonUIPluginAPI.PluginDispatcher;
-
+var {PluginActions, PluginDispatcher} = global.MarathonUIPluginAPI;
 
 var ExamplePluginComponent = React.createClass({
 
