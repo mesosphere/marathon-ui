@@ -1,22 +1,7 @@
-const PluginActions = {};
+import Util from "../../helpers/Util";
 
-// Make the properties of the object read-only, but the object extensible.
-Object.defineProperty(PluginActions, "add", {
-  enumerable: false,
-  configurable: false,
-  writable: false,
-  value: function (key) {
-    Object.defineProperty(PluginActions, key, {
-      enumerable: false,
-      configurable: false,
-      writable: false,
-      value: "PLUGIN_ACTION_" + key
-    });
-  }
-});
+const PluginActions = Util.objectCreateWithAdder("PLUGIN_ACTION_");
 
-var add = PluginActions.add;
-
-add("DIALOG_ALERT");
+["DIALOG_ALERT"].forEach(PluginActions.add);
 
 export default PluginActions;

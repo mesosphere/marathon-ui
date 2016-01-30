@@ -1,22 +1,7 @@
-const PluginMountPoints = {};
+import Util from "../../helpers/Util";
 
-// Make the properties of the object read-only, but the object extensible.
-Object.defineProperty(PluginMountPoints, "add", {
-  enumerable: false,
-  configurable: false,
-  writable: false,
-  value: function (key) {
-    Object.defineProperty(PluginMountPoints, key, {
-      enumerable: false,
-      configurable: false,
-      writable: false,
-      value: "MOUNT_POINT_" + key
-    });
-  }
-});
+const PluginMountPoints = Util.objectCreateWithAdder("PLUGIN_MOUNT_POINTS_");
 
-var add = PluginMountPoints.add;
-
-add("SIDEBAR_BOTTOM");
+["SIDEBAR_BOTTOM"].forEach(PluginMountPoints.add);
 
 export default PluginMountPoints;
