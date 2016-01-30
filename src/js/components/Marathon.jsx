@@ -48,7 +48,7 @@ var Marathon = React.createClass({
 
     this.bindKeyboardShortcuts();
 
-    PluginStore.on(PluginEvents.BOOTSTRAP_COMPLETE, () => {
+    PluginStore.once(PluginEvents.BOOTSTRAP_COMPLETE, () => {
       this.startPolling();
     });
 

@@ -1,3 +1,5 @@
+import config from "../../config/config";
+
 import PluginActions from "./PluginActions";
 import PluginDispatcher from "./PluginDispatcher";
 import PluginEvents from "./PluginEvents";
@@ -9,7 +11,8 @@ var MarathonUIPluginAPI = {
   PluginDispatcher: PluginDispatcher,
   PluginEvents: PluginEvents,
   PluginMountPoints: PluginMountPoints,
-  PluginHelper: PluginHelper
+  PluginHelper: PluginHelper,
+  UIVersion: config.version
 };
 
 export default MarathonUIPluginAPI;
