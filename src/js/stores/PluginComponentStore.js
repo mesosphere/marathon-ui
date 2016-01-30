@@ -1,6 +1,6 @@
 import {EventEmitter} from "events";
 
-import PluginDispatcher from "../plugin/PluginDispatcher";
+import PluginDispatcher from "../plugin/external/PluginDispatcher";
 import PluginComponentEvents from "../events/PluginComponentEvents";
 
 import Util from "../helpers/Util";
