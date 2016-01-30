@@ -1,4 +1,5 @@
 import PluginDispatcher from "./external/PluginDispatcher";
+import PluginEvents from "./external/PluginEvents";
 
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
@@ -19,7 +20,7 @@ function registerProxy(proxy) {
 }
 
 registerProxy({
-  pluginEvent: "PLUGIN_APPS_STORE_CHANGE",
+  pluginEvent: PluginEvents.APPS_STORE_CHANGE,
   store: AppsStore,
   storeEvent: AppsEvents.CHANGE,
   storeGetter: "apps"
