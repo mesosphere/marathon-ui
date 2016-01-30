@@ -1,7 +1,7 @@
 import {EventEmitter} from "events";
 
 import AppDispatcher from "../AppDispatcher";
-import PluginDispatcher from "../plugin/PluginDispatcher";
+import PluginDispatcher from "../plugin/external/PluginDispatcher";
 import DialogActions from "../actions/DialogActions";
 import DialogSeverity from "../constants/DialogSeverity";
 import PluginActions from "../actions/PluginActions";

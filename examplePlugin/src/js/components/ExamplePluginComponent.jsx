@@ -3,7 +3,7 @@ import React from "react/addons";
 import ExamplePluginStore from "../stores/ExamplePluginStore";
 import ExamplePluginEvents from "../events/ExamplePluginEvents";
 
-var PluginDispatcher = global.PluginDispatcher;
+var PluginDispatcher = global.MarathonUIPluginAPI.PluginDispatcher;
 
 var ExamplePluginComponent = React.createClass({
 

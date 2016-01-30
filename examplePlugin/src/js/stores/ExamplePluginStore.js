@@ -2,11 +2,13 @@ import {EventEmitter} from "events";
 
 import ExamplePluginEvents from "../events/ExamplePluginEvents";
 
+var PluginDispatcher = global.MarathonUIPluginAPI.PluginDispatcher;
+
 var ExamplePluginStore = Object.assign({}, EventEmitter.prototype, {
   apps: []
 });
 
-global.PluginDispatcher.register(function (event) {
+PluginDispatcher.register(function (event) {
   switch (event.eventType) {
     case "PLUGIN_APPS_STORE_CHANGE":
       ExamplePluginStore.apps = event.data;

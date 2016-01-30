@@ -1,8 +1,8 @@
-import PluginDispatcher from "./PluginDispatcher";
 import PluginEventProxy from "./PluginEventProxy";
 import PluginActionProxy from "./PluginActionProxy";
+import MarathonUIPluginAPI from "./external/MarathonUIPluginAPI";
 
-global.PluginDispatcher = PluginDispatcher;
+global.MarathonUIPluginAPI = MarathonUIPluginAPI;
 
 PluginEventProxy.init();
 PluginActionProxy.init();

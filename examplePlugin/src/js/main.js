@@ -1,12 +1,7 @@
 import ExamplePluginComponent from "./components/ExamplePluginComponent";
 
-global.PluginDispatcher.dispatch({
-  eventType: "STARTUP_COMPLETE",
-  pluginId: "examplePlugin-0.0.1"
-});
+var PluginHelper = global.MarathonUIPluginAPI.PluginHelper;
 
-global.PluginDispatcher.dispatch({
-  eventType: "INJECT_COMPONENT",
-  placeId: "SIDEBAR_BOTTOM",
-  component: ExamplePluginComponent
-});
+PluginHelper.registerMe("examplePlugin-0.0.1");
+
+PluginHelper.injectComponent(ExamplePluginComponent, "SIDEBAR_BOTTOM");

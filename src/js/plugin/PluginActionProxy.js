@@ -1,4 +1,4 @@
-import PluginDispatcher from "./PluginDispatcher";
+import PluginDispatcher from "./external/PluginDispatcher";
 
 import DialogActions from "../actions/DialogActions";
 
