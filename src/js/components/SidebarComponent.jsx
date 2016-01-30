@@ -11,6 +11,7 @@ import SidebarStatusFilterComponent
 
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 import PluginMountMixin from "../mixins/PluginMountMixin";
+import PluginMountPoints from "../plugin/external/PluginMountPoints";
 
 var SidebarComponent = React.createClass({
   displayName: "SidebarComponent",
@@ -30,7 +31,7 @@ var SidebarComponent = React.createClass({
 
   pluginPlaces: function () {
     return [{
-      id: "SIDEBAR_BOTTOM",
+      id: PluginMountPoints.SIDEBAR_BOTTOM,
       key: "bottom"
     }];
   },

@@ -48,6 +48,10 @@ var PluginMountMixin = {
   },
 
   addComponent: function (component) {
+    if (typeof this.pluginPlaces !== "function") {
+      return;
+    }
+
     var place =
       this.pluginPlaces().find(place => place.id === component.placeId);
 
