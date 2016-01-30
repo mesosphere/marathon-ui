@@ -2,7 +2,9 @@ import {EventEmitter} from "events";
 
 import ExamplePluginEvents from "../events/ExamplePluginEvents";
 
-var PluginDispatcher = global.MarathonUIPluginAPI.PluginDispatcher;
+var MarathonUIPluginAPI = global.MarathonUIPluginAPI;
+var PluginDispatcher = MarathonUIPluginAPI.PluginDispatcher;
+var PluginEvents = MarathonUIPluginAPI.PluginEvents;
 
 var ExamplePluginStore = Object.assign({}, EventEmitter.prototype, {
   apps: []
@@ -10,7 +12,7 @@ var ExamplePluginStore = Object.assign({}, EventEmitter.prototype, {
 
 PluginDispatcher.register(function (event) {
   switch (event.eventType) {
-    case "PLUGIN_APPS_STORE_CHANGE":
+    case PluginEvents.APPS_STORE_CHANGE:
       ExamplePluginStore.apps = event.data;
       ExamplePluginStore.emit(ExamplePluginEvents.APPS_CHANGE);
       break;
