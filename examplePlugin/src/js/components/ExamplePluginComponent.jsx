@@ -3,7 +3,8 @@ import React from "react/addons";
 import ExamplePluginStore from "../stores/ExamplePluginStore";
 import ExamplePluginEvents from "../events/ExamplePluginEvents";
 
-var {PluginActions, PluginDispatcher} = global.MarathonUIPluginAPI;
+var {PluginActions, PluginHelper} =
+  global.MarathonUIPluginAPI;
 
 var ExamplePluginComponent = React.createClass({
 
@@ -31,12 +32,9 @@ var ExamplePluginComponent = React.createClass({
   handleClick: function (e) {
     e.stopPropagation();
 
-    PluginDispatcher.dispatch({
-      actionType: PluginActions.DIALOG_ALERT,
-      data: {
-        title: "Hello world",
-        message: "Hi, Plugin speaking here."
-      }
+    PluginHelper.callAction(PluginActions.DIALOG_ALERT, {
+      title: "Hello world",
+      message: "Hi, Plugin speaking here."
     });
   },
 
