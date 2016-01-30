@@ -1,3 +1,4 @@
+import PluginActions from "./external/PluginActions";
 import PluginDispatcher from "./external/PluginDispatcher";
 
 import DialogActions from "../actions/DialogActions";
@@ -9,7 +10,7 @@ function registerProxy(proxy) {
 }
 
 registerProxy({
-  pluginActionType: "PLUGIN_DIALOG_ALERT",
+  pluginActionType: PluginActions.DIALOG_ALERT,
   actionFunction: DialogActions.alert
 });
 
