@@ -4,6 +4,7 @@
 
 ### Changed
 - \#3078 - Always show download button for logs
+- \#3077 - Future timestamps
 
 ### Fixed
 - \#3093 - Don't display "Create an Application" together with "Loading error"
