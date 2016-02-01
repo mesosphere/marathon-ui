@@ -7,7 +7,7 @@ function encodeValuesToURIComponents(values) {
   if (Util.isArray(values)) {
     return values.map((param) => {
       var uriComponent = Util.isArray(param)
-        ? param.join(":")
+        ? param.map(segment => encodeURIComponent(segment)).join(":")
         : param.toString();
 
       return encodeURIComponent(uriComponent);
@@ -79,6 +79,10 @@ var QueryParamsMixin = {
     }
 
     router.transitionTo(router.getCurrentPathname(), {}, queryParams);
+  },
+
+  decodeQueryParamArray: function (array) {
+    return array.split(":").map(segment => decodeURIComponent(segment));
   }
 };
 

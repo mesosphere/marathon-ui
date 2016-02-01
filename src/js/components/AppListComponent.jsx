@@ -226,7 +226,7 @@ var AppListComponent = React.createClass({
         }
 
         return filterLabels.some(label => {
-          let [key, value] = label;
+          let [key, value] = this.decodeQueryParamArray(label);
           return labels[key] === value;
         });
       });

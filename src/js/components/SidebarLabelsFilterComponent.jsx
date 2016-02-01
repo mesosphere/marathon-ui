@@ -90,7 +90,7 @@ var SidebarLabelsFilterComponent = React.createClass({
       selectedLabels = [];
     } else {
       selectedLabels = selectedLabels
-        .map(label => label.split(":"))
+        .map(label => this.decodeQueryParamArray(label))
         .filter(label => lazy(state.availableLabels).find(label) != null);
     }
 
