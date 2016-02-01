@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import React from "react/addons";
 
+import AutolinkComponent from "./AutolinkComponent";
+
 var FormGroupComponent = React.createClass({
   displayName: "FormGroupComponent",
 
@@ -33,7 +35,7 @@ var FormGroupComponent = React.createClass({
 
     return (
       <div className="help-block">
-        <strong>{props.errorMessage}</strong>
+        <AutolinkComponent text={props.errorMessage} />
       </div>
     );
   },

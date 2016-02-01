@@ -6,6 +6,7 @@ import AppsActions from "../../actions/AppsActions";
 import AppsEvents from "../../events/AppsEvents";
 import AppFormErrorMessages from "../../constants/AppFormErrorMessages";
 import AppFormStore from "../../stores/AppFormStore";
+import AutolinkComponent from "../AutolinkComponent";
 import AppsStore from "../../stores/AppsStore";
 import CollapsiblePanelComponent
   from "../../components/CollapsiblePanelComponent";
@@ -177,7 +178,7 @@ var AppModalComponent = React.createClass({
 
     return (
       <p className="text-danger">
-        <strong>{error}</strong>
+        <AutolinkComponent text={error} />
       </p>
     );
   },
