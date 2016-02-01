@@ -226,7 +226,7 @@ var AppListComponent = React.createClass({
         }
 
         return filterLabels.some(label => {
-          let [key, value] = label;
+          let [key, value] = label.split(":");
           return labels[key] === value;
         });
       });
