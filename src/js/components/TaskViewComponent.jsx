@@ -155,7 +155,7 @@ var TaskViewComponent = React.createClass({
           <div className="col-sm-6 base-bottom">
             {this.getButtons()}
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-6 base-bottom">
             {this.getPagedNav()}
           </div>
         </div>

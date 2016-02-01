@@ -103,7 +103,8 @@ var PagedNavComponent = React.createClass({
     var leftArrow =
       this.props.useArrows ?
         <li className={leftArrowsClassSet}>
-          <button onClick={this.handlePageChange.bind(this, currentPage - 1)}>
+          <button className="btn btn-default btn-sm"
+            onClick={this.handlePageChange.bind(this, currentPage - 1)}>
             ‹
           </button>
         </li> :
@@ -111,7 +112,8 @@ var PagedNavComponent = React.createClass({
     var leftEndArrow =
       this.props.useEndArrows ?
         <li className={leftArrowsClassSet}>
-          <button onClick={this.handlePageChange.bind(this, 0)}>
+          <button className="btn btn-default btn-sm"
+            onClick={this.handlePageChange.bind(this, 0)}>
             «
           </button>
         </li> :
@@ -119,7 +121,8 @@ var PagedNavComponent = React.createClass({
     var rightArrow =
       this.props.useArrows ?
         <li className={rightArrowsClassSet}>
-          <button onClick={this.handlePageChange.bind(this, currentPage + 1)}>
+          <button className="btn btn-default btn-sm"
+            onClick={this.handlePageChange.bind(this, currentPage + 1)}>
             ›
           </button>
         </li> :
@@ -127,7 +130,7 @@ var PagedNavComponent = React.createClass({
     var rightEndArrow =
       this.props.useEndArrows ?
         <li className={rightArrowsClassSet}>
-          <button
+          <button className="btn btn-default btn-sm"
             onClick={this.handlePageChange.bind(this, noPages - 1)}>
             »
           </button>
