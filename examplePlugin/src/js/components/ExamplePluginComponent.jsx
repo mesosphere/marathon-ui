@@ -10,7 +10,7 @@ var ExamplePluginComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      appsCount: 0
+      appsCount: ExamplePluginStore.apps.length
     };
   },
 
