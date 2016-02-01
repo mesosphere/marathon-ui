@@ -10,16 +10,13 @@ import SidebarStatusFilterComponent
   from "../components/SidebarStatusFilterComponent";
 
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
-import PluginMountMixin from "../mixins/PluginMountMixin";
+import PluginMountPointComponent from "../components/PluginMountPointComponent";
 import PluginMountPoints from "../plugin/external/PluginMountPoints";
 
 var SidebarComponent = React.createClass({
   displayName: "SidebarComponent",
 
-  mixins: [
-    QueryParamsMixin,
-    PluginMountMixin
-  ],
+  mixins: [QueryParamsMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -27,13 +24,6 @@ var SidebarComponent = React.createClass({
 
   propTypes: {
     groupId: React.PropTypes.string.isRequired
-  },
-
-  pluginPlaces: function () {
-    return [{
-      id: PluginMountPoints.SIDEBAR_BOTTOM,
-      key: "bottom"
-    }];
   },
 
   render: function () {
@@ -67,7 +57,7 @@ var SidebarComponent = React.createClass({
         </div>
         <SidebarHealthFilterComponent />
         <SidebarLabelsFilterComponent />
-        {this.getPluginComponents("bottom")}
+        <PluginMountPointComponent placeId={PluginMountPoints.SIDEBAR_BOTTOM} />
       </nav>
     );
   }
