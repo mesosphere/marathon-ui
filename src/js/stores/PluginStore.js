@@ -20,7 +20,7 @@ function loadNextPlugin() {
   if (pluginsToLoad.length === 0) {
     return;
   }
-  PluginActions.requestPlugin(pluginsToLoad.shift());
+  PluginActions.loadPlugin(pluginsToLoad.shift());
 }
 
 function checkForStartupCompleteAndEmit() {
@@ -37,7 +37,7 @@ function checkForStartupCompleteAndEmit() {
 
 var PluginStore = Util.extendObject(EventEmitter.prototype, {
   bootstrap: function () {
-    PluginActions.requestMetaInfo();
+    PluginActions.requestPlugins();
   },
   isBootstrapComplete: function () {
     return bootstrapComplete;
@@ -55,16 +55,16 @@ PluginDispatcher.register(function (event) {
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
-    case PluginEvents.META_INFO_SUCCESS:
+    case PluginEvents.REQUEST_PLUGINS_SUCCESS:
       pluginsMetaData = action.data;
       pluginsToLoad = Util.deepCopy(pluginsMetaData);
       loadNextPlugin();
       break;
-    case PluginEvents.REQUEST_SUCCESS:
+    case PluginEvents.LOAD_PLUGIN_SUCCESS:
       pluginsLoaded.push(action.metaInfo);
       loadNextPlugin();
       break;
-    case PluginEvents.REQUEST_ERROR:
+    case PluginEvents.LOAD_PLUGIN_ERROR:
       pluginsErrored.push(action.metaInfo);
       checkForStartupCompleteAndEmit();
       DialogActions.alert({
