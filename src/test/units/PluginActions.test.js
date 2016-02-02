@@ -21,23 +21,25 @@ describe("PluginActions", function () {
         switch (url) {
           case `${config.apiURL}v2/plugins`:
             resolve({
-              "plugins": [
-                {
-                  "id": "plugin-id",
-                  "implementation": "package.class",
-                  "info": {
-                    "description": "Plugin description.",
-                    "modules": ["ui"],
-                    "name": "Plugin Name"
-                  },
-                  "plugin":
-                    "mesosphere.marathon.plugin.http.HttpRequestHandler",
-                  "tags": [
-                    "ui",
-                    "example"
-                  ]
-                }
-              ]
+              "body": {
+                "plugins": [
+                  {
+                    "id": "plugin-id",
+                    "implementation": "package.class",
+                    "info": {
+                      "description": "Plugin description.",
+                      "modules": ["ui"],
+                      "name": "Plugin Name"
+                    },
+                    "plugin":
+                      "mesosphere.marathon.plugin.http.HttpRequestHandler",
+                    "tags": [
+                      "ui",
+                      "example"
+                    ]
+                  }
+                ]
+              }
             });
             break;
           default:
