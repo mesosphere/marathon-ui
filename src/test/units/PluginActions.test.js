@@ -26,10 +26,9 @@ describe("PluginActions", function () {
                   "id": "plugin-id",
                   "implementation": "package.class",
                   "info": {
-                    "ui": true,
-                    "name": "Plugin Name",
                     "description": "Plugin description.",
-                    "main": "main.js"
+                    "modules": ["ui"],
+                    "name": "Plugin Name"
                   },
                   "plugin":
                     "mesosphere.marathon.plugin.http.HttpRequestHandler",
@@ -63,10 +62,9 @@ describe("PluginActions", function () {
                 "id": "plugin-id",
                 "implementation": "package.class",
                 "info": {
-                  "ui": true,
-                  "name": "Plugin Name",
                   "description": "Plugin description.",
-                  "main": "main.js"
+                  "modules": ["ui"],
+                  "name": "Plugin Name"
                 },
                 "plugin": "mesosphere.marathon.plugin.http.HttpRequestHandler",
                 "tags": [

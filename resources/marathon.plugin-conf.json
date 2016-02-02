@@ -5,10 +5,9 @@
       "implementation": "mesosphere.marathon.example.plugin.http.WebJarHandler",
       "tags": ["ui", "example"],
       "info": {
-        "ui": true,
         "name": "Example Plugin",
-        "description": "This is a simple example plugin to demonstrate and test the ui plugins mechanism.",
-        "main": "main.js"
+        "modules": ["ui"],
+        "description": "This is a simple example plugin to demonstrate and test the ui plugins mechanism."
       }
     }
   }
