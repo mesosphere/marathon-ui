@@ -1,11 +1,12 @@
 import Util from "../../helpers/Util";
+import States from "../../constants/States";
 
 const pluginScheme = {
-  id: null,
-  modules: null,
-  name: "",
   description: "",
-  loaded: false
+  id: null,
+  modules: [],
+  name: "",
+  state: States.STATE_INITIAL
 };
 
 export default Util.deepFreeze(pluginScheme);
