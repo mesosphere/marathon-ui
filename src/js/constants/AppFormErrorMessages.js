@@ -14,7 +14,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   constraints: [
     "Invalid constraints format or operator. Supported operators are " +
     ValidConstraints.map((c) => `'${c}'`).join(", ") +
-    ". See https://mesosphere.github.io/marathon/docs/constraints.html."
+    ". See https://mesosphere.github.io/marathon/docs/constraints.html"
   ],
   containerVolumes: [
     "Container Path must be a valid path",
