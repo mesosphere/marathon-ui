@@ -122,4 +122,52 @@ describe("PluginActions", function () {
 
   });
 
+  describe("load plugin", function () {
+
+    before(function () {
+      PluginActions.load = JSONPUtilRequestStub((url, resolve, reject) => {
+        switch (url) {
+          case `${config.apiURL}v2/plugins/example/main.js`:
+            resolve("console.log(\"Example Plugin\");");
+            break;
+          default:
+            reject({message: "error"});
+            break;
+        }
+      });
+    });
+
+    after(function () {
+      PluginActions.load = JSONPUtil.request;
+    });
+
+    it("successfully loads plugin", function (done) {
+      var dispatchToken = AppDispatcher.register(function (action) {
+        if (action.actionType ===
+          PluginEvents.LOAD_PLUGIN_SUCCESS) {
+          AppDispatcher.unregister(dispatchToken);
+          expectAsync(() => {
+            expect(action.id).to.equal("example");
+          }, done);
+        }
+      });
+      PluginActions.loadPlugin("example");
+    });
+
+    it("handles failure gracefully", function (done) {
+      var dispatchToken = AppDispatcher.register(function (action) {
+        if (action.actionType ===
+          PluginEvents.LOAD_PLUGIN_ERROR) {
+          AppDispatcher.unregister(dispatchToken);
+          expectAsync(() => {
+            expect(action.id).to.equal("missing");
+          }, done);
+        }
+      });
+      PluginActions.loadPlugin("missing");
+    });
+
+  });
+
+
 });
