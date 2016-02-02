@@ -1,0 +1,12 @@
+{
+  "plugins": {
+    "example": {
+      "plugin": "mesosphere.marathon.plugin.http.HttpRequestHandler",
+      "implementation": "mesosphere.marathon.example.plugin.http.WebJarHandler",
+      "tags": ["ui", "example"],
+      "info": {
+        "ui": true
+      }
+    }
+  }
+}
