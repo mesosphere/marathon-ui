@@ -12,10 +12,11 @@ var PluginActions = {
   requestPlugins: function () {
     this.request({url: `${config.apiURL}v2/plugins`})
       .success(function (response) {
-        if (response != null && Util.isArray(response.plugins)) {
+        if (response != null && response.body != null
+            && Util.isArray(response.body.plugins)) {
           AppDispatcher.dispatch({
             actionType: PluginEvents.REQUEST_PLUGINS_SUCCESS,
-            data: response.plugins
+            data: response.body.plugins
           });
           return;
         }
