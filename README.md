@@ -10,6 +10,11 @@ The UI is bundled with the [Marathon](https://github.com/mesosphere/marathon) pa
 Please note that issues are disabled for this repository. Please feel free to open an issue on the
 [issues page on the main Marathon Repository](https://github.com/mesosphere/marathon/issues?q=is%3Aopen+is%3Aissue+label%3Agui).
 
+#### Documentation
+
+Documentation for the Marathon UI (work in progress) can be found at
+https://mesosphere.github.io/marathon/docs/marathon-ui.html.
+
 #### Setup
 
 1. Install Mesos and Marathon (follow the [tutorial here](https://mesosphere.github.io/marathon/docs/))
