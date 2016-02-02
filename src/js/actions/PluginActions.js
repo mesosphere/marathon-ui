@@ -11,30 +11,30 @@ var sampleListOfPlugins = [{
 }];
 
 var PluginActions = {
-  requestMetaInfo: function () {
+  requestPlugins: function () {
     AppDispatcher.dispatchNext({
-      actionType: PluginEvents.META_INFO_SUCCESS,
+      actionType: PluginEvents.REQUEST_PLUGINS_SUCCESS,
       data: sampleListOfPlugins
     });
 
     /*
     AppDispatcher.dispatchNext({
-      actionType: PluginEvents.META_INFO_ERROR,
+      actionType: PluginEvents.REQUEST_PLUGINS_ERROR,
       data: "Oh nooo!"
     });
     */
   },
-  requestPlugin: function (pluginInfo) {
+  loadPlugin: function (pluginInfo) {
     this.request(pluginInfo.uri).then(
       function () {
         AppDispatcher.dispatch({
-          actionType: PluginEvents.REQUEST_SUCCESS,
+          actionType: PluginEvents.LOAD_PLUGIN_SUCCESS,
           metaInfo: pluginInfo
         });
       },
       function (error) {
         AppDispatcher.dispatch({
-          actionType: PluginEvents.REQUEST_ERROR,
+          actionType: PluginEvents.LOAD_PLUGIN_ERROR,
           data: error,
           metaInfo: pluginInfo
         });
