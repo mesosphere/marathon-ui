@@ -31,7 +31,8 @@ describe("PluginActions", function () {
                     "description": "Plugin description.",
                     "main": "main.js"
                   },
-                  "plugin": "mesosphere.marathon.plugin.http.HttpRequestHandler",
+                  "plugin":
+                    "mesosphere.marathon.plugin.http.HttpRequestHandler",
                   "tags": [
                     "ui",
                     "example"

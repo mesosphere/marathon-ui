@@ -50,6 +50,6 @@ var PluginActions = {
   },
   request: ajaxWrapper,
   load: JSONPUtil.request
-}
+};
 
 export default PluginActions;
