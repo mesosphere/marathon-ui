@@ -1,12 +1,19 @@
 [![Stories in Ready](https://badge.waffle.io/mesosphere/marathon.png?label=ready,gui&title=Ready)](https://waffle.io/mesosphere/marathon?label=gui)
 # Marathon UI [![Build Status](https://travis-ci.org/mesosphere/marathon-ui.png?branch=master)](https://travis-ci.org/mesosphere/marathon-ui) [![Teamcity Snapshot UI Webjar Build Status](https://teamcity.mesosphere.io/app/rest/builds/buildType:%28id:Oss_Marathon_SnapshotUiWebjar%29/statusIcon)](https://teamcity.mesosphere.io/viewType.html?buildTypeId=Oss_Marathon_SnapshotUiWebjar&guest=1) [![Coverage Status](https://coveralls.io/repos/mesosphere/marathon-ui/badge.svg?branch=master&service=github)](https://coveralls.io/github/mesosphere/marathon-ui?branch=feature%2Fadd-code-coverage-task)
 
+![Marathon UI](https://raw.github.com/mesosphere/marathon-ui/marathon-ui.png "Marathon UI")
+
 ## The web user interface for Mesosphere's Marathon
 
 The UI is bundled with the [Marathon](https://github.com/mesosphere/marathon) package.
 
 Please note that issues are disabled for this repository. Please feel free to open an issue on the
 [issues page on the main Marathon Repository](https://github.com/mesosphere/marathon/issues?q=is%3Aopen+is%3Aissue+label%3Agui).
+
+#### Documentation
+
+Documentation for the Marathon UI (work in progress) can be found at
+https://mesosphere.github.io/marathon/docs/marathon-ui.html.
 
 #### Setup
 
