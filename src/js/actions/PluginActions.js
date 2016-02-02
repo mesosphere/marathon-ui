@@ -31,19 +31,19 @@ var PluginActions = {
         });
       });
   },
-  loadPlugin: function (pluginInfo) {
-    this.load(pluginInfo.uri).then(
+  loadPlugin: function (pluginId) {
+    this.load(`${config.apiURL}v2/plugins/${pluginId}/main.js`).then(
       function () {
         AppDispatcher.dispatch({
           actionType: PluginEvents.LOAD_PLUGIN_SUCCESS,
-          metaInfo: pluginInfo
+          id: pluginId
         });
       },
       function (error) {
         AppDispatcher.dispatch({
           actionType: PluginEvents.LOAD_PLUGIN_ERROR,
           data: error,
-          metaInfo: pluginInfo
+          id: pluginId
         });
       }
     );
