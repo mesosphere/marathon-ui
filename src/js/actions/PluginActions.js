@@ -1,31 +1,38 @@
-import AppDispatcher from "../AppDispatcher";
+import Util from "../helpers/Util";
 import JSONPUtil from "../helpers/JSONPUtil";
-import PluginEvents from "../events/PluginEvents";
+import ajaxWrapper from "../helpers/ajaxWrapper";
 
-// Comes from the API later on
-var sampleListOfPlugins = [{
-  hash: "pluginHash",
-  id: "examplePlugin-0.0.1",
-  name: "UI Sample Plugin",
-  uri: "http://localhost:4202/main.js"
-}];
+import config from "../config/config";
+
+import Messages from "../constants/Messages";
+import AppDispatcher from "../AppDispatcher";
+import PluginEvents from "../events/PluginEvents";
 
 var PluginActions = {
   requestPlugins: function () {
-    AppDispatcher.dispatchNext({
-      actionType: PluginEvents.REQUEST_PLUGINS_SUCCESS,
-      data: sampleListOfPlugins
-    });
-
-    /*
-    AppDispatcher.dispatchNext({
-      actionType: PluginEvents.REQUEST_PLUGINS_ERROR,
-      data: "Oh nooo!"
-    });
-    */
+    this.request({url: `${config.apiURL}v2/plugins`})
+      .success(function (response) {
+        if (response != null && Util.isArray(response.plugins)) {
+          AppDispatcher.dispatch({
+            actionType: PluginEvents.REQUEST_PLUGINS_SUCCESS,
+            data: response.plugins
+          });
+          return;
+        }
+        AppDispatcher.dispatch({
+          actionType: PluginEvents.REQUEST_PLUGINS_ERROR,
+          data: {message: Messages.MALFORMED}
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: PluginEvents.REQUEST_PLUGINS_ERROR,
+          data: error
+        });
+      });
   },
   loadPlugin: function (pluginInfo) {
-    this.request(pluginInfo.uri).then(
+    this.load(pluginInfo.uri).then(
       function () {
         AppDispatcher.dispatch({
           actionType: PluginEvents.LOAD_PLUGIN_SUCCESS,
@@ -41,7 +48,8 @@ var PluginActions = {
       }
     );
   },
-  request: JSONPUtil.request
-};
+  request: ajaxWrapper,
+  load: JSONPUtil.request
+}
 
 export default PluginActions;
