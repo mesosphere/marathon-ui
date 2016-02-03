@@ -1,12 +1,12 @@
 import {expect} from "chai";
 import expectAsync from "./../helpers/expectAsync";
 import ajaxWrapperStub from "./../stubs/ajaxWrapperStub";
-import JSONPUtilRequestStub from "./../stubs/JSONPUtilRequestStub";
+import PluginLoaderLoadStub from "./../stubs/PluginLoaderLoadStub";
 
 import config from "../../js/config/config";
 
 import ajaxWrapper from "../../js/helpers/ajaxWrapper";
-import JSONPUtil from "../../js/helpers/JSONPUtil";
+import PluginLoader from "../../js/plugin/PluginLoader";
 import Messages from "../../js/constants/Messages";
 import AppDispatcher from "../../js/AppDispatcher";
 import PluginActions from "../../js/actions/PluginActions";
@@ -125,7 +125,7 @@ describe("PluginActions", function () {
   describe("load plugin", function () {
 
     before(function () {
-      PluginActions.load = JSONPUtilRequestStub((url, resolve, reject) => {
+      PluginActions.load = PluginLoaderLoadStub((url, resolve, reject) => {
         switch (url) {
           case `${config.apiURL}v2/plugins/example/main.js`:
             resolve("console.log(\"Example Plugin\");");
@@ -138,7 +138,7 @@ describe("PluginActions", function () {
     });
 
     after(function () {
-      PluginActions.load = JSONPUtil.request;
+      PluginActions.load = PluginLoader.load;
     });
 
     it("successfully loads plugin", function (done) {
