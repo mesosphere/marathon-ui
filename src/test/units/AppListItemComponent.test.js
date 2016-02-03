@@ -51,4 +51,55 @@ describe("AppListItemComponent", function () {
       .to.equal("4 of 5");
   });
 
+  describe("has highlight in the sorted column", function(){
+    var testCases = [
+      {
+        sortKey: "id",
+        cssClass: ".name-cell"
+      },
+      {
+        sortKey: "totalMem",
+        cssClass: ".ram"
+      },
+      {
+        sortKey: "tasksRunning",
+        cssClass: ".instances-cell"
+      },
+      {
+        sortKey: "totalCpus",
+        cssClass: ".cpu-cell"
+      },
+      {
+        sortKey: "healthWeight",
+        cssClass: ".health-bar-column"
+      }
+    ];
+
+    var model = {
+       id: "/app-123",
+       deployments: [],
+       tasksRunning: 4,
+       health: [],
+       instances: 5,
+       mem: 100,
+       totalMem: 1030,
+       cpus: 4,
+       totalCpus: 20.0000001,
+       status: 0
+     };
+
+    testCases.forEach(function (testCase) {
+      it(testCase.sortKey, function () {
+        var component = render(
+          <AppListItemComponent
+            model={model}
+            currentGroup="/"
+            sortKey={testCase.sortKey} />
+        );
+
+        expect(component.find(testCase.cssClass).get(0).attribs.class)
+          .to.contain("cell-highlighted");
+      });
+    });
+  });
 });

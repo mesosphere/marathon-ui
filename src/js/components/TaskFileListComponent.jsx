@@ -82,6 +82,34 @@ var TaskFileListComponent = React.createClass({
     var files = state.files;
     var sortKey = state.sortKey;
 
+    var idClassSet = classNames({
+      "cell-highlighted": sortKey === "name"
+    });
+
+    var modeClassSet = classNames({
+      "cell-highlighted": sortKey === "mode"
+    });
+
+    var nlinkClassSet = classNames({
+      "cell-highlighted": sortKey === "nlink"
+    });
+
+    var uidClassSet = classNames({
+      "cell-highlighted": sortKey === "uid"
+    });
+
+    var gidClassSet = classNames({
+      "cell-highlighted": sortKey === "gid"
+    });
+
+    var sizeClassSet = classNames("text-right", {
+      "cell-highlighted": sortKey === "size"
+    });
+
+    var mtimeClassSet = classNames("text-right", {
+      "cell-highlighted": sortKey === "mtime"
+    });
+
     if (files != null) {
       return lazy(files)
         .sortBy(app => app[sortKey], state.sortDescending)
@@ -90,28 +118,28 @@ var TaskFileListComponent = React.createClass({
           var lastModifiedIsoString = lastModifiedDate.toISOString();
           return (
             <tr key={file.path}>
-              <td>
+              <td className={idClassSet}>
                 <span>{file.name}</span>
                 {this.getDownloadButton(file)}
               </td>
-              <td>
+              <td className={modeClassSet}>
                 <span>{file.mode}</span>
               </td>
-              <td>
+              <td className={nlinkClassSet}>
                 <span>{file.nlink}</span>
               </td>
-              <td>
+              <td className={uidClassSet}>
                 <span>{file.uid}</span>
               </td>
-              <td>
+              <td className={gidClassSet}>
                 <span>{file.gid}</span>
               </td>
-              <td className="text-right">
+              <td className={sizeClassSet}>
                 <span>
                   {`${Util.filesize(file.size, 0)}`}
                 </span>
               </td>
-              <td className="text-right">
+              <td className={mtimeClassSet}>
                 <time dateTime={lastModifiedIsoString}
                     title={lastModifiedIsoString}>
                   {lastModifiedDate.toLocaleString()}
@@ -133,51 +161,80 @@ var TaskFileListComponent = React.createClass({
   },
 
   render: function () {
+    var state = this.state;
     var headerClassSet = classNames({
       "clickable": true,
       "dropup": !this.state.sortDescending
     });
 
+    var idClassSet = classNames({
+      "cell-highlighted": state.sortKey === "name"
+    });
+
+    var modeClassSet = classNames({
+      "cell-highlighted": state.sortKey === "mode"
+    });
+
+    var nlinkClassSet = classNames({
+      "cell-highlighted": state.sortKey === "nlink"
+    });
+
+    var uidClassSet = classNames({
+      "cell-highlighted": state.sortKey === "uid"
+    });
+
+    var gidClassSet = classNames({
+      "cell-highlighted": state.sortKey === "gid"
+    });
+
+    var sizeClassSet = classNames("text-right", {
+      "cell-highlighted": state.sortKey === "size"
+    });
+
+    var mtimeClassSet = classNames("text-right", {
+      "cell-highlighted": state.sortKey === "mtime"
+    });
+
     return (
       <table className="table table-hover table-selectable task-file-list">
         <thead>
-          <th>
+          <th className={idClassSet}>
             <span onClick={this.sortBy.bind(null, "name")}
                 className={headerClassSet}>
               ID {this.getCaret("name")}
             </span>
           </th>
-          <th>
+          <th className={modeClassSet}>
             <span onClick={this.sortBy.bind(null, "mode")}
                 className={headerClassSet}>
               Permissions {this.getCaret("mode")}
             </span>
           </th>
-          <th>
+          <th className={nlinkClassSet}>
             <span onClick={this.sortBy.bind(null, "nlink")}
                 className={headerClassSet}>
               Nlink {this.getCaret("nlink")}
             </span>
           </th>
-          <th>
+          <th className={uidClassSet}>
             <span onClick={this.sortBy.bind(null, "uid")}
                 className={headerClassSet}>
               Uid {this.getCaret("uid")}
             </span>
           </th>
-          <th>
+          <th className={gidClassSet}>
             <span onClick={this.sortBy.bind(null, "gid")}
                 className={headerClassSet}>
               Gid {this.getCaret("gid")}
             </span>
           </th>
-          <th className="text-right">
+          <th className={sizeClassSet}>
             <span onClick={this.sortBy.bind(null, "size")}
                 className={headerClassSet}>
               Size {this.getCaret("size")}
             </span>
           </th>
-          <th className="text-right">
+          <th className={mtimeClassSet}>
             <span onClick={this.sortBy.bind(null, "mtime")}
                 className={headerClassSet}>
               Last Modified {this.getCaret("mtime")}

@@ -30,6 +30,7 @@ var TaskListItemComponent = React.createClass({
     hasHealth: React.PropTypes.bool,
     isActive: React.PropTypes.bool.isRequired,
     onToggle: React.PropTypes.func.isRequired,
+    sortKey: React.PropTypes.string,
     task: React.PropTypes.object.isRequired,
     taskHealthMessage: React.PropTypes.string
   },
@@ -151,6 +152,7 @@ var TaskListItemComponent = React.createClass({
 
   render: function () {
     var task = this.props.task;
+    var sortKey = this.props.sortKey;
     var hasHealth = !!this.props.hasHealth;
     var version = new Date(task.version).toISOString();
     var taskId = task.id;
@@ -168,7 +170,8 @@ var TaskListItemComponent = React.createClass({
       "hidden": !hasHealth,
       "unhealthy": taskHealth === HealthStatus.UNHEALTHY,
       "healthy": taskHealth === HealthStatus.HEALTHY,
-      "unknown": taskHealth === HealthStatus.UNKNOWN
+      "unknown": taskHealth === HealthStatus.UNKNOWN,
+      "cell-highlighted": sortKey === "healthStatus"
     });
 
     var statusClassSet = classNames({
@@ -181,10 +184,27 @@ var TaskListItemComponent = React.createClass({
 
     var updatedAtISO;
     var updatedAtLocal;
+
     if (task.updatedAt != null) {
       updatedAtISO = new Date(task.updatedAt).toISOString();
       updatedAtLocal = new Date(task.updatedAt).toLocaleString();
     }
+
+    var idClassSet = classNames({
+      "cell-highlighted": sortKey === "id"
+    });
+
+    var versionClassSet = classNames("text-right", {
+      "cell-highlighted": sortKey === "version"
+    });
+
+    var updatedAtClassSet = classNames("text-right", {
+      "cell-highlighted": sortKey === "updatedAt"
+    });
+
+    var statusCellClassSet = classNames("text-center", {
+      "cell-highlighted": sortKey === "status"
+    });
 
     return (
       <tr className={listItemClassSet}>
@@ -193,7 +213,7 @@ var TaskListItemComponent = React.createClass({
             checked={this.props.isActive}
             onChange={this.handleCheckboxClick} />
         </td>
-        <td>
+        <td className={idClassSet}>
           <a href={taskURI}>{taskId}</a>
           <br />
           {this.getEndpoints()}
@@ -201,7 +221,7 @@ var TaskListItemComponent = React.createClass({
         <td className={healthClassSet} title={this.props.taskHealthMessage}>
           {this.props.taskHealthMessage}
         </td>
-        <td className="text-center">
+        <td className={statusCellClassSet}>
           <span className={statusClassSet}>
             {task.status}
           </span>
@@ -212,12 +232,12 @@ var TaskListItemComponent = React.createClass({
         <td className="text-center">
           <TaskFileDownloadComponent task={task} fileName="stdout" />
         </td>
-        <td className="text-right">
+        <td className={versionClassSet}>
           <span title={version}>
             {new Moment(version).fromNow()}
           </span>
         </td>
-        <td className="text-right">
+        <td className={updatedAtClassSet}>
           <time className={updatedAtNodeClassSet}
               dateTime={updatedAtISO}
               title={updatedAtISO}>

@@ -21,7 +21,9 @@
   font-weight: normal;
   border: none;
   background-color: @table-header-color;
-
+  &.cell-highlighted {
+    background-color: fade(@table-header-color, 6);
+  }
 }
 
 .table > tbody > tr > td > .list-inline,
@@ -38,10 +40,18 @@
   table-layout: fixed;
 }
 
+.table > tbody > tr > td {
+  &.cell-highlighted {
+    background-color: fade(@table-highlight-color, 1);
+  }
+}
+
 .table > tbody > tr.active > td,
-.table-hover > tbody > tr:hover > td {
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > td.cell-highlighted {
   background-color: @table-highlight-color;
 }
+
 
 .table-selectable tr > td {
   cursor: pointer;

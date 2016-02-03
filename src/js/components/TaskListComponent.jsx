@@ -68,6 +68,7 @@ var TaskListComponent = React.createClass({
             isActive={isActive}
             key={task.id}
             onToggle={props.onTaskToggle}
+            sortKey={sortKey}
             task={task}
             taskHealthMessage={props.getTaskHealthMessage(task.id)} />
         );
@@ -128,6 +129,7 @@ var TaskListComponent = React.createClass({
 
   render: function () {
     var props = this.props;
+    var state = this.state;
     var tasksLength = props.tasks.length;
     var hasHealth = !!props.hasHealth;
     var hasError = props.fetchState === States.STATE_ERROR;
@@ -156,7 +158,24 @@ var TaskListComponent = React.createClass({
     });
 
     var hasHealthClassSet = classNames({
-      "hidden": !hasHealth
+      "hidden": !hasHealth,
+      "cell-highlighted": state.sortKey === "healthStatus"
+    });
+
+    var idClassSet = classNames({
+      "cell-highlighted": state.sortKey === "id"
+    });
+
+    var statusClassSet = classNames("text-center", {
+      "cell-highlighted": state.sortKey === "status"
+    });
+
+    var versionClassSet = classNames("text-right", {
+      "cell-highlighted": state.sortKey === "version"
+    });
+
+    var updatedAtClassSet = classNames("text-right", {
+      "cell-highlighted": state.sortKey === "updatedAt"
     });
 
     return (
@@ -187,7 +206,7 @@ var TaskListComponent = React.createClass({
                   disabled={tasksLength === 0}
                   onChange={props.toggleAllTasks} />
               </th>
-              <th>
+              <th className={idClassSet}>
                 <span onClick={this.sortBy.bind(null, "id")}
                     className={headerClassSet}>
                   ID {this.getCaret("id")}
@@ -199,7 +218,7 @@ var TaskListComponent = React.createClass({
                   Health {this.getCaret("healthStatus")}
                 </span>
               </th>
-              <th className="text-center">
+              <th className={statusClassSet}>
                 <span onClick={this.sortBy.bind(null, "status")}
                     className={headerClassSet}>
                   Status {this.getCaret("status")}
@@ -211,13 +230,13 @@ var TaskListComponent = React.createClass({
               <th className="text-center">
                 Output Log
               </th>
-              <th className="text-right">
+              <th className={versionClassSet}>
                 <span onClick={this.sortBy.bind(null, "version")}
                     className={headerClassSet}>
                   {this.getCaret("version")} Version
                 </span>
               </th>
-              <th className="text-right">
+              <th className={updatedAtClassSet}>
                 <span onClick={this.sortBy.bind(null, "updatedAt")}
                     className={headerClassSet}>
                   {this.getCaret("updatedAt")} Updated

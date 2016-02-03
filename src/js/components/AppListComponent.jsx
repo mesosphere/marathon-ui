@@ -359,6 +359,7 @@ var AppListComponent = React.createClass({
           <AppListItemComponent key={app.id}
             model={app}
             currentGroup={props.currentGroup}
+            sortKey={sortKey}
             viewType={appListViewType} />
         );
       })
@@ -467,6 +468,30 @@ var AppListComponent = React.createClass({
         state.fetchState !== States.STATE_LOADING
     });
 
+    var idClassSet = classNames("text-left name-cell", {
+      "cell-highlighted": state.sortKey === "id"
+    });
+
+    var cpuClassSet = classNames("text-right cpu-cell", {
+      "cell-highlighted": state.sortKey === "totalCpus"
+    });
+
+    var memClassSet = classNames("text-right ram-cell", {
+      "cell-highlighted": state.sortKey === "totalMem"
+    });
+
+    var statusClassSet = classNames("status-cell", {
+      "cell-highlighted": state.sortKey === "status"
+    });
+
+    var tasksClassSet = classNames("text-right instances-cell", {
+      "cell-highlighted": state.sortKey === "tasksRunning"
+    });
+
+    var healthClassSet = classNames("health-cell", {
+      "cell-highlighted": state.sortKey === "healthWeight"
+    });
+
     var totalColumnSpan = 8;
 
     var statusTooltipMessage = (
@@ -498,25 +523,25 @@ var AppListComponent = React.createClass({
           </colgroup>
           <thead>
             <tr>
-              <th className="text-left name-cell" colSpan="2">
+              <th className={idClassSet} colSpan="2">
                 <span onClick={this.sortBy.bind(null, "id")}
                     className={headerClassSet}>
                   Name {this.getCaret("id")}
                 </span>
               </th>
-              <th className="text-right cpu-cell">
+              <th className={cpuClassSet}>
                 <span onClick={this.sortBy.bind(null, "totalCpus")}
                     className={headerClassSet}>
                   {this.getCaret("totalCpus")} CPU
                 </span>
               </th>
-              <th className="text-right ram-cell">
+              <th className={memClassSet}>
                 <span onClick={this.sortBy.bind(null, "totalMem")}
                     className={headerClassSet}>
                   {this.getCaret("totalMem")} Memory
                 </span>
               </th>
-              <th className="status-cell">
+              <th className={statusClassSet}>
                 <div onClick={this.sortBy.bind(null, "status")}
                     className={headerClassSet}>
                   <div>Status</div>
@@ -526,13 +551,13 @@ var AppListComponent = React.createClass({
                   {this.getCaret("status")}
                 </div>
               </th>
-              <th className="text-right instances-cell">
+              <th className={tasksClassSet}>
                 <span onClick={this.sortBy.bind(null, "tasksRunning")}
                     className={headerClassSet}>
                   {this.getCaret("tasksRunning")} Running Instances
                 </span>
               </th>
-              <th className="health-cell" colSpan="2">
+              <th className={healthClassSet} colSpan="2">
                 <div onClick={this.sortBy.bind(null, "healthWeight")}
                     className={headerClassSet}>
                   <div>Health</div>
