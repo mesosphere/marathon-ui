@@ -1,3 +1,7 @@
+## 0.15.3 - 2016-02-03
+### Fixed
+- \#3149 - The application definition should be always post processed
+
 ## 0.15.2 - 2016-01-28
 ### Fixed
 - \#3054 - Avoid manipulating `fetch` values directly; keep using `uris` field
