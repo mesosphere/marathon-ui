@@ -30,9 +30,9 @@ const PluginLoader = {
         // TODO: Wrapped plugin interface to always include the plugin id
         pluginWindow.MarathonUIPluginAPI = MarathonUIPluginAPI;
 
-        let dispatchToken = PluginDispatcher.register(function (action) {
-          if (action.actionType === "STARTUP_COMPLETE"
-              && action.pluginId === pluginId) {
+        let dispatchToken = PluginDispatcher.register(function (event) {
+          if (event.eventType === "STARTUP_COMPLETE"
+              && event.pluginId === pluginId) {
             PluginDispatcher.unregister(dispatchToken);
 
             resolve(pluginId);
