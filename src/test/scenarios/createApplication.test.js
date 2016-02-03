@@ -432,7 +432,7 @@ describe("Create Application", function () {
         it("updates correctly", function (done) {
           AppFormStore.once(FormEvents.CHANGE, function () {
             expectAsync(function () {
-              expect(AppFormStore.app.id).to.equal("/app-1");
+              expect(AppFormStore.getApp().id).to.equal("/app-1");
             }, done);
           });
 
@@ -447,8 +447,8 @@ describe("Create Application", function () {
 
           AppFormStore.once(FormEvents.CHANGE, function () {
             expectAsync(function () {
-              expect(AppFormStore.app.id).to.equal("/app-2");
-              expect(AppFormStore.app.unknownProperty).to.equal("unknown");
+              expect(AppFormStore.getApp().id).to.equal("/app-2");
+              expect(AppFormStore.getApp().unknownProperty).to.equal("unknown");
             }, done);
           });
 
@@ -466,7 +466,7 @@ describe("Create Application", function () {
 
           AppFormStore.once(FormEvents.CHANGE, function () {
             expectAsync(function () {
-              expect(AppFormStore.app.container.docker.unknownProperty)
+              expect(AppFormStore.getApp().container.docker.unknownProperty)
                 .to.equal("unknown");
             }, done);
           });
@@ -479,7 +479,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.cpus).to.equal(1.1);
+                expect(AppFormStore.getApp().cpus).to.equal(1.1);
               }, done);
             });
 
@@ -491,7 +491,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.disk).to.equal(256);
+                expect(AppFormStore.getApp().disk).to.equal(256);
               }, done);
             });
 
@@ -503,7 +503,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.cmd).to.equal("sleep 1");
+                expect(AppFormStore.getApp().cmd).to.equal("sleep 1");
               }, done);
             });
 
@@ -516,7 +516,8 @@ describe("Create Application", function () {
           it("inserts a key-value pair", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.env.ENV_KEY_1).to.equal("ENV_VALUE_1");
+                expect(AppFormStore.getApp().env.ENV_KEY_1)
+                  .to.equal("ENV_VALUE_1");
               }, done);
             });
 
@@ -526,8 +527,10 @@ describe("Create Application", function () {
           it("inserts another key-value pair", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.env.ENV_KEY_1).to.equal("ENV_VALUE_1");
-                expect(AppFormStore.app.env.ENV_KEY_2).to.equal("ENV_VALUE_2");
+                expect(AppFormStore.getApp().env.ENV_KEY_1)
+                  .to.equal("ENV_VALUE_1");
+                expect(AppFormStore.getApp().env.ENV_KEY_2)
+                  .to.equal("ENV_VALUE_2");
               }, done);
             });
 
@@ -537,7 +540,8 @@ describe("Create Application", function () {
           it("updates a key-value pair", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.env.ENV_KEY_1).to.equal("ENV_VALUE_1A");
+                expect(AppFormStore.getApp().env.ENV_KEY_1)
+                  .to.equal("ENV_VALUE_1A");
               }, done);
             });
 
@@ -550,7 +554,7 @@ describe("Create Application", function () {
           it("deletes a key-value pair", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.env)
+                expect(AppFormStore.getApp().env)
                   .to.not.have.property("ENV_VALUE_1A");
               }, done);
             });
@@ -565,7 +569,8 @@ describe("Create Application", function () {
           it("inserts a key-value pair", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.labels.L_KEY_1).to.equal("L_VALUE_1");
+                expect(AppFormStore.getApp().labels.L_KEY_1)
+                  .to.equal("L_VALUE_1");
               }, done);
             });
 
@@ -575,8 +580,10 @@ describe("Create Application", function () {
           it("inserts another key-value pair", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.labels.L_KEY_1).to.equal("L_VALUE_1");
-                expect(AppFormStore.app.labels.L_KEY_2).to.equal("L_VALUE_2");
+                expect(AppFormStore.getApp().labels.L_KEY_1)
+                  .to.equal("L_VALUE_1");
+                expect(AppFormStore.getApp().labels.L_KEY_2)
+                  .to.equal("L_VALUE_2");
               }, done);
             });
 
@@ -586,7 +593,8 @@ describe("Create Application", function () {
           it("updates a key-value pair", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.labels.L_KEY_1).to.equal("L_VALUE_1A");
+                expect(AppFormStore.getApp().labels.L_KEY_1)
+                  .to.equal("L_VALUE_1A");
               }, done);
             });
 
@@ -599,7 +607,7 @@ describe("Create Application", function () {
           it("deletes a key-value pair", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.labels)
+                expect(AppFormStore.getApp().labels)
                   .to.not.have.property("L_VALUE_1A");
               }, done);
             });
@@ -614,7 +622,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.mem).to.equal(32);
+                expect(AppFormStore.getApp().mem).to.equal(32);
               }, done);
             });
 
@@ -626,7 +634,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.instances).to.equal(2);
+                expect(AppFormStore.getApp().instances).to.equal(2);
               }, done);
             });
 
@@ -638,7 +646,7 @@ describe("Create Application", function () {
           it("doesn't update on invalid value", function (done) {
             AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
               expectAsync(function () {
-                expect(AppFormStore.app.executor).to.be.undefined;
+                expect(AppFormStore.getApp().executor).to.be.undefined;
               }, done);
             });
 
