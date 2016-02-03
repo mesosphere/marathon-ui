@@ -2,6 +2,8 @@ import URLUtil from "../helpers/URLUtil";
 import MarathonUIPluginAPI from "./external/MarathonUIPluginAPI";
 import PluginDispatcher from "./external/PluginDispatcher";
 
+const PLUGIN_STARTUP_TIMEOUT = 10000; // in ms
+
 const PluginLoader = {
   load: function (pluginId, pluginURI) {
     return new Promise(function (resolve, reject) {
@@ -25,6 +27,7 @@ const PluginLoader = {
 
         const pluginWindow = pluginHost.contentWindow;
         const pluginDocument = pluginWindow.document;
+        var pluginTimeout = null;
 
         // Inject plugin interface
         // TODO: Wrapped plugin interface to always include the plugin id
@@ -35,6 +38,7 @@ const PluginLoader = {
               && event.pluginId === pluginId) {
             PluginDispatcher.unregister(dispatchToken);
 
+            clearTimeout(pluginTimeout);
             resolve(pluginId);
           }
         });
@@ -42,12 +46,22 @@ const PluginLoader = {
         // Load Plugin
         const pluginScript = pluginDocument.createElement("script");
 
+        function handlePluginScriptLoad(error) {
+          pluginScript.removeEventListener("load", handlePluginScriptLoad);
+          pluginScript.removeEventListener("error", handlePluginScriptError);
+
+          pluginTimeout =
+            setTimeout(handlePluginScriptError, PLUGIN_STARTUP_TIMEOUT);
+        }
+
         function handlePluginScriptError(error) {
-          pluginScript.removeEventListener("error", handlePluginHostError);
+          pluginScript.removeEventListener("load", handlePluginScriptLoad);
+          pluginScript.removeEventListener("error", handlePluginScriptError);
 
           reject(error);
         }
 
+        pluginScript.addEventListener("load", handlePluginScriptLoad);
         pluginScript.addEventListener("error", handlePluginScriptError);
         pluginScript.setAttribute("src", URLUtil.getAbsoluteURL(pluginURI));
 
