@@ -13,11 +13,12 @@
 ### Fixed
 - \#3093 - Don't display "Create an Application" together with "Loading error"
 - \#2907 - Add tooltip with help links to Status and Health columns in App list
+- \#3149 - The application definition should be always post processed
 
 ## 0.15.2 - 2016-01-28
 ### Fixed
 - \#3054 - Avoid manipulating `fetch` values directly; keep using `uris` field
--
+
 ## 0.15.1 - 2016-01-22
 ### Fixed
 - \#3605 - Prevent ctrl-c keyboard shortcut from showing the Create modal dialog
