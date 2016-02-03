@@ -1,4 +1,5 @@
 const States = {
+  STATE_INITIAL: -1,
   STATE_LOADING: 0,
   STATE_ERROR: 1,
   STATE_SUCCESS: 2,

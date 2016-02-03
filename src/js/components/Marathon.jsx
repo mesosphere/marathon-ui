@@ -18,6 +18,11 @@ import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
 import DialogActions from "../actions/DialogActions";
 import QueueActions from "../actions/QueueActions";
+import PluginActions from "../actions/PluginActions";
+
+import "../plugin/PluginInterface";
+import PluginStore from "../stores/PluginStore";
+import PluginEvents from "../events/PluginEvents";
 
 import tabs from "../constants/tabs";
 
@@ -40,10 +45,10 @@ var Marathon = React.createClass({
   },
 
   componentDidMount: function () {
+    PluginActions.requestPlugins();
+
     this.onRouteChange();
-
     this.bindKeyboardShortcuts();
-
     this.startPolling();
   },
 
@@ -101,8 +106,8 @@ var Marathon = React.createClass({
 
   componentDidUpdate: function (prevProps, prevState) {
     /* eslint-disable eqeqeq */
-    if (prevState.activeAppId != this.state.activeAppId ||
-      prevState.activeTabId != this.state.activeTabId) {
+    if ((prevState.activeAppId != this.state.activeAppId ||
+        prevState.activeTabId != this.state.activeTabId)) {
       this.resetPolling();
     }
     /* eslint-enable eqeqeq */
