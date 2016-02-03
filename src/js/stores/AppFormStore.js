@@ -362,6 +362,18 @@ function processResponseErrors(responseErrors, response, statusCode) {
 var AppFormStore = lazy(EventEmitter.prototype).extend({
   app: {},
   fields: {},
+  getApp: function () {
+    var app = Util.deepCopy(this.app);
+
+    Object.keys(app).forEach((appKey) => {
+      var postProcessor = AppFormModelPostProcess[appKey];
+      if (postProcessor != null) {
+        postProcessor(app);
+      }
+    });
+
+    return app;
+  },
   responseErrors: {},
   validationErrorIndices: {},
   initAndReset: function () {
