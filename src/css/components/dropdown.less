@@ -22,6 +22,8 @@
     border-color: @dropdown-bg-color;
     border-radius: 2px;
     display: block;
+    max-height: @sidebar-width*2;
+    overflow-y: scroll;
     z-index: 1001; /* Override Bootstrap's 1000 base value */
 
     .checkbox {
@@ -39,7 +41,7 @@
           display: block;
           overflow: hidden;
           text-overflow: ellipsis;
-          width: @sidebar-width*0.5;
+          max-width: @sidebar-width*2;
           white-space: nowrap;
         }
       }
