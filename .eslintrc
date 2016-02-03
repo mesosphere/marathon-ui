@@ -24,6 +24,7 @@
 
   "rules": {
     "no-unused-vars": [1],
+    "no-console": [2],
     "eqeqeq": [2, "smart"],
     "quotes": [2, "double"],
     "indent": [2, 2, {"SwitchCase": 1, "VariableDeclarator": 1}],
