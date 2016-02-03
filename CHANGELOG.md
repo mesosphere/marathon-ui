@@ -13,6 +13,9 @@
 ### Fixed
 - \#3093 - Don't display "Create an Application" together with "Loading error"
 - \#2907 - Add tooltip with help links to Status and Health columns in App list
+
+## 0.15.3 - 2016-02-03
+### Fixed
 - \#3149 - The application definition should be always post processed
 
 ## 0.15.2 - 2016-01-28
