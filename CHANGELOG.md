@@ -2,6 +2,8 @@
 ### Added
 - \#3017 - Move application Search Bar to the Header
 - \#3082 - Make URLs in form validation error messages clickable
+- \#3076 - Highlight sorted columns in the UI
+
 
 ### Changed
 - \#3078 - Always show download button for logs
@@ -14,7 +16,7 @@
 ## 0.15.2 - 2016-01-28
 ### Fixed
 - \#3054 - Avoid manipulating `fetch` values directly; keep using `uris` field
-- 
+-
 ## 0.15.1 - 2016-01-22
 ### Fixed
 - \#3605 - Prevent ctrl-c keyboard shortcut from showing the Create modal dialog
