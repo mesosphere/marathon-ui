@@ -186,6 +186,36 @@ const resolveAppKeyToFieldIdMap = {
   "healthChecks": "healthChecks"
 };
 
+// Validate all fields in form store and update validationErrorIndices.
+// Return true if all checks passed, otherwise false.
+function checkAllFieldsForValidity(fields) {
+  return Object.keys(fields).reduce((memo, fieldId) => {
+    let value = fields[fieldId];
+    let isDuplicableRowField = duplicableRowFields.indexOf(fieldId) > -1;
+
+    if (value != null) {
+      if (isDuplicableRowField) {
+        return checkDuplicableRowFieldForValidity(fieldId, value) && memo;
+      }
+      return checkFieldForValidity(fieldId, value) && memo;
+    }
+    return memo;
+  }, true);
+}
+
+// Update validationErrorIndices, also return true if there was any error
+function checkDuplicableRowFieldForValidity(fieldId, values) {
+  return values.reduce((memo, value) => {
+    return memo && checkFieldForValidity(fieldId, value);
+  }, true);
+}
+
+// Update validationErrorIndices, also return true if there was an error
+function checkFieldForValidity(fieldId, value) {
+  return !updateErrorIndices(
+    fieldId, value, AppFormStore.validationErrorIndices);
+}
+
 function getValidationErrorIndex(fieldId, value) {
   if (validationRules[fieldId] == null) {
     return -1;
@@ -389,6 +419,10 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
   populateFieldsFromAppDefinition: function (app) {
     this.app = app;
     populateFieldsFromModel(Util.deepCopy(app), this.fields);
+
+    if (!checkAllFieldsForValidity(this.fields)) {
+      AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
+    }
   }
 }).value();
 
@@ -398,33 +432,40 @@ function executeAction(action, setFieldFunction) {
   var value = action.value;
   var index = action.index;
   var errorIndices = AppFormStore.validationErrorIndices;
-  var errorIndex = -1;
+  var errorOccurred = false;
 
   if (actionType === FormEvents.INSERT || actionType === FormEvents.UPDATE) {
-    errorIndex = getValidationErrorIndex(fieldId, value);
-
-    if (errorIndex > -1) {
-      if (value.consecutiveKey != null) {
-        Util.initKeyValue(errorIndices, fieldId, []);
-        errorIndices[fieldId][value.consecutiveKey] = errorIndex;
-      } else {
-        errorIndices[fieldId] = errorIndex;
-      }
-    } else {
-      deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
-    }
+    errorOccurred = updateErrorIndices(fieldId, value, errorIndices);
   } else if (actionType === FormEvents.DELETE ) {
     deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
   }
 
   setFieldFunction(AppFormStore.fields, fieldId, index, value);
 
-  if (errorIndex === -1) {
+  if (!errorOccurred) {
     rebuildModelFromFields(AppFormStore.app, AppFormStore.fields, fieldId);
     AppFormStore.emit(FormEvents.CHANGE, fieldId);
   } else {
     AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
   }
+}
+
+// Update validationErrorIndices for given field - insert error if one exists,
+// delete any existent error if no error exists.
+// Returns true if an error was found.
+function updateErrorIndices(fieldId, value, errorIndices) {
+  let errorIndex = getValidationErrorIndex(fieldId, value);
+  if (errorIndex > -1) {
+    if (value.consecutiveKey != null) {
+      Util.initKeyValue(errorIndices, fieldId, []);
+      errorIndices[fieldId][value.consecutiveKey] = errorIndex;
+    } else {
+      errorIndices[fieldId] = errorIndex;
+    }
+    return true;
+  }
+  deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
+  return false;
 }
 
 function onAppsErrorResponse(response, statusCode) {

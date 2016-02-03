@@ -44,8 +44,8 @@ var AppConfigEditFormComponent = React.createClass({
 
     return {
       fields: AppFormStore.fields,
-      errorIndices: {},
-      responseErrorMessages: {}
+      errorIndices: AppFormStore.validationErrorIndices,
+      responseErrorMessages: AppFormStore.responseErrors
     };
   },
 
