@@ -175,8 +175,7 @@ var TaskListItemComponent = React.createClass({
     });
 
     var statusClassSet = classNames({
-      "text-warning": task.status === TaskStatus.STAGED,
-      "cell-highlighted": sortKey === "status"
+      "text-warning": task.status === TaskStatus.STAGED
     });
 
     var updatedAtNodeClassSet = classNames({
@@ -203,6 +202,10 @@ var TaskListItemComponent = React.createClass({
       "cell-highlighted": sortKey === "updatedAt"
     });
 
+    var statusCellClassSet = classNames("text-center", {
+      "cell-highlighted": sortKey === "status"
+    });
+
     return (
       <tr className={listItemClassSet}>
         <td width="1" className="clickable" onClick={this.handleClick}>
@@ -218,7 +221,7 @@ var TaskListItemComponent = React.createClass({
         <td className={healthClassSet} title={this.props.taskHealthMessage}>
           {this.props.taskHealthMessage}
         </td>
-        <td className="text-center">
+        <td className={statusCellClassSet}>
           <span className={statusClassSet}>
             {task.status}
           </span>
