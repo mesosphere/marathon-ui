@@ -69,9 +69,13 @@ AppDispatcher.register(function (action) {
     case PluginEvents.LOAD_PLUGIN_ERROR:
       updatePluginState(action.id, States.STATE_ERROR);
       let plugin = getPluginById(action.id);
+      let message = "";
+      if (plugin != null) {
+        message = `${plugin.name || plugin.id}`;
+      }
       DialogActions.alert({
-        title: `Could not load plugin`,
-        message: `${plugin.name || plugin.id}`,
+        title: "Could not load plugin",
+        message: message,
         severity: DialogSeverity.WARNING
       });
       PluginStore.emit(PluginEvents.CHANGE);
