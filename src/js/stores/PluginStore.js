@@ -2,7 +2,6 @@ import {EventEmitter} from "events";
 
 import AppDispatcher from "../AppDispatcher";
 import Util from "../helpers/Util";
-import PluginDispatcher from "../plugin/external/PluginDispatcher";
 import DialogActions from "../actions/DialogActions";
 import DialogSeverity from "../constants/DialogSeverity";
 import PluginActions from "../actions/PluginActions";
@@ -48,6 +47,14 @@ function loadPlugins() {
 var PluginStore = Object.assign({
   getPlugins: function () {
     return plugins;
+  },
+  getPluginLoadingState: function () {
+    if (plugins.length === 0) {
+      return States.STATE_INITIAL;
+    }
+
+    return plugins.map((plugin) => plugin.state)
+      .reduce(Math.min);
   },
   resetStore: function () {
     plugins = [];
