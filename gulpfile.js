@@ -41,6 +41,8 @@ var files = {
   eslintRc: "./.eslintrc"
 };
 
+var eslintOverrides = {rules: {}};
+
 var webpackWatch = false;
 var configFilePath = path.resolve(dirs.js + "/config/config.js");
 if (process.env.GULP_ENV === "development") {
@@ -53,6 +55,8 @@ if (process.env.GULP_ENV === "development") {
     console.info("You could copy config.template.js to config.dev.js " +
       "to enable a development configuration.");
   }
+
+  eslintOverrides.rules["no-console"] = 0;
 }
 
 var webpackConfig = {
@@ -69,7 +73,7 @@ var webpackConfig = {
     preLoaders: [
       {
         test: /\.(js|jsx)$/,
-        loader: "eslint-loader",
+        loader: "eslint-loader?" + JSON.stringify(eslintOverrides),
         exclude: /node_modules/
       }
     ],
