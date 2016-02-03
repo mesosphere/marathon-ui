@@ -147,7 +147,7 @@ var AppModalComponent = React.createClass({
     event.preventDefault();
 
     if (!Object.keys(this.state.errorIndices).length) {
-      let app = AppFormStore.getApp();
+      const app = AppFormStore.getApp();
 
       if (this.props.app != null) {
         AppsActions.applySettingsOnApp(app.id, app, true, this.state.force);
