@@ -23,6 +23,7 @@ import PluginActions from "../actions/PluginActions";
 import "../plugin/PluginInterface";
 import PluginStore from "../stores/PluginStore";
 import PluginEvents from "../events/PluginEvents";
+import States from "../constants/States";
 
 import tabs from "../constants/tabs";
 
@@ -49,11 +50,18 @@ var Marathon = React.createClass({
 
     this.onRouteChange();
     this.bindKeyboardShortcuts();
-    this.startPolling();
+
+    PluginStore.on(PluginEvents.CHANGE, this.onPluginStoreChange);
   },
 
   componentWillReceiveProps: function () {
     this.onRouteChange();
+  },
+
+  onPluginStoreChange: function () {
+    if (PluginStore.getPluginLoadingState() > States.STATE_LOADING) {
+      this.startPolling();
+    }
   },
 
   onRouteChange: function () {
@@ -107,13 +115,16 @@ var Marathon = React.createClass({
   componentDidUpdate: function (prevProps, prevState) {
     /* eslint-disable eqeqeq */
     if ((prevState.activeAppId != this.state.activeAppId ||
-        prevState.activeTabId != this.state.activeTabId)) {
+        prevState.activeTabId != this.state.activeTabId) &&
+        PluginStore.getPluginLoadingState() > States.STATE_LOADING) {
       this.resetPolling();
     }
     /* eslint-enable eqeqeq */
   },
 
   componentWillUnmount: function () {
+    PluginStore.removeListener(PluginEvents.CHANGE, this.onPluginStoreChange);
+
     this.stopPolling();
   },
 
