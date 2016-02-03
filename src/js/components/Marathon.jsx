@@ -18,6 +18,7 @@ import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
 import DialogActions from "../actions/DialogActions";
 import QueueActions from "../actions/QueueActions";
+import PluginActions from "../actions/PluginActions";
 
 import "../plugin/PluginInterface";
 import PluginStore from "../stores/PluginStore";
@@ -44,15 +45,11 @@ var Marathon = React.createClass({
   },
 
   componentDidMount: function () {
+    PluginActions.requestPlugins();
+
     this.onRouteChange();
-
     this.bindKeyboardShortcuts();
-
-    PluginStore.once(PluginEvents.BOOTSTRAP_COMPLETE, () => {
-      this.startPolling();
-    });
-
-    PluginStore.bootstrap();
+    this.startPolling();
   },
 
   componentWillReceiveProps: function () {
@@ -110,8 +107,7 @@ var Marathon = React.createClass({
   componentDidUpdate: function (prevProps, prevState) {
     /* eslint-disable eqeqeq */
     if ((prevState.activeAppId != this.state.activeAppId ||
-        prevState.activeTabId != this.state.activeTabId) &&
-        PluginStore.isBootstrapComplete()) {
+        prevState.activeTabId != this.state.activeTabId)) {
       this.resetPolling();
     }
     /* eslint-enable eqeqeq */
