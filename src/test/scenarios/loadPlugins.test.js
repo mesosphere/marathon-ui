@@ -1,12 +1,12 @@
 import {expect} from "chai";
 import expectAsync from "./../helpers/expectAsync";
 import ajaxWrapperStub from "./../stubs/ajaxWrapperStub";
-import JSONPUtilRequestStub from "./../stubs/JSONPUtilRequestStub";
+import PluginLoaderLoadStub from "./../stubs/PluginLoaderLoadStub";
 
 import config from "../../js/config/config";
 
 import ajaxWrapper from "../../js/helpers/ajaxWrapper";
-import JSONPUtil from "../../js/helpers/JSONPUtil";
+import PluginLoader from "../../js/plugin/PluginLoader";
 import AppDispatcher from "../../js/AppDispatcher";
 import States from "../../js/constants/States";
 import PluginActions from "../../js/actions/PluginActions";
@@ -47,7 +47,7 @@ describe("load plugins", function () {
           break;
       }
     });
-    PluginActions.load = JSONPUtilRequestStub((url, resolve, reject) => {
+    PluginActions.load = PluginLoaderLoadStub((url, resolve, reject) => {
       switch (url) {
         case `${config.apiURL}v2/plugins/plugin-id/main.js`:
           resolve("console.log(\"Example Plugin\");");
@@ -62,7 +62,7 @@ describe("load plugins", function () {
 
   afterEach(function () {
     PluginActions.request = ajaxWrapper;
-    PluginActions.load = JSONPUtil.request;
+    PluginActions.load = PluginLoader.load;
   });
 
   it("updates plugin data on request plugins success", function (done) {
@@ -106,7 +106,7 @@ describe("load plugins", function () {
   });
 
   it("handles failure gracefully", function (done) {
-    PluginActions.load = JSONPUtilRequestStub((url, resolve, reject) => {
+    PluginActions.load = PluginLoaderLoadStub((url, resolve, reject) => {
       reject({message: "error"});
     });
 

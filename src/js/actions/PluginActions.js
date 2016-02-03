@@ -1,5 +1,5 @@
 import Util from "../helpers/Util";
-import JSONPUtil from "../helpers/JSONPUtil";
+import PluginLoader from "../plugin/PluginLoader";
 import ajaxWrapper from "../helpers/ajaxWrapper";
 
 import config from "../config/config";
@@ -33,7 +33,7 @@ var PluginActions = {
       });
   },
   loadPlugin: function (pluginId) {
-    this.load(`${config.apiURL}v2/plugins/${pluginId}/main.js`).then(
+    this.load(pluginId,`${config.apiURL}v2/plugins/${pluginId}/main.js`).then(
       function () {
         AppDispatcher.dispatch({
           actionType: PluginEvents.LOAD_PLUGIN_SUCCESS,
@@ -50,7 +50,7 @@ var PluginActions = {
     );
   },
   request: ajaxWrapper,
-  load: JSONPUtil.request
+  load: PluginLoader.load
 };
 
 export default PluginActions;
