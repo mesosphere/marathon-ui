@@ -1,6 +1,8 @@
+import config from "../config/config";
+
 import URLUtil from "../helpers/URLUtil";
-import MarathonUIPluginAPI from "./external/MarathonUIPluginAPI";
 import PluginDispatcher from "./external/PluginDispatcher";
+import PluginDispatcherProxy from "./PluginDispatcherProxy";
 
 const PLUGIN_STARTUP_TIMEOUT = 10000; // in ms
 
@@ -30,8 +32,10 @@ const PluginLoader = {
         var pluginTimeout = null;
 
         // Inject plugin interface
-        // TODO: Wrapped plugin interface to always include the plugin id
-        pluginWindow.MarathonUIPluginAPI = MarathonUIPluginAPI;
+        pluginWindow.marathonPluginInterface = {
+          PluginDispatcher: PluginDispatcherProxy.create(pluginId),
+          UIVersion: config.version
+        };
 
         let dispatchToken = PluginDispatcher.register(function (event) {
           if (event.eventType === "STARTUP_COMPLETE"
