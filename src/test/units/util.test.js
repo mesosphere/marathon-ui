@@ -214,10 +214,10 @@ describe("Util", function () {
       };
 
       expect(Util.detectObjectPaths(obj, "obj1", ["obj1.obj2"]))
-          .to.deep.equal([
-        "obj1.obj2",
-        "obj1.string2"
-      ]);
+        .to.deep.equal([
+          "obj1.obj2",
+          "obj1.string2"
+        ]);
     });
   });
 
@@ -516,6 +516,20 @@ describe("Util", function () {
       copiedObject.obj1.obj2 = null;
       expect(copiedObject).to.not.eql(originalObject);
       expect(originalObject2).to.eql(originalObject);
+    });
+
+    it("does not clone out of bounds arrays", function () {
+      var originalObject = {
+        obj1: {
+          array1: [1, 2]
+        }
+      };
+
+      var number = 83864234234;
+      originalObject.obj1.array1[number] = 3;
+
+      var copiedObject = Util.deepCopy(originalObject);
+      expect(copiedObject).to.not.eql(originalObject);
     });
   });
 });
