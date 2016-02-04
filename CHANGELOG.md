@@ -1,3 +1,7 @@
+## 0.15.4 - 2016-02-08
+### Fixed
+- \#3160 - Show server-side validation errors for invalid constraints
+
 ## 0.15.3 - 2016-02-03
 ### Fixed
 - \#3149 - The application definition should be always post processed
