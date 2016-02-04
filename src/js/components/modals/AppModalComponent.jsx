@@ -191,6 +191,10 @@ var AppModalComponent = React.createClass({
           size="md"
           onDestroy={this.props.onDestroy}>
         <form method="post" role="form" onSubmit={this.handleSubmit}>
+          <button onClick={event => event.preventDefault()}
+              className="enter-trap">
+            Enter trap
+          </button>
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>
