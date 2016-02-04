@@ -39,7 +39,7 @@ var SidebarLabelsFilterComponent = React.createClass({
   },
 
   getAvailableLabels: function () {
-    var apps = AppsStore.apps;
+    var apps = AppsStore.getApps();
     if (apps.length === 0) {
       return [];
     }

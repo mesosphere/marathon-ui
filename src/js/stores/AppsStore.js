@@ -13,6 +13,13 @@ import TaskStatus from "../constants/TaskStatus";
 import QueueStore from "./QueueStore";
 import QueueEvents from "../events/QueueEvents";
 
+import Util from "../helpers/Util";
+
+const storeData = {
+  apps: [],
+  currentApp: appScheme
+};
+
 const healthWeights = Object.freeze({
   [HealthStatus.UNHEALTHY]: 32,
   [HealthStatus.OVERCAPACITY]: 16,
@@ -184,32 +191,39 @@ function applyAppDelayStatusOnAllApps(apps, queue) {
 }
 
 var AppsStore = lazy(EventEmitter.prototype).extend({
-  // Array of apps objects recieved from the "apps/"-endpoint
-  apps: [],
+  // Array of apps objects received from the "apps/"-endpoint
+  getApps: function () {
+    return Util.deepCopy(storeData.apps);
+  },
+
   // Object of the current app recieved from the "apps/[appId]"-endpoint
   // This endpoint delievers more data, like the tasks on the app.
-  currentApp: appScheme,
-
   getCurrentApp: function (appId) {
-    if (appId === this.currentApp.id) {
-      return this.currentApp;
+    var app;
+
+    if (appId === storeData.currentApp.id) {
+      app = storeData.currentApp;
+    } else {
+      let shallowApp = lazy(storeData.apps).findWhere({id: appId});
+      if (shallowApp) {
+        app = shallowApp;
+      } else {
+        app = appScheme;
+      }
     }
 
-    var shallowApp = lazy(this.apps).findWhere({id: appId});
-    if (shallowApp) {
-      return shallowApp;
-    }
-
-    return appScheme;
+    return Util.deepCopy(app);
   },
 
   getTask: function (appId, taskId) {
-    return lazy(this.getCurrentApp(appId).tasks).findWhere({"id": taskId});
+    return Util.deepCopy(
+      lazy(this.getCurrentApp(appId).tasks).findWhere({"id": taskId})
+    );
   }
 }).value();
 
 QueueStore.on(QueueEvents.CHANGE, function () {
-  var change = applyAppDelayStatusOnAllApps(AppsStore.apps, QueueStore.queue);
+  var change = applyAppDelayStatusOnAllApps(storeData.apps, QueueStore.queue);
   if (change) {
     AppsStore.emit(AppsEvents.CHANGE);
   }
@@ -218,8 +232,8 @@ QueueStore.on(QueueEvents.CHANGE, function () {
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
-      AppsStore.apps = processApps(action.data.body.apps);
-      applyAppDelayStatusOnAllApps(AppsStore.apps, QueueStore.queue);
+      storeData.apps = processApps(action.data.body.apps);
+      applyAppDelayStatusOnAllApps(storeData.apps, QueueStore.queue);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APPS_ERROR:
@@ -230,8 +244,8 @@ AppDispatcher.register(function (action) {
       );
       break;
     case AppsEvents.REQUEST_APP:
-      AppsStore.currentApp = processApp(action.data.body.app);
-      applyAppDelayStatus(AppsStore.currentApp, QueueStore.queue);
+      storeData.currentApp = processApp(action.data.body.app);
+      applyAppDelayStatus(storeData.currentApp, QueueStore.queue);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.REQUEST_APP_ERROR:
@@ -241,7 +255,7 @@ AppDispatcher.register(function (action) {
         action.data.status);
       break;
     case AppsEvents.CREATE_APP:
-      AppsStore.apps.push(processApp(action.data.body));
+      storeData.apps.push(processApp(action.data.body));
       AppsStore.emit(AppsEvents.CREATE_APP);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
@@ -253,8 +267,8 @@ AppDispatcher.register(function (action) {
       );
       break;
     case AppsEvents.DELETE_APP:
-      AppsStore.apps =
-        removeApp(AppsStore.apps, action.appId);
+      storeData.apps =
+        removeApp(storeData.apps, action.appId);
       AppsStore.emit(AppsEvents.DELETE_APP);
       break;
     case AppsEvents.DELETE_APP_ERROR:
@@ -296,9 +310,9 @@ AppDispatcher.register(function (action) {
       );
       break;
     case TasksEvents.DELETE:
-      AppsStore.currentApp.tasks =
+      storeData.currentApp.tasks =
         removeTasks(
-          AppsStore.currentApp.tasks,
+          storeData.currentApp.tasks,
           action.appId,
           action.taskIds
         );
