@@ -304,59 +304,6 @@ describe("request task files", function () {
     MesosActions.requestTaskFiles(agentId, taskId);
   });
 
-  it("recovers from missing framework id", function (done) {
-    InfoStore.info = {
-      "marathon_config": {
-        "mesos_leader_ui_url": "//mesos-master:5051"
-      }
-    };
-
-    nock(config.apiURL)
-      .get("/v2/info")
-      .reply(200, {
-        "frameworkId": "framework-id",
-        "marathon_config": {
-          "mesos_leader_ui_url": "//mesos-master:5051"
-        }
-      });
-
-    MesosStore.once(MesosEvents.REQUEST_TASK_FILES_COMPLETE, function () {
-      expectAsync(function () {
-        var files = MesosStore.getTaskFiles("task-file-test-task-id");
-        expect(files[0].path).to.equal("/file/path/filename");
-      }, done);
-    });
-
-    MesosActions.requestTaskFiles("task-file-test-agent-id",
-      "task-file-test-task-id");
-  });
-
-  it("recovers from missing leader url", function (done) {
-    InfoStore.info = {
-      "frameworkId": "framework-id",
-      "marathon_config": {}
-    };
-
-    nock(config.apiURL)
-      .get("/v2/info")
-      .reply(200, {
-        "frameworkId": "framework-id",
-        "marathon_config": {
-          "mesos_leader_ui_url": "//mesos-master:5051"
-        }
-      });
-
-    MesosStore.once(MesosEvents.REQUEST_TASK_FILES_COMPLETE, function () {
-      expectAsync(function () {
-        var files = MesosStore.getTaskFiles("task-file-test-task-id");
-        expect(files[0].path).to.equal("/file/path/filename");
-      }, done);
-    });
-
-    MesosActions.requestTaskFiles("task-file-test-agent-id",
-      "task-file-test-task-id");
-  });
-
   it("handles wrong framework id gracefully", function (done) {
     var agentId = "wrong-framework-id-test-wrong-agent-id";
     var taskId = "wrong-framework-id-test-wrong-task-id";
