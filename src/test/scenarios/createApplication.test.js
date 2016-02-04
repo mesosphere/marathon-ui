@@ -160,7 +160,7 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.responseErrors.instances)
+            expect(AppFormStore.getResponseErrors().instances)
               .to.equal("error.expected.jsnumber");
           }, done);
         });
@@ -187,7 +187,7 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.responseErrors.general)
+            expect(AppFormStore.getResponseErrors().general)
               .to.equal(expectedMessage);
           }, done);
         });
@@ -211,7 +211,7 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.responseErrors.general)
+            expect(AppFormStore.getResponseErrors().general)
               .to.equal(expectedMessage);
           }, done);
         });
@@ -229,7 +229,7 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.responseErrors.appId)
+            expect(AppFormStore.getResponseErrors().appId)
               .to.equal("error on id attribute");
           }, done);
         });
@@ -253,7 +253,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general)
+              expect(AppFormStore.getResponseErrors().general)
                 .to.equal(
                   AppFormErrorMessages.getGeneralMessage("appCreation")
                 );
@@ -274,7 +274,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general).to.equal(
+              expect(AppFormStore.getResponseErrors().general).to.equal(
                 AppFormErrorMessages.getGeneralMessage("unauthorizedAccess")
               );
             }, done);
@@ -294,7 +294,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general).to.equal(
+              expect(AppFormStore.getResponseErrors().general).to.equal(
                 AppFormErrorMessages.getGeneralMessage("errorPrefix")
                 + " something strange"
               );
@@ -315,7 +315,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general).to.equal(
+              expect(AppFormStore.getResponseErrors().general).to.equal(
                 AppFormErrorMessages.getGeneralMessage("forbiddenAccess")
               );
             }, done);
@@ -335,7 +335,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general).to.equal(
+              expect(AppFormStore.getResponseErrors().general).to.equal(
                 AppFormErrorMessages.getGeneralMessage("errorPrefix")
                 + " something strange"
               );
@@ -354,7 +354,7 @@ describe("Create Application", function () {
       it("processes error response codes >= 500 correctly", function (done) {
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.responseErrors.general)
+            expect(AppFormStore.getResponseErrors().general)
               .to.equal(
               AppFormErrorMessages.getGeneralMessage("unknownServerError")
             );
@@ -373,7 +373,7 @@ describe("Create Application", function () {
       it("has no response errors on success", function (done) {
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
-            expect(Object.keys(AppFormStore.responseErrors).length).to.equal(0);
+            expect(Object.keys(AppFormStore.getResponseErrors()).length).to.equal(0);
           }, done);
         });
 
@@ -1159,7 +1159,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.instances)
+              expect(AppFormStore.getResponseErrors().instances)
                 .to.equal("error.expected.jsnumber");
             }, done);
           });
@@ -1186,7 +1186,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general)
+              expect(AppFormStore.getResponseErrors().general)
                 .to.equal(expectedMessage);
             }, done);
           });
@@ -1210,7 +1210,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general)
+              expect(AppFormStore.getResponseErrors().general)
                 .to.equal(expectedMessage);
             }, done);
           });
@@ -1228,7 +1228,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.appId)
+              expect(AppFormStore.getResponseErrors().appId)
                 .to.equal("error on id attribute");
             }, done);
           });
@@ -1252,7 +1252,7 @@ describe("Create Application", function () {
 
             AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
               expectAsync(function () {
-                expect(AppFormStore.responseErrors.general).to.equal(
+                expect(AppFormStore.getResponseErrors().general).to.equal(
                   AppFormErrorMessages.getGeneralMessage("appCreation")
                 );
               }, done);
@@ -1272,7 +1272,7 @@ describe("Create Application", function () {
 
             AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
               expectAsync(function () {
-                expect(AppFormStore.responseErrors.general).to.equal(
+                expect(AppFormStore.getResponseErrors().general).to.equal(
                   AppFormErrorMessages.getGeneralMessage("unauthorizedAccess")
                 );
               }, done);
@@ -1292,7 +1292,7 @@ describe("Create Application", function () {
 
             AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
               expectAsync(function () {
-                expect(AppFormStore.responseErrors.general).to.equal(
+                expect(AppFormStore.getResponseErrors().general).to.equal(
                   AppFormErrorMessages.getGeneralMessage("errorPrefix")
                   + " something strange"
                 );
@@ -1313,7 +1313,7 @@ describe("Create Application", function () {
 
             AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
               expectAsync(function () {
-                expect(AppFormStore.responseErrors.general).to.equal(
+                expect(AppFormStore.getResponseErrors().general).to.equal(
                   AppFormErrorMessages.getGeneralMessage("forbiddenAccess")
                 );
               }, done);
@@ -1333,7 +1333,7 @@ describe("Create Application", function () {
 
             AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
               expectAsync(function () {
-                expect(AppFormStore.responseErrors.general).to.equal(
+                expect(AppFormStore.getResponseErrors().general).to.equal(
                   AppFormErrorMessages.getGeneralMessage("errorPrefix")
                   + " something strange");
               }, done);
@@ -1351,7 +1351,7 @@ describe("Create Application", function () {
         it("processes error response codes >= 500 correctly", function (done) {
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general).to.equal(
+              expect(AppFormStore.getResponseErrors().general).to.equal(
                 AppFormErrorMessages.getGeneralMessage("unknownServerError")
               );
             }, done);
@@ -1369,7 +1369,7 @@ describe("Create Application", function () {
         it("has no response errors on success", function (done) {
           AppsStore.once(AppsEvents.CHANGE, function () {
             expectAsync(function () {
-              expect(Object.keys(AppFormStore.responseErrors).length)
+              expect(Object.keys(AppFormStore.getResponseErrors()).length)
                 .to.equal(0);
             }, done);
           });
