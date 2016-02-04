@@ -13,7 +13,8 @@ import AppsEvents from "../events/AppsEvents";
 import FormEvents from "../events/FormEvents";
 
 const storeData = {
-  app: {}
+  app: {},
+  fields: {}
 };
 
 const defaultFieldValues = Object.freeze({
@@ -394,7 +395,6 @@ function processResponseErrors(responseErrors, response, statusCode) {
 }
 
 var AppFormStore = lazy(EventEmitter.prototype).extend({
-  fields: {},
   getApp: function () {
     var app = Util.deepCopy(storeData.app);
 
@@ -407,21 +407,24 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
 
     return app;
   },
+  getFields: function () {
+    return Util.deepCopy(storeData.fields);
+  },
   responseErrors: {},
   validationErrorIndices: {},
   initAndReset: function () {
     storeData.app = {};
-    this.fields = {};
+    storeData.fields = {};
     this.validationErrorIndices = {};
 
     Object.keys(defaultFieldValues).forEach((fieldId) => {
-      this.fields[fieldId] = defaultFieldValues[fieldId];
-      rebuildModelFromFields(storeData.app, this.fields, fieldId);
+      storeData.fields[fieldId] = defaultFieldValues[fieldId];
+      rebuildModelFromFields(storeData.app, storeData.fields, fieldId);
     });
   },
   populateFieldsFromAppDefinition: function (app) {
     storeData.app = app;
-    populateFieldsFromModel(Util.deepCopy(storeData.app), this.fields);
+    populateFieldsFromModel(Util.deepCopy(storeData.app), storeData.fields);
 
     if (!checkAllFieldsForValidity(storeData.fields)) {
       AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
@@ -443,10 +446,10 @@ function executeAction(action, setFieldFunction) {
     deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
   }
 
-  setFieldFunction(AppFormStore.fields, fieldId, index, value);
+  setFieldFunction(storeData.fields, fieldId, index, value);
 
   if (!errorOccurred) {
-    rebuildModelFromFields(storeData.app, AppFormStore.fields, fieldId);
+    rebuildModelFromFields(storeData.app, storeData.fields, fieldId);
     AppFormStore.emit(FormEvents.CHANGE, fieldId);
   } else {
     AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
