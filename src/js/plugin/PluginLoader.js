@@ -50,7 +50,7 @@ const PluginLoader = {
         // Load Plugin
         const pluginScript = pluginDocument.createElement("script");
 
-        function handlePluginScriptLoad(error) {
+        function handlePluginScriptLoad() {
           pluginScript.removeEventListener("load", handlePluginScriptLoad);
           pluginScript.removeEventListener("error", handlePluginScriptError);
 
