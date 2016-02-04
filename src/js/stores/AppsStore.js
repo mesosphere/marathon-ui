@@ -1,5 +1,4 @@
 import {EventEmitter} from "events";
-import lazy from "lazy.js";
 
 import AppDispatcher from "../AppDispatcher";
 import AppsEvents from "../events/AppsEvents";
@@ -30,15 +29,13 @@ const healthWeights = Object.freeze({
 });
 
 function removeApp(apps, appId) {
-  return lazy(apps).reject({
-    id: appId
-  }).value();
+  return apps.filter(app => app.id !== appId);
 }
 
 function removeTasks(tasks, relatedAppId, taskIds) {
-  return lazy(tasks).reject(function (task) {
-    return (taskIds.indexOf(task.id) > -1) && task.appId === relatedAppId;
-  }).value();
+  return tasks.filter(task => {
+    return !(taskIds.includes(task.id) && task.appId === relatedAppId);
+  });
 }
 
 function getTaskHealth(task) {
@@ -125,7 +122,8 @@ function calculateTotalResources(app) {
 }
 
 function processApp(app) {
-  app = lazy(appScheme).extend(app).value();
+  app = Util.extendObject(appScheme, app);
+
   app = calculateTotalResources(app);
 
   app.status = AppStatus.RUNNING;
@@ -138,26 +136,26 @@ function processApp(app) {
   app.health = getAppHealth(app);
   app.healthWeight = getAppHealthWeight(app.health);
 
-  app.tasks = lazy(app.tasks).map(function (task) {
+  app.tasks = app.tasks.map(function (task) {
     task.id =  task.id || task.taskId;
     task.healthStatus = getTaskHealth(task);
     setTaskStatus(task);
     return task;
-  }).value();
+  });
 
   return app;
 }
 
 function processApps(apps) {
-  return lazy(apps).map(function (app) {
+  return apps.map(function (app) {
     return processApp(app);
-  }).value();
+  });
 }
 
 function applyAppDelayStatus(app, queue) {
   var hasChanges = false;
 
-  var queueEntry = lazy(queue).find(function (entry) {
+  var queueEntry = queue.find(function (entry) {
     return entry.app != null && app.id === entry.app.id && entry.delay != null;
   });
 
@@ -190,7 +188,7 @@ function applyAppDelayStatusOnAllApps(apps, queue) {
   return hasChanges;
 }
 
-var AppsStore = lazy(EventEmitter.prototype).extend({
+var AppsStore = Util.extendObject(EventEmitter.prototype, {
   // Array of apps objects received from the "apps/"-endpoint
   getApps: function () {
     return Util.deepCopy(storeData.apps);
@@ -204,7 +202,7 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
     if (appId === storeData.currentApp.id) {
       app = storeData.currentApp;
     } else {
-      let shallowApp = lazy(storeData.apps).findWhere({id: appId});
+      let shallowApp = storeData.apps.find(app => app.id === appId);
       if (shallowApp) {
         app = shallowApp;
       } else {
@@ -217,10 +215,10 @@ var AppsStore = lazy(EventEmitter.prototype).extend({
 
   getTask: function (appId, taskId) {
     return Util.deepCopy(
-      lazy(this.getCurrentApp(appId).tasks).findWhere({"id": taskId})
+      this.getCurrentApp(appId).tasks.find(task => task.id === taskId)
     );
   }
-}).value();
+});
 
 QueueStore.on(QueueEvents.CHANGE, function () {
   var change = applyAppDelayStatusOnAllApps(storeData.apps, QueueStore.queue);
