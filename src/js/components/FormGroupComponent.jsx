@@ -53,7 +53,7 @@ var FormGroupComponent = React.createClass({
     var child = React.Children.only(props.children);
     var formControlChild = React.cloneElement(
       child, {
-        className: "form-control",
+        className: "form-control mousetrap",
         id: fieldId,
         onChange: this.handleChange,
         defaultValue: props.value,
