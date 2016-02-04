@@ -12,6 +12,10 @@ import AppsStore from "./AppsStore";
 import AppsEvents from "../events/AppsEvents";
 import FormEvents from "../events/FormEvents";
 
+const storeData = {
+  app: {}
+};
+
 const defaultFieldValues = Object.freeze({
   cpus: 0.1,
   mem: 16,
@@ -390,10 +394,9 @@ function processResponseErrors(responseErrors, response, statusCode) {
 }
 
 var AppFormStore = lazy(EventEmitter.prototype).extend({
-  app: {},
   fields: {},
   getApp: function () {
-    var app = Util.deepCopy(this.app);
+    var app = Util.deepCopy(storeData.app);
 
     Object.keys(app).forEach((appKey) => {
       var postProcessor = AppFormModelPostProcess[appKey];
@@ -407,20 +410,20 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
   responseErrors: {},
   validationErrorIndices: {},
   initAndReset: function () {
-    this.app = {};
+    storeData.app = {};
     this.fields = {};
     this.validationErrorIndices = {};
 
     Object.keys(defaultFieldValues).forEach((fieldId) => {
       this.fields[fieldId] = defaultFieldValues[fieldId];
-      rebuildModelFromFields(this.app, this.fields, fieldId);
+      rebuildModelFromFields(storeData.app, this.fields, fieldId);
     });
   },
   populateFieldsFromAppDefinition: function (app) {
-    this.app = app;
-    populateFieldsFromModel(Util.deepCopy(app), this.fields);
+    storeData.app = app;
+    populateFieldsFromModel(Util.deepCopy(storeData.app), this.fields);
 
-    if (!checkAllFieldsForValidity(this.fields)) {
+    if (!checkAllFieldsForValidity(storeData.fields)) {
       AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
     }
   }
@@ -443,7 +446,7 @@ function executeAction(action, setFieldFunction) {
   setFieldFunction(AppFormStore.fields, fieldId, index, value);
 
   if (!errorOccurred) {
-    rebuildModelFromFields(AppFormStore.app, AppFormStore.fields, fieldId);
+    rebuildModelFromFields(storeData.app, AppFormStore.fields, fieldId);
     AppFormStore.emit(FormEvents.CHANGE, fieldId);
   } else {
     AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
