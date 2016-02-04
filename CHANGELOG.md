@@ -15,6 +15,7 @@
 - \#2907 - Add tooltip with help links to Status and Health columns in App list
 - \#3160 - Show server-side validation errors for invalid constraints
 - \#3164 - Show server-side validation errors for invalid object
+- \#3102 - Updating environment variables sometimes deletes entries
 
 ## 0.15.3 - 2016-02-03
 ### Fixed
