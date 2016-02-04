@@ -5,7 +5,6 @@ import expectAsync from "./../helpers/expectAsync";
 
 import config from "../../js/config/config";
 
-import React from "../../../node_modules/react/addons";
 import FormActions from "../../js/actions/FormActions";
 import FormEvents from "../../js/events/FormEvents";
 import AppsActions from "../../js/actions/AppsActions";
@@ -373,7 +372,8 @@ describe("Create Application", function () {
       it("has no response errors on success", function (done) {
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
-            expect(Object.keys(AppFormStore.getResponseErrors()).length).to.equal(0);
+            expect(Object.keys(AppFormStore.getResponseErrors()).length)
+              .to.equal(0);
           }, done);
         });
 
@@ -400,9 +400,10 @@ describe("Create Application", function () {
           function (done) {
             AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
               expectAsync(function () {
-                expect(AppFormStore.validationErrorIndices)
+                expect(AppFormStore.getValidationErrorIndices())
                   .to.have.property("appId");
-                expect(AppFormStore.validationErrorIndices.appId).to.equal(0);
+                expect(AppFormStore.getValidationErrorIndices().appId)
+                  .to.equal(0);
               }, done);
             });
 
@@ -413,9 +414,10 @@ describe("Create Application", function () {
           function (done) {
             AppFormStore.once(FormEvents.FIELD_VALIDATION_ERROR, function () {
               expectAsync(function () {
-                expect(AppFormStore.validationErrorIndices)
+                expect(AppFormStore.getValidationErrorIndices())
                   .to.have.property("appId");
-                expect(AppFormStore.validationErrorIndices.appId).to.equal(1);
+                expect(AppFormStore.getValidationErrorIndices().appId)
+                  .to.equal(1);
               }, done);
             });
 
