@@ -254,7 +254,9 @@ describe("Create Application", function () {
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
               expect(AppFormStore.responseErrors.general)
-                .to.equal(AppFormErrorMessages.getGeneralMessage("appCreation"));
+                .to.equal(
+                  AppFormErrorMessages.getGeneralMessage("appCreation")
+                );
             }, done);
           });
 
@@ -659,7 +661,7 @@ describe("Create Application", function () {
         it("updates correctly", function (done) {
           AppFormStore.once(FormEvents.CHANGE, function () {
             expectAsync(function () {
-              expect(AppFormStore.fields.appId).to.equal("/app-1");
+              expect(AppFormStore.getFields().appId).to.equal("/app-1");
             }, done);
           });
 
@@ -672,7 +674,7 @@ describe("Create Application", function () {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
 
-                expect(AppFormStore.fields.cpus).to.equal(1.1);
+                expect(AppFormStore.getFields().cpus).to.equal(1.1);
               }, done);
             });
 
@@ -684,7 +686,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.disk).to.equal(256);
+                expect(AppFormStore.getFields().disk).to.equal(256);
               }, done);
             });
 
@@ -697,7 +699,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.cmd).to.equal("sleep 1");
+                expect(AppFormStore.getFields().cmd).to.equal("sleep 1");
               }, done);
             });
 
@@ -711,7 +713,7 @@ describe("Create Application", function () {
             it("updates correctly", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  expect(AppFormStore.fields.dockerForcePullImage)
+                  expect(AppFormStore.getFields().dockerForcePullImage)
                     .to.equal(true);
                 }, done);
               });
@@ -724,7 +726,8 @@ describe("Create Application", function () {
             it("updates correctly", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  expect(AppFormStore.fields.dockerImage).to.equal("/image");
+                  expect(AppFormStore.getFields().dockerImage)
+                    .to.equal("/image");
                 }, done);
               });
 
@@ -736,7 +739,8 @@ describe("Create Application", function () {
             it("updates correctly", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  expect(AppFormStore.fields.dockerNetwork).to.equal("BRIDGE");
+                  expect(AppFormStore.getFields().dockerNetwork)
+                    .to.equal("BRIDGE");
                 }, done);
               });
 
@@ -748,7 +752,8 @@ describe("Create Application", function () {
             it("updates correctly", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  expect(AppFormStore.fields.dockerPrivileged).to.equal(true);
+                  expect(AppFormStore.getFields().dockerPrivileged)
+                    .to.equal(true);
                 }, done);
               });
 
@@ -761,7 +766,7 @@ describe("Create Application", function () {
             it("inserts a new row", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  expect(AppFormStore.fields.dockerPortMappings[0])
+                  expect(AppFormStore.getFields().dockerPortMappings[0])
                     .to.deep.equal({
                       containerPort: 8000,
                       hostPort: 8001,
@@ -782,7 +787,7 @@ describe("Create Application", function () {
             it("inserts another row", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  expect(AppFormStore.fields.dockerPortMappings[0])
+                  expect(AppFormStore.getFields().dockerPortMappings[0])
                     .to.deep.equal({
                       containerPort: 8000,
                       hostPort: 8001,
@@ -790,7 +795,7 @@ describe("Create Application", function () {
                       protocol: "udp"
                     });
 
-                  expect(AppFormStore.fields.dockerPortMappings[1])
+                  expect(AppFormStore.getFields().dockerPortMappings[1])
                     .to.deep.equal({
                       containerPort: 9000,
                       hostPort: 9001,
@@ -811,7 +816,7 @@ describe("Create Application", function () {
             it("updates a row at index", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  let row = AppFormStore.fields.dockerPortMappings[0];
+                  let row = AppFormStore.getFields().dockerPortMappings[0];
                   expect(row.containerPort).to.equal(9000);
                   expect(row.hostPort).to.equal(9001);
                   expect(row.servicePort).to.equal(8101);
@@ -830,8 +835,8 @@ describe("Create Application", function () {
             it("deletes a row at index", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  let row = AppFormStore.fields.dockerPortMappings[0];
-                  expect(AppFormStore.fields.dockerPortMappings.length)
+                  let row = AppFormStore.getFields().dockerPortMappings[0];
+                  expect(AppFormStore.getFields().dockerPortMappings.length)
                     .to.equal(1);
                   expect(row).to.deep.equal({
                     containerPort: 9000,
@@ -852,7 +857,7 @@ describe("Create Application", function () {
             it("inserts a new row", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  expect(AppFormStore.fields.dockerParameters[0])
+                  expect(AppFormStore.getFields().dockerParameters[0])
                     .to.deep.equal({
                       key: "DOCKER_KEY",
                       value: "DOCKER_VALUE"
@@ -870,7 +875,7 @@ describe("Create Application", function () {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
 
-                  expect(AppFormStore.fields.dockerParameters[1])
+                  expect(AppFormStore.getFields().dockerParameters[1])
                     .to.deep.equal({
                       key: "DOCKER_KEY_1",
                       value: "DOCKER_VALUE_1"
@@ -887,7 +892,7 @@ describe("Create Application", function () {
             it("updates a row at index", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  let row = AppFormStore.fields.dockerParameters[0];
+                  let row = AppFormStore.getFields().dockerParameters[0];
                   expect(row.key).to.equal("DOCKER_KEY_1A");
                   expect(row.value).to.equal("DOCKER_VALUE_1");
                 }, done);
@@ -901,8 +906,8 @@ describe("Create Application", function () {
             it("deletes a row at index", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  let row = AppFormStore.fields.dockerParameters[0];
-                  expect(AppFormStore.fields.dockerParameters.length)
+                  let row = AppFormStore.getFields().dockerParameters[0];
+                  expect(AppFormStore.getFields().dockerParameters.length)
                     .to.equal(1);
                   expect(row).to.deep.equal({
                     key: "DOCKER_KEY_1",
@@ -921,7 +926,7 @@ describe("Create Application", function () {
             it("inserts a new row", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  expect(AppFormStore.fields.containerVolumes[0])
+                  expect(AppFormStore.getFields().containerVolumes[0])
                     .to.deep.equal({
                       containerPath: "/container-0",
                       hostPath: "/host-0",
@@ -941,7 +946,7 @@ describe("Create Application", function () {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
 
-                  expect(AppFormStore.fields.containerVolumes[1])
+                  expect(AppFormStore.getFields().containerVolumes[1])
                     .to.deep.equal({
                       containerPath: "/container-1",
                       hostPath: "/host-1",
@@ -960,7 +965,7 @@ describe("Create Application", function () {
             it("updates a row at index", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  let row = AppFormStore.fields.containerVolumes[0];
+                  let row = AppFormStore.getFields().containerVolumes[0];
                   expect(row.mode).to.equal("RW");
                 }, done);
               });
@@ -971,8 +976,8 @@ describe("Create Application", function () {
             it("deletes a row at index", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
-                  let row = AppFormStore.fields.containerVolumes[0];
-                  expect(AppFormStore.fields.containerVolumes.length)
+                  let row = AppFormStore.getFields().containerVolumes[0];
+                  expect(AppFormStore.getFields().containerVolumes.length)
                     .to.equal(1);
                   expect(row).to.deep.equal({
                     containerPath: "/container-1",
@@ -993,7 +998,7 @@ describe("Create Application", function () {
           it("inserts a key-value pair", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.env[0]).to.deep.equal({
+                expect(AppFormStore.getFields().env[0]).to.deep.equal({
                   key: "ENV_KEY_1",
                   value: "ENV_VALUE_1"
                 });
@@ -1005,7 +1010,7 @@ describe("Create Application", function () {
           it("updates a key-value pair at index", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.env[0]).to.deep.equal({
+                expect(AppFormStore.getFields().env[0]).to.deep.equal({
                   key: "ENV_KEY_2",
                   value: "ENV_VALUE_1"
                 });
@@ -1021,12 +1026,12 @@ describe("Create Application", function () {
 
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.env.length).to.equal(2);
-                expect(AppFormStore.fields.env[0]).to.deep.equal({
+                expect(AppFormStore.getFields().env.length).to.equal(2);
+                expect(AppFormStore.getFields().env[0]).to.deep.equal({
                   key: "ENV_KEY_3",
                   value: "ENV_VALUE_3"
                 });
-                expect(AppFormStore.fields.env[1]).to.deep.equal({
+                expect(AppFormStore.getFields().env[1]).to.deep.equal({
                   key: "ENV_KEY_2",
                   value: "ENV_VALUE_1"
                 });
@@ -1043,8 +1048,8 @@ describe("Create Application", function () {
           it("deletes a key-value pair at index", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.env.length).to.equal(1);
-                expect(AppFormStore.fields.env[0]).to.deep.equal({
+                expect(AppFormStore.getFields().env.length).to.equal(1);
+                expect(AppFormStore.getFields().env[0]).to.deep.equal({
                   key: "ENV_KEY_2",
                   value: "ENV_VALUE_1"
                 });
@@ -1060,7 +1065,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.mem).to.equal(32);
+                expect(AppFormStore.getFields().mem).to.equal(32);
               }, done);
             });
 
@@ -1072,7 +1077,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.instances).to.equal(2);
+                expect(AppFormStore.getFields().instances).to.equal(2);
               }, done);
             });
 
@@ -1084,7 +1089,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.executor).to.equal("//cmd");
+                expect(AppFormStore.getFields().executor).to.equal("//cmd");
               }, done);
             });
 
@@ -1096,7 +1101,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.ports).to.equal("23, 24, 25");
+                expect(AppFormStore.getFields().ports).to.equal("23, 24, 25");
               }, done);
             });
 
@@ -1108,7 +1113,8 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.uris).to.equal("abc, http://dcfe");
+                expect(AppFormStore.getFields().uris)
+                  .to.equal("abc, http://dcfe");
               }, done);
             });
 
@@ -1120,7 +1126,7 @@ describe("Create Application", function () {
           it("updates correctly", function (done) {
             AppFormStore.once(FormEvents.CHANGE, function () {
               expectAsync(function () {
-                expect(AppFormStore.fields.contraints).to
+                expect(AppFormStore.getFields().contraints).to
                   .equal("hostname:UNIQUE, test:LIKE");
               }, done);
             });
