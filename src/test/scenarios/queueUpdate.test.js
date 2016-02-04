@@ -54,7 +54,7 @@ describe("queue update", function () {
 
     QueueStore.once(QueueEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(_.findWhere(AppsStore.apps, {id: "/app-1"}).status)
+        expect(_.findWhere(AppsStore.getApps(), {id: "/app-1"}).status)
           .to.equal(3);
       }, done);
     });
@@ -83,7 +83,7 @@ describe("queue update", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(_.findWhere(AppsStore.apps, {id: "/app-1"}).status)
+        expect(_.findWhere(AppsStore.getApps(), {id: "/app-1"}).status)
           .to.equal(4);
       }, done);
     });

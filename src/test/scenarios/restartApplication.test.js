@@ -41,7 +41,7 @@ describe("Restart Application", function () {
 
     AppsStore.once(AppsEvents.RESTART_APP, function () {
       expectAsync(function () {
-        expect(AppsStore.apps).to.have.length(2);
+        expect(AppsStore.getApps()).to.have.length(2);
       }, done);
     });
 
@@ -55,7 +55,7 @@ describe("Restart Application", function () {
 
     AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
       expectAsync(function () {
-        expect(AppsStore.apps).to.have.length(2);
+        expect(AppsStore.getApps()).to.have.length(2);
         expect(error.message).to.equal("restart error");
       }, done);
     });
@@ -70,7 +70,7 @@ describe("Restart Application", function () {
 
     AppsStore.once(AppsEvents.RESTART_APP_ERROR, function (error) {
       expectAsync(function () {
-        expect(AppsStore.apps).to.have.length(2);
+        expect(AppsStore.getApps()).to.have.length(2);
         expect(error.message).to.equal("app locked by deployment");
       }, done);
     });

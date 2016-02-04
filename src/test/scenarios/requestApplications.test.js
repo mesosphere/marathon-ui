@@ -33,12 +33,12 @@ describe("request applications", function () {
   });
 
   it("updates the AppsStore on success", function () {
-    expect(AppsStore.apps).to.have.length(2);
+    expect(AppsStore.getApps()).to.have.length(2);
   });
 
   it("calculate total resources", function () {
-    expect(AppsStore.apps[0].totalMem).to.equal(500);
-    expect(AppsStore.apps[0].totalCpus).to.equal(20);
+    expect(AppsStore.getApps()[0].totalMem).to.equal(500);
+    expect(AppsStore.getApps()[0].totalCpus).to.equal(20);
   });
 
   it("handles failure gracefully", function (done) {
@@ -93,15 +93,15 @@ describe("request applications", function () {
     });
 
     it("has correct health weight", function () {
-      expect(AppsStore.apps[0].healthWeight).to.equal(47);
+      expect(AppsStore.getApps()[0].healthWeight).to.equal(47);
     });
 
     it("has the correct app type", function () {
-      expect(AppsStore.apps[0].type).to.equal(AppTypes.CGROUP);
+      expect(AppsStore.getApps()[0].type).to.equal(AppTypes.CGROUP);
     });
 
     it("has correct health data object", function () {
-      expect(AppsStore.apps[0].health).to.deep.equal([
+      expect(AppsStore.getApps()[0].health).to.deep.equal([
         {quantity: 2, state: HealthStatus.HEALTHY},
         {quantity: 2, state: HealthStatus.UNHEALTHY},
         {quantity: 1, state: HealthStatus.UNKNOWN},
@@ -138,15 +138,15 @@ describe("request applications", function () {
     });
 
     it("has correct health weight", function () {
-      expect(AppsStore.apps[0].healthWeight).to.equal(47);
+      expect(AppsStore.getApps()[0].healthWeight).to.equal(47);
     });
 
     it("has the correct app type", function () {
-      expect(AppsStore.apps[0].type).to.equal("DOCKER");
+      expect(AppsStore.getApps()[0].type).to.equal("DOCKER");
     });
 
     it("has correct health data object", function () {
-      expect(AppsStore.apps[0].health).to.deep.equal([
+      expect(AppsStore.getApps()[0].health).to.deep.equal([
         {quantity: 2, state: HealthStatus.HEALTHY},
         {quantity: 2, state: HealthStatus.UNHEALTHY},
         {quantity: 1, state: HealthStatus.UNKNOWN},
@@ -180,11 +180,11 @@ describe("request applications", function () {
     });
 
     it("has correct health weight", function () {
-      expect(AppsStore.apps[0].healthWeight).to.equal(0);
+      expect(AppsStore.getApps()[0].healthWeight).to.equal(0);
     });
 
     it("has correct health data object", function () {
-      expect(AppsStore.apps[0].health).to.deep.equal([
+      expect(AppsStore.getApps()[0].health).to.deep.equal([
         {quantity: 0, state: HealthStatus.HEALTHY},
         {quantity: 0, state: HealthStatus.UNHEALTHY},
         {quantity: 0, state: HealthStatus.UNKNOWN},
@@ -218,11 +218,11 @@ describe("request applications", function () {
     });
 
     it("has correct health weight", function () {
-      expect(AppsStore.apps[0].healthWeight).to.equal(13);
+      expect(AppsStore.getApps()[0].healthWeight).to.equal(13);
     });
 
     it("has correct health data object", function () {
-      expect(AppsStore.apps[0].health).to.deep.equal([
+      expect(AppsStore.getApps()[0].health).to.deep.equal([
         {quantity: 5, state: HealthStatus.HEALTHY},
         {quantity: 0, state: HealthStatus.UNHEALTHY},
         {quantity: 0, state: HealthStatus.UNKNOWN},
@@ -256,11 +256,11 @@ describe("request applications", function () {
     });
 
     it("has correct health weight", function () {
-      expect(AppsStore.apps[0].healthWeight).to.equal(18);
+      expect(AppsStore.getApps()[0].healthWeight).to.equal(18);
     });
 
     it("has correct health data object", function () {
-      expect(AppsStore.apps[0].health).to.deep.equal([
+      expect(AppsStore.getApps()[0].health).to.deep.equal([
         {quantity: 0, state: HealthStatus.HEALTHY},
         {quantity: 0, state: HealthStatus.UNHEALTHY},
         {quantity: 1, state: HealthStatus.UNKNOWN},
@@ -287,7 +287,8 @@ describe("on single app request", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.id).to.equal("/single-app");
+        expect(AppsStore.getCurrentApp("/single-app").id)
+          .to.equal("/single-app");
       }, done);
     });
 
@@ -308,7 +309,7 @@ describe("on single app request", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.status).to.equal(0);
+        expect(AppsStore.getCurrentApp("/single-app").status).to.equal(0);
       }, done);
     });
 
@@ -328,7 +329,7 @@ describe("on single app request", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.status).to.equal(1);
+        expect(AppsStore.getCurrentApp("/single-app").status).to.equal(1);
       }, done);
     });
 
@@ -347,7 +348,7 @@ describe("on single app request", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.status).to.equal(2);
+        expect(AppsStore.getCurrentApp("/single-app").status).to.equal(2);
       }, done);
     });
 

@@ -41,7 +41,7 @@ describe("Update Application", function () {
 
     AppsStore.once(AppsEvents.APPLY_APP, function () {
       expectAsync(function () {
-        expect(AppsStore.apps).to.have.length(2);
+        expect(AppsStore.getApps()).to.have.length(2);
       }, done);
     });
 
@@ -59,7 +59,7 @@ describe("Update Application", function () {
 
     AppsStore.once(AppsEvents.APPLY_APP_ERROR, function (error) {
       expectAsync(function () {
-        expect(AppsStore.apps).to.have.length(2);
+        expect(AppsStore.getApps()).to.have.length(2);
         expect(error.message).to.equal("apply bad data error");
       }, done);
     });

@@ -9,7 +9,6 @@ import AppsActions from "../../js/actions/AppsActions";
 import AppsStore from "../../js/stores/AppsStore";
 import AppsEvents from "../../js/events/AppsEvents";
 import TasksActions from "../../js/actions/TasksActions";
-import TasksEvents from "../../js/events/TasksEvents";
 
 describe("delete task and scale application", function () {
 
@@ -47,8 +46,8 @@ describe("delete task and scale application", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.tasks).to.have.length(1);
-        expect(_.where(AppsStore.currentApp.tasks, {
+        expect(AppsStore.getCurrentApp("/app-1").tasks).to.have.length(1);
+        expect(_.where(AppsStore.getCurrentApp("/app-1").tasks, {
           id: "task-2"
         })).to.be.empty;
       }, done);
@@ -62,16 +61,14 @@ describe("delete task and scale application", function () {
 
       AppsStore.once(AppsEvents.CHANGE, function () {
         expectAsync(function () {
-          expect(AppsStore.currentApp.tasks).to.have.length(0);
+          expect(AppsStore.getCurrentApp("/app-1").tasks).to.have.length(0);
         }, done);
       });
 
       TasksActions.deleteTasksAndScale("/app-1", ["task-1", "task-2"]);
     });
 
-
     TasksActions.deleteTasksAndScale("/app-1", ["task-2"]);
   });
-
 
 });

@@ -42,9 +42,9 @@ describe("Delete Application", function () {
 
     AppsStore.once(AppsEvents.DELETE_APP, function () {
       expectAsync(function () {
-        expect(AppsStore.apps).to.have.length(1);
+        expect(AppsStore.getApps()).to.have.length(1);
 
-        expect(_.where(AppsStore.apps, {
+        expect(_.where(AppsStore.getApps(), {
           id: "/app-1"
         })).to.be.empty;
       }, done);
@@ -60,7 +60,7 @@ describe("Delete Application", function () {
 
     AppsStore.once(AppsEvents.DELETE_APP_ERROR, function (error) {
       expectAsync(function () {
-        expect(AppsStore.apps).to.have.length(2);
+        expect(AppsStore.getApps()).to.have.length(2);
         expect(error.message).to.equal("delete error");
       }, done);
     });
