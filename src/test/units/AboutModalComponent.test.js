@@ -1,16 +1,22 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
+import nock from "nock";
 import _ from "underscore";
 
 import React from "react/addons";
-import AboutModalComponent from "../../js/components/modals/AboutModalComponent";
+import AboutModalComponent
+  from "../../js/components/modals/AboutModalComponent";
+import InfoActions from "../../js/actions/InfoActions";
+import InfoEvents from "../../js/events/InfoEvents";
 import InfoStore from "../../js/stores/InfoStore";
 import ObjectDlComponent from "../../js/components/ObjectDlComponent";
 
+import config from "../../js/config/config";
+
 describe("About Modal", function () {
 
-  before(function () {
-    InfoStore.info = {
+  before(function (done) {
+    var info = {
       "version": "1.2.3",
       "frameworkId": "framework1",
       "leader": "leader1.dcos.io",
@@ -24,12 +30,20 @@ describe("About Modal", function () {
       }
     };
 
-    this.component = shallow(<AboutModalComponent onDestroy={_.noop} />);
-    this.nodes = {
-      modalTitleText: this.component.find(".modal-title").text(),
-      modalBodyText: this.component.find(".modal-body").text(),
-      objectDlComponents: this.component.find(ObjectDlComponent)
-    };
+    nock(config.apiURL)
+      .get("/v2/info")
+      .reply(200, info);
+
+    InfoStore.once(InfoEvents.CHANGE, () => {
+      this.component = shallow(<AboutModalComponent onDestroy={_.noop} />);
+      this.nodes = {
+        modalTitleText: this.component.find(".modal-title").text(),
+        modalBodyText: this.component.find(".modal-body").text(),
+        objectDlComponents: this.component.find(ObjectDlComponent)
+      };
+      done();
+    });
+    InfoActions.requestInfo();
   });
 
   after(function () {

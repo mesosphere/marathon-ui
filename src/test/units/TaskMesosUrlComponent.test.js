@@ -1,29 +1,43 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
+import nock from "nock";
 
 import React from "react/addons";
+import InfoActions from "../../js/actions/InfoActions";
+import InfoEvents from "../../js/events/InfoEvents";
 import InfoStore from "../../js/stores/InfoStore";
 import TaskMesosUrlComponent from "../../js/components/TaskMesosUrlComponent";
 
+import config from "../../js/config/config";
+
 describe("TaskMesosUrlComponent", function () {
 
-  before(function () {
+  before(function (done) {
     this.model = {
       appId: "/app-1",
       id: "task-123",
       slaveId: "20150720-125149-3839899402-5050-16758-S1"
     };
-    InfoStore.info = {
+
+    var info = {
       version: "1.2.3",
       frameworkId: "framework1",
       leader: "leader1.dcos.io",
-      marathon_config: {
-        marathon_field_1: "mf1",
-        mesos_leader_ui_url: "http://leader1.dcos.io:5050"
+      "marathon_config": {
+        "marathon_field_1": "mf1",
+        "mesos_leader_ui_url": "http://leader1.dcos.io:5050/"
       }
     };
 
-    this.component = shallow(<TaskMesosUrlComponent task={this.model}/>);
+    nock(config.apiURL)
+      .get("/v2/info")
+      .reply(200, info);
+
+    InfoStore.once(InfoEvents.CHANGE, () => {
+      this.component = shallow(<TaskMesosUrlComponent task={this.model}/>);
+      done();
+    });
+    InfoActions.requestInfo();
   });
 
   after(function () {
@@ -40,8 +54,6 @@ describe("TaskMesosUrlComponent", function () {
 
   it("has the correct mesos task url when mesosUrl has trailing slash",
     function () {
-      InfoStore.info.marathon_config.mesos_leader_ui_url =
-        "http://leader1.dcos.io:5050/";
       this.component.setProps({task: this.model});
 
       var url = this.component.props().href;
