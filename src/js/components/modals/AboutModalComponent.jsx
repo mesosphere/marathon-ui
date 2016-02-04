@@ -19,7 +19,7 @@ var AboutModalComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      info: InfoStore.info
+      info: InfoStore.getInfo()
     };
   },
 
@@ -46,7 +46,7 @@ var AboutModalComponent = React.createClass({
 
   onInfoChange: function () {
     this.setState({
-      info: InfoStore.info
+      info: InfoStore.getInfo()
     });
   },
 

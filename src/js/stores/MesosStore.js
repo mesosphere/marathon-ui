@@ -303,12 +303,12 @@ AppDispatcher.register(function (action) {
         agentId: data.agentId,
         taskId: data.taskId
       });
-      info = InfoStore.info;
+      info = InfoStore.getInfo();
       resolveTaskFileRequests();
       break;
     case InfoEvents.REQUEST:
       AppDispatcher.waitFor([InfoStore.dispatchToken]);
-      info = InfoStore.info;
+      info = InfoStore.getInfo();
       resolveTaskFileRequests();
       break;
     case InfoEvents.REQUEST_ERROR:
