@@ -425,8 +425,7 @@ describe("Create Application", function () {
       describe("the model", function () {
 
         after(function () {
-          AppFormStore.app = {};
-          AppFormStore.fields = {};
+          AppFormStore.initAndReset();
         });
 
         it("updates correctly", function (done) {
@@ -440,10 +439,10 @@ describe("Create Application", function () {
         });
 
         it("preserves unknown properties", function (done) {
-          AppFormStore.app = {
+          AppFormStore.populateFieldsFromAppDefinition({
             id: "/app-1",
             unknownProperty: "unknown"
-          };
+          });
 
           AppFormStore.once(FormEvents.CHANGE, function () {
             expectAsync(function () {
@@ -456,13 +455,13 @@ describe("Create Application", function () {
         });
 
         it("preserves unknown nested properties", function (done) {
-          AppFormStore.app = {
+          AppFormStore.populateFieldsFromAppDefinition({
             container: {
               docker: {
                 unknownProperty: "unknown"
               }
             }
-          };
+          });
 
           AppFormStore.once(FormEvents.CHANGE, function () {
             expectAsync(function () {
