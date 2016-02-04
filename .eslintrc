@@ -22,9 +22,12 @@
     "react"
   ],
 
+  // Some rules could be eventually overriden for the development environment
+  // in the gulpfile.js.
+  // Consider these rules to apply perfectly on a release/production.
   "rules": {
     "no-unused-vars": [1],
-    "no-console": [1],
+    "no-console": [2],
     "eqeqeq": [2, "smart"],
     "quotes": [2, "double"],
     "indent": [2, 2, {"SwitchCase": 1, "VariableDeclarator": 1}],
