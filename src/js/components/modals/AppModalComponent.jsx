@@ -87,7 +87,9 @@ var AppModalComponent = React.createClass({
         force: true
       });
     } else {
-      this.setState({error: AppFormStore.responseErrors["general"]});
+      this.setState({
+        error: AppFormStore.getResponseErrors()["general"]
+      });
     }
   },
 

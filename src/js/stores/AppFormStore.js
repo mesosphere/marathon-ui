@@ -14,7 +14,8 @@ import FormEvents from "../events/FormEvents";
 
 const storeData = {
   app: {},
-  fields: {}
+  fields: {},
+  responseErrors: {}
 };
 
 const defaultFieldValues = Object.freeze({
@@ -410,7 +411,9 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
   getFields: function () {
     return Util.deepCopy(storeData.fields);
   },
-  responseErrors: {},
+  getResponseErrors: function () {
+    return Util.deepCopy(storeData.responseErrors);
+  },
   validationErrorIndices: {},
   initAndReset: function () {
     storeData.app = {};
@@ -475,8 +478,8 @@ function updateErrorIndices(fieldId, value, errorIndices) {
 }
 
 function onAppsErrorResponse(response, statusCode) {
-  AppFormStore.responseErrors = {};
-  processResponseErrors(AppFormStore.responseErrors, response, statusCode);
+  storeData.responseErrors = {};
+  processResponseErrors(storeData.responseErrors, response, statusCode);
 }
 
 AppsStore.on(AppsEvents.CREATE_APP_ERROR, function (data, status) {
@@ -486,10 +489,10 @@ AppsStore.on(AppsEvents.APPLY_APP_ERROR, function (data, isEditing, status) {
   onAppsErrorResponse(data, status);
 });
 AppsStore.on(AppsEvents.CREATE_APP, function () {
-  AppFormStore.responseErrors = {};
+  storeData.responseErrors = {};
 });
 AppsStore.on(AppsEvents.APPLY_APP, function () {
-  AppFormStore.responseErrors = {};
+  storeData.responseErrors = {};
 });
 
 AppDispatcher.register(function (action) {
