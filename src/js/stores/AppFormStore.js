@@ -15,7 +15,8 @@ import FormEvents from "../events/FormEvents";
 const storeData = {
   app: {},
   fields: {},
-  responseErrors: {}
+  responseErrors: {},
+  validationErrorIndices: {}
 };
 
 const defaultFieldValues = Object.freeze({
@@ -414,11 +415,14 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
   getResponseErrors: function () {
     return Util.deepCopy(storeData.responseErrors);
   },
-  validationErrorIndices: {},
+  getValidationErrorIndices: function () {
+    return Util.deepCopy(storeData.validationErrorIndices);
+  },
   initAndReset: function () {
     storeData.app = {};
     storeData.fields = {};
-    this.validationErrorIndices = {};
+    storeData.responseErrors = {};
+    storeData.validationErrorIndices = {};
 
     Object.keys(defaultFieldValues).forEach((fieldId) => {
       storeData.fields[fieldId] = defaultFieldValues[fieldId];
@@ -440,7 +444,7 @@ function executeAction(action, setFieldFunction) {
   var fieldId = action.fieldId;
   var value = action.value;
   var index = action.index;
-  var errorIndices = AppFormStore.validationErrorIndices;
+  var errorIndices = storeData.validationErrorIndices;
   var errorOccurred = false;
 
   if (actionType === FormEvents.INSERT || actionType === FormEvents.UPDATE) {
