@@ -119,6 +119,7 @@ const responseAttributePathToFieldIdMap = {
   "/acceptedResourceRoles": "acceptedResourceRoles",
   "/cmd": "cmd",
   "/constraints": "constraints",
+  "/constraints({INDEX})": "constraints",
   "/container/docker/forcePullImage": "dockerForcePullImage",
   "/container/docker/image": "dockerImage",
   "/container/docker/network": "dockerNetwork",
