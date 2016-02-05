@@ -42,7 +42,7 @@ mesos-slave:
     - MESOS_DOCKER_STOP_TIMEOUT=60secs
     - MESOS_RESOURCES=cpus:4;mem:1280;disk:25600;ports(*):[12000-12999]
 marathon-service:
-  image: mesosphere/marathon-test:0dc9d404da29
+  image: mesosphere/marathon-test:1ec751bba551
   expose:
     - "8080"
   links:
@@ -55,7 +55,7 @@ marathon-service:
     - MARATHON_PLUGIN_DIR=/plugins
     - MARATHON_PLUGIN_CONF=/plugin-conf.json
   volumes:
-    - ./resources/plugins:/plugins
+    - ./resources/marathon-plugins:/plugins
     - ./resources/marathon.plugin-conf.json:/plugin-conf.json
 marathon-ui:
   image: nginx:latest
