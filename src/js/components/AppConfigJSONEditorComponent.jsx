@@ -20,6 +20,11 @@ var AppConfigJSONEditorComponent = React.createClass({
     };
   },
 
+  shouldComponentUpdate: function () {
+    // avoid re-rendering the component as it causes the cursor to jump.
+    return false;
+  },
+
   handleUpdate: function (value) {
     let app = null;
     let jsonWasValid = false;
