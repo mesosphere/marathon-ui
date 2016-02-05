@@ -46,8 +46,8 @@ describe("delete tasks", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.tasks).to.have.length(1);
-        expect(_.where(AppsStore.currentApp.tasks, {
+        expect(AppsStore.getCurrentApp("/app-1").tasks).to.have.length(1);
+        expect(_.where(AppsStore.getCurrentApp("/app-1").tasks, {
           id: "task-1"
         })).to.be.empty;
       }, done);
@@ -64,7 +64,7 @@ describe("delete tasks", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.tasks).to.have.length(0);
+        expect(AppsStore.getCurrentApp("/app-1").tasks).to.have.length(0);
       }, done);
     });
 

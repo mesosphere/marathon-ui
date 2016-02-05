@@ -13,32 +13,49 @@ import AppsEvents from "../../js/events/AppsEvents";
 import AppsStore from "../../js/stores/AppsStore";
 import AppStatus from "../../js/constants/AppStatus";
 import AppPageComponent from "../../js/components/AppPageComponent";
-import HealthStatus from "../../js/constants/HealthStatus";
 import States from "../../js/constants/States";
 
 describe("AppPageComponent", function () {
 
-  before(function () {
+  before(function (done) {
     var app = Util.extendObject(appScheme, {
       id: "/test-app-1",
       healthChecks: [{path: "/", protocol: "HTTP"}],
       status: AppStatus.RUNNING,
       tasks: [
+        // Unhealthy status
         {
           id: "test-task-1",
           appId: "/test-app-1",
-          healthStatus: HealthStatus.UNHEALTHY,
-          healthCheckResults: [
-            {
-              alive: false,
-              taskId: "test-task-1"
-            }
-          ]
+          healthCheckResults: [{
+            alive: false,
+            taskId: "test-task-1"
+          }]
+        },
+        // Unknown status
+        {
+          id: "test-task-2",
+          appId: "/test-app-1"
+        },
+        // Healthy status
+        {
+          id: "test-task-3",
+          appId: "/test-app-1",
+          healthCheckResults: [{
+            alive: true,
+            firstSuccess: new Date(),
+            taskId: "test-task-3"
+          }]
         }
       ]
     });
 
-    AppsStore.apps = [app];
+    nock(config.apiURL)
+      .get("/v2/apps//test-app-1")
+      .query({embed: "app.taskStats"})
+      .reply(200, {
+        app: app
+      });
 
     var context = {
       router: {
@@ -50,7 +67,12 @@ describe("AppPageComponent", function () {
       }
     };
 
-    this.component = shallow(<AppPageComponent />, {context});
+    AppsStore.once(AppsEvents.CHANGE, () => {
+      this.component = shallow(<AppPageComponent />, {context});
+      done();
+    });
+
+    AppsActions.requestApp("/test-app-1");
   });
 
   after(function () {
@@ -69,60 +91,25 @@ describe("AppPageComponent", function () {
   });
 
   it("returns the right shorthand health message for failing tasks",
-     function () {
-       expect(this.component
-                .instance()
-                .getTaskHealthMessage("test-task-1")
-       ).to.equal("Unhealthy");
-     });
+    function () {
+      expect(this.component.instance().getTaskHealthMessage("test-task-1"))
+        .to.equal("Unhealthy");
+  });
 
   it("returns the right health message for tasks with unknown health",
-     function () {
-       var app = Util.extendObject(appScheme, {
-         id: "/test-app-1",
-         status: AppStatus.RUNNING,
-         tasks: [
-           {
-             id: "test-task-1",
-             appId: "/test-app-1",
-             healthStatus: HealthStatus.UNKNOWN
-           }
-         ]
-       });
-
-       AppsStore.apps = [app];
-
-       expect(this.component
-                .instance()
-                .getTaskHealthMessage("test-task-1")
-       ).to.equal("Unknown");
-     });
+      function () {
+    expect(this.component.instance().getTaskHealthMessage("test-task-2"))
+      .to.equal("Unknown");
+  });
 
   it("returns the right health message for healthy tasks", function () {
-    var app = Util.extendObject(appScheme, {
-      id: "/test-app-1",
-      status: AppStatus.RUNNING,
-      tasks: [
-        {
-          id: "test-task-1",
-          appId: "/test-app-1",
-          healthStatus: HealthStatus.HEALTHY
-        }
-      ]
-    });
-
-    AppsStore.apps = [app];
-
-    expect(this.component
-             .instance()
-             .getTaskHealthMessage("test-task-1")
-    ).to.equal("Healthy");
+    expect(this.component.instance().getTaskHealthMessage("test-task-3"))
+      .to.equal("Healthy");
   });
 
   describe("on unauthorized access error", function () {
 
     it("has the correct fetchState", function () {
-      // @todo: Remove action/store dependency
       AppsStore.once(AppsEvents.REQUEST_APPS_ERROR, function () {
         expectAsync(function () {
           expect(this.element.state.fetchState)

@@ -287,7 +287,8 @@ describe("on single app request", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.id).to.equal("/single-app");
+        expect(AppsStore.getCurrentApp("/single-app").id)
+          .to.equal("/single-app");
       }, done);
     });
 
@@ -308,7 +309,7 @@ describe("on single app request", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.status).to.equal(0);
+        expect(AppsStore.getCurrentApp("/single-app").status).to.equal(0);
       }, done);
     });
 
@@ -328,7 +329,7 @@ describe("on single app request", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.status).to.equal(1);
+        expect(AppsStore.getCurrentApp("/single-app").status).to.equal(1);
       }, done);
     });
 
@@ -347,7 +348,7 @@ describe("on single app request", function () {
 
     AppsStore.once(AppsEvents.CHANGE, function () {
       expectAsync(function () {
-        expect(AppsStore.currentApp.status).to.equal(2);
+        expect(AppsStore.getCurrentApp("/single-app").status).to.equal(2);
       }, done);
     });
 

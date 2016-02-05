@@ -1,28 +1,28 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
+import nock from "nock";
 
 import config from "../../js/config/config";
 
 import React from "../../../node_modules/react/addons";
-import Util from "../../js/helpers/Util";
 import appScheme from "../../js/stores/schemes/appScheme";
-import InfoStore from "../../js/stores/InfoStore";
+import AppsActions from "../../js/actions/AppsActions";
 import AppsStore from "../../js/stores/AppsStore";
+import AppsEvents from "../../js/events/AppsEvents";
 import AppDebugInfoComponent from "../../js/components/AppDebugInfoComponent";
+import InfoActions from "../../js/actions/InfoActions";
+import InfoEvents from "../../js/events/InfoEvents";
+import InfoStore from "../../js/stores/InfoStore";
 
-var server = config.localTestserverURI;
-config.apiURL = "http://" + server.address + ":" + server.port + "/";
+import Util from "../../js/helpers/Util";
+import expectAsync from "./../helpers/expectAsync";
 
 describe("App debug info component", function () {
 
   describe("Last task failure", function () {
 
-    afterEach(function () {
-      this.component.instance().componentWillUnmount();
-    });
-
-    it("should show failed task", function () {
-      InfoStore.info = {
+    before(function (done) {
+      var info = {
         "version": "1.2.3",
         "frameworkId": "framework1",
         "leader": "leader1.dcos.io",
@@ -31,6 +31,20 @@ describe("App debug info component", function () {
           "mesos_master_url": "http://leader1.dcos.io:5050"
         }
       };
+
+      nock(config.apiURL)
+        .get("/v2/info")
+        .reply(200, info);
+
+      InfoStore.once(InfoEvents.CHANGE, done);
+      InfoActions.requestInfo();
+    });
+
+    afterEach(function () {
+      this.component.instance().componentWillUnmount();
+    });
+
+    it("should show failed task", function (done) {
       var app = Util.extendObject(appScheme, {
         id: "/python",
         lastTaskFailure: {
@@ -44,26 +58,39 @@ describe("App debug info component", function () {
         }
       });
 
-      AppsStore.apps = [app];
-      this.component = shallow(<AppDebugInfoComponent appId={app.id} />);
-      var nodes = this.component.find("dd");
+      nock(config.apiURL)
+        .get("/v2/apps//python")
+        .query({embed: "app.taskStats"})
+        .reply(200, {
+          app: app
+        });
 
-      var taskId = nodes.at(0).text().trim();
-      var state = nodes.at(1).text().trim();
-      var message = nodes.at(2).text().trim();
-      var host = nodes.at(3).text().trim();
-      var timestamp = nodes.at(4).find("span").text().trim();
-      var version = nodes.at(5).find("span").text().trim();
+      AppsStore.once(AppsEvents.CHANGE, () => {
+        expectAsync(() => {
+          this.component = shallow(<AppDebugInfoComponent appId="/python" />);
+          var nodes = this.component.find("dd");
 
-      expect(taskId).to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
-      expect(state).to.equal("TASK_LOST");
-      expect(message).to.equal("Slave slave1.dcos.io removed");
-      expect(host).to.equal("slave1.dcos.io");
-      expect(timestamp).to.equal("2015-08-05T09:08:56.349Z");
-      expect(version).to.equal("2015-07-06T12:37:28.774Z");
+          var taskId = nodes.at(0).text().trim();
+          var state = nodes.at(1).text().trim();
+          var message = nodes.at(2).text().trim();
+          var host = nodes.at(3).text().trim();
+          var timestamp = nodes.at(4).find("span").text().trim();
+          var version = nodes.at(5).find("span").text().trim();
+
+          expect(taskId)
+            .to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
+          expect(state).to.equal("TASK_LOST");
+          expect(message).to.equal("Slave slave1.dcos.io removed");
+          expect(host).to.equal("slave1.dcos.io");
+          expect(timestamp).to.equal("2015-08-05T09:08:56.349Z");
+          expect(version).to.equal("2015-07-06T12:37:28.774Z");
+        }, done);
+      });
+
+      AppsActions.requestApp("/python");
     });
 
-    it("should show unspecified field on empty values", function () {
+    it("should show unspecified field on empty values", function (done) {
       var app = Util.extendObject(appScheme, {
         id: "/python",
         lastTaskFailure: {
@@ -75,34 +102,57 @@ describe("App debug info component", function () {
         }
       });
 
-      AppsStore.apps = [app];
-      this.component = shallow(<AppDebugInfoComponent appId={app.id} />);
-      var nodes = this.component.find("dl").children();
+      nock(config.apiURL)
+        .get("/v2/apps//python")
+        .query({embed: "app.taskStats"})
+        .reply(200, {
+          app: app
+        });
 
-      var state = nodes.at(3).type().displayName;
-      var message = nodes.at(5).type().displayName;
+      AppsStore.once(AppsEvents.CHANGE, () => {
+        expectAsync(() => {
+          this.component = shallow(<AppDebugInfoComponent appId="/python" />);
+          var nodes = this.component.find("dl").children();
 
-      expect(state).to.equal("UnspecifiedNodeComponent");
-      expect(message).to.equal("UnspecifiedNodeComponent");
+          var state = nodes.at(3).type().displayName;
+          var message = nodes.at(5).type().displayName;
+
+          expect(state).to.equal("UnspecifiedNodeComponent");
+          expect(message).to.equal("UnspecifiedNodeComponent");
+        }, done);
+      });
+
+      AppsActions.requestApp("/python");
     });
 
-    it("should show message when app never failed", function () {
-      this.appId = "/python";
+    it("should show message when app never failed", function (done) {
       var app = Util.extendObject(appScheme, {
         id: "/python"
       });
 
-      AppsStore.apps = [app];
+      nock(config.apiURL)
+        .get("/v2/apps//python")
+        .query({embed: "app.taskStats"})
+        .reply(200, {
+          app: app
+        });
 
-      this.component = shallow(<AppDebugInfoComponent appId={this.appId} />);
-      var message = this.component.children().at(2).find(".panel-body").text();
-      expect(message).to.equal("This app does not have failed tasks");
+      AppsStore.once(AppsEvents.CHANGE, () => {
+        expectAsync(() => {
+          this.component = shallow(<AppDebugInfoComponent appId="/python" />);
+          var message =
+            this.component.children().at(2).find(".panel-body").text();
+          expect(message).to.equal("This app does not have failed tasks");
+        }, done);
+      });
+
+      AppsActions.requestApp("/python");
     });
   });
 
   describe("Last configuration changes", function () {
 
-    before(function () {
+    before(function (done) {
       var app = Util.extendObject(appScheme, {
         id: "/app-1",
         versionInfo: {
@@ -111,8 +161,19 @@ describe("App debug info component", function () {
         }
       });
 
-      AppsStore.apps = [app];
-      this.component = shallow(<AppDebugInfoComponent appId={app.id} />);
+      nock(config.apiURL)
+        .get("/v2/apps//app-1")
+        .query({embed: "app.taskStats"})
+        .reply(200, {
+          app: app
+        });
+
+      AppsStore.once(AppsEvents.CHANGE, () => {
+        this.component = shallow(<AppDebugInfoComponent appId="/app-1" />);
+        done();
+      });
+
+      AppsActions.requestApp("/app-1");
     });
 
     after(function () {

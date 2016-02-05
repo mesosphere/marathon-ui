@@ -9,7 +9,6 @@ import config from "../../js/config/config";
 import JSONPUtil from "../../js/helpers/JSONPUtil";
 import ajaxWrapper from "../../js/helpers/ajaxWrapper";
 import AppDispatcher from "../../js/AppDispatcher";
-import InfoStore from "../../js/stores/InfoStore";
 import DCOSActions from "../../js/actions/DCOSActions";
 import MesosActions from "../../js/actions/MesosActions";
 import MesosEvents from "../../js/events/MesosEvents";
@@ -199,13 +198,17 @@ describe("request task files", function () {
       "//mesos-agent:5051/fail", "/file/path", "0.26.0");
   });
 
-  it("updates the files data on request task files success", function (done) {
-    InfoStore.info = {
+  it("updates the files data on request task files success", (done) => {
+    var info = {
       "frameworkId": "framework-id",
       "marathon_config": {
         "mesos_leader_ui_url": "//mesos-master:5051"
       }
     };
+
+    nock(config.apiURL)
+      .get("/v2/info")
+      .reply(200, info);
 
     MesosStore.once(MesosEvents.REQUEST_TASK_FILES_COMPLETE, function () {
       expectAsync(function () {
@@ -219,12 +222,16 @@ describe("request task files", function () {
   });
 
   it("determines correct node/agent urls", function (done) {
-    InfoStore.info = {
+    var info = {
       "frameworkId": "framework-id",
       "marathon_config": {
         "mesos_leader_ui_url": "//mesos-master:5051"
       }
     };
+
+    nock(config.apiURL)
+      .get("/v2/info")
+      .reply(200, info);
 
     DCOSActions.request = ajaxWrapperStub(
       function (url, resolve, reject) {
@@ -254,7 +261,7 @@ describe("request task files", function () {
     var agentId = "task-file-test-missing-framework-agent-id";
     var taskId = "task-file-test-missing-framework-task-id";
 
-    InfoStore.info = {
+    var info = {
       "marathon_config": {
         "mesos_leader_ui_url": "//mesos-master:5051"
       }
@@ -262,7 +269,7 @@ describe("request task files", function () {
 
     nock(config.apiURL)
       .get("/v2/info")
-      .reply(200, InfoStore.info);
+      .reply(200, info);
 
     MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
       expectAsync(function () {
@@ -278,14 +285,14 @@ describe("request task files", function () {
     var agentId = "task-file-test-missing-leader-url-agent-id";
     var taskId = "task-file-test-missing-leader-url-task-id";
 
-    InfoStore.info = {
+    var info = {
       "frameworkId": "framework-id",
       "marathon_config": {}
     };
 
     nock(config.apiURL)
       .get("/v2/info")
-      .reply(200, InfoStore.info);
+      .reply(200, info);
 
     MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
       expectAsync(function () {
@@ -297,69 +304,20 @@ describe("request task files", function () {
     MesosActions.requestTaskFiles(agentId, taskId);
   });
 
-  it("recovers from missing framework id", function (done) {
-    InfoStore.info = {
-      "marathon_config": {
-        "mesos_leader_ui_url": "//mesos-master:5051"
-      }
-    };
-
-    nock(config.apiURL)
-      .get("/v2/info")
-      .reply(200, {
-        "frameworkId": "framework-id",
-        "marathon_config": {
-          "mesos_leader_ui_url": "//mesos-master:5051"
-        }
-      });
-
-    MesosStore.once(MesosEvents.REQUEST_TASK_FILES_COMPLETE, function () {
-      expectAsync(function () {
-        var files = MesosStore.getTaskFiles("task-file-test-task-id");
-        expect(files[0].path).to.equal("/file/path/filename");
-      }, done);
-    });
-
-    MesosActions.requestTaskFiles("task-file-test-agent-id",
-      "task-file-test-task-id");
-  });
-
-  it("recovers from missing leader url", function (done) {
-    InfoStore.info = {
-      "frameworkId": "framework-id",
-      "marathon_config": {}
-    };
-
-    nock(config.apiURL)
-      .get("/v2/info")
-      .reply(200, {
-        "frameworkId": "framework-id",
-        "marathon_config": {
-          "mesos_leader_ui_url": "//mesos-master:5051"
-        }
-      });
-
-    MesosStore.once(MesosEvents.REQUEST_TASK_FILES_COMPLETE, function () {
-      expectAsync(function () {
-        var files = MesosStore.getTaskFiles("task-file-test-task-id");
-        expect(files[0].path).to.equal("/file/path/filename");
-      }, done);
-    });
-
-    MesosActions.requestTaskFiles("task-file-test-agent-id",
-      "task-file-test-task-id");
-  });
-
   it("handles wrong framework id gracefully", function (done) {
     var agentId = "wrong-framework-id-test-wrong-agent-id";
     var taskId = "wrong-framework-id-test-wrong-task-id";
 
-    InfoStore.info = {
+    var info = {
       "frameworkId": "wrong-framework-id",
       "marathon_config": {
         "mesos_leader_ui_url": "//mesos-master:5051"
       }
     };
+
+    nock(config.apiURL)
+      .get("/v2/info")
+      .reply(200, info);
 
     MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
       expectAsync(function () {
@@ -417,12 +375,16 @@ describe("request task files", function () {
     var agentId = "wrong-leader-url-test-agent-id";
     var taskId = "wrong-leader-url-test-task-id";
 
-    InfoStore.info = {
+    var info = {
       "frameworkId": "framework-id",
       "marathon_config": {
         "mesos_leader_ui_url": "//mesos-fail:5051"
       }
     };
+
+    nock(config.apiURL)
+      .get("/v2/info")
+      .reply(200, info);
 
     MesosStore.once(MesosEvents.REQUEST_TASK_FILES_ERROR, function (event) {
       expectAsync(function () {

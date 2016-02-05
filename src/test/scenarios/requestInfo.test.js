@@ -2,11 +2,11 @@ import {expect} from "chai";
 import nock from "nock";
 import expectAsync from "./../helpers/expectAsync";
 
-import config from "../../js/config/config";
-
 import InfoActions from "../../js/actions/InfoActions";
 import InfoEvents from "../../js/events/InfoEvents";
 import InfoStore from "../../js/stores/InfoStore";
+
+import config from "../../js/config/config";
 
 describe("request info", function () {
 
