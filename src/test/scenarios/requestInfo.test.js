@@ -19,7 +19,7 @@ describe("request info", function () {
   });
 
   it("updates the InfoStore on success", function () {
-    expect(InfoStore.getInfo().name).to.equal("Marathon");
+    expect(InfoStore.info.name).to.equal("Marathon");
   });
 
   it("handles failure gracefully", function (done) {

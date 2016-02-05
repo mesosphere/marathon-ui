@@ -10,6 +10,8 @@ import AppsActions from "../../js/actions/AppsActions";
 import AppsStore from "../../js/stores/AppsStore";
 import AppsEvents from "../../js/events/AppsEvents";
 import AppDebugInfoComponent from "../../js/components/AppDebugInfoComponent";
+import InfoActions from "../../js/actions/InfoActions";
+import InfoEvents from "../../js/events/InfoEvents";
 import InfoStore from "../../js/stores/InfoStore";
 
 import Util from "../../js/helpers/Util";
@@ -19,12 +21,8 @@ describe("App debug info component", function () {
 
   describe("Last task failure", function () {
 
-    afterEach(function () {
-      this.component.instance().componentWillUnmount();
-    });
-
-    it("should show failed task", function (done) {
-      InfoStore.info = {
+    before(function (done) {
+      var info = {
         "version": "1.2.3",
         "frameworkId": "framework1",
         "leader": "leader1.dcos.io",
@@ -34,6 +32,19 @@ describe("App debug info component", function () {
         }
       };
 
+      nock(config.apiURL)
+        .get("/v2/info")
+        .reply(200, info);
+
+      InfoStore.once(InfoEvents.CHANGE, done);
+      InfoActions.requestInfo();
+    });
+
+    afterEach(function () {
+      this.component.instance().componentWillUnmount();
+    });
+
+    it("should show failed task", function (done) {
       var app = Util.extendObject(appScheme, {
         id: "/python",
         lastTaskFailure: {

@@ -47,8 +47,8 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CHANGE, function () {
           expectAsync(function () {
-            expect(AppsStore.getApps()).to.have.length(3);
-            expect(_.where(AppsStore.getApps(), {
+            expect(AppsStore.apps).to.have.length(3);
+            expect(_.where(AppsStore.apps, {
               id: "/app-3"
             })).to.be.not.empty;
           }, done);
@@ -69,7 +69,7 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CREATE_APP, function () {
           expectAsync(function () {
-            expect(AppsStore.getApps()).to.have.length(3);
+            expect(AppsStore.apps).to.have.length(3);
           }, done);
         });
 

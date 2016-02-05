@@ -110,7 +110,7 @@ var AppListComponent = React.createClass({
 
   getInitialState: function () {
     var fetchState = States.STATE_LOADING;
-    var apps = AppsStore.getApps();
+    var apps = AppsStore.apps;
 
     if (apps.length > 0) {
       fetchState = States.STATE_SUCCESS;
@@ -138,7 +138,7 @@ var AppListComponent = React.createClass({
 
   onAppsChange: function () {
     this.setState({
-      apps: AppsStore.getApps(),
+      apps: AppsStore.apps,
       fetchState: States.STATE_SUCCESS
     });
   },

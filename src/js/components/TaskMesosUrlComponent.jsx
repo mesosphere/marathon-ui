@@ -14,7 +14,7 @@ var TaskMesosUrlComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      info: InfoStore.getInfo()
+      info: InfoStore.info
     };
   },
 
@@ -32,7 +32,7 @@ var TaskMesosUrlComponent = React.createClass({
 
   onInfoChange: function () {
     this.setState({
-      info: InfoStore.getInfo()
+      info: InfoStore.info
     });
   },
 

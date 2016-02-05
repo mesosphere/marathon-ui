@@ -41,7 +41,7 @@ describe("Scale Application", function () {
 
     AppsStore.once(AppsEvents.SCALE_APP, function () {
       expectAsync(function () {
-        expect(AppsStore.getApps()).to.have.length(2);
+        expect(AppsStore.apps).to.have.length(2);
       }, done);
     });
 
@@ -55,7 +55,7 @@ describe("Scale Application", function () {
 
     AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
       expectAsync(function () {
-        expect(AppsStore.getApps()).to.have.length(2);
+        expect(AppsStore.apps).to.have.length(2);
         expect(error.message).to.equal("scale error");
       }, done);
     });
@@ -70,7 +70,7 @@ describe("Scale Application", function () {
 
     AppsStore.once(AppsEvents.SCALE_APP_ERROR, function (error) {
       expectAsync(function () {
-        expect(AppsStore.getApps()).to.have.length(2);
+        expect(AppsStore.apps).to.have.length(2);
         expect(error.message).to.equal("scale bad data error");
       }, done);
     });

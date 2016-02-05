@@ -1,5 +1,4 @@
 import {EventEmitter} from "events";
-import lazy from "lazy.js";
 
 import AppDispatcher from "../AppDispatcher";
 import InfoEvents from "../events/InfoEvents";
@@ -10,11 +9,11 @@ const storeData = {
   info: {}
 };
 
-var InfoStore = lazy(EventEmitter.prototype).extend({
-  getInfo: function () {
+var InfoStore = Util.extendObject(EventEmitter.prototype, {
+  get info() {
     return Util.deepCopy(storeData.info);
   }
-}).value();
+});
 
 InfoStore.dispatchToken = AppDispatcher.register(function (action) {
   switch (action.actionType) {

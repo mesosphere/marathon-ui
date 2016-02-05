@@ -190,7 +190,7 @@ function applyAppDelayStatusOnAllApps(apps, queue) {
 
 var AppsStore = Util.extendObject(EventEmitter.prototype, {
   // Array of apps objects received from the "apps/"-endpoint
-  getApps: function () {
+  get apps() {
     return Util.deepCopy(storeData.apps);
   },
 
