@@ -88,7 +88,7 @@ var AppModalComponent = React.createClass({
       });
     } else {
       this.setState({
-        error: AppFormStore.getResponseErrors()["general"]
+        error: AppFormStore.responseErrors["general"]
       });
     }
   },
@@ -97,7 +97,7 @@ var AppModalComponent = React.createClass({
     event.preventDefault();
 
     if (this.state.appIsValid) {
-      const app = AppFormStore.getApp();
+      const app = AppFormStore.app;
 
       if (this.props.app != null) {
         AppsActions.applySettingsOnApp(app.id, app, true, this.state.force);

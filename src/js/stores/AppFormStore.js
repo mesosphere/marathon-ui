@@ -1,5 +1,4 @@
 import {EventEmitter} from "events";
-import lazy from "lazy.js";
 import objectPath from "object-path";
 import Util from "../helpers/Util";
 
@@ -396,8 +395,8 @@ function processResponseErrors(responseErrors, response, statusCode) {
   }
 }
 
-var AppFormStore = lazy(EventEmitter.prototype).extend({
-  getApp: function () {
+var AppFormStore = Util.extendObject(EventEmitter.prototype, {
+  get app() {
     var app = Util.deepCopy(storeData.app);
 
     Object.keys(app).forEach((appKey) => {
@@ -409,15 +408,16 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
 
     return app;
   },
-  getFields: function () {
+  get fields() {
     return Util.deepCopy(storeData.fields);
   },
-  getResponseErrors: function () {
+  get responseErrors() {
     return Util.deepCopy(storeData.responseErrors);
   },
-  getValidationErrorIndices: function () {
+  get validationErrorIndices() {
     return Util.deepCopy(storeData.validationErrorIndices);
   },
+
   initAndReset: function () {
     storeData.app = {};
     storeData.fields = {};
@@ -437,7 +437,7 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
       AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
     }
   }
-}).value();
+});
 
 function executeAction(action, setFieldFunction) {
   var actionType = action.actionType;
