@@ -144,12 +144,18 @@ var AppModalComponent = React.createClass({
     }
   },
 
-  handleAppConfigChange: function (app, isValid = true) {
-    this.setState({app: app, appIsValid: isValid});
+  handleAppConfigChange: function (app) {
+    // At present we assume that the supplied app config is valid.
+    // We may wish to pass invalid (eg incomplete) configs in the future.
+    this.setState({
+      app: app,
+      error: null,
+      appIsValid: true
+    });
   },
 
   handleAppConfigError: function (error) {
-    this.setState({error: error});
+    this.setState({error: error, appIsValid: false});
   },
 
   render: function () {

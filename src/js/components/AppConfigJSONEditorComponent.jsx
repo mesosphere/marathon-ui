@@ -4,7 +4,6 @@ import "brace/theme/monokai";
 import React from "react/addons";
 
 import AppDefaultFields from "../constants/AppDefaultFields";
-import Util from "../helpers/Util";
 
 var AppConfigJSONEditorComponent = React.createClass({
   displayName: "AppConfigJSONEditorComponent",
@@ -12,8 +11,7 @@ var AppConfigJSONEditorComponent = React.createClass({
   propTypes: {
     app: React.PropTypes.object,
     onChange: React.PropTypes.func.isRequired,
-    // Not currently used; supplied for parity with AppConfigEditForm
-    onError: React.PropTypes.func
+    onError: React.PropTypes.func.isRequired
   },
 
   getDefaultProps: function () {
@@ -23,16 +21,19 @@ var AppConfigJSONEditorComponent = React.createClass({
   },
 
   handleUpdate: function (value) {
+    let app = null;
+    let jsonWasValid = false;
+
     try {
-      let app = JSON.parse(value);
-      // we assume that any valid JSON object is a valid app config
-      this.props.onChange(app);
+      app = JSON.parse(value);
+      jsonWasValid = true;
     }
     catch (e) {
-      // no-op avoids empty catch-block warnings. We don't want to raise errors
-      // here because that causes a whole state refresh of the editor, losing
-      // whatever the user was typing.
-      Util.noop();
+      this.props.onError("Invalid JSON");
+    }
+
+    if (jsonWasValid) {
+      this.props.onChange(app);
     }
   },
 
