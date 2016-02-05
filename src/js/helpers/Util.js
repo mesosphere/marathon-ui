@@ -5,6 +5,22 @@ var consecutiveNumber = 0;
 // method can't be *call*ed on different objects in IE.
 var toString = Object.prototype.toString;
 
+function assignWithAccessors(target, ...sources) {
+  sources.forEach(source => {
+    Object.keys(source).forEach(key => {
+      let descriptor = Object.getOwnPropertyDescriptor(source, key);
+      if (descriptor.get == null && descriptor.set == null) {
+        descriptor.writable = true;
+      }
+      descriptor.configurable = true;
+      descriptor.enumerable = true;
+
+      Object.defineProperty(target, key, descriptor);
+    });
+  });
+  return target;
+}
+
 var Util = {
   initKeyValue: function (obj, key, value) {
     if (obj[key] === undefined) {
@@ -35,7 +51,7 @@ var Util = {
   },
   noop: function () {},
   extendObject: function (...sources) {
-    return Object.assign({}, ...sources);
+    return assignWithAccessors({}, ...sources);
   },
   getUniqueId: function () {
     return (++consecutiveNumber).toString() + (new Date()).getTime();
