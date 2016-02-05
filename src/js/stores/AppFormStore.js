@@ -190,8 +190,8 @@ const resolveAppKeyToFieldIdMap = {
 // Return true if all checks passed, otherwise false.
 function checkAllFieldsForValidity(fields) {
   return Object.keys(fields).reduce((memo, fieldId) => {
-    let value = fields[fieldId];
-    let isDuplicableRowField = duplicableRowFields.indexOf(fieldId) > -1;
+    var value = fields[fieldId];
+    var isDuplicableRowField = duplicableRowFields.indexOf(fieldId) > -1;
 
     if (value != null) {
       if (isDuplicableRowField) {
@@ -454,7 +454,7 @@ function executeAction(action, setFieldFunction) {
 // delete any existent error if no error exists.
 // Returns true if an error was found.
 function updateErrorIndices(fieldId, value, errorIndices) {
-  let errorIndex = getValidationErrorIndex(fieldId, value);
+  var errorIndex = getValidationErrorIndex(fieldId, value);
   if (errorIndex > -1) {
     if (value.consecutiveKey != null) {
       Util.initKeyValue(errorIndices, fieldId, []);

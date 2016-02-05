@@ -26,8 +26,8 @@ var AppConfigJSONEditorComponent = React.createClass({
   },
 
   handleUpdate: function (value) {
-    let app = null;
-    let jsonWasValid = false;
+    var app = null;
+    var jsonWasValid = false;
 
     try {
       app = JSON.parse(value);
@@ -44,7 +44,7 @@ var AppConfigJSONEditorComponent = React.createClass({
 
   getPrettyPrintedDefinition: function () {
     // without this check, we would just show 'null' when creating a new app
-    let app = this.props.app == null
+    var app = this.props.app == null
       ? AppDefaultFields
       : this.props.app;
     return JSON.stringify(app, null, 2);
