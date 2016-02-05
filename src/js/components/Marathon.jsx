@@ -123,8 +123,11 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("c", function () {
+      if (this.state.modal != null) {
+        this.handleModalDestroy();
+      }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-app"});
-    }, "keypress");
+    }.bind(this), "keypress");
 
     Mousetrap.bind("g a", function () {
       if (this.state.modal == null) {
@@ -144,12 +147,18 @@ var Marathon = React.createClass({
     });
 
     Mousetrap.bind("shift+,", function () {
+      if (this.state.modal != null) {
+        this.handleModalDestroy();
+      }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "about"});
-    });
+    }.bind(this));
 
     Mousetrap.bind("?", function () {
+      if (this.state.modal != null) {
+        this.handleModalDestroy();
+      }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "help"});
-    });
+    }.bind(this));
   },
 
   handleModalDestroy: function () {

@@ -23,6 +23,9 @@ var AppListFilterComponent = React.createClass({
     this.updateFilterText();
 
     Mousetrap.bind("s", function () {
+      if (this.getQueryParamValue("modal") != null) {
+        return null;
+      }
       React.findDOMNode(this.refs.filterText).focus();
     }.bind(this), "keyup");
   },
