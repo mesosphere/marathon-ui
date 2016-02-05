@@ -1,50 +1,63 @@
 import {EventEmitter} from "events";
-import lazy from "lazy.js";
 
 import AppDispatcher from "../AppDispatcher";
 import appScheme from "../stores/schemes/appScheme";
 import AppVersionsEvents from "../events/AppVersionsEvents";
 
+import Util from "../helpers/Util";
+
+const storeData = {
+  appVersions: {},
+  availableAppVersions: [],
+  currentAppId: null
+};
+
 function processAppVersion(appVersion) {
-  return lazy(appScheme).extend(appVersion).value();
+  return Util.extendObject(appScheme, appVersion);
 }
 
-var AppVersionsStore = lazy(EventEmitter.prototype).extend({
-  // appId where the app versions belong to
-  currentAppId: null,
-  // List of the available version timestamps
-  availableAppVersions: [],
+var AppVersionsStore = Util.extendObject(EventEmitter.prototype, {
   // Already requested versions with version timestamp as key
-  appVersions: {},
+  get appVersions() {
+    return Util.deepCopy(storeData.appVersions);
+  },
+  // List of the available version timestamps
+  get availableAppVersions() {
+    return Util.deepCopy(storeData.availableAppVersions);
+  },
+  // appId where the app versions belong to
+  get currentAppId() {
+    return storeData.currentAppId;
+  },
 
   resetOnAppChange: function (appId) {
-    if (appId !== this.currentAppId) {
-      this.availableAppVersions = [];
-      this.appVersions = {};
-      this.currentAppId = appId;
+    if (appId !== storeData.currentAppId) {
+      storeData.availableAppVersions = [];
+      storeData.appVersions = {};
+      storeData.currentAppId = appId;
     }
   },
 
   getAppVersions: function (appId) {
-    if (appId === this.currentAppId) {
+    if (appId === storeData.currentAppId) {
       return this.availableAppVersions;
     }
     return [];
   },
 
   getAppVersion: function (appId, appVersionTimestamp) {
-    if (appId === this.currentAppId) {
-      return this.appVersions[appVersionTimestamp] || {};
+    if (appId === storeData.currentAppId) {
+      return Util.deepCopy(this.appVersions[appVersionTimestamp]) || {};
     }
     return {};
   }
-}).value();
+});
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS:
       AppVersionsStore.resetOnAppChange(action.appId);
-      AppVersionsStore.availableAppVersions = action.data.body.versions;
+      storeData.availableAppVersions = action.data.body.versions;
       AppVersionsStore.emit(AppVersionsEvents.CHANGE, action.appId);
       break;
     case AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS_ERROR:
@@ -56,7 +69,7 @@ AppDispatcher.register(function (action) {
       break;
     case AppVersionsEvents.REQUEST_ONE:
       AppVersionsStore.resetOnAppChange(action.appId);
-      AppVersionsStore.appVersions[action.versionTimestamp] =
+      storeData.appVersions[action.versionTimestamp] =
         processAppVersion(action.data.body);
       AppVersionsStore.emit(AppVersionsEvents.CHANGE, action.versionTimestamp);
       break;
