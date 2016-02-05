@@ -6,6 +6,10 @@ import queueScheme from "./schemes/queueScheme";
 
 import Util from "../helpers/Util";
 
+const storeData = {
+  queue: []
+};
+
 function processQueue(queue = []) {
   return queue.map(function (entry) {
     return Util.extendObject(queueScheme, entry);
@@ -13,12 +17,14 @@ function processQueue(queue = []) {
 }
 
 var QueueStore = Util.extendObject(EventEmitter.prototype, {
-  queue: [],
+  get queue() {
+    return Util.deepCopy(storeData.queue);
+  },
 
   getDelayByAppId: function (appId) {
     var timeLeftSeconds = 0;
 
-    var queueEntry = this.queue.find(function (entry) {
+    var queueEntry = storeData.queue.find(function (entry) {
       return entry.app.id === appId && entry.delay != null;
     });
 
@@ -33,7 +39,7 @@ var QueueStore = Util.extendObject(EventEmitter.prototype, {
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case QueueEvents.REQUEST:
-      QueueStore.queue = processQueue(action.data.body.queue);
+      storeData.queue = processQueue(action.data.body.queue);
       QueueStore.emit(QueueEvents.CHANGE);
       break;
     case QueueEvents.REQUEST_ERROR:
