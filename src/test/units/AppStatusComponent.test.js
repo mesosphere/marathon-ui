@@ -1,18 +1,23 @@
 import {expect} from "chai";
+import nock from "nock";
 import {shallow} from "enzyme";
-
 import React from "react/addons";
+
 import AppStatus from "../../js/constants/AppStatus";
-import QueueStore from "../../js/stores/QueueStore";
 import AppStatusComponent from "../../js/components/AppStatusComponent";
+import QueueActions from "../../js/actions/QueueActions";
+import QueueEvents from "../../js/events/QueueEvents";
+import QueueStore from "../../js/stores/QueueStore";
+
+import config from "../../js/config/config";
 
 describe("AppStatusComponent", function () {
 
   describe("on delayed status", function () {
 
-    before(function () {
+    before(function (done) {
       var model = {
-        id: "app-1",
+        id: "/app-1",
         deployments: [],
         tasksRunning: 4,
         instances: 5,
@@ -21,14 +26,31 @@ describe("AppStatusComponent", function () {
         status: AppStatus.DELAYED
       };
 
-      QueueStore.queue = [
-        {
-          app: {id: "app-1"},
-          delay: {timeLeftSeconds: 173}
-        }
-      ];
+      var nockResponse = {
+        "queue": [
+          {
+            "app": {
+              "id": "/app-1",
+              "maxLaunchDelaySeconds": 3600
+            },
+            "delay": {
+              "overdue": false,
+              "timeLeftSeconds": 173
+            }
+          }
+        ]
+      };
 
-      this.component = shallow(<AppStatusComponent model={model} />);
+      nock(config.apiURL)
+        .get("/v2/queue")
+        .reply(200, nockResponse);
+
+      QueueStore.once(QueueEvents.CHANGE, () => {
+        this.component = shallow(<AppStatusComponent model={model} />);
+        done();
+      });
+
+      QueueActions.requestQueue();
     });
 
     it("has correct status description", function () {
@@ -45,7 +67,7 @@ describe("AppStatusComponent", function () {
 
     before(function () {
       var model = {
-        id: "app-1",
+        id: "/app-1",
         deployments: [],
         tasksRunning: 4,
         instances: 5,

@@ -6,13 +6,31 @@ import expectAsync from "./../helpers/expectAsync";
 import config from "../../js/config/config";
 
 import AppsStore from "../../js/stores/AppsStore";
+import AppsActions from "../../js/actions/AppsActions";
 import AppsEvents from "../../js/events/AppsEvents";
 import QueueActions from "../../js/actions/QueueActions";
-
-var server = config.localTestserverURI;
-config.apiURL = "http://" + server.address + ":" + server.port + "/";
+import QueueEvents from "../../js/events/QueueEvents";
+import QueueStore from "../../js/stores/QueueStore";
 
 describe("queue update", function () {
+
+  before(function (done) {
+    var nockResponse = {
+      apps: [{
+        id: "/app-1",
+        instances: 5,
+        mem: 100,
+        cpus: 4
+      }]
+    };
+
+    nock(config.apiURL)
+      .get("/v2/apps")
+      .reply(200, nockResponse);
+
+    AppsStore.once(AppsEvents.CHANGE, done);
+    AppsActions.requestApps();
+  });
 
   it("has the correct app status (delayed)", function (done) {
     var nockResponse = {
@@ -29,11 +47,12 @@ describe("queue update", function () {
         }
       ]
     };
+
     nock(config.apiURL)
       .get("/v2/queue")
       .reply(200, nockResponse);
 
-    AppsStore.once(AppsEvents.CHANGE, function () {
+    QueueStore.once(QueueEvents.CHANGE, function () {
       expectAsync(function () {
         expect(_.findWhere(AppsStore.apps, {id: "/app-1"}).status)
           .to.equal(3);
