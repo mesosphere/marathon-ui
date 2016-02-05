@@ -115,7 +115,7 @@ describe("Create Application", function () {
         nock(config.apiURL)
           .post("/v2/apps")
           .reply(422, {
-            errors: [
+            details: [
               {
                 attribute: "id",
                 error: "attribute has invalid value"
@@ -125,8 +125,8 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error) {
           expectAsync(function () {
-            expect(error.errors[0].attribute).to.equal("id");
-            expect(error.errors[0].error)
+            expect(error.details[0].attribute).to.equal("id");
+            expect(error.details[0].error)
               .to.equal("attribute has invalid value");
           }, done);
         });
@@ -237,7 +237,7 @@ describe("Create Application", function () {
         nock(config.apiURL)
           .post("/v2/apps")
           .reply(422, {
-            "errors": [{
+            "details": [{
               "attribute": "id",
               "error": "error on id attribute"
             }]
@@ -1231,7 +1231,7 @@ describe("Create Application", function () {
           nock(config.apiURL)
             .post("/v2/apps")
             .reply(422, {
-              "errors": [{
+              "details": [{
                 "attribute": "id",
                 "error": "error on id attribute"
               }]

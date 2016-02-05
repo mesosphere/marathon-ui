@@ -26,7 +26,7 @@ const AppFormValidators = {
 
   appIdNoWhitespaces: (str) => str.match(/ /g) == null,
 
-  appIdValidChars: (str) => str.match(/[^a-z0-9\-_\.\/]/g) == null,
+  appIdValidChars: (str) => str.match(/[^a-z0-9\-\.\/]/g) == null,
 
   appIdWellFormedPath: (str) => {
     // This RegExp is taken from the ID field explanation described here:

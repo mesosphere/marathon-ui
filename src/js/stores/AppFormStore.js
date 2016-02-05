@@ -295,16 +295,15 @@ function processResponseErrors(responseErrors, response, statusCode) {
       AppFormErrorMessages.getGeneralMessage("unknownServerError");
 
   } else if (statusCode === 422 && response != null &&
-      Util.isArray(response.errors)) {
-
-    response.errors.forEach((error) => {
-      var attributePath = error.attribute.length
-        ? error.attribute
+      Util.isArray(response.details)) {
+    response.details.forEach(detail => {
+      var attributePath = detail.attribute.length
+        ? detail.attribute
         : "general";
       var fieldId = resolveResponseAttributePathToFieldId(attributePath) ||
         attributePath;
       responseErrors[fieldId] =
-        AppFormErrorMessages.lookupServerResponseMessage(error.error);
+        AppFormErrorMessages.lookupServerResponseMessage(detail.error);
     });
 
   } else if (statusCode === 409 && responseHasDeployments) {
@@ -343,13 +342,13 @@ function processResponseErrors(responseErrors, response, statusCode) {
   } else if (statusCode === 400 && response != null &&
       Util.isArray(response.details)) {
 
-    response.details.forEach((detail) => {
+    response.details.forEach(detail => {
       var attributePath = detail.path.length
         ? detail.path
         : "general";
       var fieldId = resolveResponseAttributePathToFieldId(attributePath) ||
         attributePath;
-      responseErrors[fieldId] = detail.errors.map((error) => {
+      responseErrors[fieldId] = detail.errors.map(error => {
         return AppFormErrorMessages.lookupServerResponseMessage(error);
       }).join(", ");
     });
