@@ -241,6 +241,24 @@ function deleteErrorIndices(errorIndices, fieldId, consecutiveKey) {
   }
 }
 
+// Update validationErrorIndices for given field - insert error if one exists,
+// delete any existent error if no error exists.
+// Returns true if an error was found.
+function updateErrorIndices(fieldId, value, errorIndices) {
+  var errorIndex = getValidationErrorIndex(fieldId, value);
+  if (errorIndex > -1) {
+    if (value.consecutiveKey != null) {
+      Util.initKeyValue(errorIndices, fieldId, []);
+      errorIndices[fieldId][value.consecutiveKey] = errorIndex;
+    } else {
+      errorIndices[fieldId] = errorIndex;
+    }
+    return true;
+  }
+  deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
+  return false;
+}
+
 function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveFieldIdToAppKeyMap[fieldId];
   if (key) {
@@ -461,24 +479,6 @@ function executeAction(action, setFieldFunction) {
   } else {
     AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
   }
-}
-
-// Update validationErrorIndices for given field - insert error if one exists,
-// delete any existent error if no error exists.
-// Returns true if an error was found.
-function updateErrorIndices(fieldId, value, errorIndices) {
-  var errorIndex = getValidationErrorIndex(fieldId, value);
-  if (errorIndex > -1) {
-    if (value.consecutiveKey != null) {
-      Util.initKeyValue(errorIndices, fieldId, []);
-      errorIndices[fieldId][value.consecutiveKey] = errorIndex;
-    } else {
-      errorIndices[fieldId] = errorIndex;
-    }
-    return true;
-  }
-  deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
-  return false;
 }
 
 function onAppsErrorResponse(response, statusCode) {
