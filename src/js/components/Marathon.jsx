@@ -12,7 +12,7 @@ import DialogsComponent from "../components/DialogsComponent";
 import EditAppModalComponent from "../components/modals/EditAppModalComponent";
 import HelpModalComponent from "../components/modals/HelpModalComponent";
 import NavTabsComponent from "../components/NavTabsComponent";
-import HelpMenu from "./HelpMenu";
+import HelpMenuComponent from "./HelpMenuComponent";
 
 import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
@@ -248,7 +248,7 @@ var Marathon = React.createClass({
               tabs={tabs} />
             <div className="nav navbar-nav navbar-right">
               <AppListFilterComponent />
-              <HelpMenu />
+              <HelpMenuComponent />
             </div>
           </div>
         </nav>

@@ -7,7 +7,7 @@ import PopoverComponent from "./PopoverComponent";
 
 import OnClickOutsideMixin from "react-onclickoutside";
 
-var HelpMenu = React.createClass({
+var HelpMenuComponent = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.func
@@ -71,4 +71,4 @@ var HelpMenu = React.createClass({
   }
 });
 
-export default HelpMenu;
+export default HelpMenuComponent;
