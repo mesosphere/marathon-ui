@@ -98,6 +98,8 @@ var AppConfigEditFormComponent = React.createClass({
     this.setState({
       fields: AppFormStore.fields,
       errorIndices: AppFormStore.validationErrorIndices
+    }, () => {
+      this.props.onError(this.getErrorMessage("general"));
     });
   },
 
@@ -105,12 +107,13 @@ var AppConfigEditFormComponent = React.createClass({
     this.setState({
       fields: AppFormStore.fields,
       errorIndices: AppFormStore.validationErrorIndices
+    }, () => {
+      if (!!Object.keys(this.state.errorIndices).length) {
+        this.props.onError(this.getErrorMessage("general"));
+      } else {
+        this.props.onChange(AppFormStore.app);
+      }
     });
-    if (!!Object.keys(this.state.errorIndices).length) {
-      this.props.onError(this.getErrorMessage("general"));
-    } else {
-      this.props.onChange(AppFormStore.app);
-    }
   },
 
   handleFieldUpdate: function (fieldId, value) {
