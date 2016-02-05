@@ -142,9 +142,12 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("g v", function () {
+      if (this.state.modal != null) {
+        return null;
+      }
       DialogActions.alert({message:`You're running version ${config.version}.`,
         title: "Marathon UI"});
-    });
+    }.bind(this));
 
     Mousetrap.bind("shift+,", function () {
       if (this.state.modal != null) {
@@ -155,7 +158,7 @@ var Marathon = React.createClass({
 
     Mousetrap.bind("?", function () {
       if (this.state.modal != null) {
-        this.handleModalDestroy();
+        return null;
       }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "help"});
     }.bind(this));
