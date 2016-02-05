@@ -3,7 +3,7 @@
 - \#3017 - Move application Search Bar to the Header
 - \#3082 - Make URLs in form validation error messages clickable
 - \#3076 - Highlight sorted columns in the UI
-
+- \#2049 - Added JSON editor to application modal
 
 ### Changed
 - \#3078 - Always show download button for logs

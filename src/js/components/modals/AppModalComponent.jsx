@@ -3,25 +3,14 @@ import React from "react/addons";
 import Util from "../../helpers/Util";
 
 import AppsActions from "../../actions/AppsActions";
+import AppConfigEditFormComponent from "../AppConfigEditFormComponent";
+import AppConfigJSONEditorComponent from "../AppConfigJSONEditorComponent";
 import AppsEvents from "../../events/AppsEvents";
 import AppFormErrorMessages from "../../constants/AppFormErrorMessages";
 import AppFormStore from "../../stores/AppFormStore";
 import AutolinkComponent from "../AutolinkComponent";
 import AppsStore from "../../stores/AppsStore";
-import CollapsiblePanelComponent
-  from "../../components/CollapsiblePanelComponent";
-import ContainerSettingsComponent
-  from "../../components/ContainerSettingsComponent";
-import FormActions from "../../actions/FormActions";
-import FormEvents from "../../events/FormEvents";
-import HealthChecksComponent from "../../components/HealthChecksComponent";
 import ModalComponent from "../../components/ModalComponent";
-import OptionalEnvironmentComponent
-  from "../../components/OptionalEnviromentComponent";
-import OptionalLabelsComponent from "../../components/OptionalLabelsComponent";
-import OptionalSettingsComponent
-  from "../../components/OptionalSettingsComponent";
-import FormGroupComponent from "../../components/FormGroupComponent";
 
 var AppModalComponent = React.createClass({
   displayName: "AppModalComponent",
@@ -40,17 +29,15 @@ var AppModalComponent = React.createClass({
 
   getInitialState: function () {
     var app = this.props.app;
-    AppFormStore.initAndReset();
 
-    if (app != null) {
-      AppFormStore.populateFieldsFromAppDefinition(app);
-    }
-
+    // We don't want to trigger changes in the app until the submit button
+    // is clicked, therefore it is held in the modal state rather than props
     return {
-      fields: AppFormStore.fields,
-      errorIndices: {},
-      responseErrorMessages: {},
-      force: false
+      app: app,
+      appIsValid: true,
+      error: null,
+      force: false,
+      jsonMode: false
     };
   },
 
@@ -65,20 +52,6 @@ var AppModalComponent = React.createClass({
     AppsStore.on(AppsEvents.CREATE_APP_ERROR, this.onCreateAppError);
     AppsStore.on(AppsEvents.APPLY_APP, this.onCreateApp);
     AppsStore.on(AppsEvents.APPLY_APP_ERROR, this.onApplyAppError);
-    AppFormStore.on(FormEvents.CHANGE, this.onFormChange);
-    AppFormStore.on(FormEvents.FIELD_VALIDATION_ERROR,
-      this.onFieldValidationError);
-  },
-
-  componentDidMount: function () {
-    this.setCursorToEndOfAppIdInput();
-  },
-
-  setCursorToEndOfAppIdInput: function () {
-    var appIdInput = React.findDOMNode(this.refs.appId);
-    appIdInput.focus();
-    var valueLength = appIdInput.value.length;
-    appIdInput.setSelectionRange(valueLength, valueLength);
   },
 
   componentWillUnmount: function () {
@@ -90,9 +63,6 @@ var AppModalComponent = React.createClass({
       this.onCreateApp);
     AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR,
       this.onApplyAppError);
-    AppFormStore.removeListener(FormEvents.CHANGE, this.onFormChange);
-    AppFormStore.removeListener(FormEvents.FIELD_VALIDATION_ERROR,
-      this.onFieldValidationError);
   },
 
   onApplyAppError: function (error, isEditing, status) {
@@ -113,40 +83,18 @@ var AppModalComponent = React.createClass({
     } else if (status === 409 && data.deployments != null) {
       // a 409 error without deployments is a field conflict
       this.setState({
-        responseErrorMessages: {
-          general: AppFormErrorMessages.getGeneralMessage("appLocked")
-        },
+        error: AppFormErrorMessages.getGeneralMessage("appLocked"),
         force: true
       });
     } else {
-      this.setState({
-        responseErrorMessages: AppFormStore.responseErrors
-      });
+      this.setState({error: AppFormStore.responseErrors["general"]});
     }
-  },
-
-  onFieldValidationError: function () {
-    this.setState({
-      fields: AppFormStore.fields,
-      errorIndices: AppFormStore.validationErrorIndices
-    });
-  },
-
-  onFormChange: function () {
-    this.setState({
-      fields: AppFormStore.fields,
-      errorIndices: AppFormStore.validationErrorIndices
-    });
-  },
-
-  handleFieldUpdate: function (fieldId, value) {
-    FormActions.update(fieldId, value);
   },
 
   handleSubmit: function (event) {
     event.preventDefault();
 
-    if (!Object.keys(this.state.errorIndices).length) {
+    if (this.state.appIsValid) {
       const app = AppFormStore.getApp();
 
       if (this.props.app != null) {
@@ -157,20 +105,8 @@ var AppModalComponent = React.createClass({
     }
   },
 
-  getErrorMessage: function (fieldId) {
-    var state = this.state;
-    var errorIndex = state.errorIndices[fieldId];
-    if (errorIndex != null && !Util.isArray(errorIndex)) {
-      return AppFormErrorMessages.getFieldMessage(fieldId, errorIndex);
-    }
-    if (state.responseErrorMessages[fieldId] != null) {
-      return state.responseErrorMessages[fieldId];
-    }
-    return null;
-  },
-
   getGeneralErrorBlock: function () {
-    var error = this.getErrorMessage("general");
+    var error = this.state.error;
 
     if (error == null) {
       return null;
@@ -191,7 +127,7 @@ var AppModalComponent = React.createClass({
 
     var classSet = classNames({
       "btn btn-success": true,
-      "disabled": !!Object.keys(this.state.errorIndices).length
+      "disabled": !this.state.appIsValid
     });
 
     return (
@@ -201,14 +137,25 @@ var AppModalComponent = React.createClass({
     );
   },
 
-  fieldsHaveError: function (fieldIds) {
-    var state = this.state;
-    var errorIndices = state.errorIndices;
-    var responseMessages = state.responseErrorMessages;
+  handleModeToggle: function (event) {
+    event.preventDefault();
+    if (event.metaKey || event.ctrlKey) {
+      this.setState({jsonMode: !this.state.jsonMode});
+    }
+  },
 
-    return !!Object.values(fieldIds).find((fieldId) => {
-      return errorIndices[fieldId] != null || responseMessages[fieldId] != null;
+  handleAppConfigChange: function (app) {
+    // At present we assume that the supplied app config is valid.
+    // We may wish to pass invalid (eg incomplete) configs in the future.
+    this.setState({
+      app: app,
+      error: null,
+      appIsValid: true
     });
+  },
+
+  handleAppConfigError: function (error) {
+    this.setState({error: error, appIsValid: false});
   },
 
   render: function () {
@@ -220,6 +167,15 @@ var AppModalComponent = React.createClass({
     if (props.app != null && props.app.version != null) {
       modalTitle = "Edit Application";
     }
+
+    var appConfigProps = {
+      app: state.app,
+      onChange: this.handleAppConfigChange,
+      onError: this.handleAppConfigError
+    };
+    var appConfigEditor = state.jsonMode
+      ? <AppConfigJSONEditorComponent {...appConfigProps} />
+      : <AppConfigEditFormComponent {...appConfigProps} />;
 
     var cancelButton = (
       <button className="btn btn-default"
@@ -238,121 +194,12 @@ var AppModalComponent = React.createClass({
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>
-            <h3 className="modal-title">{modalTitle}</h3>
+            <h3 className="modal-title" onClick={this.handleModeToggle}>
+              {modalTitle}
+            </h3>
           </div>
           <div className="modal-body reduced-padding">
-            <FormGroupComponent
-                errorMessage={this.getErrorMessage("appId")}
-                fieldId="appId"
-                value={state.fields.appId}
-                label="ID"
-                onChange={this.handleFieldUpdate}>
-              <input ref="appId" />
-            </FormGroupComponent>
-            <div className="row">
-              <div className="col-sm-3">
-                <FormGroupComponent
-                    errorMessage={this.getErrorMessage("cpus")}
-                    fieldId="cpus"
-                    label="CPUs"
-                    value={state.fields.cpus}
-                    onChange={this.handleFieldUpdate}>
-                  <input min="0" step="any" type="number" />
-                </FormGroupComponent>
-              </div>
-              <div className="col-sm-3">
-                <FormGroupComponent
-                    fieldId="mem"
-                    label="Memory (MiB)"
-                    errorMessage={this.getErrorMessage("mem")}
-                    value={state.fields.mem}
-                    onChange={this.handleFieldUpdate}>
-                  <input min="0" step="any" type="number" />
-                </FormGroupComponent>
-              </div>
-              <div className="col-sm-3">
-                <FormGroupComponent
-                    fieldId="disk"
-                    label="Disk Space (MiB)"
-                    errorMessage={this.getErrorMessage("disk")}
-                    value={state.fields.disk}
-                    onChange={this.handleFieldUpdate}>
-                  <input min="0" step="any" type="number"/>
-                </FormGroupComponent>
-              </div>
-              <div className="col-sm-3">
-                <FormGroupComponent
-                    fieldId="instances"
-                    label="Instances"
-                    errorMessage={this.getErrorMessage("instances")}
-                    value={state.fields.instances}
-                    onChange={this.handleFieldUpdate}>
-                  <input min="0" step="1" type="number" />
-                </FormGroupComponent>
-              </div>
-            </div>
-            <FormGroupComponent
-                errorMessage={this.getErrorMessage("cmd")}
-                fieldId="cmd"
-                label="Command"
-                help="May be left blank if a container image is supplied"
-                value={state.fields.cmd}
-                onChange={this.handleFieldUpdate}>
-              <textarea style={{resize: "vertical"}} />
-            </FormGroupComponent>
-            <div className="row full-bleed">
-              <CollapsiblePanelComponent
-                  isOpen=
-                    {this.fieldsHaveError(ContainerSettingsComponent.fieldIds)}
-                  title="Docker container settings">
-                <ContainerSettingsComponent
-                  errorIndices={state.errorIndices}
-                  fields={state.fields}
-                  getErrorMessage={this.getErrorMessage} />
-              </CollapsiblePanelComponent>
-            </div>
-            <div className="row full-bleed">
-              <CollapsiblePanelComponent
-                  isOpen={this.fieldsHaveError({env: "env"})}
-                  title="Environment variables">
-                <OptionalEnvironmentComponent
-                  errorIndices={state.errorIndices}
-                  getErrorMessage={this.getErrorMessage}
-                  fields={state.fields} />
-              </CollapsiblePanelComponent>
-            </div>
-            <div className="row full-bleed">
-              <CollapsiblePanelComponent
-                  isOpen={this.fieldsHaveError({labels: "labels"})}
-                  title="Labels">
-                <OptionalLabelsComponent
-                  errorIndices={state.errorIndices}
-                  getErrorMessage={this.getErrorMessage}
-                  fields={state.fields} />
-              </CollapsiblePanelComponent>
-            </div>
-            <div className="row full-bleed reduced-padding">
-              <CollapsiblePanelComponent
-                  isOpen=
-                    {this.fieldsHaveError({healthChecks: "healthChecks"})}
-                  title="Health checks">
-                <HealthChecksComponent
-                  errorIndices={state.errorIndices}
-                  fields={state.fields}
-                  getErrorMessage={this.getErrorMessage} />
-              </CollapsiblePanelComponent>
-            </div>
-            <div className="row full-bleed">
-              <CollapsiblePanelComponent
-                  isOpen=
-                    {this.fieldsHaveError(OptionalSettingsComponent.fieldIds)}
-                  title="Optional settings">
-                <OptionalSettingsComponent
-                  errorIndices={state.errorIndices}
-                  fields={state.fields}
-                  getErrorMessage={this.getErrorMessage} />
-              </CollapsiblePanelComponent>
-            </div>
+            {appConfigEditor}
             <div className="modal-controls">
               {this.getGeneralErrorBlock()}
               {this.getSubmitButton()} {cancelButton}
