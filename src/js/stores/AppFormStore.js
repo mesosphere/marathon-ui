@@ -1,5 +1,4 @@
 import {EventEmitter} from "events";
-import lazy from "lazy.js";
 import objectPath from "object-path";
 import Util from "../helpers/Util";
 
@@ -11,6 +10,13 @@ import AppFormValidators from "./validators/AppFormValidators";
 import AppsStore from "./AppsStore";
 import AppsEvents from "../events/AppsEvents";
 import FormEvents from "../events/FormEvents";
+
+const storeData = {
+  app: {},
+  fields: {},
+  responseErrors: {},
+  validationErrorIndices: {}
+};
 
 const defaultFieldValues = Object.freeze({
   cpus: 0.1,
@@ -235,6 +241,24 @@ function deleteErrorIndices(errorIndices, fieldId, consecutiveKey) {
   }
 }
 
+// Update validationErrorIndices for given field - insert error if one exists,
+// delete any existent error if no error exists.
+// Returns true if an error was found.
+function updateErrorIndices(fieldId, value, errorIndices) {
+  var errorIndex = getValidationErrorIndex(fieldId, value);
+  if (errorIndex > -1) {
+    if (value.consecutiveKey != null) {
+      Util.initKeyValue(errorIndices, fieldId, []);
+      errorIndices[fieldId][value.consecutiveKey] = errorIndex;
+    } else {
+      errorIndices[fieldId] = errorIndex;
+    }
+    return true;
+  }
+  deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
+  return false;
+}
+
 function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveFieldIdToAppKeyMap[fieldId];
   if (key) {
@@ -389,11 +413,9 @@ function processResponseErrors(responseErrors, response, statusCode) {
   }
 }
 
-var AppFormStore = lazy(EventEmitter.prototype).extend({
-  app: {},
-  fields: {},
-  getApp: function () {
-    var app = Util.deepCopy(this.app);
+var AppFormStore = Util.extendObject(EventEmitter.prototype, {
+  get app() {
+    var app = Util.deepCopy(storeData.app);
 
     Object.keys(app).forEach((appKey) => {
       var postProcessor = AppFormModelPostProcess[appKey];
@@ -404,34 +426,43 @@ var AppFormStore = lazy(EventEmitter.prototype).extend({
 
     return app;
   },
-  responseErrors: {},
-  validationErrorIndices: {},
+  get fields() {
+    return Util.deepCopy(storeData.fields);
+  },
+  get responseErrors() {
+    return Util.deepCopy(storeData.responseErrors);
+  },
+  get validationErrorIndices() {
+    return Util.deepCopy(storeData.validationErrorIndices);
+  },
+
   initAndReset: function () {
-    this.app = {};
-    this.fields = {};
-    this.validationErrorIndices = {};
+    storeData.app = {};
+    storeData.fields = {};
+    storeData.responseErrors = {};
+    storeData.validationErrorIndices = {};
 
     Object.keys(defaultFieldValues).forEach((fieldId) => {
-      this.fields[fieldId] = defaultFieldValues[fieldId];
-      rebuildModelFromFields(this.app, this.fields, fieldId);
+      storeData.fields[fieldId] = defaultFieldValues[fieldId];
+      rebuildModelFromFields(storeData.app, storeData.fields, fieldId);
     });
   },
   populateFieldsFromAppDefinition: function (app) {
-    this.app = app;
-    populateFieldsFromModel(Util.deepCopy(app), this.fields);
+    storeData.app = app;
+    populateFieldsFromModel(Util.deepCopy(storeData.app), storeData.fields);
 
-    if (!checkAllFieldsForValidity(this.fields)) {
+    if (!checkAllFieldsForValidity(storeData.fields)) {
       AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
     }
   }
-}).value();
+});
 
 function executeAction(action, setFieldFunction) {
   var actionType = action.actionType;
   var fieldId = action.fieldId;
   var value = action.value;
   var index = action.index;
-  var errorIndices = AppFormStore.validationErrorIndices;
+  var errorIndices = storeData.validationErrorIndices;
   var errorOccurred = false;
 
   if (actionType === FormEvents.INSERT || actionType === FormEvents.UPDATE) {
@@ -440,37 +471,19 @@ function executeAction(action, setFieldFunction) {
     deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
   }
 
-  setFieldFunction(AppFormStore.fields, fieldId, index, value);
+  setFieldFunction(storeData.fields, fieldId, index, value);
 
   if (!errorOccurred) {
-    rebuildModelFromFields(AppFormStore.app, AppFormStore.fields, fieldId);
+    rebuildModelFromFields(storeData.app, storeData.fields, fieldId);
     AppFormStore.emit(FormEvents.CHANGE, fieldId);
   } else {
     AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
   }
 }
 
-// Update validationErrorIndices for given field - insert error if one exists,
-// delete any existent error if no error exists.
-// Returns true if an error was found.
-function updateErrorIndices(fieldId, value, errorIndices) {
-  var errorIndex = getValidationErrorIndex(fieldId, value);
-  if (errorIndex > -1) {
-    if (value.consecutiveKey != null) {
-      Util.initKeyValue(errorIndices, fieldId, []);
-      errorIndices[fieldId][value.consecutiveKey] = errorIndex;
-    } else {
-      errorIndices[fieldId] = errorIndex;
-    }
-    return true;
-  }
-  deleteErrorIndices(errorIndices, fieldId, value.consecutiveKey);
-  return false;
-}
-
 function onAppsErrorResponse(response, statusCode) {
-  AppFormStore.responseErrors = {};
-  processResponseErrors(AppFormStore.responseErrors, response, statusCode);
+  storeData.responseErrors = {};
+  processResponseErrors(storeData.responseErrors, response, statusCode);
 }
 
 AppsStore.on(AppsEvents.CREATE_APP_ERROR, function (data, status) {
@@ -480,10 +493,10 @@ AppsStore.on(AppsEvents.APPLY_APP_ERROR, function (data, isEditing, status) {
   onAppsErrorResponse(data, status);
 });
 AppsStore.on(AppsEvents.CREATE_APP, function () {
-  AppFormStore.responseErrors = {};
+  storeData.responseErrors = {};
 });
 AppsStore.on(AppsEvents.APPLY_APP, function () {
-  AppFormStore.responseErrors = {};
+  storeData.responseErrors = {};
 });
 
 AppDispatcher.register(function (action) {
