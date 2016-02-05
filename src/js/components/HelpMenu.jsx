@@ -35,13 +35,14 @@ var HelpMenu = React.createClass({
 
   render: function () {
     var router = this.context.router;
-    var helpMenuClassName = classNames("help-menu icon help", {
+    var helpMenuClassName = classNames("help-menu", {
       "active": this.state.helpMenuVisible
     });
 
     return (
       <div className={helpMenuClassName}
           onClick={this.toggleHelpMenu}>
+        <i className="icon icon-mini help"></i>
         <span className="caret"></span>
         <PopoverComponent visible={this.state.helpMenuVisible}
             className="help-menu-dropdown">

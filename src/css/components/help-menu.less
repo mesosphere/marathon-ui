@@ -3,15 +3,21 @@
  * =============
  */
 .help-menu {
-  margin: @base-spacing-unit*2+1 @base-spacing-unit;
-  width: @base-spacing-unit*2.5;
-  padding: 0 @base-spacing-unit*2.5;
+  margin: 0;
+  padding: @base-spacing-unit*2 @base-spacing-unit*2;
   cursor: pointer;
-  color: @manatee;
+  color: @white;
   background-position: center left;
+  line-height: 1;
+  opacity: .4;
 
-  &.active {
-    color: @white;
+  .caret {
+    margin-left: @horizontal-spacing-unit;
+  }
+
+  &.active,
+  &:hover {
+    opacity: 1;
   }
 
   &-dropdown.popover.bottom, &-dropdown.popover.default {
@@ -31,11 +37,10 @@
     }
 
     .dropdown-menu {
-      left: auto;
+      right: @base-spacing-unit*2;
       transform: none;
       position: relative;
-      border-color: @white;
-      border-radius: 2px;
+      border: none;
       display: block;
     }
   }
