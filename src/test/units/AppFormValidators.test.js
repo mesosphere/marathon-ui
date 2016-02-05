@@ -31,12 +31,13 @@ describe("App Form Validators", function () {
       });
 
       it("has no illegal characters", function () {
-        expect(this.validatior.appIdValidChars("./app-1_b")).to.be.true;
+        expect(this.validatior.appIdValidChars("./app-1.b")).to.be.true;
       });
 
       it("has illegal characters", function () {
         expect(this.validatior.appIdValidChars("Uppercase")).to.be.false;
         expect(this.validatior.appIdValidChars("app#1")).to.be.false;
+        expect(this.validatior.appIdValidChars("app_1")).to.be.false;
         expect(this.validatior.appIdValidChars("+1")).to.be.false;
       });
 
