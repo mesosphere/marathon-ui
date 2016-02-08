@@ -124,7 +124,7 @@ var Marathon = React.createClass({
 
     Mousetrap.bind("c", function () {
       if (this.state.modal != null) {
-        this.handleModalDestroy();
+        return null;
       }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-app"});
     }.bind(this), "keypress");
@@ -151,7 +151,7 @@ var Marathon = React.createClass({
 
     Mousetrap.bind("shift+,", function () {
       if (this.state.modal != null) {
-        this.handleModalDestroy();
+        return null;
       }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "about"});
     }.bind(this));
