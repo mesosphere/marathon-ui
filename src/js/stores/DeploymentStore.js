@@ -1,30 +1,29 @@
 import {EventEmitter} from "events";
-import lazy from "lazy.js";
 
 import AppDispatcher from "../AppDispatcher";
 import DeploymentEvents from "../events/DeploymentEvents";
 import deploymentScheme from "./schemes/deploymentScheme";
 
+import Util from "../helpers/Util";
+
 function processDeployments(deployments) {
-  return lazy(deployments).map(function (deployment) {
-    deployment = lazy(deploymentScheme).extend(deployment).value();
+  return deployments.map(function (deployment) {
+    deployment = Util.extendObject(deploymentScheme, deployment);
 
     deployment.affectedAppsString = deployment.affectedApps.join(", ");
     deployment.currentActionsString = deployment.currentActions.join(", ");
 
     return deployment;
-  }).value();
+  });
 }
 
 function removeDeployment(deployments, deploymentId) {
-  return lazy(deployments).reject({
-    id: deploymentId
-  }).value();
+  return deployments.filter(deployment => deployment.id !== deploymentId);
 }
 
-var DeploymentStore = lazy(EventEmitter.prototype).extend({
+var DeploymentStore = Util.extendObject(EventEmitter.prototype, {
   deployments: []
-}).value();
+});
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
