@@ -834,7 +834,7 @@ describe("App Form", function () {
         nock(config.apiURL)
           .post("/v2/apps")
           .reply(422, {
-            "errors": [{
+            "details": [{
               "attribute": "id",
               "error": "error on id attribute"
             }]
