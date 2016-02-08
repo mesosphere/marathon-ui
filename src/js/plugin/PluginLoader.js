@@ -34,6 +34,7 @@ const PluginLoader = {
         // Inject plugin interface
         pluginWindow.marathonPluginInterface = {
           PluginDispatcher: PluginDispatcherProxy.create(pluginId),
+          pluginId: pluginId,
           UIVersion: config.version
         };
 
