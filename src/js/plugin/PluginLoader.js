@@ -32,11 +32,11 @@ const PluginLoader = {
         var pluginTimeout = null;
 
         // Inject plugin interface
-        pluginWindow.marathonPluginInterface = {
+        pluginWindow.marathonPluginInterface = Object.freeze({
           PluginDispatcher: PluginDispatcherProxy.create(pluginId),
           pluginId: pluginId,
           UIVersion: config.version
-        };
+        });
 
         let dispatchToken = PluginDispatcher.register(function (event) {
           if (event.eventType === "STARTUP_COMPLETE"
