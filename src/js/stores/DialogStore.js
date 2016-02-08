@@ -1,9 +1,9 @@
 import {EventEmitter} from "events";
-import lazy from "lazy.js";
-import Util from "../helpers/Util";
 
 import AppDispatcher from "../AppDispatcher";
 import DialogEvents from "../events/DialogEvents";
+
+import Util from "../helpers/Util";
 
 var dialogs = [];
 
@@ -22,7 +22,7 @@ function removeDialog(dialog) {
   });
 }
 
-var DialogStore = lazy(EventEmitter.prototype).extend({
+var DialogStore = Util.extendObject(EventEmitter.prototype, {
   handleUserResponse: function (dialogId,
     acceptCallback,
     dismissCallback = Util.noop
@@ -50,7 +50,7 @@ var DialogStore = lazy(EventEmitter.prototype).extend({
     DialogStore.on(DialogEvents.ACCEPT_DIALOG, onAccept);
     DialogStore.on(DialogEvents.DISMISS_DIALOG, onDismiss);
   }
-}).value();
+});
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
