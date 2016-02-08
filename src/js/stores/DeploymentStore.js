@@ -6,6 +6,10 @@ import deploymentScheme from "./schemes/deploymentScheme";
 
 import Util from "../helpers/Util";
 
+const storeData = {
+  deployments: []
+};
+
 function processDeployments(deployments) {
   return deployments.map(function (deployment) {
     deployment = Util.extendObject(deploymentScheme, deployment);
@@ -22,13 +26,15 @@ function removeDeployment(deployments, deploymentId) {
 }
 
 var DeploymentStore = Util.extendObject(EventEmitter.prototype, {
-  deployments: []
+  get deployments() {
+    return Util.deepCopy(storeData.deployments);
+  }
 });
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case DeploymentEvents.REQUEST:
-      DeploymentStore.deployments = processDeployments(action.data.body);
+      storeData.deployments = processDeployments(action.data.body);
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REQUEST_ERROR:
@@ -39,8 +45,8 @@ AppDispatcher.register(function (action) {
       );
       break;
     case DeploymentEvents.REVERT:
-      DeploymentStore.deployments =
-        removeDeployment(DeploymentStore.deployments, action.deploymentId);
+      storeData.deployments =
+        removeDeployment(storeData.deployments, action.deploymentId);
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.REVERT_ERROR:
@@ -51,8 +57,8 @@ AppDispatcher.register(function (action) {
       );
       break;
     case DeploymentEvents.STOP:
-      DeploymentStore.deployments =
-        removeDeployment(DeploymentStore.deployments, action.deploymentId);
+      storeData.deployments =
+        removeDeployment(storeData.deployments, action.deploymentId);
       DeploymentStore.emit(DeploymentEvents.CHANGE);
       break;
     case DeploymentEvents.STOP_ERROR:
