@@ -1,15 +1,18 @@
 import {expect} from "chai";
 import {shallow} from "enzyme";
-
 import React from "react/addons";
+
+import AppDispatcher from "../../js/AppDispatcher";
 import NavTabsComponent from "../../js/components/NavTabsComponent";
+import DeploymentEvents from "../../js/events/DeploymentEvents";
 import DeploymentStore from "../../js/stores/DeploymentStore";
+
 import tabs from "../../js/constants/tabs";
 
 describe("Deployments navigation badge", function () {
 
   before(function () {
-    DeploymentStore.deployments = [
+    var deployments = [
       {id: "deployment-1"},
       {id: "deployment-2"}
     ];
@@ -19,7 +22,14 @@ describe("Deployments navigation badge", function () {
       tabs: tabs
     };
 
-    this.component = shallow(<NavTabsComponent {...props} />);
+    DeploymentStore.once(DeploymentEvents.CHANGE, () => {
+      this.component = shallow(<NavTabsComponent {...props} />);
+    });
+
+    AppDispatcher.dispatch({
+      actionType: DeploymentEvents.REQUEST,
+      data: {body: deployments}
+    });
   });
 
   after(function () {
