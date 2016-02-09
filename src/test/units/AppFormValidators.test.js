@@ -633,6 +633,59 @@ describe("App Form Validators", function () {
         expect(this.validatior.ports("123, 495 666")).to.be.false;
       });
     });
+    describe("Volumes", function () {
+      describe("size", function () {
+        it("should not be empty", function () {
+          var volume = {
+            size: ""
+          };
+          expect(this.validatior.volumesSize(volume)).to.be.false;
+        });
+
+        it("should not be a not number value", function () {
+          var volume = {
+            size: "abc"
+          };
+          expect(this.validatior.volumesSize(volume)).to.be.false;
+        });
+
+        it("should be a number value", function () {
+          var volume = {
+            size: "1024"
+          };
+          expect(this.validatior.volumesSize(volume)).to.be.true;
+        });
+      });
+      describe("path", function () {
+        it("shouyld allow an empty value", function () {
+          var volume = {
+            path: ""
+          };
+          expect(this.validatior.volumesPath(volume)).to.be.true;
+        });
+
+        it("should not be a not contain a space", function () {
+          var volume = {
+            path: "ab c"
+          };
+          expect(this.validatior.volumesPath(volume)).to.be.false;
+        });
+
+        it("should be a string value", function () {
+          var volume = {
+            path: "abc"
+          };
+          expect(this.validatior.volumesPath(volume)).to.be.true;
+        });
+
+        it("should be can contain a slash string value", function () {
+          var volume = {
+            path: "ab/c"
+          };
+          expect(this.validatior.volumesPath(volume)).to.be.true;
+        });
+      });
+    });
 
   });
 
