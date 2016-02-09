@@ -2,6 +2,9 @@ import config from "../config/config";
 
 import URLUtil from "../helpers/URLUtil";
 import PluginDispatcher from "./external/PluginDispatcher";
+import PluginEvents from "./external/PluginEvents";
+import PluginMountPoints from "./external/PluginMountPoints";
+import PluginActions from "./external/PluginActions";
 import PluginDispatcherProxy from "./PluginDispatcherProxy";
 
 const PLUGIN_STARTUP_TIMEOUT = 10000; // in ms
@@ -33,7 +36,10 @@ const PluginLoader = {
 
         // Inject plugin interface
         pluginWindow.marathonPluginInterface = Object.freeze({
+          PluginActions: PluginActions,
           PluginDispatcher: PluginDispatcherProxy.create(pluginId),
+          PluginEvents: PluginEvents,
+          PluginMountPoints: PluginMountPoints,
           pluginId: pluginId,
           UIVersion: config.version
         });
