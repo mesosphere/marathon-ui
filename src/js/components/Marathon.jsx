@@ -123,8 +123,11 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("c", function () {
+      if (this.state.modal != null) {
+        return null;
+      }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-app"});
-    }, "keypress");
+    }.bind(this), "keypress");
 
     Mousetrap.bind("g a", function () {
       if (this.state.modal == null) {
@@ -139,17 +142,26 @@ var Marathon = React.createClass({
     }.bind(this));
 
     Mousetrap.bind("g v", function () {
+      if (this.state.modal != null) {
+        return null;
+      }
       DialogActions.alert({message:`You're running version ${config.version}.`,
         title: "Marathon UI"});
-    });
+    }.bind(this));
 
     Mousetrap.bind("shift+,", function () {
+      if (this.state.modal != null) {
+        return null;
+      }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "about"});
-    });
+    }.bind(this));
 
     Mousetrap.bind("?", function () {
+      if (this.state.modal != null) {
+        return null;
+      }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "help"});
-    });
+    }.bind(this));
   },
 
   handleModalDestroy: function () {

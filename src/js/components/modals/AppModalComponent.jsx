@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import React from "react/addons";
 import Util from "../../helpers/Util";
+import Mousetrap from "mousetrap";
 
 import AppsActions from "../../actions/AppsActions";
 import AppConfigEditFormComponent from "../AppConfigEditFormComponent";
@@ -52,6 +53,7 @@ var AppModalComponent = React.createClass({
     AppsStore.on(AppsEvents.CREATE_APP_ERROR, this.onCreateAppError);
     AppsStore.on(AppsEvents.APPLY_APP, this.onCreateApp);
     AppsStore.on(AppsEvents.APPLY_APP_ERROR, this.onApplyAppError);
+    Mousetrap.bind(["command+enter", "ctrl+enter"], () => this.handleSubmit());
   },
 
   componentWillUnmount: function () {
@@ -63,6 +65,7 @@ var AppModalComponent = React.createClass({
       this.onCreateApp);
     AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR,
       this.onApplyAppError);
+    Mousetrap.unbind(["command+enter", "ctrl+enter"]);
   },
 
   onApplyAppError: function (error, isEditing, status) {
@@ -94,7 +97,9 @@ var AppModalComponent = React.createClass({
   },
 
   handleSubmit: function (event) {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
 
     if (this.state.appIsValid) {
       const app = AppFormStore.app;
@@ -193,6 +198,8 @@ var AppModalComponent = React.createClass({
           size="md"
           onDestroy={this.props.onDestroy}>
         <form method="post" role="form" onSubmit={this.handleSubmit}>
+          <button onClick={event => event.preventDefault()}
+            style={{display: "none"}} />
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>

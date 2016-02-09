@@ -18,12 +18,15 @@ var DuplicableRowControls = React.createClass({
 
     return (
       <div className="controls">
-        <button className={removeButtonClassSet}
+        <button type="button"
+            className={removeButtonClassSet}
             onClick={this.props.handleRemoveRow}>
           <i className="icon ion-ios-minus-outline"/>
           <i className="icon icon-hover ion-ios-minus"/>
         </button>
-        <button className="btn btn-link add" onClick={this.props.handleAddRow}>
+        <button type="button"
+            className="btn btn-link add"
+            onClick={this.props.handleAddRow}>
           <i className="icon ion-ios-plus-outline"/>
           <i className="icon icon-hover ion-ios-plus"/>
         </button>
