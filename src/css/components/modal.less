@@ -225,3 +225,95 @@
   }
 
 }
+
+// Design Prototype
+.modal-dialog {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0;
+  bottom: 0;
+}
+
+.modal-header {
+  background-color: @brand-primary;
+  border-radius: 0;
+  padding: 30px 40px;
+}
+
+.modal-content {
+  background-color: #fff;
+}
+
+.modal-body {
+  color: @shuttle-gray;
+  padding: 30px 40px;
+}
+
+.modal-body .row.full-bleed .panel-body {
+  padding: 30px 40px;
+}
+
+.control-label {
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 30px;
+
+  .help-block {
+    color: #aaa;
+    margin-top: 10px;
+  }
+}
+
+.form-control {
+  background: #fff;
+  border-color: #E2E4E5;
+  box-shadow: none;
+  color: #555;
+  height: 46px;
+  padding: 0 12px;
+
+  &:focus {
+    border-color: @brand-primary;
+    outline: 0;
+    background-color: fade(@brand-primary, 5%);
+    box-shadow: none;
+  }
+}
+
+textarea.form-control {
+  height: auto;
+  padding: 12px;
+}
+
+.modal-body .row.full-bleed {
+  margin-left: -40px;
+  margin-right: -40px;
+}
+
+.collapsible-panel {
+  background-color: transparent !important; // Sorry :-(
+  border: none;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.panel-heading {
+  background-color: #F7F7F7;
+  color: #898D98;
+  box-shadow: 0 1px 0 #ddd, 0 -1px 0 #ddd;
+  border: none !important;
+  border-radius: none;
+  padding: 10px 40px !important; // Sorry :-(
+}
+
+.panel-title {
+  color: #898D98;
+}
+
+.panel-body {
+  background-color: transparent !important; // Sorry :-(
+}
+
