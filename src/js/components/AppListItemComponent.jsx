@@ -9,6 +9,7 @@ import AppListItemLabelsComponent
   from "../components/AppListItemLabelsComponent";
 import AppListViewTypes from "../constants/AppListViewTypes";
 import AppStatus from "../constants/AppStatus";
+import FilterTypes from "../constants/FilterTypes";
 import AppStatusComponent from "../components/AppStatusComponent";
 import BreadcrumbComponent from "../components/BreadcrumbComponent";
 import Util from "../helpers/Util";
@@ -124,6 +125,10 @@ var AppListItemComponent = React.createClass({
       let param = {
         groupId: encodeURIComponent(model.id)
       };
+      if (query[FilterTypes.TEXT] !== undefined) {
+        delete query[FilterTypes.TEXT];
+      }
+      console.log(query);
       router.transitionTo("group", param, query);
     } else {
       router.transitionTo("app", {appId: encodeURIComponent(model.id)});

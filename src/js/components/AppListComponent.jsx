@@ -199,17 +199,46 @@ var AppListComponent = React.createClass({
     var filterStatus = filters[FilterTypes.STATUS];
 
     if (filterText != null && filterText !== "") {
+      var groupNodes = [];
       nodesSequence = nodesSequence
         .filter(app => {
-          return score(app.id, filterText) > 0.004;
+          let pathParts = app.id.substr(1).split("/");
+          let appID = pathParts.pop();
+          let curPath = "";
+
+          // Append found groups in the list
+          pathParts.forEach(part => {
+            curPath += "/" + part;
+            console.log("+"+part, "->", curPath);
+            if (score(part, filterText) > 0.004) {
+              let group = groupNodes.find(item => {
+                return item.id === curPath;
+              });
+
+              // Create or update group
+              if (group == null) {
+                group = initGroupNode(curPath, app);
+                groupNodes.push( group );
+              } else {
+                updateGroupNode(group, app);
+              }
+            }
+          });
+
+          // Filter item
+          if (score(appID, filterText) > 0.004)
+            return true;
         });
+
+      // Apend the group nodes
+      nodesSequence = nodesSequence.concat( groupNodes );
 
     } else if (currentGroup !== "/") {
       nodesSequence = nodesSequence
         .filter(app => app.id.startsWith(currentGroup));
     }
 
-    nodesSequence.each(app => {
+    nodesSequence.forEach(app => {
       filterCounts.appsStatusesCount[app.status]++;
       app.health.forEach(health => {
         if (health.quantity) {
@@ -314,21 +343,28 @@ var AppListComponent = React.createClass({
       appsHealthCount: getInitialFilterCounts(HealthStatus)
     };
 
-    // Global search view - only display filtered apps
+    // Global search view - only display filtered apps & groups
     if (this.hasFilters()) {
       appListViewType = AppListViewTypes.APP_LIST;
 
-      nodesSequence = this.filterNodes(lazy(state.apps), filterCounts)
+      nodesSequence = lazy(this.filterNodes(state.apps, filterCounts))
         .sortBy((app) => {
           return app[sortKey];
         }, state.sortDescending);
 
       let filterText = this.getQueryParamValue(FilterTypes.TEXT);
       if (filterText != null && sortKey === "id") {
+        // Hoist groups to top of the app list and sort everything by sortKey
         nodesSequence = nodesSequence.sort((a, b) => {
-          return score(a.id, filterText) > score(b.id, filterText)
-            ? -1
-            : 1;
+          if (a.isGroup && !b.isGroup) {
+            return -1;
+          } else if (b.isGroup && !a.isGroup) {
+            return 1;
+          } else {
+            return a[sortKey] > b[sortKey]
+              ? -1 * sortDirection
+              : 1 * sortDirection;
+          }
         });
       }
 
