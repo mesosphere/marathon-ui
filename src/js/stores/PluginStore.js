@@ -51,7 +51,40 @@ var PluginStore = Object.assign({
     }
 
     return plugins.map((plugin) => plugin.state)
-      .reduce(Math.min);
+      .reduce((pluginAState, pluginBState) => {
+        if (pluginAState === States.STATE_INITIAL ||
+            pluginBState === States.STATE_INITIAL) {
+          return States.STATE_INITIAL;
+        }
+
+        if (pluginAState === States.STATE_LOADING ||
+            pluginBState === States.STATE_LOADING) {
+          return States.STATE_LOADING;
+        }
+
+        if (pluginAState === States.STATE_ERROR ||
+            pluginBState === States.STATE_ERROR) {
+          return States.STATE_ERROR;
+        }
+
+        if (pluginAState === States.STATE_UNAUTHORIZED ||
+            pluginBState === States.STATE_UNAUTHORIZED) {
+          return States.STATE_UNAUTHORIZED;
+        }
+
+        if (pluginAState === States.STATE_FORBIDDEN ||
+            pluginBState === States.STATE_FORBIDDEN) {
+          return States.STATE_FORBIDDEN;
+        }
+
+        if (pluginAState === States.STATE_SUCCESS &&
+            pluginBState === States.STATE_SUCCESS) {
+          return States.STATE_SUCCESS;
+        }
+
+        return States.STATE_INITIAL;
+
+      });
   },
   resetStore: function () {
     plugins = [];

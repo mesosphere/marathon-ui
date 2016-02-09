@@ -59,7 +59,9 @@ var Marathon = React.createClass({
   },
 
   onPluginStoreChange: function () {
-    if (PluginStore.getPluginLoadingState() > States.STATE_LOADING) {
+    var pluginLoadingState = PluginStore.getPluginLoadingState();
+    if (pluginLoadingState !== States.STATE_INITIAL &&
+        pluginLoadingState !== States.STATE_LOADING) {
       this.startPolling();
     }
   },
