@@ -5,6 +5,7 @@ import PluginDispatcher from "./external/PluginDispatcher";
 import PluginEvents from "./external/PluginEvents";
 import PluginMountPoints from "./external/PluginMountPoints";
 import PluginActions from "./external/PluginActions";
+import PluginHelper from "./external/PluginHelper";
 import PluginDispatcherProxy from "./PluginDispatcherProxy";
 
 const PLUGIN_STARTUP_TIMEOUT = 10000; // in ms
@@ -39,6 +40,7 @@ const PluginLoader = {
           PluginActions: PluginActions,
           PluginDispatcher: PluginDispatcherProxy.create(pluginId),
           PluginEvents: PluginEvents,
+          PluginHelper: PluginHelper.create(pluginId),
           PluginMountPoints: PluginMountPoints,
           pluginId: pluginId,
           UIVersion: config.version
