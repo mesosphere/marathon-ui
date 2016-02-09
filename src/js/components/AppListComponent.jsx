@@ -14,6 +14,7 @@ import States from "../constants/States";
 import AppListItemComponent from "./AppListItemComponent";
 import CenteredInlineDialogComponent from "./CenteredInlineDialogComponent";
 import TooltipComponent from "../components/TooltipComponent";
+import PathUtil from "../helpers/PathUtil";
 
 import AppsActions from "../actions/AppsActions";
 import AppsStore from "../stores/AppsStore";
@@ -100,7 +101,14 @@ function sortByKeyWithGroups( sortKey, sortDirection, a, b ) {
   } else if (b.isGroup && !a.isGroup) {
     return 1;
   } else {
-    return a[sortKey] > b[sortKey]
+    let valA = a[sortKey];
+    let valB = b[sortKey];
+    // Get last app name when sorting by ID
+    if (sortKey === "id") {
+      valA = PathUtil.getAppName(valA);
+      valB = PathUtil.getAppName(valB);
+    }
+    return valA > valB
       ? -1 * sortDirection
       : 1 * sortDirection;
   }
@@ -218,8 +226,10 @@ var AppListComponent = React.createClass({
       nodesSequence = nodesSequence
         .filter(app => {
           var pathParts = app.id.substr(1).split("/");
-          var appID = pathParts.pop();
           var curPath = "";
+
+          // Skip last item
+          pathParts.pop();
 
           // Append found groups in the list
           pathParts.forEach(part => {
@@ -240,8 +250,7 @@ var AppListComponent = React.createClass({
           });
 
           // Filter item
-          if (score(appID, filterText) > FUZZY_COMPARISON_SCORE)
-            return true;
+          return (score(app.id, filterText) > FUZZY_COMPARISON_SCORE);
         });
 
       // Apend the group nodes
