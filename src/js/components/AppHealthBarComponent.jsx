@@ -31,7 +31,8 @@ var AppHealthBarComponent = React.createClass({
 
     let allZeroWidthBefore = true;
     return health.map(function (d, i) {
-      var width = (dataSum == 0) ? 0 : roundWorkaround(d.quantity * 100 / dataSum);
+      var width = (dataSum === 0) ? 0 : // Make sure we don't get NaN
+                  roundWorkaround(d.quantity * 100 / dataSum);
       var classSet = {
         // set health-bar-inner class for bars in the stack which have a
         // non-zero-width left neightbar
