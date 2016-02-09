@@ -3,7 +3,7 @@ import "brace/mode/json";
 import "brace/theme/monokai";
 import React from "react/addons";
 
-import AppDefaultFields from "../constants/AppDefaultFields";
+import AppDefaultFieldValues from "../constants/AppDefaultFieldValues";
 
 var AppConfigJSONEditorComponent = React.createClass({
   displayName: "AppConfigJSONEditorComponent",
@@ -45,7 +45,7 @@ var AppConfigJSONEditorComponent = React.createClass({
   getPrettyPrintedDefinition: function () {
     // without this check, we would just show 'null' when creating a new app
     var app = this.props.app == null
-      ? AppDefaultFields
+      ? AppDefaultFieldValues
       : this.props.app;
     return JSON.stringify(app, null, 2);
   },

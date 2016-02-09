@@ -2,6 +2,7 @@ import {EventEmitter} from "events";
 import objectPath from "object-path";
 import Util from "../helpers/Util";
 
+import AppDefaultFieldValues from "../constants/AppDefaultFieldValues";
 import AppDispatcher from "../AppDispatcher";
 import AppFormErrorMessages from "../constants/AppFormErrorMessages";
 import AppFormTransforms from "./transforms/AppFormTransforms";
@@ -18,14 +19,7 @@ const storeData = {
   validationErrorIndices: {}
 };
 
-const defaultFieldValues = Object.freeze({
-  cpus: 1,
-  mem: 128,
-  disk: 0,
-  instances: 1
-});
-
-const duplicableRowFields = [
+const duplicableRowFields = Object.freeze([
   "containerVolumes",
   "containerVolumesLocal",
   "dockerPortMappings",
@@ -33,7 +27,7 @@ const duplicableRowFields = [
   "env",
   "healthChecks",
   "labels"
-];
+]);
 
 /**
  * Validation rules for individual fields and fieldsets (duplicable rows).
@@ -485,8 +479,8 @@ var AppFormStore = Util.extendObject(EventEmitter.prototype, {
     storeData.responseErrors = {};
     storeData.validationErrorIndices = {};
 
-    Object.keys(defaultFieldValues).forEach((fieldId) => {
-      storeData.fields[fieldId] = defaultFieldValues[fieldId];
+    Object.keys(AppDefaultFieldValues).forEach((fieldId) => {
+      storeData.fields[fieldId] = AppDefaultFieldValues[fieldId];
       rebuildModelFromFields(storeData.app, storeData.fields, fieldId);
     });
   },
