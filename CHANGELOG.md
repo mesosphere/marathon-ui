@@ -11,6 +11,9 @@
 - \#3124 - Improve usability of labels filter dropdown
 
 ### Fixed
+- \#3174 - Header and suspend icon have size problem
+- \#3133 - Interrupted scaling operations can leave the health bar in an
+  incorrect state
 - \#3093 - Don't display "Create an Application" together with "Loading error"
 - \#2907 - Add tooltip with help links to Status and Health columns in App list
 - \#3160 - Show server-side validation errors for invalid constraints
