@@ -128,7 +128,6 @@ var AppListItemComponent = React.createClass({
       if (query[FilterTypes.TEXT] !== undefined) {
         delete query[FilterTypes.TEXT];
       }
-      console.log(query);
       router.transitionTo("group", param, query);
     } else {
       router.transitionTo("app", {appId: encodeURIComponent(model.id)});

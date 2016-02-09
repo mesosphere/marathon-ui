@@ -22,6 +22,9 @@ import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 import Util from "../helpers/Util";
 
+// Acceptable score after fuzzy comparision
+const FUZZY_COMPARISON_SCORE = 0.004;
+
 function getGroupStatus(groupStatus, appStatus) {
   if (appStatus === AppStatus.DEPLOYING ||
       appStatus === AppStatus.DELAYED ||
@@ -89,6 +92,18 @@ function updateGroupNode(group, app) {
   group.totalCpus += app.totalCpus;
   group.totalMem += app.totalMem;
   return group;
+}
+
+function sortByKeyWithGroups( sortKey, sortDirection, a, b ) {
+  if (a.isGroup && !b.isGroup) {
+    return -1;
+  } else if (b.isGroup && !a.isGroup) {
+    return 1;
+  } else {
+    return a[sortKey] > b[sortKey]
+      ? -1 * sortDirection
+      : 1 * sortDirection;
+  }
 }
 
 var AppListComponent = React.createClass({
@@ -202,15 +217,14 @@ var AppListComponent = React.createClass({
       var groupNodes = [];
       nodesSequence = nodesSequence
         .filter(app => {
-          let pathParts = app.id.substr(1).split("/");
-          let appID = pathParts.pop();
-          let curPath = "";
+          var pathParts = app.id.substr(1).split("/");
+          var appID = pathParts.pop();
+          var curPath = "";
 
           // Append found groups in the list
           pathParts.forEach(part => {
             curPath += "/" + part;
-            console.log("+"+part, "->", curPath);
-            if (score(part, filterText) > 0.004) {
+            if (score(part, filterText) > FUZZY_COMPARISON_SCORE) {
               let group = groupNodes.find(item => {
                 return item.id === curPath;
               });
@@ -226,7 +240,7 @@ var AppListComponent = React.createClass({
           });
 
           // Filter item
-          if (score(appID, filterText) > 0.004)
+          if (score(appID, filterText) > FUZZY_COMPARISON_SCORE)
             return true;
         });
 
@@ -355,17 +369,9 @@ var AppListComponent = React.createClass({
       let filterText = this.getQueryParamValue(FilterTypes.TEXT);
       if (filterText != null && sortKey === "id") {
         // Hoist groups to top of the app list and sort everything by sortKey
-        nodesSequence = nodesSequence.sort((a, b) => {
-          if (a.isGroup && !b.isGroup) {
-            return -1;
-          } else if (b.isGroup && !a.isGroup) {
-            return 1;
-          } else {
-            return a[sortKey] > b[sortKey]
-              ? -1 * sortDirection
-              : 1 * sortDirection;
-          }
-        });
+        nodesSequence = nodesSequence.sort(
+          sortByKeyWithGroups.bind(this, sortKey, sortDirection)
+        );
       }
 
     // Grouped node view
@@ -376,17 +382,7 @@ var AppListComponent = React.createClass({
           return app.id;
         }, state.sortDescending)
         // Hoist groups to top of the app list and sort everything by sortKey
-        .sort((a, b) => {
-          if (a.isGroup && !b.isGroup) {
-            return -1;
-          } else if (b.isGroup && !a.isGroup) {
-            return 1;
-          } else {
-            return a[sortKey] > b[sortKey]
-              ? -1 * sortDirection
-              : 1 * sortDirection;
-          }
-        });
+        .sort(sortByKeyWithGroups.bind(this, sortKey, sortDirection));
     }
 
     var appListItems = nodesSequence
