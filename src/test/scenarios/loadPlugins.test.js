@@ -68,15 +68,8 @@ describe("load plugins", function () {
   it("updates plugin data on request plugins success", function (done) {
     PluginStore.once(PluginEvents.CHANGE, function () {
       expectAsync(() => {
-        expect(PluginStore.getPlugins()).to.deep.equal([
-          {
-            id: "plugin-id",
-            modules: ["ui"],
-            name: "Plugin Name",
-            description: "Plugin description.",
-            state: States.STATE_INITIAL
-          }
-        ]);
+        expect(PluginStore.getPluginLoadingState())
+          .to.equal(States.STATE_INITIAL);
       }, done);
     });
 
@@ -89,15 +82,8 @@ describe("load plugins", function () {
         PluginEvents.LOAD_PLUGIN_SUCCESS) {
         AppDispatcher.unregister(dispatchToken);
         expectAsync(() => {
-          expect(PluginStore.getPlugins()).to.deep.equal([
-            {
-              id: "plugin-id",
-              modules: ["ui"],
-              name: "Plugin Name",
-              description: "Plugin description.",
-              state: States.STATE_SUCCESS
-            }
-          ]);
+          expect(PluginStore.getPluginLoadingState())
+            .to.equal(States.STATE_SUCCESS);
         }, done);
       }
     });
@@ -115,15 +101,8 @@ describe("load plugins", function () {
         PluginEvents.LOAD_PLUGIN_ERROR) {
         AppDispatcher.unregister(dispatchToken);
         expectAsync(() => {
-          expect(PluginStore.getPlugins()).to.deep.equal([
-            {
-              id: "plugin-id",
-              modules: ["ui"],
-              name: "Plugin Name",
-              description: "Plugin description.",
-              state: States.STATE_ERROR
-            }
-          ]);
+          expect(PluginStore.getPluginLoadingState())
+            .to.equal(States.STATE_ERROR);
         }, done);
       }
     });

@@ -45,9 +45,6 @@ function loadPlugins() {
 }
 
 var PluginStore = Object.assign({
-  getPlugins: function () {
-    return plugins;
-  },
   getPluginLoadingState: function () {
     if (plugins.length === 0) {
       return States.STATE_INITIAL;
