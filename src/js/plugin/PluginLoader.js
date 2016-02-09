@@ -45,7 +45,7 @@ const PluginLoader = {
         });
 
         let dispatchToken = PluginDispatcher.register(function (event) {
-          if (event.eventType === "STARTUP_COMPLETE"
+          if (event.eventType === PluginEvents.STARTUP_COMPLETE
               && event.pluginId === pluginId) {
             PluginDispatcher.unregister(dispatchToken);
 
