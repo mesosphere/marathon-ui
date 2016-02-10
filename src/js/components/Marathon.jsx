@@ -58,10 +58,14 @@ var Marathon = React.createClass({
     this.onRouteChange();
   },
 
-  onPluginStoreChange: function () {
+  isPluginLoadingComplete: function () {
     var pluginLoadingState = PluginStore.getPluginLoadingState();
-    if (pluginLoadingState !== States.STATE_INITIAL &&
-        pluginLoadingState !== States.STATE_LOADING) {
+    return pluginLoadingState !== States.STATE_INITIAL &&
+      pluginLoadingState !== States.STATE_LOADING;
+  },
+
+  onPluginStoreChange: function () {
+    if (this.isPluginLoadingComplete()) {
       this.startPolling();
     }
   },
@@ -118,7 +122,7 @@ var Marathon = React.createClass({
     /* eslint-disable eqeqeq */
     if ((prevState.activeAppId != this.state.activeAppId ||
         prevState.activeTabId != this.state.activeTabId) &&
-        PluginStore.getPluginLoadingState() > States.STATE_LOADING) {
+        this.isPluginLoadingComplete()) {
       this.resetPolling();
     }
     /* eslint-enable eqeqeq */
