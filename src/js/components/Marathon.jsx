@@ -59,7 +59,7 @@ var Marathon = React.createClass({
   },
 
   isPluginLoadingComplete: function () {
-    var pluginLoadingState = PluginStore.getPluginLoadingState();
+    var pluginLoadingState = PluginStore.pluginsLoadingState;
     return pluginLoadingState !== States.STATE_INITIAL &&
       pluginLoadingState !== States.STATE_LOADING;
   },
