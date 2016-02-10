@@ -2,7 +2,7 @@ import {EventEmitter} from "events";
 import objectPath from "object-path";
 import Util from "../helpers/Util";
 
-import AppDefaultFieldValues from "../constants/AppDefaultFieldValues";
+import {AppConfigFormDefaultValues} from "../constants/AppConfigDefaults";
 import AppDispatcher from "../AppDispatcher";
 import AppFormErrorMessages from "../constants/AppFormErrorMessages";
 import AppFormTransforms from "./transforms/AppFormTransforms";
@@ -479,8 +479,8 @@ var AppFormStore = Util.extendObject(EventEmitter.prototype, {
     storeData.responseErrors = {};
     storeData.validationErrorIndices = {};
 
-    Object.keys(AppDefaultFieldValues).forEach((fieldId) => {
-      storeData.fields[fieldId] = AppDefaultFieldValues[fieldId];
+    Object.keys(AppConfigFormDefaultValues).forEach((fieldId) => {
+      storeData.fields[fieldId] = AppConfigFormDefaultValues[fieldId];
       rebuildModelFromFields(storeData.app, storeData.fields, fieldId);
     });
   },
