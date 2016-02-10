@@ -77,7 +77,14 @@ const AppFormModelToFieldTransforms = {
   ports: (ports) => ports
     .join(", "),
   uris: (uris) => uris
-    .join(", ")
+    .join(", "),
+  volumes: (volumes) => {
+    return volumes
+      .map((row, i) => {
+        row.consecutiveKey = i;
+        return row;
+      });
+  }
 };
 
 export default Object.freeze(AppFormModelToFieldTransforms);

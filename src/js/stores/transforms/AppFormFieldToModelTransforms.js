@@ -144,7 +144,13 @@ const AppFormFieldToModelTransforms = {
   uris: (uris) => lazy(uris.split(","))
     .map((uri) => uri.trim())
     .filter((uri) => uri != null && uri !== "")
-    .value()
+    .value(),
+  volumes: (volumes) => {
+    return volumes.map(volume => {
+      volume.mode = "RW";
+      return volume;
+    });
+  }
 };
 
 export default Object.freeze(AppFormFieldToModelTransforms);
