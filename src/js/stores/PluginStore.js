@@ -87,6 +87,13 @@ var PluginStore = Util.extendObject({
 
       });
   },
+
+  get isPluginsLoadingFinished() {
+    var pluginLoadingState = this.pluginsLoadingState;
+    return pluginLoadingState !== States.STATE_INITIAL &&
+      pluginLoadingState !== States.STATE_LOADING;
+  },
+
   resetStore: function () {
     plugins = [];
   }
