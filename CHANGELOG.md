@@ -11,7 +11,6 @@
 - \#3124 - Improve usability of labels filter dropdown
 
 ### Fixed
-- \#3174 - Header and suspend icon have size problem
 - \#3133 - Interrupted scaling operations can leave the health bar in an
   incorrect state
 - \#3093 - Don't display "Create an Application" together with "Loading error"
