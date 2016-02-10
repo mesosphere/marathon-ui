@@ -33,8 +33,7 @@
     "react-router": "^0.13.3",
     "react-timer-mixin": "^0.13.3",
     "react-tools": "^0.13.2",
-    "semver": "^5.1.0",
-    "underscore": "^1.7.0"
+    "semver": "^5.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.2.1",
@@ -76,6 +75,7 @@
     "source-map-loader": "^0.1.5",
     "source-sans-pro": "^2.0.10",
     "transform-loader": "^0.2.2",
+    "underscore": "^1.7.0",
     "webpack": "^1.12.9",
     "webpack-notifier": "^1.2.1"
   },
