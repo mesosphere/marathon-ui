@@ -80,11 +80,13 @@ var AppDebugInfoComponent = React.createClass({
         {invalidateValue(lastTaskFailure.host)}
         <dt>Timestamp</dt>
         <dd>
-          <span>{timestamp}</span> ({timeStampText})
+          <span>{new Date(timestamp).toLocaleString()}</span> ({timeStampText})
         </dd>
         <dt>Version</dt>
         <dd>
-          <span>{version}</span> ({new Moment(version).fromNow()})
+          <span>
+            {new Date(version).toLocaleString()}
+          </span> ({new Moment(version).fromNow()})
         </dd>
         <dt>Mesos Details</dt>
         <dd><TaskMesosUrlComponent task={lastTaskFailure}/></dd>
@@ -113,7 +115,11 @@ var AppDebugInfoComponent = React.createClass({
     );
 
     if (lastScalingAt !== lastConfigChangeAt) {
-      let lastScalingTimestamp = <span>{lastScalingAt}</span>;
+      let lastScalingTimestamp = (
+        <span>
+          {new Date(lastScalingAt).toLocaleString()}
+        </span>
+      );
       lastScaling = (
         <dd>
           {lastScalingTimestamp} ({new Moment(lastScalingAt).fromNow()})
@@ -121,7 +127,11 @@ var AppDebugInfoComponent = React.createClass({
       );
     }
 
-    var lastConfigTimestamp = <span>{lastConfigChangeAt}</span>;
+    var lastConfigTimestamp = (
+      <span>
+        {new Date(lastConfigChangeAt).toLocaleString()}
+      </span>
+    );
     var lastConfig = (
       <dd>
         {lastConfigTimestamp} ({new Moment(lastConfigChangeAt).fromNow()})

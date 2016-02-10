@@ -274,7 +274,7 @@ var AppVersionComponent = React.createClass({
           <dt>User</dt>
           {invalidateValue(appVersion.user)}
           <dt>Version</dt>
-          {invalidateValue(appVersion.version)}
+          {invalidateValue(new Date(appVersion.version).toLocaleString())}
         </dl>
       </div>
     );
