@@ -23,7 +23,6 @@ import PluginActions from "../actions/PluginActions";
 import "../plugin/PluginInterface";
 import PluginStore from "../stores/PluginStore";
 import PluginEvents from "../events/PluginEvents";
-import States from "../constants/States";
 
 import tabs from "../constants/tabs";
 
@@ -58,14 +57,8 @@ var Marathon = React.createClass({
     this.onRouteChange();
   },
 
-  isPluginLoadingComplete: function () {
-    var pluginLoadingState = PluginStore.pluginsLoadingState;
-    return pluginLoadingState !== States.STATE_INITIAL &&
-      pluginLoadingState !== States.STATE_LOADING;
-  },
-
   onPluginStoreChange: function () {
-    if (this.isPluginLoadingComplete()) {
+    if (PluginStore.isPluginsLoadingFinished) {
       this.startPolling();
     }
   },
@@ -122,7 +115,7 @@ var Marathon = React.createClass({
     /* eslint-disable eqeqeq */
     if ((prevState.activeAppId != this.state.activeAppId ||
         prevState.activeTabId != this.state.activeTabId) &&
-        this.isPluginLoadingComplete()) {
+      PluginStore.isPluginsLoadingFinished) {
       this.resetPolling();
     }
     /* eslint-enable eqeqeq */
