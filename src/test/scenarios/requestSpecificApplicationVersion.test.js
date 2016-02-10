@@ -1,6 +1,7 @@
 import {expect} from "chai";
 import nock from "nock";
 import expectAsync from "./../helpers/expectAsync";
+import minimalAppFullConfig from "../fixtures/minimalAppFullConfig";
 
 import config from "../../js/config/config";
 
@@ -47,6 +48,33 @@ describe("request specific application version", function () {
       });
 
     AppVersionsActions.requestAppVersion("/app-1", "version-timestamp-1");
+  });
+
+  describe("the app configuration", function () {
+
+    it("excludes all default values", function (done) {
+      nock(config.apiURL)
+        .get("/v2/apps//app-id/versions/2016-01-01T00:00:00.000Z")
+        .reply(200, minimalAppFullConfig);
+
+      AppVersionsStore.once(AppVersionsEvents.CHANGE, function () {
+        expectAsync(function () {
+          var config = AppVersionsStore.getAppConfigVersion(
+            "/app-id", "2016-01-01T00:00:00.000Z"
+          );
+          expect(config).to.deep.equal({
+            "id": "/app-id",
+            "cmd": "some --cmd",
+            ports: [12345]
+          });
+        }, done);
+      });
+
+      AppVersionsActions.requestAppVersion(
+        "/app-id", "2016-01-01T00:00:00.000Z"
+      );
+    });
+
   });
 
   it("handles failure gracefully", function (done) {
