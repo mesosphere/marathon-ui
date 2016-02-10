@@ -238,16 +238,27 @@
 .modal-header {
   background-color: @brand-primary;
   border-radius: 0;
-  padding: 30px 40px;
+  padding: 15px 40px;
 }
 
 .modal-content {
   background-color: #fff;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0;
+
+  h4 {
+    font-size: 18px;
+    margin: 0 0 20px 0;
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid #eee;
+  }
 }
 
 .modal-body {
   color: @shuttle-gray;
   padding: 30px 40px;
+  overflow-y: auto;
 }
 
 .modal-body .row.full-bleed .panel-body {
@@ -307,6 +318,10 @@ textarea.form-control {
   border: none !important;
   border-radius: none;
   padding: 10px 40px !important; // Sorry :-(
+
+  &:hover {
+    background-color: darken(#F7F7F7, 2%) !important;
+  }
 }
 
 .panel-title {
@@ -315,5 +330,26 @@ textarea.form-control {
 
 .panel-body {
   background-color: transparent !important; // Sorry :-(
+}
+
+.duplicable-row .controls {
+  flex-grow: 1;
+  margin-bottom: 36px;
+}
+
+.duplicable-row .controls .btn.add {
+  color: @brand-primary;
+}
+
+.duplicable-row .controls .btn.remove {
+  color: #ddd;
+}
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+  opacity: 0;
+}
+
+.add-colon:after {
+  color: #222;
+  bottom: 2.4em;
 }
 
