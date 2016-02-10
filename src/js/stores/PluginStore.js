@@ -13,8 +13,8 @@ import pluginScheme from "../stores/schemes/pluginScheme";
 var plugins = [];
 
 function addPlugin(data) {
-  if (data.id == null && !Util.isObject(data.info)
-    && getPluginById(data.id) != null) {
+  if (data.id == null && !Util.isObject(data.info) &&
+      getPluginById(data.id) != null) {
     return;
   }
 
@@ -22,7 +22,7 @@ function addPlugin(data) {
 }
 
 function getPluginById(id) {
-  return plugins.find((plugin) => plugin.id === id);
+  return plugins.find(plugin => plugin.id === id);
 }
 
 function updatePluginState(id, state) {
@@ -35,17 +35,18 @@ function updatePluginState(id, state) {
 }
 
 function loadPlugins() {
-  plugins.filter((plugin) => {
-    return plugin.modules.indexOf(PluginModules.UI) >= 0
-      && plugin.state === States.STATE_INITIAL;
-  }).forEach((plugin) => {
+  plugins.filter(plugin => {
+    return plugin.modules.includes(PluginModules.UI) &&
+      plugin.state === States.STATE_INITIAL;
+  })
+  .forEach(plugin => {
     plugin.state = States.STATE_LOADING;
     PluginActions.loadPlugin(plugin.id);
   });
 }
 
-var PluginStore = Object.assign({
-  getPluginLoadingState: function () {
+var PluginStore = Util.extendObject({
+  get pluginsLoadingState() {
     if (plugins.length === 0) {
       return States.STATE_INITIAL;
     }
