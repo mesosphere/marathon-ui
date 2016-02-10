@@ -2,23 +2,36 @@ import {expect} from "chai";
 import {mount} from "enzyme";
 
 import React from "../../../node_modules/react/addons";
-import AppVersionsStore from "../../js/stores/AppVersionsStore";
 import AppVersionListComponent
   from "../../js/components/AppVersionListComponent.jsx";
 import AppVersionListItemComponent
   from "../../js/components/AppVersionListItemComponent.jsx";
 
+import AppDispatcher from "../../js/AppDispatcher";
+import AppVersionsEvents from "../../js/events/AppVersionsEvents";
+import AppVersionsStore from "../../js/stores/AppVersionsStore";
+
 describe("AppVersionListComponent", function () {
 
-  before(function () {
-    AppVersionsStore.currentAppId = "/app-test";
-    AppVersionsStore.availableAppVersions = [
-      "2015-06-29T13:54:01.577Z",
-      "2015-06-29T13:02:29.615Z",
-      "2015-06-29T13:02:19.363Z"
-    ];
+  before(function (done) {
+    var appVersions = {
+      versions: [
+        "2015-06-29T13:54:01.577Z",
+        "2015-06-29T13:02:29.615Z",
+        "2015-06-29T13:02:19.363Z"
+      ]
+    };
 
-    this.component = mount(<AppVersionListComponent appId={"/app-test"} />);
+    AppVersionsStore.once(AppVersionsEvents.CHANGE, () => {
+      this.component = mount(<AppVersionListComponent appId="/app-test" />);
+      done();
+    });
+
+    AppDispatcher.dispatch({
+      actionType: AppVersionsEvents.REQUEST_VERSION_TIMESTAMPS,
+      data: {body: appVersions},
+      appId: "/app-test"
+    });
   });
 
   after(function () {
