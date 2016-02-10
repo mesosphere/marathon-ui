@@ -31,7 +31,8 @@ const duplicableRowFields = [
   "dockerParameters",
   "env",
   "healthChecks",
-  "labels"
+  "labels",
+  "volumes"
 ];
 
 /**
@@ -80,7 +81,11 @@ const validationRules = {
   "instances": [AppFormValidators.instances],
   "labels": [AppFormValidators.labels],
   "mem": [AppFormValidators.mem],
-  "ports": [AppFormValidators.ports]
+  "ports": [AppFormValidators.ports],
+  "volumes": [
+    AppFormValidators.volumesSize,
+    AppFormValidators.volumesPath
+  ]
 };
 
 /**
@@ -110,7 +115,8 @@ const resolveFieldIdToAppKeyMap = {
   mem: "mem",
   ports: "ports",
   uris: "uris",
-  user: "user"
+  user: "user",
+  volumes: "volumes"
 };
 
 /**
@@ -191,7 +197,8 @@ const resolveAppKeyToFieldIdMap = {
   "container.docker.parameters": "dockerParameters",
   "container.docker.privileged": "dockerPrivileged",
   "container.volumes": "containerVolumes",
-  "healthChecks": "healthChecks"
+  "healthChecks": "healthChecks",
+  "volumes": "volumes"
 };
 
 // Validate all fields in form store and update validationErrorIndices.
@@ -270,7 +277,6 @@ function rebuildModelFromFields(app, fields, fieldId) {
       Util.objectPathSet(app, key, transform(fields[fieldId]));
     }
   }
-
   Object.keys(app).forEach((appKey) => {
     var postProcessor = AppFormModelPostProcess[appKey];
     if (postProcessor != null) {
