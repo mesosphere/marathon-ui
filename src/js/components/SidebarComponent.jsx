@@ -11,7 +11,7 @@ import SidebarStatusFilterComponent
 
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 import PluginMountPointComponent from "../components/PluginMountPointComponent";
-import PluginMountPoints from "../plugin/external/PluginMountPoints";
+import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 
 var SidebarComponent = React.createClass({
   displayName: "SidebarComponent",

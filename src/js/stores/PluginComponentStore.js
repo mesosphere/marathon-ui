@@ -1,8 +1,8 @@
 import {EventEmitter} from "events";
 import React from "react/addons";
 
-import PluginDispatcher from "../plugin/external/PluginDispatcher";
-import PluginEvents from "../plugin/external/PluginEvents";
+import PluginDispatcher from "../plugin/shared/PluginDispatcher";
+import PluginEvents from "../plugin/shared/PluginEvents";
 import PluginComponentEvents from "../events/PluginComponentEvents";
 
 import Util from "../helpers/Util";

@@ -1,11 +1,11 @@
 import config from "../config/config";
 
 import URLUtil from "../helpers/URLUtil";
-import PluginDispatcher from "./external/PluginDispatcher";
-import PluginEvents from "./external/PluginEvents";
-import PluginMountPoints from "./external/PluginMountPoints";
-import PluginActions from "./external/PluginActions";
-import PluginHelper from "./external/PluginHelper";
+import PluginDispatcher from "./shared/PluginDispatcher";
+import PluginEvents from "./shared/PluginEvents";
+import PluginMountPoints from "./shared/PluginMountPoints";
+import PluginActions from "./shared/PluginActions";
+import PluginHelper from "./shared/PluginHelper";
 import PluginDispatcherProxy from "./PluginDispatcherProxy";
 
 const PLUGIN_STARTUP_TIMEOUT = 10000; // in ms

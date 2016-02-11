@@ -1,5 +1,5 @@
-import PluginDispatcher from "./external/PluginDispatcher";
-import PluginEvents from "./external/PluginEvents";
+import PluginDispatcher from "./shared/PluginDispatcher";
+import PluginEvents from "./shared/PluginEvents";
 
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";

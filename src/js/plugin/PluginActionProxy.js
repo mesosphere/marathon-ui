@@ -1,5 +1,5 @@
-import PluginActions from "./external/PluginActions";
-import PluginDispatcher from "./external/PluginDispatcher";
+import PluginActions from "./shared/PluginActions";
+import PluginDispatcher from "./shared/PluginDispatcher";
 
 import DialogActions from "../actions/DialogActions";
 

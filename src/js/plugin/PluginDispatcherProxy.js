@@ -1,4 +1,4 @@
-import PluginDispatcher from "./external/PluginDispatcher";
+import PluginDispatcher from "./shared/PluginDispatcher";
 import Util from "../helpers/Util";
 
 export default class PluginDispatcherProxy {
