@@ -11,9 +11,9 @@ var OptionalVolumesComponent = React.createClass({
   mixins: [DuplicableRowsMixin],
 
   duplicableRowsScheme: {
-    volumes: {
-      size: "",
-      path: ""
+    containerVolumesLocal: {
+      persistentSize: "",
+      containerPath: ""
     }
   },
 
@@ -21,22 +21,22 @@ var OptionalVolumesComponent = React.createClass({
     event.target.blur();
     event.preventDefault();
 
-    this.addRow("volumes", position);
+    this.addRow("containerVolumesLocal", position);
   },
 
   handleRemoveRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
 
-    this.removeRow("volumes", position);
+    this.removeRow("containerVolumesLocal", position);
   },
 
   handleChange: function (position) {
-    this.updateRow("volumes", position);
+    this.updateRow("containerVolumesLocal", position);
   },
 
   getVolumeRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError("volumes", row.consecutiveKey);
+    var error = this.getError("containerVolumesLocal", row.consecutiveKey);
     // var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
 
     var rowClassSet = classNames({
@@ -49,19 +49,19 @@ var OptionalVolumesComponent = React.createClass({
                   onChange={this.handleChange.bind(null, i)}>
           <div className="col-sm-4">
             <FormGroupComponent
-                fieldId={`volumes.size.${i}`}
+                fieldId={`containerVolumesLocal.persistent.size.${i}`}
                 label="Size (MiB)"
-                value={row.size}>
-              <input ref={`size${i}`}
+                value={row.persistentSize}>
+              <input ref={`persistentSize${i}`}
                 type="number"/>
             </FormGroupComponent>
           </div>
           <div className="col-sm-8">
             <FormGroupComponent
-              fieldId={`volumes.path.${i}`}
+              fieldId={`containerVolumesLocal.containerPath.${i}`}
               label="Container Path"
-              value={row.path}>
-              <input ref={`path${i}`} />
+              value={row.containerPath}>
+              <input ref={`containerPath${i}`} />
             </FormGroupComponent>
             <DuplicableRowControls
               disableRemoveButton={disableRemoveButton}
@@ -75,7 +75,7 @@ var OptionalVolumesComponent = React.createClass({
   },
 
   getVolumesRows: function () {
-    var rows = this.state.rows.volumes;
+    var rows = this.state.rows.containerVolumesLocal;
     if (rows == null) {
       return (
         <button type="button">
@@ -83,7 +83,10 @@ var OptionalVolumesComponent = React.createClass({
         </button>
       );
     }
-    let disableRemoveButton = this.hasOnlyOneSingleEmptyRow("volumes");
+
+    let disableRemoveButton = this.hasOnlyOneSingleEmptyRow(
+      "containerVolumesLocal"
+    );
 
     return rows.map((row, i) => {
       return this.getVolumeRow(row, i, disableRemoveButton);
@@ -99,7 +102,7 @@ var OptionalVolumesComponent = React.createClass({
         <div className="duplicable-list">
           {this.getVolumesRows()}
         </div>
-        {this.getGeneralErrorBlock("volumes")}
+        {this.getGeneralErrorBlock("containerVolumesLocal")}
       </div>
     );
   }
