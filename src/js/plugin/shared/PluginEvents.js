@@ -1,8 +1,9 @@
 import Util from "../../helpers/Util";
 
-const PluginEvents = Util.objectCreateWithAdder("PLUGIN_EVENTS_");
+const PluginEvents = {
+  "STARTUP_COMPLETE": "STARTUP_COMPLETE",
+  "INJECT_COMPONENT": "INJECT_COMPONENT",
+  "APPS_STORE_CHANGE": "APPS_STORE_CHANGE"
+};
 
-["STARTUP_COMPLETE", "INJECT_COMPONENT","APPS_STORE_CHANGE"]
-  .forEach(PluginEvents.add);
-
-export default PluginEvents;
+export default Util.fixObject(PluginEvents, "PLUGIN_EVENTS_");

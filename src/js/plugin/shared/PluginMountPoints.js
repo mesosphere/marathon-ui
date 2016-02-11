@@ -1,7 +1,7 @@
 import Util from "../../helpers/Util";
 
-const PluginMountPoints = Util.objectCreateWithAdder("PLUGIN_MOUNT_POINTS_");
+const PluginMountPoints = {
+  "SIDEBAR_BOTTOM": "SIDEBAR_BOTTOM"
+};
 
-["SIDEBAR_BOTTOM"].forEach(PluginMountPoints.add);
-
-export default PluginMountPoints;
+export default Util.fixObject(PluginMountPoints, "PLUGIN_MOUNT_POINTS_");
