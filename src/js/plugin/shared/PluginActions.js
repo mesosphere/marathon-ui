@@ -1,7 +1,7 @@
 import Util from "../../helpers/Util";
 
-const PluginActions = Util.objectCreateWithAdder("PLUGIN_ACTION_");
+const PluginActions = {
+  "DIALOG_ALERT": "DIALOG_ALERT"
+};
 
-["DIALOG_ALERT"].forEach(PluginActions.add);
-
-export default PluginActions;
+export default Util.fixObject(PluginActions, "PLUGIN_ACTION_");
