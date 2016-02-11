@@ -8,7 +8,7 @@ export const AppConfigFormDefaultValues = Util.deepFreeze({
   mem: 16,
   disk: 0,
   instances: 1,
-  ports: ""
+  ports: "0"
 });
 
 // Default values for an 'empty' app config, or the JSON editor

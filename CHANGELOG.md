@@ -30,6 +30,8 @@
 ### Fixed
 - \#3160 - Show server-side validation errors for invalid constraints
 - \#3164 - Show server-side validation errors for invalid object
+- \#3214 -  App creation modal ports field default value does not reflect
+  service default value
 
 ## 0.15.3 - 2016-02-03
 ### Fixed
