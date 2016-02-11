@@ -32,9 +32,7 @@ const AppFormModelPostProcess = {
       return;
     }
 
-    if (container.type == null) {
-      container.type = "MESOS";
-    }
+    container.type = container.docker != null ? "DOCKER" : "MESOS";
 
     let isEmpty = (Util.isArray(container.volumes) &&
         container.volumes.length === 0 ||
