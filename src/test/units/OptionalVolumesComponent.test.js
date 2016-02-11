@@ -2,7 +2,8 @@ import {expect} from "chai";
 import {render, shallow} from "enzyme";
 
 import React from "react/addons";
-import OptionalVolumesComponent from "../../js/components/OptionalVolumesComponent.jsx";
+import OptionalVolumesComponent
+  from "../../js/components/OptionalVolumesComponent.jsx";
 
 describe("Optional Volumes Component", function () {
   describe("(no volume)", () => {
@@ -33,18 +34,17 @@ describe("Optional Volumes Component", function () {
   describe("(one volume)", () => {
     var component = render(
       <OptionalVolumesComponent errorIndices={{}}
-        fields={{"volumes": [{
-          consecutiveKey: "11454950241300",
-          mode: null,
-          path: "",
-          size: "1024"
+        fields={{"containerVolumesLocal": [{
+          consecutiveKey: "0",
+          containerPath: "",
+          persistentSize: "1024"
         }]}}
         getErrorMessage={()=>{}}/>
     );
 
     it("should have the right size id", () => {
       expect(component.find("input").get(0).attribs.id)
-        .to.equal("volumes.size.0");
+        .to.equal("containerVolumesLocal.persistent.size.0");
     });
 
     it("should have the right size value", () => {
@@ -54,7 +54,7 @@ describe("Optional Volumes Component", function () {
 
     it("should have the right path id", () => {
       expect(component.find("input").get(1).attribs.id)
-        .to.equal("volumes.path.0");
+        .to.equal("containerVolumesLocal.containerPath.0");
     });
 
     it("should have the right path value", () => {

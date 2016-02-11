@@ -9,7 +9,7 @@ describe("App Form Validators", function () {
 
     before(function () {
       this.validatior = AppFormValidators;
-    })
+    });
 
     describe("app id", function () {
       it("is not an empty string", function () {
@@ -637,52 +637,59 @@ describe("App Form Validators", function () {
       describe("size", function () {
         it("should not be empty", function () {
           var volume = {
-            size: ""
+            persistentSize: ""
           };
-          expect(this.validatior.volumesSize(volume)).to.be.false;
+          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.false;
         });
 
         it("should not be a not number value", function () {
           var volume = {
-            size: "abc"
+            persistentSize: "abc"
           };
-          expect(this.validatior.volumesSize(volume)).to.be.false;
+          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.false;
         });
 
         it("should be a number value", function () {
           var volume = {
-            size: "1024"
+            persistentSize: "1024"
           };
-          expect(this.validatior.volumesSize(volume)).to.be.true;
+          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.true;
         });
       });
       describe("path", function () {
-        it("shouyld allow an empty value", function () {
+        it("should allow an empty value", function () {
           var volume = {
-            path: ""
+            containerPath: ""
           };
-          expect(this.validatior.volumesPath(volume)).to.be.true;
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
         });
 
         it("should not be a not contain a space", function () {
           var volume = {
-            path: "ab c"
+            containerPath: "ab c"
           };
-          expect(this.validatior.volumesPath(volume)).to.be.false;
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
         });
 
         it("should be a string value", function () {
           var volume = {
-            path: "abc"
+            containerPath: "abc"
           };
-          expect(this.validatior.volumesPath(volume)).to.be.true;
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
         });
 
-        it("should be can contain a slash string value", function () {
+        it("should contain a slash string value", function () {
           var volume = {
-            path: "ab/c"
+            containerPath: "ab/c"
           };
-          expect(this.validatior.volumesPath(volume)).to.be.true;
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
+        });
+
+        it("should begin with a slash string value", function () {
+          var volume = {
+            containerPath: "/abc"
+          };
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
         });
       });
     });
