@@ -41,6 +41,21 @@ describe("Util", function () {
       var result = Util.extendObject(["foo", "bar"], ["faz"]);
       expect(result).to.deep.equal(expectedResult);
     });
+
+    it("treats accessors", function () {
+      var counter = 0;
+
+      var obj = {
+        get count() {
+          return ++counter;
+        }
+      };
+
+      var newObj = Util.extendObject({}, obj);
+
+      expect(newObj.count).to.equal(1);
+      expect(newObj.count).to.equal(2);
+    });
   });
 
   describe("initKeyValue", function () {

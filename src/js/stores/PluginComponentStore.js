@@ -2,6 +2,7 @@ import {EventEmitter} from "events";
 import React from "react/addons";
 
 import PluginDispatcher from "../plugin/external/PluginDispatcher";
+import PluginEvents from "../plugin/external/PluginEvents";
 import PluginComponentEvents from "../events/PluginComponentEvents";
 
 import Util from "../helpers/Util";
@@ -15,7 +16,7 @@ var PluginComponentStore = Util.extendObject(EventEmitter.prototype, {
 });
 
 PluginDispatcher.register(event => {
-  if (event.eventType === "INJECT_COMPONENT") {
+  if (event.eventType === PluginEvents.INJECT_COMPONENT) {
     let componentObj = {
       placeId: event.placeId,
       component: event.component

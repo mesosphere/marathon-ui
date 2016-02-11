@@ -1,47 +1,56 @@
+import Util from "../helpers/Util";
+import PluginLoader from "../plugin/PluginLoader";
+import ajaxWrapper from "../helpers/ajaxWrapper";
+
+import config from "../config/config";
+
+import Messages from "../constants/Messages";
 import AppDispatcher from "../AppDispatcher";
-import JSONPUtil from "../helpers/JSONPUtil";
 import PluginEvents from "../events/PluginEvents";
 
-// Comes from the API later on
-var sampleListOfPlugins = [{
-  hash: "pluginHash",
-  id: "examplePlugin-0.0.1",
-  name: "UI Sample Plugin",
-  uri: "http://localhost:4202/main.js"
-}];
-
 var PluginActions = {
-  requestMetaInfo: function () {
-    AppDispatcher.dispatchNext({
-      actionType: PluginEvents.META_INFO_SUCCESS,
-      data: sampleListOfPlugins
-    });
-
-    /*
-    AppDispatcher.dispatchNext({
-      actionType: PluginEvents.META_INFO_ERROR,
-      data: "Oh nooo!"
-    });
-    */
+  requestPlugins: function () {
+    this.request({url: `${config.apiURL}v2/plugins`})
+      .success(function (response) {
+        if (response != null && response.body != null
+            && Util.isArray(response.body.plugins)) {
+          AppDispatcher.dispatch({
+            actionType: PluginEvents.REQUEST_PLUGINS_SUCCESS,
+            data: response.body.plugins
+          });
+          return;
+        }
+        AppDispatcher.dispatch({
+          actionType: PluginEvents.REQUEST_PLUGINS_ERROR,
+          data: {message: Messages.MALFORMED}
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: PluginEvents.REQUEST_PLUGINS_ERROR,
+          data: error
+        });
+      });
   },
-  requestPlugin: function (pluginInfo) {
-    this.request(pluginInfo.uri).then(
+  loadPlugin: function (pluginId) {
+    this.load(pluginId,`${config.apiURL}v2/plugins/${pluginId}/main.js`).then(
       function () {
         AppDispatcher.dispatch({
-          actionType: PluginEvents.REQUEST_SUCCESS,
-          metaInfo: pluginInfo
+          actionType: PluginEvents.LOAD_PLUGIN_SUCCESS,
+          id: pluginId
         });
       },
       function (error) {
         AppDispatcher.dispatch({
-          actionType: PluginEvents.REQUEST_ERROR,
+          actionType: PluginEvents.LOAD_PLUGIN_ERROR,
           data: error,
-          metaInfo: pluginInfo
+          id: pluginId
         });
       }
     );
   },
-  request: JSONPUtil.request
+  request: ajaxWrapper,
+  load: PluginLoader.load
 };
 
 export default PluginActions;

@@ -1,78 +1,129 @@
 import {EventEmitter} from "events";
 
 import AppDispatcher from "../AppDispatcher";
-import PluginDispatcher from "../plugin/external/PluginDispatcher";
+import Util from "../helpers/Util";
 import DialogActions from "../actions/DialogActions";
 import DialogSeverity from "../constants/DialogSeverity";
 import PluginActions from "../actions/PluginActions";
 import PluginEvents from "../events/PluginEvents";
+import PluginModules from "../constants/PluginModules";
+import States from "../constants/States";
+import pluginScheme from "../stores/schemes/pluginScheme";
 
-import Util from "../helpers/Util";
+var plugins = [];
 
-var pluginsMetaData = [];
-var pluginsToLoad = [];
-var pluginsStarted = [];
-var pluginsErrored = [];
-
-var bootstrapComplete = false;
-
-function loadNextPlugin() {
-  if (pluginsToLoad.length === 0) {
+function addPlugin(data) {
+  if (data.id == null && !Util.isObject(data.info) &&
+      getPluginById(data.id) != null) {
     return;
   }
-  PluginActions.requestPlugin(pluginsToLoad.shift());
+
+  plugins.push(Util.extendObject(pluginScheme, data.info, {id: data.id}));
 }
 
-function checkForStartupCompleteAndEmit() {
-  let allStarted = pluginsMetaData.every(plugin => {
-    return pluginsStarted.includes(plugin.id) ||
-      pluginsErrored.some(errored => errored.id === plugin.id);
+function getPluginById(id) {
+  return plugins.find(plugin => plugin.id === id);
+}
+
+function updatePluginState(id, state) {
+  var plugin = getPluginById(id);
+  if (plugin == null) {
+    return;
+  }
+
+  plugin.state = state;
+}
+
+function loadPlugins() {
+  plugins.filter(plugin => {
+    return plugin.modules.includes(PluginModules.UI) &&
+      plugin.state === States.STATE_INITIAL;
+  })
+  .forEach(plugin => {
+    plugin.state = States.STATE_LOADING;
+    PluginActions.loadPlugin(plugin.id);
   });
-
-  if (allStarted) {
-    bootstrapComplete = true;
-    PluginStore.emit(PluginEvents.BOOTSTRAP_COMPLETE);
-  }
 }
 
-var PluginStore = Util.extendObject(EventEmitter.prototype, {
-  bootstrap: function () {
-    PluginActions.requestMetaInfo();
-  },
-  isBootstrapComplete: function () {
-    return bootstrapComplete;
-  }
-});
+var PluginStore = Util.extendObject({
+  get pluginsLoadingState() {
+    if (plugins.length === 0) {
+      return States.STATE_INITIAL;
+    }
 
-PluginDispatcher.register(function (event) {
-  switch (event.eventType) {
-    case "STARTUP_COMPLETE":
-      pluginsStarted.push(event.pluginId);
-      checkForStartupCompleteAndEmit();
-      break;
+    return plugins.map((plugin) => plugin.state)
+      .reduce((pluginAState, pluginBState) => {
+        if (pluginAState === States.STATE_INITIAL ||
+            pluginBState === States.STATE_INITIAL) {
+          return States.STATE_INITIAL;
+        }
+
+        if (pluginAState === States.STATE_LOADING ||
+            pluginBState === States.STATE_LOADING) {
+          return States.STATE_LOADING;
+        }
+
+        if (pluginAState === States.STATE_ERROR ||
+            pluginBState === States.STATE_ERROR) {
+          return States.STATE_ERROR;
+        }
+
+        if (pluginAState === States.STATE_UNAUTHORIZED ||
+            pluginBState === States.STATE_UNAUTHORIZED) {
+          return States.STATE_UNAUTHORIZED;
+        }
+
+        if (pluginAState === States.STATE_FORBIDDEN ||
+            pluginBState === States.STATE_FORBIDDEN) {
+          return States.STATE_FORBIDDEN;
+        }
+
+        if (pluginAState === States.STATE_SUCCESS &&
+            pluginBState === States.STATE_SUCCESS) {
+          return States.STATE_SUCCESS;
+        }
+
+        return States.STATE_INITIAL;
+
+      });
+  },
+
+  get isPluginsLoadingFinished() {
+    var pluginLoadingState = this.pluginsLoadingState;
+    return pluginLoadingState !== States.STATE_INITIAL &&
+      pluginLoadingState !== States.STATE_LOADING;
+  },
+
+  resetStore: function () {
+    plugins = [];
   }
-});
+
+}, EventEmitter.prototype);
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
-    case PluginEvents.META_INFO_SUCCESS:
-      pluginsMetaData = action.data;
-      pluginsToLoad = Util.deepCopy(pluginsMetaData);
-      loadNextPlugin();
+    case PluginEvents.REQUEST_PLUGINS_SUCCESS:
+      action.data.forEach(addPlugin);
+      PluginStore.emit(PluginEvents.CHANGE);
+      loadPlugins();
       break;
-    case PluginEvents.REQUEST_SUCCESS:
-      pluginsLoaded.push(action.metaInfo);
-      loadNextPlugin();
+    case PluginEvents.LOAD_PLUGIN_SUCCESS:
+      updatePluginState(action.id, States.STATE_SUCCESS);
+      PluginStore.emit(PluginEvents.CHANGE);
       break;
-    case PluginEvents.REQUEST_ERROR:
-      pluginsErrored.push(action.metaInfo);
-      checkForStartupCompleteAndEmit();
+    case PluginEvents.LOAD_PLUGIN_ERROR:
+      updatePluginState(action.id, States.STATE_ERROR);
+      let plugin = getPluginById(action.id);
+      let message = "";
+      if (plugin != null) {
+        message = `${plugin.name || plugin.id}`;
+      }
       DialogActions.alert({
-        title: `Could not load plugin`,
-        message: `${action.metaInfo.name} (${action.metaInfo.hash})`,
+        title: "Could not load plugin",
+        message: message,
         severity: DialogSeverity.WARNING
       });
-      loadNextPlugin();
+      PluginStore.emit(PluginEvents.CHANGE);
       break;
   }
 });

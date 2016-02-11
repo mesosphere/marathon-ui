@@ -18,6 +18,7 @@ import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
 import DialogActions from "../actions/DialogActions";
 import QueueActions from "../actions/QueueActions";
+import PluginActions from "../actions/PluginActions";
 
 import "../plugin/PluginInterface";
 import PluginStore from "../stores/PluginStore";
@@ -44,19 +45,22 @@ var Marathon = React.createClass({
   },
 
   componentDidMount: function () {
-    this.onRouteChange();
+    PluginActions.requestPlugins();
 
+    this.onRouteChange();
     this.bindKeyboardShortcuts();
 
-    PluginStore.once(PluginEvents.BOOTSTRAP_COMPLETE, () => {
-      this.startPolling();
-    });
-
-    PluginStore.bootstrap();
+    PluginStore.on(PluginEvents.CHANGE, this.onPluginStoreChange);
   },
 
   componentWillReceiveProps: function () {
     this.onRouteChange();
+  },
+
+  onPluginStoreChange: function () {
+    if (PluginStore.isPluginsLoadingFinished) {
+      this.startPolling();
+    }
   },
 
   onRouteChange: function () {
@@ -111,13 +115,15 @@ var Marathon = React.createClass({
     /* eslint-disable eqeqeq */
     if ((prevState.activeAppId != this.state.activeAppId ||
         prevState.activeTabId != this.state.activeTabId) &&
-        PluginStore.isBootstrapComplete()) {
+      PluginStore.isPluginsLoadingFinished) {
       this.resetPolling();
     }
     /* eslint-enable eqeqeq */
   },
 
   componentWillUnmount: function () {
+    PluginStore.removeListener(PluginEvents.CHANGE, this.onPluginStoreChange);
+
     this.stopPolling();
   },
 
