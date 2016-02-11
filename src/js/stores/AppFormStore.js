@@ -27,12 +27,12 @@ const defaultFieldValues = Object.freeze({
 
 const duplicableRowFields = [
   "containerVolumes",
+  "containerVolumesLocal",
   "dockerPortMappings",
   "dockerParameters",
   "env",
   "healthChecks",
-  "labels",
-  "volumes"
+  "labels"
 ];
 
 /**
@@ -54,6 +54,10 @@ const validationRules = {
     AppFormValidators.containerVolumesContainerPathIsValid,
     AppFormValidators.containerVolumesHostPathIsValid,
     AppFormValidators.containerVolumesModeNotEmpty
+  ],
+  "containerVolumesLocal": [
+    AppFormValidators.containerVolumesLocalSize,
+    AppFormValidators.containerVolumesLocalPath
   ],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
@@ -81,11 +85,7 @@ const validationRules = {
   "instances": [AppFormValidators.instances],
   "labels": [AppFormValidators.labels],
   "mem": [AppFormValidators.mem],
-  "ports": [AppFormValidators.ports],
-  "volumes": [
-    AppFormValidators.volumesSize,
-    AppFormValidators.volumesPath
-  ]
+  "ports": [AppFormValidators.ports]
 };
 
 /**
@@ -99,6 +99,7 @@ const resolveFieldIdToAppKeyMap = {
   cmd: "cmd",
   constraints: "constraints",
   containerVolumes: "container.volumes",
+  containerVolumesLocal: "container.volumes",
   cpus: "cpus",
   disk: "disk",
   dockerForcePullImage: "container.docker.forcePullImage",
@@ -115,8 +116,7 @@ const resolveFieldIdToAppKeyMap = {
   mem: "mem",
   ports: "ports",
   uris: "uris",
-  user: "user",
-  volumes: "volumes"
+  user: "user"
 };
 
 /**
@@ -189,16 +189,18 @@ const responseAttributePathToFieldIdMap = {
  * Not listed keys are taken as they are.
  */
 const resolveAppKeyToFieldIdMap = {
-  id: "appId",
-  "container.docker.forcePullImage": "dockerForcePullImage",
-  "container.docker.image": "dockerImage",
-  "container.docker.network": "dockerNetwork",
-  "container.docker.portMappings": "dockerPortMappings",
-  "container.docker.parameters": "dockerParameters",
-  "container.docker.privileged": "dockerPrivileged",
-  "container.volumes": "containerVolumes",
-  "healthChecks": "healthChecks",
-  "volumes": "volumes"
+  id: ["appId"],
+  "container.docker.forcePullImage": ["dockerForcePullImage"],
+  "container.docker.image": ["dockerImage"],
+  "container.docker.network": ["dockerNetwork"],
+  "container.docker.portMappings": ["dockerPortMappings"],
+  "container.docker.parameters": ["dockerParameters"],
+  "container.docker.privileged": ["dockerPrivileged"],
+  "container.volumes": [
+    "containerVolumes",
+    "containerVolumesLocal"
+  ],
+  "healthChecks": ["healthChecks"]
 };
 
 // Validate all fields in form store and update validationErrorIndices.
@@ -309,16 +311,18 @@ function populateFieldsFromModel(app, fields) {
   var paths = Util.detectObjectPaths(app, null, ["env", "labels"]);
 
   paths.forEach((appKey) => {
-    var fieldId = resolveAppKeyToFieldIdMap[appKey];
-    if (fieldId == null) {
-      fieldId = appKey;
+    var fieldIdArray = resolveAppKeyToFieldIdMap[appKey];
+    if (fieldIdArray == null) {
+      fieldIdArray = [appKey];
     }
-    const transform = AppFormTransforms.ModelToField[fieldId];
-    if (transform == null) {
-      fields[fieldId] = objectPath.get(app, appKey);
-    } else {
-      fields[fieldId] = transform(objectPath.get(app, appKey));
-    }
+    fieldIdArray.forEach(fieldId => {
+      const transform = AppFormTransforms.ModelToField[fieldId];
+      if (transform == null) {
+        fields[fieldId] = objectPath.get(app, appKey);
+      } else {
+        fields[fieldId] = transform(objectPath.get(app, appKey));
+      }
+    });
   });
 }
 

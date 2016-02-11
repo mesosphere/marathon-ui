@@ -33,7 +33,8 @@ const AppFormFieldToModelTransforms = {
   constraints: (constraints) => constraints
     .split(",")
     .map((constraint) => constraint.split(":").map((value) => value.trim())),
-  containerVolumes: (rows) => lazy(rows)
+  containerVolumes: (rows) => {
+    return lazy(rows)
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.containerVolumes))
     .compact()
     .filter((row) => {
@@ -42,7 +43,25 @@ const AppFormFieldToModelTransforms = {
           !Util.isStringAndEmpty(row[key].toString().trim()));
       });
     })
-    .value(),
+    .value();
+  },
+  containerVolumesLocal: rows => {
+    rows = rows.filter(row => {
+      return ["containerPath", "persistentSize"].every(key => {
+        return row[key] != null && row[key] !== "";
+      });
+    })
+      .map(row => {
+        return {
+          containerPath: row.containerPath,
+          persistent: {
+            size: row.persistentSize * 1
+          },
+          mode: "RW"
+        };
+      });
+    return rows;
+  },
   dockerForcePullImage: (isChecked) => !!isChecked,
   dockerParameters: (rows) => lazy(rows)
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))
