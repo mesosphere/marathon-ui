@@ -14,6 +14,15 @@ describe("PluginDispatcherProxy", function () {
     this.dispatcher = null;
   });
 
+  it("should throw an error if no valid  plugin id is supplied", function () {
+
+    expect(()=> PluginDispatcherProxy.create()).to.throw(TypeError);
+    expect(()=> PluginDispatcherProxy.create(null)).to.throw(TypeError);
+    expect(()=> PluginDispatcherProxy.create("")).to.throw(TypeError);
+    expect(()=> PluginDispatcherProxy.create({})).to.throw(TypeError);
+
+  });
+
   it("should add plugin id as payload", function (done) {
     var dispatchToken = this.dispatcher.register((event) => {
       if (event.eventType === "TEST_EVENT") {
