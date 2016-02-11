@@ -1,9 +1,16 @@
+import Util from "../../helpers/Util";
 import PluginDispatcher from "./PluginDispatcher";
 import PluginEvents from "./PluginEvents";
 
 export default class PluginHelper {
 
   constructor(pluginId) {
+    if (!Util.isString(pluginId) || pluginId === "") {
+      throw new TypeError(
+        "Plugin id may only be a String with at least one character"
+      );
+    }
+
     this.pluginId = pluginId;
     Object.freeze(this);
   }

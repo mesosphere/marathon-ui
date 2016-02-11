@@ -1,8 +1,15 @@
 import PluginDispatcher from "./external/PluginDispatcher";
+import Util from "../helpers/Util";
 
 export default class PluginDispatcherProxy {
 
   constructor(pluginId) {
+    if (!Util.isString(pluginId) || pluginId === "") {
+      throw new TypeError(
+        "Plugin id may only be a String with at least one character"
+      );
+    }
+
     this.pluginId = pluginId;
     Object.freeze(this);
   }
