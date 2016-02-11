@@ -11,6 +11,7 @@ import States from "../constants/States";
 import pluginScheme from "../stores/schemes/pluginScheme";
 
 var plugins = [];
+var requestState = States.STATE_INITIAL;
 
 function addPlugin(data) {
   if (data.id == null && !Util.isObject(data.info) &&
@@ -47,8 +48,17 @@ function loadPlugins() {
 
 var PluginStore = Util.extendObject({
   get pluginsLoadingState() {
-    if (plugins.length === 0) {
+
+    if (requestState === States.STATE_INITIAL) {
       return States.STATE_INITIAL;
+    }
+
+    if (requestState === States.STATE_ERROR) {
+      return States.STATE_ERROR;
+    }
+
+    if (requestState === States.STATE_SUCCESS && plugins.length === 0) {
+      return States.STATE_SUCCESS;
     }
 
     return plugins.map((plugin) => plugin.state)
@@ -103,9 +113,14 @@ var PluginStore = Util.extendObject({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case PluginEvents.REQUEST_PLUGINS_SUCCESS:
+      requestState = States.STATE_SUCCESS;
       action.data.forEach(addPlugin);
       PluginStore.emit(PluginEvents.CHANGE);
       loadPlugins();
+      break;
+    case PluginEvents.REQUEST_PLUGINS_ERROR:
+      requestState = States.STATE_ERROR;
+      PluginStore.emit(PluginEvents.CHANGE);
       break;
     case PluginEvents.LOAD_PLUGIN_SUCCESS:
       updatePluginState(action.id, States.STATE_SUCCESS);

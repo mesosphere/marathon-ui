@@ -91,7 +91,50 @@ describe("load plugins", function () {
     PluginActions.requestPlugins();
   });
 
-  it("handles failure gracefully", function (done) {
+  it("handles plugin request failure gracefully", function (done) {
+    PluginActions.request = ajaxWrapperStub((url, resolve, reject) => {
+      reject({message: "error"});
+    });
+
+    var dispatchToken = AppDispatcher.register(function (action) {
+      if (action.actionType ===
+        PluginEvents.REQUEST_PLUGINS_ERROR) {
+        AppDispatcher.unregister(dispatchToken);
+        expectAsync(() => {
+          expect(PluginStore.pluginsLoadingState)
+            .to.equal(States.STATE_ERROR);
+        }, done);
+      }
+    });
+
+    PluginActions.requestPlugins();
+  });
+
+  it("handles empty plugin request response  gracefully", function (done) {
+    PluginActions.request = ajaxWrapperStub((url, resolve) => {
+      resolve({
+        "body": {
+          "plugins": []
+        }
+      });
+    });
+
+    var dispatchToken = AppDispatcher.register(function (action) {
+      if (action.actionType ===
+        PluginEvents.REQUEST_PLUGINS_SUCCESS) {
+        AppDispatcher.unregister(dispatchToken);
+        expectAsync(() => {
+          expect(PluginStore.pluginsLoadingState)
+            .to.equal(States.STATE_SUCCESS);
+        }, done);
+      }
+    });
+
+    PluginActions.requestPlugins();
+  });
+
+
+  it("handles plugin loading failure gracefully", function (done) {
     PluginActions.load = PluginLoaderLoadStub((url, resolve, reject) => {
       reject({message: "error"});
     });
