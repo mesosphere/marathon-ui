@@ -271,14 +271,39 @@ function updateErrorIndices(fieldId, value, errorIndices) {
 
 function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveFieldIdToAppKeyMap[fieldId];
+
   if (key) {
-    const transform = AppFormTransforms.FieldToModel[fieldId];
-    if (transform == null) {
-      Util.objectPathSet(app, key, fields[fieldId]);
+    let fieldIdsBySameModelKey = Object.keys(resolveFieldIdToAppKeyMap)
+      .filter(mapKey => {
+        return resolveFieldIdToAppKeyMap[mapKey] ===
+        resolveFieldIdToAppKeyMap[fieldId];
+      });
+
+    let setValue;
+
+    if (fieldIdsBySameModelKey.length < 2) {
+      const transform = AppFormTransforms.FieldToModel[fieldId];
+      if (transform == null) {
+        setValue = fields[fieldId];
+      } else {
+        setValue = transform(fields[fieldId]);
+      }
     } else {
-      Util.objectPathSet(app, key, transform(fields[fieldId]));
+      setValue = fieldIdsBySameModelKey.reduce((memo, fieldId) => {
+        const transform = AppFormTransforms.FieldToModel[fieldId];
+        if (fields[fieldId] != null) {
+          if (transform == null) {
+            memo = memo.concat(fields[fieldId]);
+          } else {
+            memo = memo.concat(transform(fields[fieldId]));
+          }
+        }
+        return memo;
+      }, []);
     }
+    Util.objectPathSet(app, key, setValue);
   }
+
   Object.keys(app).forEach((appKey) => {
     var postProcessor = AppFormModelPostProcess[appKey];
     if (postProcessor != null) {
@@ -310,7 +335,7 @@ function populateFieldsFromModel(app, fields) {
   // so it's excluded.
   var paths = Util.detectObjectPaths(app, null, ["env", "labels"]);
 
-  paths.forEach((appKey) => {
+  paths.forEach(appKey => {
     var fieldIdArray = resolveAppKeyToFieldIdMap[appKey];
     if (fieldIdArray == null) {
       fieldIdArray = [appKey];

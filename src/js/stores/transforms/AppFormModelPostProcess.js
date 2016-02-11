@@ -28,7 +28,6 @@ const AppFormModelPostProcess = {
   },
   container: (app) => {
     var container = app.container;
-
     if (container == null) {
       return;
     }

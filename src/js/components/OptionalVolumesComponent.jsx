@@ -46,7 +46,7 @@ var OptionalVolumesComponent = React.createClass({
     return (
       <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset className="row duplicable-row"
-                  onChange={this.handleChange.bind(null, i)}>
+            onChange={this.handleChange.bind(null, i)}>
           <div className="col-sm-4">
             <FormGroupComponent
                 fieldId={`containerVolumesLocal.persistent.size.${i}`}

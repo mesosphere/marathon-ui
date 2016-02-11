@@ -33,17 +33,17 @@ const AppFormFieldToModelTransforms = {
   constraints: (constraints) => constraints
     .split(",")
     .map((constraint) => constraint.split(":").map((value) => value.trim())),
-  containerVolumes: (rows) => {
+  containerVolumes: rows => {
     return lazy(rows)
-    .map((row) => ensureObjectScheme(row, dockerRowSchemes.containerVolumes))
-    .compact()
-    .filter((row) => {
-      return ["containerPath", "hostPath", "mode"].every((key) => {
-        return (row[key] != null &&
-          !Util.isStringAndEmpty(row[key].toString().trim()));
-      });
-    })
-    .value();
+      .map((row) => ensureObjectScheme(row, dockerRowSchemes.containerVolumes))
+      .compact()
+      .filter((row) => {
+        return ["containerPath", "hostPath", "mode"].every((key) => {
+          return (row[key] != null &&
+            !Util.isStringAndEmpty(row[key].toString().trim()));
+        });
+      })
+      .value();
   },
   containerVolumesLocal: rows => {
     rows = rows.filter(row => {
@@ -55,7 +55,7 @@ const AppFormFieldToModelTransforms = {
         return {
           containerPath: row.containerPath,
           persistent: {
-            size: row.persistentSize * 1
+            size: parseInt(row.persistentSize, 10)
           },
           mode: "RW"
         };
