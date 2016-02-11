@@ -21,6 +21,10 @@ const applicationFieldValidationErrors = Util.deepFreeze({
     "Host Path must be a valid path",
     "Mode must not be empty"
   ],
+  containerVolumesLocal: [
+    "Size must be a non-negative Number",
+    "Contianer Path must be a valid path"
+  ],
   cpus: ["CPUs must be a number greater or equal to 0.01"],
   disk: ["Disk Space must be a non-negative number"],
   dockerImage: ["Image cannot  contain whitespaces"],
