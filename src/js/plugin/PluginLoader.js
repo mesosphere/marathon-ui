@@ -1,3 +1,5 @@
+import React from "react/addons";
+
 import config from "../config/config";
 
 import URLUtil from "../helpers/URLUtil";
@@ -35,7 +37,10 @@ const PluginLoader = {
         const pluginDocument = pluginWindow.document;
         var pluginTimeout = null;
 
-        // Inject plugin interface
+        // Inject the plugin interface including the current React instance.
+        // Plugins need to use interface as well as the provided React instance
+        // to provide components. Using a different React instance will result
+        // in "Invariant Violation" errors.
         pluginWindow.marathonPluginInterface = Object.freeze({
           PluginActions: PluginActions,
           PluginDispatcher: PluginDispatcherProxy.create(pluginId),
@@ -43,6 +48,7 @@ const PluginLoader = {
           PluginHelper: PluginHelper.create(pluginId),
           PluginMountPoints: PluginMountPoints,
           pluginId: pluginId,
+          React: React,
           UIVersion: config.version
         });
 
