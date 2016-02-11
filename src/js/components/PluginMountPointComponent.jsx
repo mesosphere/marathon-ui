@@ -16,7 +16,7 @@ var PluginMountPointComponent = React.createClass({
   },
 
   componentWillMount: function () {
-    var components = PluginComponentStore.getComponents()
+    var components = PluginComponentStore.components
       .filter(component => {
         return component.placeId === this.props.placeId;
       });

@@ -10,7 +10,7 @@ import Util from "../helpers/Util";
 var components = [];
 
 var PluginComponentStore = Util.extendObject(EventEmitter.prototype, {
-  getComponents: function () {
+  get components() {
     return components;
   }
 });
