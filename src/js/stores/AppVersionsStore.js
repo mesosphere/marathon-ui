@@ -1,10 +1,9 @@
 import {EventEmitter} from "events";
 
-import {AppConfigDefaultValues} from "../constants/AppConfigDefaults";
+import {AllAppConfigDefaultValues} from "../constants/AppConfigDefaults";
 import AppDispatcher from "../AppDispatcher";
 import appScheme from "../stores/schemes/appScheme";
 import AppVersionsEvents from "../events/AppVersionsEvents";
-
 import Util from "../helpers/Util";
 
 const storeData = {
@@ -58,10 +57,10 @@ var AppVersionsStore = Util.extendObject(EventEmitter.prototype, {
   getAppConfigVersion: function (appId, appVersionTimestamp) {
     var version = this.getAppVersion(appId, appVersionTimestamp);
     return Object.keys(version).reduce((memo, key) => {
-      if (AppConfigDefaultValues.hasOwnProperty(key)) {
-        let defaultVal = AppConfigDefaultValues[key];
+      if (AllAppConfigDefaultValues.hasOwnProperty(key)) {
+        let defaultVal = AllAppConfigDefaultValues[key];
         let val = version[key];
-        if (val !== defaultVal) {
+        if (!Util.isEgal(val, defaultVal)) {
           memo[key] = val;
         }
       }

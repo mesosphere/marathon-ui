@@ -63,9 +63,37 @@ describe("request specific application version", function () {
             "/app-id", "2016-01-01T00:00:00.000Z"
           );
           expect(config).to.deep.equal({
-            "id": "/app-id",
-            "cmd": "some --cmd",
+            id: "/app-id",
+            cmd: "some --cmd",
             ports: [12345]
+          });
+        }, done);
+      });
+
+      AppVersionsActions.requestAppVersion(
+        "/app-id", "2016-01-01T00:00:00.000Z"
+      );
+    });
+
+    it("includes non-default values", function (done) {
+      nock(config.apiURL)
+        .get("/v2/apps//app-id/versions/2016-01-01T00:00:00.000Z")
+        .reply(200, Object.assign({}, minimalAppFullConfig, {
+          labels: {
+            "testing": "123"
+          }
+        }));
+
+      AppVersionsStore.once(AppVersionsEvents.CHANGE, function () {
+        expectAsync(function () {
+          var config = AppVersionsStore.getAppConfigVersion(
+            "/app-id", "2016-01-01T00:00:00.000Z"
+          );
+          expect(config).to.deep.equal({
+            id: "/app-id",
+            cmd: "some --cmd",
+            ports: [12345],
+            labels: {testing: "123"}
           });
         }, done);
       });

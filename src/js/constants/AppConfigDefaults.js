@@ -21,3 +21,29 @@ export const AppConfigDefaultValues = Util.deepFreeze({
   instances: 1,
   ports: [ 0 ]
 });
+
+// Complete app configuration with default values
+export const AllAppConfigDefaultValues = Util.deepFreeze(
+  Object.assign({}, AppConfigDefaultValues, {
+    args: null,
+    env: {},
+    executor: "",
+    constraints: [],
+    uris: [],
+    fetch: [],
+    storeUrls: [],
+    requirePorts: false,
+    backoffSeconds: 1,
+    backoffFactor: 1.15,
+    maxLaunchDelaySeconds: 3600,
+    container: null,
+    healthChecks: [],
+    dependencies: [],
+    upgradeStrategy: {
+      minimumHealthCapacity: 1,
+      maximumOverCapacity: 1
+    },
+    labels: {},
+    acceptedResourceRoles: null
+  })
+);
