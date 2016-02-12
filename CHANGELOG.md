@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- \#3172 - "Apply" button is broken (sending both uris and fetch) #3172
+
 ## 0.15.4 - 2016-02-08
 ### Fixed
 - \#3160 - Show server-side validation errors for invalid constraints
