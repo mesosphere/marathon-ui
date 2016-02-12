@@ -10,8 +10,10 @@ import PluginModules from "../constants/PluginModules";
 import States from "../constants/States";
 import pluginScheme from "../stores/schemes/pluginScheme";
 
-var plugins = [];
-var requestState = States.STATE_INITIAL;
+var storeData = {
+  plugins: [],
+  requestState: States.STATE_INITIAL
+};
 
 function addPlugin(data) {
   if (data.id == null && !Util.isObject(data.info) &&
@@ -19,11 +21,15 @@ function addPlugin(data) {
     return;
   }
 
-  plugins.push(Util.extendObject(pluginScheme, data.info, {id: data.id}));
+  storeData.plugins.push(Util.extendObject(
+    pluginScheme,
+    data.info,
+    {id: data.id}
+  ));
 }
 
 function getPluginById(id) {
-  return plugins.find(plugin => plugin.id === id);
+  return storeData.plugins.find(plugin => plugin.id === id);
 }
 
 function updatePluginState(id, state) {
@@ -36,65 +42,45 @@ function updatePluginState(id, state) {
 }
 
 function loadPlugins() {
-  plugins.filter(plugin => {
-    return plugin.modules.includes(PluginModules.UI) &&
-      plugin.state === States.STATE_INITIAL;
-  })
-  .forEach(plugin => {
-    plugin.state = States.STATE_LOADING;
-    PluginActions.loadPlugin(plugin.id);
-  });
+  storeData.plugins
+    .filter(plugin => {
+      return plugin.modules.includes(PluginModules.UI) &&
+        plugin.state === States.STATE_INITIAL;
+    })
+    .forEach(plugin => {
+      plugin.state = States.STATE_LOADING;
+      PluginActions.loadPlugin(plugin.id);
+    });
 }
 
-var PluginStore = Util.extendObject({
+var PluginStore = Util.extendObject(EventEmitter.prototype, {
   get pluginsLoadingState() {
+    var {requestState, plugins} = storeData;
 
-    if (requestState === States.STATE_INITIAL) {
-      return States.STATE_INITIAL;
+    if (requestState === States.STATE_INITIAL ||
+        requestState === States.STATE_ERROR ||
+        requestState === States.STATE_SUCCESS &&
+        plugins.length === 0) {
+      return requestState;
     }
 
-    if (requestState === States.STATE_ERROR) {
-      return States.STATE_ERROR;
-    }
-
-    if (requestState === States.STATE_SUCCESS && plugins.length === 0) {
-      return States.STATE_SUCCESS;
-    }
-
-    return plugins.map((plugin) => plugin.state)
+    return plugins
+      .map(plugin => plugin.state)
       .reduce((pluginAState, pluginBState) => {
-        if (pluginAState === States.STATE_INITIAL ||
-            pluginBState === States.STATE_INITIAL) {
-          return States.STATE_INITIAL;
-        }
-
-        if (pluginAState === States.STATE_LOADING ||
-            pluginBState === States.STATE_LOADING) {
-          return States.STATE_LOADING;
-        }
-
-        if (pluginAState === States.STATE_ERROR ||
-            pluginBState === States.STATE_ERROR) {
-          return States.STATE_ERROR;
-        }
-
-        if (pluginAState === States.STATE_UNAUTHORIZED ||
-            pluginBState === States.STATE_UNAUTHORIZED) {
-          return States.STATE_UNAUTHORIZED;
-        }
-
-        if (pluginAState === States.STATE_FORBIDDEN ||
-            pluginBState === States.STATE_FORBIDDEN) {
-          return States.STATE_FORBIDDEN;
-        }
-
         if (pluginAState === States.STATE_SUCCESS &&
             pluginBState === States.STATE_SUCCESS) {
           return States.STATE_SUCCESS;
         }
 
-        return States.STATE_INITIAL;
+        let state = Object.values(States)
+          .filter(state => state !== States.STATE_SUCCESS)
+          .find(state => state === pluginAState || state === pluginBState);
 
+        if (state != null) {
+          return state;
+        }
+
+        return States.STATE_INITIAL;
       });
   },
 
@@ -105,21 +91,24 @@ var PluginStore = Util.extendObject({
   },
 
   resetStore: function () {
-    plugins = [];
+    storeData = {
+      plugins: [],
+      requestState: States.STATE_INITIAL
+    };
   }
 
-}, EventEmitter.prototype);
+});
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case PluginEvents.REQUEST_PLUGINS_SUCCESS:
-      requestState = States.STATE_SUCCESS;
+      storeData.requestState = States.STATE_SUCCESS;
       action.data.forEach(addPlugin);
       PluginStore.emit(PluginEvents.CHANGE);
       loadPlugins();
       break;
     case PluginEvents.REQUEST_PLUGINS_ERROR:
-      requestState = States.STATE_ERROR;
+      storeData.requestState = States.STATE_ERROR;
       PluginStore.emit(PluginEvents.CHANGE);
       break;
     case PluginEvents.LOAD_PLUGIN_SUCCESS:
