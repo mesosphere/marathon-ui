@@ -1,4 +1,4 @@
-## Unversioned
+## 0.15.5 - 2016-02-12
 ### Fixed
 - \#3172 - "Apply" button is broken (sending both uris and fetch) #3172
 
