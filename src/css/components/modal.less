@@ -242,9 +242,7 @@
 }
 
 .modal-content {
-  background-color: #fff;
   height: 100%;
-  overflow: hidden;
   border-radius: 0;
 
   h4 {
@@ -256,9 +254,9 @@
 }
 
 .modal-body {
+  background-color: #fff;
   color: @shuttle-gray;
   padding: 30px 40px;
-  overflow-y: auto;
 }
 
 .modal-body .row.full-bleed .panel-body {
@@ -335,6 +333,10 @@ textarea.form-control {
 .duplicable-row .controls {
   flex-grow: 1;
   margin-bottom: 36px;
+
+  .btn-link.add {
+    float: left;
+  }
 }
 
 .duplicable-row .controls .btn.add {
