@@ -64,7 +64,7 @@ var EditAppModalComponent = React.createClass({
     }
 
     let app = Object.assign({},
-      AppVersionsStore.getAppVersion(props.appId, props.appVersion)
+      AppVersionsStore.getAppConfigVersion(props.appId, props.appVersion)
     );
 
     this.setState({
