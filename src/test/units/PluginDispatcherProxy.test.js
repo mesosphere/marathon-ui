@@ -113,7 +113,8 @@ describe("PluginDispatcherProxy", function () {
 
     var tokenA = this.dispatcher.register(callbackA);
 
-    this.dispatcher.register((payload) => {
+    var dispatchToken = this.dispatcher.register((payload) => {
+      this.dispatcher.unregister(dispatchToken);
       this.dispatcher.waitFor([tokenA]);
       expect(callbackA.callCount).to.equal(1);
       expect(callbackA.calledWith(payload)).to.equal(true);
