@@ -254,8 +254,8 @@ var AppConfigEditFormComponent = React.createClass({
         </div>
         <div className="row full-bleed">
           <CollapsiblePanelComponent
-            isOpen={this.fieldsHaveError({volumes: "volumes"})}
-            title="Volumes">
+              isOpen={this.fieldsHaveError({volumes: "volumes"})}
+              title="Volumes">
             <OptionalVolumesComponent
               errorIndices={state.errorIndices}
               getErrorMessage={this.getErrorMessage}

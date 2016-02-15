@@ -96,17 +96,20 @@ const AppFormModelPostProcess = {
       volume => volume.persistent == null
     );
 
-    app.container.volumes = app.container.volumes.concat(app.volumes.map(
-      volume => {
-        return {
-          containerPath: volume.path,
-          persistent: {
-            size: volume.size
-          },
-          mode: volume.mode
-        };
-      }
-    ));
+    app.container.volumes = app.container.volumes.concat(
+      app.volumes.map(
+        volume => {
+          return {
+            containerPath: volume.path,
+            persistent: {
+              size: volume.size
+            },
+            mode: volume.mode
+          };
+        }
+      )
+    );
+
     delete app.volumes;
   }
 };

@@ -42,6 +42,7 @@ var OptionalVolumesComponent = React.createClass({
       "has-error": !!error,
       "duplicable-row": true
     });
+
     return (
       <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset className="row duplicable-row"
@@ -57,9 +58,9 @@ var OptionalVolumesComponent = React.createClass({
           </div>
           <div className="col-sm-8">
             <FormGroupComponent
-              fieldId={`containerVolumesLocal.containerPath.${i}`}
-              label="Container Path"
-              value={row.containerPath}>
+                fieldId={`containerVolumesLocal.containerPath.${i}`}
+                label="Container Path"
+                value={row.containerPath}>
               <input ref={`containerPath${i}`} />
             </FormGroupComponent>
             <DuplicableRowControls
