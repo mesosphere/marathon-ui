@@ -37,7 +37,6 @@ var OptionalVolumesComponent = React.createClass({
 
   getVolumeRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError("containerVolumesLocal", row.consecutiveKey);
-    // var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
 
     var rowClassSet = classNames({
       "has-error": !!error,

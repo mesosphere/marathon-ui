@@ -159,11 +159,9 @@ const AppFormValidators = {
       !!obj.persistentSize.toString().match(/^[0-9\.]+$/)) ||
       (Util.isStringAndEmpty(obj.persistentSize) &&
       Util.isStringAndEmpty(obj.containerPath)),
-  containerVolumesLocalPath: (obj) => {
-    return isValidPath(obj.containerPath) ||
+  containerVolumesLocalPath: (obj) => isValidPath(obj.containerPath) ||
     (Util.isStringAndEmpty(obj.persistentSize) &&
-    Util.isStringAndEmpty(obj.containerPath));
-  }
+    Util.isStringAndEmpty(obj.containerPath))
 };
 
 export default Object.freeze(AppFormValidators);
