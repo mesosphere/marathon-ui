@@ -1,4 +1,7 @@
-## 0.15.5 - 2016-02-12
+## 0.15.6 - 2016-02-23
+- \#3192 - Adapt default Mem/CPU settings
+
+## 0.15.5 - 2016-02-15
 ### Fixed
 - \#3172 - "Apply" button is broken (sending both uris and fetch) #3172
 - \#3242 - Treat "value" attribute in server-side validation errors as general
