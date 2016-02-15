@@ -173,7 +173,8 @@ const responseAttributePathToFieldIdMap = {
   "/labels": "labels",
   "/ports": "ports",
   "/uris": "uris",
-  "/user": "user"
+  "/user": "user",
+  "value": "general"
 };
 
 /**
