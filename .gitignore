@@ -10,5 +10,9 @@ npm-debug.log
 # Istanbul (code coverage)
 coverage/
 
+# Maven
+pom.xml
+target/
+
 dist/
 src/js/config/config.dev.js
