@@ -203,8 +203,9 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.responseErrors.appId)
-              .to.equal("error on id attribute");
+            expect(AppFormStore.responseErrors.general)
+              .to.equal("Groups and Applications may not have the same " +
+                "identifier: /sleep");
           }, done);
         });
 
@@ -212,13 +213,14 @@ describe("Create Application", function () {
           .post("/v2/apps")
           .reply(422, {
             "details": [{
-              "attribute": "id",
-              "error": "error on id attribute"
+              "attribute": "value",
+              "error": "Groups and Applications may not have the same " +
+                "identifier: /sleep"
             }]
           });
 
         AppsActions.createApp({
-          id: "bad id"
+          id: "sleep/my-app"
         });
       });
 
