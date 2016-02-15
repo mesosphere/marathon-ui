@@ -110,31 +110,6 @@ describe("Create Application", function () {
         });
       });
 
-      it("handles atttribute value error", function (done) {
-        nock(config.apiURL)
-          .post("/v2/apps")
-          .reply(422, {
-            details: [
-              {
-                attribute: "id",
-                error: "attribute has invalid value"
-              }
-            ]
-          });
-
-        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function (error) {
-          expectAsync(function () {
-            expect(error.details[0].attribute).to.equal("id");
-            expect(error.details[0].error)
-              .to.equal("attribute has invalid value");
-          }, done);
-        });
-
-        AppsActions.createApp({
-          id: "app 1"
-        });
-      });
-
       it("handles unauthorized errors gracefully", function (done) {
         nock(config.apiURL)
           .post("/v2/apps")
@@ -228,8 +203,9 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.responseErrors.appId)
-              .to.equal("error on id attribute");
+            expect(AppFormStore.responseErrors.general)
+              .to.equal("Groups and Applications may not have the same " +
+                "identifier: /sleep");
           }, done);
         });
 
@@ -237,13 +213,14 @@ describe("Create Application", function () {
           .post("/v2/apps")
           .reply(422, {
             "details": [{
-              "attribute": "id",
-              "error": "error on id attribute"
+              "attribute": "value",
+              "error": "Groups and Applications may not have the same " +
+                "identifier: /sleep"
             }]
           });
 
         AppsActions.createApp({
-          id: "bad id"
+          id: "sleep/my-app"
         });
       });
 
