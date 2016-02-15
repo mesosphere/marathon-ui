@@ -13,8 +13,8 @@ var AppsEvents = require("../events/AppsEvents");
 var FormEvents = require("../events/FormEvents");
 
 const defaultFieldValues = Object.freeze({
-  cpus: 0.1,
-  mem: 16,
+  cpus: 1,
+  mem: 128,
   disk: 0,
   instances: 1
 });
