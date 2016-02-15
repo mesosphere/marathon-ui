@@ -15,11 +15,19 @@
   incorrect state
 - \#3093 - Don't display "Create an Application" together with "Loading error"
 - \#2907 - Add tooltip with help links to Status and Health columns in App list
-- \#3160 - Show server-side validation errors for invalid constraints
-- \#3164 - Show server-side validation errors for invalid object
 - \#3102 - Updating environment variables sometimes deletes entries
 - \#3242 - Treat "value" attribute in server-side validation errors as general
   error
+
+## 0.15.5 - 2016-02-15
+### Fixed
+- \#3242 - Treat "value" attribute in server-side validation errors as general
+  error
+
+## 0.15.4 - 2016-02-08
+### Fixed
+- \#3160 - Show server-side validation errors for invalid constraints
+- \#3164 - Show server-side validation errors for invalid object
 
 ## 0.15.3 - 2016-02-03
 ### Fixed
