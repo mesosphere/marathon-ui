@@ -1,15 +1,18 @@
-
-dist/
-
-node_modules/
-tmp/
-release/
-
-npm-debug.log
-
+# IDE, OS
 .DS_Store
 *.iml
 .idea/*
 
-src/js/config/config.dev.js
+# npm
+node_modules/
+npm-debug.log
+
+# Istanbul (code coverage)
 coverage/
+
+# Maven
+pom.xml
+target/
+
+dist/
+src/js/config/config.dev.js
