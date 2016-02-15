@@ -155,10 +155,14 @@ const AppFormValidators = {
     ports.split(",")
       .every((port) => port.toString().trim().match(/^[0-9]+$/)),
   containerVolumesLocalSize: (obj) =>
-    !Util.isStringAndEmpty(obj.persistentSize) &&
-      !!obj.persistentSize.toString().match(/^[0-9\.]+$/),
+    (!Util.isStringAndEmpty(obj.persistentSize) &&
+      !!obj.persistentSize.toString().match(/^[0-9\.]+$/)) ||
+      (Util.isStringAndEmpty(obj.persistentSize) &&
+      Util.isStringAndEmpty(obj.containerPath)),
   containerVolumesLocalPath: (obj) => {
-    return isValidPath(obj.containerPath);
+    return isValidPath(obj.containerPath) ||
+    (Util.isStringAndEmpty(obj.persistentSize) &&
+    Util.isStringAndEmpty(obj.containerPath));
   }
 };
 
