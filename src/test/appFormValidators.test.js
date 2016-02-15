@@ -76,11 +76,13 @@ describe("App Form Validators", function () {
         expect(this.v.cpus("")).to.be.false;
       });
 
-      it("looks like a number", function () {
+      it("looks like a number greater or equal to 0.01", function () {
         expect(this.v.cpus("not a number 666")).to.be.false;
-        expect(this.v.cpus(0.1)).to.be.true;
+        expect(this.v.cpus(0.001)).to.be.false;
+        expect(this.v.cpus("0.0001")).to.be.false;
+        expect(this.v.cpus(0.01)).to.be.true;
+        expect(this.v.cpus("0.01")).to.be.true;
         expect(this.v.cpus(5)).to.be.true;
-        expect(this.v.cpus("0.0001")).to.be.true;
         expect(this.v.cpus("2")).to.be.true;
       });
     });
@@ -584,13 +586,17 @@ describe("App Form Validators", function () {
         expect(this.v.mem("")).to.be.false;
       });
 
-      it("looks like a number", function () {
+      it("looks like a number greater or equal to 32", function () {
         expect(this.v.mem("")).to.be.false;
         expect(this.v.mem("not a number 666")).to.be.false;
-        expect(this.v.mem(0.1)).to.be.true;
-        expect(this.v.mem(5)).to.be.true;
-        expect(this.v.mem("0.0001")).to.be.true;
-        expect(this.v.mem("2")).to.be.true;
+        expect(this.v.mem(0.1)).to.be.false;
+        expect(this.v.mem(5)).to.be.false;
+        expect(this.v.mem("0.0001")).to.be.false;
+        expect(this.v.mem("31")).to.be.false;
+        expect(this.v.mem("32")).to.be.true;
+        expect(this.v.mem("32.7")).to.be.true;
+        expect(this.v.mem(32)).to.be.true;
+        expect(this.v.mem(500)).to.be.true;
       });
     });
 
