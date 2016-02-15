@@ -1,6 +1,8 @@
 ## 0.15.5 - 2016-02-12
 ### Fixed
 - \#3172 - "Apply" button is broken (sending both uris and fetch) #3172
+- \#3242 - Treat "value" attribute in server-side validation errors as general
+  error
 
 ## 0.15.4 - 2016-02-08
 ### Fixed
