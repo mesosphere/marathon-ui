@@ -682,13 +682,6 @@ describe("App Form Validators", function () {
     });
     describe("Volumes", function () {
       describe("size", function () {
-        it("should not be empty", function () {
-          var volume = {
-            persistentSize: ""
-          };
-          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.false;
-        });
-
         it("should not be a not number value", function () {
           var volume = {
             persistentSize: "abc"
@@ -701,6 +694,13 @@ describe("App Form Validators", function () {
             persistentSize: "1024"
           };
           expect(this.validatior.containerVolumesLocalSize(volume)).to.be.true;
+        });
+
+        it("should not be a negative value", function () {
+          var volume = {
+            persistentSize: "-1024"
+          };
+          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.false;
         });
       });
       describe("path", function () {
@@ -737,6 +737,37 @@ describe("App Form Validators", function () {
             containerPath: "/abc"
           };
           expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
+        });
+      });
+      describe("all fields", function () {
+        it("should not have an empty persistentSize", function () {
+          var volume = {
+            containerPath: "abc",
+            persistentSize: ""
+          };
+
+          expect(this.validatior.containerVolumesLocalIsNotEmpty(volume))
+            .to.be.false;
+        });
+
+        it("should not have an empty containerPath", function () {
+          var volume = {
+            containerPath: "",
+            persistentSize: "12"
+          };
+
+          expect(this.validatior.containerVolumesLocalIsNotEmpty(volume))
+            .to.be.false;
+        });
+
+        it("should be valid if no empty value is provided", function () {
+          var volume = {
+            containerPath: "asdasd",
+            persistentSize: "12"
+          };
+
+          expect(this.validatior.containerVolumesLocalIsNotEmpty(volume))
+            .to.be.true;
         });
       });
     });
