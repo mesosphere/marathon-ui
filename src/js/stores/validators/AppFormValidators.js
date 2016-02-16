@@ -60,7 +60,7 @@ const AppFormValidators = {
       }),
 
   cpus: (value) => !Util.isStringAndEmpty(value) &&
-    !!value.toString().match(/^[0-9\.]+$/),
+    !!value.toString().match(/^[0-9\.]+$/) && parseFloat(value) >= 0.01,
 
   disk: (value) => !Util.isStringAndEmpty(value) &&
     !!value.toString().match(/^[0-9\.]+$/),
@@ -149,7 +149,7 @@ const AppFormValidators = {
     !Util.isStringAndEmpty(obj.value)),
 
   mem: (value) => !Util.isStringAndEmpty(value) &&
-    !!value.toString().match(/^[0-9\.]+$/),
+    !!value.toString().match(/^[0-9\.]+$/) && parseInt(value) >= 32,
 
   ports: (ports) => Util.isStringAndEmpty(ports) ||
     ports.split(",")

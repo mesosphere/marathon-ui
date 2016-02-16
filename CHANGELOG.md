@@ -9,6 +9,7 @@
 - \#3078 - Always show download button for logs
 - \#3077 - Future timestamps
 - \#3124 - Improve usability of labels filter dropdown
+- \#3192 - Adapt default Mem/CPU settings
 
 ### Fixed
 - \#3133 - Interrupted scaling operations can leave the health bar in an
