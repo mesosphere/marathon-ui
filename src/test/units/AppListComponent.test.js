@@ -213,16 +213,20 @@ describe("AppListComponent", function () {
         .map(app => app.props().model.id);
 
       expect(appNames).to.deep.equal([
+        // Groups
+        "/fuzzy/apps",
+        "/apps",
+        // Applications
+        "/group-alpha/app-1",
+        "/group-alpha/app-2",
+        "/group-alpha/group-beta/app-3",
+        "/app-alpha",
         "/app-beta",
         "/app-exact",
-        "/app-alpha",
-        "/group-alpha/app-2",
-        "/group-alpha/app-1",
-        "/group-alpha/group-beta/app-3",
-        "/apps/sleep",
-        "/fuzzy/apps/sleepz",
         "/group-with-long-name/group-with-long-name-/group-with-long-name/" +
-          "group-with-long-name/group-with-long-name/app-omega"
+          "group-with-long-name/group-with-long-name/app-omega",
+        "/apps/sleep",
+        "/fuzzy/apps/sleepz"
       ]);
       this.component.instance().componentWillUnmount();
     });
