@@ -296,6 +296,53 @@ describe("App Form Validators", function () {
           });
         });
 
+        describe("container is not empty", function () {
+
+          it("should be valid if empty", function () {
+            let isValid = this.validatior.containerVolumesIsNotEmpty;
+            var givenEmptyObject = {
+              containerPath: "",
+              hostPath: "",
+              mode: null
+            };
+            var expectedState = true;
+            expect(isValid(givenEmptyObject)).to.be.equal(expectedState);
+          });
+
+          it("should be valid if not empty", function () {
+            let isValid = this.validatior.containerVolumesIsNotEmpty;
+            var givenEmptyObject = {
+              containerPath: "/container-0",
+              hostPath: "/host-0",
+              mode: "RO"
+            };
+            var expectedState = true;
+            expect(isValid(givenEmptyObject)).to.be.equal(expectedState);
+          });
+
+          it("should not be valid if hostPath is empty", function () {
+            let isValid = this.validatior.containerVolumesIsNotEmpty;
+            var givenEmptyObject = {
+              containerPath: "/container-0",
+              hostPath: "",
+              mode: "RO"
+            };
+            var expectedState = false;
+            expect(isValid(givenEmptyObject)).to.be.equal(expectedState);
+          });
+
+          it("should not be valid if containerPath is empty", function () {
+            let isValid = this.validatior.containerVolumesIsNotEmpty;
+            var givenEmptyObject = {
+              containerPath: "",
+              hostPath: "/host-0",
+              mode: "RO"
+            };
+            var expectedState = false;
+            expect(isValid(givenEmptyObject)).to.be.equal(expectedState);
+          });
+        });
+
       });
 
     });

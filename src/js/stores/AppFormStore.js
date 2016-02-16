@@ -53,7 +53,8 @@ const validationRules = {
   "containerVolumes": [
     AppFormValidators.containerVolumesContainerPathIsValid,
     AppFormValidators.containerVolumesHostPathIsValid,
-    AppFormValidators.containerVolumesModeNotEmpty
+    AppFormValidators.containerVolumesModeNotEmpty,
+    AppFormValidators.containerVolumesIsNotEmpty
   ],
   "containerVolumesLocal": [
     AppFormValidators.containerVolumesLocalSize,

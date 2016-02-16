@@ -48,6 +48,11 @@ const AppFormValidators = {
 
   containerVolumesModeNotEmpty: (obj) => !Util.isStringAndEmpty(obj.mode),
 
+  containerVolumesIsNotEmpty: (obj) =>
+    (!Util.isStringAndEmpty(obj.containerPath) &&
+    !Util.isStringAndEmpty(obj.hostPath)) ||
+    obj.mode == null,
+
   constraints: (constraints) => Util.isStringAndEmpty(constraints) ||
     constraints
       .split(",")
