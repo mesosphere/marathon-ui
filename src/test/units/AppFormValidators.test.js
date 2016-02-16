@@ -725,18 +725,18 @@ describe("App Form Validators", function () {
           expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
         });
 
-        it("should contain a slash string value", function () {
+        it("should not contain a slash string value", function () {
           var volume = {
             containerPath: "ab/c"
           };
-          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
         });
 
-        it("should begin with a slash string value", function () {
+        it("should not begin with a slash string value", function () {
           var volume = {
             containerPath: "/abc"
           };
-          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
         });
       });
     });

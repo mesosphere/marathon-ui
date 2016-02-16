@@ -164,7 +164,8 @@ const AppFormValidators = {
       !!obj.persistentSize.toString().match(/^[0-9\.]+$/)) ||
       (Util.isStringAndEmpty(obj.persistentSize) &&
       Util.isStringAndEmpty(obj.containerPath)),
-  containerVolumesLocalPath: (obj) => isValidPath(obj.containerPath) ||
+  containerVolumesLocalPath: (obj) => (isValidPath(obj.containerPath) &&
+      !obj.containerPath.match(/\//)) ||
     (Util.isStringAndEmpty(obj.persistentSize) &&
     Util.isStringAndEmpty(obj.containerPath))
 };
