@@ -531,5 +531,62 @@ describe("Util", function () {
       var copiedObject = Util.deepCopy(originalObject);
       expect(copiedObject).to.not.eql(originalObject);
     });
+
+    it("does clone an array with normal indices", () => {
+      var originalObject = {
+        array: []
+      };
+      originalObject.array[0] = "test";
+
+      var expectedObject = {
+        array: []
+      };
+      expectedObject.array[0] = "test";
+
+      expect(Util.deepCopy(originalObject)).to.deep.equal(expectedObject);
+    });
+
+    it("does clone an array with unusual small indices", () => {
+      var originalObject = {
+        array: []
+      };
+      originalObject.array[2] = "test";
+
+      var expectedObject = {
+        array: []
+      };
+      expectedObject.array[2] = "test";
+
+      expect(Util.deepCopy(originalObject)).to.deep.equal(expectedObject);
+    });
+
+    it("does clone an array with with in max range indices", () => {
+      var originalObject = {
+        array: []
+      };
+      originalObject.array[1145529089] = "test";
+
+      var expectedObject = {
+        array: []
+      };
+      expectedObject.array[1145529089] = "test";
+
+      expect(Util.deepCopy(originalObject)).to.deep.equal(expectedObject);
+    });
+
+    // IF this test fails change remove the not if that works we are good.
+    it("does clone an array with unusual indices", () => {
+      var originalObject = {
+        array: []
+      };
+      originalObject.array[11455290885778] = "test";
+
+      var expectedObject = {
+        array: []
+      };
+      expectedObject.array[11455290885778] = "test";
+
+      expect(Util.deepCopy(originalObject)).to.not.deep.equal(expectedObject);
+    });
   });
 });

@@ -40,7 +40,7 @@ var DuplicableRowsMixin = {
     Object.keys(duplicableRowsScheme).forEach(function (fieldId) {
       if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
         let rowScheme = Util.extendObject(duplicableRowsScheme[fieldId], {
-          consecutiveKey: Util.getUniqueId()
+          consecutiveKey: parseInt((Util.getUniqueId() + "").slice(-9))
         });
         FormActions.insert(fieldId, rowScheme);
       }
