@@ -24,7 +24,8 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   ],
   containerVolumesLocal: [
     "Size must be a non-negative number",
-    "Container Path must be a valid path"
+    "Container Path must be a valid path",
+    "Container Path and Size have to be set"
   ],
   cpus: ["CPUs must be a number greater or equal to 0.01"],
   disk: ["Disk Space must be a non-negative number"],

@@ -58,7 +58,8 @@ const validationRules = {
   ],
   "containerVolumesLocal": [
     AppFormValidators.containerVolumesLocalSize,
-    AppFormValidators.containerVolumesLocalPath
+    AppFormValidators.containerVolumesLocalPath,
+    AppFormValidators.containerVolumesLocalIsNotEmpty
   ],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
