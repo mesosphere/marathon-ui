@@ -33,11 +33,15 @@ https://mesosphere.github.io/marathon/docs/marathon-ui.html.
 
 6. Run development environment
 
-        npm run serve
-
+  ```
+  npm run serve
+  ```
+  
   or
-
-        npm run livereload
+  
+  ```
+  npm run livereload
+  ```
 
   for a `browsersync` live-reload server.
 
