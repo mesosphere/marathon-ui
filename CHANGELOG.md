@@ -4,6 +4,7 @@
 - \#3082 - Make URLs in form validation error messages clickable
 - \#3076 - Highlight sorted columns in the UI
 - \#2049 - Added JSON editor to application modal
+- \#3155 - Add support for Local Volumes in Create/Edit modal
 
 ### Changed
 - \#3078 - Always show download button for logs

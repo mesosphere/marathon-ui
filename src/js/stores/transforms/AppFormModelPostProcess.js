@@ -28,10 +28,11 @@ const AppFormModelPostProcess = {
   },
   container: (app) => {
     var container = app.container;
-
     if (container == null) {
       return;
     }
+
+    container.type = container.docker != null ? "DOCKER" : "MESOS";
 
     let isEmpty = (Util.isArray(container.volumes) &&
         container.volumes.length === 0 ||
@@ -80,6 +81,36 @@ const AppFormModelPostProcess = {
     if (isEmpty) {
       app.healthChecks = [];
     }
+  },
+  volumes: app => {
+    if (app.container == null) {
+      app.container = {
+        type: "MESOS"
+      };
+    }
+    if (app.container.volumes == null) {
+      app.container.volumes = [];
+    }
+
+    app.container.volumes = app.container.volumes.filter(
+      volume => volume.persistent == null
+    );
+
+    app.container.volumes = app.container.volumes.concat(
+      app.volumes.map(
+        volume => {
+          return {
+            containerPath: volume.path,
+            persistent: {
+              size: volume.size
+            },
+            mode: volume.mode
+          };
+        }
+      )
+    );
+
+    delete app.volumes;
   }
 };
 

@@ -48,6 +48,11 @@ const AppFormValidators = {
 
   containerVolumesModeNotEmpty: (obj) => !Util.isStringAndEmpty(obj.mode),
 
+  containerVolumesIsNotEmpty: (obj) =>
+    (!Util.isStringAndEmpty(obj.containerPath) &&
+    !Util.isStringAndEmpty(obj.hostPath)) ||
+    obj.mode == null,
+
   constraints: (constraints) => Util.isStringAndEmpty(constraints) ||
     constraints
       .split(",")
@@ -153,7 +158,17 @@ const AppFormValidators = {
 
   ports: (ports) => Util.isStringAndEmpty(ports) ||
     ports.split(",")
-      .every((port) => port.toString().trim().match(/^[0-9]+$/))
+      .every((port) => port.toString().trim().match(/^[0-9]+$/)),
+  containerVolumesLocalSize: (obj) =>
+    Util.isStringAndEmpty(obj.persistentSize) ||
+    !!obj.persistentSize.toString().match(/^[0-9\.]+$/),
+  containerVolumesLocalPath: (obj) => isValidPath(obj.containerPath) &&
+    !obj.containerPath.match(/\//),
+  containerVolumesLocalIsNotEmpty: (obj) =>
+    (!Util.isStringAndEmpty(obj.persistentSize) &&
+    !Util.isStringAndEmpty(obj.containerPath)) ||
+    (Util.isStringAndEmpty(obj.persistentSize) &&
+    Util.isStringAndEmpty(obj.containerPath))
 };
 
 export default Object.freeze(AppFormValidators);

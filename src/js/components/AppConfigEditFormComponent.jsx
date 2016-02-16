@@ -17,6 +17,8 @@ import OptionalEnvironmentComponent
 import OptionalLabelsComponent from "../components/OptionalLabelsComponent";
 import OptionalSettingsComponent
   from "../components/OptionalSettingsComponent";
+import OptionalVolumesComponent
+  from "../components/OptionalVolumesComponent";
 import FormGroupComponent from "../components/FormGroupComponent";
 
 var AppConfigEditFormComponent = React.createClass({
@@ -248,6 +250,16 @@ var AppConfigEditFormComponent = React.createClass({
               errorIndices={state.errorIndices}
               fields={state.fields}
               getErrorMessage={this.getErrorMessage}/>
+          </CollapsiblePanelComponent>
+        </div>
+        <div className="row full-bleed">
+          <CollapsiblePanelComponent
+              isOpen={this.fieldsHaveError({volumes: "volumes"})}
+              title="Volumes">
+            <OptionalVolumesComponent
+              errorIndices={state.errorIndices}
+              getErrorMessage={this.getErrorMessage}
+              fields={state.fields} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed">

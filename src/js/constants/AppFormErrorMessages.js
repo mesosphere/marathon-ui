@@ -19,11 +19,17 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   containerVolumes: [
     "Container Path must be a valid path",
     "Host Path must be a valid path",
-    "Mode must not be empty"
+    "Mode must not be empty",
+    "Container Path and Host Path have to be set."
+  ],
+  containerVolumesLocal: [
+    "Size must be a non-negative number",
+    "Container Path must be a valid path",
+    "Container Path and Size have to be set"
   ],
   cpus: ["CPUs must be a number greater or equal to 0.01"],
   disk: ["Disk Space must be a non-negative number"],
-  dockerImage: ["Image cannot  contain whitespaces"],
+  dockerImage: ["Image cannot contain whitespaces"],
   dockerParameters: ["Key cannot be blank"],
   dockerPortMappings: [
     "Container Port must be a valid port",
@@ -44,7 +50,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
     "Timeout must be a non-negative number",
     "Maximal Consecutive Failures must be a non-negative number"
   ],
-  instances: ["Instances must be a non-negative Number"],
+  instances: ["Instances must be a non-negative number"],
   labels: ["Key cannot be blank"],
   mem: ["Memory must be a number greater or equal to 32"],
   ports: ["Ports must be a comma-separated list of numbers"]

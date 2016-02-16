@@ -9,7 +9,7 @@ describe("App Form Validators", function () {
 
     before(function () {
       this.validatior = AppFormValidators;
-    })
+    });
 
     describe("app id", function () {
       it("is not an empty string", function () {
@@ -293,6 +293,53 @@ describe("App Form Validators", function () {
 
             expect(isValid({mode: ""})).to.be.false;
             expect(isValid({mode: "RO"})).to.be.true;
+          });
+        });
+
+        describe("container is not empty", function () {
+
+          it("should be valid if empty", function () {
+            let isValid = this.validatior.containerVolumesIsNotEmpty;
+            var givenEmptyObject = {
+              containerPath: "",
+              hostPath: "",
+              mode: null
+            };
+            var expectedState = true;
+            expect(isValid(givenEmptyObject)).to.be.equal(expectedState);
+          });
+
+          it("should be valid if not empty", function () {
+            let isValid = this.validatior.containerVolumesIsNotEmpty;
+            var givenEmptyObject = {
+              containerPath: "/container-0",
+              hostPath: "/host-0",
+              mode: "RO"
+            };
+            var expectedState = true;
+            expect(isValid(givenEmptyObject)).to.be.equal(expectedState);
+          });
+
+          it("should not be valid if hostPath is empty", function () {
+            let isValid = this.validatior.containerVolumesIsNotEmpty;
+            var givenEmptyObject = {
+              containerPath: "/container-0",
+              hostPath: "",
+              mode: "RO"
+            };
+            var expectedState = false;
+            expect(isValid(givenEmptyObject)).to.be.equal(expectedState);
+          });
+
+          it("should not be valid if containerPath is empty", function () {
+            let isValid = this.validatior.containerVolumesIsNotEmpty;
+            var givenEmptyObject = {
+              containerPath: "",
+              hostPath: "/host-0",
+              mode: "RO"
+            };
+            var expectedState = false;
+            expect(isValid(givenEmptyObject)).to.be.equal(expectedState);
           });
         });
 
@@ -631,6 +678,97 @@ describe("App Form Validators", function () {
 
       it("detects invalid format", function () {
         expect(this.validatior.ports("123, 495 666")).to.be.false;
+      });
+    });
+    describe("Volumes", function () {
+      describe("size", function () {
+        it("should not be a not number value", function () {
+          var volume = {
+            persistentSize: "abc"
+          };
+          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.false;
+        });
+
+        it("should be a number value", function () {
+          var volume = {
+            persistentSize: "1024"
+          };
+          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.true;
+        });
+
+        it("should not be a negative value", function () {
+          var volume = {
+            persistentSize: "-1024"
+          };
+          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.false;
+        });
+      });
+      describe("path", function () {
+        it("should allow an empty value", function () {
+          var volume = {
+            containerPath: ""
+          };
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
+        });
+
+        it("should not be a not contain a space", function () {
+          var volume = {
+            containerPath: "ab c"
+          };
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
+        });
+
+        it("should be a string value", function () {
+          var volume = {
+            containerPath: "abc"
+          };
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
+        });
+
+        it("should not contain a slash string value", function () {
+          var volume = {
+            containerPath: "ab/c"
+          };
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
+        });
+
+        it("should not begin with a slash string value", function () {
+          var volume = {
+            containerPath: "/abc"
+          };
+          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
+        });
+      });
+      describe("all fields", function () {
+        it("should not have an empty persistentSize", function () {
+          var volume = {
+            containerPath: "abc",
+            persistentSize: ""
+          };
+
+          expect(this.validatior.containerVolumesLocalIsNotEmpty(volume))
+            .to.be.false;
+        });
+
+        it("should not have an empty containerPath", function () {
+          var volume = {
+            containerPath: "",
+            persistentSize: "12"
+          };
+
+          expect(this.validatior.containerVolumesLocalIsNotEmpty(volume))
+            .to.be.false;
+        });
+
+        it("should be valid if no empty value is provided", function () {
+          var volume = {
+            containerPath: "asdasd",
+            persistentSize: "12"
+          };
+
+          expect(this.validatior.containerVolumesLocalIsNotEmpty(volume))
+            .to.be.true;
+        });
       });
     });
 

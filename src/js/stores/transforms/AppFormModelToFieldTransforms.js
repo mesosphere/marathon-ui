@@ -29,8 +29,19 @@ const AppFormModelToFieldTransforms = {
   },
   containerVolumes: (volumes) => {
     return volumes
+      .filter(row => row.hostPath != null)
       .map((row, i) => {
         row.consecutiveKey = i;
+        return row;
+      });
+  },
+  containerVolumesLocal: (volumes) => {
+    return volumes
+      .filter(row => row.persistent != null)
+      .map((row, i) => {
+        row.persistentSize = row.persistent.size;
+        row.consecutiveKey = i;
+        delete row.persistent;
         return row;
       });
   },
@@ -77,7 +88,14 @@ const AppFormModelToFieldTransforms = {
   ports: (ports) => ports
     .join(", "),
   uris: (uris) => uris
-    .join(", ")
+    .join(", "),
+  volumes: (volumes) => {
+    return volumes
+      .map((row, i) => {
+        row.consecutiveKey = i;
+        return row;
+      });
+  }
 };
 
 export default Object.freeze(AppFormModelToFieldTransforms);

@@ -27,6 +27,7 @@ const defaultFieldValues = Object.freeze({
 
 const duplicableRowFields = [
   "containerVolumes",
+  "containerVolumesLocal",
   "dockerPortMappings",
   "dockerParameters",
   "env",
@@ -52,7 +53,13 @@ const validationRules = {
   "containerVolumes": [
     AppFormValidators.containerVolumesContainerPathIsValid,
     AppFormValidators.containerVolumesHostPathIsValid,
-    AppFormValidators.containerVolumesModeNotEmpty
+    AppFormValidators.containerVolumesModeNotEmpty,
+    AppFormValidators.containerVolumesIsNotEmpty
+  ],
+  "containerVolumesLocal": [
+    AppFormValidators.containerVolumesLocalSize,
+    AppFormValidators.containerVolumesLocalPath,
+    AppFormValidators.containerVolumesLocalIsNotEmpty
   ],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
@@ -94,6 +101,7 @@ const resolveFieldIdToAppKeyMap = {
   cmd: "cmd",
   constraints: "constraints",
   containerVolumes: "container.volumes",
+  containerVolumesLocal: "container.volumes",
   cpus: "cpus",
   disk: "disk",
   dockerForcePullImage: "container.docker.forcePullImage",
@@ -183,15 +191,18 @@ const responseAttributePathToFieldIdMap = {
  * Not listed keys are taken as they are.
  */
 const resolveAppKeyToFieldIdMap = {
-  id: "appId",
-  "container.docker.forcePullImage": "dockerForcePullImage",
-  "container.docker.image": "dockerImage",
-  "container.docker.network": "dockerNetwork",
-  "container.docker.portMappings": "dockerPortMappings",
-  "container.docker.parameters": "dockerParameters",
-  "container.docker.privileged": "dockerPrivileged",
-  "container.volumes": "containerVolumes",
-  "healthChecks": "healthChecks"
+  id: ["appId"],
+  "container.docker.forcePullImage": ["dockerForcePullImage"],
+  "container.docker.image": ["dockerImage"],
+  "container.docker.network": ["dockerNetwork"],
+  "container.docker.portMappings": ["dockerPortMappings"],
+  "container.docker.parameters": ["dockerParameters"],
+  "container.docker.privileged": ["dockerPrivileged"],
+  "container.volumes": [
+    "containerVolumes",
+    "containerVolumesLocal"
+  ],
+  "healthChecks": ["healthChecks"]
 };
 
 // Validate all fields in form store and update validationErrorIndices.
@@ -262,13 +273,37 @@ function updateErrorIndices(fieldId, value, errorIndices) {
 
 function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveFieldIdToAppKeyMap[fieldId];
+
   if (key) {
-    const transform = AppFormTransforms.FieldToModel[fieldId];
-    if (transform == null) {
-      Util.objectPathSet(app, key, fields[fieldId]);
+    let fieldIdsBySameModelKey = Object.keys(resolveFieldIdToAppKeyMap)
+      .filter(mapKey => {
+        return resolveFieldIdToAppKeyMap[mapKey] ===
+        resolveFieldIdToAppKeyMap[fieldId];
+      });
+
+    let setValue;
+
+    if (fieldIdsBySameModelKey.length < 2) {
+      const transform = AppFormTransforms.FieldToModel[fieldId];
+      if (transform == null) {
+        setValue = fields[fieldId];
+      } else {
+        setValue = transform(fields[fieldId]);
+      }
     } else {
-      Util.objectPathSet(app, key, transform(fields[fieldId]));
+      setValue = fieldIdsBySameModelKey.reduce((memo, fieldId) => {
+        const transform = AppFormTransforms.FieldToModel[fieldId];
+        if (fields[fieldId] != null) {
+          if (transform == null) {
+            memo = memo.concat(fields[fieldId]);
+          } else {
+            memo = memo.concat(transform(fields[fieldId]));
+          }
+        }
+        return memo;
+      }, []);
     }
+    Util.objectPathSet(app, key, setValue);
   }
 
   Object.keys(app).forEach((appKey) => {
@@ -302,17 +337,19 @@ function populateFieldsFromModel(app, fields) {
   // so it's excluded.
   var paths = Util.detectObjectPaths(app, null, ["env", "labels"]);
 
-  paths.forEach((appKey) => {
-    var fieldId = resolveAppKeyToFieldIdMap[appKey];
-    if (fieldId == null) {
-      fieldId = appKey;
+  paths.forEach(appKey => {
+    var fieldIdArray = resolveAppKeyToFieldIdMap[appKey];
+    if (fieldIdArray == null) {
+      fieldIdArray = [appKey];
     }
-    const transform = AppFormTransforms.ModelToField[fieldId];
-    if (transform == null) {
-      fields[fieldId] = objectPath.get(app, appKey);
-    } else {
-      fields[fieldId] = transform(objectPath.get(app, appKey));
-    }
+    fieldIdArray.forEach(fieldId => {
+      const transform = AppFormTransforms.ModelToField[fieldId];
+      if (transform == null) {
+        fields[fieldId] = objectPath.get(app, appKey);
+      } else {
+        fields[fieldId] = transform(objectPath.get(app, appKey));
+      }
+    });
   });
 }
 

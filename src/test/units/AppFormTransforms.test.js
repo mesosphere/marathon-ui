@@ -33,31 +33,70 @@ describe("App Form Field to Model Transform", function () {
           ["atomic", "LIKE", "man"]
         ]);
     });
+    describe("container volumes", function () {
+      it("to array of objects", function () {
+        expect(AppFormTransforms.FieldToModel.containerVolumes([
+          {
+            containerPath: "/etc/a",
+            hostPath: "/var/data/a",
+            mode: "RO",
+            consecutiveKey: 1
+          }
+        ])).to.deep.equal([
+            {containerPath: "/etc/a", hostPath: "/var/data/a", mode: "RO"}
+        ]);
+      });
 
-    it("container volumes to array of objects", function () {
-      expect(AppFormTransforms.FieldToModel.containerVolumes([
-        {
-          containerPath: "/etc/a",
-          hostPath: "/var/data/a",
-          mode: "RO",
-          consecutiveKey: 1
-        }
-      ])).to.deep.equal([
-          {containerPath: "/etc/a", hostPath: "/var/data/a", mode: "RO"}
-      ]);
+      it("to empty array", function () {
+        expect(AppFormTransforms.FieldToModel.containerVolumes([
+          {
+            containerPath: "",
+            hostPath: "",
+            mode: "",
+            consecutiveKey: 1
+          }
+        ])).to.deep.equal([]);
+      });
+
+      describe("local volumes", function () {
+        it("should contain local volumes", function () {
+          var localVolumesArray = [
+            {
+              containerPath: "/var/data",
+              persistentSize: "10",
+              consecutiveKey: 1
+            }
+          ];
+          var expectedLocalVolumesArray = [
+            {
+              containerPath: "/var/data",
+              persistent: {
+                size: 10
+              },
+              mode: "RW"
+            }
+          ];
+          expect(AppFormTransforms.FieldToModel.containerVolumesLocal(
+            localVolumesArray
+          )).to.deep.equal(expectedLocalVolumesArray);
+        });
+
+        it("should remove empty local volumes", function () {
+          var localVolumesArray = [
+            {
+              containerPath: "",
+              persistentSize: "",
+              consecutiveKey: 1
+            }
+          ];
+          var expectedEmptyArray = [];
+          expect(AppFormTransforms.FieldToModel.containerVolumesLocal(
+            localVolumesArray
+          )).to.deep.equal(expectedEmptyArray);
+        });
+
+      });
     });
-
-    it("container volumes to empty array", function () {
-      expect(AppFormTransforms.FieldToModel.containerVolumes([
-        {
-          containerPath: "",
-          hostPath: "",
-          mode: "",
-          consecutiveKey: 1
-        }
-      ])).to.deep.equal([]);
-    });
-
     it("dockerForcePullImage is checked", function () {
       expect(AppFormTransforms.FieldToModel.dockerForcePullImage(true))
         .to.be.true;
@@ -369,6 +408,130 @@ describe("App Form Model To Field Transform", function () {
         {containerPath: "/a/b", hostPath: "/c", mode: "RO", consecutiveKey: 0},
         {containerPath: "/e/f", hostPath: "/g/h", mode: "RW", consecutiveKey: 1}
       ]);
+    });
+
+    describe("container Volumes Local", function () {
+      it("provides the right array", function () {
+        var containerVolumesWithLocalVolume = [
+          {
+            containerPath: "/a/b",
+            persistent: {
+              size: 10
+            },
+            mode: "RW"
+          }
+        ];
+        var expectedLocalVolumesArray = [
+          {
+            containerPath: "/a/b",
+            persistentSize: 10,
+            mode: "RW",
+            consecutiveKey: 0
+          }
+        ];
+        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+          containerVolumesWithLocalVolume
+        )).to.deep.equal(expectedLocalVolumesArray);
+      });
+
+      it("should provide an array with 2 items", function () {
+        var containerVolumesWithLocalVolumes = [
+          {
+            containerPath: "/a/b",
+            persistent: {
+              size: 10
+            },
+            mode: "RW"
+          },
+          {
+            containerPath: "/a/b/c",
+            persistent: {
+              size: 25
+            },
+            mode: "RW"
+          }
+        ];
+        var expectedLocalVolumesArray = [
+          {
+            containerPath: "/a/b",
+            persistentSize: 10,
+            mode: "RW",
+            consecutiveKey: 0
+          },
+          {
+            containerPath: "/a/b/c",
+            persistentSize: 25,
+            mode: "RW",
+            consecutiveKey: 1
+          }
+        ];
+        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+          containerVolumesWithLocalVolumes
+        )).to.deep.equal(expectedLocalVolumesArray);
+      });
+
+      it("should exclude docker container", function () {
+        var containerVolumesWithMixedVolumes = [
+          {
+            containerPath: "/a/b",
+            persistent: {
+              size: 10
+            },
+            mode: "RW"
+          },
+          {
+            containerPath: "/a/b",
+            hostPath: "/home",
+            mode: "RW"
+          },
+          {
+            containerPath: "/a/b/c",
+            persistent: {
+              size: 25
+            },
+            mode: "RW"
+          }
+        ];
+        var expectedLocalVolumesArray = [
+          {
+            containerPath: "/a/b",
+            persistentSize: 10,
+            mode: "RW",
+            consecutiveKey: 0
+          },
+          {
+            containerPath: "/a/b/c",
+            persistentSize: 25,
+            mode: "RW",
+            consecutiveKey: 1
+          }
+        ];
+        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+          containerVolumesWithMixedVolumes
+        )).to.deep.equal(expectedLocalVolumesArray);
+      });
+
+      it("should return an empty array", function () {
+        var containerVolumesWithDockerVolume = [
+          {
+            containerPath: "/a/b",
+            hostPath: "/home",
+            mode: "RW"
+          }
+        ];
+        var expectedLocalVolumesArray = [];
+        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+          containerVolumesWithDockerVolume
+        )).to.deep.equal(expectedLocalVolumesArray);
+      });
+
+      it("should return an empty array", function () {
+        var containerVolumesWithoutVolume = [];
+        var expectedLocalVolumesArray = [];
+        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+          containerVolumesWithoutVolume
+        )).to.deep.equal(expectedLocalVolumesArray);
+      });
     });
 
     it("env object to sorted array", function () {

@@ -33,16 +33,35 @@ const AppFormFieldToModelTransforms = {
   constraints: (constraints) => constraints
     .split(",")
     .map((constraint) => constraint.split(":").map((value) => value.trim())),
-  containerVolumes: (rows) => lazy(rows)
-    .map((row) => ensureObjectScheme(row, dockerRowSchemes.containerVolumes))
-    .compact()
-    .filter((row) => {
-      return ["containerPath", "hostPath", "mode"].every((key) => {
-        return (row[key] != null &&
-          !Util.isStringAndEmpty(row[key].toString().trim()));
+  containerVolumes: rows => {
+    return lazy(rows)
+      .map((row) => ensureObjectScheme(row, dockerRowSchemes.containerVolumes))
+      .compact()
+      .filter((row) => {
+        return ["containerPath", "hostPath", "mode"].every((key) => {
+          return (row[key] != null &&
+            !Util.isStringAndEmpty(row[key].toString().trim()));
+        });
+      })
+      .value();
+  },
+  containerVolumesLocal: rows => {
+    rows = rows.filter(row => {
+      return ["containerPath", "persistentSize"].every(key => {
+        return row[key] != null && row[key] !== "";
       });
     })
-    .value(),
+      .map(row => {
+        return {
+          containerPath: row.containerPath,
+          persistent: {
+            size: parseInt(row.persistentSize, 10)
+          },
+          mode: "RW"
+        };
+      });
+    return rows;
+  },
   dockerForcePullImage: (isChecked) => !!isChecked,
   dockerParameters: (rows) => lazy(rows)
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))
@@ -144,7 +163,13 @@ const AppFormFieldToModelTransforms = {
   uris: (uris) => lazy(uris.split(","))
     .map((uri) => uri.trim())
     .filter((uri) => uri != null && uri !== "")
-    .value()
+    .value(),
+  volumes: (volumes) => {
+    return volumes.map(volume => {
+      volume.mode = "RW";
+      return volume;
+    });
+  }
 };
 
 export default Object.freeze(AppFormFieldToModelTransforms);
