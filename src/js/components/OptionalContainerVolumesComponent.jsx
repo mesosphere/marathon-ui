@@ -7,7 +7,7 @@ import FormGroupComponent from "../components/FormGroupComponent";
 
 import ContainerConstants from "../constants/ContainerConstants";
 
-var OptionalVolumesComponent = React.createClass({
+var OptionalContainerVolumesComponent = React.createClass({
   displayName: "OptionalContainerVolumesComponent",
 
   propTypes: {
@@ -129,7 +129,7 @@ var OptionalVolumesComponent = React.createClass({
     return (
       <div>
         <h4>
-          Docker container Volumes
+          Docker Container Volumes
         </h4>
         <div className="duplicable-list">
           {this.getDockerVolumesRows()}
@@ -140,4 +140,4 @@ var OptionalVolumesComponent = React.createClass({
   }
 });
 
-export default OptionalVolumesComponent;
+export default OptionalContainerVolumesComponent;
