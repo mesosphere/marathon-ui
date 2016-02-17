@@ -180,7 +180,7 @@ var AppModalComponent = React.createClass({
       : <AppConfigEditFormComponent {...appConfigProps} />;
 
     var cancelButton = (
-      <button className="btn btn-default"
+      <button className="btn btn-link"
           type="button"
           onClick={this.destroy}>
         Cancel
