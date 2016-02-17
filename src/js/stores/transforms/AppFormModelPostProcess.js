@@ -32,6 +32,15 @@ const AppFormModelPostProcess = {
       return;
     }
 
+    if ((container.docker == null || container.docker.image == null ||
+      container.docker.image === "") &&
+      container.volumes != null) {
+      delete container.docker;
+      container.volumes = container.volumes.filter(row => {
+        return row.hostPath == null;
+      });
+    }
+
     container.type = container.docker != null ? "DOCKER" : "MESOS";
 
     let isEmpty = (Util.isArray(container.volumes) &&
