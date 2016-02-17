@@ -4,9 +4,17 @@ import React from "react/addons";
 import DuplicableRowControls from "../components/DuplicableRowControls";
 import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import FormGroupComponent from "../components/FormGroupComponent";
+import OptionalContainerVolumesComponent
+  from "../components/OptionalContainerVolumesComponent";
 
 var OptionalVolumesComponent = React.createClass({
   displayName: "OptionalVolumesComponent",
+
+  propTypes: {
+    errorIndices: React.PropTypes.object.isRequired,
+    fields: React.PropTypes.object.isRequired,
+    getErrorMessage: React.PropTypes.func.isRequired
+  },
 
   mixins: [DuplicableRowsMixin],
 
@@ -103,6 +111,10 @@ var OptionalVolumesComponent = React.createClass({
           {this.getVolumesRows()}
         </div>
         {this.getGeneralErrorBlock("containerVolumesLocal")}
+        <OptionalContainerVolumesComponent
+          errorIndices={this.props.errorIndices}
+          getErrorMessage={this.props.getErrorMessage}
+          fields={this.props.fields} />
       </div>
     );
   }
