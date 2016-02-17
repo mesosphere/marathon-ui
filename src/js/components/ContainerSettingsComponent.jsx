@@ -24,7 +24,6 @@ var ContainerSettingsComponent = React.createClass({
 
   statics: {
     fieldIds: Object.freeze({
-      containerVolumes: "containerVolumes",
       dockerForcePullImage: "dockerForcePullImage",
       dockerImage: "dockerImage",
       dockerNetwork: "dockerNetwork",
@@ -213,84 +212,6 @@ var ContainerSettingsComponent = React.createClass({
     });
   },
 
-  getVolumesRow: function (row, i, disableRemoveButton = false) {
-    var fieldsetId = ContainerSettingsComponent.fieldIds.containerVolumes;
-    var error = this.getError(fieldsetId, row.consecutiveKey);
-    var getErrorMessage = this.props.getErrorMessage;
-    var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
-    var handleAddRow = this.handleAddRow.bind(null, fieldsetId, i + 1);
-    var handleRemoveRow =
-      this.handleRemoveRow.bind(null, fieldsetId, i);
-
-    var rowClassSet = classNames({
-      "has-error": !!error,
-      "duplicable-row": true
-    });
-
-    return (
-      <div key={row.consecutiveKey} className={rowClassSet}>
-        <fieldset className="row duplicable-row"
-          onChange={handleChange}>
-          <div className="col-sm-4">
-            <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.containerPath`)
-                }
-                fieldId={`${fieldsetId}.${i}.containerPath`}
-                label="Container Path"
-                value={row.containerPath}>
-              <input ref={`containerPath${i}`} />
-            </FormGroupComponent>
-          </div>
-          <div className="col-sm-4">
-            <FormGroupComponent
-                errorMessage={getErrorMessage(`${fieldsetId}.${i}.hostPath`)}
-                fieldId={`${fieldsetId}.${i}.hostPath`}
-                label="Host Path"
-                value={row.hostPath}>
-              <input ref={`hostPath${i}`} />
-            </FormGroupComponent>
-          </div>
-          <div className="col-sm-4">
-            <FormGroupComponent
-                errorMessage={getErrorMessage(`${fieldsetId}.${i}.mode`)}
-                fieldId={`${fieldsetId}.${i}.mode`}
-                label="Mode"
-                value={row.mode}>
-              <select defaultValue="" ref={`mode${i}`}>
-                <option value="">Select</option>
-                <option value={ContainerConstants.VOLUMES.MODE.RO}>
-                  Read Only
-                </option>
-                <option value={ContainerConstants.VOLUMES.MODE.RW}>
-                  Read and Write
-                </option>
-              </select>
-            </FormGroupComponent>
-            <DuplicableRowControls disableRemoveButton={disableRemoveButton}
-              handleAddRow={handleAddRow}
-              handleRemoveRow={handleRemoveRow} />
-          </div>
-        </fieldset>
-        {error}
-      </div>
-    );
-  },
-
-  getVolumesRows: function () {
-    var rows = this.state.rows.containerVolumes;
-
-    if (rows == null) {
-      return null;
-    }
-
-    let disableRemoveButton = this.hasOnlyOneSingleEmptyRow("containerVolumes");
-
-    return rows.map((row, i) => {
-      return this.getVolumesRow(row, i, disableRemoveButton);
-    });
-  },
-
   render: function () {
     var props = this.props;
     var fieldIds = ContainerSettingsComponent.fieldIds;
@@ -352,8 +273,7 @@ var ContainerSettingsComponent = React.createClass({
         <div className="duplicable-list">{this.getPortMappingRows()}</div>
         <h4>Parameters</h4>
         <div className="duplicable-list">{this.getParametersRows()}</div>
-        <h4>Volumes</h4>
-        <div className="duplicable-list">{this.getVolumesRows()}</div>
+        <div>You can set you Docker volume settings below.</div>
       </div>
     );
   }
