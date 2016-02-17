@@ -82,8 +82,8 @@ describe("App debug info component", function () {
           expect(state).to.equal("TASK_LOST");
           expect(message).to.equal("Slave slave1.dcos.io removed");
           expect(host).to.equal("slave1.dcos.io");
-          expect(timestamp).to.equal("2015-08-05T09:08:56.349Z");
-          expect(version).to.equal("2015-07-06T12:37:28.774Z");
+          expect(timestamp).to.equal(new Date("2015-08-05T09:08:56.349Z").toLocaleString());
+          expect(version).to.equal(new Date("2015-07-06T12:37:28.774Z").toLocaleString());
         }, done);
       });
 
@@ -200,7 +200,7 @@ describe("App debug info component", function () {
         .at(1)
         .find("span")
         .text();
-      expect(message).to.equal("2015-08-11T13:57:11.238Z");
+      expect(message).to.equal(new Date("2015-08-11T13:57:11.238Z").toLocaleString());
     });
 
   });

@@ -170,7 +170,7 @@ describe("AppVersionComponent", function () {
 
   it("has correct version", function () {
     expect(this.rows.at(43).props().children[0])
-      .to.equal("2015-06-29T12:57:02.269Z");
+      .to.equal(new Date("2015-06-29T12:57:02.269Z").toLocaleString());
   });
 
 });
