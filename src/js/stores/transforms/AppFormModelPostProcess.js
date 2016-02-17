@@ -81,36 +81,6 @@ const AppFormModelPostProcess = {
     if (isEmpty) {
       app.healthChecks = [];
     }
-  },
-  volumes: app => {
-    if (app.container == null) {
-      app.container = {
-        type: "MESOS"
-      };
-    }
-    if (app.container.volumes == null) {
-      app.container.volumes = [];
-    }
-
-    app.container.volumes = app.container.volumes.filter(
-      volume => volume.persistent == null
-    );
-
-    app.container.volumes = app.container.volumes.concat(
-      app.volumes.map(
-        volume => {
-          return {
-            containerPath: volume.path,
-            persistent: {
-              size: volume.size
-            },
-            mode: volume.mode
-          };
-        }
-      )
-    );
-
-    delete app.volumes;
   }
 };
 
