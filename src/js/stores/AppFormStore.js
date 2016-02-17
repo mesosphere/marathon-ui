@@ -271,6 +271,17 @@ function updateErrorIndices(fieldId, value, errorIndices) {
   return false;
 }
 
+function getFieldValue(fields, fieldId) {
+  var value = fields[fieldId];
+  var transform = AppFormTransforms.FieldToModel[fieldId];
+
+  if (transform == null || value == null) {
+    return value;
+  }
+
+  return transform(value);
+}
+
 function rebuildModelFromFields(app, fields, fieldId) {
   const key = resolveFieldIdToAppKeyMap[fieldId];
 
@@ -278,35 +289,29 @@ function rebuildModelFromFields(app, fields, fieldId) {
     let fieldIdsBySameModelKey = Object.keys(resolveFieldIdToAppKeyMap)
       .filter(mapKey => {
         return resolveFieldIdToAppKeyMap[mapKey] ===
-        resolveFieldIdToAppKeyMap[fieldId];
+          resolveFieldIdToAppKeyMap[fieldId];
       });
 
-    let setValue;
+    let fieldValue;
 
-    if (fieldIdsBySameModelKey.length < 2) {
-      const transform = AppFormTransforms.FieldToModel[fieldId];
-      if (transform == null) {
-        setValue = fields[fieldId];
-      } else {
-        setValue = transform(fields[fieldId]);
-      }
+    if (fieldIdsBySameModelKey.length <= 1) {
+      fieldValue = getFieldValue(fields, fieldId);
     } else {
-      setValue = fieldIdsBySameModelKey.reduce((memo, fieldId) => {
-        const transform = AppFormTransforms.FieldToModel[fieldId];
-        if (fields[fieldId] != null) {
-          if (transform == null) {
-            memo = memo.concat(fields[fieldId]);
-          } else {
-            memo = memo.concat(transform(fields[fieldId]));
-          }
+      fieldValue = fieldIdsBySameModelKey.reduce((memo, fieldId) => {
+        var value = getFieldValue(fields, fieldId);
+
+        if (value != null) {
+          memo = memo.concat(value);
         }
+
         return memo;
       }, []);
     }
-    Util.objectPathSet(app, key, setValue);
+
+    Util.objectPathSet(app, key, fieldValue);
   }
 
-  Object.keys(app).forEach((appKey) => {
+  Object.keys(app).forEach(appKey => {
     var postProcessor = AppFormModelPostProcess[appKey];
     if (postProcessor != null) {
       postProcessor(app);
