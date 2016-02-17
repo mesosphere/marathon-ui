@@ -274,6 +274,22 @@
     color: #aaa;
     margin-top: 10px;
   }
+
+  &.has-error {
+    label,
+    .help-block {
+      color: @alizarin-crimson;
+    }
+
+    .form-control {
+      border-color: @alizarin-crimson;
+      box-shadow: none;
+
+      &:focus {
+        background-color: fade(@alizarin-crimson, 5%);
+      }
+    }
+  }
 }
 
 .form-control {
@@ -354,4 +370,3 @@ textarea.form-control {
   color: #222;
   bottom: 2.4em;
 }
-
