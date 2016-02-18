@@ -2,14 +2,14 @@ import {expect} from "chai";
 import {render, shallow} from "enzyme";
 
 import React from "react/addons";
-import OptionalVolumesComponent
-  from "../../js/components/OptionalVolumesComponent.jsx";
+import LocalVolumesComponent
+  from "../../js/components/LocalVolumesComponent.jsx";
 
 describe("Optional Volumes Component", function () {
   describe("(no volume)", () => {
     var component = shallow(
-      <OptionalVolumesComponent errorIndices={{}}
-        fields={{"volumes": null}}
+      <LocalVolumesComponent errorIndices={{}}
+        fields={{"containerVolumesLocal": null}}
         getErrorMessage={()=>{}}/>
     );
 
@@ -33,7 +33,7 @@ describe("Optional Volumes Component", function () {
   });
   describe("(one volume)", () => {
     var component = render(
-      <OptionalVolumesComponent errorIndices={{}}
+      <LocalVolumesComponent errorIndices={{}}
         fields={{"containerVolumesLocal": [{
           consecutiveKey: "0",
           containerPath: "",
