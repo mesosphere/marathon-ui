@@ -21,6 +21,27 @@ function assignWithAccessors(target, ...sources) {
   return target;
 }
 
+function createFixedObject(valuePrefix) {
+  const obj = {};
+
+  // Make the properties of the object read-only, but the object extensible.
+  Object.defineProperty(obj, "addFixedProperty", {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: function (key, value) {
+      Object.defineProperty(obj, key, {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: valuePrefix + value
+      });
+    }
+  });
+
+  return obj;
+}
+
 var Util = {
   initKeyValue: function (obj, key, value) {
     if (obj[key] === undefined) {
@@ -128,6 +149,15 @@ var Util = {
     }
 
     return obj;
+  },
+  fixObject: function (obj, valuePrefix = "") {
+    const fixedObject = createFixedObject(valuePrefix);
+
+    Object.entries(obj).forEach(pair => {
+      fixedObject.addFixedProperty(pair[0], pair[1]);
+    });
+
+    return fixedObject;
   },
   filesize: function (bytes, decimals, threshold, multiplier, units) {
     bytes = bytes || 0;

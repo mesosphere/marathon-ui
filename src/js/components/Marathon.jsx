@@ -18,6 +18,11 @@ import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
 import DialogActions from "../actions/DialogActions";
 import QueueActions from "../actions/QueueActions";
+import PluginActions from "../actions/PluginActions";
+
+import "../plugin/PluginInterface";
+import PluginStore from "../stores/PluginStore";
+import PluginEvents from "../events/PluginEvents";
 
 import tabs from "../constants/tabs";
 
@@ -40,15 +45,22 @@ var Marathon = React.createClass({
   },
 
   componentDidMount: function () {
-    this.onRouteChange();
+    PluginActions.requestPlugins();
 
+    this.onRouteChange();
     this.bindKeyboardShortcuts();
 
-    this.startPolling();
+    PluginStore.on(PluginEvents.CHANGE, this.onPluginStoreChange);
   },
 
   componentWillReceiveProps: function () {
     this.onRouteChange();
+  },
+
+  onPluginStoreChange: function () {
+    if (PluginStore.isPluginsLoadingFinished) {
+      this.startPolling();
+    }
   },
 
   onRouteChange: function () {
@@ -101,14 +113,17 @@ var Marathon = React.createClass({
 
   componentDidUpdate: function (prevProps, prevState) {
     /* eslint-disable eqeqeq */
-    if (prevState.activeAppId != this.state.activeAppId ||
-      prevState.activeTabId != this.state.activeTabId) {
+    if ((prevState.activeAppId != this.state.activeAppId ||
+        prevState.activeTabId != this.state.activeTabId) &&
+      PluginStore.isPluginsLoadingFinished) {
       this.resetPolling();
     }
     /* eslint-enable eqeqeq */
   },
 
   componentWillUnmount: function () {
+    PluginStore.removeListener(PluginEvents.CHANGE, this.onPluginStoreChange);
+
     this.stopPolling();
   },
 
