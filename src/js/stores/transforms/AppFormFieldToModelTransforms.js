@@ -45,7 +45,7 @@ const AppFormFieldToModelTransforms = {
       })
       .value();
   },
-  containerVolumesLocal: rows => {
+  localVolumes: rows => {
     rows = rows.filter(row => {
       return ["containerPath", "persistentSize"].every(key => {
         return row[key] != null && row[key] !== "";

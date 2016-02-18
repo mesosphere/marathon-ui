@@ -17,7 +17,7 @@ var LocalVolumesComponent = React.createClass({
   mixins: [DuplicableRowsMixin],
 
   duplicableRowsScheme: {
-    containerVolumesLocal: {
+    localVolumes: {
       persistentSize: "",
       containerPath: ""
     }
@@ -27,22 +27,22 @@ var LocalVolumesComponent = React.createClass({
     event.target.blur();
     event.preventDefault();
 
-    this.addRow("containerVolumesLocal", position);
+    this.addRow("localVolumes", position);
   },
 
   handleRemoveRow: function (position, event) {
     event.target.blur();
     event.preventDefault();
 
-    this.removeRow("containerVolumesLocal", position);
+    this.removeRow("localVolumes", position);
   },
 
   handleChange: function (position) {
-    this.updateRow("containerVolumesLocal", position);
+    this.updateRow("localVolumes", position);
   },
 
   getVolumeRow: function (row, i, disableRemoveButton = false) {
-    var error = this.getError("containerVolumesLocal", row.consecutiveKey);
+    var error = this.getError("localVolumes", row.consecutiveKey);
 
     var rowClassSet = classNames({
       "has-error": !!error,
@@ -55,7 +55,7 @@ var LocalVolumesComponent = React.createClass({
             onChange={this.handleChange.bind(null, i)}>
           <div className="col-sm-4">
             <FormGroupComponent
-                fieldId={`containerVolumesLocal.persistent.size.${i}`}
+                fieldId={`localVolumes.persistent.size.${i}`}
                 label="Size (MiB)"
                 value={row.persistentSize}>
               <input ref={`persistentSize${i}`}
@@ -64,7 +64,7 @@ var LocalVolumesComponent = React.createClass({
           </div>
           <div className="col-sm-8">
             <FormGroupComponent
-                fieldId={`containerVolumesLocal.containerPath.${i}`}
+                fieldId={`localVolumes.containerPath.${i}`}
                 label="Container Path"
                 value={row.containerPath}>
               <input ref={`containerPath${i}`} />
@@ -81,7 +81,7 @@ var LocalVolumesComponent = React.createClass({
   },
 
   getVolumesRows: function () {
-    var rows = this.state.rows.containerVolumesLocal;
+    var rows = this.state.rows.localVolumes;
     if (rows == null) {
       return (
         <button type="button">
@@ -91,7 +91,7 @@ var LocalVolumesComponent = React.createClass({
     }
 
     let disableRemoveButton = this.hasOnlyOneSingleEmptyRow(
-      "containerVolumesLocal"
+      "localVolumes"
     );
 
     return rows.map((row, i) => {
@@ -108,7 +108,7 @@ var LocalVolumesComponent = React.createClass({
         <div className="duplicable-list">
           {this.getVolumesRows()}
         </div>
-        {this.getGeneralErrorBlock("containerVolumesLocal")}
+        {this.getGeneralErrorBlock("localVolumes")}
       </div>
     );
   }

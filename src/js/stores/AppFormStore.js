@@ -27,7 +27,7 @@ const defaultFieldValues = Object.freeze({
 
 const duplicableRowFields = [
   "containerVolumes",
-  "containerVolumesLocal",
+  "localVolumes",
   "dockerPortMappings",
   "dockerParameters",
   "env",
@@ -56,10 +56,10 @@ const validationRules = {
     AppFormValidators.containerVolumesModeNotEmpty,
     AppFormValidators.containerVolumesIsNotEmpty
   ],
-  "containerVolumesLocal": [
-    AppFormValidators.containerVolumesLocalSize,
-    AppFormValidators.containerVolumesLocalPath,
-    AppFormValidators.containerVolumesLocalIsNotEmpty
+  "localVolumes": [
+    AppFormValidators.localVolumesSize,
+    AppFormValidators.localVolumesPath,
+    AppFormValidators.localVolumesIsNotEmpty
   ],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
@@ -101,7 +101,7 @@ const resolveFieldIdToAppKeyMap = {
   cmd: "cmd",
   constraints: "constraints",
   containerVolumes: "container.volumes",
-  containerVolumesLocal: "container.volumes",
+  localVolumes: "container.volumes",
   cpus: "cpus",
   disk: "disk",
   dockerForcePullImage: "container.docker.forcePullImage",
@@ -200,7 +200,7 @@ const resolveAppKeyToFieldIdMap = {
   "container.docker.privileged": ["dockerPrivileged"],
   "container.volumes": [
     "containerVolumes",
-    "containerVolumesLocal"
+    "localVolumes"
   ],
   "healthChecks": ["healthChecks"]
 };
