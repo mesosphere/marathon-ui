@@ -7,8 +7,8 @@ import FormGroupComponent from "../components/FormGroupComponent";
 
 import ContainerConstants from "../constants/ContainerConstants";
 
-var OptionalContainerVolumesComponent = React.createClass({
-  displayName: "OptionalContainerVolumesComponent",
+var ContainerVolumesComponent = React.createClass({
+  displayName: "ContainerVolumesComponent",
 
   propTypes: {
     fields: React.PropTypes.object.isRequired
@@ -140,4 +140,4 @@ var OptionalContainerVolumesComponent = React.createClass({
   }
 });
 
-export default OptionalContainerVolumesComponent;
+export default ContainerVolumesComponent;

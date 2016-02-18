@@ -4,8 +4,8 @@ import React from "react/addons";
 import DuplicableRowControls from "../components/DuplicableRowControls";
 import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import FormGroupComponent from "../components/FormGroupComponent";
-import OptionalContainerVolumesComponent
-  from "../components/OptionalContainerVolumesComponent";
+import ContainerVolumesComponent
+  from "../components/ContainerVolumesComponent";
 
 var OptionalVolumesComponent = React.createClass({
   displayName: "OptionalVolumesComponent",
@@ -111,7 +111,7 @@ var OptionalVolumesComponent = React.createClass({
           {this.getVolumesRows()}
         </div>
         {this.getGeneralErrorBlock("containerVolumesLocal")}
-        <OptionalContainerVolumesComponent
+        <ContainerVolumesComponent
           errorIndices={this.props.errorIndices}
           getErrorMessage={this.props.getErrorMessage}
           fields={this.props.fields} />
