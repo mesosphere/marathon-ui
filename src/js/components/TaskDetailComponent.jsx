@@ -4,12 +4,20 @@ import objectPath from "object-path";
 import React from "react/addons";
 
 import AppsStore from "../stores/AppsStore";
+import AppVolumesListComponent from "../components/AppVolumesListComponent";
 import States from "../constants/States";
 import TimeFieldComponent from "../components/TimeFieldComponent";
+import TogglableTabsComponent from "../components/TogglableTabsComponent";
+import TabPaneComponent from "../components/TabPaneComponent";
 import TaskHealthComponent from "../components/TaskHealthComponent";
 import TaskMesosUrlComponent from "../components/TaskMesosUrlComponent";
 import TaskFileListComponent from "../components/TaskFileListComponent";
 import HealthStatus from "../constants/HealthStatus";
+
+var tabsTemplate = [
+  {id: "apps/:appId/:taskId", text: "Working Directory"},
+  {id: "apps/:appId/:taskId/volumes", text: "Volumes"}
+];
 
 var TaskDetailComponent = React.createClass({
   displayName: "TaskDetailComponent",
@@ -20,6 +28,14 @@ var TaskDetailComponent = React.createClass({
     hasHealth: React.PropTypes.bool,
     task: React.PropTypes.object,
     taskHealthMessage: React.PropTypes.string
+  },
+
+  contextTypes: {
+    router: React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      // This is needed for the tests, the context differs there.
+      React.PropTypes.object
+    ])
   },
 
   getErrorMessage: function (hasError) {
@@ -223,9 +239,108 @@ var TaskDetailComponent = React.createClass({
         </dl>
         {this.getTaskHealthComponent()}
         <hr />
-        <h3>Working Directory</h3>
-        <TaskFileListComponent task={task} />
+        {this.getTabs(task)}
       </div>
+    );
+  },
+
+  getTabs: function (task) {
+    var appId = this.props.appId;
+
+    var activeTabId =
+      `apps/${encodeURIComponent(appId)}/${encodeURIComponent(task.id)}`;
+    var activeTab = this.context.router.getCurrentParams().tab;
+
+    var tabs = tabsTemplate.map(function (tab) {
+      var id = tab.id.replace(":appId", encodeURIComponent(appId))
+        .replace(":taskId", encodeURIComponent(task.id));
+
+      if (activeTabId == null || tab === activeTab) {
+        activeTabId = id;
+      }
+
+      return {
+        id: id,
+        text: tab.text
+      };
+    });
+
+    if (activeTab === "volumes") {
+      activeTabId += "/volumes";
+    } else if (activeTab != null) {
+      activeTaskId = activeTab;
+    }
+
+    task.volumes = [
+      {
+        "containerPath": "foo",
+        "persistenceId": "appid.container.random"
+      },
+      {
+        "containerPath": "bar",
+        "persistenceId": "appid.bar.random"
+      }
+    ];
+
+    var appVolumes = [
+      {
+        "containerPath": "foo",
+        "mode": "RW",
+        "persistent": {
+          "size": 1024
+        }
+      },
+      {
+        "containerPath": "bar",
+        "mode": "RW",
+        "persistent": {
+          "size": 1024
+        }
+      }
+    ];
+
+    appVolumes = appVolumes.reduce((memo, volume) => {
+      if (volume.containerPath == null) {
+        return memo;
+      }
+      console.log(volume);
+      memo[volume.containerPath] = volume;
+      console.log(memo);
+      return memo;
+    }, {});
+
+    var volumes = task.volumes.map(taskVolume => {
+      appVolumes[taskVolume.containerPath].id = taskVolume.persistenceId;
+      return appVolumes[taskVolume.containerPath];
+    });
+
+    console.log(volumes);
+
+    return (
+      <TogglableTabsComponent className="page-body page-body-no-top"
+          activeTabId={activeTabId}
+          tabs={tabs} >
+        <TabPaneComponent
+            id={tabs[0].id}>
+            <h3>Working Directory</h3>
+            <TaskFileListComponent task={task} />
+        </TabPaneComponent>
+        <TabPaneComponent
+            id={tabs[1].id}>
+          {this.getVolumes(volumes)}
+        </TabPaneComponent>
+      </TogglableTabsComponent>
+    );
+  },
+
+  getVolumes: function (volumes) {
+    if (this.props.task == null || volumes == null) {
+      return null;
+    }
+
+    return (
+      <AppVolumesListComponent
+        volumes={volumes} />
     );
   },
 

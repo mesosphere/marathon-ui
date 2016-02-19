@@ -280,6 +280,9 @@ var AppPageComponent = React.createClass({
   getAppDetails: function () {
     var state = this.state;
     var model = state.app;
+    var volumes = model.container != null
+      ? model.container.volumes
+      : null;
 
     var tabs = state.tabs.filter(tab =>
       tab.text !== "Volumes" ||
@@ -309,7 +312,7 @@ var AppPageComponent = React.createClass({
         </TabPaneComponent>
         <TabPaneComponent
             id={"apps/" + encodeURIComponent(state.appId) + "/volumes"}>
-          <AppVolumesListComponent appId={state.appId} />
+          <AppVolumesListComponent volumes={volumes} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );

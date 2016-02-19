@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import React from "react/addons";
 
-import AppsStore from "../stores/AppsStore";
 import AppVolumesListItemComponent
   from "../components/AppVolumesListItemComponent";
 
@@ -11,7 +10,7 @@ var AppVolumesListComponent = React.createClass({
   displayName: "AppVolumesListComponent",
 
   propTypes: {
-    appId: React.PropTypes.string.isRequired
+    volumes: React.PropTypes.array
   },
 
   getInitialState: function () {
@@ -49,9 +48,10 @@ var AppVolumesListComponent = React.createClass({
     return null;
   },
 
-  getVolumeRow: function (volume) {
+  getVolumeRow: function (volume, index) {
     return (
       <AppVolumesListItemComponent
+        key={index}
         sortKey={this.state.sortKey}
         volume={volume}/>
     );
@@ -76,7 +76,6 @@ var AppVolumesListComponent = React.createClass({
 
   render: function () {
     var state = this.state;
-    var app = AppsStore.getCurrentApp(this.props.appId);
 
     var headerClassSet = classNames({
       "clickable": true,
@@ -107,15 +106,15 @@ var AppVolumesListComponent = React.createClass({
       "cell-highlighted": state.sortKey === "mode"
     });
 
-    if (app.container == null || app.container.volumes == null) {
+    if (this.props.volumes == null) {
       return null;
     }
 
     return (
       <div>
-        <h4>
+        <h3>
           Volumes
-        </h4>
+        </h3>
         <table className="table table-unstyled task-list">
           <thead>
             <tr>
@@ -158,7 +157,7 @@ var AppVolumesListComponent = React.createClass({
             </tr>
           </thead>
           <tbody>
-            {this.getVolumes(app.container.volumes)}
+            {this.getVolumes(this.props.volumes)}
           </tbody>
         </table>
       </div>
