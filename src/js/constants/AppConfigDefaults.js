@@ -4,8 +4,8 @@ import Util from "../helpers/Util";
 export const AppConfigFormDefaultValues = Util.deepFreeze({
   id: "",
   cmd: "",
-  cpus: 0.1,
-  mem: 16,
+  cpus: 1,
+  mem: 128,
   disk: 0,
   instances: 1,
   ports: "0"
@@ -15,8 +15,8 @@ export const AppConfigFormDefaultValues = Util.deepFreeze({
 export const AppConfigDefaultValues = Util.deepFreeze({
   id: null,
   cmd: null,
-  cpus: 0.1,
-  mem: 16,
+  cpus: 1,
+  mem: 128,
   disk: 0,
   instances: 1,
   ports: [ 0 ]
