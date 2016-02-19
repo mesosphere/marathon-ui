@@ -108,6 +108,18 @@ var Util = {
 
     return paths;
   },
+  sortBy: function (key, sortDescending = false) {
+    sortDescending = sortDescending ? -1 : 1;
+    return function (a, b) {
+      if (a[key] > b[key] || a[key] == null) {
+        return 1 * sortDescending;
+      }
+      if (a[key] < b[key] || b[key] == null) {
+        return -1 * sortDescending;
+      }
+      return 0;
+    };
+  },
   objectPathSet: function (obj, path, value) {
     var [initialKey] = path.split(".");
 
