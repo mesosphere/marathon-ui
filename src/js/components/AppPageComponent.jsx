@@ -9,6 +9,7 @@ import AppStatusComponent from "../components/AppStatusComponent";
 import AppVersionsActions from "../actions/AppVersionsActions";
 import AppDebugInfoComponent from "../components/AppDebugInfoComponent";
 import AppVersionListComponent from "../components/AppVersionListComponent";
+import AppVolumesListComponent from "../components/AppVolumesListComponent";
 import DialogActions from "../actions/DialogActions";
 import DialogStore from "../stores/DialogStore";
 import DialogSeverity from "../constants/DialogSeverity";
@@ -28,7 +29,8 @@ import TasksEvents from "../events/TasksEvents";
 var tabsTemplate = [
   {id: "apps/:appId", text: "Instances"},
   {id: "apps/:appId/configuration", text: "Configuration"},
-  {id: "apps/:appId/debug", text: "Debug"}
+  {id: "apps/:appId/debug", text: "Debug"},
+  {id: "apps/:appId/volumes", text: "Volumes"}
 ];
 
 var AppPageComponent = React.createClass({
@@ -78,6 +80,8 @@ var AppPageComponent = React.createClass({
       activeTabId += "/configuration";
     } else if (view === "debug") {
       activeTabId += "/debug";
+    } else if (view === "volumes") {
+      activeTabId += "/volumes";
     } else if (view != null) {
       activeTaskId = view;
       activeViewIndex = 1;
@@ -277,11 +281,15 @@ var AppPageComponent = React.createClass({
     var state = this.state;
     var model = state.app;
 
+    var tabs = state.tabs.filter(tab =>
+      tab.text !== "Volumes" ||
+      (model.container != null && model.container.volumes != null));
+
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
           activeTabId={state.activeTabId}
           onTabClick={this.handleTabClick}
-          tabs={state.tabs} >
+          tabs={tabs} >
         <TabPaneComponent
             id={"apps/" + encodeURIComponent(state.appId)}>
           <TaskViewComponent
@@ -298,6 +306,10 @@ var AppPageComponent = React.createClass({
         <TabPaneComponent
             id={"apps/" + encodeURIComponent(state.appId) + "/debug"}>
           <AppDebugInfoComponent appId={state.appId} />
+        </TabPaneComponent>
+        <TabPaneComponent
+            id={"apps/" + encodeURIComponent(state.appId) + "/volumes"}>
+          <AppVolumesListComponent appId={state.appId} />
         </TabPaneComponent>
       </TogglableTabsComponent>
     );
