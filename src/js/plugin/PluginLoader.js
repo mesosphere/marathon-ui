@@ -24,10 +24,6 @@ const PluginLoader = {
       pluginHost.setAttribute("frameborder","0");
       pluginHost.setAttribute("style",
         "position:absolute; top:-1px; left:-1px;");
-      pluginHost.setAttribute("sandbox","allow-same-origin allow-scripts");
-      pluginHost.setAttribute("src", URL.createObjectURL(new Blob([
-        `<html><head></head><body>${pluginId}</body></html>`
-      ], {type: "text/html"})));
 
       function handlePluginHostLoad() {
         pluginHost.removeEventListener("load", handlePluginHostLoad);
