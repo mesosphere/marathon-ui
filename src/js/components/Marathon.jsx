@@ -13,6 +13,7 @@ import EditAppModalComponent from "../components/modals/EditAppModalComponent";
 import HelpModalComponent from "../components/modals/HelpModalComponent";
 import NavTabsComponent from "../components/NavTabsComponent";
 import HelpMenuComponent from "./HelpMenuComponent";
+import PluginMountPointComponent from "../components/PluginMountPointComponent";
 
 import AppsActions from "../actions/AppsActions";
 import DeploymentActions from "../actions/DeploymentActions";
@@ -23,6 +24,7 @@ import PluginActions from "../actions/PluginActions";
 import "../plugin/PluginInterface";
 import PluginStore from "../stores/PluginStore";
 import PluginEvents from "../events/PluginEvents";
+import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 
 import tabs from "../constants/tabs";
 
@@ -276,6 +278,8 @@ var Marathon = React.createClass({
             <div className="nav navbar-nav navbar-right">
               <AppListFilterComponent />
               <HelpMenuComponent />
+              <PluginMountPointComponent
+                placeId={PluginMountPoints.NAVBAR_TOP_RIGHT} />
             </div>
           </div>
         </nav>
