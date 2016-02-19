@@ -669,4 +669,84 @@ describe("Util", function () {
       expect(Util.deepCopy(originalObject)).to.not.deep.equal(expectedObject);
     });
   });
+  describe("sortBy", () => {
+    it("is not null", () => {
+      expect(Util.sortBy).to.not.be.null;
+    });
+
+    it("sorts alphabetical", () => {
+      var originalUnsortedArray = [
+        {"a": "z"},
+        {"a": "a"}
+      ];
+      var expectedSortedArray = [
+        {"a": "a"},
+        {"a": "z"}
+      ];
+
+      expect(originalUnsortedArray.sort(Util.sortBy("a")))
+        .to.deep.equal(expectedSortedArray);
+    });
+
+    it("sorts alphabetical reverse", () => {
+      var originalUnsortedArray = [
+        {"a": "a"},
+        {"a": "z"}
+      ];
+      var expectedSortedArray = [
+        {"a": "z"},
+        {"a": "a"}
+      ];
+
+      expect(originalUnsortedArray.sort(Util.sortBy("a", true)))
+        .to.deep.equal(expectedSortedArray);
+    });
+
+    it("sorts alphabetical with multiple letters", () => {
+      var originalUnsortedArray = [
+        {"a": "ab"},
+        {"a": "aa"}
+      ];
+      var expectedSortedArray = [
+        {"a": "aa"},
+        {"a": "ab"}
+      ];
+
+      expect(originalUnsortedArray.sort(Util.sortBy("a")))
+        .to.deep.equal(expectedSortedArray);
+    });
+
+    it("sorts alphnumeric", () => {
+      var originalUnsortedArray = [
+        {"a": "z"},
+        {"a": "0"},
+        {"a": "a"}
+      ];
+      var expectedSortedArray = [
+        {"a": "0"},
+        {"a": "a"},
+        {"a": "z"}
+      ];
+      expect(originalUnsortedArray.sort(Util.sortBy("a")))
+        .to.deep.equal(expectedSortedArray);
+    });
+
+    it("sorts null fields to the end", () => {
+      var originalUnsortedArray = [
+        {"a": "z"},
+        {"a": "0"},
+        {"b": "a"},
+        {"a": "a"}
+      ];
+      var expectedSortedArray = [
+        {"a": "0"},
+        {"a": "a"},
+        {"a": "z"},
+        {"b": "a"}
+      ];
+
+      expect(originalUnsortedArray.sort(Util.sortBy("a")))
+        .to.deep.equal(expectedSortedArray);
+    });
+  });
 });
