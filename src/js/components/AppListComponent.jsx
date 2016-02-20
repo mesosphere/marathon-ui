@@ -197,6 +197,7 @@ var AppListComponent = React.createClass({
     var filterText = filters[FilterTypes.TEXT];
     var filterLabels = filters[FilterTypes.LABELS];
     var filterStatus = filters[FilterTypes.STATUS];
+    var filterVolumes = filters[FilterTypes.VOLUMES];
 
     if (filterText != null && filterText !== "") {
       nodesSequence = nodesSequence
@@ -211,6 +212,9 @@ var AppListComponent = React.createClass({
 
     nodesSequence.each(app => {
       filterCounts.appsStatusesCount[app.status]++;
+      if (app.container != null && app.container.volumes != null) {
+        filterCounts.appsVolumesCount++;
+      }
       app.health.forEach(health => {
         if (health.quantity) {
           filterCounts.appsHealthCount[health.state]++;
@@ -257,6 +261,16 @@ var AppListComponent = React.createClass({
       });
     }
 
+    if (filterVolumes != null) { // Volume filter
+      nodesSequence = nodesSequence.filter(app => {
+        if (app.container == null || app.container.volumes == null) {
+          return false;
+        }
+
+        return true;
+      });
+    }
+
     return nodesSequence;
   },
 
@@ -267,6 +281,9 @@ var AppListComponent = React.createClass({
 
     appsInGroup.forEach(app => {
       filterCounts.appsStatusesCount[app.status]++;
+      if (app.container != null && app.container.volumes != null) {
+        filterCounts.appsVolumesCount++;
+      }
       app.health.forEach(health => {
         if (health.quantity) {
           filterCounts.appsHealthCount[health.state]++;
@@ -311,7 +328,8 @@ var AppListComponent = React.createClass({
 
     var filterCounts = {
       appsStatusesCount: getInitialFilterCounts(AppStatus),
-      appsHealthCount: getInitialFilterCounts(HealthStatus)
+      appsHealthCount: getInitialFilterCounts(HealthStatus),
+      appsVolumesCount: 0
     };
 
     // Global search view - only display filtered apps
@@ -364,7 +382,6 @@ var AppListComponent = React.createClass({
         );
       })
       .value();
-
     AppsActions.emitFilterCounts(filterCounts);
 
     return appListItems;
