@@ -273,7 +273,7 @@ var ContainerSettingsComponent = React.createClass({
         <div className="duplicable-list">{this.getPortMappingRows()}</div>
         <h4>Parameters</h4>
         <div className="duplicable-list">{this.getParametersRows()}</div>
-        <div>You can set you Docker volume settings below.</div>
+        <div>You can set your Docker volume settings below.</div>
       </div>
     );
   }

@@ -57,7 +57,7 @@ var ContainerVolumesComponent = React.createClass({
     return (
       <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset className="row duplicable-row"
-          onChange={this.handleChangeContainerVolumes.bind(null, i)}>
+            onChange={this.handleChangeContainerVolumes.bind(null, i)}>
           <div className="col-sm-4">
             <FormGroupComponent
                 fieldId={`containerVolumes.${i}.containerPath`}
