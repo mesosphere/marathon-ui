@@ -112,9 +112,6 @@ var AppVolumesListComponent = React.createClass({
 
     return (
       <div>
-        <h3>
-          Volumes
-        </h3>
         <table className="table table-unstyled task-list">
           <thead>
             <tr>
