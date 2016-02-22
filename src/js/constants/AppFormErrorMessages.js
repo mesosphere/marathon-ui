@@ -22,7 +22,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
     "Mode must not be empty",
     "Container Path and Host Path have to be set."
   ],
-  containerVolumesLocal: [
+  localVolumes: [
     "Size must be a non-negative number",
     "Container Path must be a valid path",
     "Container Path and Size have to be set"

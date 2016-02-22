@@ -32,6 +32,15 @@ const AppFormModelPostProcess = {
       return;
     }
 
+    if ((container.docker == null || container.docker.image == null ||
+        container.docker.image === "") &&
+        container.volumes != null) {
+      delete container.docker;
+      container.volumes = container.volumes.filter(row => {
+        return row.hostPath == null;
+      });
+    }
+
     container.type = container.docker != null ? "DOCKER" : "MESOS";
 
     let isEmpty = (Util.isArray(container.volumes) &&
@@ -81,36 +90,6 @@ const AppFormModelPostProcess = {
     if (isEmpty) {
       app.healthChecks = [];
     }
-  },
-  volumes: app => {
-    if (app.container == null) {
-      app.container = {
-        type: "MESOS"
-      };
-    }
-    if (app.container.volumes == null) {
-      app.container.volumes = [];
-    }
-
-    app.container.volumes = app.container.volumes.filter(
-      volume => volume.persistent == null
-    );
-
-    app.container.volumes = app.container.volumes.concat(
-      app.volumes.map(
-        volume => {
-          return {
-            containerPath: volume.path,
-            persistent: {
-              size: volume.size
-            },
-            mode: volume.mode
-          };
-        }
-      )
-    );
-
-    delete app.volumes;
   }
 };
 

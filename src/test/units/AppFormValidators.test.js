@@ -686,21 +686,21 @@ describe("App Form Validators", function () {
           var volume = {
             persistentSize: "abc"
           };
-          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.false;
+          expect(this.validatior.localVolumesSize(volume)).to.be.false;
         });
 
         it("should be a number value", function () {
           var volume = {
             persistentSize: "1024"
           };
-          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.true;
+          expect(this.validatior.localVolumesSize(volume)).to.be.true;
         });
 
         it("should not be a negative value", function () {
           var volume = {
             persistentSize: "-1024"
           };
-          expect(this.validatior.containerVolumesLocalSize(volume)).to.be.false;
+          expect(this.validatior.localVolumesSize(volume)).to.be.false;
         });
       });
       describe("path", function () {
@@ -708,35 +708,35 @@ describe("App Form Validators", function () {
           var volume = {
             containerPath: ""
           };
-          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
+          expect(this.validatior.localVolumesPath(volume)).to.be.true;
         });
 
         it("should not be a not contain a space", function () {
           var volume = {
             containerPath: "ab c"
           };
-          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
+          expect(this.validatior.localVolumesPath(volume)).to.be.false;
         });
 
         it("should be a string value", function () {
           var volume = {
             containerPath: "abc"
           };
-          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.true;
+          expect(this.validatior.localVolumesPath(volume)).to.be.true;
         });
 
         it("should not contain a slash string value", function () {
           var volume = {
             containerPath: "ab/c"
           };
-          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
+          expect(this.validatior.localVolumesPath(volume)).to.be.false;
         });
 
         it("should not begin with a slash string value", function () {
           var volume = {
             containerPath: "/abc"
           };
-          expect(this.validatior.containerVolumesLocalPath(volume)).to.be.false;
+          expect(this.validatior.localVolumesPath(volume)).to.be.false;
         });
       });
       describe("all fields", function () {
@@ -746,7 +746,7 @@ describe("App Form Validators", function () {
             persistentSize: ""
           };
 
-          expect(this.validatior.containerVolumesLocalIsNotEmpty(volume))
+          expect(this.validatior.localVolumesIsNotEmpty(volume))
             .to.be.false;
         });
 
@@ -756,7 +756,7 @@ describe("App Form Validators", function () {
             persistentSize: "12"
           };
 
-          expect(this.validatior.containerVolumesLocalIsNotEmpty(volume))
+          expect(this.validatior.localVolumesIsNotEmpty(volume))
             .to.be.false;
         });
 
@@ -766,7 +766,7 @@ describe("App Form Validators", function () {
             persistentSize: "12"
           };
 
-          expect(this.validatior.containerVolumesLocalIsNotEmpty(volume))
+          expect(this.validatior.localVolumesIsNotEmpty(volume))
             .to.be.true;
         });
       });

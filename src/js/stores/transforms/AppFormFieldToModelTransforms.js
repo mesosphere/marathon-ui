@@ -45,7 +45,7 @@ const AppFormFieldToModelTransforms = {
       })
       .value();
   },
-  containerVolumesLocal: rows => {
+  localVolumes: rows => {
     rows = rows.filter(row => {
       return ["containerPath", "persistentSize"].every(key => {
         return row[key] != null && row[key] !== "";
@@ -163,13 +163,7 @@ const AppFormFieldToModelTransforms = {
   uris: (uris) => lazy(uris.split(","))
     .map((uri) => uri.trim())
     .filter((uri) => uri != null && uri !== "")
-    .value(),
-  volumes: (volumes) => {
-    return volumes.map(volume => {
-      volume.mode = "RW";
-      return volume;
-    });
-  }
+    .value()
 };
 
 export default Object.freeze(AppFormFieldToModelTransforms);

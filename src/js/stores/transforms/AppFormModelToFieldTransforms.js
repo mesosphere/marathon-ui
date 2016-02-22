@@ -35,7 +35,7 @@ const AppFormModelToFieldTransforms = {
         return row;
       });
   },
-  containerVolumesLocal: (volumes) => {
+  localVolumes: (volumes) => {
     return volumes
       .filter(row => row.persistent != null)
       .map((row, i) => {

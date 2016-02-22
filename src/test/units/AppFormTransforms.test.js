@@ -76,7 +76,7 @@ describe("App Form Field to Model Transform", function () {
               mode: "RW"
             }
           ];
-          expect(AppFormTransforms.FieldToModel.containerVolumesLocal(
+          expect(AppFormTransforms.FieldToModel.localVolumes(
             localVolumesArray
           )).to.deep.equal(expectedLocalVolumesArray);
         });
@@ -90,7 +90,7 @@ describe("App Form Field to Model Transform", function () {
             }
           ];
           var expectedEmptyArray = [];
-          expect(AppFormTransforms.FieldToModel.containerVolumesLocal(
+          expect(AppFormTransforms.FieldToModel.localVolumes(
             localVolumesArray
           )).to.deep.equal(expectedEmptyArray);
         });
@@ -429,7 +429,7 @@ describe("App Form Model To Field Transform", function () {
             consecutiveKey: 0
           }
         ];
-        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+        expect(AppFormTransforms.ModelToField.localVolumes(
           containerVolumesWithLocalVolume
         )).to.deep.equal(expectedLocalVolumesArray);
       });
@@ -465,7 +465,7 @@ describe("App Form Model To Field Transform", function () {
             consecutiveKey: 1
           }
         ];
-        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+        expect(AppFormTransforms.ModelToField.localVolumes(
           containerVolumesWithLocalVolumes
         )).to.deep.equal(expectedLocalVolumesArray);
       });
@@ -506,7 +506,7 @@ describe("App Form Model To Field Transform", function () {
             consecutiveKey: 1
           }
         ];
-        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+        expect(AppFormTransforms.ModelToField.localVolumes(
           containerVolumesWithMixedVolumes
         )).to.deep.equal(expectedLocalVolumesArray);
       });
@@ -520,7 +520,7 @@ describe("App Form Model To Field Transform", function () {
           }
         ];
         var expectedLocalVolumesArray = [];
-        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+        expect(AppFormTransforms.ModelToField.localVolumes(
           containerVolumesWithDockerVolume
         )).to.deep.equal(expectedLocalVolumesArray);
       });
@@ -528,7 +528,7 @@ describe("App Form Model To Field Transform", function () {
       it("should return an empty array", function () {
         var containerVolumesWithoutVolume = [];
         var expectedLocalVolumesArray = [];
-        expect(AppFormTransforms.ModelToField.containerVolumesLocal(
+        expect(AppFormTransforms.ModelToField.localVolumes(
           containerVolumesWithoutVolume
         )).to.deep.equal(expectedLocalVolumesArray);
       });

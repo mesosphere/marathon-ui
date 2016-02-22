@@ -2,14 +2,14 @@ import {expect} from "chai";
 import {render, shallow} from "enzyme";
 
 import React from "react/addons";
-import OptionalVolumesComponent
-  from "../../js/components/OptionalVolumesComponent.jsx";
+import LocalVolumesComponent
+  from "../../js/components/LocalVolumesComponent.jsx";
 
 describe("Optional Volumes Component", function () {
   describe("(no volume)", () => {
     var component = shallow(
-      <OptionalVolumesComponent errorIndices={{}}
-        fields={{"volumes": null}}
+      <LocalVolumesComponent errorIndices={{}}
+        fields={{"localVolumes": null}}
         getErrorMessage={()=>{}}/>
     );
 
@@ -29,12 +29,12 @@ describe("Optional Volumes Component", function () {
     it("should have the right title", () => {
       expect(component.find("h4").first().props().children)
         .to.equal("Persistent Local Volumes");
-    })
+    });
   });
   describe("(one volume)", () => {
     var component = render(
-      <OptionalVolumesComponent errorIndices={{}}
-        fields={{"containerVolumesLocal": [{
+      <LocalVolumesComponent errorIndices={{}}
+        fields={{"localVolumes": [{
           consecutiveKey: "0",
           containerPath: "",
           persistentSize: "1024"
@@ -44,7 +44,7 @@ describe("Optional Volumes Component", function () {
 
     it("should have the right size id", () => {
       expect(component.find("input").get(0).attribs.id)
-        .to.equal("containerVolumesLocal.persistent.size.0");
+        .to.equal("localVolumes.persistent.size.0");
     });
 
     it("should have the right size value", () => {
@@ -54,7 +54,7 @@ describe("Optional Volumes Component", function () {
 
     it("should have the right path id", () => {
       expect(component.find("input").get(1).attribs.id)
-        .to.equal("containerVolumesLocal.containerPath.0");
+        .to.equal("localVolumes.containerPath.0");
     });
 
     it("should have the right path value", () => {
