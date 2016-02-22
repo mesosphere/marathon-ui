@@ -1,6 +1,7 @@
 import {EventEmitter} from "events";
 
 import {AllAppConfigDefaultValues} from "../constants/AppConfigDefaults";
+import AppConfigTransforms from "./transforms/AppConfigTransforms";
 import AppDispatcher from "../AppDispatcher";
 import appScheme from "../stores/schemes/appScheme";
 import AppVersionsEvents from "../events/AppVersionsEvents";
@@ -66,7 +67,18 @@ var AppVersionsStore = Util.extendObject(EventEmitter.prototype, {
       }
       return memo;
     }, {});
+  },
+
+  // Diff the new configuration against the current app settings
+  getAppConfigDiff: function (appId, newConfig) {
+    var allVersions = this.getAppVersions(appId);
+    if (allVersions.length === 0) {
+      return newConfig;
+    }
+    var latestVersion = allVersions[0];
+    return AppConfigTransforms.diff(this.appVersions[latestVersion], newConfig);
   }
+
 });
 
 AppDispatcher.register(function (action) {

@@ -7,6 +7,7 @@ import url from "url";
 import AppsActions from "../actions/AppsActions";
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
+import AppVersionStore from "../stores/AppVersionsStore";
 import UnspecifiedNodeComponent from "../components/UnspecifiedNodeComponent";
 
 function invalidateValue(value, suffix) {
@@ -97,7 +98,8 @@ var AppVersionComponent = React.createClass({
 
   handleRollbackToAppVersion: function () {
     var appVersion = this.props.appVersion;
-    AppsActions.applySettingsOnApp(appVersion.id, appVersion);
+    var appDiff = AppVersionStore.getAppConfigDiff(appVersion.id, appVersion);
+    AppsActions.applySettingsOnApp(appVersion.id, appDiff);
   },
 
   getButtonClassSet: function () {
