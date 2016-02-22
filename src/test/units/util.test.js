@@ -442,6 +442,86 @@ describe("Util", function () {
     });
   });
 
+  describe("isEgal", function () {
+
+    it("compares primitives strictly", function () {
+      expect(Util.isEgal(0, 0)).to.equal(true);
+      expect(Util.isEgal(1, 1)).to.equal(true);
+      expect(Util.isEgal(10, -10)).to.equal(false);
+      expect(Util.isEgal(0, -0)).to.equal(true);
+      expect(Util.isEgal("abc", "abc")).to.equal(true);
+      expect(Util.isEgal("abc", "cba")).to.equal(false);
+      expect(Util.isEgal(2.0, 2.0)).to.equal(true);
+      expect(Util.isEgal(19.1, 19.2)).to.equal(false);
+      expect(Util.isEgal(true, true)).to.equal(true);
+      expect(Util.isEgal(false, false)).to.equal(true);
+      expect(Util.isEgal(false, true)).to.equal(false);
+      expect(Util.isEgal(false, null)).to.equal(false);
+      expect(Util.isEgal("123", 123)).to.equal(false);
+    });
+    it("distinguishes null from undefined inputs", function () {
+      expect(Util.isEgal(null, null)).to.equal(true);
+      expect(Util.isEgal(undefined, undefined)).to.equal(true);
+      expect(Util.isEgal(undefined, null)).to.equal(false);
+    });
+    it("treats NaN as equal to NaN", function () {
+      expect(Util.isEgal(NaN, NaN)).to.equal(true);
+    });
+
+    it("compares arrays", function () {
+      expect(Util.isEgal(
+        [1, "abc", true],
+        [1, "abc", true]
+      )).to.equal(true);
+      expect(Util.isEgal(
+        [1, "abc", false],
+        [1, "abc", true]
+      )).to.equal(false);
+    });
+    it("compares objects", function () {
+      expect(Util.isEgal(
+        {a: 1, b: "abc", c: true},
+        {a: 1, b: "abc", c: true}
+      )).to.equal(true);
+      expect(Util.isEgal(
+        {a: 1, b: "abc", c: true},
+        {a: 1, b: "abc", c: false}
+      )).to.equal(false);
+      expect(Util.isEgal(
+        {a: 1, b: "abc", c: true},
+        {a: 1, b: "abc", c: true, d: null}
+      )).to.equal(false);
+    });
+
+    it("compares nested arrays", function () {
+      expect(Util.isEgal(
+        [[1,2,3], "b", "c"],
+        [[1,2,3], "b", "c"]
+      )).to.equal(true);
+      expect(Util.isEgal(
+        [[1,2,3], "b", "c"],
+        [[1,4,3], "b", "c"]
+      )).to.equal(false);
+    });
+
+    it("compares nested objects", function () {
+      expect(Util.isEgal({
+        a: [{a: 1}, {b: 2}, {c: 3}, 4],
+        b: {a: [1,2,3], b: [4,5,6], c: 7}
+      }, {
+        a: [{a: 1}, {b: 2}, {c: 3}, 4],
+        b: {a: [1,2,3], b: [4,5,6], c: 7}
+      })).to.equal(true);
+      expect(Util.isEgal({
+        a: [{a: 1}, {b: 2}, {c: 3}, 4],
+        b: {a: [1,2,3], b: [4,5,6], c: 7}
+      }, {
+        a: [{a: 1}, {b: 2}, {c: 3}, 4],
+        b: {a: [1,2,3], b: [4,5], c: 7}
+      })).to.equal(false);
+    });
+  });
+
   describe("deepCopy", function () {
 
     it("it returns an actual deep copy", function () {

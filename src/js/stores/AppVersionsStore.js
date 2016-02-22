@@ -1,9 +1,10 @@
 import {EventEmitter} from "events";
 
+import {AllAppConfigDefaultValues} from "../constants/AppConfigDefaults";
+import AppConfigTransforms from "./transforms/AppConfigTransforms";
 import AppDispatcher from "../AppDispatcher";
 import appScheme from "../stores/schemes/appScheme";
 import AppVersionsEvents from "../events/AppVersionsEvents";
-
 import Util from "../helpers/Util";
 
 const storeData = {
@@ -50,7 +51,34 @@ var AppVersionsStore = Util.extendObject(EventEmitter.prototype, {
       return Util.deepCopy(this.appVersions[appVersionTimestamp]) || {};
     }
     return {};
+  },
+
+  // every significant field in the full definition returned from the
+  // versions endpoint
+  getAppConfigVersion: function (appId, appVersionTimestamp) {
+    var version = this.getAppVersion(appId, appVersionTimestamp);
+    return Object.keys(version).reduce((memo, key) => {
+      if (AllAppConfigDefaultValues.hasOwnProperty(key)) {
+        let defaultVal = AllAppConfigDefaultValues[key];
+        let val = version[key];
+        if (!Util.isEgal(val, defaultVal)) {
+          memo[key] = val;
+        }
+      }
+      return memo;
+    }, {});
+  },
+
+  // Diff the new configuration against the current app settings
+  getAppConfigDiff: function (appId, newConfig) {
+    var allVersions = this.getAppVersions(appId);
+    if (allVersions.length === 0) {
+      return newConfig;
+    }
+    var latestVersion = allVersions[0];
+    return AppConfigTransforms.diff(this.appVersions[latestVersion], newConfig);
   }
+
 });
 
 AppDispatcher.register(function (action) {

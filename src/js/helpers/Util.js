@@ -201,7 +201,7 @@ var Util = {
       a != null &&
       b != null &&
       a.length === b.length &&
-      a.every((v, i) => v === b[i]);
+      a.every((v, i) => Util.isEgal(v, b[i]));
   },
   compareProperties: function (a, b, ...keys) {
     return keys.every((key) => {
@@ -214,8 +214,25 @@ var Util = {
         return this.compareArrays(Object.keys(aVal), Object.keys(bVal))
           && this.compareArrays(Object.values(aVal), Object.values(bVal));
       }
-      return aVal === bVal;
+      return Util.isEgal(aVal, bVal);
     });
+  },
+  isEgal: function (a, b) {
+    if (a === b) {
+      return true;
+    }
+    if (Util.isArray(a) && Util.isArray(b)) {
+      return Util.compareArrays(a, b);
+    }
+    if (Util.isObject(a) && Util.isObject(b)) {
+      var aKeys = Object.keys(a);
+      var bKeys = Object.keys(b);
+      if (aKeys.length !== bKeys.length) {
+        return false;
+      }
+      return aKeys.every((key) => Util.isEgal(a[key], b[key]));
+    }
+    return Number.isNaN(a) && Number.isNaN(b);
   }
 };
 

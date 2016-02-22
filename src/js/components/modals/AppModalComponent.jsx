@@ -11,6 +11,7 @@ import AppFormErrorMessages from "../../constants/AppFormErrorMessages";
 import AppFormStore from "../../stores/AppFormStore";
 import AutolinkComponent from "../AutolinkComponent";
 import AppsStore from "../../stores/AppsStore";
+import AppVersionStore from "../../stores/AppVersionsStore";
 import ModalComponent from "../../components/ModalComponent";
 
 var AppModalComponent = React.createClass({
@@ -102,10 +103,11 @@ var AppModalComponent = React.createClass({
     }
 
     if (this.state.appIsValid) {
-      const app = AppFormStore.app;
+      const app = this.state.app;
 
       if (this.props.app != null) {
-        AppsActions.applySettingsOnApp(app.id, app, true, this.state.force);
+        let appDiff = AppVersionStore.getAppConfigDiff(app.id, app);
+        AppsActions.applySettingsOnApp(app.id, appDiff, true, this.state.force);
       } else {
         AppsActions.createApp(app);
       }
