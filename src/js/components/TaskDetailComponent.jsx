@@ -268,7 +268,7 @@ var TaskDetailComponent = React.createClass({
     if (activeTab === "volumes") {
       activeTabId += "/volumes";
     } else if (activeTab != null) {
-      activeTaskId = activeTab;
+      activeTabId = activeTab;
     }
 
     task.volumes = [
@@ -303,9 +303,7 @@ var TaskDetailComponent = React.createClass({
       if (volume.containerPath == null) {
         return memo;
       }
-      console.log(volume);
       memo[volume.containerPath] = volume;
-      console.log(memo);
       return memo;
     }, {});
 
@@ -314,15 +312,12 @@ var TaskDetailComponent = React.createClass({
       return appVolumes[taskVolume.containerPath];
     });
 
-    console.log(volumes);
-
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
           activeTabId={activeTabId}
           tabs={tabs} >
         <TabPaneComponent
             id={tabs[0].id}>
-            <h3>Working Directory</h3>
             <TaskFileListComponent task={task} />
         </TabPaneComponent>
         <TabPaneComponent
