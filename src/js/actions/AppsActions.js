@@ -143,10 +143,6 @@ var AppsActions = {
   },
   applySettingsOnApp: function (appId, settings, isEditing = false,
       force = false) {
-    // Version key is not allowed and not needed on settings object
-    var clonedSettings = Object.assign({}, settings);
-    delete clonedSettings.version;
-    delete clonedSettings.fetch;
 
     // Used to mark current app config as stale
     AppDispatcher.dispatch({
@@ -161,7 +157,7 @@ var AppsActions = {
 
     this.request({
       method: "PUT",
-      data: clonedSettings,
+      data: settings,
       url: url
     })
       .success(function (app) {
