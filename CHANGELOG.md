@@ -10,7 +10,6 @@
 - \#3078 - Always show download button for logs
 - \#3077 - Future timestamps
 - \#3124 - Improve usability of labels filter dropdown
-- \#3192 - Adapt default Mem/CPU settings
 - \#3239 - Move docker volumes to volumes section
 
 ### Fixed
@@ -21,6 +20,9 @@
 - \#3102 - Updating environment variables sometimes deletes entries
 - \#3242 - Treat "value" attribute in server-side validation errors as general
   error
+
+## 0.15.6 - 2016-02-23
+- \#3192 - Adapt default Mem/CPU settings
 
 ## 0.15.5 - 2016-02-15
 ### Fixed
