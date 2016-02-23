@@ -7,13 +7,7 @@ import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import dockerRowSchemes from "../stores/schemes/dockerRowSchemes";
 import FormActions from "../actions/FormActions";
 import FormGroupComponent from "../components/FormGroupComponent";
-
-const portInputAttributes = {
-  min: 0,
-  max: 65535,
-  step: 1,
-  type: "number"
-};
+import PortInputAttributes from "../constants/PortInputAttributes";
 
 var ContainerSettingsComponent = React.createClass({
   displayName: "ContainerSettingsComponent",
@@ -86,7 +80,7 @@ var ContainerSettingsComponent = React.createClass({
                 fieldId={`${fieldsetId}.${i}.containerPort`}
                 label="Container Port"
                 value={row.containerPort}>
-              <input ref={`containerPort${i}`} {...portInputAttributes}/>
+              <input ref={`containerPort${i}`} {...PortInputAttributes}/>
             </FormGroupComponent>
           </div>
           <div className="col-sm-3">
@@ -97,7 +91,7 @@ var ContainerSettingsComponent = React.createClass({
                 fieldId={`${fieldsetId}.${i}.hostPort`}
                 label="Host Port"
                 value={row.hostPort}>
-              <input ref={`hostPort${i}`} {...portInputAttributes}/>
+              <input ref={`hostPort${i}`} {...PortInputAttributes}/>
             </FormGroupComponent>
           </div>
           <div className="col-sm-2">
@@ -108,7 +102,7 @@ var ContainerSettingsComponent = React.createClass({
                 fieldId={`${fieldsetId}.${i}.servicePort`}
                 label="Service Port"
                 value={row.servicePort}>
-              <input ref={`servicePort${i}`} {...portInputAttributes}/>
+              <input ref={`servicePort${i}`} {...PortInputAttributes}/>
             </FormGroupComponent>
           </div>
           <div className="col-sm-4">
