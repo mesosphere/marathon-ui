@@ -15,6 +15,8 @@ import HealthChecksComponent from "../components/HealthChecksComponent";
 import OptionalEnvironmentComponent
   from "../components/OptionalEnviromentComponent";
 import OptionalLabelsComponent from "../components/OptionalLabelsComponent";
+import OptionalPortsAndServiceDiscoveryComponent
+  from "../components/OptionalPortsAndServiceDiscoveryComponent";
 import OptionalSettingsComponent
   from "../components/OptionalSettingsComponent";
 import OptionalVolumesComponent
@@ -223,8 +225,19 @@ var AppConfigEditFormComponent = React.createClass({
         </div>
         <div className="row full-bleed">
           <CollapsiblePanelComponent
-            isOpen={this.fieldsHaveError({env: "env"})}
-            title="Environment variables">
+              isOpen=
+                {this.fieldsHaveError({portDefinitions: "portDefinitions"})}
+              title="Ports &amp; Service Discovery">
+            <OptionalPortsAndServiceDiscoveryComponent
+              errorIndices={state.errorIndices}
+              getErrorMessage={this.getErrorMessage}
+              fields={state.fields} />
+          </CollapsiblePanelComponent>
+        </div>
+        <div className="row full-bleed">
+          <CollapsiblePanelComponent
+              isOpen={this.fieldsHaveError({env: "env"})}
+              title="Environment variables">
             <OptionalEnvironmentComponent
               errorIndices={state.errorIndices}
               getErrorMessage={this.getErrorMessage}
