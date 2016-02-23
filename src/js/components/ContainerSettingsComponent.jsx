@@ -7,7 +7,6 @@ import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import dockerRowSchemes from "../stores/schemes/dockerRowSchemes";
 import FormActions from "../actions/FormActions";
 import FormGroupComponent from "../components/FormGroupComponent";
-import PortInputAttributes from "../constants/PortInputAttributes";
 
 var ContainerSettingsComponent = React.createClass({
   displayName: "ContainerSettingsComponent",
@@ -22,7 +21,6 @@ var ContainerSettingsComponent = React.createClass({
       dockerImage: "dockerImage",
       dockerNetwork: "dockerNetwork",
       dockerParameters: "dockerParameters",
-      dockerPortMappings: "dockerPortMappings",
       dockerPrivileged: "dockerPrivileged"
     })
   },
@@ -52,100 +50,6 @@ var ContainerSettingsComponent = React.createClass({
 
   handleSingleFieldUpdate: function (fieldId, value) {
     FormActions.update(fieldId, value);
-  },
-
-  getPortMappingRow: function (row, i, disableRemoveButton = false) {
-    var fieldsetId = ContainerSettingsComponent.fieldIds.dockerPortMappings;
-    var error = this.getError(fieldsetId, row.consecutiveKey);
-    var getErrorMessage = this.props.getErrorMessage;
-    var handleChange = this.handleChangeRow.bind(null, fieldsetId, i);
-    var handleAddRow =
-      this.handleAddRow.bind(null, fieldsetId, i + 1);
-    var handleRemoveRow =
-      this.handleRemoveRow.bind(null, fieldsetId, i);
-
-    var rowClassSet = classNames({
-      "has-error": !!error,
-      "duplicable-row": true
-    });
-
-    return (
-      <div key={row.consecutiveKey} className={rowClassSet}>
-        <fieldset className="row duplicable-row" onChange={handleChange}>
-          <div className="col-sm-3">
-            <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.containerPort`)
-                }
-                fieldId={`${fieldsetId}.${i}.containerPort`}
-                label="Container Port"
-                value={row.containerPort}>
-              <input ref={`containerPort${i}`} {...PortInputAttributes}/>
-            </FormGroupComponent>
-          </div>
-          <div className="col-sm-3">
-            <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.hostPort`)
-                }
-                fieldId={`${fieldsetId}.${i}.hostPort`}
-                label="Host Port"
-                value={row.hostPort}>
-              <input ref={`hostPort${i}`} {...PortInputAttributes}/>
-            </FormGroupComponent>
-          </div>
-          <div className="col-sm-2">
-            <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.servicePort`)
-                }
-                fieldId={`${fieldsetId}.${i}.servicePort`}
-                label="Service Port"
-                value={row.servicePort}>
-              <input ref={`servicePort${i}`} {...PortInputAttributes}/>
-            </FormGroupComponent>
-          </div>
-          <div className="col-sm-4">
-            <FormGroupComponent
-                errorMessage={
-                  getErrorMessage(`${fieldsetId}.${i}.protocol`)
-                }
-                fieldId={`${fieldsetId}.${i}.protocol`}
-                label="Protocol"
-                value={row.protocol}>
-              <select defaultValue={row.protocol} ref={`protocol${i}`}>
-                <option value="">Select</option>
-                <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
-                  {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
-                </option>
-                <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}>
-                  {ContainerConstants.PORTMAPPINGS.PROTOCOL.UDP}
-                </option>
-              </select>
-            </FormGroupComponent>
-            <DuplicableRowControls disableRemoveButton={disableRemoveButton}
-              handleAddRow={handleAddRow}
-              handleRemoveRow={handleRemoveRow} />
-          </div>
-        </fieldset>
-        {error}
-      </div>
-    );
-  },
-
-  getPortMappingRows: function () {
-    var rows = this.state.rows.dockerPortMappings;
-
-    if (rows == null) {
-      return null;
-    }
-
-    let disableRemoveButton =
-      this.hasOnlyOneSingleEmptyRow("dockerPortMappings");
-
-    return rows.map((row, i) => {
-      return this.getPortMappingRow(row, i, disableRemoveButton);
-    });
   },
 
   getParametersRow: function (row, i, disableRemoveButton = false) {
@@ -263,8 +167,6 @@ var ContainerSettingsComponent = React.createClass({
             onChange={this.handleSingleFieldUpdate}>
           <input type="checkbox" />
         </FormGroupComponent>
-        <h4>Port Mappings</h4>
-        <div className="duplicable-list">{this.getPortMappingRows()}</div>
         <h4>Parameters</h4>
         <div className="duplicable-list">{this.getParametersRows()}</div>
         <div>You can set your Docker volume settings below.</div>
