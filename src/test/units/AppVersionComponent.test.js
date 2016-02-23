@@ -173,4 +173,21 @@ describe("AppVersionComponent", function () {
       .to.equal("2015-06-29T12:57:02.269Z");
   });
 
+  it("has sorted env", function () {
+    this.model.env = {
+      "b": "B",
+      "c": "C",
+      "a": "A"
+    };
+    this.component = mount(<AppVersionComponent appVersion={this.model} />);
+    this.table = this.component.find("dl.dl-horizontal");
+    this.rows = this.table.children();
+    expect(this.rows.at(17).props().children)
+      .to.equal("a=A");
+    expect(this.rows.at(18).props().children)
+      .to.equal("b=B");
+    expect(this.rows.at(19).props().children)
+      .to.equal("c=C");
+  });
+
 });

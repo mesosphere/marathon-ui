@@ -183,7 +183,7 @@ var AppVersionComponent = React.createClass({
         Object.keys(appVersion.env).length === 0)
       ? <UnspecifiedNodeComponent />
       // Print environment variables as key value pairs like "key=value"
-      : Object.keys(appVersion.env).map(function (k) {
+      : Object.keys(appVersion.env).sort().map(function (k) {
         return <dd key={k}>{k + "=" + appVersion.env[k]}</dd>;
       });
 
