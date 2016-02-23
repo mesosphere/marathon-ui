@@ -26,7 +26,8 @@ const duplicableRowFields = Object.freeze([
   "dockerParameters",
   "env",
   "healthChecks",
-  "labels"
+  "labels",
+  "portDefinitions"
 ]);
 
 /**
@@ -81,6 +82,7 @@ const validationRules = {
   "instances": [AppFormValidators.instances],
   "labels": [AppFormValidators.labels],
   "mem": [AppFormValidators.mem],
+  "portDefinitions": [],
   "ports": [AppFormValidators.ports]
 };
 
@@ -110,6 +112,7 @@ const resolveFieldIdToAppKeyMap = {
   executor: "executor",
   labels: "labels",
   mem: "mem",
+  portDefinitions: "portDefinitions",
   ports: "ports",
   uris: "uris",
   user: "user"
@@ -185,7 +188,7 @@ const responseAttributePathToFieldIdMap = {
  * Not listed keys are taken as they are.
  */
 const resolveAppKeyToFieldIdMap = {
-  id: ["appId"],
+  "id": ["appId"],
   "container.docker.forcePullImage": ["dockerForcePullImage"],
   "container.docker.image": ["dockerImage"],
   "container.docker.network": ["dockerNetwork"],
@@ -195,8 +198,7 @@ const resolveAppKeyToFieldIdMap = {
   "container.volumes": [
     "containerVolumes",
     "localVolumes"
-  ],
-  "healthChecks": ["healthChecks"]
+  ]
 };
 
 // Validate all fields in form store and update validationErrorIndices.
