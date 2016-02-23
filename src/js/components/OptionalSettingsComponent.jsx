@@ -15,7 +15,6 @@ var OptionalSettingsComponent = React.createClass({
   statics: {
     fieldIds: Object.freeze({
       executor: "executor",
-      ports: "ports",
       uris: "uris",
       constraints: "constraints",
       acceptedResourceRoles: "acceptedResourceRoles",
@@ -39,8 +38,6 @@ var OptionalSettingsComponent = React.createClass({
       "Valid constraint format is \"field:operator[:value]\".";
     var executorHelp = "Executor must be the string '//cmd', a string " +
       "containing only single slashes ('/'), or blank.";
-    var portsHelp = "Comma-separated list of numbers. 0's (zeros) assign " +
-      "random ports. (Default: one random port)";
 
     return (
       <div>
@@ -51,15 +48,6 @@ var OptionalSettingsComponent = React.createClass({
             label="Executor"
             onChange={this.handleFieldUpdate}
             value={fields[fieldIds.executor]}>
-          <input />
-        </FormGroupComponent>
-        <FormGroupComponent
-            errorMessage={props.getErrorMessage(fieldIds.ports)}
-            fieldId={fieldIds.ports}
-            help={portsHelp}
-            label="Ports"
-            onChange={this.handleFieldUpdate}
-            value={fields[fieldIds.ports]}>
           <input />
         </FormGroupComponent>
         <FormGroupComponent
