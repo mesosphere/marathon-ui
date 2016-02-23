@@ -96,80 +96,84 @@ describe("AppVersionComponent", function () {
     expect(this.rows.at(13).text().trim()).to.equal("Unspecified");
   });
 
+  it("has correct volumes", function () {
+    expect(this.rows.at(15).text().trim()).to.equal("Unspecified");
+  });
+
   it("has correct cpus", function () {
-    expect(this.rows.at(15).text().trim()).to.equal("0.1");
+    expect(this.rows.at(17).text().trim()).to.equal("0.1");
   });
 
   it("has correct environment", function () {
-    expect(this.rows.at(17).text().trim()).to.equal("Unspecified");
-  });
-
-  it("has correct executor", function () {
     expect(this.rows.at(19).text().trim()).to.equal("Unspecified");
   });
 
+  it("has correct executor", function () {
+    expect(this.rows.at(21).text().trim()).to.equal("Unspecified");
+  });
+
   it("has correct health checks", function () {
-    var healthChecks = this.rows.at(21).text().trim();
+    var healthChecks = this.rows.at(23).text().trim();
     expect(healthChecks).to.equal(
       JSON.stringify(this.model.healthChecks, null, 2)
     );
   });
 
   it("has correct number of instances", function () {
-    expect(this.rows.at(23).text().trim()).to.equal("14");
+    expect(this.rows.at(25).text().trim()).to.equal("14");
   });
 
   it("has correct ip address", function () {
-    var ipAddress = this.rows.at(25).text().trim();
+    var ipAddress = this.rows.at(27).text().trim();
     expect(ipAddress).to.equal(
       JSON.stringify(this.model.ipAddress, null, 2)
     );
   });
 
   it("has correct amount of memory", function () {
-    var children = this.rows.at(27).props().children;
+    var children = this.rows.at(29).props().children;
     expect(children[0]).to.equal(16.0);
     expect(children[2]).to.equal("MiB");
   });
 
   it("has correct amount of disk space", function () {
-    var children = this.rows.at(29).props().children;
+    var children = this.rows.at(31).props().children;
     expect(children[0]).to.equal(0.0);
     expect(children[2]).to.equal("MiB");
   });
 
   it("has correct ports", function () {
-    var children = this.rows.at(31).props().children;
+    var children = this.rows.at(33).props().children;
     expect(children).to.equal("10000, 10001");
   });
 
   it("has correct backoff factor", function () {
-    var children = this.rows.at(33).props().children;
+    var children = this.rows.at(35).props().children;
     expect(children[0]).to.equal(1.15);
   });
 
   it("has correct backoff", function () {
-    var children = this.rows.at(35).props().children;
+    var children = this.rows.at(37).props().children;
     expect(children[0]).to.equal(1);
     expect(children[2]).to.equal("seconds");
   });
 
   it("has correct max launch delay", function () {
-    var children = this.rows.at(37).props().children;
+    var children = this.rows.at(39).props().children;
     expect(children[0]).to.equal(3600);
     expect(children[2]).to.equal("seconds");
   });
 
   it("has correct URIs", function () {
-    expect(this.rows.at(39).text().trim()).to.equal("Unspecified");
+    expect(this.rows.at(41).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct User", function () {
-    expect(this.rows.at(41).props().children[0]).to.equal("testuser");
+    expect(this.rows.at(43).props().children[0]).to.equal("testuser");
   });
 
   it("has correct version", function () {
-    expect(this.rows.at(43).props().children[0])
+    expect(this.rows.at(45).props().children[0])
       .to.equal("2015-06-29T12:57:02.269Z");
   });
 

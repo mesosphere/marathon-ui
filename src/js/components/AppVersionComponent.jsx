@@ -167,9 +167,22 @@ var AppVersionComponent = React.createClass({
         );
       });
 
-    var containerNode = (appVersion.container == null)
-      ? <UnspecifiedNodeComponent />
-      : getHighlightNode(appVersion.container);
+    var containerNode = <UnspecifiedNodeComponent />;
+    var volumesNode = <UnspecifiedNodeComponent />;
+
+    if (appVersion.container != null) {
+      containerNode = getHighlightNode(Object.keys(appVersion.container)
+        .reduce((memo,key) => {
+          if (key !== "volumes") {
+            memo[key] = appVersion.container[key];
+          }
+          return memo;
+        }, {}));
+
+      if (appVersion.container.volumes != null) {
+        volumesNode = getHighlightNode(appVersion.container.volumes);
+      }
+    }
 
     var dependenciesNode = (appVersion.dependencies.length === 0)
       ? <UnspecifiedNodeComponent />
@@ -247,6 +260,8 @@ var AppVersionComponent = React.createClass({
           {acceptedResourceRoles}
           <dt>Container</dt>
           {containerNode}
+          <dt>Volumes</dt>
+          {volumesNode}
           <dt>CPUs</dt>
           {invalidateValue(appVersion.cpus)}
           <dt>Environment</dt>
