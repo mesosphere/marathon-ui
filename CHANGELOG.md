@@ -11,6 +11,7 @@
 - \#3077 - Future timestamps
 - \#3124 - Improve usability of labels filter dropdown
 - \#3239 - Move docker volumes to volumes section
+- \#3269 - Sort ENV variables in application details page
 
 ### Fixed
 - \#3133 - Interrupted scaling operations can leave the health bar in an
