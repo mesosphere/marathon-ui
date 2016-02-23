@@ -152,75 +152,75 @@ var AppConfigEditFormComponent = React.createClass({
     return (
       <div>
         <FormGroupComponent
-          errorMessage={this.getErrorMessage("appId")}
-          fieldId="appId"
-          value={state.fields.appId}
-          label="ID"
-          onChange={this.handleFieldUpdate}>
-          <input ref="appId"/>
+            errorMessage={this.getErrorMessage("appId")}
+            fieldId="appId"
+            value={state.fields.appId}
+            label="ID"
+            onChange={this.handleFieldUpdate}>
+          <input ref="appId" />
         </FormGroupComponent>
 
         <div className="row">
           <div className="col-sm-3">
             <FormGroupComponent
-              errorMessage={this.getErrorMessage("cpus")}
-              fieldId="cpus"
-              label="CPUs"
-              value={state.fields.cpus}
-              onChange={this.handleFieldUpdate}>
-              <input min="0" step="any" type="number"/>
+                errorMessage={this.getErrorMessage("cpus")}
+                fieldId="cpus"
+                label="CPUs"
+                value={state.fields.cpus}
+                onChange={this.handleFieldUpdate}>
+              <input min="0" step="any" type="number" />
             </FormGroupComponent>
           </div>
           <div className="col-sm-3">
             <FormGroupComponent
-              fieldId="mem"
-              label="Memory (MiB)"
-              errorMessage={this.getErrorMessage("mem")}
-              value={state.fields.mem}
-              onChange={this.handleFieldUpdate}>
-              <input min="0" step="any" type="number"/>
+                fieldId="mem"
+                label="Memory (MiB)"
+                errorMessage={this.getErrorMessage("mem")}
+                value={state.fields.mem}
+                onChange={this.handleFieldUpdate}>
+              <input min="0" step="any" type="number" />
             </FormGroupComponent>
           </div>
           <div className="col-sm-3">
             <FormGroupComponent
-              fieldId="disk"
-              label="Disk Space (MiB)"
-              errorMessage={this.getErrorMessage("disk")}
-              value={state.fields.disk}
-              onChange={this.handleFieldUpdate}>
-              <input min="0" step="any" type="number"/>
+                fieldId="disk"
+                label="Disk Space (MiB)"
+                errorMessage={this.getErrorMessage("disk")}
+                value={state.fields.disk}
+                onChange={this.handleFieldUpdate}>
+              <input min="0" step="any" type="number" />
             </FormGroupComponent>
           </div>
           <div className="col-sm-3">
             <FormGroupComponent
-              fieldId="instances"
-              label="Instances"
-              errorMessage={this.getErrorMessage("instances")}
-              value={state.fields.instances}
-              onChange={this.handleFieldUpdate}>
-              <input min="0" step="1" type="number"/>
+                fieldId="instances"
+                label="Instances"
+                errorMessage={this.getErrorMessage("instances")}
+                value={state.fields.instances}
+                onChange={this.handleFieldUpdate}>
+              <input min="0" step="1" type="number" />
             </FormGroupComponent>
           </div>
         </div>
         <FormGroupComponent
-          errorMessage={this.getErrorMessage("cmd")}
-          fieldId="cmd"
-          label="Command"
-          help="May be left blank if a container image is supplied"
-          value={state.fields.cmd}
-          onChange={this.handleFieldUpdate}>
-          <textarea style={{resize: "vertical"}}/>
+            errorMessage={this.getErrorMessage("cmd")}
+            fieldId="cmd"
+            label="Command"
+            help="May be left blank if a container image is supplied"
+            value={state.fields.cmd}
+            onChange={this.handleFieldUpdate}>
+          <textarea style={{resize: "vertical"}} />
         </FormGroupComponent>
 
         <div className="row full-bleed">
           <CollapsiblePanelComponent
-            isOpen=
-              {this.fieldsHaveError(ContainerSettingsComponent.fieldIds)}
-            title="Docker container settings">
+              isOpen=
+                {this.fieldsHaveError(ContainerSettingsComponent.fieldIds)}
+              title="Docker container settings">
             <ContainerSettingsComponent
               errorIndices={state.errorIndices}
               fields={state.fields}
-              getErrorMessage={this.getErrorMessage}/>
+              getErrorMessage={this.getErrorMessage} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed">
@@ -241,28 +241,28 @@ var AppConfigEditFormComponent = React.createClass({
             <OptionalEnvironmentComponent
               errorIndices={state.errorIndices}
               getErrorMessage={this.getErrorMessage}
-              fields={state.fields}/>
+              fields={state.fields} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed">
           <CollapsiblePanelComponent
-            isOpen={this.fieldsHaveError({labels: "labels"})}
-            title="Labels">
+              isOpen={this.fieldsHaveError({labels: "labels"})}
+              title="Labels">
             <OptionalLabelsComponent
               errorIndices={state.errorIndices}
               getErrorMessage={this.getErrorMessage}
-              fields={state.fields}/>
+              fields={state.fields} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed reduced-padding">
           <CollapsiblePanelComponent
-            isOpen=
-              {this.fieldsHaveError({healthChecks: "healthChecks"})}
-            title="Health checks">
+              isOpen=
+                {this.fieldsHaveError({healthChecks: "healthChecks"})}
+              title="Health checks">
             <HealthChecksComponent
               errorIndices={state.errorIndices}
               fields={state.fields}
-              getErrorMessage={this.getErrorMessage}/>
+              getErrorMessage={this.getErrorMessage} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed">
@@ -277,13 +277,13 @@ var AppConfigEditFormComponent = React.createClass({
         </div>
         <div className="row full-bleed">
           <CollapsiblePanelComponent
-            isOpen=
-              {this.fieldsHaveError(OptionalSettingsComponent.fieldIds)}
-            title="Optional settings">
+              isOpen=
+                {this.fieldsHaveError(OptionalSettingsComponent.fieldIds)}
+              title="Optional settings">
             <OptionalSettingsComponent
               errorIndices={state.errorIndices}
               fields={state.fields}
-              getErrorMessage={this.getErrorMessage}/>
+              getErrorMessage={this.getErrorMessage} />
           </CollapsiblePanelComponent>
         </div>
       </div>
