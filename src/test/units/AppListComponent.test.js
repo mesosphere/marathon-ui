@@ -58,7 +58,13 @@ describe("AppListComponent", function () {
         cpus: 1
       },
       {
-        id: "/group-with-long-name/group-with-long-name-/" +
+        id: "/fuzzy/apps/app",
+        instances: 1,
+        mem: 16,
+        cpus: 1
+      },
+      {
+        id: "/group-with-long-name/group-with-long-name/" +
         "group-with-long-name/group-with-long-name/" +
         "group-with-long-name/app-omega",
         instances: 1,
@@ -111,9 +117,9 @@ describe("AppListComponent", function () {
 
   // The following cannot use mount() due to the BreadcrumbComponent's Link
   // (see Breadcrumb Component tests)
-  describe("when the user enters a text filter", function () {
+  describe("when the user applies a text filter", function () {
 
-    it("displays the exact search result match", function () {
+    it("displays the exact matching app", function () {
       var context = {
         router: {
           getCurrentQuery: function () {
@@ -139,7 +145,7 @@ describe("AppListComponent", function () {
       this.component.instance().componentWillUnmount();
     });
 
-    it("handles fuzzy search input", function () {
+    it("handles fuzzy app search input", function () {
       var context = {
         router: {
           getCurrentQuery: function () {
@@ -166,6 +172,64 @@ describe("AppListComponent", function () {
       this.component.instance().componentWillUnmount();
     });
 
+    it("displays the exact matching group", function () {
+      var context = {
+        router: {
+          getCurrentQuery: function () {
+            return {
+              filterText: "apps"
+            };
+          }
+        }
+      };
+
+      this.component = shallow(
+        <AppListComponent currentGroup="/" />,
+        {context}
+      );
+
+      var appNames = this.component
+        .find(AppListItemComponent)
+        .map(app => app.props().model.id);
+
+      expect(appNames).to.deep.equal([
+        "/apps",
+        "/fuzzy/apps",
+        "/apps/sleep",
+        "/fuzzy/apps/app",
+        "/fuzzy/apps/sleepz",
+      ]);
+      this.component.instance().componentWillUnmount();
+    });
+
+    it("handles fuzzy group search input", function () {
+      var context = {
+        router: {
+          getCurrentQuery: function () {
+            return {
+              filterText: "fuzz"
+            };
+          }
+        }
+      };
+
+      this.component = shallow(
+        <AppListComponent currentGroup="/" />,
+        {context}
+      );
+
+      var appNames = this.component
+        .find(AppListItemComponent)
+        .map(app => app.props().model.id);
+
+      expect(appNames).to.deep.equal([
+        "/fuzzy",
+        "/fuzzy/apps/app",
+        "/fuzzy/apps/sleepz"
+      ]);
+      this.component.instance().componentWillUnmount();
+    });
+
     it("shows the right result for deeply nested paths", function () {
       var context = {
         router: {
@@ -187,7 +251,7 @@ describe("AppListComponent", function () {
         .map(app => app.props().model.id);
 
       expect(appNames).to.deep.equal(["/group-with-long-name/" +
-      "group-with-long-name-/group-with-long-name/group-with-long-name/" +
+      "group-with-long-name/group-with-long-name/group-with-long-name/" +
       "group-with-long-name/app-omega"]);
       this.component.instance().componentWillUnmount();
     });
@@ -213,15 +277,30 @@ describe("AppListComponent", function () {
         .map(app => app.props().model.id);
 
       expect(appNames).to.deep.equal([
+        // group, score: 0.134
+        "/apps",
+        // group, score:0.10579545454545455
+        "/fuzzy/apps",
+        // app, score:0.12
+        "/fuzzy/apps/app",
+        // app, score:0.10833333333333332
         "/app-beta",
+        // app, score:0.10533333333333333
         "/app-exact",
+        // app, score:0.10533333333333333
         "/app-alpha",
+        // app, score:0.07369444444444445
         "/group-alpha/app-2",
+        // app, score:0.07369444444444445
         "/group-alpha/app-1",
+        // app, score:0.06234482758620689
         "/group-alpha/group-beta/app-3",
+        // app, score:0.04454545454545455
         "/apps/sleep",
+        // app, score:0.035
         "/fuzzy/apps/sleepz",
-        "/group-with-long-name/group-with-long-name-/group-with-long-name/" +
+        // app, score:0.023078260869565215
+        "/group-with-long-name/group-with-long-name/group-with-long-name/" +
           "group-with-long-name/group-with-long-name/app-omega"
       ]);
       this.component.instance().componentWillUnmount();
