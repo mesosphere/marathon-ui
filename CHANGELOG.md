@@ -6,6 +6,7 @@
 - \#2049 - Added JSON editor to application modal
 - \#3155 - Add support for Local Volumes in Create/Edit modal
 - \#3157 - Filter apps by attached volumes
+- \#3127 - Show groups as part of search results
 
 ### Changed
 - \#3078 - Always show download button for logs
