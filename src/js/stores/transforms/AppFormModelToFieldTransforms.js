@@ -90,6 +90,9 @@ const AppFormModelToFieldTransforms = {
   portDefinitions: portDefinition => {
     return portDefinition
       .map((row, i) => {
+        if (row.containerPort != null) {
+          row.port = row.containerPort;
+        }
         row.consecutiveKey = i;
         return row;
       });

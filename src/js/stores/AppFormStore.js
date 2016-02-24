@@ -9,6 +9,7 @@ import AppFormTransforms from "./transforms/AppFormTransforms";
 import AppFormModelPostProcess from "./transforms/AppFormModelPostProcess";
 import AppFormValidators from "./validators/AppFormValidators";
 import AppsStore from "./AppsStore";
+import ContainerConstants from "../constants/ContainerConstants";
 import AppsEvents from "../events/AppsEvents";
 import FormEvents from "../events/FormEvents";
 
@@ -80,7 +81,8 @@ const validationRules = {
   ],
   "instances": [AppFormValidators.instances],
   "labels": [AppFormValidators.labels],
-  "mem": [AppFormValidators.mem]
+  "mem": [AppFormValidators.mem],
+  // "portDefinitions": []
 };
 
 /**
@@ -187,7 +189,7 @@ const resolveAppKeyToFieldIdMap = {
   "container.docker.forcePullImage": ["dockerForcePullImage"],
   "container.docker.image": ["dockerImage"],
   "container.docker.network": ["dockerNetwork"],
-  "container.docker.portMappings": ["dockerPortMappings"],
+  "container.docker.portMappings": ["portDefinitions"],
   "container.docker.parameters": ["dockerParameters"],
   "container.docker.privileged": ["dockerPrivileged"],
   "container.volumes": [
@@ -334,6 +336,14 @@ function populateFieldsFromModel(app, fields) {
   // so it's excluded.
   var paths = Util.detectObjectPaths(app, null, ["env", "labels"]);
 
+  var dockerNetwork =
+    objectPath.get(app, "container.docker.network");
+
+  if (dockerNetwork != null &&
+      dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
+    paths = paths.filter(appKey => appKey !== "portDefinitions");
+  }
+
   paths.forEach(appKey => {
     var fieldIdArray = resolveAppKeyToFieldIdMap[appKey];
     if (fieldIdArray == null) {
@@ -459,8 +469,14 @@ var AppFormStore = Util.extendObject(EventEmitter.prototype, {
       }
     });
 
-    if (objectPath.get(app, "container.docker.portMappings") != null) {
+    var dockerNetwork =
+      objectPath.get(app, "container.docker.network");
+
+    if (dockerNetwork != null &&
+        dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
       delete app.portDefinitions;
+    } else if (objectPath.get(app, "container.docker.portMappings") != null) {
+      delete app.container.docker.portMappings;
     }
 
     return app;
