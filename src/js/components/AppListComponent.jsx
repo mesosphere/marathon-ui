@@ -21,6 +21,7 @@ import AppsEvents from "../events/AppsEvents";
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 import Util from "../helpers/Util";
+import SortUtil from "../helpers/SortUtil";
 
 function getGroupStatus(groupStatus, appStatus) {
   if (appStatus === AppStatus.DEPLOYING ||
@@ -188,7 +189,42 @@ var AppListComponent = React.createClass({
     });
   },
 
-  filterNodes: function (nodesSequence, filterCounts) {
+  getGroupsFromApps: function (apps) {
+    var groups = [];
+
+    apps.forEach(app => {
+      let pathParts = app.id.split("/");
+
+      // Remove app name
+      pathParts.pop();
+
+      // Create groups
+      pathParts.forEach((pathPart, index, pathParts) => {
+        // We can ignore the first part as all app/group ids begin with a slash
+        if (index === 0) {
+          return;
+        }
+
+        let groupId = pathParts.slice(0, index + 1).join("/");
+        let group = groups.find(item => {
+          return item.id === groupId;
+        });
+
+        if (group == null) {
+          group = initGroupNode(groupId, app);
+          groups.push(group);
+        } else {
+          updateGroupNode(group, app);
+        }
+      });
+
+    });
+
+    return groups;
+  },
+
+  filterItems: function (items, filterCounts) {
+
     var props = this.props;
     var currentGroup = props.currentGroup;
     var filters = this.getQueryParamObject();
@@ -200,22 +236,28 @@ var AppListComponent = React.createClass({
     var filterVolumes = filters[FilterTypes.VOLUMES];
 
     if (filterText != null && filterText !== "") {
-      nodesSequence = nodesSequence
-        .filter(app => {
-          return score(app.id, filterText) > 0.004;
-        });
+      items = items.filter(item => {
+        var id = item.id;
+        if (item.isGroup) {
+          id = item.id.split("/").pop();
+        }
+
+        return score(id, filterText) > 0.004;
+      });
 
     } else if (currentGroup !== "/") {
-      nodesSequence = nodesSequence
-        .filter(app => app.id.startsWith(currentGroup));
+      items = items.filter(app => app.id.startsWith(currentGroup));
     }
 
-    nodesSequence.each(app => {
-      filterCounts.appsStatusesCount[app.status]++;
-      if (app.container != null && app.container.volumes != null) {
+    items.each(item => {
+      if (item.isGroup) {
+        return;
+      }
+      filterCounts.appsStatusesCount[item.status]++;
+      if (item.container != null && item.container.volumes != null) {
         filterCounts.appsVolumesCount++;
       }
-      app.health.forEach(health => {
+      item.health.forEach(health => {
         if (health.quantity) {
           filterCounts.appsHealthCount[health.state]++;
         }
@@ -223,9 +265,10 @@ var AppListComponent = React.createClass({
     });
 
     if (filterLabels != null && filterLabels.length > 0) {
-      nodesSequence = nodesSequence.filter(app => {
-        let labels = app.labels;
-        if (labels == null || Object.keys(labels).length === 0) {
+      items = items.filter(item => {
+        let labels = item.labels;
+        if (item.isGroup || labels == null ||
+            Object.keys(labels).length === 0) {
           return false;
         }
 
@@ -237,24 +280,24 @@ var AppListComponent = React.createClass({
     }
 
     if (filterStatus != null && filterStatus.length > 0) {
-      nodesSequence = nodesSequence.filter(app => {
-        if (app.status == null) {
+      items = items.filter(item => {
+        if (item.isGroup || item.status == null) {
           return false;
         }
-        let appStatus = app.status.toString();
+        let appStatus = item.status.toString();
 
         return filterStatus.some(status => appStatus === status);
       });
     }
 
     if (filterHealth != null && filterHealth.length > 0) {
-      nodesSequence = nodesSequence.filter(app => {
-        if (app.health == null) {
+      items = items.filter(item => {
+        if (item.isGroup || item.health == null) {
           return false;
         }
 
         return filterHealth.some(healthFilter => {
-          return app.health.some(health =>
+          return item.health.some(health =>
             health.state === healthFilter && health.quantity > 0
           );
         });
@@ -262,8 +305,8 @@ var AppListComponent = React.createClass({
     }
 
     if (filterVolumes != null) {
-      nodesSequence = nodesSequence.filter(app => {
-        if (app.container == null || app.container.volumes == null) {
+      items = items.filter(item => {
+        if (item.container == null || item.container.volumes == null) {
           return false;
         }
 
@@ -271,60 +314,61 @@ var AppListComponent = React.createClass({
       });
     }
 
-    return nodesSequence;
+    return items;
   },
 
-  getGroupedNodes: function (apps, filterCounts) {
-    var currentGroup = this.props.currentGroup;
+  groupItems: function (items, currentGroup, filterCounts) {
+    //  Exclude items that are not in the current group
+    var itemsInCurrentGroup = items.filter(
+      item => item.id.startsWith(currentGroup)
+    );
 
-    var appsInGroup = apps.filter(app => app.id.startsWith(currentGroup));
-
-    appsInGroup.forEach(app => {
-      filterCounts.appsStatusesCount[app.status]++;
-      if (app.container != null && app.container.volumes != null) {
+    itemsInCurrentGroup.forEach(item => {
+      if (item.isGroup) {
+        return;
+      }
+      filterCounts.appsStatusesCount[item.status]++;
+      if (item.container != null && item.container.volumes != null) {
         filterCounts.appsVolumesCount++;
       }
-      app.health.forEach(health => {
+      item.health.forEach(health => {
         if (health.quantity) {
           filterCounts.appsHealthCount[health.state]++;
         }
       });
     });
 
-    return appsInGroup
-      .reduce((memo, app) => {
-        let relativePath = app.id.substring(currentGroup.length);
-        let pathParts = relativePath.split("/");
-        let isGroup = pathParts.length > 1;
+    // Exclude items that are in a sub group
+    itemsInCurrentGroup = itemsInCurrentGroup.filter(item => {
+      let relativePath = item.id.substring(currentGroup.length);
+      let pathParts = relativePath.split("/");
+      return pathParts.length < 2;
+    });
 
-        if (!isGroup) {
-          memo.push(app);
-        } else {
-          let groupId = currentGroup + pathParts[0];
-          let group = memo.find(item => {
-            return item.id === groupId;
-          });
+    return itemsInCurrentGroup;
+  },
 
-          if (group == null) {
-            group = initGroupNode(groupId, app);
-            memo.push(group);
-          } else {
-            updateGroupNode(group, app);
-          }
-        }
-        return memo;
-      }, []);
+  sortItems: function (items, compareFunction) {
+    // Hoist groups to top and sort items using the compare function
+    return items.sort((a, b) => {
+      var score = 0;
+
+      if (a.isGroup && !b.isGroup) {
+        score = -1;
+      } else if (b.isGroup && !a.isGroup) {
+        score =  1;
+      }
+
+      return score + compareFunction(a, b) / 2;
+    });
   },
 
   getAppListItems: function () {
+    var appListViewType = AppListViewTypes.GROUPED_LIST;
+    var props = this.props;
     var state = this.state;
     var sortKey = state.sortKey;
-    var props = this.props;
-    var appListViewType = AppListViewTypes.GROUPED_LIST;
-
-    var sortDirection = state.sortDescending ? 1 : -1;
-
-    var nodesSequence;
+    var sortDirection = state.sortDescending ? -1 : 1;
 
     var filterCounts = {
       appsStatusesCount: getInitialFilterCounts(AppStatus),
@@ -332,56 +376,47 @@ var AppListComponent = React.createClass({
       appsVolumesCount: 0
     };
 
-    // Global search view - only display filtered apps
+    var items = lazy(state.apps.concat(this.getGroupsFromApps(state.apps)));
+
     if (this.hasFilters()) {
+      // Global search view
       appListViewType = AppListViewTypes.APP_LIST;
-
-      nodesSequence = this.filterNodes(lazy(state.apps), filterCounts)
-        .sortBy((app) => {
-          return app[sortKey];
-        }, state.sortDescending);
-
-      let filterText = this.getQueryParamValue(FilterTypes.TEXT);
-      if (filterText != null && sortKey === "id") {
-        nodesSequence = nodesSequence.sort((a, b) => {
-          return score(a.id, filterText) > score(b.id, filterText)
-            ? -1
-            : 1;
-        });
-      }
-
-    // Grouped node view
-    } else {
-      nodesSequence = lazy(this.getGroupedNodes(state.apps, filterCounts))
-        // Alphabetically presort
-        .sortBy((app) => {
-          return app.id;
-        }, state.sortDescending)
-        // Hoist groups to top of the app list and sort everything by sortKey
-        .sort((a, b) => {
-          if (a.isGroup && !b.isGroup) {
-            return -1;
-          } else if (b.isGroup && !a.isGroup) {
-            return 1;
-          } else {
-            return a[sortKey] > b[sortKey]
-              ? -1 * sortDirection
-              : 1 * sortDirection;
-          }
-        });
+      items = this.filterItems(items, filterCounts);
+    }
+    else {
+      // Grouped view
+      items = this.groupItems(items,  props.currentGroup, filterCounts);
     }
 
-    var appListItems = nodesSequence
-      .map(app => {
-        return (
-          <AppListItemComponent key={app.id}
-            model={app}
-            currentGroup={props.currentGroup}
-            sortKey={sortKey}
-            viewType={appListViewType} />
-        );
-      })
-      .value();
+    let filterText = this.getQueryParamValue(FilterTypes.TEXT);
+    if (filterText != null && sortKey === "id") {
+      items = this.sortItems(items, (itemA, itemB) => {
+        var scoreItemA = score(itemA.id, filterText);
+        var scoreItemB = score(itemB.id, filterText);
+        if (scoreItemA < scoreItemB) {
+          return 1;
+        }
+        if (scoreItemA > scoreItemB) {
+          return -1;
+        }
+        return 0;
+      });
+    } else {
+      items = this.sortItems(items,
+        (a,b) => SortUtil.compareValues(a[sortKey],b[sortKey]) * sortDirection
+      );
+    }
+
+    var appListItems = items.map(app => {
+      return (
+        <AppListItemComponent key={app.id}
+          model={app}
+          currentGroup={props.currentGroup}
+          sortKey={sortKey}
+          viewType={appListViewType}/>
+      );
+    }).value();
+
     AppsActions.emitFilterCounts(filterCounts);
 
     return appListItems;
