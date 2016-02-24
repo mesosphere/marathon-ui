@@ -14,7 +14,8 @@ var BreadcrumbComponent = React.createClass({
   propTypes: {
     appId: React.PropTypes.string,
     groupId: React.PropTypes.string,
-    taskId: React.PropTypes.string
+    taskId: React.PropTypes.string,
+    volumeId: React.PropTypes.string
   },
 
   getInitialState: function () {
@@ -61,6 +62,7 @@ var BreadcrumbComponent = React.createClass({
   didPropsChange: function (nextProps) {
     return nextProps.appId !== this.props.appId ||
       nextProps.groupId !== this.props.groupId ||
+      nextProps.volumeId !== this.props.volumeId ||
       nextProps.taskId !== this.props.taskId;
   },
 
@@ -213,6 +215,27 @@ var BreadcrumbComponent = React.createClass({
     );
   },
 
+  getVolumeLink: function () {
+    var appId = this.props.appId;
+    var volumeId = this.props.volumeId;
+    if (volumeId == null || appId == null) {
+      return null;
+    }
+
+    var params = {
+      appId: encodeURIComponent(appId),
+      volumeId: volumeId
+    };
+
+    return (
+      <li>
+        <Link to="volumeView" params={params}>
+          {volumeId}
+        </Link>
+      </li>
+    );
+  },
+
   render: function () {
     var classSet = classNames({
       breadcrumb: true,
@@ -227,6 +250,7 @@ var BreadcrumbComponent = React.createClass({
         {this.getGroupLinks()}
         {this.getAppLink()}
         {this.getTaskLink()}
+        {this.getVolumeLink()}
       </ol>
     );
   }

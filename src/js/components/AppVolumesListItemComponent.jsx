@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React from "react/addons";
+import {Link} from "react-router";
 
 var AppVolumesListItemComponent = React.createClass({
   displayName: "AppVolumesListItemComponent",
@@ -36,10 +37,17 @@ var AppVolumesListItemComponent = React.createClass({
       "cell-highlighted": sortKey === "mode"
     });
 
+    var params = {
+      appId: encodeURIComponent(volume.appId),
+      volumeId: volume.persistenceId
+    };
+
     return (
       <tr>
         <td className={idClassSet}>
-          {volume.id}
+          <Link to="volumeView" params={params}>
+            {volume.persistenceId}
+          </Link>
         </td>
         <td className={typeClassSet}>
           {volume.type}

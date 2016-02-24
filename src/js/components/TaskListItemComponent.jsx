@@ -154,9 +154,16 @@ var TaskListItemComponent = React.createClass({
     var task = this.props.task;
     var sortKey = this.props.sortKey;
     var hasHealth = !!this.props.hasHealth;
-    var version = task.version == null
-      ? null
-      : new Date(task.version).toISOString();
+    var version;
+    var endpoints;
+    var status = "Waiting";
+
+    if (task.status != null) {
+      var version = new Date(task.version).toISOString();
+      var endpoints = this.getEndpoints();
+      var status = task.status;
+    }
+
     var taskId = task.id;
     var taskURI = "#apps/" +
       encodeURIComponent(this.props.appId) +
@@ -218,14 +225,14 @@ var TaskListItemComponent = React.createClass({
         <td className={idClassSet}>
           <a href={taskURI}>{taskId}</a>
           <br />
-          {this.getEndpoints()}
+          {endpoints}
         </td>
         <td className={healthClassSet} title={this.props.taskHealthMessage}>
           {this.props.taskHealthMessage}
         </td>
         <td className={statusCellClassSet}>
           <span className={statusClassSet}>
-            {task.status}
+            {status}
           </span>
         </td>
         <td className="text-center">
@@ -236,7 +243,7 @@ var TaskListItemComponent = React.createClass({
         </td>
         <td className={versionClassSet}>
           <span title={version}>
-            {new Moment(version).fromNow()}
+            {version && new Moment(version).fromNow() || "---"}
           </span>
         </td>
         <td className={updatedAtClassSet}>

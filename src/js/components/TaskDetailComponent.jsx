@@ -246,6 +246,7 @@ var TaskDetailComponent = React.createClass({
 
   getTabs: function (task) {
     var appId = this.props.appId;
+    var app = AppsStore.getCurrentApp(appId);
 
     var activeTabId =
       `apps/${encodeURIComponent(appId)}/${encodeURIComponent(task.id)}`;
@@ -271,46 +272,27 @@ var TaskDetailComponent = React.createClass({
       activeTabId = activeTab;
     }
 
-    task.volumes = [
-      {
-        "containerPath": "foo",
-        "persistenceId": "appid.container.random"
-      },
-      {
-        "containerPath": "bar",
-        "persistenceId": "appid.bar.random"
-      }
-    ];
+    var volumes = [];
 
-    var appVolumes = [
-      {
-        "containerPath": "foo",
-        "mode": "RW",
-        "persistent": {
-          "size": 1024
-        }
-      },
-      {
-        "containerPath": "bar",
-        "mode": "RW",
-        "persistent": {
-          "size": 1024
-        }
-      }
-    ];
-
-    appVolumes = appVolumes.reduce((memo, volume) => {
-      if (volume.containerPath == null) {
-        return memo;
-      }
-      memo[volume.containerPath] = volume;
-      return memo;
-    }, {});
-
-    var volumes = task.volumes.map(taskVolume => {
-      appVolumes[taskVolume.containerPath].id = taskVolume.persistenceId;
-      return appVolumes[taskVolume.containerPath];
-    });
+    if (task.localVolumes != null) {
+      volumes = task.localVolumes
+        .map(volume => {
+          if (app.container == null || app.container.volumes == null) {
+            return null;
+          }
+          app.container.volumes.forEach(function (volumeConfig) {
+            if (volumeConfig.containerPath &&
+                volumeConfig.containerPath === volume.containerPath) {
+              Object.keys(volumeConfig).forEach(key =>
+                volume[key] = volumeConfig[key]
+              );
+              volume.appId = app.id;
+              volume.taskId = task.id;
+            }
+          });
+          return volume;
+        });
+    }
 
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"

@@ -12,6 +12,8 @@ var routes = (
     <Route name="group" path="group/:groupId" handler={TabPanesComponent} />
     <Route name="app" path="apps/:appId" handler={AppPageComponent} />
     <Route name="appView" path="apps/:appId/:view" handler={AppPageComponent} />
+    <Route name="volumeView" path="apps/:appId/volume/:volumeId"
+      handler={AppPageComponent} />
     <Route name="taskView" path="apps/:appId/:view/:tab"
       handler={AppPageComponent} />
     <Route name="deployments" path="deployments" handler={TabPanesComponent} />

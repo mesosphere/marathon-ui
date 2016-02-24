@@ -56,6 +56,7 @@ var AppPageComponent = React.createClass({
 
     var appId = decodeURIComponent(params.appId);
     var view = params.view;
+    var volumeId = params.volumeId;
 
     var activeTabId = `apps/${encodeURIComponent(appId)}`;
 
@@ -82,6 +83,8 @@ var AppPageComponent = React.createClass({
       activeTabId += "/debug";
     } else if (view === "volumes") {
       activeTabId += "/volumes";
+    } else if (volumeId != null) {
+      activeViewIndex = 2;
     } else if (view != null) {
       activeTaskId = view;
       activeViewIndex = 1;
@@ -92,6 +95,7 @@ var AppPageComponent = React.createClass({
       activeTaskId: activeTaskId,
       activeViewIndex: activeViewIndex,
       app: app,
+      volumeId: volumeId,
       appId: appId,
       view: decodeURIComponent(params.view),
       tabs: tabs
@@ -277,12 +281,85 @@ var AppPageComponent = React.createClass({
     );
   },
 
+  getVolumeDetails: function () {
+    var {app, volumeId} = this.state;
+    var tasks = app.tasks;
+
+    var volume = tasks
+      // Get the first volume from a task with the same id as provided
+      // by the router. This should be unique.
+      .reduce((memo, task) => {
+        return task.localVolumes
+          .filter(volume => volume.persistenceId === volumeId)
+          .reduce((memo, volume) => {
+            if (memo != null) {
+              return memo;
+            }
+            volume.taskId = task.id;
+            return volume;
+          }, null);
+      }, null);
+
+    if (volume == null) {
+      return null;
+    }
+
+    if (app.container != null && app.container.volumes != null) {
+      app.container.volumes.forEach(function (volumeConfig) {
+        if (volumeConfig.containerPath &&
+            volumeConfig.containerPath === volume.containerPath) {
+          Object.keys(volumeConfig).forEach(key =>
+            volume[key] = volumeConfig[key]
+          );
+        }
+      });
+    }
+
+    return (
+      <dl className={"dl-horizontal"}>
+        <dt>ID</dt>
+        <dd>{volume.persistenceId}</dd>
+        <dt>Container Path</dt>
+        <dd>{volume.containerPath}</dd>
+        <dt>Mode</dt>
+        <dd>{volume.mode}</dd>
+        <dt>Size</dt>
+        <dd>{volume.persistent.size}</dd>
+        <dt>Task Id</dt>
+        <dd>{volume.taskId}</dd>
+      </dl>
+    );
+  },
+
   getAppDetails: function () {
     var state = this.state;
     var model = state.app;
-    var volumes = model.container != null
-      ? model.container.volumes
-      : null;
+
+    var volumes = model.tasks.reduce((memo, task) => {
+      if (task.localVolumes != null) {
+        return memo.concat(task.localVolumes.map(volume => {
+          volume.taskId = task.id;
+          return volume;
+        }));
+      }
+      return memo;
+    }, [])
+      .map(volume => {
+        if (model.container == null || model.container.volumes == null) {
+          return null;
+        }
+        model.container.volumes.forEach(function (volumeConfig) {
+          if (volumeConfig.containerPath &&
+              volumeConfig.containerPath === volume.containerPath) {
+            Object.keys(volumeConfig).forEach(key =>
+              volume[key] = volumeConfig[key]
+            );
+            volume.appId = model.id;
+          }
+        });
+        return volume;
+      })
+      .filter(volume => volume != null);
 
     var tabs = state.tabs.filter(tab =>
       tab.text !== "Volumes" ||
@@ -327,6 +404,8 @@ var AppPageComponent = React.createClass({
       content = this.getAppDetails();
     } else if (this.state.activeViewIndex === 1) {
       content = this.getTaskDetailComponent();
+    } else if (this.state.activeViewIndex === 2) {
+      content = this.getVolumeDetails();
     }
 
     var groupId = PathUtil.getGroupFromAppId(state.appId);
@@ -336,7 +415,8 @@ var AppPageComponent = React.createClass({
       <div>
         <BreadcrumbComponent groupId={groupId}
           appId={state.appId}
-          taskId={state.activeTaskId} />
+          taskId={state.activeTaskId}
+          volumeId={state.volumeId} />
         <div className="container-fluid">
           <div className="page-header">
             <h1>{name}</h1>
