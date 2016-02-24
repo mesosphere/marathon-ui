@@ -12,7 +12,8 @@ const ContainerConstants = {
     }
   },
   TYPE: {
-    DOCKER: "DOCKER"
+    DOCKER: "DOCKER",
+    MESOS: "MESOS"
   },
   VOLUMES: {
     MODE: {
