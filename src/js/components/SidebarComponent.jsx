@@ -8,6 +8,8 @@ import SidebarLabelsFilterComponent
   from "../components/SidebarLabelsFilterComponent";
 import SidebarStatusFilterComponent
   from "../components/SidebarStatusFilterComponent";
+import SidebarVolumesFilterComponent
+  from "../components/SidebarVolumesFilterComponent";
 
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 import PluginMountPointComponent from "../components/PluginMountPointComponent";
@@ -57,6 +59,7 @@ var SidebarComponent = React.createClass({
         </div>
         <SidebarHealthFilterComponent />
         <SidebarLabelsFilterComponent />
+        <SidebarVolumesFilterComponent />
         <PluginMountPointComponent placeId={PluginMountPoints.SIDEBAR_BOTTOM} />
       </nav>
     );
