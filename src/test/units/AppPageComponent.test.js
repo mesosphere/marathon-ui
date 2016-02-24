@@ -129,14 +129,12 @@ describe("AppPageComponent", function () {
   });
   describe("on app request Error sets the right state", function () {
     it("State Unauthorized", function () {
-      // this.component.onAppRequestError(null, 401);
       this.component.instance().onAppRequestError(null, 401);
       expect(this.component.state("fetchState"))
         .to.equal(States.STATE_UNAUTHORIZED);
     });
 
     it("State Unauthorized", function () {
-      // this.component.onAppRequestError(null, 401);
       this.component.instance().onAppRequestError(null, 403);
       expect(this.component.state("fetchState"))
         .to.equal(States.STATE_FORBIDDEN);
