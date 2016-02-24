@@ -6,9 +6,6 @@ import FilterTypes from "../constants/FilterTypes";
 
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
-/**
- * Health is wealth, peace of mind is happiness.
- */
 var SidebarVolumesFilterComponent = React.createClass({
   displayName: "SidebarVolumesFilterComponent",
 
@@ -30,15 +27,15 @@ var SidebarVolumesFilterComponent = React.createClass({
 
   componentWillMount: function () {
     AppsStore.on(AppsEvents.UPDATE_APPS_FILTER_COUNT,
-      this.onAppsHealthChange);
+      this.onUpdateAppsFilterCount);
   },
 
   componentWillUnmount: function () {
     AppsStore.removeListener(AppsEvents.UPDATE_APPS_FILTER_COUNT,
-      this.onAppsHealthChange);
+      this.onUpdateAppsFilterCount);
   },
 
-  onAppsHealthChange: function (filterCounts) {
+  onUpdateAppsFilterCount: function (filterCounts) {
     this.setState({
       appsVolumesCount: filterCounts.appsVolumesCount
     });
@@ -54,18 +51,23 @@ var SidebarVolumesFilterComponent = React.createClass({
     };
 
     return (
-      <ul className="list-group checked-list-box filters">
-        <li className="checkbox">
-          <input {...checkboxProps}
-            onChange={this.handleChange} />
-          <label htmlFor={checkboxProps.id}>
-            Volumes
-            <span className="badge">
-              {state.appsVolumesCount.toLocaleString()}
-            </span>
-          </label>
-        </li>
-      </ul>
+      <div>
+        <div className="flex-row">
+          <h3 className="small-caps">Resources</h3>
+        </div>
+        <ul className="list-group checked-list-box filters">
+          <li className="checkbox">
+            <input {...checkboxProps}
+              onChange={this.handleChange} />
+            <label htmlFor={checkboxProps.id}>
+              Volumes
+              <span className="badge">
+                {state.appsVolumesCount.toLocaleString()}
+              </span>
+            </label>
+          </li>
+        </ul>
+      </div>
     );
   }
 

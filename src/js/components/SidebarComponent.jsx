@@ -59,9 +59,6 @@ var SidebarComponent = React.createClass({
         </div>
         <SidebarHealthFilterComponent />
         <SidebarLabelsFilterComponent />
-        <div className="flex-row">
-          <h3 className="small-caps">Resources</h3>
-        </div>
         <SidebarVolumesFilterComponent />
         <PluginMountPointComponent placeId={PluginMountPoints.SIDEBAR_BOTTOM} />
       </nav>

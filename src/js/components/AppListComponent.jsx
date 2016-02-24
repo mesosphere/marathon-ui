@@ -261,7 +261,7 @@ var AppListComponent = React.createClass({
       });
     }
 
-    if (filterVolumes != null) { // Volume filter
+    if (filterVolumes != null) {
       nodesSequence = nodesSequence.filter(app => {
         if (app.container == null || app.container.volumes == null) {
           return false;
