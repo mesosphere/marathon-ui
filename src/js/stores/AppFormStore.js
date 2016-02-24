@@ -80,8 +80,7 @@ const validationRules = {
   ],
   "instances": [AppFormValidators.instances],
   "labels": [AppFormValidators.labels],
-  "mem": [AppFormValidators.mem],
-  "ports": [AppFormValidators.ports]
+  "mem": [AppFormValidators.mem]
 };
 
 /**
@@ -110,7 +109,7 @@ const resolveFieldIdToAppKeyMap = {
   executor: "executor",
   labels: "labels",
   mem: "mem",
-  ports: "ports",
+  portDefinitions: "portDefinitions",
   uris: "uris",
   user: "user"
 };
@@ -173,7 +172,6 @@ const responseAttributePathToFieldIdMap = {
   "/instances": "instances",
   "/mem": "mem",
   "/labels": "labels",
-  "/ports": "ports",
   "/uris": "uris",
   "/user": "user",
   "value": "general"
@@ -454,12 +452,16 @@ var AppFormStore = Util.extendObject(EventEmitter.prototype, {
   get app() {
     var app = Util.deepCopy(storeData.app);
 
-    Object.keys(app).forEach((appKey) => {
+    Object.keys(app).forEach(appKey => {
       var postProcessor = AppFormModelPostProcess[appKey];
       if (postProcessor != null) {
         postProcessor(app);
       }
     });
+
+    if (objectPath.get(app, "container.docker.portMappings") != null) {
+      delete app.portDefinitions;
+    }
 
     return app;
   },
