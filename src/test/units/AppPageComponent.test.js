@@ -2,6 +2,7 @@ import {expect} from "chai";
 import {shallow} from "enzyme";
 import nock from "nock";
 import expectAsync from "./../helpers/expectAsync";
+import sinon from "sinon";
 
 import config from "../../js/config/config";
 
@@ -14,6 +15,7 @@ import AppsStore from "../../js/stores/AppsStore";
 import AppStatus from "../../js/constants/AppStatus";
 import AppPageComponent from "../../js/components/AppPageComponent";
 import States from "../../js/constants/States";
+import TaskViewComponent from "../../js/components/TaskViewComponent";
 
 describe("AppPageComponent", function () {
 
@@ -124,5 +126,38 @@ describe("AppPageComponent", function () {
       AppsActions.requestApps();
     });
 
+  });
+  describe("on app request Error sets the right state", function () {
+    it("State Unauthorized", function () {
+      // this.component.onAppRequestError(null, 401);
+      this.component.instance().onAppRequestError(null, 401);
+      expect(this.component.state("fetchState"))
+        .to.equal(States.STATE_UNAUTHORIZED);
+    });
+
+    it("State Unauthorized", function () {
+      // this.component.onAppRequestError(null, 401);
+      this.component.instance().onAppRequestError(null, 403);
+      expect(this.component.state("fetchState"))
+        .to.equal(States.STATE_FORBIDDEN);
+    });
+  });
+  describe("on delete app succes ", function () {
+    it("transitions to 'apps'", function () {
+      var transitionSpy = sinon.spy();
+      var context = {
+        router: {
+          transitionTo: transitionSpy,
+          getCurrentParams: function () {
+            return {
+              appId: "/test-app-1"
+            };
+          }
+        }
+      };
+      var component = shallow(<AppPageComponent />, {context});
+      component.instance().onDeleteAppSuccess();
+      expect(transitionSpy.called).to.be.true;
+    });
   });
 });

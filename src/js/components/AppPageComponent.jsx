@@ -67,9 +67,6 @@ var AppPageComponent = React.createClass({
 
     var tabs = tabsTemplate.map(function (tab) {
       var id = tab.id.replace(":appId", encodeURIComponent(appId));
-      if (activeTabId == null) {
-        activeTabId = id;
-      }
 
       return {
         id: id,
