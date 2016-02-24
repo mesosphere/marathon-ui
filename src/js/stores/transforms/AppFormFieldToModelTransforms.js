@@ -160,7 +160,7 @@ const AppFormFieldToModelTransforms = {
   portDefinitions: portDefinitions => {
     return portDefinitions
       .map(portDefinition => {
-        var definition = Object.assign({},portDefinition);
+        var definition = Object.assign({}, portDefinition);
         definition.port = parseInt(definition.port, 10);
         delete definition.consecutiveKey;
         return definition;
