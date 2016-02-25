@@ -5,6 +5,7 @@
 - \#3076 - Highlight sorted columns in the UI
 - \#2049 - Added JSON editor to application modal
 - \#3155 - Add support for Local Volumes in Create/Edit modal
+- \#3157 - Filter apps by attached volumes
 
 ### Changed
 - \#3078 - Always show download button for logs
