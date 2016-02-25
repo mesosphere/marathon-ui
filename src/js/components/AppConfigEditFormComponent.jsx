@@ -230,8 +230,8 @@ var AppConfigEditFormComponent = React.createClass({
               title="Ports &amp; Service Discovery">
             <OptionalPortsAndServiceDiscoveryComponent
               errorIndices={state.errorIndices}
-              getErrorMessage={this.getErrorMessage}
-              fields={state.fields} />
+              fields={state.fields}
+              getErrorMessage={this.getErrorMessage} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed">
@@ -240,8 +240,8 @@ var AppConfigEditFormComponent = React.createClass({
               title="Environment variables">
             <OptionalEnvironmentComponent
               errorIndices={state.errorIndices}
-              getErrorMessage={this.getErrorMessage}
-              fields={state.fields} />
+              fields={state.fields}
+              getErrorMessage={this.getErrorMessage} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed">
@@ -250,8 +250,8 @@ var AppConfigEditFormComponent = React.createClass({
               title="Labels">
             <OptionalLabelsComponent
               errorIndices={state.errorIndices}
-              getErrorMessage={this.getErrorMessage}
-              fields={state.fields} />
+              fields={state.fields}
+              getErrorMessage={this.getErrorMessage} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed reduced-padding">
@@ -271,8 +271,8 @@ var AppConfigEditFormComponent = React.createClass({
               title="Volumes">
             <OptionalVolumesComponent
               errorIndices={state.errorIndices}
-              getErrorMessage={this.getErrorMessage}
-              fields={state.fields} />
+              fields={state.fields}
+              getErrorMessage={this.getErrorMessage} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed">

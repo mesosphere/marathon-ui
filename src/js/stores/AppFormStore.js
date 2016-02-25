@@ -138,14 +138,10 @@ const responseAttributePathToFieldIdMap = {
     "dockerParameters.{INDEX}.key",
   "/container/docker/parameters({INDEX})/value":
     "dockerParameters.{INDEX}.value",
-  "/container/docker/portMappings({INDEX})/containerPort":
-    "dockerPortMappings.{INDEX}.containerPort",
   "/container/docker/portMappings({INDEX})/hostPort":
     "dockerPortMappings.{INDEX}.hostPort",
   "/container/docker/portMappings({INDEX})/servicePort":
     "dockerPortMappings.{INDEX}.servicePort",
-  "/container/docker/portMappings({INDEX})/protocol":
-    "dockerPortMappings.{INDEX}.protocol",
   "/container/volumes({INDEX})/containerPath":
     "containerVolumes.{INDEX}.containerPath",
   "/container/volumes({INDEX})/hostPath":
@@ -174,6 +170,14 @@ const responseAttributePathToFieldIdMap = {
     "healthChecks.{INDEX}.maxConsecutiveFailures",
   "/instances": "instances",
   "/mem": "mem",
+  "portDefinitions": "portDefinitions",
+  "portDefinitions({INDEX}).name": "portDefinitions.{INDEX}.name",
+  "portDefinitions({INDEX}).port": "portDefinitions.{INDEX}.port",
+  "portDefinitions({INDEX}).protocol": "portDefinitions.{INDEX}.protocol",
+  "/container/docker/portMappings({INDEX})/containerPort":
+    "portDefinitions.{INDEX}.port",
+  "/container/docker/portMappings({INDEX})/protocol":
+    "portDefinitions.{INDEX}.protocol",
   "/labels": "labels",
   "/uris": "uris",
   "/user": "user",
@@ -315,6 +319,12 @@ function rebuildModelFromFields(app, fields, fieldId) {
 
 function resolveResponseAttributePathToFieldId(attributePath) {
   var fieldId;
+
+  // Workarounds against API inconsistencies
+  // Remove if mesosphere/marathon#3339 is fixed
+  attributePath = attributePath.replace("[", "(");
+  attributePath = attributePath.replace("]", ")");
+
   // Check if attributePath contains an index like path(0)/attribute
   // Matches as defined: [0] : "(0)", [1]: "0"
   var matches = attributePath.match(/\(([0-9]+)\)/);
@@ -396,15 +406,27 @@ function processResponseErrors(responseErrors, response, statusCode) {
   } else if (statusCode === 422 && response != null &&
       Util.isArray(response.details)) {
     response.details.forEach(detail => {
-      var path = detail.path;
-      var fieldId = resolveResponseAttributePathToFieldId(path) || path;
-      if (detail.errors.length >= 1) {
-        responseErrors[fieldId] =
-          AppFormErrorMessages.lookupServerResponseMessage(detail.errors[0]);
-      } else {
-        responseErrors[fieldId] =
-          AppFormErrorMessages.lookupServerResponseMessage(response.message);
+      var attributePath = "general";
+
+      if (detail.attribute != null && detail.attribute.length) {
+        attributePath = detail.attribute;
+      } else if (detail.path != null && detail.path.length) {
+        attributePath = detail.path;
       }
+
+      var fieldId = resolveResponseAttributePathToFieldId(attributePath) ||
+        attributePath;
+
+      var error = detail.error;
+
+      if (detail.errors != null && detail.errors.length) {
+        error = detail.errors.map(error => {
+          return AppFormErrorMessages.lookupServerResponseMessage(error);
+        }).join(", ");
+      };
+
+      responseErrors[fieldId] =
+        AppFormErrorMessages.lookupServerResponseMessage(error);
     });
 
   } else if (statusCode === 409 && responseHasDeployments) {

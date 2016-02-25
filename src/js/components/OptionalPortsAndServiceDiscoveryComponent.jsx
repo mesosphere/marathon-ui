@@ -22,6 +22,10 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     }
   },
 
+  propTypes: {
+    getErrorMessage: React.PropTypes.func.isRequired
+  },
+
   handleAddRow: function (fieldId, position, event) {
     event.target.blur();
     event.preventDefault();
@@ -42,6 +46,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
   getPortDefinitionRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError(fieldsetId, row.consecutiveKey);
+    var getErrorMessage = this.props.getErrorMessage;
 
     var rowClassSet = classNames({
       "has-error": !!error,
@@ -62,6 +67,9 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
           </div>
           <div className="col-sm-3">
             <FormGroupComponent
+                errorMessage={
+                  getErrorMessage(`${fieldsetId}.${i}.protocol`)
+                }
                 fieldId={`${fieldsetId}.${i}.protocol`}
                 label="Protocol"
                 value={row.protocol}>
