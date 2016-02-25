@@ -318,34 +318,32 @@ var AppListComponent = React.createClass({
   },
 
   groupItems: function (items, currentGroup, filterCounts) {
-    //  Exclude items that are not in the current group
-    var itemsInCurrentGroup = items.filter(
-      item => item.id.startsWith(currentGroup)
-    );
+    return items.filter(item => {
 
-    itemsInCurrentGroup.forEach(item => {
-      if (item.isGroup) {
-        return;
+      //  Exclude groups and items that are not in the current group
+      if (!item.id.startsWith(currentGroup)) {
+        return false;
       }
-      filterCounts.appsStatusesCount[item.status]++;
-      if (item.container != null && item.container.volumes != null) {
-        filterCounts.appsVolumesCount++;
-      }
-      item.health.forEach(health => {
-        if (health.quantity) {
-          filterCounts.appsHealthCount[health.state]++;
+
+      // Update filter counts
+      if (!item.isGroup) {
+        filterCounts.appsStatusesCount[item.status]++;
+        if (item.container != null && item.container.volumes != null) {
+          filterCounts.appsVolumesCount++;
         }
-      });
-    });
+        item.health.forEach(health => {
+          if (health.quantity) {
+            filterCounts.appsHealthCount[health.state]++;
+          }
+        });
+      }
 
-    // Exclude items that are in a sub group
-    itemsInCurrentGroup = itemsInCurrentGroup.filter(item => {
-      var relativePath = item.id.substring(currentGroup.length);
-      var pathParts = relativePath.split("/");
+      // Exclude items that are in a sub group
+      let relativePath = item.id.substring(currentGroup.length);
+      let pathParts = relativePath.split("/");
+
       return pathParts.length < 2;
     });
-
-    return itemsInCurrentGroup;
   },
 
   sortItems: function (items, compareFunction) {
