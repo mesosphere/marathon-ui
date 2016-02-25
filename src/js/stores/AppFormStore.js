@@ -61,12 +61,6 @@ const validationRules = {
   "disk": [AppFormValidators.disk],
   "dockerImage": [AppFormValidators.dockerImageNoWhitespaces],
   "dockerParameters": [AppFormValidators.dockerParameters],
-  "dockerPortMappings": [
-    AppFormValidators.dockerPortMappingsContainerPortIsValid,
-    AppFormValidators.dockerPortMappingsHostPortIsValid,
-    AppFormValidators.dockerPortMappingsServicePortIsValid,
-    AppFormValidators.dockerPortMappingsProtocolValidType
-  ],
   "env": [AppFormValidators.env],
   "executor": [AppFormValidators.executor],
   "healthChecks": [
@@ -83,7 +77,10 @@ const validationRules = {
   "instances": [AppFormValidators.instances],
   "labels": [AppFormValidators.labels],
   "mem": [AppFormValidators.mem],
-  // "portDefinitions": []
+  "portDefinitions": [
+    AppFormValidators.portDefinitionsPortIsValid,
+    AppFormValidators.portDefinitionsProtocolValidType
+  ]
 };
 
 /**
@@ -104,7 +101,6 @@ const resolveFieldIdToAppKeyMap = {
   dockerImage: "container.docker.image",
   dockerNetwork: "container.docker.network",
   dockerParameters: "container.docker.parameters",
-  dockerPortMappings: "container.docker.portMappings",
   dockerPrivileged: "container.docker.privileged",
   healthChecks: "healthChecks",
   instances: "instances",
@@ -138,10 +134,6 @@ const responseAttributePathToFieldIdMap = {
     "dockerParameters.{INDEX}.key",
   "/container/docker/parameters({INDEX})/value":
     "dockerParameters.{INDEX}.value",
-  "/container/docker/portMappings({INDEX})/hostPort":
-    "dockerPortMappings.{INDEX}.hostPort",
-  "/container/docker/portMappings({INDEX})/servicePort":
-    "dockerPortMappings.{INDEX}.servicePort",
   "/container/volumes({INDEX})/containerPath":
     "containerVolumes.{INDEX}.containerPath",
   "/container/volumes({INDEX})/hostPath":
@@ -178,6 +170,8 @@ const responseAttributePathToFieldIdMap = {
     "portDefinitions.{INDEX}.port",
   "/container/docker/portMappings({INDEX})/protocol":
     "portDefinitions.{INDEX}.protocol",
+  "/container/docker/portMappings({INDEX})/hostPort": "portDefinitions",
+  "/container/docker/portMappings({INDEX})/servicePort": "portDefinitions",
   "/labels": "labels",
   "/uris": "uris",
   "/user": "user",

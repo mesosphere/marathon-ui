@@ -77,19 +77,6 @@ const AppFormValidators = {
     !(Util.isStringAndEmpty(obj.key) &&
     !Util.isStringAndEmpty(obj.value)),
 
-  dockerPortMappingsContainerPortIsValid: (obj) =>
-    isValidPort(obj.containerPort),
-
-  dockerPortMappingsHostPortIsValid: (obj) => isValidPort(obj.hostPort),
-
-  dockerPortMappingsServicePortIsValid: (obj) => isValidPort(obj.servicePort),
-
-  dockerPortMappingsProtocolValidType: (obj) =>
-    obj.protocol == null ||
-    Util.isStringAndEmpty(obj.protocol) ||
-    (obj.protocol != null &&
-      (obj.protocol === "tcp" || obj.protocol === "udp")),
-
   env: (obj) => obj.hasOwnProperty("key") &&
     obj.hasOwnProperty("value") &&
     !(Util.isStringAndEmpty(obj.key) &&
@@ -159,16 +146,27 @@ const AppFormValidators = {
   ports: (ports) => Util.isStringAndEmpty(ports) ||
     ports.split(",")
       .every((port) => port.toString().trim().match(/^[0-9]+$/)),
+
   localVolumesSize: (obj) =>
     Util.isStringAndEmpty(obj.persistentSize) ||
     !!obj.persistentSize.toString().match(/^[0-9\.]+$/),
+
   localVolumesPath: (obj) => isValidPath(obj.containerPath) &&
     !obj.containerPath.match(/\//),
+
   localVolumesIsNotEmpty: (obj) =>
     (!Util.isStringAndEmpty(obj.persistentSize) &&
     !Util.isStringAndEmpty(obj.containerPath)) ||
     (Util.isStringAndEmpty(obj.persistentSize) &&
-    Util.isStringAndEmpty(obj.containerPath))
+    Util.isStringAndEmpty(obj.containerPath)),
+
+  portDefinitionsPortIsValid: (obj) => isValidPort(obj.port),
+
+  portDefinitionsProtocolValidType: (obj) =>
+    obj.protocol == null ||
+    Util.isStringAndEmpty(obj.protocol) ||
+    (obj.protocol != null &&
+      (obj.protocol === "tcp" || obj.protocol === "udp"))
 };
 
 export default Object.freeze(AppFormValidators);

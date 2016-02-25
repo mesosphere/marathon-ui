@@ -31,12 +31,6 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   disk: ["Disk Space must be a non-negative number"],
   dockerImage: ["Image cannot contain whitespaces"],
   dockerParameters: ["Key cannot be blank"],
-  dockerPortMappings: [
-    "Container Port must be a valid port",
-    "Host Port must be a valid port",
-    "Service Port must be a valid port",
-    "Protocol must be of type 'tcp' or 'udp'"
-  ],
   env: ["Key cannot be blank"],
   executor: ["Invalid executor format"],
   healthChecks: [
@@ -53,7 +47,10 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   instances: ["Instances must be a non-negative number"],
   labels: ["Key cannot be blank"],
   mem: ["Memory must be a number greater or equal to 32"],
-  ports: ["Ports must be a comma-separated list of numbers"]
+  portDefinitions: [
+    "Port must be a valid port",
+    "Protocol must be of type 'tcp' or 'udp'"
+  ],
 });
 
 const generalErrors = Util.deepFreeze({
