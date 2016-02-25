@@ -193,7 +193,7 @@ var AppListComponent = React.createClass({
     var groups = [];
 
     apps.forEach(app => {
-      let pathParts = app.id.split("/");
+      var pathParts = app.id.split("/");
 
       // Remove app name
       pathParts.pop();
@@ -266,14 +266,14 @@ var AppListComponent = React.createClass({
 
     if (filterLabels != null && filterLabels.length > 0) {
       items = items.filter(item => {
-        let labels = item.labels;
+        var labels = item.labels;
         if (item.isGroup || labels == null ||
             Object.keys(labels).length === 0) {
           return false;
         }
 
         return filterLabels.some(label => {
-          let [key, value] = this.decodeQueryParamArray(label);
+          var [key, value] = this.decodeQueryParamArray(label);
           return labels[key] === value;
         });
       });
@@ -340,8 +340,8 @@ var AppListComponent = React.createClass({
 
     // Exclude items that are in a sub group
     itemsInCurrentGroup = itemsInCurrentGroup.filter(item => {
-      let relativePath = item.id.substring(currentGroup.length);
-      let pathParts = relativePath.split("/");
+      var relativePath = item.id.substring(currentGroup.length);
+      var pathParts = relativePath.split("/");
       return pathParts.length < 2;
     });
 

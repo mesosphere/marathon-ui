@@ -12,9 +12,11 @@ var SearchUtil = {
     }
 
     if (Util.isNumber(a) && Util.isNumber(a)) {
-
       var delta = a - b;
-      return delta / Math.abs(delta || 1);
+      if (delta === 0) {
+        return delta;
+      }
+      return delta / Math.abs(delta);
     }
 
     if (Util.isString(a) && Util.isString(b)) {
