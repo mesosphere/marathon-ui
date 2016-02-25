@@ -9,6 +9,19 @@ import PortInputAttributes from "../constants/PortInputAttributes";
 
 const fieldsetId = "portDefinitions";
 
+function determinePortDefinitionsType(fields) {
+  if (fields.dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
+    return ContainerConstants.NETWORK.BRIDGE;
+  }
+
+  if ((fields.dockerImage != null && fields.dockerImage !== "") ||
+      fields.dockerNetwork === ContainerConstants.NETWORK.HOST) {
+    return ContainerConstants.NETWORK.HOST;
+  }
+
+  return ContainerConstants.TYPE.MESOS;
+}
+
 var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   displayName: "OptionalPortsAndServiceDiscoveryComponent",
 
@@ -23,6 +36,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   propTypes: {
+    fields: React.PropTypes.object.isRequired,
     getErrorMessage: React.PropTypes.func.isRequired
   },
 
@@ -42,6 +56,37 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     event.preventDefault();
 
     this.removeRow(fieldId, position);
+  },
+
+  getHelpText: function () {
+    var rows = this.state.rows[fieldsetId];
+
+    if (rows == null || this.hasOnlyOneSingleEmptyRow(fieldsetId)) {
+      return null;
+    }
+
+    let type = determinePortDefinitionsType(this.props.fields);
+
+    let rowsLength = rows.length;
+
+    let portIdentifiers = Array(rowsLength)
+      .fill()
+      .map((_, i) => "$PORT" + i)
+      .join(", ")
+      .replace(/(.*), (.*)$/, "$1 and $2");
+
+    let message = "Your application will need to be configured to listen to" +
+      ` ${portIdentifiers} which will be assigned dynamically.`;
+
+    if (type === ContainerConstants.NETWORK.HOST) {
+      message = "Your Docker container will need to be configured to listen" +
+        ` to ${portIdentifiers} which will be assigned dynamically.`;
+    } else if (type === ContainerConstants.NETWORK.BRIDGE) {
+      message = "Your Docker container will bind to the requested ports and" +
+        ` they will be dynamically mapped to ${portIdentifiers} on the host.`;
+    }
+
+    return <div>{message}</div>;
   },
 
   getPortDefinitionRow: function (row, i, disableRemoveButton = false) {
@@ -124,6 +169,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
           {this.getPortDefinitionRows()}
         </div>
         {this.getGeneralErrorBlock(fieldsetId)}
+        {this.getHelpText()}
       </div>
     );
   }
