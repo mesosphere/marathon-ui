@@ -87,6 +87,16 @@ const AppFormModelToFieldTransforms = {
   },
   ports: (ports) => ports
     .join(", "),
+  portDefinitions: portDefinition => {
+    return portDefinition
+      .map((row, i) => {
+        if (row.containerPort != null) {
+          row.port = row.containerPort;
+        }
+        row.consecutiveKey = i;
+        return row;
+      });
+  },
   uris: (uris) => uris
     .join(", "),
   volumes: (volumes) => {

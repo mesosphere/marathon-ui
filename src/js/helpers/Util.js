@@ -119,13 +119,11 @@ var Util = {
 
     if (this.isObject(obj)) {
       copy = Object.assign({}, obj);
-
-      Object.keys(copy).forEach((key) => {
-        copy[key] = this.deepCopy(copy[key]);
-      });
     } else if (this.isArray(obj)) {
       copy = obj.slice(); // shallow copy
+    }
 
+    if (copy != null) {
       Object.keys(copy).forEach((key) => {
         copy[key] = this.deepCopy(copy[key]);
       });
