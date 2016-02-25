@@ -23,6 +23,7 @@
 - \#3102 - Updating environment variables sometimes deletes entries
 - \#3242 - Treat "value" attribute in server-side validation errors as general
   error
+- \#3304 - Marathon UI hangs after being open for a while
 
 ## 0.15.6 - 2016-02-23
 - \#3192 - Adapt default Mem/CPU settings
