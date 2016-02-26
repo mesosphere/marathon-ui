@@ -7,6 +7,8 @@ import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import FormGroupComponent from "../components/FormGroupComponent";
 import PortInputAttributes from "../constants/PortInputAttributes";
 
+import Util from "../helpers/Util";
+
 const fieldsetId = "portDefinitions";
 
 function determinePortDefinitionsType(fields) {
@@ -40,6 +42,12 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     getErrorMessage: React.PropTypes.func.isRequired
   },
 
+  getInitialState: function () {
+    return {
+      manualPortsConsecutiveKeys: []
+    };
+  },
+
   handleAddRow: function (fieldId, position, event) {
     event.target.blur();
     event.preventDefault();
@@ -67,9 +75,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
     let type = determinePortDefinitionsType(this.props.fields);
 
-    let rowsLength = rows.length;
-
-    let portIdentifiers = Array(rowsLength)
+    let portIdentifiers = Array(rows.length)
       .fill()
       .map((_, i) => "$PORT" + i)
       .join(", ")
@@ -89,6 +95,79 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     return <div>{message}</div>;
   },
 
+  handleCheckboxClick: function (consecutiveKey) {
+    var checkbox = React
+      .findDOMNode(this.refs["manualPortCheckbox" + consecutiveKey]);
+
+    if (checkbox == null) {
+      return;
+    }
+
+    var manualPorts = Util.deepCopy(this.state.manualPortsConsecutiveKeys);
+
+    if (checkbox.checked) {
+      manualPorts.push(consecutiveKey);
+    } else {
+      manualPorts =
+        manualPorts.filter(manualPort => manualPort !== consecutiveKey);
+    }
+
+    this.setState({
+      manualPortsConsecutiveKeys: manualPorts
+    });
+  },
+
+  getPortInputField: function (row, i) {
+    var type = determinePortDefinitionsType(this.props.fields);
+
+    var fieldLabel = type === ContainerConstants.NETWORK.BRIDGE
+      ? "Container Port"
+      : "Port";
+
+    var inputAttributes = PortInputAttributes;
+    var inputDisabled = false;
+    var inputValue = row.port;
+
+    var randomPortCheckbox = null;
+
+    if (type !== ContainerConstants.NETWORK.BRIDGE) {
+      let checked = !this.state.manualPortsConsecutiveKeys
+        .includes(row.consecutiveKey);
+
+      if (checked) {
+        inputValue = "$PORT" + i;
+        inputDisabled = true;
+        inputAttributes = null;
+      }
+
+      randomPortCheckbox = (
+        <div className="port-input-field">
+          <label>
+            <input type="checkbox"
+              defaultChecked={checked}
+              ref={"manualPortCheckbox" + row.consecutiveKey}
+              onClick={this.handleCheckboxClick
+                .bind(null, row.consecutiveKey)} />
+            Assign a random port
+          </label>
+        </div>
+      );
+    }
+
+    return (
+      <div className="col-sm-4">
+        <FormGroupComponent
+            fieldId={`${fieldsetId}.${i}.port`}
+            label={fieldLabel}
+            value={inputValue}>
+          <input ref={`port${i}`}
+            disabled={inputDisabled} {...inputAttributes} />
+        </FormGroupComponent>
+        {randomPortCheckbox}
+      </div>
+    );
+  },
+
   getPortDefinitionRow: function (row, i, disableRemoveButton = false) {
     var error = this.getError(fieldsetId, row.consecutiveKey);
     var getErrorMessage = this.props.getErrorMessage;
@@ -102,15 +181,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset className="row duplicable-row"
             onChange={this.handleChangeRow.bind(null, fieldsetId, i)}>
-          <div className="col-sm-3">
-            <FormGroupComponent
-                fieldId={`${fieldsetId}.${i}.port`}
-                label="Port"
-                value={row.port}>
-              <input ref={`port${i}`} {...PortInputAttributes} />
-            </FormGroupComponent>
-          </div>
-          <div className="col-sm-3">
+          {this.getPortInputField(row, i)}
+          <div className="col-sm-2">
             <FormGroupComponent
                 errorMessage={
                   getErrorMessage(`${fieldsetId}.${i}.protocol`)

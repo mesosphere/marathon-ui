@@ -4,6 +4,11 @@ const dockerRowSchemes = {
   dockerParameters: {
     key: "",
     value: ""
+  },
+  containerVolumes: {
+    containerPath: "",
+    hostPath: "",
+    mode: null
   }
 };
 
