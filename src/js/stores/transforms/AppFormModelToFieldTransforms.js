@@ -13,13 +13,6 @@ const AppFormModelToFieldTransforms = {
       .map((constraint) => constraint.join(":"))
       .join(", ");
   },
-  dockerPortMappings: (mappings) => {
-    return mappings
-      .map((row, i) => {
-        row.consecutiveKey = i;
-        return row;
-      });
-  },
   dockerParameters: (parameters) => {
     return parameters
       .map((row, i) => {

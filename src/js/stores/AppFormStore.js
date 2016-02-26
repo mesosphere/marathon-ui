@@ -23,7 +23,6 @@ const storeData = {
 const duplicableRowFields = Object.freeze([
   "containerVolumes",
   "localVolumes",
-  "dockerPortMappings",
   "dockerParameters",
   "env",
   "healthChecks",
