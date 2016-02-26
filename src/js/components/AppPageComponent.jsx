@@ -320,6 +320,10 @@ var AppPageComponent = React.createClass({
       });
     }
 
+    var taskURI = "#apps/" +
+      encodeURIComponent(this.state.appId) +
+      "/" + encodeURIComponent(volume.taskId);
+
     return (
       <dl className={"dl-horizontal"}>
         <dt>ID</dt>
@@ -331,7 +335,9 @@ var AppPageComponent = React.createClass({
         <dt>Size</dt>
         <dd>{volume.persistent.size}</dd>
         <dt>Task Id</dt>
-        <dd>{volume.taskId}</dd>
+        <dd>
+          <a href={taskURI}>{volume.taskId}</a>
+        </dd>
       </dl>
     );
   },
