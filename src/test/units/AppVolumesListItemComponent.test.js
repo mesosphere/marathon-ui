@@ -8,6 +8,7 @@ import AppVolumesListItemComponent
 describe("AppVolumesListItemComponent", () => {
   var volume = {
     appId: "stu",
+    host: "127.0.0.1",
     persistenceId: "x.y.z",
     type: "TYPE",
     containerPath: "path",
@@ -23,6 +24,7 @@ describe("AppVolumesListItemComponent", () => {
 
   var sortKeys = [
     "id",
+    "host",
     "type",
     "containerPath",
     "hostPath",
@@ -35,28 +37,33 @@ describe("AppVolumesListItemComponent", () => {
       .to.equal(volume.persistenceId);
   });
 
-  it("contains the right type", () => {
+  it("contains the right host", () => {
     expect(component.find("td").at(1).text())
-      .to.equal(volume.type);
+      .to.equal(volume.host);
+  });
+
+  it("contains the right type", () => {
+    expect(component.find("td").at(2).text())
+    .to.equal(volume.type);
   });
 
   it("contains the right containerPath", () => {
-    expect(component.find("td").at(2).text())
+    expect(component.find("td").at(3).text())
       .to.equal(volume.containerPath);
   });
 
   it("contains the right host path", () => {
-    expect(component.find("td").at(3).text())
+    expect(component.find("td").at(4).text())
       .to.equal(volume.hostPath);
   });
 
   it("contains the right size", () => {
-    expect(component.find("td").at(4).text())
+    expect(component.find("td").at(5).text())
       .to.equal(volume.size);
   });
 
   it("contains the right mode", () => {
-    expect(component.find("td").at(5).text())
+    expect(component.find("td").at(6).text())
       .to.equal(volume.mode);
   });
 

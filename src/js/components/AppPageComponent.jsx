@@ -296,6 +296,7 @@ var AppPageComponent = React.createClass({
 
               }
               volume.taskId = task.id;
+              volume.host = task.host;
               volume.status = task.status == null
                 ? "Detached"
                 : "Attached";
@@ -338,6 +339,10 @@ var AppPageComponent = React.createClass({
         <dd>
           <a href={taskURI}>{volume.taskId}</a>
         </dd>
+        <dt>Host</dt>
+        <dd>
+          {volume.host}
+        </dd>
       </dl>
     );
   },
@@ -350,6 +355,7 @@ var AppPageComponent = React.createClass({
       if (task.localVolumes != null) {
         return memo.concat(task.localVolumes.map(volume => {
           volume.taskId = task.id;
+          volume.host = task.host;
           volume.status = task.status == null
             ? "Detached"
             : "Attached";

@@ -17,6 +17,10 @@ var AppVolumesListItemComponent = React.createClass({
       "cell-highlighted": sortKey === "id"
     });
 
+    var hostClassSet = classNames({
+      "cell-highlighted": sortKey === "host"
+    });
+
     var typeClassSet = classNames({
       "cell-highlighted": sortKey === "type"
     });
@@ -56,6 +60,9 @@ var AppVolumesListItemComponent = React.createClass({
           <Link to="volumeView" params={params}>
             {volume.persistenceId}
           </Link>
+        </td>
+        <td className={hostClassSet}>
+          {volume.host}
         </td>
         <td className={typeClassSet}>
           {volume.type}

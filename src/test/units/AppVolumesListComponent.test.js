@@ -11,6 +11,7 @@ describe("AppVolumesListComponent", () => {
   var volumes = [
     {
       appId: "stu",
+      host: "127.0.0.1",
       persistenceId: "x.y.z",
       containerPath: "path",
       persistent: {
@@ -20,6 +21,7 @@ describe("AppVolumesListComponent", () => {
     },
     {
       appId: "stu",
+      host: "127.0.0.1",
       persistenceId: "x.y.z",
       containerPath: "path",
       hostPath: "Hpath",
@@ -33,6 +35,7 @@ describe("AppVolumesListComponent", () => {
 
   var sortKeys = [
     "id",
+    "host",
     "type",
     "containerPath",
     "hostPath",
@@ -96,7 +99,7 @@ describe("AppVolumesListComponent", () => {
       });
     });
   });
-  
+
   describe("if no volumes are provided", () => {
     var component = shallow(
       <AppVolumesListComponent />

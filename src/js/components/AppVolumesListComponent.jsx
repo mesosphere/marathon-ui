@@ -86,6 +86,10 @@ var AppVolumesListComponent = React.createClass({
       "cell-highlighted": state.sortKey === "id"
     });
 
+    var hostClassSet = classNames({
+      "cell-highlighted": state.sortKey === "host"
+    });
+
     var typeClassSet = classNames({
       "cell-highlighted": state.sortKey === "type"
     });
@@ -123,6 +127,12 @@ var AppVolumesListComponent = React.createClass({
                 <span onClick={this.sortBy.bind(null, "id")}
                     className={headerClassSet}>
                   ID {this.getCaret("id")}
+                </span>
+              </th>
+              <th className={hostClassSet}>
+                <span onClick={this.sortBy.bind(null, "host")}
+                    className={headerClassSet}>
+                  Host{this.getCaret("host")}
                 </span>
               </th>
               <th className={typeClassSet}>
