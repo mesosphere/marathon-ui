@@ -29,10 +29,6 @@ var AppVolumesListItemComponent = React.createClass({
       "cell-highlighted": sortKey === "containerPath"
     });
 
-    var hostPathClassSet = classNames({
-      "cell-highlighted": sortKey === "hostPath"
-    });
-
     var sizeClassSet = classNames({
       "cell-highlighted": sortKey === "size"
     });
@@ -69,9 +65,6 @@ var AppVolumesListItemComponent = React.createClass({
         </td>
         <td className={containerPathClassSet}>
           {volume.containerPath}
-        </td>
-        <td className={hostPathClassSet}>
-          {volume.hostPath}
         </td>
         <td className={sizeClassSet}>
           {volume.size}

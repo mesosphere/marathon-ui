@@ -38,7 +38,6 @@ describe("AppVolumesListComponent", () => {
     "host",
     "type",
     "containerPath",
-    "hostPath",
     "size",
     "mode"
   ];

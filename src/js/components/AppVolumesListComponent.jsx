@@ -98,10 +98,6 @@ var AppVolumesListComponent = React.createClass({
       "cell-highlighted": state.sortKey === "containerPath"
     });
 
-    var hostPathClassSet = classNames({
-      "cell-highlighted": state.sortKey === "hostPath"
-    });
-
     var sizeClassSet = classNames({
       "cell-highlighted": state.sortKey === "size"
     });
@@ -145,12 +141,6 @@ var AppVolumesListComponent = React.createClass({
                 <span onClick={this.sortBy.bind(null, "containerPath")}
                     className={headerClassSet}>
                   Container Path {this.getCaret("containerPath")}
-                </span>
-              </th>
-              <th className={hostPathClassSet}>
-                <span onClick={this.sortBy.bind(null, "hostPath")}
-                    className={headerClassSet}>
-                  Host Path {this.getCaret("hostPath")}
                 </span>
               </th>
               <th className={sizeClassSet}>

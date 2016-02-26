@@ -27,7 +27,6 @@ describe("AppVolumesListItemComponent", () => {
     "host",
     "type",
     "containerPath",
-    "hostPath",
     "size",
     "mode"
   ];
@@ -52,18 +51,13 @@ describe("AppVolumesListItemComponent", () => {
       .to.equal(volume.containerPath);
   });
 
-  it("contains the right host path", () => {
-    expect(component.find("td").at(4).text())
-      .to.equal(volume.hostPath);
-  });
-
   it("contains the right size", () => {
-    expect(component.find("td").at(5).text())
+    expect(component.find("td").at(4).text())
       .to.equal(volume.size);
   });
 
   it("contains the right mode", () => {
-    expect(component.find("td").at(6).text())
+    expect(component.find("td").at(5).text())
       .to.equal(volume.mode);
   });
 
