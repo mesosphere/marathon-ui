@@ -27,7 +27,8 @@ var ContainerSettingsComponent = React.createClass({
 
   propTypes: {
     fields: React.PropTypes.object.isRequired,
-    getErrorMessage: React.PropTypes.func.isRequired
+    getErrorMessage: React.PropTypes.func.isRequired,
+    openVolumes: React.PropTypes.func
   },
 
   handleAddRow: function (fieldId, position, event) {
@@ -169,7 +170,10 @@ var ContainerSettingsComponent = React.createClass({
         </FormGroupComponent>
         <h4>Parameters</h4>
         <div className="duplicable-list">{this.getParametersRows()}</div>
-        <div>You can set your Docker volume settings below.</div>
+        <div>
+          You can set your Docker volume
+          settings <u onClick={() => this.props.openVolumes(true)}>below</u>.
+        </div>
       </div>
     );
   }

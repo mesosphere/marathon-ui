@@ -7,7 +7,8 @@ var CollapsiblePanelComponent = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     isOpen: React.PropTypes.bool,
-    title: React.PropTypes.string.isRequired
+    title: React.PropTypes.string.isRequired,
+    togglePanel: React.PropTypes.func
   },
 
   getDefaultProps: function () {
@@ -27,10 +28,16 @@ var CollapsiblePanelComponent = React.createClass({
       this.setState({
         isOpen: nextProps.isOpen
       });
+      if (this.props.togglePanel != null) {
+        this.props.togglePanel(false);
+      }
     }
   },
 
   handleToggle: function () {
+    if (this.props.togglePanel != null) {
+      this.props.togglePanel(!this.state.isOpen);
+    }
     this.setState({isOpen: !this.state.isOpen});
   },
 
