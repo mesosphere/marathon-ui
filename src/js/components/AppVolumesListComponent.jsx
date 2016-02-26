@@ -106,13 +106,17 @@ var AppVolumesListComponent = React.createClass({
       "cell-highlighted": state.sortKey === "mode"
     });
 
+    var statusClassSet = classNames({
+      "cell-highlighted": state.sortKey === "status"
+    });
+
     if (this.props.volumes == null) {
       return null;
     }
 
     return (
       <div>
-        <table className="table table-unstyled task-list">
+        <table className="table table-unstyled volume-list">
           <thead>
             <tr>
               <th className={idClassSet}>
@@ -149,6 +153,12 @@ var AppVolumesListComponent = React.createClass({
                 <span onClick={this.sortBy.bind(null, "mode")}
                     className={headerClassSet}>
                   Mode {this.getCaret("mode")}
+                </span>
+              </th>
+              <th className={statusClassSet}>
+                <span onClick={this.sortBy.bind(null, "status")}
+                    className={headerClassSet}>
+                  Status {this.getCaret("status")}
                 </span>
               </th>
             </tr>

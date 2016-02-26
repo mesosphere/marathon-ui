@@ -37,6 +37,14 @@ var AppVolumesListItemComponent = React.createClass({
       "cell-highlighted": sortKey === "mode"
     });
 
+    var statusClassSet = classNames({
+      "cell-highlighted": sortKey === "status",
+      "volume-attached": volume.status != null &&
+        volume.status.toLowerCase() === "attached",
+      "volume-detached": volume.status != null &&
+        volume.status.toLowerCase() === "detached"
+    });
+
     var params = {
       appId: encodeURIComponent(volume.appId),
       volumeId: volume.persistenceId
@@ -63,6 +71,9 @@ var AppVolumesListItemComponent = React.createClass({
         </td>
         <td className={modeClassSet}>
           {volume.mode}
+        </td>
+        <td className={statusClassSet}>
+          {volume.status}
         </td>
       </tr>
     );

@@ -1,4 +1,5 @@
 import React from "react/addons";
+import classNames from "classnames";
 
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
@@ -286,15 +287,22 @@ var AppPageComponent = React.createClass({
       // Get the first volume from a task with the same id as provided
       // by the router. This should be unique.
       .reduce((memo, task) => {
-        return task.localVolumes
-          .filter(volume => volume.persistenceId === volumeId)
-          .reduce((memo, volume) => {
-            if (memo != null) {
-              return memo;
-            }
-            volume.taskId = task.id;
-            return volume;
-          }, null);
+        if (memo == null) {
+          return task.localVolumes
+            .filter(volume => volume.persistenceId === volumeId)
+            .reduce((memo, volume) => {
+              if (memo != null) {
+                return memo;
+
+              }
+              volume.taskId = task.id;
+              volume.status = task.status == null
+                ? "Detached"
+                : "Attached";
+              return volume;
+            }, null);
+        }
+        return memo;
       }, null);
 
     if (volume == null) {
@@ -336,6 +344,9 @@ var AppPageComponent = React.createClass({
       if (task.localVolumes != null) {
         return memo.concat(task.localVolumes.map(volume => {
           volume.taskId = task.id;
+          volume.status = task.status == null
+            ? "Detached"
+            : "Attached";
           return volume;
         }));
       }

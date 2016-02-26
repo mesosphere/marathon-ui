@@ -288,6 +288,9 @@ var TaskDetailComponent = React.createClass({
               );
               volume.appId = app.id;
               volume.taskId = task.id;
+              volume.status = task.status == null
+                ? "Detached"
+                : "Attached";
             }
           });
           return volume;
