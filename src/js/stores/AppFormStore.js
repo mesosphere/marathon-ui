@@ -176,7 +176,7 @@ const responseAttributePathToFieldIdMap = {
   "/ports": "ports",
   "/uris": "uris",
   "/user": "user",
-  "value": "general"
+  "self": "general"
 };
 
 /**
@@ -388,13 +388,15 @@ function processResponseErrors(responseErrors, response, statusCode) {
   } else if (statusCode === 422 && response != null &&
       Util.isArray(response.details)) {
     response.details.forEach(detail => {
-      var attributePath = detail.attribute.length
-        ? detail.attribute
-        : "general";
-      var fieldId = resolveResponseAttributePathToFieldId(attributePath) ||
-        attributePath;
-      responseErrors[fieldId] =
-        AppFormErrorMessages.lookupServerResponseMessage(detail.error);
+      var path = detail.path;
+      var fieldId = resolveResponseAttributePathToFieldId(path) || path;
+      if (detail.errors.length >= 1) {
+        responseErrors[fieldId] =
+          AppFormErrorMessages.lookupServerResponseMessage(detail.errors[0]);
+      } else {
+        responseErrors[fieldId] =
+          AppFormErrorMessages.lookupServerResponseMessage(response.message);
+      }
     });
 
   } else if (statusCode === 409 && responseHasDeployments) {
