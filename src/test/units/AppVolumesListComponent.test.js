@@ -17,7 +17,8 @@ describe("AppVolumesListComponent", () => {
       persistent: {
         size: "1536"
       },
-      mode: "XX"
+      mode: "XX",
+      status: "attached"
     },
     {
       appId: "stu",
@@ -25,7 +26,8 @@ describe("AppVolumesListComponent", () => {
       persistenceId: "x.y.z",
       containerPath: "path",
       hostPath: "Hpath",
-      mode: "XX"
+      mode: "XX",
+      status: "detached"
     }
   ];
   var component = shallow(
@@ -39,7 +41,8 @@ describe("AppVolumesListComponent", () => {
     "type",
     "containerPath",
     "size",
-    "mode"
+    "mode",
+    "status"
   ];
 
   it("contains the right LOCAL volume list item", () => {

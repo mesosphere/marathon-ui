@@ -9,12 +9,13 @@ describe("AppVolumesListItemComponent", () => {
   var volume = {
     appId: "stu",
     host: "127.0.0.1",
-    persistenceId: "x.y.z",
+    persistenceId: "x#y#z",
     type: "TYPE",
     containerPath: "path",
     hostPath: "Hpath",
     size: "1536",
-    mode: "XX"
+    mode: "XX",
+    status: "Attached"
   };
   var component = shallow(
     <AppVolumesListItemComponent
@@ -28,7 +29,8 @@ describe("AppVolumesListItemComponent", () => {
     "type",
     "containerPath",
     "size",
-    "mode"
+    "mode",
+    "status"
   ];
 
   it("contains the right id", () => {
@@ -43,7 +45,7 @@ describe("AppVolumesListItemComponent", () => {
 
   it("contains the right type", () => {
     expect(component.find("td").at(2).text())
-    .to.equal(volume.type);
+      .to.equal(volume.type);
   });
 
   it("contains the right containerPath", () => {
@@ -59,6 +61,11 @@ describe("AppVolumesListItemComponent", () => {
   it("contains the right mode", () => {
     expect(component.find("td").at(5).text())
       .to.equal(volume.mode);
+  });
+
+  it("contains the right Status", () => {
+    expect(component.find("td").at(6).text())
+      .to.equal(volume.status);
   });
 
   describe("sorting is highlighting the right column", () => {
