@@ -12,7 +12,10 @@ var FormGroupComponent = React.createClass({
     errorMessage: React.PropTypes.string,
     fieldId: React.PropTypes.string,
     help: React.PropTypes.string,
-    label: React.PropTypes.string,
+    label: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.element
+    ]),
     onChange: React.PropTypes.func
   },
 

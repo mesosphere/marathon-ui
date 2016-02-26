@@ -5,7 +5,7 @@ import React from "react/addons";
 import LocalVolumesComponent
   from "../../js/components/LocalVolumesComponent.jsx";
 
-describe("Optional Volumes Component", function () {
+describe("Local Volumes Component", function () {
   describe("(no volume)", () => {
     var component = shallow(
       <LocalVolumesComponent errorIndices={{}}
@@ -27,7 +27,7 @@ describe("Optional Volumes Component", function () {
     });
 
     it("should have the right title", () => {
-      expect(component.find("h4").first().props().children)
+      expect(component.find("h4").first().props().children[0])
         .to.equal("Persistent Local Volumes");
     });
   });
