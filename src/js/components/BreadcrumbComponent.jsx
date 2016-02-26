@@ -224,7 +224,7 @@ var BreadcrumbComponent = React.createClass({
 
     var params = {
       appId: encodeURIComponent(appId),
-      volumeId: volumeId
+      volumeId: encodeURIComponent(volumeId)
     };
 
     return (

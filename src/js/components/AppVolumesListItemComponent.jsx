@@ -51,7 +51,7 @@ var AppVolumesListItemComponent = React.createClass({
 
     var params = {
       appId: encodeURIComponent(volume.appId),
-      volumeId: volume.persistenceId
+      volumeId: encodeURIComponent(volume.persistenceId)
     };
 
     return (
