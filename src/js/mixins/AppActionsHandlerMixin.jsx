@@ -1,3 +1,5 @@
+import React from "react";// eslint-disable-line no-unused-vars
+
 import AppsActions from "../actions/AppsActions";
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
@@ -187,11 +189,50 @@ var AppActionsHandlerMixin = {
       if (instancesString != null && instancesString !== "") {
         let instances = parseInt(instancesString, 10);
 
+        if (model.container != null && model.container.volumes != null &&
+          model.instances > instances
+        ) {
+          this.handleScaleDownVolumeApp(instances);
+          return null;
+        }
+
         this.addScaleAppListener();
 
         AppsActions.scaleApp(model.id, instances);
       }
     });
+  },
+
+  handleScaleDownVolumeApp: function (instances) {
+    var appId = this.props.model.id;
+
+    const dialogId = DialogActions.confirm({
+      actionButtonLabel: "Continue Scaling",
+      message: (
+        <div>
+          <div>By scaling down any existing local volumes will
+            be detached from destroyed instances. <a href="about:blank"
+                target="_blank"
+                className="modal-body-link">
+              Read more about persistent local volumes.
+            </a>
+          </div>
+          <div>
+            Are your sure you want to continue?
+          </div>
+        </div>
+      ),
+      severity: DialogSeverity.WARNING,
+      title: `Caution: ${appId} is a Stateful Application`
+    });
+
+    DialogStore.handleUserResponse(dialogId, () => {
+      this.addScaleAppListener();
+
+      AppsActions.scaleApp(appId, instances, true);
+    });
+
+    return;
   },
 
   handleScaleGroup: function () {
