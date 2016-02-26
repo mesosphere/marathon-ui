@@ -354,14 +354,21 @@ var AppPageComponent = React.createClass({
       encodeURIComponent(this.state.appId) +
       "/" + encodeURIComponent(volume.taskId);
 
+    var appURI = "#apps/" +
+      encodeURIComponent(this.state.appId);
+
     return (
       <dl className={"dl-horizontal"}>
         <dt>Container Path</dt>
         <dd>{volume.containerPath}</dd>
         <dt>Mode</dt>
         <dd>{volume.mode}</dd>
-        <dt>Size</dt>
+        <dt>Size (MiB)</dt>
         <dd>{volume.persistent.size}</dd>
+        <dt>Application</dt>
+        <dd>
+          <a href={appURI}>{appId}</a>
+        </dd>
         <dt>Task Id</dt>
         <dd>
           <a href={taskURI}>{volume.taskId}</a>
