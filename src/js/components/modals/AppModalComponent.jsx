@@ -129,7 +129,7 @@ var AppModalComponent = React.createClass({
   },
 
   getSubmitButton: function () {
-    var submitButtonTitle = "+ Create";
+    var submitButtonTitle = "Create application";
     if (this.props.app != null && this.props.app.version != null) {
       submitButtonTitle = "Change and deploy configuration";
     }
@@ -187,7 +187,7 @@ var AppModalComponent = React.createClass({
       : <AppConfigEditFormComponent {...appConfigProps} />;
 
     var cancelButton = (
-      <button className="btn btn-default"
+      <button className="btn btn-link"
           type="button"
           onClick={this.destroy}>
         Cancel

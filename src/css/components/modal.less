@@ -225,3 +225,195 @@
   }
 
 }
+
+
+
+
+
+/* ==============
+ * Design Prototype
+ * ==============
+ */
+
+.modal {
+
+  border-radius: 0;
+
+  // Modal layout
+  .modal-dialog {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+    bottom: 0;
+  }
+
+  .modal-header {
+    background-color: @brand-primary;
+    border-radius: 0;
+    padding: 15px 40px;
+    height: 50px;
+    position: fixed;
+    width: 100%;
+  }
+
+  .modal-content {
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .modal-body {
+    background-color: #fff;
+    color: @shuttle-gray;
+    padding: 30px 40px;
+    position: absolute;
+    bottom: 0;
+    top: 50px;
+    overflow-y: scroll;
+    width: 100%;
+  }
+
+
+  // Modal panels
+  .modal-body .row.full-bleed .panel-body {
+    padding: 30px 40px;
+  }
+
+  .modal-body .row.full-bleed {
+    margin-left: -40px;
+    margin-right: -40px;
+  }
+
+  .collapsible-panel {
+    background-color: transparent !important; // Sorry about the !important stuff :-(
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
+  }
+
+  .panel-title {
+    color: #898D98;
+  }
+
+  .panel-body {
+    background-color: transparent !important;
+  }
+
+  .panel-heading {
+    background-color: #F7F7F7;
+    color: #898D98;
+    box-shadow: 0 1px 0 #ddd, 0 -1px 0 #ddd;
+    border: none !important;
+    border-radius: none;
+    padding: 10px 40px !important;
+
+    &:hover {
+      background-color: darken(#F7F7F7, 2%) !important;
+    }
+  }
+
+
+  // Modal form elements
+  .control-label {
+    margin-bottom: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 30px;
+
+    .help-block {
+      color: #aaa;
+      margin-top: 10px;
+    }
+
+    &.has-error {
+      label,
+      .help-block {
+        color: @alizarin-crimson;
+      }
+
+      .form-control {
+        border-color: @alizarin-crimson;
+        box-shadow: none;
+
+        &:focus {
+          background-color: fade(@alizarin-crimson, 5%);
+        }
+      }
+    }
+  }
+
+  .form-control {
+    background: #fff;
+    border-color: #E2E4E5;
+    box-shadow: none;
+    color: #555;
+    height: 46px;
+    padding: 0 12px;
+
+    &:focus {
+      border-color: @brand-primary;
+      outline: 0;
+      background-color: fade(@brand-primary, 5%);
+      box-shadow: none;
+    }
+  }
+
+  textarea.form-control {
+    height: auto;
+    padding: 12px;
+  }
+
+  .duplicable-row { 
+
+    .controls {
+      flex-grow: 1;
+      margin-bottom: 36px;
+    }
+
+    .btn-link.add {
+      float: left;
+    }
+
+    .controls {
+
+      .btn.add {
+        color: @brand-primary;
+      }
+
+      .btn.remove {
+        color: #ddd;
+      }
+
+      .btn.disabled, 
+      .btn[disabled], 
+      fieldset[disabled] .btn {
+        opacity: .2;
+      }
+    }
+  }
+
+  .add-colon:after {
+    color: #222;
+    bottom: 2.4em;
+  }
+
+  // Modal type
+  h4 {
+    font-size: 18px;
+    margin: 0 0 20px 0;
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  dd {
+    color: @text-color-muted;
+  }
+
+
+  // Modal buttons
+  .btn.disabled {
+    opacity: .2;
+  }
+
+}
