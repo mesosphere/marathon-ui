@@ -19,12 +19,14 @@ var AppModalComponent = React.createClass({
 
   propTypes: {
     app: React.PropTypes.object,
+    editMode: React.PropTypes.bool,
     onDestroy: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
       app: null,
+      editMode: false,
       onDestroy: Util.noop
     };
   },
@@ -129,10 +131,9 @@ var AppModalComponent = React.createClass({
   },
 
   getSubmitButton: function () {
-    var submitButtonTitle = "+ Create";
-    if (this.props.app != null && this.props.app.version != null) {
-      submitButtonTitle = "Change and deploy configuration";
-    }
+    var submitButtonText = this.props.editMode
+      ? "Change and deploy configuration"
+      : "+ Create";
 
     var classSet = classNames({
       "btn btn-success": true,
@@ -140,9 +141,9 @@ var AppModalComponent = React.createClass({
     });
 
     return (
-      <input type="submit"
-        className={classSet}
-        value={submitButtonTitle} />
+      <button type="submit" className={classSet}>
+        {submitButtonText}
+      </button>
     );
   },
 
@@ -171,11 +172,9 @@ var AppModalComponent = React.createClass({
     var props = this.props;
     var state = this.state;
 
-    var modalTitle = "New Application";
-
-    if (props.app != null && props.app.version != null) {
-      modalTitle = "Edit Application";
-    }
+    var modalTitle = props.editMode
+      ? "Edit Application"
+      : "New Application";
 
     var appConfigProps = {
       app: state.app,
@@ -198,7 +197,7 @@ var AppModalComponent = React.createClass({
       <ModalComponent dismissOnClickOutside={false}
           ref="modalComponent"
           size="md"
-          onDestroy={this.props.onDestroy}>
+          onDestroy={props.onDestroy}>
         <form method="post" role="form" onSubmit={this.handleSubmit}>
           <button onClick={event => event.preventDefault()}
             style={{display: "none"}} />
