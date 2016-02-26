@@ -282,11 +282,31 @@ var AppPageComponent = React.createClass({
     );
   },
 
-  getVolumeDetails: function () {
-    var {app, volumeId} = this.state;
-    var tasks = app.tasks;
+  getVolumeStatus: function () {
+    var volume = this.getVolume();
 
-    var volume = tasks
+    if (volume == null) {
+      return null;
+    }
+
+    var className = classNames("volume-status", {
+      "volume-attached": volume.status === "Attached"
+    });
+
+    return (
+      <h2 className={className}>{volume.status}</h2>
+    );
+  },
+
+  getVolume: function () {
+    var {app, volumeId} = this.state;
+
+    if (app.tasks != null) {
+      return null;
+    }
+
+    var tasks = app.tasks;
+    return tasks
       // Get the first volume from a task with the same id as provided
       // by the router. This should be unique.
       .reduce((memo, task) => {
@@ -308,6 +328,12 @@ var AppPageComponent = React.createClass({
         }
         return memo;
       }, null);
+  },
+
+  getVolumeDetails: function () {
+    var {app, appId} = this.state;
+
+    var volume = this.getVolume();
 
     if (volume == null) {
       return null;
@@ -330,8 +356,6 @@ var AppPageComponent = React.createClass({
 
     return (
       <dl className={"dl-horizontal"}>
-        <dt>ID</dt>
-        <dd>{volume.persistenceId}</dd>
         <dt>Container Path</dt>
         <dd>{volume.containerPath}</dd>
         <dt>Mode</dt>
@@ -422,6 +446,7 @@ var AppPageComponent = React.createClass({
     var content;
     var state = this.state;
     var model = state.app;
+    var volumeId = this.getRouteSettings().volumeId;
 
     if (this.state.activeViewIndex === 0) {
       content = this.getAppDetails();
@@ -432,7 +457,29 @@ var AppPageComponent = React.createClass({
     }
 
     var groupId = PathUtil.getGroupFromAppId(state.appId);
-    var name = PathUtil.getAppName(state.appId);
+    var name = volumeId;
+    if (volumeId == null) {
+      name = PathUtil.getAppName(state.appId);
+      var appHealthStatus =
+        <AppStatusComponent model={model} showSummary={true} />;
+
+      var appHealthBar = (
+        <div className="app-health-detail">
+          <AppHealthBarComponent model={model} />
+          <AppHealthDetailComponent
+            className="list-inline"
+            fields={[
+              HealthStatus.HEALTHY,
+              HealthStatus.UNHEALTHY,
+              HealthStatus.UNKNOWN,
+              HealthStatus.STAGED,
+              HealthStatus.OVERCAPACITY,
+              HealthStatus.UNSCHEDULED
+            ]}
+            model={model} />
+          </div>
+      );
+    }
 
     return (
       <div>
@@ -443,21 +490,9 @@ var AppPageComponent = React.createClass({
         <div className="container-fluid">
           <div className="page-header">
             <h1>{name}</h1>
-            <AppStatusComponent model={model} showSummary={true} />
-            <div className="app-health-detail">
-              <AppHealthBarComponent model={model} />
-              <AppHealthDetailComponent
-                className="list-inline"
-                fields={[
-                  HealthStatus.HEALTHY,
-                  HealthStatus.UNHEALTHY,
-                  HealthStatus.UNKNOWN,
-                  HealthStatus.STAGED,
-                  HealthStatus.OVERCAPACITY,
-                  HealthStatus.UNSCHEDULED
-                ]}
-                model={model} />
-            </div>
+            {this.getVolumeStatus()}
+            {appHealthStatus}
+            {appHealthBar}
             {this.getControls()}
           </div>
           {content}
