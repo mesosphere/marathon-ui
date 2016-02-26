@@ -41,6 +41,13 @@ var AppsActions = {
       });
   },
   createApp: function (newAppAttributes) {
+    if (newAppAttributes.container != null &&
+      newAppAttributes.container.volumes != null) {
+      newAppAttributes.residency = {
+        relaunchEscalationTimeoutSeconds: 10,
+        taskLostBehavior: "WAIT_FOREVER"
+      };
+    }
     this.request({
       method: "POST",
       data: newAppAttributes,
