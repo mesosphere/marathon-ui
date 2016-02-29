@@ -39,9 +39,7 @@ export default React.createClass({
           activeTabId={this.props.activeTabId}
           onTabClick={this.props.onTabClick}
           tabs={this.props.tabs} />
-        <div className="tab-content">
-          {childNodes}
-        </div>
+        {childNodes}
       </div>
     );
   }
