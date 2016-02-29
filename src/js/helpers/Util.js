@@ -77,6 +77,9 @@ var Util = {
   getUniqueId: function () {
     return (++consecutiveNumber).toString() + (new Date()).getTime();
   },
+  getNewConsecutiveKey: function () {
+    return parseInt((this.getUniqueId() + "").slice(-9));
+  },
   detectObjectPaths: function (obj, startKey, excludePaths = []) {
     var paths = [];
 

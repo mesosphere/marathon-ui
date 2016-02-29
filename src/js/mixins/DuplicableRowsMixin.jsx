@@ -5,10 +5,6 @@ import FormActions from "../actions/FormActions";
 
 import Util from "../helpers/Util";
 
-function getNewConsecutiveKey() {
-  return parseInt((Util.getUniqueId() + "").slice(-9));
-}
-
 var DuplicableRowsMixin = {
   propTypes: {
     errorIndices: React.PropTypes.object.isRequired,
@@ -44,7 +40,7 @@ var DuplicableRowsMixin = {
     Object.keys(duplicableRowsScheme).forEach(function (fieldId) {
       if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
         let rowScheme = Util.extendObject(duplicableRowsScheme[fieldId], {
-          consecutiveKey: getNewConsecutiveKey()
+          consecutiveKey: Util.getNewConsecutiveKey()
         });
         FormActions.insert(fieldId, rowScheme);
       }
@@ -70,7 +66,7 @@ var DuplicableRowsMixin = {
       return Util.extendObject(row, {
         consecutiveKey: row.consecutiveKey != null
           ? row.consecutiveKey
-          : getNewConsecutiveKey()
+          : Util.getNewConsecutiveKey()
       });
     });
   },
@@ -100,7 +96,7 @@ var DuplicableRowsMixin = {
   addRow: function (fieldId, position) {
     FormActions.insert(fieldId,
       Util.extendObject(this.duplicableRowsScheme[fieldId], {
-        consecutiveKey: getNewConsecutiveKey()
+        consecutiveKey: Util.getNewConsecutiveKey()
       }),
       position
     );
