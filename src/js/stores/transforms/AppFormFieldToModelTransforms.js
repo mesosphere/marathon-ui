@@ -162,6 +162,11 @@ const AppFormFieldToModelTransforms = {
       .map(portDefinition => {
         var definition = Object.assign({}, portDefinition);
         definition.port = parseInt(definition.port, 10);
+        if (definition.port == null ||
+            isNaN(definition.port) ||
+            definition.isRandomPort) {
+          definition.port = 0;
+        }
         delete definition.consecutiveKey;
         delete definition.isRandomPort;
         return definition;

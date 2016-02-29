@@ -160,7 +160,12 @@ const AppFormValidators = {
     (Util.isStringAndEmpty(obj.persistentSize) &&
     Util.isStringAndEmpty(obj.containerPath)),
 
-  portDefinitionsPortIsValid: (obj) => isValidPort(obj.port),
+  portDefinitionsPortIsValid: (obj) => {
+    if (obj.isRandomPort === false) {
+      return obj.port != null && obj.port !== "";
+    }
+    return isValidPort(obj.port);
+  },
 
   portDefinitionsProtocolValidType: (obj) =>
     obj.protocol == null ||
