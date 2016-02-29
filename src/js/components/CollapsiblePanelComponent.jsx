@@ -13,7 +13,8 @@ var CollapsiblePanelComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
-      isOpen: false
+      isOpen: false,
+      togglePanel: function () {}
     };
   },
 
@@ -28,16 +29,12 @@ var CollapsiblePanelComponent = React.createClass({
       this.setState({
         isOpen: nextProps.isOpen
       });
-      if (this.props.togglePanel != null) {
-        this.props.togglePanel(false);
-      }
+      this.props.togglePanel(false);
     }
   },
 
   handleToggle: function () {
-    if (this.props.togglePanel != null) {
-      this.props.togglePanel(!this.state.isOpen);
-    }
+    this.props.togglePanel(!this.state.isOpen);
     this.setState({isOpen: !this.state.isOpen});
   },
 

@@ -110,9 +110,8 @@ var AppConfigEditFormComponent = React.createClass({
   },
 
   setViewVolumes: function (isVolumesOpen = true) {
-    isVolumesOpen = isVolumesOpen === true ? true : false;
     this.setState({
-      isVolumesOpen: isVolumesOpen
+      isVolumesOpen: !!isVolumesOpen
     });
   },
 
@@ -157,6 +156,12 @@ var AppConfigEditFormComponent = React.createClass({
 
   render: function () {
     var state = this.state;
+
+    var volumesIsOpen = this.fieldsHaveError({volumes: "volumes"});
+
+    if (state.isVolumesOpen === true) {
+      volumesIsOpen = state.isVolumesOpen;
+    }
 
     return (
       <div>
@@ -278,10 +283,7 @@ var AppConfigEditFormComponent = React.createClass({
         </div>
         <div className="row full-bleed">
           <CollapsiblePanelComponent
-              isOpen={
-                this.fieldsHaveError({volumes: "volumes"}) ||
-                state.isVolumesOpen
-              }
+              isOpen={volumesIsOpen}
               togglePanel={this.setViewVolumes}
               title="Volumes">
             <OptionalVolumesComponent

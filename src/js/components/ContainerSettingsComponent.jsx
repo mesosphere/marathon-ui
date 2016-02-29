@@ -172,7 +172,9 @@ var ContainerSettingsComponent = React.createClass({
         <div className="duplicable-list">{this.getParametersRows()}</div>
         <div>
           You can set your Docker volume
-          settings <u onClick={() => this.props.openVolumes(true)}>below</u>.
+          settings <a onClick={this.props.openVolumes}>
+            below
+          </a>.
         </div>
       </div>
     );
