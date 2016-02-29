@@ -189,7 +189,7 @@ var AppModalComponent = React.createClass({
       : <AppConfigEditFormComponent {...appConfigProps} />;
 
     var cancelButton = (
-      <button className="btn btn-default"
+      <button className="btn btn-default btn-inverse"
           type="button"
           onClick={this.destroy}>
         Cancel
@@ -207,9 +207,9 @@ var AppModalComponent = React.createClass({
           <div className="modal-header">
             <button type="button" className="close"
               aria-hidden="true" onClick={this.destroy}>&times;</button>
-            <h3 className="modal-title" onClick={this.handleModeToggle}>
+            <h2 className="modal-title" onClick={this.handleModeToggle}>
               {modalTitle}
-            </h3>
+            </h2>
           </div>
           <div className="modal-body reduced-padding">
             {appConfigEditor}
