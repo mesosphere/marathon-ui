@@ -14,9 +14,14 @@ var DeploymentListComponent = React.createClass({
   displayName: "DeploymentListComponent",
 
   getInitialState: function () {
+    var deployments = DeploymentStore.deployments;
+    var fetchState = deployments.length > 0
+      ? States.STATE_SUCCESS
+      : States.STATE_LOADING;
+
     return {
-      deployments: DeploymentStore.deployments,
-      fetchState: States.STATE_LOADING,
+      deployments: deployments,
+      fetchState: fetchState,
       sortKey: null,
       sortDescending: false,
       errorMessage: ""
