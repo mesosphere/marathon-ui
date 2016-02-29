@@ -133,6 +133,163 @@ describe("load plugins", function () {
     PluginActions.requestPlugins();
   });
 
+  it("handles missing modules metadata in plugin request response gracefully",
+    function (done) {
+      PluginActions.request = ajaxWrapperStub((url, resolve) => {
+        resolve({
+          "body": {
+            "plugins": [
+              {
+                "id": "plugin-id",
+                "implementation": "package.class",
+                "info": {
+                  "description": "Plugin description.",
+                  "name": "Plugin Name"
+                },
+                "plugin": "mesosphere.marathon.plugin.http.HttpRequestHandler",
+                "tags": [
+                  "ui",
+                  "example"
+                ]
+              }
+            ]
+          }
+        });
+      });
+
+      var dispatchToken = AppDispatcher.register(function (action) {
+        if (action.actionType ===
+          PluginEvents.REQUEST_PLUGINS_SUCCESS) {
+          AppDispatcher.unregister(dispatchToken);
+          expectAsync(() => {
+            expect(PluginStore.pluginsLoadingState)
+              .to.equal(States.STATE_SUCCESS);
+          }, done);
+        }
+      });
+
+      PluginActions.requestPlugins();
+    }
+  );
+
+  it("handles empty modules metadata in plugin request response gracefully",
+    function (done) {
+      PluginActions.request = ajaxWrapperStub((url, resolve) => {
+        resolve({
+          "body": {
+            "plugins": [
+              {
+                "id": "plugin-id",
+                "implementation": "package.class",
+                "info": {
+                  "description": "Plugin description.",
+                  "modules": [],
+                  "name": "Plugin Name"
+                },
+                "plugin": "mesosphere.marathon.plugin.http.HttpRequestHandler",
+                "tags": [
+                  "ui",
+                  "example"
+                ]
+              }
+            ]
+          }
+        });
+      });
+
+      var dispatchToken = AppDispatcher.register(function (action) {
+        if (action.actionType ===
+          PluginEvents.REQUEST_PLUGINS_SUCCESS) {
+          AppDispatcher.unregister(dispatchToken);
+          expectAsync(() => {
+            expect(PluginStore.pluginsLoadingState)
+              .to.equal(States.STATE_SUCCESS);
+          }, done);
+        }
+      });
+
+      PluginActions.requestPlugins();
+    }
+  );
+
+  it("handles service plugins in plugin request response gracefully",
+    function (done) {
+      PluginActions.request = ajaxWrapperStub((url, resolve) => {
+        resolve({
+          "body": {
+            "plugins": [
+              {
+                "id": "plugin-id",
+                "implementation": "package.class",
+                "info": {
+                  "description": "Plugin description.",
+                  "modules": ["service"],
+                  "name": "Plugin Name"
+                },
+                "plugin": "mesosphere.marathon.plugin.http.HttpRequestHandler",
+                "tags": [
+                  "ui",
+                  "example"
+                ]
+              }
+            ]
+          }
+        });
+      });
+
+      var dispatchToken = AppDispatcher.register(function (action) {
+        if (action.actionType ===
+          PluginEvents.REQUEST_PLUGINS_SUCCESS) {
+          AppDispatcher.unregister(dispatchToken);
+          expectAsync(() => {
+            expect(PluginStore.pluginsLoadingState)
+              .to.equal(States.STATE_SUCCESS);
+          }, done);
+        }
+      });
+
+      PluginActions.requestPlugins();
+    }
+  );
+
+  it("handles empty modules metadata in plugin request response gracefully",
+    function (done) {
+      PluginActions.request = ajaxWrapperStub((url, resolve) => {
+        resolve({
+          "body": {
+            "plugins": [
+              {
+                "id": "plugin-id",
+                "implementation": "package.class",
+                "info": {
+                  "description": "Plugin description.",
+                  "name": "Plugin Name"
+                },
+                "plugin": "mesosphere.marathon.plugin.http.HttpRequestHandler",
+                "tags": [
+                  "ui",
+                  "example"
+                ]
+              }
+            ]
+          }
+        });
+      });
+
+      var dispatchToken = AppDispatcher.register(function (action) {
+        if (action.actionType ===
+          PluginEvents.REQUEST_PLUGINS_SUCCESS) {
+          AppDispatcher.unregister(dispatchToken);
+          expectAsync(() => {
+            expect(PluginStore.pluginsLoadingState)
+              .to.equal(States.STATE_SUCCESS);
+          }, done);
+        }
+      });
+
+      PluginActions.requestPlugins();
+    }
+  );
 
   it("handles plugin loading failure gracefully", function (done) {
     PluginActions.load = PluginLoaderLoadStub((url, resolve, reject) => {
