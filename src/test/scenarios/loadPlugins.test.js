@@ -15,54 +15,70 @@ import PluginEvents from "../../js/events/PluginEvents";
 
 describe("load plugins", function () {
 
+  var errorResponse = {message: "error"};
+
+  function createPlugin(id,modules) {
+    var plugin =  {
+      id: id || "plugin-id" ,
+      implementation: "package.class",
+      info: {
+        description: "Plugin description.",
+        name: "Plugin Name"
+      },
+      plugin:
+        "mesosphere.marathon.plugin.http.HttpRequestHandler",
+      tags: [
+        "ui",
+        "example"
+      ]
+    };
+
+    // Add modules metadata
+    if (modules != null) {
+      plugin.info.modules = modules;
+    }
+
+    return plugin;
+  }
+
+  function createPluginResponse(...plugins) {
+    var response = {
+      body: {
+        plugins: plugins
+      }
+    };
+
+    return response;
+  }
+
   beforeEach(function () {
     PluginStore.resetStore();
     PluginActions.request = ajaxWrapperStub((url, resolve, reject) => {
       switch (url) {
         case `${config.apiURL}v2/plugins`:
-          resolve({
-            "body": {
-              "plugins": [
-                {
-                  "id": "plugin-id",
-                  "implementation": "package.class",
-                  "info": {
-                    "description": "Plugin description.",
-                    "modules": ["ui"],
-                    "name": "Plugin Name"
-                  },
-                  "plugin":
-                      "mesosphere.marathon.plugin.http.HttpRequestHandler",
-                  "tags": [
-                    "ui",
-                    "example"
-                  ]
-                }
-              ]
-            }
-          });
+          resolve(createPluginResponse(createPlugin("test-plugin",["ui"])));
           break;
         default:
-          reject({message: "error"});
+          reject(errorResponse);
           break;
       }
     });
     PluginActions.load = PluginLoaderLoadStub((url, resolve, reject) => {
       switch (url) {
-        case `${config.apiURL}v2/plugins/plugin-id/main.js`:
+        case `${config.apiURL}v2/plugins/test-plugin/main.js`:
           resolve("console.log(\"Example Plugin\");");
           break;
         default:
-          reject({message: "error"});
+          reject(errorResponse);
           break;
       }
     });
-
   });
 
   afterEach(function () {
     PluginActions.request = ajaxWrapper;
     PluginActions.load = PluginLoader.load;
+    PluginStore.resetStore();
   });
 
   it("updates plugin data on request plugins success", function (done) {
@@ -93,7 +109,7 @@ describe("load plugins", function () {
 
   it("handles plugin request failure gracefully", function (done) {
     PluginActions.request = ajaxWrapperStub((url, resolve, reject) => {
-      reject({message: "error"});
+      reject(errorResponse);
     });
 
     var dispatchToken = AppDispatcher.register(function (action) {
@@ -112,11 +128,7 @@ describe("load plugins", function () {
 
   it("handles empty plugin request response  gracefully", function (done) {
     PluginActions.request = ajaxWrapperStub((url, resolve) => {
-      resolve({
-        "body": {
-          "plugins": []
-        }
-      });
+      resolve(createPluginResponse());
     });
 
     var dispatchToken = AppDispatcher.register(function (action) {
@@ -133,10 +145,75 @@ describe("load plugins", function () {
     PluginActions.requestPlugins();
   });
 
+  it("handles missing modules metadata in plugin request response gracefully",
+    function (done) {
+      PluginActions.request = ajaxWrapperStub((url, resolve) => {
+        resolve(createPluginResponse(createPlugin("missing-modules")));
+      });
+
+      var dispatchToken = AppDispatcher.register(function (action) {
+        if (action.actionType ===
+          PluginEvents.REQUEST_PLUGINS_SUCCESS) {
+          AppDispatcher.unregister(dispatchToken);
+          expectAsync(() => {
+            expect(PluginStore.pluginsLoadingState)
+              .to.equal(States.STATE_SUCCESS);
+          }, done);
+        }
+      });
+
+      PluginActions.requestPlugins();
+    }
+  );
+
+  it("handles empty modules metadata in plugin request response gracefully",
+    function (done) {
+      PluginActions.request = ajaxWrapperStub((url, resolve) => {
+        resolve(createPluginResponse(createPlugin("empty-modules", [])));
+      });
+
+      var dispatchToken = AppDispatcher.register(function (action) {
+        if (action.actionType ===
+          PluginEvents.REQUEST_PLUGINS_SUCCESS) {
+          AppDispatcher.unregister(dispatchToken);
+          expectAsync(() => {
+            expect(PluginStore.pluginsLoadingState)
+              .to.equal(States.STATE_SUCCESS);
+          }, done);
+        }
+      });
+
+      PluginActions.requestPlugins();
+    }
+  );
+
+  it("ignores service only plugins in plugin request response gracefully",
+    function (done) {
+      PluginActions.request = ajaxWrapperStub((url, resolve) => {
+        resolve(createPluginResponse(
+          createPlugin("test-plugin", ["ui", "service"]),
+          createPlugin("service-plugin", ["service"])
+        ));
+      });
+
+      var dispatchToken = AppDispatcher.register((action) => {
+        if (action.actionType ===
+          PluginEvents.LOAD_PLUGIN_SUCCESS) {
+          AppDispatcher.unregister(dispatchToken);
+          expectAsync(() => {
+            expect(PluginStore.pluginsLoadingState)
+              .to.equal(States.STATE_SUCCESS);
+          }, done);
+        }
+      });
+
+      PluginActions.requestPlugins();
+    }
+  );
 
   it("handles plugin loading failure gracefully", function (done) {
     PluginActions.load = PluginLoaderLoadStub((url, resolve, reject) => {
-      reject({message: "error"});
+      reject(errorResponse);
     });
 
     var dispatchToken = AppDispatcher.register(function (action) {

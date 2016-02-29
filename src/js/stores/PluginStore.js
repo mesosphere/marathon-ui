@@ -16,7 +16,9 @@ var storeData = {
 };
 
 function addPlugin(data) {
-  if (data.id == null && !Util.isObject(data.info) &&
+  if (data.id == null || !Util.isObject(data.info) ||
+      !Util.isArray(data.info.modules) ||
+      !data.info.modules.includes(PluginModules.UI) ||
       getPluginById(data.id) != null) {
     return;
   }
@@ -42,15 +44,14 @@ function updatePluginState(id, state) {
 }
 
 function loadPlugins() {
-  storeData.plugins
-    .filter(plugin => {
-      return plugin.modules.includes(PluginModules.UI) &&
-        plugin.state === States.STATE_INITIAL;
-    })
-    .forEach(plugin => {
-      plugin.state = States.STATE_LOADING;
-      PluginActions.loadPlugin(plugin.id);
-    });
+  storeData.plugins.forEach(plugin => {
+    if (plugin.state !== States.STATE_INITIAL) {
+      return;
+    }
+
+    plugin.state = States.STATE_LOADING;
+    PluginActions.loadPlugin(plugin.id);
+  });
 }
 
 var PluginStore = Util.extendObject(EventEmitter.prototype, {
