@@ -25,10 +25,11 @@ var TabPaneComponent = React.createClass({
   },
 
   render: function () {
-    var classSet = classNames({
-      "active": this.props.isActive,
-      "tab-pane": true
-    }, this.props.className);
+    if (!this.props.isActive) {
+      return null;
+    }
+
+    var classSet = classNames("tab-pane active", this.props.className);
 
     return (
       <div className={classSet}>
