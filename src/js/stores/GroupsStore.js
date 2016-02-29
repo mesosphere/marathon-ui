@@ -9,6 +9,16 @@ var GroupsStore = Util.extendObject(EventEmitter.prototype, {});
 
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
+    case GroupsEvents.CREATE_GROUP:
+      GroupsStore.emit(GroupsEvents.CREATE_GROUP);
+      break;
+    case GroupsEvents.CREATE_GROUP_ERROR:
+      GroupsStore.emit(
+        GroupsEvents.CREATE_GROUP_ERROR,
+        action.data.body,
+        action.data.status
+      );
+      break;
     case GroupsEvents.SCALE_SUCCESS:
       GroupsStore.emit(GroupsEvents.SCALE_SUCCESS);
       break;

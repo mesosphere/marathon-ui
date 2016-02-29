@@ -6,6 +6,25 @@ import AppDispatcher from "../AppDispatcher";
 import GroupsEvents from "../events/GroupsEvents";
 
 var GroupsActions = {
+  createGroup: function (newGroupAttributes) {
+    this.request({
+      method: "POST",
+      data: newGroupAttributes,
+      url: `${config.apiURL}v2/groups`
+    })
+      .success(function (group) {
+        AppDispatcher.dispatch({
+          actionType: GroupsEvents.CREATE_GROUP,
+          data: group
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: GroupsEvents.CREATE_GROUP_ERROR,
+          data: error
+        });
+      });
+  },
   scaleGroup: function (groupId, scaleBy) {
     this.request({
       method: "PUT",
