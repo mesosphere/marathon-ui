@@ -86,6 +86,7 @@ const AppFormModelToFieldTransforms = {
         if (row.containerPort != null) {
           row.port = row.containerPort;
         }
+        row.isRandomPort = false;
         row.consecutiveKey = i;
         return row;
       });

@@ -7,8 +7,6 @@ import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import FormGroupComponent from "../components/FormGroupComponent";
 import PortInputAttributes from "../constants/PortInputAttributes";
 
-import Util from "../helpers/Util";
-
 const fieldsetId = "portDefinitions";
 
 function determinePortDefinitionsType(fields) {
@@ -33,19 +31,14 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     portDefinitions: {
       port: "",
       protocol: "",
-      name: ""
+      name: "",
+      isRandomPort: true
     }
   },
 
   propTypes: {
     fields: React.PropTypes.object.isRequired,
     getErrorMessage: React.PropTypes.func.isRequired
-  },
-
-  getInitialState: function () {
-    return {
-      manualPortsConsecutiveKeys: []
-    };
   },
 
   handleAddRow: function (fieldId, position, event) {
@@ -95,26 +88,15 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     return <div>{message}</div>;
   },
 
-  handleCheckboxClick: function (consecutiveKey) {
-    var checkbox = React
-      .findDOMNode(this.refs["manualPortCheckbox" + consecutiveKey]);
-
-    if (checkbox == null) {
-      return;
-    }
-
-    var manualPorts = Util.deepCopy(this.state.manualPortsConsecutiveKeys);
-
-    if (checkbox.checked) {
-      manualPorts.push(consecutiveKey);
-    } else {
-      manualPorts =
-        manualPorts.filter(manualPort => manualPort !== consecutiveKey);
-    }
-
-    this.setState({
-      manualPortsConsecutiveKeys: manualPorts
-    });
+  getRandomPortCheckbox: function (row, i) {
+    return (
+      <FormGroupComponent className="checkbox-form-group port-input-field"
+          fieldId={`${fieldsetId}.${i}.isRandomPort`}
+          label="Assign a random port"
+          value={row.isRandomPort}>
+        <input ref={`isRandomPort${i}`} type="checkbox" />
+      </FormGroupComponent>
+    );
   },
 
   getPortInputField: function (row, i) {
@@ -124,45 +106,36 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       ? "Container Port"
       : "Port";
 
-    var inputAttributes = PortInputAttributes;
-    var inputDisabled = false;
-    var inputValue = row.port;
-
     var randomPortCheckbox = null;
+    var randomPortField = null;
 
     if (type !== ContainerConstants.NETWORK.BRIDGE) {
-      let checked = !this.state.manualPortsConsecutiveKeys
-        .includes(row.consecutiveKey);
+      randomPortCheckbox = this.getRandomPortCheckbox(row, i);
 
-      if (checked) {
-        inputValue = "$PORT" + i;
-        inputDisabled = true;
-        inputAttributes = null;
+      if (row.isRandomPort) {
+        randomPortField = (
+          <FormGroupComponent
+              label={fieldLabel}
+              value={"$PORT" + i}>
+            <input disabled={true} />
+          </FormGroupComponent>
+        );
       }
-
-      randomPortCheckbox = (
-        <div className="port-input-field">
-          <label>
-            <input type="checkbox"
-              defaultChecked={checked}
-              ref={"manualPortCheckbox" + row.consecutiveKey}
-              onClick={this.handleCheckboxClick
-                .bind(null, row.consecutiveKey)} />
-            Assign a random port
-          </label>
-        </div>
-      );
     }
+
+    let portFieldClassSet = classNames({
+      "hidden": !!randomPortField
+    });
 
     return (
       <div className="col-sm-4">
-        <FormGroupComponent
+        <FormGroupComponent className={portFieldClassSet}
             fieldId={`${fieldsetId}.${i}.port`}
             label={fieldLabel}
-            value={inputValue}>
-          <input ref={`port${i}`}
-            disabled={inputDisabled} {...inputAttributes} />
+            value={row.port}>
+          <input ref={`port${i}`} {...PortInputAttributes} />
         </FormGroupComponent>
+        {randomPortField}
         {randomPortCheckbox}
       </div>
     );

@@ -163,6 +163,7 @@ const AppFormFieldToModelTransforms = {
         var definition = Object.assign({}, portDefinition);
         definition.port = parseInt(definition.port, 10);
         delete definition.consecutiveKey;
+        delete definition.isRandomPort;
         return definition;
       })
       .filter(portDefinition => {
