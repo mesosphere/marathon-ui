@@ -162,7 +162,7 @@ const AppFormValidators = {
 
   portDefinitionsPortIsValid: (obj) => {
     if (obj.isRandomPort === false) {
-      return obj.port != null && obj.port !== "";
+      return obj.port != null && obj.port !== "" && isValidPort(obj.port);
     }
     return isValidPort(obj.port);
   },

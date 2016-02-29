@@ -79,20 +79,28 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   getHelpText: function () {
     var rows = this.state.rows[fieldsetId];
 
-    let type = determinePortDefinitionsType(this.props.fields);
+    var partialRandomText = !rows.every(row => row.isRandomPort)
+      ? "partial "
+      : "";
 
-    let portIdentifiers = Array(rows.length)
+    var dynamicPortText = !rows.every(row => !row.isRandomPort)
+      ? ` which will be assigned ${partialRandomText}dynamically`
+      : "";
+
+    var type = determinePortDefinitionsType(this.props.fields);
+
+    var portIdentifiers = Array(rows.length)
       .fill()
       .map((_, i) => "$PORT" + i)
       .join(", ")
       .replace(/(.*), (.*)$/, "$1 and $2");
 
-    let message = "Your application will need to be configured to listen to" +
-      ` ${portIdentifiers} which will be assigned dynamically.`;
+    var message = "Your application will need to be configured to listen to" +
+      ` ${portIdentifiers}${dynamicPortText}.`;
 
     if (type === ContainerConstants.NETWORK.HOST) {
       message = "Your Docker container will need to be configured to listen" +
-        ` to ${portIdentifiers} which will be assigned dynamically.`;
+        ` to ${portIdentifiers}${dynamicPortText}.`;
     } else if (type === ContainerConstants.NETWORK.BRIDGE) {
       message = "Your Docker container will bind to the requested ports and" +
         ` they will be dynamically mapped to ${portIdentifiers} on the host.`;
