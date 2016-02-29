@@ -25,14 +25,22 @@ describe("App Form Field to Model Transform", function () {
       expect(AppFormTransforms.FieldToModel.disk("33.23")).to.equal(33.23);
     });
 
-    it("constraints to array with segements", function () {
-      let constraints = "hostname:UNIQUE, atomic:LIKE:man";
-      expect(AppFormTransforms.FieldToModel.constraints(constraints))
-        .to.deep.equal([
-          ["hostname", "UNIQUE"],
-          ["atomic", "LIKE", "man"]
-        ]);
+    describe("constraints", function () {
+      it("to array with segments", function () {
+        var constraints = "hostname:UNIQUE, atomic:LIKE:man";
+        expect(AppFormTransforms.FieldToModel.constraints(constraints))
+          .to.deep.equal([
+            ["hostname", "UNIQUE"],
+            ["atomic", "LIKE", "man"]
+          ]);
+      });
+      it("without inserting empty items", function () {
+        var constraints = "";
+        expect(AppFormTransforms.FieldToModel.constraints(constraints))
+          .to.deep.equal([]);
+      });
     });
+
     describe("container volumes", function () {
       it("to array of objects", function () {
         expect(AppFormTransforms.FieldToModel.containerVolumes([
