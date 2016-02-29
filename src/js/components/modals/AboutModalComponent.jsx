@@ -58,8 +58,6 @@ var AboutModalComponent = React.createClass({
       <ModalComponent onDestroy={this.props.onDestroy}
           size="lg">
         <div className="modal-header modal-header-blend">
-          <button type="button" className="close"
-            aria-hidden="true" onClick={this.destroy}>&times;</button>
           <h2 className="modal-title" title={`UI Version ${config.version}`}>
             <img width="160" height="27" alt="Marathon" src={logoPath} />
             <small className="text-muted" style={{"marginLeft": "1em"}}>

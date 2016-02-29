@@ -19,8 +19,6 @@ var HelpModalComponent = React.createClass({
     return (
       <ModalComponent onDestroy={this.props.onDestroy} ref="modalComponent">
         <div className="modal-header">
-          <button type="button" className="close"
-            aria-hidden="true" onClick={this.destroy}>&times;</button>
           <h2 className="modal-title">Keyboard shortcuts</h2>
         </div>
         <div className="modal-body">
