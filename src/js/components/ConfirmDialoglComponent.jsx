@@ -38,7 +38,7 @@ var ConfirmDialogComponent = React.createClass({
     var className = classNames("dialog", data.severity);
 
     return (
-      <ModalComponent centered={true}
+      <ModalComponent
           className={className}
           dismissOnClickOutside={false}
           ref="modalComponent"

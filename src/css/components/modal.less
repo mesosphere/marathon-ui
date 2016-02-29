@@ -31,7 +31,9 @@
 }
 
 .modal-body {
+  max-height: calc(~"80vh" - @modal-header-height);
   word-wrap: break-word;
+  overflow: scroll;
 
   .row.full-bleed {
     margin-left: -@modal-body-padding;
@@ -89,12 +91,13 @@
 }
 
 @media (min-width: 768px) {
-  .modal-centered {
+  .modal {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
   }
+
   .modal-md {
     width: 740px;
   }

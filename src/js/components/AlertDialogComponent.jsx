@@ -39,7 +39,6 @@ var AlertDialogComponent = React.createClass({
 
     return (
       <ModalComponent
-          centered={true}
           className={className}
           dismissOnClickOutside={false}
           ref="modalComponent"
