@@ -212,10 +212,11 @@ describe("Create Application", function () {
         nock(config.apiURL)
           .post("/v2/apps")
           .reply(422, {
+            "message": "Object is not valid",
             "details": [{
-              "attribute": "value",
-              "error": "Groups and Applications may not have the same " +
-                "identifier: /sleep"
+              "path": "self",
+              "errors": ["Groups and Applications may not have the same " +
+                "identifier: /sleep"]
             }]
           });
 
@@ -223,6 +224,31 @@ describe("Create Application", function () {
           id: "sleep/my-app"
         });
       });
+
+      it("processes a 422 error response with no error details correctly",
+        function (done) {
+
+          AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+            expectAsync(function () {
+              expect(AppFormStore.responseErrors.general)
+                .to.equal("Object is not valid");
+            }, done);
+          });
+
+          nock(config.apiURL)
+            .post("/v2/apps")
+            .reply(422, {
+              "message": "Object is not valid",
+              "details": [{
+                "path": "self",
+                "errors": []
+              }]
+            });
+
+          AppsActions.createApp({
+            id: "sleep/my-app"
+          });
+        });
 
       it("processes error response codes 300 to 499 correctly",
         function (done) {
@@ -1216,8 +1242,8 @@ describe("Create Application", function () {
             .post("/v2/apps")
             .reply(422, {
               "details": [{
-                "attribute": "id",
-                "error": "error on id attribute"
+                "path": "id",
+                "errors": ["error on id attribute"]
               }]
             });
 
