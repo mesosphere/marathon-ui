@@ -47,7 +47,8 @@ const AppFormModelPostProcess = {
       : ContainerConstants.TYPE.MESOS;
 
     if (container.type === ContainerConstants.TYPE.DOCKER &&
-        container.docker.network === ContainerConstants.NETWORK.BRIDGE) {
+        container.docker.network === ContainerConstants.NETWORK.BRIDGE &&
+        app.portDefinitions != null) {
       container.docker.portMappings =
         app.portDefinitions.map(portDefinition => {
           var definition = Object.assign({}, portDefinition);
