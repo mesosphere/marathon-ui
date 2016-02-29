@@ -4,8 +4,11 @@ import React from "react/addons";
 import ContainerConstants from "../constants/ContainerConstants";
 import DuplicableRowControls from "../components/DuplicableRowControls";
 import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
+import FormActions from "../actions/FormActions";
 import FormGroupComponent from "../components/FormGroupComponent";
 import PortInputAttributes from "../constants/PortInputAttributes";
+
+import Util from "../helpers/Util";
 
 const fieldsetId = "portDefinitions";
 
@@ -29,9 +32,9 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
   duplicableRowsScheme: {
     portDefinitions: {
-      port: "",
-      protocol: "",
-      name: "",
+      port: null,
+      protocol: ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP,
+      name: null,
       isRandomPort: true
     }
   },
@@ -45,7 +48,21 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     event.target.blur();
     event.preventDefault();
 
-    this.addRow(fieldId, position);
+    var type = determinePortDefinitionsType(this.props.fields);
+    var isBridgeNetwork = type === ContainerConstants.NETWORK.BRIDGE;
+
+    var scheme = Util.extendObject(this.duplicableRowsScheme[fieldId], {
+      consecutiveKey: Util.getNewConsecutiveKey()
+    });
+
+    if (isBridgeNetwork) {
+      scheme.isRandomPort = false;
+    }
+
+    FormActions.insert(fieldId,
+      scheme,
+      position
+    );
   },
 
   handleChangeRow: function (fieldId, position) {
@@ -84,12 +101,20 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     return <div>{message}</div>;
   },
 
-  getRandomPortCheckbox: function (row, i) {
+  getRandomPortCheckbox: function (row, i, hidden = false) {
+    var classSet = classNames({
+      "hidden": hidden,
+    }, "checkbox-form-group port-input-field");
+
+    var value = hidden
+      ? false
+      : row.isRandomPort;
+
     return (
-      <FormGroupComponent className="checkbox-form-group port-input-field"
+      <FormGroupComponent className={classSet}
           fieldId={`${fieldsetId}.${i}.isRandomPort`}
           label="Assign a random port"
-          value={row.isRandomPort}>
+          value={value}>
         <input ref={`isRandomPort${i}`} type="checkbox" />
       </FormGroupComponent>
     );
@@ -97,26 +122,22 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
   getPortInputField: function (row, i) {
     var type = determinePortDefinitionsType(this.props.fields);
+    var isBridgeNetwork = type === ContainerConstants.NETWORK.BRIDGE;
 
-    var fieldLabel = type === ContainerConstants.NETWORK.BRIDGE
+    var fieldLabel = isBridgeNetwork
       ? "Container Port"
       : "Port";
 
-    var randomPortCheckbox = null;
     var randomPortField = null;
 
-    if (type !== ContainerConstants.NETWORK.BRIDGE) {
-      randomPortCheckbox = this.getRandomPortCheckbox(row, i);
-
-      if (row.isRandomPort) {
-        randomPortField = (
-          <FormGroupComponent
-              label={fieldLabel}
-              value={"$PORT" + i}>
-            <input disabled={true} />
-          </FormGroupComponent>
-        );
-      }
+    if (!isBridgeNetwork && row.isRandomPort) {
+      randomPortField = (
+        <FormGroupComponent
+            label={fieldLabel}
+            value={"$PORT" + i}>
+          <input disabled={true} />
+        </FormGroupComponent>
+      );
     }
 
     let portFieldClassSet = classNames({
@@ -132,7 +153,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
           <input ref={`port${i}`} {...PortInputAttributes} />
         </FormGroupComponent>
         {randomPortField}
-        {randomPortCheckbox}
+        {this.getRandomPortCheckbox(row, i, isBridgeNetwork)}
       </div>
     );
   },
@@ -160,7 +181,6 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
                 label="Protocol"
                 value={row.protocol}>
               <select defaultValue={row.protocol} ref={`protocol${i}`}>
-                <option value="">Select</option>
                 <option value={ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}>
                   {ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP}
                 </option>
