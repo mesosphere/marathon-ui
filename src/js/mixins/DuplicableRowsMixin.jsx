@@ -86,6 +86,10 @@ var DuplicableRowsMixin = {
     return Object.keys(this.duplicableRowsScheme[fieldId])
       .reduce(function (memo, key) {
         var input = findDOMNode(refs[`${key}${i}`]);
+        if (input == null) {
+          throw new Error("Cannot find input element. " +
+            "You need to define a correct ref-attribute at the element.");
+        }
         memo[key] = input.type !== "checkbox"
           ? input.value
           : input.checked;
