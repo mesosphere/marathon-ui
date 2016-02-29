@@ -83,7 +83,8 @@ var DuplicableRowsMixin = {
       .reduce(function (memo, key) {
         var input = findDOMNode(refs[`${key}${i}`]);
         if (input == null) {
-          throw new Error("Cannot find input element. " +
+          return memo;
+          throw new Error(`Cannot find input element in refs["${key}${i}"]. ` +
             "You need to define a correct ref-attribute at the element.");
         }
         memo[key] = input.type !== "checkbox"
@@ -112,7 +113,7 @@ var DuplicableRowsMixin = {
     FormActions.delete(fieldId, row, position);
   },
 
-  hasOnlyOneSingleEmptyRow: function (fieldId) {
+  hasOnlyOneSingleEmptyRow: function (fieldId, excludeFieldIds = []) {
     var rows = this.state.rows[fieldId];
 
     if (rows.length !== 1) {
@@ -120,7 +121,9 @@ var DuplicableRowsMixin = {
     }
 
     return Object.keys(this.duplicableRowsScheme[fieldId]).every((key) => {
-      return rows[0][key] == null || Util.isStringAndEmpty(rows[0][key]);
+      return excludeFieldIds.includes(key) ||
+        rows[0][key] == null ||
+        Util.isStringAndEmpty(rows[0][key]);
     });
   },
 

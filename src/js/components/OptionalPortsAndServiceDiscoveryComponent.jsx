@@ -62,10 +62,6 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   getHelpText: function () {
     var rows = this.state.rows[fieldsetId];
 
-    if (rows == null || this.hasOnlyOneSingleEmptyRow(fieldsetId)) {
-      return null;
-    }
-
     let type = determinePortDefinitionsType(this.props.fields);
 
     let portIdentifiers = Array(rows.length)
@@ -200,7 +196,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       return null;
     }
 
-    let disableRemoveButton = this.hasOnlyOneSingleEmptyRow(fieldsetId);
+    let disableRemoveButton = this.hasOnlyOneSingleEmptyRow(fieldsetId,
+      ["protocol", "isRandomPort"]);
 
     return rows.map((row, i) => {
       return this.getPortDefinitionRow(row, i, disableRemoveButton);
