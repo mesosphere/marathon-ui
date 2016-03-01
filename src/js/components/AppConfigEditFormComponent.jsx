@@ -228,7 +228,7 @@ var AppConfigEditFormComponent = React.createClass({
           <CollapsiblePanelComponent
               isOpen=
                 {this.fieldsHaveError({portDefinitions: "portDefinitions"})}
-              title="Ports &amp; Service Discovery">
+              title="Ports">
             <OptionalPortsAndServiceDiscoveryComponent
               errorIndices={state.errorIndices}
               fields={state.fields}
