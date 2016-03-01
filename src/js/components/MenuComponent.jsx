@@ -8,13 +8,39 @@ var MenuComponent = React.createClass({
   "displayName": "MenuComponent",
 
   propTypes: {
-    children: Util.getComponentTypeValidator(MenuItemComponent)
+    children: Util.getComponentTypeValidator(MenuItemComponent),
+    name: React.PropTypes.string,
+    onChange: React.PropTypes.func,
+    selected: React.PropTypes.string
+  },
+
+  getDefaultProps: function () {
+    return {
+      name: "menu-" + Util.getUniqueId(),
+      onChange: Util.noop
+    };
+  },
+
+  renderChildren: function () {
+    var {children, name, selected} = this.props;
+
+    return React.Children.map(children, function (child) {
+
+      return React.addons.cloneWithProps(child, {
+        name: name,
+        selected: child.props.value === selected
+      });
+    }.bind(this));
+  },
+
+  onChange: function (event) {
+    this.props.onChange(event.target.value);
   },
 
   render: function () {
     return (
-      <ul>
-        {this.props.children}
+      <ul onChange={this.onChange}>
+        {this.renderChildren()}
       </ul>
     );
   }
