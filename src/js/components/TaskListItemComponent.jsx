@@ -154,7 +154,9 @@ var TaskListItemComponent = React.createClass({
     var task = this.props.task;
     var sortKey = this.props.sortKey;
     var hasHealth = !!this.props.hasHealth;
-    var version = new Date(task.version).toISOString();
+    var version = task.version == null
+      ? null
+      : new Date(task.version).toISOString();
     var taskId = task.id;
     var taskURI = "#apps/" +
       encodeURIComponent(this.props.appId) +
