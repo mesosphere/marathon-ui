@@ -33,7 +33,6 @@ describe("AppVersionComponent", function () {
       "constraints": [],
       "uris": [],
       "storeUrls": [],
-      "ports": [10000, 10001],
       "requirePorts": false,
       "backoffSeconds": 1,
       "backoffFactor": 1.15,
@@ -136,11 +135,6 @@ describe("AppVersionComponent", function () {
     var children = this.rows.at(29).props().children;
     expect(children[0]).to.equal(0.0);
     expect(children[2]).to.equal("MiB");
-  });
-
-  it("has correct ports", function () {
-    var children = this.rows.at(31).props().children;
-    expect(children).to.equal("10000, 10001");
   });
 
   it("has correct backoff factor", function () {
