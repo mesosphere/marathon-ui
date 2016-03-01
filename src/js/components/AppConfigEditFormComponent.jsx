@@ -28,6 +28,7 @@ var AppConfigEditFormComponent = React.createClass({
 
   propTypes: {
     app: React.PropTypes.object,
+    handleModeToggle: React.PropTypes.func.isRequired,
     onChange: React.PropTypes.func.isRequired,
     onError: React.PropTypes.func.isRequired
   },
@@ -231,7 +232,8 @@ var AppConfigEditFormComponent = React.createClass({
             <OptionalPortsAndServiceDiscoveryComponent
               errorIndices={state.errorIndices}
               fields={state.fields}
-              getErrorMessage={this.getErrorMessage} />
+              getErrorMessage={this.getErrorMessage}
+              handleModeToggle={this.props.handleModeToggle} />
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed">

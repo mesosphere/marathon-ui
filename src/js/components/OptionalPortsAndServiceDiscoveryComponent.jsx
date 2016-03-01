@@ -25,6 +25,12 @@ function determinePortDefinitionsType(fields) {
   return ContainerConstants.TYPE.MESOS;
 }
 
+function isTooComplexStructure(fields) {
+  return fields.portDefinitions.some(portDefinition => {
+    return !!Object.keys(portDefinition.labels).length;
+  });
+}
+
 var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   displayName: "OptionalPortsAndServiceDiscoveryComponent",
 
@@ -41,7 +47,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
   propTypes: {
     fields: React.PropTypes.object.isRequired,
-    getErrorMessage: React.PropTypes.func.isRequired
+    getErrorMessage: React.PropTypes.func.isRequired,
+    handleModeToggle: React.PropTypes.func.isRequired
   },
 
   handleAddRow: function (fieldId, position, event) {
@@ -233,6 +240,19 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   render: function () {
+    if (isTooComplexStructure(this.props.fields)) {
+      return (
+        <div>
+          Looks like your ports & service discovery configuration is a little
+          bit too sophisticated for our form to handle.
+          Please switch
+          to <a className="json-link clickable"
+            onClick={this.props.handleModeToggle}>JSON mode</a> if
+          you want to view or modify.
+        </div>
+      );
+    }
+
     return (
       <div>
         <div className="duplicable-list">
