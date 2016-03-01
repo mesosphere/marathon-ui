@@ -88,6 +88,10 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   getHelpText: function () {
     var rows = this.state.rows[fieldsetId];
 
+    if (rows == null) {
+      return null;
+    }
+
     var partialRandomText = !rows.every(row => row.isRandomPort)
       ? "partial "
       : "";
@@ -185,7 +189,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     });
 
     return (
-      <div key={row.consecutiveKey} className={rowClassSet}>
+      <div key={row.consecutiveKey+i} className={rowClassSet}>
         <fieldset className="row duplicable-row"
             onChange={this.handleChangeRow.bind(null, fieldsetId, i)}>
           {this.getPortInputField(row, i)}
