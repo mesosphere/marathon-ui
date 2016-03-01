@@ -93,11 +93,11 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     }
 
     var partialRandomText = !rows.every(row => row.isRandomPort)
-      ? "partial "
+      ? "partially "
       : "";
 
     var dynamicPortText = !rows.every(row => !row.isRandomPort)
-      ? ` which will be assigned ${partialRandomText}dynamically`
+      ? ` which will be ${partialRandomText}assigned dynamically`
       : "";
 
     var type = determinePortDefinitionsType(this.props.fields);
