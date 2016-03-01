@@ -84,8 +84,6 @@ var DuplicableRowsMixin = {
         var input = findDOMNode(refs[`${key}${i}`]);
         if (input == null) {
           return memo;
-          throw new Error(`Cannot find input element in refs["${key}${i}"]. ` +
-            "You need to define a correct ref-attribute at the element.");
         }
         memo[key] = input.type !== "checkbox"
           ? input.value

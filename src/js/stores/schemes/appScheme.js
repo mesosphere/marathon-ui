@@ -23,7 +23,6 @@ const appScheme = {
   status: AppStatus.SUSPENDED,
   mem: null,
   disk: null,
-  // ports: [0],
   portDefinitions: [],
   uris: [],
   user: null,
