@@ -1,0 +1,34 @@
+[role="menu"] {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  [role="menu-item"] {
+    label {
+      color: inherit;
+      font-weight: 400;
+      display: block;
+      box-sizing: border-box;
+      padding: @base-spacing-unit 0;
+      margin: 0;
+      border-right: transparent 2px solid;
+      opacity: .8;
+      &:hover {
+        border-color: currentColor;
+        opacity: 1;
+      }
+    }
+
+    [type="radio"] {
+      display: none;
+
+      &:checked+label {
+        font-weight: 600;
+        color: @menu-item-color-active;
+        border-right-color: @menu-item-color-active;
+        opacity: 1;
+
+      }
+    }
+  }
+}

@@ -39,7 +39,7 @@ var MenuComponent = React.createClass({
 
   render: function () {
     return (
-      <ul onChange={this.onChange}>
+      <ul onChange={this.onChange} role="menu">
         {this.renderChildren()}
       </ul>
     );

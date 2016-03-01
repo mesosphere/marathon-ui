@@ -22,7 +22,7 @@ var MenuItemComponent = React.createClass({
     } = this.props;
 
     return (
-      <li>
+      <li role="menu-item">
         <input id={id} type="radio" name={name} value={value}
           defaultChecked={selected} />
         <label htmlFor={id}>
