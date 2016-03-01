@@ -26,9 +26,11 @@ function determinePortDefinitionsType(fields) {
 }
 
 function isTooComplexStructure(fields) {
-  return fields.portDefinitions.some(portDefinition => {
-    return !!Object.keys(portDefinition.labels).length;
-  });
+  return fields.portDefinitions != null &&
+      fields.portDefinitions.some(portDefinition =>
+        portDefinition.labels != null &&
+      !!Object.keys(portDefinition.labels).length
+    );
 }
 
 var OptionalPortsAndServiceDiscoveryComponent = React.createClass({

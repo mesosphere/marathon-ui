@@ -165,6 +165,7 @@ const responseAttributePathToFieldIdMap = {
   "portDefinitions({INDEX}).name": "portDefinitions.{INDEX}.name",
   "portDefinitions({INDEX}).port": "portDefinitions.{INDEX}.port",
   "portDefinitions({INDEX}).protocol": "portDefinitions.{INDEX}.protocol",
+  "container.docker.portMappings": "portDefinitions",
   "/container/docker/portMappings({INDEX})/containerPort":
     "portDefinitions.{INDEX}.port",
   "/container/docker/portMappings({INDEX})/protocol":
