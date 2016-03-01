@@ -14,6 +14,7 @@
 - \#3124 - Improve usability of labels filter dropdown
 - \#3239 - Move docker volumes to volumes section
 - \#3269 - Sort ENV variables in application details page
+- \#3243 - Simplify port management in Marathon UI
 
 ### Fixed
 - \#3133 - Interrupted scaling operations can leave the health bar in an
