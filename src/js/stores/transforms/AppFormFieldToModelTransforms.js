@@ -32,7 +32,11 @@ const AppFormFieldToModelTransforms = {
   disk: (value) => parseFloat(value),
   constraints: (constraints) => constraints
     .split(",")
-    .map((constraint) => constraint.split(":").map((value) => value.trim())),
+    .filter((constraint) => constraint != null && constraint !== "")
+    .map((constraint) =>
+      constraint
+        .split(":")
+        .map((value) => value.trim())),
   containerVolumes: rows => {
     return lazy(rows)
       .map((row) => ensureObjectScheme(row, dockerRowSchemes.containerVolumes))
