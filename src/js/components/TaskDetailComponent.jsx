@@ -126,6 +126,30 @@ var TaskDetailComponent = React.createClass({
     ));
   },
 
+  getStatus: function () {
+    var props = this.props;
+    var task = props.task;
+    if (task == null || task.status == null) {
+      return <dd className="text-muted">Unknown</dd>;
+    }
+    return <dd>{task.status}</dd>;
+  },
+
+  getVersion: function () {
+    var props = this.props;
+    var task = props.task;
+    if (task == null || task.version == null) {
+      return <dd className="text-muted">None</dd>;
+    }
+    return (
+      <dd>
+        <time dateTime={task.version}>
+          {task.version}
+        </time>
+      </dd>
+    );
+  },
+
   getTaskHealthComponent: function () {
     var props = this.props;
     var task = props.task;
@@ -188,14 +212,10 @@ var TaskDetailComponent = React.createClass({
           <dt>Service Discovery</dt>
           {this.getServiceDiscovery()}
           <dt>Status</dt>
-          <dd>{task.status}</dd>
+          {this.getStatus()}
           {timeFields}
           <dt>Version</dt>
-          <dd>
-            <time dateTime={task.version}>
-              {task.version}
-            </time>
-          </dd>
+          {this.getVersion()}
           <dt>Health</dt>
           <dd className={healthClassSet}>{props.taskHealthMessage}</dd>
           <dt>Mesos details</dt>
