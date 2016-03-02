@@ -1,4 +1,5 @@
 import React from "react/addons";
+import Util from "../helpers/Util";
 
 var SectionComponent = React.createClass({
   "displayName": "SectionComponent",
@@ -6,13 +7,31 @@ var SectionComponent = React.createClass({
   propTypes: {
     active: React.PropTypes.bool,
     children: React.PropTypes.node,
-    id: React.PropTypes.string.isRequired
+    id: React.PropTypes.string.isRequired,
+    onActive: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
-      active: false
+      active: false,
+      onActive: Util.noop
     };
+  },
+
+  componentDidMount: function () {
+    this.triggerCallbacks();
+  },
+
+  componentDidUpdate: function () {
+    this.triggerCallbacks();
+  },
+
+  triggerCallbacks: function () {
+    var {active, onActive} = this.props;
+
+    if (active) {
+      onActive();
+    }
   },
 
   render: function () {
