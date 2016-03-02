@@ -1,4 +1,5 @@
 import React from "react/addons";
+import classNames from "classnames";
 import Util from "../helpers/Util";
 
 import AppsEvents from "../events/AppsEvents";
@@ -162,6 +163,45 @@ var AppConfigEditFormComponent = React.createClass({
   render: function () {
     var state = this.state;
 
+    var generalMenuItemClassSet = classNames({
+      "error": this.fieldsHaveError({
+        appId: "appId",
+        cpus: "cpus",
+        mem: "mem",
+        disk: "disk",
+        instances: "instances",
+        cmd: "cmd"
+      })
+    });
+
+    var containerMenuItemClassSet = classNames({
+      "error": this.fieldsHaveError({container: "container"})
+    });
+
+    var portsMenuItemClassSet = classNames({
+      "error": this.fieldsHaveError({portDefinitions: "portDefinitions"})
+    });
+
+    var envMenuItemClassSet = classNames({
+      "error": this.fieldsHaveError({env: "env"})
+    });
+
+    var labelsMenuItemClassSet = classNames({
+      "error": this.fieldsHaveError({labels: "labels"})
+    });
+
+    var healthMenuItemClassSet = classNames({
+      "error": this.fieldsHaveError({healthChecks: "healthChecks"})
+    });
+
+    var volumesMenuItemClassSet = classNames({
+      "error": this.fieldsHaveError({volumes: "volumes"})
+    });
+
+    var optionalMenuItemClassSet = classNames({
+      "error": this.fieldsHaveError(OptionalSettingsComponent.fieldIds)
+    });
+
     var volumesIsOpen = this.fieldsHaveError({volumes: "volumes"});
 
     if (state.isVolumesOpen) {
@@ -172,43 +212,53 @@ var AppConfigEditFormComponent = React.createClass({
       <div className="app-config-edit">
         <MenuComponent selected={state.activeSection} className="col-sm-3"
             onChange={this.onMenuChange}>
-          <MenuItemComponent value="general">General</MenuItemComponent>
-          <MenuItemComponent value="container">
+          <MenuItemComponent value="general"
+              className={generalMenuItemClassSet}>
+            General
+          </MenuItemComponent>
+          <MenuItemComponent value="container"
+              className={containerMenuItemClassSet}>
             Container
           </MenuItemComponent>
-          <MenuItemComponent value="ports">
+          <MenuItemComponent value="ports"
+             className={portsMenuItemClassSet}>
             Ports
           </MenuItemComponent>
-          <MenuItemComponent value="env">
+          <MenuItemComponent value="env"
+              className={envMenuItemClassSet}>
             Environment Variables
           </MenuItemComponent>
-          <MenuItemComponent value="labels">
+          <MenuItemComponent value="labels"
+              className={labelsMenuItemClassSet}>
             Labels
           </MenuItemComponent>
-          <MenuItemComponent value="health">
+          <MenuItemComponent value="health"
+              className={healthMenuItemClassSet}>
             Health Checks
           </MenuItemComponent>
-          <MenuItemComponent value="volumes">
+          <MenuItemComponent value="volumes"
+              className={volumesMenuItemClassSet}>
             Volumes
           </MenuItemComponent>
-          <MenuItemComponent value="optional">Optional</MenuItemComponent>
+          <MenuItemComponent value="optional"
+              className={optionalMenuItemClassSet}>
+            Optional
+          </MenuItemComponent>
         </MenuComponent>
         <ContentComponent active={state.activeSection}
             className="content-component">
           <SectionComponent id="general"
               onActive={this.setCursorToEndOfAppIdInput}>
-            <FormGroupComponent
-              errorMessage={this.getErrorMessage("appId")}
-              fieldId="appId"
-              value={state.fields.appId}
-              label="ID"
-              onChange={this.handleFieldUpdate}>
+            <FormGroupComponent errorMessage={this.getErrorMessage("appId")}
+                fieldId="appId"
+                value={state.fields.appId}
+                label="ID"
+                onChange={this.handleFieldUpdate}>
               <input ref="appId"/>
             </FormGroupComponent>
             <div className="row">
               <div className="col-sm-3">
-                <FormGroupComponent
-                  errorMessage={this.getErrorMessage("cpus")}
+                <FormGroupComponent errorMessage={this.getErrorMessage("cpus")}
                   fieldId="cpus"
                   label="CPUs"
                   value={state.fields.cpus}
@@ -217,9 +267,7 @@ var AppConfigEditFormComponent = React.createClass({
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <FormGroupComponent
-                  fieldId="mem"
-                  label="Memory (MiB)"
+                <FormGroupComponent fieldId="mem" label="Memory (MiB)"
                   errorMessage={this.getErrorMessage("mem")}
                   value={state.fields.mem}
                   onChange={this.handleFieldUpdate}>
@@ -227,9 +275,7 @@ var AppConfigEditFormComponent = React.createClass({
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <FormGroupComponent
-                  fieldId="disk"
-                  label="Disk Space (MiB)"
+                <FormGroupComponent fieldId="disk" label="Disk Space (MiB)"
                   errorMessage={this.getErrorMessage("disk")}
                   value={state.fields.disk}
                   onChange={this.handleFieldUpdate}>
@@ -237,9 +283,7 @@ var AppConfigEditFormComponent = React.createClass({
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
-                <FormGroupComponent
-                  fieldId="instances"
-                  label="Instances"
+                <FormGroupComponent fieldId="instances" label="Instances"
                   errorMessage={this.getErrorMessage("instances")}
                   value={state.fields.instances}
                   onChange={this.handleFieldUpdate}>
@@ -247,8 +291,7 @@ var AppConfigEditFormComponent = React.createClass({
                 </FormGroupComponent>
               </div>
             </div>
-            <FormGroupComponent
-              errorMessage={this.getErrorMessage("cmd")}
+            <FormGroupComponent errorMessage={this.getErrorMessage("cmd")}
               fieldId="cmd"
               label="Command"
               help="May be left blank if a container image is supplied"
