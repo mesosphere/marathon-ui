@@ -25,7 +25,7 @@ describe("App Modal", function () {
     });
 
     it("shows the creation button text", function () {
-      expect(this.nodes.submitBtn.text()).to.equal("+ Create");
+      expect(this.nodes.submitBtn.text()).to.equal("Create Application");
     });
 
   });
