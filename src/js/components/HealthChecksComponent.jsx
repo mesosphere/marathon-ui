@@ -253,7 +253,7 @@ var HealthChecksComponent = React.createClass({
           </div>
           <div className="row duplicable-row">
             <div className="col-sm-4">
-              <button className="btn btn-default"
+              <button className="btn btn-default btn-inverse"
                   type="button"
                   onClick={handleAddRow}>
                 Add Another Health Check
