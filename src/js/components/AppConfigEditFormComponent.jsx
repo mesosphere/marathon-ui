@@ -159,7 +159,7 @@ var AppConfigEditFormComponent = React.createClass({
 
     var volumesIsOpen = this.fieldsHaveError({volumes: "volumes"});
 
-    if (state.isVolumesOpen === true) {
+    if (state.isVolumesOpen) {
       volumesIsOpen = state.isVolumesOpen;
     }
 

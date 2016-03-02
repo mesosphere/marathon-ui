@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React from "react";
+import Util from "../helpers/Util";
 
 var CollapsiblePanelComponent = React.createClass({
   displayName: "CollapsiblePanelComponent",
@@ -14,7 +15,7 @@ var CollapsiblePanelComponent = React.createClass({
   getDefaultProps: function () {
     return {
       isOpen: false,
-      togglePanel: function () {}
+      togglePanel: Util.noop
     };
   },
 
