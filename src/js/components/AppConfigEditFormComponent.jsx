@@ -195,7 +195,8 @@ var AppConfigEditFormComponent = React.createClass({
         </MenuComponent>
         <ContentComponent active={state.activeSection}
             className="content-component">
-          <SectionComponent id="general">
+          <SectionComponent id="general"
+              onActive={this.setCursorToEndOfAppIdInput}>
             <FormGroupComponent
               errorMessage={this.getErrorMessage("appId")}
               fieldId="appId"
