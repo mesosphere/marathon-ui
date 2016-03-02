@@ -10,7 +10,10 @@ import AppsEvents from "../../js/events/AppsEvents";
 import HealthStatus from "../../js/constants/HealthStatus";
 import AppTypes from "../../js/constants/AppTypes";
 
-describe("request applications", function () {
+var server = config.localTestserverURI;
+config.apiURL = "http://" + server.address + ":" + server.port + "/";
+
+describe("request applications and groups", function () {
 
   before(function (done) {
     var nockResponse = {
@@ -21,6 +24,9 @@ describe("request applications", function () {
         cpus: 4
       }, {
         id: "/app-2"
+      }],
+      groups: [{
+        id: "/group"
       }]
     };
 
@@ -34,7 +40,7 @@ describe("request applications", function () {
   });
 
   it("updates the AppsStore on success", function () {
-    expect(AppsStore.apps).to.have.length(2);
+    expect(AppsStore.apps).to.have.length(3);
   });
 
   it("calculate total resources", function () {
@@ -279,6 +285,56 @@ describe("request applications", function () {
     });
   });
 
+  describe("application groups", function () {
+    before(function (done) {
+      var nockResponse = {
+        id: "/",
+        apps: [{
+          id: "/app-1",
+          tasksHealthy: 0,
+          tasksUnhealthy: 0,
+          tasksRunning: 1,
+          tasksStaged: 0,
+          instances: 0
+        }],
+        groups: [{
+          id: "/empty-group",
+          apps: [],
+          groups: []
+        }, {
+          id: "/non-empty-group",
+          apps: [{
+            id: "/non-empty-group/app-2",
+            tasksHealthy: 0,
+            tasksUnhealthy: 0,
+            tasksRunning: 1,
+            tasksStaged: 0,
+            instances: 0
+          }],
+          groups: []
+        }]
+      };
+
+      nock(config.apiURL)
+        .get("/v2/groups")
+        .query(true)
+        .reply(200, nockResponse);
+
+      AppsStore.once(AppsEvents.CHANGE, done);
+      AppsActions.requestApps();
+    });
+
+    it("handles emtpy groups", function () {
+      var emptyGroup = AppsStore.apps[1];
+      expect(emptyGroup.id).to.eql("/empty-group");
+      expect(emptyGroup.isGroup).to.be.true;
+    });
+
+    it("handles nested applications", function () {
+      var nestedApp = AppsStore.apps[2];
+      expect(nestedApp.id).to.eql("/non-empty-group/app-2");
+    });
+  });
 });
 
 describe("on single app request", function () {
