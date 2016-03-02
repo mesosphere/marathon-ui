@@ -1,3 +1,4 @@
+import {Link} from "react-router";
 import React from "react/addons";
 
 import AppListComponent from "../components/AppListComponent";
@@ -84,7 +85,22 @@ var TabPanesComponent = React.createClass({
   },
 
   render: function () {
+    var path = this.context.router.getCurrentPathname();
     var state = this.state;
+    var groupId = state.currentGroup;
+
+    var newAppModalQuery = {
+      modal: "new-app"
+    };
+
+    var newGroupModalQuery = {
+      modal: "new-group"
+    };
+
+    if (groupId != null && groupId !== "/") {
+      newAppModalQuery.groupId = groupId;
+      newGroupModalQuery.groupId = groupId;
+    }
 
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
@@ -95,6 +111,24 @@ var TabPanesComponent = React.createClass({
             <main>
               <div className="contextual-bar">
                 {this.getContextualBar()}
+                <ul className="list-unstyled list-inline">
+                  <li>
+                    <Link to={path}
+                        query={newGroupModalQuery}
+                        className="btn btn-default create-group"
+                        activeClassName="create-group-active">
+                      Create Group
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={path}
+                        query={newAppModalQuery}
+                        className="btn btn-success create-app"
+                        activeClassName="create-app-active">
+                      Create Application
+                    </Link>
+                  </li>
+                </ul>
               </div>
               <AppListComponent currentGroup={state.currentGroup} />
             </main>

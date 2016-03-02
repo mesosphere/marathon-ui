@@ -7,6 +7,7 @@
 - \#3155 - Add support for Local Volumes in Create/Edit modal
 - \#3157 - Filter apps by attached volumes
 - \#3127 - Show groups as part of search results
+- \#966  - Allow creating empty groups
 
 ### Changed
 - \#3078 - Always show download button for logs

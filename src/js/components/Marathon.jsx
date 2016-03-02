@@ -10,6 +10,7 @@ import AboutModalComponent from "../components/modals/AboutModalComponent";
 import AppModalComponent from "../components/modals/AppModalComponent";
 import DialogsComponent from "../components/DialogsComponent";
 import EditAppModalComponent from "../components/modals/EditAppModalComponent";
+import GroupModalComponent from "../components/modals/GroupModalComponent";
 import HelpModalComponent from "../components/modals/HelpModalComponent";
 import NavTabsComponent from "../components/NavTabsComponent";
 import HelpMenuComponent from "./HelpMenuComponent";
@@ -86,6 +87,11 @@ var Marathon = React.createClass({
     } else if (modalQuery != null && modalQuery.indexOf("edit-app--") > -1) {
       let [, appId, appVersion] = modalQuery.split("--");
       modal = this.getEditAppModal(decodeURIComponent(appId), appVersion);
+    } else if (modalQuery === "new-group") {
+      let groupId = params.groupId != null
+        ? decodeURIComponent(params.groupId)
+        : null;
+      modal = this.getNewGroupModal(groupId);
     }
 
     var appId = params.appId;
@@ -147,6 +153,14 @@ var Marathon = React.createClass({
         return null;
       }
       router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-app"});
+    }.bind(this), "keypress");
+
+    Mousetrap.bind("shift+c", function () {
+      if (this.state.modal != null) {
+        return null;
+      }
+      router.transitionTo(router.getCurrentPathname(),
+        {}, {modal: "new-group"});
     }.bind(this), "keypress");
 
     Mousetrap.bind("g a", function () {
@@ -256,6 +270,13 @@ var Marathon = React.createClass({
     return (
       <EditAppModalComponent appId={appId}
         appVersion={appVersion}
+        onDestroy={this.handleModalDestroy} />
+    );
+  },
+
+  getNewGroupModal: function (groupId) {
+    return (
+      <GroupModalComponent parentGroupId={groupId}
         onDestroy={this.handleModalDestroy} />
     );
   },
