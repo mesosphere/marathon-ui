@@ -169,6 +169,10 @@ var AppModalComponent = React.createClass({
     this.setState({error: error, appIsValid: false});
   },
 
+  onJSONToggleChange: function (event) {
+    this.setState({jsonMode:event.target.checked});
+  },
+
   render: function () {
     var props = this.props;
     var state = this.state;
@@ -200,13 +204,15 @@ var AppModalComponent = React.createClass({
       <ModalComponent dismissOnClickOutside={false}
           ref="modalComponent"
           size="md"
-          onDestroy={props.onDestroy}>
+          onDestroy={props.onDestroy}
+          className="app-modal">
         <form method="post" role="form" onSubmit={this.handleSubmit}>
           <button onClick={event => event.preventDefault()}
             style={{display: "none"}} />
           <div className="modal-header">
-            <button type="button" className="close"
-              aria-hidden="true" onClick={this.destroy}>&times;</button>
+            <input id="json-toggle" type="checkbox" name="checkbox"
+              className="toggle" onChange={this.onJSONToggleChange} />
+            <label htmlFor="json-toggle">JSON Mode</label>
             <h2 className="modal-title" onClick={this.handleModeToggle}>
               {modalTitle}
             </h2>
