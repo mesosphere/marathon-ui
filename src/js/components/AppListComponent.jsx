@@ -401,7 +401,7 @@ var AppListComponent = React.createClass({
       });
     } else {
       items = this.sortItems(items,
-        (a,b) => SortUtil.compareValues(a[sortKey],b[sortKey]) * sortDirection
+        (a, b) => SortUtil.compareValues(a[sortKey], b[sortKey]) * sortDirection
       );
     }
 
