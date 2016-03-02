@@ -16,6 +16,7 @@
     border-radius: @modal-border-radius @modal-border-radius 0 0;
     background-color: @modal-dialog-info-color;
     color: @modal-header-text-color;
+    max-height: @modal-header-height;
 
     padding: @modal-header-padding;
 
@@ -45,7 +46,7 @@
   .modal-body {
     padding: 0 @base-spacing-unit*2.5;
 
-    max-height: calc(~"80vh" - @modal-header-height);
+    max-height: calc(~"80vh" - (@modal-header-height+@modal-footer-height));
     word-wrap: break-word;
     overflow: scroll;
 
@@ -119,6 +120,7 @@
     margin-top: 0;
     justify-content: flex-end;
     padding: @modal-footer-padding;
+    max-height: @modal-footer-height;
   }
 }
 
