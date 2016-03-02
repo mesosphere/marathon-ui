@@ -9,6 +9,7 @@ var MenuComponent = React.createClass({
 
   propTypes: {
     children: Util.getComponentTypeValidator(MenuItemComponent),
+    className: React.PropTypes.string,
     name: React.PropTypes.string,
     onChange: React.PropTypes.func,
     selected: React.PropTypes.string
@@ -39,7 +40,7 @@ var MenuComponent = React.createClass({
 
   render: function () {
     return (
-      <ul onChange={this.onChange} role="menu">
+      <ul onChange={this.onChange} role="menu" className={this.props.className}>
         {this.renderChildren()}
       </ul>
     );

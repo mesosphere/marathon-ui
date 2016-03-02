@@ -43,7 +43,7 @@
   }
 
   .modal-body {
-    padding-bottom: @modal-dialog-padding;
+    padding: 0 @base-spacing-unit*2.5;
 
     max-height: calc(~"80vh" - @modal-header-height);
     word-wrap: break-word;
@@ -89,7 +89,9 @@
       font-weight: inherit;
     }
 
-
+    .menu-content {
+      display: flex;
+    }
   }
 
   .tooltip-container {
@@ -113,15 +115,26 @@
 
   .modal-footer {
     background-color: @modal-dialog-footer-color;
-
     border-radius: 0 0 @modal-border-radius @modal-border-radius;
-    border-top: none;
+    border-top-color: @modal-footer-border-color;
     display: flex;
     margin-top: 0;
-    justify-content: center;
+    justify-content: flex-end;
     padding: @modal-footer-padding;
   }
 
+  .content-component {
+    padding: @base-spacing-unit*2;
+    border-left: @modal-footer-border-color 1px solid;
+  }
+
+  .form-control.form-control-inverse {
+    border-color: @alto;
+
+    &:focus {
+      border-color: @dodger-blue;
+    }
+  }
 }
 
 @media (min-width: 768px) {
@@ -206,6 +219,7 @@
   }
 
   .modal-body {
+    padding: @base-spacing-unit*2.5 @base-spacing-unit*2.5 @modal-dialog-padding;
     text-align: center;
   }
 
@@ -232,25 +246,29 @@
       background-color: @modal-dialog-warning-color;
     }
 
-    .modal-footer .btn-default:hover {
-      border-color: @modal-dialog-warning-color;
-    }
+    .modal-footer {
+      justify-content: center;
 
-    .modal-footer .btn-success {
-      background-color: @modal-dialog-warning-color;
-      border-color: @modal-dialog-warning-color;
-
-      &:hover {
-        background-color: lighten(@modal-dialog-warning-color,10%);
-        border-color: lighten(@modal-dialog-warning-color,10%);
-
-        &:focus{
-          outline-color: lighten(@modal-dialog-warning-color,10%);
-        }
+      .btn-default:hover {
+        border-color: @modal-dialog-warning-color;
       }
 
-      &:focus{
-        outline-color: @modal-dialog-warning-color;
+      .btn-success {
+        background-color: @modal-dialog-warning-color;
+        border-color: @modal-dialog-warning-color;
+
+        &:hover {
+          background-color: lighten(@modal-dialog-warning-color,10%);
+          border-color: lighten(@modal-dialog-warning-color,10%);
+
+          &:focus{
+            outline-color: lighten(@modal-dialog-warning-color,10%);
+          }
+        }
+
+        &:focus{
+          outline-color: @modal-dialog-warning-color;
+        }
       }
     }
   }

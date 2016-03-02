@@ -133,7 +133,7 @@ var AppModalComponent = React.createClass({
   getSubmitButton: function () {
     var submitButtonText = this.props.editMode
       ? "Change and deploy configuration"
-      : "+ Create";
+      : "Create Application";
 
     var classSet = classNames({
       "btn btn-success": true,
@@ -217,11 +217,13 @@ var AppModalComponent = React.createClass({
               {modalTitle}
             </h2>
           </div>
-          <div className="modal-body reduced-padding">
+          <div className="modal-body">
             {appConfigEditor}
+          </div>
+          <div className="modal-footer">
             <div className="modal-controls">
-              {this.getGeneralErrorBlock()}
-              {this.getSubmitButton()} {cancelButton}
+            {this.getGeneralErrorBlock()}
+            {cancelButton} {this.getSubmitButton()}
             </div>
           </div>
         </form>

@@ -56,7 +56,7 @@ var FormGroupComponent = React.createClass({
     var child = React.Children.only(props.children);
     var formControlChild = React.cloneElement(
       child, {
-        className: "form-control mousetrap",
+        className: "form-control form-control-inverse mousetrap",
         id: fieldId,
         onChange: this.handleChange,
         defaultValue: props.value,
