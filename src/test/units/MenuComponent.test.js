@@ -35,7 +35,7 @@ describe("MenuComponent", function () {
   });
 
   it("should select correct menu item", function () {
-    expect(shallowComponent.find("[value='ports']").prop("selected"))
+    expect(shallowComponent.find(MenuItemComponent).at(3).prop("selected"))
       .to.be.true;
   });
 
