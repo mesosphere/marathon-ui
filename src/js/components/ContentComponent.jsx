@@ -8,6 +8,7 @@ var ContentComponent = React.createClass({
 
   propTypes: {
     active: React.PropTypes.string,
+    className: React.PropTypes.string,
     children: Util.getComponentTypeValidator(SectionComponent)
   },
 
@@ -23,7 +24,7 @@ var ContentComponent = React.createClass({
 
   render: function () {
     return (
-      <div>
+      <div className={this.props.className}>
         {this.renderChildren()}
       </div>
     );

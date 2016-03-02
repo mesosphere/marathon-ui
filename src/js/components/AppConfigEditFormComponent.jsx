@@ -193,116 +193,114 @@ var AppConfigEditFormComponent = React.createClass({
           </MenuItemComponent>
           <MenuItemComponent value="optional">Optional</MenuItemComponent>
         </MenuComponent>
-        <div className="content-component">
-          <ContentComponent active={state.activeSection}>
-            <SectionComponent id="general">
-              <FormGroupComponent
-                errorMessage={this.getErrorMessage("appId")}
-                fieldId="appId"
-                value={state.fields.appId}
-                label="ID"
-                onChange={this.handleFieldUpdate}>
-                <input ref="appId"/>
-              </FormGroupComponent>
-
-              <div className="row">
-                <div className="col-sm-3">
-                  <FormGroupComponent
-                    errorMessage={this.getErrorMessage("cpus")}
-                    fieldId="cpus"
-                    label="CPUs"
-                    value={state.fields.cpus}
-                    onChange={this.handleFieldUpdate}>
-                    <input min="0" step="any" type="number"/>
-                  </FormGroupComponent>
-                </div>
-                <div className="col-sm-3">
-                  <FormGroupComponent
-                    fieldId="mem"
-                    label="Memory (MiB)"
-                    errorMessage={this.getErrorMessage("mem")}
-                    value={state.fields.mem}
-                    onChange={this.handleFieldUpdate}>
-                    <input min="0" step="any" type="number"/>
-                  </FormGroupComponent>
-                </div>
-                <div className="col-sm-3">
-                  <FormGroupComponent
-                    fieldId="disk"
-                    label="Disk Space (MiB)"
-                    errorMessage={this.getErrorMessage("disk")}
-                    value={state.fields.disk}
-                    onChange={this.handleFieldUpdate}>
-                    <input min="0" step="any" type="number"/>
-                  </FormGroupComponent>
-                </div>
-                <div className="col-sm-3">
-                  <FormGroupComponent
-                    fieldId="instances"
-                    label="Instances"
-                    errorMessage={this.getErrorMessage("instances")}
-                    value={state.fields.instances}
-                    onChange={this.handleFieldUpdate}>
-                    <input min="0" step="1" type="number"/>
-                  </FormGroupComponent>
-                </div>
+        <ContentComponent active={state.activeSection}
+            className="content-component">
+          <SectionComponent id="general">
+            <FormGroupComponent
+              errorMessage={this.getErrorMessage("appId")}
+              fieldId="appId"
+              value={state.fields.appId}
+              label="ID"
+              onChange={this.handleFieldUpdate}>
+              <input ref="appId"/>
+            </FormGroupComponent>
+            <div className="row">
+              <div className="col-sm-3">
+                <FormGroupComponent
+                  errorMessage={this.getErrorMessage("cpus")}
+                  fieldId="cpus"
+                  label="CPUs"
+                  value={state.fields.cpus}
+                  onChange={this.handleFieldUpdate}>
+                  <input min="0" step="any" type="number"/>
+                </FormGroupComponent>
               </div>
-              <FormGroupComponent
-                errorMessage={this.getErrorMessage("cmd")}
-                fieldId="cmd"
-                label="Command"
-                help="May be left blank if a container image is supplied"
-                value={state.fields.cmd}
-                onChange={this.handleFieldUpdate}>
-                <textarea style={{resize: "vertical"}}/>
-              </FormGroupComponent>
-            </SectionComponent>
-            <SectionComponent id="container">
-              <ContainerSettingsComponent
-                errorIndices={state.errorIndices}
-                fields={state.fields}
-                getErrorMessage={this.getErrorMessage}
-                openVolumes={this.setViewVolumes}/>
-            </SectionComponent>
-            <SectionComponent id="ports">
-              <OptionalPortsAndServiceDiscoveryComponent
-                errorIndices={state.errorIndices}
-                fields={state.fields}
-                getErrorMessage={this.getErrorMessage}
-                handleModeToggle={this.props.handleModeToggle} />
-            </SectionComponent>
-            <SectionComponent id="env">
-              <OptionalEnvironmentComponent
-                errorIndices={state.errorIndices}
-                getErrorMessage={this.getErrorMessage}
-                fields={state.fields}/>
-            </SectionComponent>
-            <SectionComponent id="labels">
-              <OptionalLabelsComponent
-                errorIndices={state.errorIndices}
-                getErrorMessage={this.getErrorMessage}
-                fields={state.fields}/>
-            </SectionComponent>
-            <SectionComponent id="health">
-              <HealthChecksComponent
-                errorIndices={state.errorIndices}
-                fields={state.fields}
-                getErrorMessage={this.getErrorMessage}/>
-            </SectionComponent>
-            <SectionComponent id="volumes">
-              <OptionalVolumesComponent
-                errorIndices={state.errorIndices}
-                getErrorMessage={this.getErrorMessage}
-                fields={state.fields} />
-            </SectionComponent>
-            <SectionComponent id="optional">
-              <OptionalSettingsComponent
-                errorIndices={state.errorIndices}
-                fields={state.fields}
-                getErrorMessage={this.getErrorMessage}/>
-            </SectionComponent>
-          </ContentComponent>
-        </div>
+              <div className="col-sm-3">
+                <FormGroupComponent
+                  fieldId="mem"
+                  label="Memory (MiB)"
+                  errorMessage={this.getErrorMessage("mem")}
+                  value={state.fields.mem}
+                  onChange={this.handleFieldUpdate}>
+                  <input min="0" step="any" type="number"/>
+                </FormGroupComponent>
+              </div>
+              <div className="col-sm-3">
+                <FormGroupComponent
+                  fieldId="disk"
+                  label="Disk Space (MiB)"
+                  errorMessage={this.getErrorMessage("disk")}
+                  value={state.fields.disk}
+                  onChange={this.handleFieldUpdate}>
+                  <input min="0" step="any" type="number"/>
+                </FormGroupComponent>
+              </div>
+              <div className="col-sm-3">
+                <FormGroupComponent
+                  fieldId="instances"
+                  label="Instances"
+                  errorMessage={this.getErrorMessage("instances")}
+                  value={state.fields.instances}
+                  onChange={this.handleFieldUpdate}>
+                  <input min="0" step="1" type="number"/>
+                </FormGroupComponent>
+              </div>
+            </div>
+            <FormGroupComponent
+              errorMessage={this.getErrorMessage("cmd")}
+              fieldId="cmd"
+              label="Command"
+              help="May be left blank if a container image is supplied"
+              value={state.fields.cmd}
+              onChange={this.handleFieldUpdate}>
+              <textarea style={{resize: "vertical"}}/>
+            </FormGroupComponent>
+          </SectionComponent>
+          <SectionComponent id="container">
+            <ContainerSettingsComponent
+              errorIndices={state.errorIndices}
+              fields={state.fields}
+              getErrorMessage={this.getErrorMessage}
+              openVolumes={this.setViewVolumes}/>
+          </SectionComponent>
+          <SectionComponent id="ports">
+            <OptionalPortsAndServiceDiscoveryComponent
+              errorIndices={state.errorIndices}
+              fields={state.fields}
+              getErrorMessage={this.getErrorMessage}
+              handleModeToggle={this.props.handleModeToggle} />
+          </SectionComponent>
+          <SectionComponent id="env">
+            <OptionalEnvironmentComponent
+              errorIndices={state.errorIndices}
+              getErrorMessage={this.getErrorMessage}
+              fields={state.fields}/>
+          </SectionComponent>
+          <SectionComponent id="labels">
+            <OptionalLabelsComponent
+              errorIndices={state.errorIndices}
+              getErrorMessage={this.getErrorMessage}
+              fields={state.fields}/>
+          </SectionComponent>
+          <SectionComponent id="health">
+            <HealthChecksComponent
+              errorIndices={state.errorIndices}
+              fields={state.fields}
+              getErrorMessage={this.getErrorMessage}/>
+          </SectionComponent>
+          <SectionComponent id="volumes">
+            <OptionalVolumesComponent
+              errorIndices={state.errorIndices}
+              getErrorMessage={this.getErrorMessage}
+              fields={state.fields} />
+          </SectionComponent>
+          <SectionComponent id="optional">
+            <OptionalSettingsComponent
+              errorIndices={state.errorIndices}
+              fields={state.fields}
+              getErrorMessage={this.getErrorMessage}/>
+          </SectionComponent>
+        </ContentComponent>
       </div>
     );
   }
