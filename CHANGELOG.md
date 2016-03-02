@@ -17,6 +17,7 @@
 - \#3239 - Move docker volumes to volumes section
 - \#3269 - Sort ENV variables in application details page
 - \#3243 - Simplify port management in Marathon UI
+- \#3305 - Redesign Create/Edit modal and add JSON editor toggle
 
 ### Fixed
 - \#3133 - Interrupted scaling operations can leave the health bar in an
