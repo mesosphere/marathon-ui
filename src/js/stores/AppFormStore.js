@@ -419,6 +419,10 @@ function processResponseErrors(responseErrors, response, statusCode) {
         }).join(", ");
       };
 
+      if (error == null) {
+        error = response.message;
+      }
+
       responseErrors[fieldId] =
         AppFormErrorMessages.lookupServerResponseMessage(error);
     });
