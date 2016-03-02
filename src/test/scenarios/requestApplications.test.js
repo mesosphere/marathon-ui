@@ -25,7 +25,8 @@ describe("request applications", function () {
     };
 
     nock(config.apiURL)
-      .get("/v2/apps")
+      .get("/v2/groups")
+      .query(true)
       .reply(200, nockResponse);
 
     AppsStore.once(AppsEvents.CHANGE, done);
@@ -43,7 +44,8 @@ describe("request applications", function () {
 
   it("handles failure gracefully", function (done) {
     nock(config.apiURL)
-      .get("/v2/apps")
+      .get("/v2/groups")
+      .query(true)
       .reply(404, {message: "Guru Meditation"});
 
     AppsStore.once(AppsEvents.REQUEST_APPS_ERROR, function (error) {
@@ -57,7 +59,8 @@ describe("request applications", function () {
 
   it("handles unauthorized errors gracefully", function (done) {
     nock(config.apiURL)
-      .get("/v2/apps")
+      .get("/v2/groups")
+      .query(true)
       .reply(401, {message: "Unauthorized access"});
 
     AppsStore.once(AppsEvents.REQUEST_APPS_ERROR,
@@ -85,7 +88,8 @@ describe("request applications", function () {
       };
 
       nock(config.apiURL)
-        .get("/v2/apps")
+        .get("/v2/groups")
+        .query(true)
         .reply(200, nockResponse);
 
       AppsStore.once(AppsEvents.CHANGE, done);
@@ -130,7 +134,8 @@ describe("request applications", function () {
       };
 
       nock(config.apiURL)
-        .get("/v2/apps")
+        .get("/v2/groups")
+        .query(true)
         .reply(200, nockResponse);
 
       AppsStore.once(AppsEvents.CHANGE, done);
@@ -172,7 +177,8 @@ describe("request applications", function () {
       };
 
       nock(config.apiURL)
-        .get("/v2/apps")
+        .get("/v2/groups")
+        .query(true)
         .reply(200, nockResponse);
 
       AppsStore.once(AppsEvents.CHANGE, done);
@@ -210,7 +216,8 @@ describe("request applications", function () {
       };
 
       nock(config.apiURL)
-        .get("/v2/apps")
+        .get("/v2/groups")
+        .query(true)
         .reply(200, nockResponse);
 
       AppsStore.once(AppsEvents.CHANGE, done);
@@ -248,7 +255,8 @@ describe("request applications", function () {
       };
 
       nock(config.apiURL)
-        .get("/v2/apps")
+        .get("/v2/groups")
+        .query(true)
         .reply(200, nockResponse);
 
       AppsStore.once(AppsEvents.CHANGE, done);

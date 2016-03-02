@@ -118,7 +118,8 @@ describe("AppPageComponent", function () {
       });
 
       nock(config.apiURL)
-        .get("/v2/apps")
+        .get("/v2/groups")
+        .query(true)
         .reply(401, {"message": "Unauthorized access"});
 
       AppsActions.requestApps();
