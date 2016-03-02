@@ -109,11 +109,16 @@
   color: @oslo-gray;
 }
 
-.has-error .help-block,
-.has-error .control-label,
-.has-error .radio,
-.has-error .checkbox,
-.has-error .radio-inline,
-.has-error .checkbox-inline {
-  color: @text-color-danger-light;
+.has-error {
+  .help-block,
+  .control-label,
+  .radio,
+  .checkbox,
+  .radio-inline,
+  .checkbox-inline {
+    color: @text-color-danger-light;
+  }
+  .form-control:focus {
+    border-color: @text-color-danger-light
+  }
 }

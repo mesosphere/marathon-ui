@@ -124,9 +124,9 @@ var AppModalComponent = React.createClass({
     }
 
     return (
-      <p className="text-danger">
+      <div className="text-danger app-error-block">
         <AutolinkComponent text={error} />
-      </p>
+      </div>
     );
   },
 
@@ -219,12 +219,12 @@ var AppModalComponent = React.createClass({
               {modalTitle}
             </h2>
           </div>
+          {this.getGeneralErrorBlock()}
           <div className="modal-body">
             {appConfigEditor}
           </div>
           <div className="modal-footer">
             <div className="modal-controls">
-            {this.getGeneralErrorBlock()}
             {cancelButton} {this.getSubmitButton()}
             </div>
           </div>

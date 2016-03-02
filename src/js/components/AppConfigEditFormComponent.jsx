@@ -195,7 +195,7 @@ var AppConfigEditFormComponent = React.createClass({
     });
 
     var volumesMenuItemClassSet = classNames({
-      "error": this.fieldsHaveError({volumes: "volumes"})
+      "error": this.fieldsHaveError({localVolumes: "localVolumes"})
     });
 
     var optionalMenuItemClassSet = classNames({
