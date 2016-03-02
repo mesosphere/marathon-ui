@@ -8,18 +8,18 @@ var ContentComponent = React.createClass({
 
   propTypes: {
     active: React.PropTypes.string,
-    className: React.PropTypes.string,
-    children: Util.getComponentTypeValidator(SectionComponent)
+    children: Util.getComponentTypeValidator(SectionComponent),
+    className: React.PropTypes.string
   },
 
   renderChildren: function () {
     var {active, children} = this.props;
 
-    return React.Children.map(children, (child) => {
-      return React.addons.cloneWithProps(child, {
+    return React.Children.map(children, (child) =>
+      React.addons.cloneWithProps(child, {
         active: child.props.id === active
-      });
-    });
+      })
+    );
   },
 
   render: function () {

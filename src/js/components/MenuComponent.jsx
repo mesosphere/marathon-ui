@@ -25,13 +25,12 @@ var MenuComponent = React.createClass({
   renderChildren: function () {
     var {children, name, selected} = this.props;
 
-    return React.Children.map(children, function (child) {
-
-      return React.addons.cloneWithProps(child, {
+    return React.Children.map(children,  (child) =>
+      React.addons.cloneWithProps(child, {
         name: name,
         selected: child.props.value === selected
-      });
-    }.bind(this));
+      })
+    );
   },
 
   onChange: function (event) {

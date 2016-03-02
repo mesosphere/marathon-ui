@@ -169,7 +169,7 @@ var AppConfigEditFormComponent = React.createClass({
     }
 
     return (
-      <div className="menu-content">
+      <div className="app-config-edit">
         <MenuComponent selected={state.activeSection} className="col-sm-3"
             onChange={this.onMenuChange}>
           <MenuItemComponent value="general">General</MenuItemComponent>
