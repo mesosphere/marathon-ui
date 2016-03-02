@@ -18,6 +18,18 @@ var SectionComponent = React.createClass({
     };
   },
 
+  getInitialState: function () {
+    return {
+      activeStateChanged: true
+    };
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({
+      activeStateChanged: nextProps.active !== this.props.active
+    });
+  },
+
   componentDidMount: function () {
     this.triggerCallbacks();
   },
@@ -27,9 +39,10 @@ var SectionComponent = React.createClass({
   },
 
   triggerCallbacks: function () {
+    var {activeStateChanged} = this.state;
     var {active, onActive} = this.props;
 
-    if (active) {
+    if (activeStateChanged && active) {
       onActive();
     }
   },
