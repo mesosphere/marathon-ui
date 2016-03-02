@@ -91,13 +91,13 @@ describe("AppListComponent", function () {
       .map(appNode => appNode.find(".name-cell").text());
 
     expect(appNames).to.deep.equal([
+      "app-alpha",
+      "app-beta",
+      "app-exact",
       "apps",
       "fuzzy",
       "group-alpha",
-      "group-with-long-name",
-      "app-alpha",
-      "app-beta",
-      "app-exact"
+      "group-with-long-name"
     ]);
     this.component.instance().componentWillUnmount();
   });
@@ -110,7 +110,7 @@ describe("AppListComponent", function () {
       .map(appNode => appNode.find(".name-cell").text());
 
     expect(appNames).to.deep.equal([
-      "group-beta", "app-1", "app-2"
+      "app-1", "app-2", "group-beta"
     ]);
     this.component.instance().componentWillUnmount();
   });
