@@ -191,7 +191,9 @@ var AppModalComponent = React.createClass({
     var appConfigEditor = state.jsonMode
       ? <AppConfigJSONEditorComponent {...appConfigProps} />
       : <AppConfigEditFormComponent {...appConfigProps} />;
-
+    var classSet = classNames("app-modal", {
+      "json-mode": state.jsonMode
+    });
     var cancelButton = (
       <button className="btn btn-default btn-inverse"
           type="button"
@@ -205,7 +207,7 @@ var AppModalComponent = React.createClass({
           ref="modalComponent"
           size="md"
           onDestroy={props.onDestroy}
-          className="app-modal">
+          className={classSet}>
         <form method="post" role="form" onSubmit={this.handleSubmit}>
           <button onClick={event => event.preventDefault()}
             style={{display: "none"}} />

@@ -1,37 +1,41 @@
-.app-modal .modal-content{
-  .app-config-edit {
-    display: flex;
-    height: 100%;
-  }
+.app-modal {
+  .modal-content {
+    .app-config-edit {
+      display: flex;
+      height: 100%;
+    }
 
-  .content-component {
-    border-left: @modal-footer-border-color 1px solid;
-    overflow: scroll;
-    padding-bottom: @base-spacing-unit*2;
-    padding-left: @base-spacing-unit*2;
-    padding-right: @base-spacing-unit*2.5;
-    padding-top: @base-spacing-unit*2;
-    width: 100%;
-  }
+    .content-component {
+      border-left: @modal-footer-border-color 1px solid;
+      overflow: scroll;
+      padding-bottom: @base-spacing-unit*2;
+      padding-left: @base-spacing-unit*2;
+      padding-right: @base-spacing-unit*2.5;
+      padding-top: @base-spacing-unit*2;
+      width: 100%;
+    }
 
-  .modal-body {
-    height: calc(~"80vh" - @modal-header-height);
-    padding-right: 0;
-  }
+    .modal-body {
+      height: calc(~"80vh" - @modal-header-height);
+      padding-right: 0;
+    }
 
-  #json-toggle {
-    margin: 0;
-    float: right;
-  }
+    #json-toggle {
+      margin: 0;
+      float: right;
+    }
 
-  label[for="json-toggle"] {
-    float: right;
-    margin: 0 @base-spacing-unit;
-    font-weight: 200;
-  }
+    label[for="json-toggle"] {
+      float: right;
+      margin: 0 @base-spacing-unit;
+      font-weight: 200;
+    }
 
-  [role="menu"] {
-    flex-shrink: 0;
+    [role="menu"] {
+      flex-shrink: 0;
+    }
   }
-
+  &.json-mode .modal-content .modal-body {
+    padding: 0;
+  }
 }
