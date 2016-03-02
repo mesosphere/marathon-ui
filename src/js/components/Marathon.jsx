@@ -159,7 +159,8 @@ var Marathon = React.createClass({
       if (this.state.modal != null) {
         return null;
       }
-      router.transitionTo(router.getCurrentPathname(), {}, {modal: "new-group"});
+      router.transitionTo(router.getCurrentPathname(),
+        {}, {modal: "new-group"});
     }.bind(this), "keypress");
 
     Mousetrap.bind("g a", function () {

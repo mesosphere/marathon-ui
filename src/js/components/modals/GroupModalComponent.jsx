@@ -100,16 +100,10 @@ var GroupModalComponent = React.createClass({
 
   validateGroupId: function () {
     var groupId = this.state.groupId;
-    var isValidGroupId = false;
-
-    // Re-use the app ID validation rules
-    if (AppFormValidators.appIdNotEmpty(groupId) &&
+    var isValidGroupId = AppFormValidators.appIdNotEmpty(groupId) &&
         AppFormValidators.appIdNoWhitespaces(groupId) &&
         AppFormValidators.appIdValidChars(groupId) &&
-        AppFormValidators.appIdWellFormedPath(groupId)) {
-      isValidGroupId = true;
-    }
-
+        AppFormValidators.appIdWellFormedPath(groupId);
     this.setState({isValidGroupId});
   },
 
