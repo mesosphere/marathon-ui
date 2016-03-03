@@ -92,6 +92,7 @@ var webpackConfig = {
         exclude: /node_modules/
       }
     ],
+    noParse: [/autoit\.js/],
     postLoaders: [
       {
         loader: "transform/cacheable?envify"
