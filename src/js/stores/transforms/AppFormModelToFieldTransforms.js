@@ -13,13 +13,6 @@ const AppFormModelToFieldTransforms = {
       .map((constraint) => constraint.join(":"))
       .join(", ");
   },
-  dockerPortMappings: (mappings) => {
-    return mappings
-      .map((row, i) => {
-        row.consecutiveKey = i;
-        return row;
-      });
-  },
   dockerParameters: (parameters) => {
     return parameters
       .map((row, i) => {
@@ -87,6 +80,17 @@ const AppFormModelToFieldTransforms = {
   },
   ports: (ports) => ports
     .join(", "),
+  portDefinitions: portDefinition => {
+    return portDefinition
+      .map((row, i) => {
+        if (row.containerPort != null) {
+          row.port = row.containerPort;
+        }
+        row.isRandomPort = false;
+        row.consecutiveKey = i;
+        return row;
+      });
+  },
   uris: (uris) => uris
     .join(", "),
   volumes: (volumes) => {

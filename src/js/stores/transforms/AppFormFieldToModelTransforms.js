@@ -75,28 +75,6 @@ const AppFormFieldToModelTransforms = {
         !Util.isStringAndEmpty(row.key.toString().trim());
     })
     .value(),
-  dockerPortMappings: (rows) => lazy(rows)
-    .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerPortMappings))
-    .compact()
-    .map((row) => {
-      var obj = {};
-
-      ["containerPort", "hostPort", "servicePort"].forEach((key) => {
-        if (row[key] != null &&
-            !Util.isStringAndEmpty(row[key].toString().trim())) {
-          obj[key] = parseInt(row[key], 10);
-        }
-      });
-
-      if (Object.keys(obj).length) {
-        if (!Util.isStringAndEmpty(row.protocol)) {
-          obj.protocol = row.protocol;
-        }
-        return obj;
-      }
-    })
-    .compact()
-    .value(),
   dockerPrivileged: (isChecked) => !!isChecked,
   env: (rows) => {
     return rows.reduce((memo, row) => {
@@ -157,13 +135,25 @@ const AppFormFieldToModelTransforms = {
     }, {});
   },
   mem: (value) => parseFloat(value),
-  ports: (ports) => lazy(ports.split(","))
-    .map((port) => parseInt(port, 10))
-    .filter((port) => {
-      port = Number(port);
-      return !isNaN(port) && port >= 0;
-    })
-    .value(),
+  portDefinitions: portDefinitions => {
+    return portDefinitions
+      .map(portDefinition => {
+        var definition = Object.assign({}, portDefinition);
+        definition.port = parseInt(definition.port, 10);
+        if (definition.port == null ||
+            isNaN(definition.port) ||
+            definition.isRandomPort) {
+          definition.port = 0;
+        }
+        delete definition.consecutiveKey;
+        delete definition.isRandomPort;
+        return definition;
+      })
+      .filter(portDefinition => {
+        var port = Number(portDefinition.port);
+        return !isNaN(port) && port >= 0;
+      });
+  },
   uris: (uris) => lazy(uris.split(","))
     .map((uri) => uri.trim())
     .filter((uri) => uri != null && uri !== "")

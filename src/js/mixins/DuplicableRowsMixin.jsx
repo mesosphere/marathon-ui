@@ -5,10 +5,6 @@ import FormActions from "../actions/FormActions";
 
 import Util from "../helpers/Util";
 
-function getNewConsecutiveKey() {
-  return parseInt((Util.getUniqueId() + "").slice(-9));
-}
-
 var DuplicableRowsMixin = {
   propTypes: {
     errorIndices: React.PropTypes.object.isRequired,
@@ -44,7 +40,7 @@ var DuplicableRowsMixin = {
     Object.keys(duplicableRowsScheme).forEach(function (fieldId) {
       if (state.rows[fieldId] == null || state.rows[fieldId].length === 0) {
         let rowScheme = Util.extendObject(duplicableRowsScheme[fieldId], {
-          consecutiveKey: getNewConsecutiveKey()
+          consecutiveKey: Util.getNewConsecutiveKey()
         });
         FormActions.insert(fieldId, rowScheme);
       }
@@ -70,7 +66,7 @@ var DuplicableRowsMixin = {
       return Util.extendObject(row, {
         consecutiveKey: row.consecutiveKey != null
           ? row.consecutiveKey
-          : getNewConsecutiveKey()
+          : Util.getNewConsecutiveKey()
       });
     });
   },
@@ -86,6 +82,9 @@ var DuplicableRowsMixin = {
     return Object.keys(this.duplicableRowsScheme[fieldId])
       .reduce(function (memo, key) {
         var input = findDOMNode(refs[`${key}${i}`]);
+        if (input == null) {
+          return memo;
+        }
         memo[key] = input.type !== "checkbox"
           ? input.value
           : input.checked;
@@ -96,7 +95,7 @@ var DuplicableRowsMixin = {
   addRow: function (fieldId, position) {
     FormActions.insert(fieldId,
       Util.extendObject(this.duplicableRowsScheme[fieldId], {
-        consecutiveKey: getNewConsecutiveKey()
+        consecutiveKey: Util.getNewConsecutiveKey()
       }),
       position
     );
@@ -112,7 +111,7 @@ var DuplicableRowsMixin = {
     FormActions.delete(fieldId, row, position);
   },
 
-  hasOnlyOneSingleEmptyRow: function (fieldId) {
+  hasOnlyOneSingleEmptyRow: function (fieldId, excludeFieldIds = []) {
     var rows = this.state.rows[fieldId];
 
     if (rows.length !== 1) {
@@ -120,7 +119,9 @@ var DuplicableRowsMixin = {
     }
 
     return Object.keys(this.duplicableRowsScheme[fieldId]).every((key) => {
-      return rows[0][key] == null || Util.isStringAndEmpty(rows[0][key]);
+      return excludeFieldIds.includes(key) ||
+        rows[0][key] == null ||
+        Util.isStringAndEmpty(rows[0][key]);
     });
   },
 

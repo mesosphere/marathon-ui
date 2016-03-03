@@ -77,6 +77,9 @@ var Util = {
   getUniqueId: function () {
     return (++consecutiveNumber).toString() + (new Date()).getTime();
   },
+  getNewConsecutiveKey: function () {
+    return parseInt((this.getUniqueId() + "").slice(-9));
+  },
   detectObjectPaths: function (obj, startKey, excludePaths = []) {
     var paths = [];
 
@@ -119,13 +122,11 @@ var Util = {
 
     if (this.isObject(obj)) {
       copy = Object.assign({}, obj);
-
-      Object.keys(copy).forEach((key) => {
-        copy[key] = this.deepCopy(copy[key]);
-      });
     } else if (this.isArray(obj)) {
       copy = obj.slice(); // shallow copy
+    }
 
+    if (copy != null) {
       Object.keys(copy).forEach((key) => {
         copy[key] = this.deepCopy(copy[key]);
       });

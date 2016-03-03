@@ -44,6 +44,7 @@ export const AllAppConfigDefaultValues = Util.deepFreeze(
       maximumOverCapacity: 1
     },
     labels: {},
-    acceptedResourceRoles: null
+    acceptedResourceRoles: null,
+    portDefinitions: []
   })
 );

@@ -149,7 +149,8 @@ var AppModalComponent = React.createClass({
 
   handleModeToggle: function (event) {
     event.preventDefault();
-    if (event.metaKey || event.ctrlKey) {
+    if (event.metaKey || event.ctrlKey ||
+        event.currentTarget.className.split(" ").includes("json-link")) {
       this.setState({jsonMode: !this.state.jsonMode});
     }
   },
@@ -179,8 +180,10 @@ var AppModalComponent = React.createClass({
     var appConfigProps = {
       app: state.app,
       onChange: this.handleAppConfigChange,
-      onError: this.handleAppConfigError
+      onError: this.handleAppConfigError,
+      handleModeToggle: this.handleModeToggle
     };
+
     var appConfigEditor = state.jsonMode
       ? <AppConfigJSONEditorComponent {...appConfigProps} />
       : <AppConfigEditFormComponent {...appConfigProps} />;

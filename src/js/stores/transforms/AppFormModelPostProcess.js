@@ -1,5 +1,6 @@
 import Util from "../../helpers/Util";
 
+import ContainerConstants from "../../constants/ContainerConstants";
 import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
 import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
 
@@ -41,7 +42,24 @@ const AppFormModelPostProcess = {
       });
     }
 
-    container.type = container.docker != null ? "DOCKER" : "MESOS";
+    container.type = container.docker != null
+      ? ContainerConstants.TYPE.DOCKER
+      : ContainerConstants.TYPE.MESOS;
+
+    if (container.type === ContainerConstants.TYPE.DOCKER &&
+        container.docker.network === ContainerConstants.NETWORK.BRIDGE &&
+        app.portDefinitions != null) {
+      container.docker.portMappings =
+        app.portDefinitions.map(portDefinition => {
+          var definition = Object.assign({}, portDefinition);
+          definition.containerPort = definition.port;
+          delete definition.port;
+          if (definition.hostPort == null) {
+            definition.hostPort = 0;
+          }
+          return definition;
+        });
+    }
 
     let isEmpty = (Util.isArray(container.volumes) &&
         container.volumes.length === 0 ||

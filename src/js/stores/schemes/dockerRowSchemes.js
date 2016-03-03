@@ -1,12 +1,6 @@
 import Util from "../../helpers/Util";
 
 const dockerRowSchemes = {
-  dockerPortMappings: {
-    containerPort: "",
-    hostPort: "",
-    servicePort: "",
-    protocol: null
-  },
   dockerParameters: {
     key: "",
     value: ""

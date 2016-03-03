@@ -9,6 +9,7 @@ import AppFormTransforms from "./transforms/AppFormTransforms";
 import AppFormModelPostProcess from "./transforms/AppFormModelPostProcess";
 import AppFormValidators from "./validators/AppFormValidators";
 import AppsStore from "./AppsStore";
+import ContainerConstants from "../constants/ContainerConstants";
 import AppsEvents from "../events/AppsEvents";
 import FormEvents from "../events/FormEvents";
 
@@ -22,11 +23,11 @@ const storeData = {
 const duplicableRowFields = Object.freeze([
   "containerVolumes",
   "localVolumes",
-  "dockerPortMappings",
   "dockerParameters",
   "env",
   "healthChecks",
-  "labels"
+  "labels",
+  "portDefinitions"
 ]);
 
 /**
@@ -59,12 +60,6 @@ const validationRules = {
   "disk": [AppFormValidators.disk],
   "dockerImage": [AppFormValidators.dockerImageNoWhitespaces],
   "dockerParameters": [AppFormValidators.dockerParameters],
-  "dockerPortMappings": [
-    AppFormValidators.dockerPortMappingsContainerPortIsValid,
-    AppFormValidators.dockerPortMappingsHostPortIsValid,
-    AppFormValidators.dockerPortMappingsServicePortIsValid,
-    AppFormValidators.dockerPortMappingsProtocolValidType
-  ],
   "env": [AppFormValidators.env],
   "executor": [AppFormValidators.executor],
   "healthChecks": [
@@ -81,7 +76,10 @@ const validationRules = {
   "instances": [AppFormValidators.instances],
   "labels": [AppFormValidators.labels],
   "mem": [AppFormValidators.mem],
-  "ports": [AppFormValidators.ports]
+  "portDefinitions": [
+    AppFormValidators.portDefinitionsPortIsValid,
+    AppFormValidators.portDefinitionsProtocolValidType
+  ]
 };
 
 /**
@@ -102,7 +100,6 @@ const resolveFieldIdToAppKeyMap = {
   dockerImage: "container.docker.image",
   dockerNetwork: "container.docker.network",
   dockerParameters: "container.docker.parameters",
-  dockerPortMappings: "container.docker.portMappings",
   dockerPrivileged: "container.docker.privileged",
   healthChecks: "healthChecks",
   instances: "instances",
@@ -110,7 +107,7 @@ const resolveFieldIdToAppKeyMap = {
   executor: "executor",
   labels: "labels",
   mem: "mem",
-  ports: "ports",
+  portDefinitions: "portDefinitions",
   uris: "uris",
   user: "user"
 };
@@ -136,14 +133,6 @@ const responseAttributePathToFieldIdMap = {
     "dockerParameters.{INDEX}.key",
   "/container/docker/parameters({INDEX})/value":
     "dockerParameters.{INDEX}.value",
-  "/container/docker/portMappings({INDEX})/containerPort":
-    "dockerPortMappings.{INDEX}.containerPort",
-  "/container/docker/portMappings({INDEX})/hostPort":
-    "dockerPortMappings.{INDEX}.hostPort",
-  "/container/docker/portMappings({INDEX})/servicePort":
-    "dockerPortMappings.{INDEX}.servicePort",
-  "/container/docker/portMappings({INDEX})/protocol":
-    "dockerPortMappings.{INDEX}.protocol",
   "/container/volumes({INDEX})/containerPath":
     "containerVolumes.{INDEX}.containerPath",
   "/container/volumes({INDEX})/hostPath":
@@ -172,8 +161,18 @@ const responseAttributePathToFieldIdMap = {
     "healthChecks.{INDEX}.maxConsecutiveFailures",
   "/instances": "instances",
   "/mem": "mem",
+  "portDefinitions": "portDefinitions",
+  "portDefinitions({INDEX}).name": "portDefinitions.{INDEX}.name",
+  "portDefinitions({INDEX}).port": "portDefinitions.{INDEX}.port",
+  "portDefinitions({INDEX}).protocol": "portDefinitions.{INDEX}.protocol",
+  "container.docker.portMappings": "portDefinitions",
+  "/container/docker/portMappings({INDEX})/containerPort":
+    "portDefinitions.{INDEX}.port",
+  "/container/docker/portMappings({INDEX})/protocol":
+    "portDefinitions.{INDEX}.protocol",
+  "/container/docker/portMappings({INDEX})/hostPort": "portDefinitions",
+  "/container/docker/portMappings({INDEX})/servicePort": "portDefinitions",
   "/labels": "labels",
-  "/ports": "ports",
   "/uris": "uris",
   "/user": "user",
   "self": "general"
@@ -185,18 +184,17 @@ const responseAttributePathToFieldIdMap = {
  * Not listed keys are taken as they are.
  */
 const resolveAppKeyToFieldIdMap = {
-  id: ["appId"],
+  "id": ["appId"],
   "container.docker.forcePullImage": ["dockerForcePullImage"],
   "container.docker.image": ["dockerImage"],
   "container.docker.network": ["dockerNetwork"],
-  "container.docker.portMappings": ["dockerPortMappings"],
+  "container.docker.portMappings": ["portDefinitions"],
   "container.docker.parameters": ["dockerParameters"],
   "container.docker.privileged": ["dockerPrivileged"],
   "container.volumes": [
     "containerVolumes",
     "localVolumes"
-  ],
-  "healthChecks": ["healthChecks"]
+  ]
 };
 
 // Validate all fields in form store and update validationErrorIndices.
@@ -315,6 +313,12 @@ function rebuildModelFromFields(app, fields, fieldId) {
 
 function resolveResponseAttributePathToFieldId(attributePath) {
   var fieldId;
+
+  // Workarounds against API inconsistencies
+  // Remove if mesosphere/marathon#3339 is fixed
+  attributePath = attributePath.replace("[", "(");
+  attributePath = attributePath.replace("]", ")");
+
   // Check if attributePath contains an index like path(0)/attribute
   // Matches as defined: [0] : "(0)", [1]: "0"
   var matches = attributePath.match(/\(([0-9]+)\)/);
@@ -335,6 +339,14 @@ function populateFieldsFromModel(app, fields) {
   // The env/labels-object should be treated as an object itself,
   // so it's excluded.
   var paths = Util.detectObjectPaths(app, null, ["env", "labels"]);
+
+  var dockerNetwork =
+    objectPath.get(app, "container.docker.network");
+
+  if (dockerNetwork != null &&
+      dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
+    paths = paths.filter(appKey => appKey !== "portDefinitions");
+  }
 
   paths.forEach(appKey => {
     var fieldIdArray = resolveAppKeyToFieldIdMap[appKey];
@@ -388,15 +400,31 @@ function processResponseErrors(responseErrors, response, statusCode) {
   } else if (statusCode === 422 && response != null &&
       Util.isArray(response.details)) {
     response.details.forEach(detail => {
-      var path = detail.path;
-      var fieldId = resolveResponseAttributePathToFieldId(path) || path;
-      if (detail.errors.length >= 1) {
-        responseErrors[fieldId] =
-          AppFormErrorMessages.lookupServerResponseMessage(detail.errors[0]);
-      } else {
-        responseErrors[fieldId] =
-          AppFormErrorMessages.lookupServerResponseMessage(response.message);
+      var attributePath = "general";
+
+      if (detail.attribute != null && detail.attribute.length) {
+        attributePath = detail.attribute;
+      } else if (detail.path != null && detail.path.length) {
+        attributePath = detail.path;
       }
+
+      var fieldId = resolveResponseAttributePathToFieldId(attributePath) ||
+        attributePath;
+
+      var error = detail.error;
+
+      if (detail.errors != null && detail.errors.length) {
+        error = detail.errors.map(error => {
+          return AppFormErrorMessages.lookupServerResponseMessage(error);
+        }).join(", ");
+      };
+
+      if (error == null) {
+        error = response.message;
+      }
+
+      responseErrors[fieldId] =
+        AppFormErrorMessages.lookupServerResponseMessage(error);
     });
 
   } else if (statusCode === 409 && responseHasDeployments) {
@@ -456,12 +484,22 @@ var AppFormStore = Util.extendObject(EventEmitter.prototype, {
   get app() {
     var app = Util.deepCopy(storeData.app);
 
-    Object.keys(app).forEach((appKey) => {
+    Object.keys(app).forEach(appKey => {
       var postProcessor = AppFormModelPostProcess[appKey];
       if (postProcessor != null) {
         postProcessor(app);
       }
     });
+
+    var dockerNetwork =
+      objectPath.get(app, "container.docker.network");
+
+    if (dockerNetwork != null &&
+        dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
+      delete app.portDefinitions;
+    } else if (objectPath.get(app, "container.docker.portMappings") != null) {
+      delete app.container.docker.portMappings;
+    }
 
     return app;
   },

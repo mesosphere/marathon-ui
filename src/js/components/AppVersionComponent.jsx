@@ -211,9 +211,9 @@ var AppVersionComponent = React.createClass({
         return <dd key={k}>{k + "=" + appVersion.labels[k]}</dd>;
       });
 
-    var portsNode = (appVersion.ports == null || appVersion.ports.length === 0)
+    var portDefinitionsNode = (appVersion.portDefinitions == null)
       ? <UnspecifiedNodeComponent />
-      : <dd>{appVersion.ports.join(", ")}</dd>;
+      : getHighlightNode(appVersion.portDefinitions);
 
     var urisNode = (appVersion.uris == null || appVersion.uris.length === 0)
       ? <UnspecifiedNodeComponent />
@@ -263,8 +263,8 @@ var AppVersionComponent = React.createClass({
           {invalidateValue(appVersion.mem, "MiB")}
           <dt>Disk Space</dt>
           {invalidateValue(appVersion.disk, "MiB")}
-          <dt>Ports</dt>
-          {portsNode}
+          <dt>Port Definitions</dt>
+          {portDefinitionsNode}
           <dt>Backoff Factor</dt>
           {invalidateValue(appVersion.backoffFactor)}
           <dt>Backoff</dt>
