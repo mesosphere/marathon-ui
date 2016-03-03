@@ -75,28 +75,6 @@ const AppFormFieldToModelTransforms = {
         !Util.isStringAndEmpty(row.key.toString().trim());
     })
     .value(),
-  dockerPortMappings: (rows) => lazy(rows)
-    .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerPortMappings))
-    .compact()
-    .map((row) => {
-      var obj = {};
-
-      ["containerPort", "hostPort", "servicePort"].forEach((key) => {
-        if (row[key] != null &&
-            !Util.isStringAndEmpty(row[key].toString().trim())) {
-          obj[key] = parseInt(row[key], 10);
-        }
-      });
-
-      if (Object.keys(obj).length) {
-        if (!Util.isStringAndEmpty(row.protocol)) {
-          obj.protocol = row.protocol;
-        }
-        return obj;
-      }
-    })
-    .compact()
-    .value(),
   dockerPrivileged: (isChecked) => !!isChecked,
   env: (rows) => {
     return rows.reduce((memo, row) => {
