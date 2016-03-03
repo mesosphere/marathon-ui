@@ -115,10 +115,18 @@ var AppConfigEditFormComponent = React.createClass({
     });
   },
 
-  onFormChange: function () {
+  onFormChange: function (fieldId) {
+    var responseErrorMessages = this.state.responseErrorMessages;
+
+    if (responseErrorMessages != null &&
+        responseErrorMessages[fieldId] != null) {
+      delete responseErrorMessages[fieldId];
+    }
+
     this.setState({
       fields: AppFormStore.fields,
-      errorIndices: AppFormStore.validationErrorIndices
+      errorIndices: AppFormStore.validationErrorIndices,
+      responseErrorMessages: responseErrorMessages
     }, () => {
       if (!!Object.keys(this.state.errorIndices).length) {
         this.props.onError(this.getErrorMessage("general"));
