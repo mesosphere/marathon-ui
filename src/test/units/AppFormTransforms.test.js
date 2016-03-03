@@ -336,7 +336,7 @@ describe("App Form Model To Field Transform", function () {
       .to.equal("hostname:UNIQUE, atomic:LIKE:man");
     });
 
-    describe.only("portDefinitions", function () {
+    describe("portDefinitions", function () {
       it("to array with consecutiveKey and isRandomPort", function () {
         expect(AppFormTransforms.ModelToField.portDefinitions([
           {
@@ -399,7 +399,7 @@ describe("App Form Model To Field Transform", function () {
         ]);
       });
 
-      it("copies containePort to port", function () {
+      it("copies containerPort to port", function () {
         expect(AppFormTransforms.ModelToField.portDefinitions([
           {
             containerPort: 1,
