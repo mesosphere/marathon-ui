@@ -218,7 +218,7 @@ var AppConfigEditFormComponent = React.createClass({
           </MenuItemComponent>
           <MenuItemComponent value="container"
               className={containerMenuItemClassSet}>
-            Container
+            Docker Container
           </MenuItemComponent>
           <MenuItemComponent value="ports"
              className={portsMenuItemClassSet}>
