@@ -215,100 +215,99 @@ describe("App Form Field to Model Transform", function () {
         .to.deep.equal([]);
     });
 
-    describe.skip("portDefinitions", function () {
-      it("dockerPortMappings to array of one object", function () {
-        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+    describe.only("portDefinitions", function () {
+      it("tansforms to cleaned array of one object", function () {
+        expect(AppFormTransforms.FieldToModel.portDefinitions([
           {
-            containerPort: 8000,
-            hostPort: 0,
-            servicePort: "",
+            consecutiveKey: 1,
+            isRandomPort: false,
+            port: 8000,
             protocol: "tcp",
+            name: "testport"
+          }
+        ])).to.deep.equal([
+          {
+            port: 8000,
+            protocol: "tcp",
+            name: "testport"
+          }
+        ]);
+      });
+
+      it("preserves unknown keys", function () {
+        expect(AppFormTransforms.FieldToModel.portDefinitions([
+          {
+            port: 8080,
+            label: {},
             consecutiveKey: 1
           }
         ])).to.deep.equal([
           {
-            containerPort: 8000,
-            hostPort: 0,
+            port: 8080,
+            label: {}
+          }
+        ]);
+      });
+
+      it("set 0 port if isRandomPort true", function () {
+        expect(AppFormTransforms.FieldToModel.portDefinitions([
+          {
+            consecutiveKey: 2,
+            isRandomPort: true,
+            port: 8000,
+            protocol: "tcp"
+          }
+        ])).to.deep.equal([
+          {
+            port: 0,
             protocol: "tcp"
           }
         ]);
       });
 
-      it("dockerPortMappings to empty array", function () {
-        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+      it("set 0 port if no port is given", function () {
+        expect(AppFormTransforms.FieldToModel.portDefinitions([
           {
-            containerPort: "",
-            hostPort: "",
-            servicePort: "",
-            protocol: "",
-            consecutiveKey: 1
+            consecutiveKey: 2,
+            isRandomPort: false,
+            protocol: "tcp"
           }
-        ])).to.deep.equal([]);
+        ])).to.deep.equal([
+          {
+            port: 0,
+            protocol: "tcp"
+          }
+        ]);
       });
 
-      it("dockerPortMappings to empty array also with protocol set",
-          function () {
-        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+      it("transforms to cleaned array of multiple objects", function () {
+        expect(AppFormTransforms.FieldToModel.portDefinitions([
           {
-            containerPort: "",
-            hostPort: "",
-            servicePort: "",
+            consecutiveKey: 1,
+            isRandomPort: false,
+            port: 8000,
             protocol: "tcp",
-            consecutiveKey: 1
-          }
-        ])).to.deep.equal([]);
-      });
-
-      it("dockerPortMappings to array of multiple objects", function () {
-        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
-          {
-            containerPort: "123",
-            hostPort: "123",
-            servicePort: "     ",
-            protocol: "tcp",
-            consecutiveKey: 1
+            name: "testport",
+            label: {}
           },
           {
-            containerPort: "",
-            hostPort: "",
-            servicePort: "",
-            protocol: "tcp",
-            consecutiveKey: 2
-          },
-          {
-            containerPort: "456",
-            hostPort: "",
-            servicePort: "456",
+            consecutiveKey: 2,
+            isRandomPort: true,
+            port: 8001,
             protocol: "udp",
-            consecutiveKey: 3
+            name: "testport2"
           }
         ])).to.deep.equal([
           {
-            containerPort: 123,
-            hostPort: 123,
-            protocol: "tcp"
+            port: 8000,
+            protocol: "tcp",
+            name: "testport",
+            label: {}
           },
           {
-            containerPort: 456,
-            servicePort: 456,
-            protocol: "udp"
-          }
-        ]);
-      });
-
-      it("dockerPortMappings to object with no protocol", function () {
-        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
-          {
-            containerPort: "123",
-            hostPort: "123",
-            servicePort: "      ",
-            protocol: "",
-            consecutiveKey: 1
-          }
-        ])).to.deep.equal([
-          {
-            containerPort: 123,
-            hostPort: 123
+            port: 0,
+            protocol: "udp",
+            name: "testport2"
           }
         ]);
       });
