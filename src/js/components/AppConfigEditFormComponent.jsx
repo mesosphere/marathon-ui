@@ -247,7 +247,7 @@ var AppConfigEditFormComponent = React.createClass({
         </MenuComponent>
         <ContentComponent active={state.activeSection}
             className="content-component">
-          <SectionComponent id="general"
+          <SectionComponent sectionId="general"
               onActive={this.setCursorToEndOfAppIdInput}>
             <FormGroupComponent errorMessage={this.getErrorMessage("appId")}
                 fieldId="appId"
@@ -300,45 +300,45 @@ var AppConfigEditFormComponent = React.createClass({
               <textarea style={{resize: "vertical"}}/>
             </FormGroupComponent>
           </SectionComponent>
-          <SectionComponent id="container">
+          <SectionComponent sectionId="container">
             <ContainerSettingsComponent
               errorIndices={state.errorIndices}
               fields={state.fields}
               getErrorMessage={this.getErrorMessage}
               openVolumes={this.setViewVolumes}/>
           </SectionComponent>
-          <SectionComponent id="ports">
+          <SectionComponent sectionId="ports">
             <OptionalPortsAndServiceDiscoveryComponent
               errorIndices={state.errorIndices}
               fields={state.fields}
               getErrorMessage={this.getErrorMessage}
               handleModeToggle={this.props.handleModeToggle} />
           </SectionComponent>
-          <SectionComponent id="env">
+          <SectionComponent sectionId="env">
             <OptionalEnvironmentComponent
               errorIndices={state.errorIndices}
               getErrorMessage={this.getErrorMessage}
               fields={state.fields}/>
           </SectionComponent>
-          <SectionComponent id="labels">
+          <SectionComponent sectionId="labels">
             <OptionalLabelsComponent
               errorIndices={state.errorIndices}
               getErrorMessage={this.getErrorMessage}
               fields={state.fields}/>
           </SectionComponent>
-          <SectionComponent id="health">
+          <SectionComponent sectionId="health">
             <HealthChecksComponent
               errorIndices={state.errorIndices}
               fields={state.fields}
               getErrorMessage={this.getErrorMessage}/>
           </SectionComponent>
-          <SectionComponent id="volumes">
+          <SectionComponent sectionId="volumes">
             <OptionalVolumesComponent
               errorIndices={state.errorIndices}
               getErrorMessage={this.getErrorMessage}
               fields={state.fields} />
           </SectionComponent>
-          <SectionComponent id="optional">
+          <SectionComponent sectionId="optional">
             <OptionalSettingsComponent
               errorIndices={state.errorIndices}
               fields={state.fields}

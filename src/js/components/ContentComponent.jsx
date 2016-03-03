@@ -17,7 +17,7 @@ var ContentComponent = React.createClass({
 
     return React.Children.map(children, (child) =>
       React.addons.cloneWithProps(child, {
-        active: child.props.id === active
+        active: child.props.sectionId === active
       })
     );
   },

@@ -11,9 +11,9 @@ describe("ContentComponent", function () {
   it("should render only correct section", function () {
     var component = mount(
       <ContentComponent active="c">
-        <SectionComponent id="a">Section A</SectionComponent>
-        <SectionComponent id="b">Section B</SectionComponent>
-        <SectionComponent id="c">Section C</SectionComponent>
+        <SectionComponent sectionId="a">Section A</SectionComponent>
+        <SectionComponent sectionId="b">Section B</SectionComponent>
+        <SectionComponent sectionId="c">Section C</SectionComponent>
       </ContentComponent>
     );
 

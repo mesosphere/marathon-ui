@@ -7,8 +7,8 @@ var SectionComponent = React.createClass({
   propTypes: {
     active: React.PropTypes.bool,
     children: React.PropTypes.node,
-    id: React.PropTypes.string.isRequired,
-    onActive: React.PropTypes.func
+    onActive: React.PropTypes.func,
+    sectionId: React.PropTypes.string.isRequired
   },
 
   getDefaultProps: function () {
