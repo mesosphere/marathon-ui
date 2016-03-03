@@ -215,7 +215,7 @@ describe("App Form Field to Model Transform", function () {
         .to.deep.equal([]);
     });
 
-    describe.only("portDefinitions", function () {
+    describe("portDefinitions", function () {
       it("tansforms to cleaned array of one object", function () {
         expect(AppFormTransforms.FieldToModel.portDefinitions([
           {
@@ -336,44 +336,82 @@ describe("App Form Model To Field Transform", function () {
       .to.equal("hostname:UNIQUE, atomic:LIKE:man");
     });
 
-    describe.skip("portDefinitions", function () {
-      it("dockerPortMappings to array with consecutiveKey", function () {
-        expect(AppFormTransforms.ModelToField.dockerPortMappings([
+    describe.only("portDefinitions", function () {
+      it("to array with consecutiveKey and isRandomPort", function () {
+        expect(AppFormTransforms.ModelToField.portDefinitions([
           {
-            containerPort: 1,
-            hostPort: 1,
+            port: 1,
             protocol: "tcp"
           },
           {
-            containerPort: 2,
-            servicePort: 2,
+            port: 2,
             protocol: "udp"
           },
           {
-            containerPort: 3,
-            hostPort: 3,
+            port: 3,
             servicePort: 3,
             protocol: "tcp"
           }
         ])).to.deep.equal([
           {
-            containerPort: 1,
-            hostPort: 1,
-            protocol: "tcp",
-            consecutiveKey: 0
+            consecutiveKey: 0,
+            isRandomPort: false,
+            port: 1,
+            protocol: "tcp"
           },
           {
-            containerPort: 2,
-            servicePort: 2,
-            protocol: "udp",
-            consecutiveKey: 1
+            consecutiveKey: 1,
+            isRandomPort: false,
+            port: 2,
+            protocol: "udp"
           },
           {
-            containerPort: 3,
-            hostPort: 3,
+            consecutiveKey: 2,
+            isRandomPort: false,
+            port: 3,
             servicePort: 3,
+            protocol: "tcp"
+          }
+        ]);
+      });
+
+      it("preserves unknown keys", function () {
+        expect(AppFormTransforms.ModelToField.portDefinitions([
+          {
+            port: 1,
+            hostPort: 8,
+            servicePort: 5,
             protocol: "tcp",
-            consecutiveKey: 2
+            name: "testport",
+            label: {}
+          }
+        ])).to.deep.equal([
+          {
+            consecutiveKey: 0,
+            isRandomPort: false,
+            port: 1,
+            hostPort: 8,
+            servicePort: 5,
+            protocol: "tcp",
+            name: "testport",
+            label: {}
+          }
+        ]);
+      });
+
+      it("copies containePort to port", function () {
+        expect(AppFormTransforms.ModelToField.portDefinitions([
+          {
+            containerPort: 1,
+            protocol: "tcp"
+          }
+        ])).to.deep.equal([
+          {
+            consecutiveKey: 0,
+            isRandomPort: false,
+            containerPort: 1,
+            port: 1,
+            protocol: "tcp"
           }
         ]);
       });
