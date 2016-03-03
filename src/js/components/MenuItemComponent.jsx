@@ -17,7 +17,7 @@ var MenuItemComponent = React.createClass({
     var {
       children,
       className,
-      id="menu-item-" + Util.getUniqueId(),
+      id = "menu-item-" + Util.getUniqueId(),
       name,
       value,
       selected
