@@ -119,10 +119,20 @@
   .checkbox-inline {
     color: @text-color-danger-light;
   }
+
   .form-control:focus {
     background-color: fade(@text-color-danger-light,10%);
     border-color: @text-color-danger-light;
     box-shadow: none;
+  }
 
+  a {
+    color: currentColor;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: inherit;
+      color: darken(@text-color-danger-light,30);
+    }
   }
 }
