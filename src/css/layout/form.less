@@ -17,6 +17,7 @@
     border-color: @form-control-inverse-border-color;
     box-shadow: none;
     &:focus {
+      background-color: fade(@form-control-inverse-border-color-focus,10%);
       border-color: @form-control-inverse-border-color-focus;
     }
   }
@@ -119,6 +120,9 @@
     color: @text-color-danger-light;
   }
   .form-control:focus {
-    border-color: @text-color-danger-light
+    background-color: fade(@text-color-danger-light,10%);
+    border-color: @text-color-danger-light;
+    box-shadow: none;
+
   }
 }
