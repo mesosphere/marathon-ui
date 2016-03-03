@@ -249,8 +249,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     if (isTooComplexStructure(this.props.fields)) {
       return (
         <div>
-          Looks like your ports & service discovery configuration is a little
-          bit too sophisticated for our form to handle.
+          Looks like your ports &amp; service discovery configuration
+          is a little bit too sophisticated for our form to handle.
           Please switch
           to <a className="json-link clickable"
             onClick={this.props.handleModeToggle}>JSON mode</a> if
