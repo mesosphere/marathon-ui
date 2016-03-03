@@ -34,9 +34,24 @@
     &.error {
       color: @text-color-danger-light;
 
-      [type="radio"]:checked+label {
-        color: inherit;
+      [type="radio"] {
+        &:not(:checked)+label
+        {
+          animation: highlighterror 1s;
+        }
+
+        &:checked+label {
+          color: inherit;
+          animation: highlighterror 0;
+        }
       }
     }
   }
+}
+
+@keyframes highlighterror {
+  from {
+    background: currentColor;
+  }
+
 }
