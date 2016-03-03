@@ -66,7 +66,7 @@ var ContainerVolumesComponent = React.createClass({
               <input ref={`containerPath${i}`} />
             </FormGroupComponent>
           </div>
-          <div className="col-sm-4">
+          <div className="col-sm-3">
             <FormGroupComponent
                 fieldId={`containerVolumes.${i}.hostPath`}
                 label="Host Path"
@@ -74,7 +74,7 @@ var ContainerVolumesComponent = React.createClass({
               <input ref={`hostPath${i}`} />
             </FormGroupComponent>
           </div>
-          <div className="col-sm-4">
+          <div className="col-sm-5">
             <FormGroupComponent
                 fieldId={`containerVolumes.${i}.mode`}
                 label="Mode"
