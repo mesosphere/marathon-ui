@@ -1,6 +1,7 @@
 import React from "react/addons";
 
 import Util from "../helpers/Util";
+import PropTypeUtil from "../helpers/PropTypeUtil";
 
 import MenuItemComponent from "../components/MenuItemComponent";
 
@@ -8,7 +9,7 @@ var MenuComponent = React.createClass({
   "displayName": "MenuComponent",
 
   propTypes: {
-    children: Util.getComponentTypeValidator(MenuItemComponent),
+    children: PropTypeUtil.oneOrManyInstancesOf(MenuItemComponent),
     className: React.PropTypes.string,
     name: React.PropTypes.string,
     onChange: React.PropTypes.func,

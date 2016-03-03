@@ -1,6 +1,6 @@
 import React from "react/addons";
 
-import Util from "../helpers/Util";
+import PropTypeUtil from "../helpers/PropTypeUtil";
 import SectionComponent from "../components/SectionComponent";
 
 var ContentComponent = React.createClass({
@@ -8,7 +8,7 @@ var ContentComponent = React.createClass({
 
   propTypes: {
     active: React.PropTypes.string,
-    children: Util.getComponentTypeValidator(SectionComponent),
+    children: PropTypeUtil.oneOrManyInstancesOf(SectionComponent),
     className: React.PropTypes.string
   },
 

@@ -247,17 +247,6 @@ var Util = {
     }
     return Number.isNaN(a) && Number.isNaN(b);
   },
-  getComponentTypeValidator: function (component) {
-    return function (props, propName, componentName) {
-      var prop = props[propName];
-      if (!Util.isComponentOf(prop, component)) {
-        return new Error(
-          `${propName} of ${componentName} should only be of type \
-          ${component.displayName}.`
-        );
-      }
-    };
-  },
   isComponentOf: function (prop, component) {
     if (prop == null) {
       return false;
