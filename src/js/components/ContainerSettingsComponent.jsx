@@ -147,27 +147,29 @@ var ContainerSettingsComponent = React.createClass({
             </FormGroupComponent>
           </div>
         </div>
-        <h4>Force Pull Image</h4>
-        <FormGroupComponent className="checkbox-form-group"
-            errorMessage={props.getErrorMessage(fieldIds.dockerForcePullImage)}
-            fieldId={fieldIds.dockerForcePullImage}
-            help="Force Docker to pull the image before launching each task"
-            label="Pull image on every launch"
-            value={props.fields[fieldIds.dockerForcePullImage]}
-            onChange={this.handleSingleFieldUpdate}>
-          <input type="checkbox" />
-        </FormGroupComponent>
-        <h4>Privileges</h4>
-        <FormGroupComponent className="checkbox-form-group"
-            errorMessage={props.getErrorMessage(fieldIds.dockerPrivileged)}
-            fieldId={fieldIds.dockerPrivileged}
-            help={"Select to give this container access to all devices " +
-              "on the host"}
-            label="Extend runtime privileges to this container"
-            value={props.fields[fieldIds.dockerPrivileged]}
-            onChange={this.handleSingleFieldUpdate}>
-          <input type="checkbox" />
-        </FormGroupComponent>
+        <div className="row">
+          <div className="col-sm-6">
+            <FormGroupComponent className="checkbox-form-group"
+                errorMessage=
+                  {props.getErrorMessage(fieldIds.dockerForcePullImage)}
+                fieldId={fieldIds.dockerForcePullImage}
+                label="Force pull image on every launch"
+                value={props.fields[fieldIds.dockerForcePullImage]}
+                onChange={this.handleSingleFieldUpdate}>
+              <input type="checkbox" />
+            </FormGroupComponent>
+          </div>
+          <div className="col-sm-6">
+            <FormGroupComponent className="checkbox-form-group"
+                errorMessage={props.getErrorMessage(fieldIds.dockerPrivileged)}
+                fieldId={fieldIds.dockerPrivileged}
+                label="Extend runtime privileges"
+                value={props.fields[fieldIds.dockerPrivileged]}
+                onChange={this.handleSingleFieldUpdate}>
+              <input type="checkbox" />
+            </FormGroupComponent>
+          </div>
+        </div>
         <h4>Parameters</h4>
         <div className="duplicable-list">{this.getParametersRows()}</div>
         <div>
