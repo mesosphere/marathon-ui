@@ -7,6 +7,7 @@ import AppTypes from "../constants/AppTypes";
 import ContainerConstants from "../constants/ContainerConstants";
 import AppStatus from "../constants/AppStatus";
 import HealthStatus from "../constants/HealthStatus";
+import LocalVolumesConstants from "../constants/LocalVolumesConstants";
 import TasksEvents from "../events/TasksEvents";
 import TaskStatus from "../constants/TaskStatus";
 import QueueStore from "./QueueStore";
@@ -217,6 +218,57 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
     return Util.deepCopy(
       this.getCurrentApp(appId).tasks.find(task => task.id === taskId)
     );
+  },
+
+  getVolumeById: function (appId, volumeId) {
+    var volumes = this.getVolumes(appId);
+
+    if (volumes == null) {
+      return null;
+    }
+
+    return volumes.reduce((memo, volume) => {
+      if (volume.persistenceId === volumeId) {
+        return volume;
+      }
+      return memo;
+    }, null);
+  },
+
+  getVolumes: function (appId) {
+    var app = this.getCurrentApp(appId);
+    var tasks = app.tasks;
+
+    if (tasks == null) {
+      return null;
+    }
+
+    return tasks
+      // Get the first volume from a task with the same id as provided
+      // by the router. This should be unique.
+      .reduce((memo, task) => {
+        if (task.localVolumes == null) {
+          return memo;
+        }
+        return memo.concat(task.localVolumes
+          .map((volume) => {
+            app.container.volumes.forEach(function (volumeConfig) {
+              if (volumeConfig.containerPath &&
+                  volumeConfig.containerPath === volume.containerPath) {
+                Object.keys(volumeConfig).forEach(key =>
+                  volume[key] = volumeConfig[key]
+                );
+              }
+            });
+            volume.appId = appId;
+            volume.taskId = task.id;
+            volume.host = task.host;
+            volume.status = task.status == null
+              ? LocalVolumesConstants.STATUS.DETACHED
+              : LocalVolumesConstants.STATUS.ATTACHED;
+            return volume;
+          }));
+      }, []);
   }
 });
 

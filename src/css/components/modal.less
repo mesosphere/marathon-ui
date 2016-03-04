@@ -67,6 +67,25 @@
       height: 30px;
     }
   }
+
+  .tooltip-container {
+    display: inline-block;
+    margin-left: @horizontal-spacing-unit*0.5;
+
+    .icon {
+      opacity: .4;
+    }
+
+    &:hover {
+      .icon {
+        opacity: 1;
+      }
+    }
+
+    .content a {
+      margin-left: @horizontal-spacing-unit*0.5;
+    }
+  }
 }
 
 @media (min-width: 768px) {
@@ -225,6 +244,13 @@
       margin-top:  @modal-body-padding;
       margin-left:  auto;
       margin-right:  auto;
+    }
+    &-link {
+      color: @dodger-blue;
+      text-decoration: underline;
+      &:hover {
+        color: @cornflower-blue;
+      }
     }
   }
 

@@ -1,4 +1,5 @@
 import React from "react/addons";
+import classNames from "classnames";
 
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
@@ -9,10 +10,13 @@ import AppStatusComponent from "../components/AppStatusComponent";
 import AppVersionsActions from "../actions/AppVersionsActions";
 import AppDebugInfoComponent from "../components/AppDebugInfoComponent";
 import AppVersionListComponent from "../components/AppVersionListComponent";
+import AppVolumesListComponent from "../components/AppVolumesListComponent";
+import VolumeDetailsComponent from "../components/VolumeDetailsComponent";
 import DialogActions from "../actions/DialogActions";
 import DialogStore from "../stores/DialogStore";
 import DialogSeverity from "../constants/DialogSeverity";
 import HealthStatus from "../constants/HealthStatus";
+import LocalVolumesConstants from "../constants/LocalVolumesConstants";
 import Messages from "../constants/Messages";
 import States from "../constants/States";
 import TabPaneComponent from "../components/TabPaneComponent";
@@ -28,7 +32,8 @@ import TasksEvents from "../events/TasksEvents";
 var tabsTemplate = [
   {id: "apps/:appId", text: "Instances"},
   {id: "apps/:appId/configuration", text: "Configuration"},
-  {id: "apps/:appId/debug", text: "Debug"}
+  {id: "apps/:appId/debug", text: "Debug"},
+  {id: "apps/:appId/volumes", text: "Volumes"}
 ];
 
 var AppPageComponent = React.createClass({
@@ -54,6 +59,10 @@ var AppPageComponent = React.createClass({
 
     var appId = decodeURIComponent(params.appId);
     var view = params.view;
+    var volumeId;
+    if (params.volumeId != null) {
+      volumeId = decodeURIComponent(params.volumeId);
+    }
 
     var activeTabId = `apps/${encodeURIComponent(appId)}`;
 
@@ -64,9 +73,6 @@ var AppPageComponent = React.createClass({
 
     var tabs = tabsTemplate.map(function (tab) {
       var id = tab.id.replace(":appId", encodeURIComponent(appId));
-      if (activeTabId == null) {
-        activeTabId = id;
-      }
 
       return {
         id: id,
@@ -78,6 +84,10 @@ var AppPageComponent = React.createClass({
       activeTabId += "/configuration";
     } else if (view === "debug") {
       activeTabId += "/debug";
+    } else if (view === "volumes") {
+      activeTabId += "/volumes";
+    } else if (volumeId != null) {
+      activeViewIndex = 2;
     } else if (view != null) {
       activeTaskId = view;
       activeViewIndex = 1;
@@ -88,6 +98,7 @@ var AppPageComponent = React.createClass({
       activeTaskId: activeTaskId,
       activeViewIndex: activeViewIndex,
       app: app,
+      volumeId: volumeId,
       appId: appId,
       view: decodeURIComponent(params.view),
       tabs: tabs
@@ -273,15 +284,57 @@ var AppPageComponent = React.createClass({
     );
   },
 
+  getVolumeStatus: function () {
+    var {appId, volumeId} = this.state;
+    var volume = AppsStore.getVolumeById(appId, volumeId);
+
+    if (volume == null) {
+      return null;
+    }
+
+    var className = classNames("volume-status", {
+      "volume-attached": volume.status === LocalVolumesConstants.STATUS.ATTACHED
+    });
+
+    return (
+      <h2 className={className}>{volume.status}</h2>
+    );
+  },
+
+  getVolumeDetails: function () {
+    var {appId, volumeId} = this.state;
+
+    var volume = AppsStore.getVolumeById(appId, volumeId);
+
+    if (volume == null) {
+      return null;
+    }
+
+    volume.taskURI = "#apps/" +
+      encodeURIComponent(this.appId) +
+      "/" + encodeURIComponent(volume.taskId);
+
+    volume.appURI = "#apps/" +
+      encodeURIComponent(this.state.appId);
+
+    return (<VolumeDetailsComponent volume={volume} />);
+  },
+
   getAppDetails: function () {
     var state = this.state;
     var model = state.app;
+
+    var volumes = AppsStore.getVolumes(model.id);
+
+    var tabs = state.tabs.filter(tab =>
+      tab.text !== "Volumes" ||
+      (model.container != null && model.container.volumes != null));
 
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
           activeTabId={state.activeTabId}
           onTabClick={this.handleTabClick}
-          tabs={state.tabs} >
+          tabs={tabs} >
         <TabPaneComponent
             id={"apps/" + encodeURIComponent(state.appId)}>
           <TaskViewComponent
@@ -299,6 +352,10 @@ var AppPageComponent = React.createClass({
             id={"apps/" + encodeURIComponent(state.appId) + "/debug"}>
           <AppDebugInfoComponent appId={state.appId} />
         </TabPaneComponent>
+        <TabPaneComponent
+            id={"apps/" + encodeURIComponent(state.appId) + "/volumes"}>
+          <AppVolumesListComponent volumes={volumes} />
+        </TabPaneComponent>
       </TogglableTabsComponent>
     );
   },
@@ -307,39 +364,53 @@ var AppPageComponent = React.createClass({
     var content;
     var state = this.state;
     var model = state.app;
+    var volumeId = this.getRouteSettings().volumeId;
 
     if (this.state.activeViewIndex === 0) {
       content = this.getAppDetails();
     } else if (this.state.activeViewIndex === 1) {
       content = this.getTaskDetailComponent();
+    } else if (this.state.activeViewIndex === 2) {
+      content = this.getVolumeDetails();
     }
 
     var groupId = PathUtil.getGroupFromAppId(state.appId);
-    var name = PathUtil.getAppName(state.appId);
+    var name = volumeId;
+    if (volumeId == null) {
+      name = PathUtil.getAppName(state.appId);
+      var appHealthStatus =
+        <AppStatusComponent model={model} showSummary={true} />;
+
+      var appHealthBar = (
+        <div className="app-health-detail">
+          <AppHealthBarComponent model={model} />
+          <AppHealthDetailComponent
+            className="list-inline"
+            fields={[
+              HealthStatus.HEALTHY,
+              HealthStatus.UNHEALTHY,
+              HealthStatus.UNKNOWN,
+              HealthStatus.STAGED,
+              HealthStatus.OVERCAPACITY,
+              HealthStatus.UNSCHEDULED
+            ]}
+            model={model} />
+          </div>
+      );
+    }
 
     return (
       <div>
         <BreadcrumbComponent groupId={groupId}
           appId={state.appId}
-          taskId={state.activeTaskId} />
+          taskId={state.activeTaskId}
+          volumeId={state.volumeId} />
         <div className="container-fluid">
           <div className="page-header">
             <h1>{name}</h1>
-            <AppStatusComponent model={model} showSummary={true} />
-            <div className="app-health-detail">
-              <AppHealthBarComponent model={model} />
-              <AppHealthDetailComponent
-                className="list-inline"
-                fields={[
-                  HealthStatus.HEALTHY,
-                  HealthStatus.UNHEALTHY,
-                  HealthStatus.UNKNOWN,
-                  HealthStatus.STAGED,
-                  HealthStatus.OVERCAPACITY,
-                  HealthStatus.UNSCHEDULED
-                ]}
-                model={model} />
-            </div>
+            {this.getVolumeStatus()}
+            {appHealthStatus}
+            {appHealthBar}
             {this.getControls()}
           </div>
           {content}

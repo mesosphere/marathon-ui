@@ -4,6 +4,9 @@ import React from "react/addons";
 import DuplicableRowControls from "../components/DuplicableRowControls";
 import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import FormGroupComponent from "../components/FormGroupComponent";
+import TooltipComponent from "../components/TooltipComponent";
+
+import ExternalLinks from "../constants/ExternalLinks";
 
 var LocalVolumesComponent = React.createClass({
   displayName: "LocalVolumesComponent",
@@ -49,6 +52,23 @@ var LocalVolumesComponent = React.createClass({
       "duplicable-row": true
     });
 
+    var containerPathTooltipMessage = (
+      <span>
+        Set any path you like, it will be available in your
+        working directory e.g. home
+        <a href={ExternalLinks.CONTAINER_PATH} target="_blank">Read more</a>.
+      </span>
+    );
+
+    var containerPathLabel = (
+      <span>
+        Container Path
+        <TooltipComponent message={containerPathTooltipMessage}>
+          <i className="icon icon-xs help" />
+        </TooltipComponent>
+      </span>
+    );
+
     return (
       <div key={row.consecutiveKey} className={rowClassSet}>
         <fieldset className="row duplicable-row"
@@ -65,7 +85,7 @@ var LocalVolumesComponent = React.createClass({
           <div className="col-sm-8">
             <FormGroupComponent
                 fieldId={`localVolumes.containerPath.${i}`}
-                label="Container Path"
+                label={containerPathLabel}
                 value={row.containerPath}>
               <input ref={`containerPath${i}`} />
             </FormGroupComponent>
@@ -100,10 +120,20 @@ var LocalVolumesComponent = React.createClass({
   },
 
   render: function () {
+    var localVolumesTooltipMessage = (
+      <span>
+        Local volumes hold state if an instance is shut down.
+        <a href={ExternalLinks.LOCAL_VOLUMES} target="_blank">Read more</a>.
+      </span>
+    );
+
     return (
       <div>
-        <h4>
+        <h4 className="subtitle">
           Persistent Local Volumes
+          <TooltipComponent message={localVolumesTooltipMessage}>
+            <i className="icon icon-xs help" />
+          </TooltipComponent>
         </h4>
         <div className="duplicable-list">
           {this.getVolumesRows()}

@@ -26,14 +26,23 @@ describe("TaskDetailComponent", function () {
     host: "example.com"
   };
 
+  var context = {
+    router: {
+      getCurrentParams: function () {
+        return {tab: ""};
+      }
+    }
+  };
+
   before(function () {
     this.model = Object.assign({}, baseModel);
 
     this.component = shallow(
       <TaskDetailComponent appId={this.model.appId}
-                           fetchState={States.STATE_SUCCESS}
-                           hasHealth={false}
-                           task={this.model} />
+         fetchState={States.STATE_SUCCESS}
+         hasHealth={false}
+         task={this.model} />,
+       {context}
     );
   });
 
@@ -69,11 +78,13 @@ describe("TaskDetailComponent", function () {
   });
 
   it("has a loading error", function () {
-    var component = shallow(<TaskDetailComponent
-      appId={this.model.appId}
-      fetchState={States.STATE_ERROR}
-      hasHealth={false}
-      task={this.model} />);
+    var component = shallow(
+      <TaskDetailComponent
+        appId={this.model.appId}
+        fetchState={States.STATE_ERROR}
+        hasHealth={false}
+        task={this.model} />,
+      {context});
     expect(component.find(".text-danger").length).to.equal(1);
   });
 
@@ -86,9 +97,10 @@ describe("TaskDetailComponent", function () {
 
       this.component = shallow(
         <TaskDetailComponent appId={this.model.appId}
-                             fetchState={States.STATE_SUCCESS}
-                             hasHealth={false}
-                             task={this.model} />
+            fetchState={States.STATE_SUCCESS}
+            hasHealth={false}
+            task={this.model} />,
+          {context}
       );
     });
 
@@ -159,9 +171,10 @@ describe("TaskDetailComponent", function () {
 
         this.component = shallow(
           <TaskDetailComponent appId={this.model.appId}
-                               fetchState={States.STATE_SUCCESS}
-                               hasHealth={false}
-                               task={this.model} />
+             fetchState={States.STATE_SUCCESS}
+             hasHealth={false}
+             task={this.model} />,
+           {context}
         );
         done();
       });
