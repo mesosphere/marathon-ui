@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React from "react";
+import Util from "../helpers/Util";
 
 var CollapsiblePanelComponent = React.createClass({
   displayName: "CollapsiblePanelComponent",
@@ -7,12 +8,14 @@ var CollapsiblePanelComponent = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     isOpen: React.PropTypes.bool,
-    title: React.PropTypes.string.isRequired
+    title: React.PropTypes.string.isRequired,
+    togglePanel: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
-      isOpen: false
+      isOpen: false,
+      togglePanel: Util.noop
     };
   },
 
@@ -27,10 +30,12 @@ var CollapsiblePanelComponent = React.createClass({
       this.setState({
         isOpen: nextProps.isOpen
       });
+      this.props.togglePanel(false);
     }
   },
 
   handleToggle: function () {
+    this.props.togglePanel(!this.state.isOpen);
     this.setState({isOpen: !this.state.isOpen});
   },
 

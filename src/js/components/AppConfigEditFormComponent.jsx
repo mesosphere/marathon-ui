@@ -50,7 +50,8 @@ var AppConfigEditFormComponent = React.createClass({
     return {
       fields: AppFormStore.fields,
       errorIndices: AppFormStore.validationErrorIndices,
-      responseErrorMessages: AppFormStore.responseErrors
+      responseErrorMessages: AppFormStore.responseErrors,
+      isVolumesOpen: false
     };
   },
 
@@ -108,6 +109,12 @@ var AppConfigEditFormComponent = React.createClass({
     });
   },
 
+  setViewVolumes: function (isVolumesOpen = true) {
+    this.setState({
+      isVolumesOpen: !!isVolumesOpen
+    });
+  },
+
   onFormChange: function () {
     this.setState({
       fields: AppFormStore.fields,
@@ -149,6 +156,12 @@ var AppConfigEditFormComponent = React.createClass({
 
   render: function () {
     var state = this.state;
+
+    var volumesIsOpen = this.fieldsHaveError({volumes: "volumes"});
+
+    if (state.isVolumesOpen) {
+      volumesIsOpen = state.isVolumesOpen;
+    }
 
     return (
       <div>
@@ -221,7 +234,8 @@ var AppConfigEditFormComponent = React.createClass({
             <ContainerSettingsComponent
               errorIndices={state.errorIndices}
               fields={state.fields}
-              getErrorMessage={this.getErrorMessage} />
+              getErrorMessage={this.getErrorMessage}
+              openVolumes={this.setViewVolumes}/>
           </CollapsiblePanelComponent>
         </div>
         <div className="row full-bleed">
@@ -269,7 +283,8 @@ var AppConfigEditFormComponent = React.createClass({
         </div>
         <div className="row full-bleed">
           <CollapsiblePanelComponent
-              isOpen={this.fieldsHaveError({volumes: "volumes"})}
+              isOpen={volumesIsOpen}
+              togglePanel={this.setViewVolumes}
               title="Volumes">
             <OptionalVolumesComponent
               errorIndices={state.errorIndices}
