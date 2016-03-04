@@ -7,6 +7,7 @@ import AppTypes from "../constants/AppTypes";
 import ContainerConstants from "../constants/ContainerConstants";
 import AppStatus from "../constants/AppStatus";
 import HealthStatus from "../constants/HealthStatus";
+import LocalVolumesConstants from "../constants/LocalVolumesConstants";
 import TasksEvents from "../events/TasksEvents";
 import TaskStatus from "../constants/TaskStatus";
 import QueueStore from "./QueueStore";
@@ -263,8 +264,8 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
             volume.taskId = task.id;
             volume.host = task.host;
             volume.status = task.status == null
-              ? "Detached"
-              : "Attached";
+              ? LocalVolumesConstants.STATUS.DETACHED
+              : LocalVolumesConstants.STATUS.ATTACHED;
             return volume;
           }));
       }, []);

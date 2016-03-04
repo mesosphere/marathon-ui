@@ -16,6 +16,7 @@ import DialogActions from "../actions/DialogActions";
 import DialogStore from "../stores/DialogStore";
 import DialogSeverity from "../constants/DialogSeverity";
 import HealthStatus from "../constants/HealthStatus";
+import LocalVolumesConstants from "../constants/LocalVolumesConstants";
 import Messages from "../constants/Messages";
 import States from "../constants/States";
 import TabPaneComponent from "../components/TabPaneComponent";
@@ -292,7 +293,7 @@ var AppPageComponent = React.createClass({
     }
 
     var className = classNames("volume-status", {
-      "volume-attached": volume.status === "Attached"
+      "volume-attached": volume.status === LocalVolumesConstants.STATUS.ATTACHED
     });
 
     return (
