@@ -75,40 +75,18 @@ var AppVolumesListComponent = React.createClass({
       .map(this.getVolumeRow);
   },
 
+  getHighlight: function (sortKey) {
+    return classNames({
+      "cell-highlighted": this.state.sortKey === sortKey
+    });
+  },
+
   render: function () {
     var state = this.state;
 
     var headerClassSet = classNames({
       "clickable": true,
       "dropup": !state.sortDescending
-    });
-
-    var idClassSet = classNames({
-      "cell-highlighted": state.sortKey === "id"
-    });
-
-    var hostClassSet = classNames({
-      "cell-highlighted": state.sortKey === "host"
-    });
-
-    var typeClassSet = classNames({
-      "cell-highlighted": state.sortKey === "type"
-    });
-
-    var containerPathClassSet = classNames({
-      "cell-highlighted": state.sortKey === "containerPath"
-    });
-
-    var sizeClassSet = classNames({
-      "cell-highlighted": state.sortKey === "size"
-    });
-
-    var modeClassSet = classNames({
-      "cell-highlighted": state.sortKey === "mode"
-    });
-
-    var statusClassSet = classNames({
-      "cell-highlighted": state.sortKey === "status"
     });
 
     if (this.props.volumes == null) {
@@ -120,43 +98,43 @@ var AppVolumesListComponent = React.createClass({
         <table className="table table-unstyled volume-list">
           <thead>
             <tr>
-              <th className={idClassSet}>
+              <th className={this.getHighlight("id")}>
                 <span onClick={this.sortBy.bind(null, "id")}
                     className={headerClassSet}>
                   ID {this.getCaret("id")}
                 </span>
               </th>
-              <th className={hostClassSet}>
+              <th className={this.getHighlight("host")}>
                 <span onClick={this.sortBy.bind(null, "host")}
                     className={headerClassSet}>
                   Host{this.getCaret("host")}
                 </span>
               </th>
-              <th className={typeClassSet}>
+              <th className={this.getHighlight("type")}>
                 <span onClick={this.sortBy.bind(null, "type")}
                     className={headerClassSet}>
                   Type {this.getCaret("type")}
                 </span>
               </th>
-              <th className={containerPathClassSet}>
+              <th className={this.getHighlight("containerPath")}>
                 <span onClick={this.sortBy.bind(null, "containerPath")}
                     className={headerClassSet}>
                   Container Path {this.getCaret("containerPath")}
                 </span>
               </th>
-              <th className={sizeClassSet}>
+              <th className={this.getHighlight("size")}>
                 <span onClick={this.sortBy.bind(null, "size")}
                     className={headerClassSet}>
                   Size(MiB) {this.getCaret("size")}
                 </span>
               </th>
-              <th className={modeClassSet}>
+              <th className={this.getHighlight("mode")}>
                 <span onClick={this.sortBy.bind(null, "mode")}
                     className={headerClassSet}>
                   Mode {this.getCaret("mode")}
                 </span>
               </th>
-              <th className={statusClassSet}>
+              <th className={this.getHighlight("status")}>
                 <span onClick={this.sortBy.bind(null, "status")}
                     className={headerClassSet}>
                   Status {this.getCaret("status")}

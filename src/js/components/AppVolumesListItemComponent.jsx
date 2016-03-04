@@ -10,32 +10,14 @@ var AppVolumesListItemComponent = React.createClass({
     volume: React.PropTypes.object.isRequired
   },
 
+  getHighlight: function (sortKey) {
+    return classNames({
+      "cell-highlighted": this.props.sortKey === sortKey
+    });
+  },
+
   render: function () {
     var {volume, sortKey} = this.props;
-
-    var idClassSet = classNames({
-      "cell-highlighted": sortKey === "id"
-    });
-
-    var hostClassSet = classNames({
-      "cell-highlighted": sortKey === "host"
-    });
-
-    var typeClassSet = classNames({
-      "cell-highlighted": sortKey === "type"
-    });
-
-    var containerPathClassSet = classNames({
-      "cell-highlighted": sortKey === "containerPath"
-    });
-
-    var sizeClassSet = classNames({
-      "cell-highlighted": sortKey === "size"
-    });
-
-    var modeClassSet = classNames({
-      "cell-highlighted": sortKey === "mode"
-    });
 
     var statusClassSet = classNames({
       "cell-highlighted": sortKey === "status",
@@ -52,24 +34,24 @@ var AppVolumesListItemComponent = React.createClass({
 
     return (
       <tr>
-        <td className={idClassSet}>
+        <td className={this.getHighlight("id")}>
           <Link to="volumeView" params={params}>
             {volume.persistenceId}
           </Link>
         </td>
-        <td className={hostClassSet}>
+        <td className={this.getHighlight("host")}>
           {volume.host}
         </td>
-        <td className={typeClassSet}>
+        <td className={this.getHighlight("type")}>
           {volume.type}
         </td>
-        <td className={containerPathClassSet}>
+        <td className={this.getHighlight("containerPath")}>
           {volume.containerPath}
         </td>
-        <td className={sizeClassSet}>
+        <td className={this.getHighlight("size")}>
           {volume.size}
         </td>
-        <td className={modeClassSet}>
+        <td className={this.getHighlight("mode")}>
           {volume.mode}
         </td>
         <td className={statusClassSet}>
