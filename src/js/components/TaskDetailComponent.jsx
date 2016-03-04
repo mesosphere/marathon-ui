@@ -246,7 +246,6 @@ var TaskDetailComponent = React.createClass({
 
   getTabs: function (task) {
     var appId = this.props.appId;
-    var app = AppsStore.getCurrentApp(appId);
 
     var activeTabId =
       `apps/${encodeURIComponent(appId)}/${encodeURIComponent(task.id)}`;
@@ -272,30 +271,10 @@ var TaskDetailComponent = React.createClass({
       activeTabId = activeTab;
     }
 
-    var volumes = [];
+    var volumes = AppsStore.getVolumes(appId);
 
-    if (task.localVolumes != null) {
-      volumes = task.localVolumes
-        .map(volume => {
-          if (app.container == null || app.container.volumes == null) {
-            return null;
-          }
-          app.container.volumes.forEach(function (volumeConfig) {
-            if (volumeConfig.containerPath &&
-                volumeConfig.containerPath === volume.containerPath) {
-              Object.keys(volumeConfig).forEach(key =>
-                volume[key] = volumeConfig[key]
-              );
-              volume.appId = app.id;
-              volume.taskId = task.id;
-              volume.host = task.host;
-              volume.status = task.status == null
-                ? "Detached"
-                : "Attached";
-            }
-          });
-          return volume;
-        });
+    if (volumes != null) {
+      volumes = volumes.filter(volume => volume.taskId = task.id);
     }
 
     return (

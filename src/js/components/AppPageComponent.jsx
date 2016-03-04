@@ -283,7 +283,8 @@ var AppPageComponent = React.createClass({
   },
 
   getVolumeStatus: function () {
-    var volume = this.getVolume();
+    var {appId, volumeId} = this.state;
+    var volume = AppsStore.getVolumeById(appId, volumeId);
 
     if (volume == null) {
       return null;
@@ -298,60 +299,16 @@ var AppPageComponent = React.createClass({
     );
   },
 
-  getVolume: function () {
-    var {app, volumeId} = this.state;
-
-    if (app.tasks != null) {
-      return null;
-    }
-
-    var tasks = app.tasks;
-    return tasks
-      // Get the first volume from a task with the same id as provided
-      // by the router. This should be unique.
-      .reduce((memo, task) => {
-        if (memo == null) {
-          return task.localVolumes
-            .filter(volume => volume.persistenceId === volumeId)
-            .reduce((memo, volume) => {
-              if (memo != null) {
-                return memo;
-
-              }
-              volume.taskId = task.id;
-              volume.host = task.host;
-              volume.status = task.status == null
-                ? "Detached"
-                : "Attached";
-              return volume;
-            }, null);
-        }
-        return memo;
-      }, null);
-  },
-
   getVolumeDetails: function () {
-    var {app, appId} = this.state;
+    var {appId, volumeId} = this.state;
 
-    var volume = this.getVolume();
-
+    var volume = AppsStore.getVolumeById(appId, volumeId);;
     if (volume == null) {
       return null;
     }
 
-    if (app.container != null && app.container.volumes != null) {
-      app.container.volumes.forEach(function (volumeConfig) {
-        if (volumeConfig.containerPath &&
-            volumeConfig.containerPath === volume.containerPath) {
-          Object.keys(volumeConfig).forEach(key =>
-            volume[key] = volumeConfig[key]
-          );
-        }
-      });
-    }
-
     var taskURI = "#apps/" +
-      encodeURIComponent(this.state.appId) +
+      encodeURIComponent(this.appId) +
       "/" + encodeURIComponent(volume.taskId);
 
     var appURI = "#apps/" +
@@ -385,35 +342,7 @@ var AppPageComponent = React.createClass({
     var state = this.state;
     var model = state.app;
 
-    var volumes = model.tasks.reduce((memo, task) => {
-      if (task.localVolumes != null) {
-        return memo.concat(task.localVolumes.map(volume => {
-          volume.taskId = task.id;
-          volume.host = task.host;
-          volume.status = task.status == null
-            ? "Detached"
-            : "Attached";
-          return volume;
-        }));
-      }
-      return memo;
-    }, [])
-      .map(volume => {
-        if (model.container == null || model.container.volumes == null) {
-          return null;
-        }
-        model.container.volumes.forEach(function (volumeConfig) {
-          if (volumeConfig.containerPath &&
-              volumeConfig.containerPath === volume.containerPath) {
-            Object.keys(volumeConfig).forEach(key =>
-              volume[key] = volumeConfig[key]
-            );
-            volume.appId = model.id;
-          }
-        });
-        return volume;
-      })
-      .filter(volume => volume != null);
+    var volumes = AppsStore.getVolumes(model.id);
 
     var tabs = state.tabs.filter(tab =>
       tab.text !== "Volumes" ||
