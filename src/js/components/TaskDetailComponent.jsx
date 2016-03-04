@@ -274,7 +274,7 @@ var TaskDetailComponent = React.createClass({
     var volumes = AppsStore.getVolumes(appId);
 
     if (volumes != null) {
-      volumes = volumes.filter(volume => volume.taskId = task.id);
+      volumes = volumes.filter(volume => volume.taskId === task.id);
     }
 
     return (

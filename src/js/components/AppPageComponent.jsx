@@ -11,6 +11,7 @@ import AppVersionsActions from "../actions/AppVersionsActions";
 import AppDebugInfoComponent from "../components/AppDebugInfoComponent";
 import AppVersionListComponent from "../components/AppVersionListComponent";
 import AppVolumesListComponent from "../components/AppVolumesListComponent";
+import VolumeDetailsComponent from "../components/VolumeDetailsComponent";
 import DialogActions from "../actions/DialogActions";
 import DialogStore from "../stores/DialogStore";
 import DialogSeverity from "../constants/DialogSeverity";
@@ -302,40 +303,20 @@ var AppPageComponent = React.createClass({
   getVolumeDetails: function () {
     var {appId, volumeId} = this.state;
 
-    var volume = AppsStore.getVolumeById(appId, volumeId);;
+    var volume = AppsStore.getVolumeById(appId, volumeId);
+
     if (volume == null) {
       return null;
     }
 
-    var taskURI = "#apps/" +
+    volume.taskURI = "#apps/" +
       encodeURIComponent(this.appId) +
       "/" + encodeURIComponent(volume.taskId);
 
-    var appURI = "#apps/" +
+    volume.appURI = "#apps/" +
       encodeURIComponent(this.state.appId);
 
-    return (
-      <dl className={"dl-horizontal"}>
-        <dt>Container Path</dt>
-        <dd>{volume.containerPath}</dd>
-        <dt>Mode</dt>
-        <dd>{volume.mode}</dd>
-        <dt>Size (MiB)</dt>
-        <dd>{volume.persistent.size}</dd>
-        <dt>Application</dt>
-        <dd>
-          <a href={appURI}>{appId}</a>
-        </dd>
-        <dt>Task Id</dt>
-        <dd>
-          <a href={taskURI}>{volume.taskId}</a>
-        </dd>
-        <dt>Host</dt>
-        <dd>
-          {volume.host}
-        </dd>
-      </dl>
-    );
+    return (<VolumeDetailsComponent volume={volume} />);
   },
 
   getAppDetails: function () {
