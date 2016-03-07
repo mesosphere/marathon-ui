@@ -227,12 +227,7 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
       return null;
     }
 
-    return volumes.reduce((memo, volume) => {
-      if (volume.persistenceId === volumeId) {
-        return volume;
-      }
-      return memo;
-    }, null);
+    return volumes.find((volume) => volume.persistenceId === volumeId);
   },
 
   getVolumes: function (appId) {
