@@ -11,20 +11,25 @@ var MenuComponent = React.createClass({
   propTypes: {
     children: PropTypeUtil.oneOrManyInstancesOf(MenuItemComponent),
     className: React.PropTypes.string,
-    name: React.PropTypes.string,
     onChange: React.PropTypes.func,
     selected: React.PropTypes.string
   },
 
   getDefaultProps: function () {
     return {
-      name: "menu-" + Util.getUniqueId(),
       onChange: Util.noop
     };
   },
 
+  getInitialState:  function () {
+    return {
+      name: "menu-" + Util.getUniqueId(),
+    };
+  },
+
   renderChildren: function () {
-    var {children, name, selected} = this.props;
+    var {children, selected} = this.props;
+    var {name} = this.state;
 
     return React.Children.map(children,  (child) =>
       React.addons.cloneWithProps(child, {

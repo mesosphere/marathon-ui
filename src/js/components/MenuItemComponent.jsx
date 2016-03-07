@@ -13,6 +13,12 @@ var MenuItemComponent = React.createClass({
     value: React.PropTypes.string.isRequired
   },
 
+  getInitialState:  function () {
+    return {
+      id: "menu-item-" + Util.getUniqueId(),
+    };
+  },
+
   shouldComponentUpdate: function (newProps) {
     return this.props.selected !== newProps.selected;
   },
@@ -21,11 +27,12 @@ var MenuItemComponent = React.createClass({
     var {
       children,
       className,
-      id = "menu-item-" + Util.getUniqueId(),
       name,
       value,
       selected
     } = this.props;
+
+    var {id} = this.state;
 
     return (
       <li role="menu-item" className={className}>
