@@ -153,7 +153,9 @@ function processEmptyGroup(group) {
   });
 }
 
-function processAppsAndGroups(group, apps = []) {
+// TODO: refactor to adhere to /groups endpoint structures.
+// https://github.com/mesosphere/marathon/issues/3383
+function processAppsAndEmptyGroups(group, apps = []) {
   if (group.apps != null && group.apps.length > 0) {
     group.apps.forEach(app => {
       apps.push(processApp(app));
@@ -163,7 +165,7 @@ function processAppsAndGroups(group, apps = []) {
   }
 
   if (group.groups != null && group.groups.length > 0) {
-    group.groups.forEach(group => processAppsAndGroups(group, apps));
+    group.groups.forEach(group => processAppsAndEmptyGroups(group, apps));
   }
 
   return apps;
@@ -246,7 +248,7 @@ QueueStore.on(QueueEvents.CHANGE, function () {
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
-      storeData.apps = processAppsAndGroups(action.data.body);
+      storeData.apps = processAppsAndEmptyGroups(action.data.body);
       applyAppDelayStatusOnAllApps(storeData.apps, QueueStore.queue);
       AppsStore.emit(AppsEvents.CHANGE);
       break;
