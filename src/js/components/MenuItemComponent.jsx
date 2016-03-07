@@ -13,6 +13,10 @@ var MenuItemComponent = React.createClass({
     value: React.PropTypes.string.isRequired
   },
 
+  shouldComponentUpdate: function (newProps) {
+    return this.props.selected !== newProps.selected;
+  },
+
   render: function () {
     var {
       children,
@@ -26,7 +30,8 @@ var MenuItemComponent = React.createClass({
     return (
       <li role="menu-item" className={className}>
         <input id={id} type="radio" name={name} value={value}
-          defaultChecked={selected} />
+          checked={selected}
+          readOnly />
         <label htmlFor={id}>
           {children}
         </label>

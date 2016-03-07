@@ -109,12 +109,6 @@ var AppConfigEditFormComponent = React.createClass({
     });
   },
 
-  setViewVolumes: function (isVolumesOpen = true) {
-    this.setState({
-      isVolumesOpen: !!isVolumesOpen
-    });
-  },
-
   onFormChange: function (fieldId) {
     var responseErrorMessages = this.state.responseErrorMessages;
 
@@ -168,6 +162,10 @@ var AppConfigEditFormComponent = React.createClass({
     });
   },
 
+  setViewVolumes: function () {
+    this.onMenuChange("volumes");
+  },
+
   render: function () {
     var state = this.state;
 
@@ -209,12 +207,6 @@ var AppConfigEditFormComponent = React.createClass({
     var optionalMenuItemClassSet = classNames({
       "error": this.fieldsHaveError(OptionalSettingsComponent.fieldIds)
     });
-
-    var volumesIsOpen = this.fieldsHaveError({volumes: "volumes"});
-
-    if (state.isVolumesOpen) {
-      volumesIsOpen = state.isVolumesOpen;
-    }
 
     return (
       <div className="app-config-edit">
