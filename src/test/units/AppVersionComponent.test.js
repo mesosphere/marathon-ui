@@ -11,7 +11,7 @@ describe("AppVersionComponent", function () {
     this.model = {
       "id": "/sleep10",
       "cmd": "sleep 10",
-      "args": null,
+      "args": ["arg1", "arg2"],
       "user": "testuser",
       "env": {},
       "instances": 14,
@@ -162,8 +162,13 @@ describe("AppVersionComponent", function () {
     expect(this.rows.at(41).props().children[0]).to.equal("testuser");
   });
 
+  it("has correct args", function () {
+    expect(this.rows.at(43).text()).to.equal("arg1");
+    expect(this.rows.at(44).text()).to.equal("arg2");
+  });
+
   it("has correct version", function () {
-    expect(this.rows.at(43).props().children[0])
+    expect(this.rows.at(46).props().children[0])
       .to.equal("2015-06-29T12:57:02.269Z");
   });
 
