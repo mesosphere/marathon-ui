@@ -228,6 +228,12 @@ var AppVersionComponent = React.createClass({
         return <dd key={uri+i}>{linkNode}</dd>;
       });
 
+    var argsNode = (appVersion.args == null || appVersion.args.length === 0)
+      ? <UnspecifiedNodeComponent />
+      : appVersion.args.map(function (arg, i) {
+        return <dd key={`args-${i}`}>{arg}</dd>;
+      });
+
     return (
       <div>
         {this.getApplyButton()}
@@ -275,6 +281,8 @@ var AppVersionComponent = React.createClass({
           {urisNode}
           <dt>User</dt>
           {invalidateValue(appVersion.user)}
+          <dt>Args</dt>
+          {argsNode}
           <dt>Version</dt>
           {invalidateValue(appVersion.version)}
         </dl>
