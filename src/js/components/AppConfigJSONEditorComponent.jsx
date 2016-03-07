@@ -57,10 +57,9 @@ var AppConfigJSONEditorComponent = React.createClass({
         height="100%"
         mode="json"
         onChange={this.handleUpdate}
-        showGutter={false}
+        showGutter={true}
         showPrintMargin={false}
         theme="monokai"
-        showGutter={true}
         value={this.getPrettyPrintedDefinition()}
         width="100%" />
     );
