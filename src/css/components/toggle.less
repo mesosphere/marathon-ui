@@ -20,7 +20,7 @@
     border-radius: @toggle-height;
     border: rgba(0, 0, 0, 0.2) @toggle-border-width solid;
     content: " ";
-    transition: border-color @toggle-tansition-speed, background-color @toggle-tansition-speed;
+    transition: border-color @toggle-transition-speed, background-color @toggle-transition-speed;
   }
 
   &:after {
@@ -34,7 +34,7 @@
     height: @toggle-height - @toggle-border-width * 2;
     background-color: @white;
     border-radius: @toggle-height;
-    transition: transform @toggle-tansition-speed;
+    transition: transform @toggle-transition-speed;
     box-shadow: 0 @toggle-border-width @toggle-border-width @toggle-border-width rgba(0, 0, 0, 0.1);
   }
 
