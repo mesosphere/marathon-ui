@@ -68,7 +68,7 @@
     "jsdom": "^6.5.1",
     "json-loader": "^0.5.2",
     "mocha": "^2.3.4",
-    "mocha-teamcity-reporter": "1.0.1",
+    "mocha-teamcity-reporter": "1.0.0",
     "nock": "^3.4.0",
     "npm-shrinkwrap": "^200.4.0",
     "sinon": "^1.12.2",
