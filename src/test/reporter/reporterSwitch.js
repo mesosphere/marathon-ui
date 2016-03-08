@@ -22,7 +22,7 @@ if (process.env.TEAMCITY_VERSION == null) {
   reporter = require("../../../node_modules/mocha/lib/reporters/spec");
 } else {
   console.log("TEAMCITY REPORTER");
-  console.log(getFiles("../../../node_modules/mocha-teamcity-reporter"));
+  console.log(getFiles("./node_modules"));
   reporter = require("../../../node_modules/mocha-teamcity-reporter");
 }
 
