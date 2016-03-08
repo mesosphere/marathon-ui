@@ -246,6 +246,19 @@ var Util = {
       return aKeys.every((key) => Util.isEgal(a[key], b[key]));
     }
     return Number.isNaN(a) && Number.isNaN(b);
+  },
+  isComponentOf: function (prop, component) {
+    if (prop == null) {
+      return false;
+    }
+
+    if (Util.isArray(prop)) {
+      return prop.every(item =>
+        item.type === component
+      );
+    }
+
+    return prop.type === component;
   }
 };
 

@@ -16,6 +16,10 @@
     background: transparent;
     border-color: @form-control-inverse-border-color;
     box-shadow: none;
+    &:focus {
+      background-color: fade(@form-control-inverse-border-color-focus,10%);
+      border-color: @form-control-inverse-border-color-focus;
+    }
   }
 }
 
@@ -84,21 +88,21 @@
 }
 
 .checkbox-form-group {
-  margin-bottom: 25px;
   position: relative;
+
   input[type=checkbox], input[type=radio] {
     position: absolute;
-    left: 8px;
-    top: 8px;
+    left: 0;
+    top: 0;
     display: inline;
     height: auto;
+    margin-top: 0.1em;
     width: auto;
     box-shadow: none;
   }
+
   label {
-    display: block;
-    padding: 8px 8px 8px 32px;
-    border-radius: 4px;
+    padding: 0 0 0 24px;
   }
 }
 
@@ -106,11 +110,29 @@
   color: @oslo-gray;
 }
 
-.has-error .help-block,
-.has-error .control-label,
-.has-error .radio,
-.has-error .checkbox,
-.has-error .radio-inline,
-.has-error .checkbox-inline {
-  color: @text-color-danger-light;
+.has-error {
+  .help-block,
+  .control-label,
+  .radio,
+  .checkbox,
+  .radio-inline,
+  .checkbox-inline {
+    color: @text-color-danger-light;
+  }
+
+  .form-control:focus {
+    background-color: fade(@text-color-danger-light,10%);
+    border-color: @text-color-danger-light;
+    box-shadow: none;
+  }
+
+  a {
+    color: currentColor;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: inherit;
+      color: darken(@text-color-danger-light,30);
+    }
+  }
 }

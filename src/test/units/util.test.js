@@ -1,4 +1,6 @@
 import {expect} from "chai";
+import React from "react/addons";
+
 import Util from "../../js/helpers/Util";
 
 describe("Util", function () {
@@ -747,6 +749,48 @@ describe("Util", function () {
 
       expect(originalUnsortedArray.sort(Util.sortBy("a")))
         .to.deep.equal(expectedSortedArray);
+    });
+  });
+
+  describe("isComponentOf", function () {
+    var TestComponentA = React.createClass({
+       render: function () {
+         return null;
+       }
+    });
+
+    var TestComponentB = React.createClass({
+       render: function () {
+         return null;
+       }
+    });
+
+    it("should return true for same component type", function () {
+      expect(Util.isComponentOf(<TestComponentA />, TestComponentA))
+        .to.be.true;
+    });
+
+    it("should return false if components are different", function () {
+      expect(Util.isComponentOf(<TestComponentB />, TestComponentA))
+        .to.be.false;
+    });
+
+    it("should return true if all components are same", function () {
+      expect(Util.isComponentOf([
+        <TestComponentA />,
+        <TestComponentA />
+      ], TestComponentA)).to.be.true;
+    });
+
+    it("should return false if not all components are same", function () {
+      expect(Util.isComponentOf([
+        <TestComponentA />,
+        <TestComponentB />
+      ], TestComponentA)).to.be.false;
+    });
+
+    it("should return false if prop is null", function () {
+      expect(Util.isComponentOf(null,TestComponentA)).to.be.false;
     });
   });
 });

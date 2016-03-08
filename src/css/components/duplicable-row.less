@@ -5,6 +5,8 @@
 .duplicable-row {
   .controls {
     margin: 0 0 1em 0.2em;
+    min-width: @base-spacing-unit*10;
+
     .btn {
       display: inline-block;
       position: relative;
@@ -38,7 +40,10 @@
         color: @brand-primary;
       }
       &.remove {
-        color: @black-haze;
+        color: @manatee;
+        &.disabled {
+          opacity: 0;
+        }
       }
     }
     .icon {

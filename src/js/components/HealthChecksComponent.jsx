@@ -140,7 +140,7 @@ var HealthChecksComponent = React.createClass({
             </div>
           </div>
           <div className="row">
-            <div className="col-sm-2">
+            <div className="col-sm-3">
               <FormGroupComponent
                   errorMessage={
                     getErrorMessage(`${fieldsetId}.${i}.gracePeriodSeconds`)
@@ -153,7 +153,7 @@ var HealthChecksComponent = React.createClass({
                   {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
-            <div className="col-sm-2">
+            <div className="col-sm-3">
               <FormGroupComponent
                   errorMessage={
                     getErrorMessage(`${fieldsetId}.${i}.intervalSeconds`)
@@ -165,7 +165,7 @@ var HealthChecksComponent = React.createClass({
                 <input ref={`intervalSeconds${i}`} {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
-            <div className="col-sm-2">
+            <div className="col-sm-3">
               <FormGroupComponent
                   errorMessage={
                     getErrorMessage(`${fieldsetId}.${i}.timeoutSeconds`)
@@ -253,7 +253,7 @@ var HealthChecksComponent = React.createClass({
           </div>
           <div className="row duplicable-row">
             <div className="col-sm-4">
-              <button className="btn btn-default"
+              <button className="btn btn-default btn-inverse"
                   type="button"
                   onClick={handleAddRow}>
                 Add Another Health Check

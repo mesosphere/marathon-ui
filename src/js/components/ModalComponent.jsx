@@ -9,7 +9,6 @@ function modalSizeClassName(size) {
 var ModalComponent = React.createClass({
   displayName: "ModalComponent",
   propTypes: {
-    centered: React.PropTypes.bool,
     children: React.PropTypes.node,
     className: React.PropTypes.string,
     dismissOnClickOutside: React.PropTypes.bool,
@@ -56,8 +55,7 @@ var ModalComponent = React.createClass({
     var isInTransition = this.state.isInTransition;
 
     var modalClassName = classNames("modal fade", props.className, {
-      "in": isInTransition,
-      "modal-centered": props.centered
+      "in": isInTransition
     });
 
     var modalDialogClassName = classNames("modal-dialog",

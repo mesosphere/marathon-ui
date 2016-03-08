@@ -54,10 +54,10 @@ var AppConfigJSONEditorComponent = React.createClass({
     return (
       <AceEditor
         editorProps={{$blockScrolling: true}}
-        height="495px"
+        height="100%"
         mode="json"
         onChange={this.handleUpdate}
-        showGutter={false}
+        showGutter={true}
         showPrintMargin={false}
         theme="monokai"
         value={this.getPrettyPrintedDefinition()}

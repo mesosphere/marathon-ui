@@ -21,7 +21,8 @@
 @btn-default-inverse-active-border-color: @dodger-blue;
 @btn-default-inverse-active-text-color: @shuttle-gray;
 
-@form-control-inverse-border-color: @dodger-blue;
+@form-control-inverse-border-color: @alto;
+@form-control-inverse-border-color-focus: @dodger-blue;
 
 @badge-bg-color: fade(@white, 5%);
 @badge-indicator-bg-color: @mustard;
@@ -59,12 +60,19 @@
 @task-health-over-capacity-color: @cornflower-blue;
 @task-health-unscheduled-color: @mirage;
 @task-health-running-color: @oslo-gray;
+
+@modal-header-text-color: @white;
 @modal-dialog-bg-color: @white;
-@modal-dialog-text-color: @shuttle-gray;
+@modal-dialog-text-color: @manatee;
 @modal-dialog-footer-color: @wild-sand;
-@modal-dialog-info-color: @blue-ribbon;
+@modal-dialog-info-color: @dodger-blue;
 @modal-dialog-warning-color: @blaze-orange;
 @modal-dialog-danger-color: @red-ribbon;
+@modal-footer-border-color: @alto;
+
+@menu-item-color-active: @dodger-blue;
+@toggle-checked-color: @emerald;
+@content-component-border-color: @alto;
 
 /* ==============
  * Layout
@@ -91,7 +99,8 @@
 @small-font-size: 12px;
 @xsmall-font-size: 10px;
 @modal-font-size: 16px;
-@modal-font-size-header: @font-size-h1;
+@modal-font-size-header: @font-size-h2;
+@modal-dialog-font-size-header: @font-size-h1;
 
 /* ==============
  * Misc
@@ -154,9 +163,22 @@
  * Modal
  * ==============
  */
-@modal-border-radius: 6px;
+@modal-border-radius: 4px;
 @modal-body-padding: 20px;
-@modal-footer-padding: 33px;
-@modal-dialog-padding: @modal-footer-padding;
-@modal-dialog-width: 536px;
+@modal-footer-height: 105px;
+@modal-footer-padding: @base-spacing-unit*2;
+@modal-header-height: 50px;
+@modal-header-padding: 16px;
+@modal-error-height: 32px;
 @modal-dialog-height: 232px;
+@modal-dialog-padding: 33px;
+@modal-dialog-width: 536px;
+
+/* ==============
+* Toggle
+* ==============
+*/
+@toggle-width: 24px;
+@toggle-height: 16px;
+@toggle-border-width: 1px;
+@toggle-transition-speed: 0.5s;

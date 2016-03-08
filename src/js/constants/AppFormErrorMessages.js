@@ -66,7 +66,8 @@ const generalErrors = Util.deepFreeze({
 });
 
 const serverResponseMappings = Util.deepFreeze({
-  "error.path.missing": "Please provide a path"
+  "error.path.missing": "Please provide a path",
+  "error.minLength": "May not be blank"
 });
 
 const AppFormErrorMessages = {
