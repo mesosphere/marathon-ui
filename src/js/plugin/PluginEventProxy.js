@@ -3,6 +3,8 @@ import PluginEvents from "./shared/PluginEvents";
 
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
+import AppFormStore from "../stores/AppFormStore";
+import FormEvents from "../events/FormEvents";
 
 import Util from "../helpers/Util";
 
@@ -24,6 +26,27 @@ registerProxy({
   store: AppsStore,
   storeEvent: AppsEvents.CHANGE,
   storeGetter: "apps"
+});
+
+registerProxy({
+  pluginEvent: PluginEvents.APP_FORM_STORE_INSERT,
+  store: AppFormStore,
+  storeEvent: FormEvents.INSERT,
+  storeGetter: "fields"
+});
+
+registerProxy({
+  pluginEvent: PluginEvents.APP_FORM_STORE_UPDATE,
+  store: AppFormStore,
+  storeEvent: FormEvents.UPDATE,
+  storeGetter: "fields"
+});
+
+registerProxy({
+  pluginEvent: PluginEvents.APP_FORM_STORE_DELETE,
+  store: AppFormStore,
+  storeEvent: FormEvents.DELETE,
+  storeGetter: "fields"
 });
 
 var PluginEventProxy = {
