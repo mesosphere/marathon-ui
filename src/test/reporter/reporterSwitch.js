@@ -21,6 +21,7 @@ var reporter;
 if (process.env.TEAMCITY_VERSION == null) {
   reporter = require("../../../node_modules/mocha/lib/reporters/spec");
 } else {
+  console.log(getFiles("/usr/local/lib/node_modules"));
   reporter = require("mocha-teamcity-reporter");
 }
 
