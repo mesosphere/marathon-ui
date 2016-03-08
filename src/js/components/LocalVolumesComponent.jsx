@@ -54,8 +54,9 @@ var LocalVolumesComponent = React.createClass({
 
     var containerPathTooltipMessage = (
       <span>
-        Set any path you like, it will be available in your
-        working directory e.g. home
+        The path to the directory where your application will
+        read and write data. The path must be non-nested,
+        e.g. `/var/lib/mysql`.
         <a href={ExternalLinks.CONTAINER_PATH} target="_blank">Read more</a>.
       </span>
     );
