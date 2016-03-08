@@ -70,6 +70,13 @@ describe("AppListComponent", function () {
         instances: 1,
         mem: 16,
         cpus: 1
+      },
+      {
+        id: "/empty-group",
+        instances: 0,
+        mem: 0,
+        cpus: 0,
+        isGroup: true
       }
     ];
 
@@ -92,6 +99,7 @@ describe("AppListComponent", function () {
 
     expect(appNames).to.deep.equal([
       "apps",
+      "empty-group",
       "fuzzy",
       "group-alpha",
       "group-with-long-name",
@@ -319,6 +327,30 @@ describe("AppListComponent", function () {
 
       this.component = shallow(
         <AppListComponent currentGroup="/" />,
+        {context}
+      );
+
+      var appNames = this.component
+        .find(AppListItemComponent)
+        .map(app => app.props().model.id);
+
+      expect(appNames).to.have.length(0);
+      this.component.instance().componentWillUnmount();
+    });
+
+    it("shows no items for empty groups", function () {
+      var context = {
+        router: {
+          getCurrentQuery: function () {
+            return {
+              filterText: "nope"
+            };
+          }
+        }
+      };
+
+      this.component = shallow(
+        <AppListComponent currentGroup="/empty-group" />,
         {context}
       );
 

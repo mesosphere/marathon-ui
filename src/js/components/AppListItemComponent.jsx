@@ -120,11 +120,10 @@ var AppListItemComponent = React.createClass({
     var model = this.props.model;
     var router = this.context.router;
     if (model.isGroup) {
-      let query = router.getCurrentQuery();
       let param = {
         groupId: encodeURIComponent(model.id)
       };
-      router.transitionTo("group", param, query);
+      router.transitionTo("group", param);
     } else {
       router.transitionTo("app", {appId: encodeURIComponent(model.id)});
     }

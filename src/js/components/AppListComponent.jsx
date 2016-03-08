@@ -192,33 +192,33 @@ var AppListComponent = React.createClass({
   getGroupsFromApps: function (apps) {
     var groups = [];
 
-    apps.forEach(app => {
-      var pathParts = app.id.split("/");
+    apps.filter(app => !app.isGroup)
+      .forEach(app => {
+        var pathParts = app.id.split("/");
 
-      // Remove app name
-      pathParts.pop();
+        // Remove app name
+        pathParts.pop();
 
-      // Create groups
-      pathParts.forEach((pathPart, index, pathParts) => {
-        // We can ignore the first part as all app/group ids begin with a slash
-        if (index === 0) {
-          return;
-        }
+        // Create groups
+        pathParts.forEach((pathPart, index, pathParts) => {
+          // Ignore the first part as all app/group ids that begin with a slash
+          if (index === 0) {
+            return;
+          }
 
-        let groupId = pathParts.slice(0, index + 1).join("/");
-        let group = groups.find(item => {
-          return item.id === groupId;
+          let groupId = pathParts.slice(0, index + 1).join("/");
+          let group = groups.find(item => {
+            return item.id === groupId;
+          });
+
+          if (group == null) {
+            group = initGroupNode(groupId, app);
+            groups.push(group);
+          } else {
+            updateGroupNode(group, app);
+          }
         });
-
-        if (group == null) {
-          group = initGroupNode(groupId, app);
-          groups.push(group);
-        } else {
-          updateGroupNode(group, app);
-        }
       });
-
-    });
 
     return groups;
   },
@@ -401,7 +401,7 @@ var AppListComponent = React.createClass({
       });
     } else {
       items = this.sortItems(items,
-        (a,b) => SortUtil.compareValues(a[sortKey],b[sortKey]) * sortDirection
+        (a, b) => SortUtil.compareValues(a[sortKey], b[sortKey]) * sortDirection
       );
     }
 

@@ -7,13 +7,15 @@ import AppsEvents from "../events/AppsEvents";
 
 var AppsActions = {
   requestApps: function () {
+    const embed = "embed=group.groups&embed=group.apps&" +
+      "embed=group.apps.deployments&embed=group.apps.counts";
     this.request({
-      url: `${config.apiURL}v2/apps`
+      url: `${config.apiURL}v2/groups?${embed}`
     })
-      .success(function (apps) {
+      .success(function (groups) {
         AppDispatcher.dispatch({
           actionType: AppsEvents.REQUEST_APPS,
-          data: apps
+          data: groups
         });
       })
       .error(function (error) {

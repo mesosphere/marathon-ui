@@ -25,7 +25,8 @@ describe("queue update", function () {
     };
 
     nock(config.apiURL)
-      .get("/v2/apps")
+      .get("/v2/groups")
+      .query(true)
       .reply(200, nockResponse);
 
     AppsStore.once(AppsEvents.CHANGE, done);
