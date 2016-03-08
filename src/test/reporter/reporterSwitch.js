@@ -21,7 +21,12 @@ var reporter;
 if (process.env.TEAMCITY_VERSION == null) {
   reporter = require("../../../node_modules/mocha/lib/reporters/spec");
 } else {
-  reporter = require("../../../node_modules/mocha-teamcity-reporter");
+  try {
+    reporter = require("../../../node_modules/mocha-teamcity-reporter");
+  } catch (e) {
+    console.log("ERRROT!");
+    console.log(e);
+  }
 }
 
 exports = module.exports = reporter;
