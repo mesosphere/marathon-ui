@@ -8,9 +8,13 @@ import AppFormStore from "../stores/AppFormStore";
 import AppsStore from "../stores/AppsStore";
 import ContainerSettingsComponent
   from "../components/ContainerSettingsComponent";
+import ContentComponent from "../components/ContentComponent";
 import FormActions from "../actions/FormActions";
 import FormEvents from "../events/FormEvents";
+import FormGroupComponent from "../components/FormGroupComponent";
 import HealthChecksComponent from "../components/HealthChecksComponent";
+import MenuComponent from "../components/MenuComponent";
+import MenuItemComponent from "../components/MenuItemComponent";
 import OptionalEnvironmentComponent
   from "../components/OptionalEnviromentComponent";
 import OptionalLabelsComponent from "../components/OptionalLabelsComponent";
@@ -20,11 +24,9 @@ import OptionalSettingsComponent
   from "../components/OptionalSettingsComponent";
 import OptionalVolumesComponent
   from "../components/OptionalVolumesComponent";
-import FormGroupComponent from "../components/FormGroupComponent";
-import MenuComponent from "../components/MenuComponent";
-import MenuItemComponent from "../components/MenuItemComponent";
+import PluginMountPointComponent from "../components/PluginMountPointComponent";
+import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 import SectionComponent from "../components/SectionComponent";
-import ContentComponent from "../components/ContentComponent";
 
 var AppConfigEditFormComponent = React.createClass({
   displayName: "AppConfigEditFormComponent",
@@ -166,6 +168,15 @@ var AppConfigEditFormComponent = React.createClass({
     this.onMenuChange("volumes");
   },
 
+  getPortsPanelTitle: function () {
+    return (
+      <span>
+        Ports<PluginMountPointComponent
+          placeId={PluginMountPoints.APP_EDIT_FORM_PORTS_PANEL_TITLE} />
+      </span>
+    );
+  },
+
   render: function () {
     var state = this.state;
 
@@ -222,7 +233,7 @@ var AppConfigEditFormComponent = React.createClass({
           </MenuItemComponent>
           <MenuItemComponent value="ports"
              className={portsMenuItemClassSet}>
-            Ports
+            title={this.getPortsPanelTitle()}
           </MenuItemComponent>
           <MenuItemComponent value="env"
               className={envMenuItemClassSet}>
