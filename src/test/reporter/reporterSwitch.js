@@ -8,5 +8,5 @@ if (process.env.TEAMCITY_VERSION == null) {
   console.log("Using TeamCity reporter");
   reporter = require("../../../node_modules/mocha-teamcity-reporter");
 }
-
+console.log("reporter", reporter);
 exports = module.exports = reporter;
