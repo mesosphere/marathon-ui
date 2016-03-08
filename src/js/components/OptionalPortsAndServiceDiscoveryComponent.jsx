@@ -7,6 +7,8 @@ import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import FormActions from "../actions/FormActions";
 import FormGroupComponent from "../components/FormGroupComponent";
 import PortInputAttributes from "../constants/PortInputAttributes";
+import PluginMountPointComponent from "../components/PluginMountPointComponent";
+import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 
 import Util from "../helpers/Util";
 
@@ -43,6 +45,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       port: null,
       protocol: ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP,
       name: null,
+      labels: null,
       isRandomPort: true
     }
   },
@@ -224,6 +227,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
               handleRemoveRow=
                 {this.handleRemoveRow.bind(null, fieldsetId, i)} />
           </div>
+          <PluginMountPointComponent
+            placeId={PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY} />
         </fieldset>
         {error}
       </div>

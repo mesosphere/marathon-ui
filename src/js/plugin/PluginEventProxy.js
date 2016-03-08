@@ -49,6 +49,13 @@ registerProxy({
   storeGetter: "fields"
 });
 
+registerProxy({
+  pluginEvent: PluginEvents.APP_FORM_STORE_CHANGE,
+  store: AppFormStore,
+  storeEvent: FormEvents.CHANGE,
+  storeGetter: "fields"
+});
+
 var PluginEventProxy = {
   init: function () {
     proxies.forEach(proxy => proxy());
