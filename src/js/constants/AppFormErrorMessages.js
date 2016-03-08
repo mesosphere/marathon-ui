@@ -20,12 +20,12 @@ const applicationFieldValidationErrors = Util.deepFreeze({
     "Container Path must be a valid path",
     "Host Path must be a valid path",
     "Mode must not be empty",
-    "Container Path and Host Path have to be set."
+    "Container Path and Host Path must be set."
   ],
   localVolumes: [
     "Size must be a non-negative number",
     "Container Path must be a valid path",
-    "Container Path and Size have to be set"
+    "Container Path and Size must be set"
   ],
   cpus: ["CPUs must be a number greater or equal to 0.01"],
   disk: ["Disk Space must be a non-negative number"],
@@ -36,7 +36,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   healthChecks: [
     "Incorrect protocol given",
     "Command must not be emtpy",
-    "Path must not be emtpy",
+    "Path must not be empty",
     "Port Index must be a non-negative number",
     "Port Number must be a valid port between 0 - 65535",
     "Grace Period must be a non-negative number",
@@ -57,17 +57,17 @@ const generalErrors = Util.deepFreeze({
   appCreation:
     "App creation unsuccessful. Check your app settings and try again.",
   appLocked: "App is currently locked by one or more deployments. " +
-    "Pressing the button again will forcefully change and deploy " +
+    "Press the button again to forcefully change and deploy " +
     "the new configuration.",
-  unknownServerError: "Unknown server error, could not create or apply app.",
+  unknownServerError: "Unknown server error. Could not create or apply app.",
   unauthorizedAccess: `App creation unsuccessful. ${Messages.UNAUTHORIZED}`,
   forbiddenAccess: `App creation unsuccessful. ${Messages.FORBIDDEN}`,
   errorPrefix: "Error:"
 });
 
 const serverResponseMappings = Util.deepFreeze({
-  "error.path.missing": "Please provide a path",
-  "error.minLength": "May not be blank"
+  "error.path.missing": "Specify a path",
+  "error.minLength": "Command may not be blank"
 });
 
 const AppFormErrorMessages = {
