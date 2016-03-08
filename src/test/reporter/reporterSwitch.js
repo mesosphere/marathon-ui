@@ -5,6 +5,7 @@ var reporter;
 if (process.env.TEAMCITY_VERSION == null) {
   reporter = require("../../../node_modules/mocha/lib/reporters/spec");
 } else {
+  console.log("Using TeamCity reporter");
   reporter = require("../../../node_modules/mocha-teamcity-reporter");
 }
 
