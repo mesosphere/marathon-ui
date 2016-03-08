@@ -123,7 +123,8 @@ var LocalVolumesComponent = React.createClass({
   render: function () {
     var localVolumesTooltipMessage = (
       <span>
-        Local volumes hold state if an instance is shut down.
+        Local volumes retain data if an
+        application terminates.
         <a href={ExternalLinks.LOCAL_VOLUMES} target="_blank">Read more</a>.
       </span>
     );
