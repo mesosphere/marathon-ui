@@ -297,7 +297,7 @@ var AppConfigEditFormComponent = React.createClass({
               help="May be left blank if a container image is supplied"
               value={state.fields.cmd}
               onChange={this.handleFieldUpdate}>
-              <textarea style={{resize: "vertical"}}/>
+              <textarea style={{resize: "vertical"}} rows="3"/>
             </FormGroupComponent>
           </SectionComponent>
           <SectionComponent sectionId="container">
