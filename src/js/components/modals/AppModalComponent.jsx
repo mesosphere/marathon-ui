@@ -169,10 +169,7 @@ var AppModalComponent = React.createClass({
 
   handleModeToggle: function (event) {
     event.preventDefault();
-    if (event.metaKey || event.ctrlKey ||
-        event.currentTarget.className.split(" ").includes("json-link")) {
-      this.setState({jsonMode: !this.state.jsonMode});
-    }
+    this.setState({jsonMode: !this.state.jsonMode});
   },
 
   handleAppConfigChange: function (app) {
@@ -245,7 +242,7 @@ var AppModalComponent = React.createClass({
             <input id="json-toggle" type="checkbox" name="checkbox"
               className="toggle" onChange={this.onJSONToggleChange} />
             <label htmlFor="json-toggle">JSON Mode</label>
-            <h2 className="modal-title" onClick={this.handleModeToggle}>
+            <h2 className="modal-title">
               {modalTitle}
             </h2>
           </div>
