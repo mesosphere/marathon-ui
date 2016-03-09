@@ -32,12 +32,10 @@ var AppModalComponent = React.createClass({
   },
 
   getInitialState: function () {
-    var app = this.props.app;
-
     // We don't want to trigger changes in the app until the submit button
     // is clicked, therefore it is held in the modal state rather than props
     return {
-      app: app,
+      app: this.props.app,
       appIsValid: false,
       error: null,
       force: false,
