@@ -236,7 +236,7 @@
     },
     "babel-eslint": {
       "version": "4.1.8",
-      "from": "babel-eslint@>=4.1.6 <5.0.0",
+      "from": "babel-eslint@>=4.1.7 <5.0.0",
       "resolved": "https://registry.npmjs.org/babel-eslint/-/babel-eslint-4.1.8.tgz",
       "dependencies": {
         "babel-core": {
@@ -3989,7 +3989,7 @@
     "livereload-js": {
       "version": "2.2.2",
       "from": "livereload-js@>=2.2.0 <3.0.0",
-      "resolved": "https://registry.npmjs.org/livereload-js/-/livereload-js-2.2.2.tgz"
+      "resolved": "http://registry.npmjs.org/livereload-js/-/livereload-js-2.2.2.tgz"
     },
     "load-json-file": {
       "version": "1.1.0",
