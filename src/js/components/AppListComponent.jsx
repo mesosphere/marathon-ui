@@ -434,7 +434,7 @@ var AppListComponent = React.createClass({
 
   getInlineDialog: function (appNodes = []) {
     var {props, state} = this;
-    var path = this.context.router.getCurrentPathname();
+    var path = this.getCurrentPathname();
 
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
