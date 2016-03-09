@@ -64,7 +64,7 @@ var Util = {
     return toString.call(obj) === "[object Object]";
   },
   isStringAndEmpty: function (str) {
-    return this.isString(str) && (str == null || str === "");
+    return this.isString(str) && str.length === 0;
   },
   hasClass: function (element, className) {
     return element.className &&
