@@ -1,5 +1,6 @@
 import React from "react/addons";
 import classNames from "classnames";
+import Mousetrap from "mousetrap";
 
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
@@ -121,6 +122,21 @@ var AppPageComponent = React.createClass({
       this.onDeleteAppSuccess);
     AppsStore.removeListener(TasksEvents.DELETE_ERROR,
       this.onDeleteTaskError);
+    Mousetrap.unbind(["command+e", "ctrl+e"]);
+  },
+
+  componentDidMount: function () {
+    Mousetrap.bind(["command+e", "ctrl+e"], this.openEditModal);
+  },
+
+  openEditModal: function () {
+    var router = this.context.router;
+    var app = AppsStore.getCurrentApp(this.state.appId);
+    if (this.state.modal == null) {
+      router.transitionTo(router.getCurrentPathname(), {}, {
+        modal: `edit-app--${app.id}--${app.version}`
+      });
+    }
   },
 
   componentWillReceiveProps: function () {

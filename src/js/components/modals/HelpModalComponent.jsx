@@ -37,6 +37,13 @@ var HelpModalComponent = React.createClass({
             <dd>Focus application search bar</dd>
             <dt>shift + ,</dt>
             <dd>Go to About modal</dd>
+            <dt>[cmd | ctrl] + enter</dt>
+            <dd>Submit the Create/Edit application dialog</dd>
+            <dt>[cmd | ctrl] + e</dt>
+            <dd>
+              Show the Edit application dialog
+              (only when inside an application page)
+            </dd>
             <dt>?</dt>
             <dd>Go to Help modal</dd>
           </dl>
