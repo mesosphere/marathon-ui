@@ -38,7 +38,7 @@ var AppModalComponent = React.createClass({
     // is clicked, therefore it is held in the modal state rather than props
     return {
       app: app,
-      appIsValid: true,
+      appIsValid: false,
       error: null,
       force: false,
       jsonMode: false
