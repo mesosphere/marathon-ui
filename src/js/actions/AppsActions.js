@@ -43,6 +43,13 @@ var AppsActions = {
       });
   },
   createApp: function (newAppAttributes) {
+    if (newAppAttributes == null) {
+      AppDispatcher.dispatch({
+        actionType: AppsEvents.CREATE_APP_ERROR
+      });
+      return;
+    }
+
     if (newAppAttributes.container != null &&
       newAppAttributes.container.volumes != null) {
       newAppAttributes.residency = {

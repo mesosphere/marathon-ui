@@ -474,7 +474,7 @@ function processResponseErrors(responseErrors, response, statusCode) {
       }).join(", ");
     });
 
-  } else if (statusCode >= 300) {
+  } else if (statusCode == null || statusCode >= 300) {
     responseErrors.general =
       AppFormErrorMessages.getGeneralMessage("appCreation");
   }

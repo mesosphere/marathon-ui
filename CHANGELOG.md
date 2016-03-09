@@ -32,6 +32,7 @@
 - \#3304 - Marathon UI hangs after being open for a while
 - \#3233 - Cannot remove a constraint
 - \#3159 - Show args in configuration tab
+- \#3430 - Uncaught TypeError when creating an empty application
 
 ## 0.15.6 - 2016-02-23
 - \#3192 - Adapt default Mem/CPU settings
