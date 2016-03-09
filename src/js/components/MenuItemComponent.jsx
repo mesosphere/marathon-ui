@@ -15,12 +15,8 @@ var MenuItemComponent = React.createClass({
 
   getInitialState:  function () {
     return {
-      id: "menu-item-" + Util.getUniqueId(),
+      id: "menu-item-" + Util.getUniqueId()
     };
-  },
-
-  shouldComponentUpdate: function (newProps) {
-    return this.props.selected !== newProps.selected;
   },
 
   render: function () {
