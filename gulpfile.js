@@ -239,14 +239,11 @@ gulp.task("replace-js-strings", ["webpack", "minify-js"], function () {
 });
 
 gulp.task("version-check", function () {
-  var shrinkwrapNodeVersion = require("./npm-shrinkwrap")["node-version"];
   var packageNodeVersion = require("./package").engines.node;
   var nodeVersion = process.version;
-  if (shrinkwrapNodeVersion !== nodeVersion ||
-    nodeVersion !== "v" + packageNodeVersion) {
+  if (nodeVersion !== "v" + packageNodeVersion) {
     throw(
       "\nPackage Node engine version is " + packageNodeVersion + "\n" +
-      "Shrinkwrap Node version is " + shrinkwrapNodeVersion + "\n" +
       "Current Node version is " + nodeVersion
     );
   }
