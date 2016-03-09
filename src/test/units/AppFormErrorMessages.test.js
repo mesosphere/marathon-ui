@@ -14,7 +14,7 @@ describe("AppFormErrorMessages", function () {
   describe("#getGeneralMessage", function () {
     it("returns correct message on given key", function () {
       expect(AppFormErrorMessages.getGeneralMessage("unknownServerError"))
-        .to.be.equal("Unknown server error, could not create or apply app.");
+        .to.be.equal("Unknown server error. Could not create or apply app.");
     });
   });
 
@@ -22,7 +22,7 @@ describe("AppFormErrorMessages", function () {
     it("returns correct message on given server message", function () {
       expect(
         AppFormErrorMessages.lookupServerResponseMessage("error.path.missing")
-      ).to.be.equal("Please provide a path");
+      ).to.be.equal("Specify a path");
     });
   });
 

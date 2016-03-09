@@ -50,7 +50,7 @@ var AppActionsHandlerMixin = {
   componentWillMount: function () {
     if (this.props.model == null) {
       throw new Error(
-        "The AppActionsHandlerMixin needs a defined model-property"
+        "The AppActionsHandlerMixin needs a defined model property"
       );
     }
   },
@@ -117,7 +117,7 @@ var AppActionsHandlerMixin = {
 
     const dialogId = DialogActions.confirm({
       actionButtonLabel: "Destroy Application",
-      message: `Are you sure you want to destroy ${appId}. Please note this
+      message: `Are you sure you want to destroy ${appId}? This
         action is irreversible.`,
       severity: DialogSeverity.DANGER,
       title: "Destroy Application"
@@ -137,8 +137,8 @@ var AppActionsHandlerMixin = {
 
     const dialogId = DialogActions.confirm({
       actionButtonLabel: "Destroy Group",
-      message: `Are you sure you want to destroy ${groupId} including all it's
-        applications. Please note this action is irreversible.`,
+      message: `Are you sure you want to destroy ${groupId}, including all its
+        applications? This action is irreversible.`,
       severity: DialogSeverity.DANGER,
       title: "Destroy Group"});
 
@@ -210,7 +210,7 @@ var AppActionsHandlerMixin = {
       actionButtonLabel: "Continue Scaling",
       message: (
         <div>
-          <div>By scaling down any existing local volumes will
+          <div>Scaling down will cause any existing local volumes to
             be detached from destroyed instances. <a href="about:blank"
                 target="_blank"
                 className="modal-body-link">
@@ -218,12 +218,12 @@ var AppActionsHandlerMixin = {
             </a>
           </div>
           <div>
-            Are your sure you want to continue?
+            Are you sure you want to continue?
           </div>
         </div>
       ),
       severity: DialogSeverity.WARNING,
-      title: `Caution: ${appId} is a Stateful Application`
+      title: `Caution: ${appId} is a stateful application`
     });
 
     DialogStore.handleUserResponse(dialogId, () => {
@@ -322,8 +322,8 @@ var AppActionsHandlerMixin = {
       const dialogId = DialogActions.confirm({
         actionButtonLabel: "Stop Current Deployment and Scale",
         message: `In order to scale ${appId} to a new number of instances, the
-          current deployment will have to be forcefully stopped, and a new
-          one started. Please be cautious, as this could result in unwanted
+          current deployment will have to be forcefully stopped and a new
+          one started. This could result in unwanted
           states.`,
         severity: DialogSeverity.DANGER,
         title: "Error Scaling Application"
@@ -362,7 +362,7 @@ var AppActionsHandlerMixin = {
       const dialogId = DialogActions.confirm({
         actionButtonLabel: "Stop Current Deployment and Restart",
         message: `In order to restart ${appId}, the current deployment will have
-          to be forcefully stopped. Please be cautious, as this could result in
+          to be forcefully stopped. This could result in
           unwanted states.`,
         severity: DialogSeverity.DANGER,
         title: "Error Restarting Application"

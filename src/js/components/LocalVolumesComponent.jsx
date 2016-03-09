@@ -54,8 +54,9 @@ var LocalVolumesComponent = React.createClass({
 
     var containerPathTooltipMessage = (
       <span>
-        Set any path you like, it will be available in your
-        working directory e.g. home
+        The path to the directory where your application will
+        read and write data. The path must be non-nested,
+        e.g. `/var/lib/mysql`.
         <a href={ExternalLinks.CONTAINER_PATH} target="_blank">Read more</a>.
       </span>
     );
@@ -122,7 +123,8 @@ var LocalVolumesComponent = React.createClass({
   render: function () {
     var localVolumesTooltipMessage = (
       <span>
-        Local volumes hold state if an instance is shut down.
+        Local volumes retain data if an
+        application terminates.
         <a href={ExternalLinks.LOCAL_VOLUMES} target="_blank">Read more</a>.
       </span>
     );
