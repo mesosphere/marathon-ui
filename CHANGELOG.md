@@ -18,6 +18,8 @@
 - \#3269 - Sort ENV variables in application details page
 - \#3243 - Simplify port management in Marathon UI
 - \#3305 - Redesign Create/Edit modal and add JSON editor toggle
+- \#3431 - Disable the create application button until valid data was
+  provided
 
 ### Fixed
 - \#3133 - Interrupted scaling operations can leave the health bar in an
