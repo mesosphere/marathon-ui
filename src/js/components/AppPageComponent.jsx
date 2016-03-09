@@ -122,11 +122,11 @@ var AppPageComponent = React.createClass({
       this.onDeleteAppSuccess);
     AppsStore.removeListener(TasksEvents.DELETE_ERROR,
       this.onDeleteTaskError);
-    Mousetrap.unbind(["command+e", "ctrl+e"]);
+    Mousetrap.unbind(["g e"]);
   },
 
   componentDidMount: function () {
-    Mousetrap.bind(["command+e", "ctrl+e"], this.openEditModal);
+    Mousetrap.bind(["g e"], this.openEditModal);
   },
 
   openEditModal: function () {

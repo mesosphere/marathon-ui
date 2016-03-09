@@ -39,7 +39,7 @@ var HelpModalComponent = React.createClass({
             <dd>Go to About modal</dd>
             <dt>[cmd | ctrl] + enter</dt>
             <dd>Submit the Create/Edit application dialog</dd>
-            <dt>[cmd | ctrl] + e</dt>
+            <dt>g e</dt>
             <dd>
               Show the Edit application dialog
               (only when inside an application page)
