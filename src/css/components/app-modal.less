@@ -48,5 +48,22 @@
       padding-top: @base-spacing-unit;
       overflow: auto;
     }
+
+    .json-editor {
+      height: 100%;
+      .tooltip-container {
+        position: absolute;
+        z-index: 1;
+        right: @base-spacing-unit*0.5;
+        top: @base-spacing-unit*0.5;
+      }
+      .icon.help {
+        background-image: url("img/icons/icon-help.svg");
+      }
+    }
+
+    .icon.help {
+      background-image: url("img/icons/icon-help-inverse.svg");
+    }
   }
 }

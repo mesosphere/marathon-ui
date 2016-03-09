@@ -10,6 +10,8 @@ import PortInputAttributes from "../constants/PortInputAttributes";
 import PluginComponentStore from "../stores/PluginComponentStore";
 import PluginMountPointComponent from "../components/PluginMountPointComponent";
 import PluginMountPoints from "../plugin/shared/PluginMountPoints";
+import TooltipComponent from "../components/TooltipComponent";
+import ExternalLinks from "../constants/ExternalLinks";
 
 import Util from "../helpers/Util";
 
@@ -154,6 +156,24 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       : "Port";
 
     var randomPortField = null;
+
+    var fieldTooltipMessage = (
+      <span>
+        Port configuration for applications in Marathon can be confusing,
+        to Learn more visit the
+        docs: <a href={ExternalLinks.PORTS} target="_blank">Read more</a>.
+      </span>
+    );
+
+    fieldLabel = (
+      <span>
+        {fieldLabel}
+        <TooltipComponent className="right"
+            message={fieldTooltipMessage}>
+          <i className="icon icon-xs help" />
+        </TooltipComponent>
+      </span>
+    );
 
     if (!isBridgeNetwork && row.isRandomPort) {
       randomPortField = (
