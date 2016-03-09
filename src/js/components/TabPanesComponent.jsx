@@ -73,7 +73,7 @@ var TabPanesComponent = React.createClass({
   },
 
   getTabId: function () {
-    var path = this.context.router.getCurrentPathname();
+    var path = this.getCurrentPathname();
 
     var hasTab = tabs.find(tab => tab.id === path);
 
@@ -85,7 +85,7 @@ var TabPanesComponent = React.createClass({
   },
 
   render: function () {
-    var path = this.context.router.getCurrentPathname();
+    var path = this.getCurrentPathname();
     var state = this.state;
     var groupId = state.currentGroup;
 

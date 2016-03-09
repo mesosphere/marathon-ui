@@ -2,6 +2,7 @@ import classNames from "classnames";
 var React = require("react/addons");
 
 import AppFormValidators from "../../stores/validators/AppFormValidators";
+import AppsActions from "../../actions/AppsActions";
 import GroupsActions from "../../actions/GroupsActions";
 import GroupsStore from "../../stores/GroupsStore";
 import GroupsEvents from "../../events/GroupsEvents";
@@ -78,6 +79,7 @@ var GroupModalComponent = React.createClass({
   },
 
   onCreateGroup: function () {
+    AppsActions.requestApps();
     this.destroy();
   },
 

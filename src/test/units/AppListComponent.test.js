@@ -7,7 +7,17 @@ import AppsEvents from "../../js/events/AppsEvents";
 import AppListComponent from "../../js/components/AppListComponent";
 import AppListItemComponent from "../../js/components/AppListItemComponent";
 
+class SyntheticContext {
+  get router() {
+    return {
+      getCurrentQuery: () => this.currentQuery,
+      getCurrentPathname: () => this.currentPathname
+    };
+  }
+}
+
 describe("AppListComponent", function () {
+  var context = new SyntheticContext();
 
   before(function () {
     var apps = [
@@ -128,14 +138,8 @@ describe("AppListComponent", function () {
   describe("when the user applies a text filter", function () {
 
     it("displays the exact matching app", function () {
-      var context = {
-        router: {
-          getCurrentQuery: function () {
-            return {
-              filterText: "app-exact"
-            };
-          }
-        }
+      context.currentQuery = {
+        filterText: "app-exact"
       };
 
       this.component = shallow(
@@ -154,14 +158,8 @@ describe("AppListComponent", function () {
     });
 
     it("handles fuzzy app search input", function () {
-      var context = {
-        router: {
-          getCurrentQuery: function () {
-            return {
-              filterText: "appsleep"
-            };
-          }
-        }
+      context.currentQuery = {
+        filterText: "appsleep"
       };
 
       this.component = shallow(
@@ -181,14 +179,8 @@ describe("AppListComponent", function () {
     });
 
     it("displays the exact matching group", function () {
-      var context = {
-        router: {
-          getCurrentQuery: function () {
-            return {
-              filterText: "apps"
-            };
-          }
-        }
+      context.currentQuery = {
+        filterText: "apps"
       };
 
       this.component = shallow(
@@ -211,16 +203,9 @@ describe("AppListComponent", function () {
     });
 
     it("handles fuzzy group search input", function () {
-      var context = {
-        router: {
-          getCurrentQuery: function () {
-            return {
-              filterText: "fuzz"
-            };
-          }
-        }
+      context.currentQuery = {
+        filterText: "fuzz"
       };
-
       this.component = shallow(
         <AppListComponent currentGroup="/" />,
         {context}
@@ -239,14 +224,8 @@ describe("AppListComponent", function () {
     });
 
     it("shows the right result for deeply nested paths", function () {
-      var context = {
-        router: {
-          getCurrentQuery: function () {
-            return {
-              filterText: "app-omega"
-            };
-          }
-        }
+      context.currentQuery = {
+        filterText: "app-omega"
       };
 
       this.component = shallow(
@@ -265,14 +244,8 @@ describe("AppListComponent", function () {
     });
 
     it("shows the best match first", function () {
-      var context = {
-        router: {
-          getCurrentQuery: function () {
-            return {
-              filterText: "app"
-            };
-          }
-        }
+      context.currentQuery = {
+        filterText: "app"
       };
 
       this.component = shallow(
@@ -315,14 +288,8 @@ describe("AppListComponent", function () {
     });
 
     it("returns 0 results when no matches are found", function () {
-      var context = {
-        router: {
-          getCurrentQuery: function () {
-            return {
-              filterText: "nope"
-            };
-          }
-        }
+      context.currentQuery = {
+        filterText: "nope"
       };
 
       this.component = shallow(
@@ -339,14 +306,8 @@ describe("AppListComponent", function () {
     });
 
     it("shows no items for empty groups", function () {
-      var context = {
-        router: {
-          getCurrentQuery: function () {
-            return {
-              filterText: "nope"
-            };
-          }
-        }
+      context.currentQuery = {
+        filterText: "nope"
       };
 
       this.component = shallow(

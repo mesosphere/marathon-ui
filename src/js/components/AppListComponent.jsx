@@ -434,15 +434,32 @@ var AppListComponent = React.createClass({
 
   getInlineDialog: function (appNodes = []) {
     var state = this.state;
+    var {currentGroup} = this.props;
+
+    var path = this.getCurrentPathname();
 
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
     var pageHasApps = state.apps.length > 0;
+    var pageHasFilters = Object.keys(this.getQueryParamObject()).length > 0;
     var pageHasNoRunningApps = !pageIsLoading &&
       !pageHasApps &&
       state.fetchState !== States.STATE_UNAUTHORIZED &&
       state.fetchState !== States.STATE_FORBIDDEN &&
       state.fetchState !== States.STATE_ERROR;
-    var pageHasNoMatchingApps = pageHasApps && appNodes.length === 0;
+    var pageHasNoMatchingApps = pageHasApps &&
+      appNodes.length === 0 &&
+      pageHasFilters;
+    var pageHasEmptyGroup = !pageIsLoading &&
+      appNodes.length === 0 &&
+      !pageHasFilters;
+
+    var newAppModalQuery = {
+      modal: "new-app"
+    };
+
+    if (currentGroup != null && currentGroup !== "/") {
+      newAppModalQuery.groupId = currentGroup;
+    }
 
     if (pageIsLoading) {
       let message = "Please wait while applications are being retrieved";
@@ -467,8 +484,8 @@ var AppListComponent = React.createClass({
             title="No Applications Created"
             message={message}>
           <Link className="btn btn-lg btn-success"
-              to="apps"
-              query={{modal: "new-app"}}>
+              to={path}
+              query={newAppModalQuery}>
             Create Application
           </Link>
         </CenteredInlineDialogComponent>
@@ -482,6 +499,21 @@ var AppListComponent = React.createClass({
           <Link className="btn btn-lg btn-success"
               to="apps">
             Show all Applications
+          </Link>
+        </CenteredInlineDialogComponent>
+      );
+    }
+
+    if (pageHasEmptyGroup) {
+      let message = "No Applications in this Group.";
+      return (
+        <CenteredInlineDialogComponent additionalClasses="muted"
+          title="No Applications Created"
+          message={message}>
+          <Link className="btn btn-lg btn-success"
+            to={path}
+            query={newAppModalQuery}>
+            Create Application
           </Link>
         </CenteredInlineDialogComponent>
       );

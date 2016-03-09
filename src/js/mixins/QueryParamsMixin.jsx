@@ -22,6 +22,13 @@ var QueryParamsMixin = {
     router: React.PropTypes.func
   },
 
+  getCurrentPathname: function () {
+    var router = this.context.router;
+    return router
+      ? router.getCurrentPathname()
+      : {};
+  },
+
   getClearLinkForFilter: function (filterQueryParamKey,
       caption = "Clear",
       className = null) {
