@@ -107,7 +107,7 @@ var AppModalComponent = React.createClass({
     if (this.state.appIsValid) {
       const app = this.state.app;
 
-      if (this.props.app != null) {
+      if (this.props.editMode) {
         let appDiff = AppVersionStore.getAppConfigDiff(app.id, app);
         AppsActions.applySettingsOnApp(app.id, appDiff, true, this.state.force);
       } else {
