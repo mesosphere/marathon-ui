@@ -433,7 +433,9 @@ var AppListComponent = React.createClass({
   },
 
   getInlineDialog: function (appNodes = []) {
-    var {props, state} = this;
+    var state = this.state;
+    var {currentGroup} = this.props;
+
     var path = this.getCurrentPathname();
 
     var pageIsLoading = state.fetchState === States.STATE_LOADING;
@@ -455,8 +457,8 @@ var AppListComponent = React.createClass({
       modal: "new-app"
     };
 
-    if (props.currentGroup != null && props.currentGroup !== "/") {
-      newAppModalQuery.groupId = props.currentGroup;
+    if (currentGroup != null && currentGroup !== "/") {
+      newAppModalQuery.groupId = currentGroup;
     }
 
     if (pageIsLoading) {
