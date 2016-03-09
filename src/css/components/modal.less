@@ -7,6 +7,17 @@
   border-radius: @modal-border-radius;
   color: @modal-dialog-text-color;
 
+  a {
+    color: @modal-link-color;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+
   dd {
     color: inherit;
   }
