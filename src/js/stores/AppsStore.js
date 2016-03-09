@@ -323,11 +323,8 @@ AppDispatcher.register(function (action) {
       AppsStore.emit(AppsEvents.CHANGE);
       break;
     case AppsEvents.CREATE_APP_ERROR:
-      AppsStore.emit(
-        AppsEvents.CREATE_APP_ERROR,
-        action.data.body,
-        action.data.status
-      );
+      var {body, status} = action.data ? action.data : {};
+      AppsStore.emit(AppsEvents.CREATE_APP_ERROR, body, status);
       break;
     case AppsEvents.DELETE_APP:
       storeData.apps =

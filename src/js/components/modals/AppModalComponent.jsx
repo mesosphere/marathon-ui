@@ -84,7 +84,7 @@ var AppModalComponent = React.createClass({
 
   onCreateAppError: function (data, status) {
     // All status below 300 are actually not an error
-    if (status < 300) {
+    if (status != null && status < 300) {
       this.onCreateApp();
     } else if (status === 409 && data.deployments != null) {
       // a 409 error without deployments is a field conflict
