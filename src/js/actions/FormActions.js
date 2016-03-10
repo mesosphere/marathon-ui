@@ -3,7 +3,7 @@ import FormEvents from "../events/FormEvents";
 
 var FormActions = {
   insert: function (fieldId, value, index = null) {
-    AppDispatcher.dispatchNext({
+    AppDispatcher.dispatch({
       actionType: FormEvents.INSERT,
       fieldId: fieldId,
       value: value,
@@ -11,7 +11,7 @@ var FormActions = {
     });
   },
   update: function (fieldId, value, index = null) {
-    AppDispatcher.dispatchNext({
+    AppDispatcher.dispatch({
       actionType: FormEvents.UPDATE,
       fieldId: fieldId,
       value: value,
@@ -19,7 +19,7 @@ var FormActions = {
     });
   },
   delete: function (fieldId, value, index = null) {
-    AppDispatcher.dispatchNext({
+    AppDispatcher.dispatch({
       actionType: FormEvents.DELETE,
       fieldId: fieldId,
       value: value,
