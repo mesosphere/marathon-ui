@@ -312,7 +312,7 @@ function rebuildModelFromFields(app, fields, fieldId) {
 }
 
 function resolveResponseAttributePathToFieldId(attributePath) {
-  var fieldId;
+  var fieldId = "general";
 
   // Check if attributePath contains an index like path(0)/attribute
   // Matches as defined: [0] : "(0)", [1]: "0"
