@@ -171,7 +171,7 @@ var AppConfigEditFormComponent = React.createClass({
   getPortsPanelTitle: function () {
     return (
       <span>
-        Ports<PluginMountPointComponent
+        Ports<PluginMountPointComponent className="inline-block"
           placeId={PluginMountPoints.APP_EDIT_FORM_PORTS_PANEL_TITLE} />
       </span>
     );
@@ -233,7 +233,7 @@ var AppConfigEditFormComponent = React.createClass({
           </MenuItemComponent>
           <MenuItemComponent value="ports"
              className={portsMenuItemClassSet}>
-            title={this.getPortsPanelTitle()}
+            {this.getPortsPanelTitle()}
           </MenuItemComponent>
           <MenuItemComponent value="env"
               className={envMenuItemClassSet}>

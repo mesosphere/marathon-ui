@@ -6,7 +6,14 @@ import PluginComponentStore from "../stores/PluginComponentStore";
 var PluginMountPointComponent = React.createClass({
 
   propTypes: {
+    className: React.PropTypes.string,
     placeId: React.PropTypes.string.isRequired
+  },
+
+  getDefaultProps: function () {
+    return {
+      className: null
+    };
   },
 
   getInitialState: function () {
@@ -51,7 +58,7 @@ var PluginMountPointComponent = React.createClass({
   },
 
   render: function () {
-    return <div>{this.state.mountPoint}</div>;
+    return <div className={this.props.className}>{this.state.mountPoint}</div>;
   }
 });
 
