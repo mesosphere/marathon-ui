@@ -45,6 +45,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       port: null,
       protocol: ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP,
       name: null,
+      labels: null,
       isRandomPort: true
     }
   },
