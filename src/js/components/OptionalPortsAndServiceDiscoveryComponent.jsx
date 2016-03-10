@@ -7,6 +7,7 @@ import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import FormActions from "../actions/FormActions";
 import FormGroupComponent from "../components/FormGroupComponent";
 import PortInputAttributes from "../constants/PortInputAttributes";
+import PluginComponentStore from "../stores/PluginComponentStore";
 import PluginMountPointComponent from "../components/PluginMountPointComponent";
 import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 
@@ -233,13 +234,15 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     );
   },
 
-  getPortDefinitionRows: function () {
-    return (
-      <PluginMountPointComponent
-        placeId={PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY} />
-    );
+  getPortDefinitionRows: function (hasPlaceIdSet = false) {
+    if (hasPlaceIdSet) {
+      return (
+        <PluginMountPointComponent
+          placeId={PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY} />
+      );
+    }
 
-    var rows = this.state.rows[fieldsetId];
+    let rows = this.state.rows[fieldsetId];
 
     if (rows == null) {
       return null;
@@ -254,7 +257,11 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   render: function () {
-    if (isTooComplexStructure(this.props.fields)) {
+    var hasPlaceIdSet = PluginComponentStore.hasComponentAtPlaceId(
+      PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY
+    );
+
+    if (!hasPlaceIdSet && isTooComplexStructure(this.props.fields)) {
       return (
         <div>
           Looks like your ports &amp; service discovery configuration
@@ -270,7 +277,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     return (
       <div>
         <div className="duplicable-list">
-          {this.getPortDefinitionRows()}
+          {this.getPortDefinitionRows(hasPlaceIdSet)}
         </div>
         {this.getGeneralErrorBlock(fieldsetId)}
         {this.getHelpText()}
