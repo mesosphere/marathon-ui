@@ -45,7 +45,6 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       port: null,
       protocol: ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP,
       name: null,
-      labels: null,
       isRandomPort: true
     }
   },
@@ -227,8 +226,6 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
               handleRemoveRow=
                 {this.handleRemoveRow.bind(null, fieldsetId, i)} />
           </div>
-          <PluginMountPointComponent
-            placeId={PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY} />
         </fieldset>
         {error}
       </div>
@@ -236,6 +233,13 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   getPortDefinitionRows: function () {
+    return null;
+
+    return (
+      <PluginMountPointComponent
+        placeId={PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY} />
+    );
+
     var rows = this.state.rows[fieldsetId];
 
     if (rows == null) {
