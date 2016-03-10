@@ -124,58 +124,58 @@ const responseAttributePathToFieldIdMap = {
   "/acceptedResourceRoles": "acceptedResourceRoles",
   "/cmd": "cmd",
   "/constraints": "constraints",
-  "/constraints({INDEX})": "constraints",
+  "/constraints[{INDEX}]": "constraints",
   "/container/docker/forcePullImage": "dockerForcePullImage",
   "/container/docker/image": "dockerImage",
   "/container/docker/network": "dockerNetwork",
   "/container/docker/privileged": "dockerPrivileged",
-  "/container/docker/parameters({INDEX})/key":
-    "dockerParameters.{INDEX}.key",
-  "/container/docker/parameters({INDEX})/value":
-    "dockerParameters.{INDEX}.value",
-  "/container/volumes({INDEX})/containerPath":
-    "containerVolumes.{INDEX}.containerPath",
-  "/container/volumes({INDEX})/hostPath":
-    "containerVolumes.{INDEX}.hostPath",
-  "/container/volumes({INDEX})/mode":
-    "containerVolumes.{INDEX}.mode",
+  "/container/docker/parameters[{INDEX}]/key":
+    "dockerParameters/{INDEX}/key",
+  "/container/docker/parameters[{INDEX}]/value":
+    "dockerParameters/{INDEX}/value",
+  "/container/volumes[{INDEX}]/containerPath":
+    "containerVolumes/{INDEX}/containerPath",
+  "/container/volumes[{INDEX}]/hostPath":
+    "containerVolumes/{INDEX}/hostPath",
+  "/container/volumes[{INDEX}]/mode":
+    "containerVolumes/{INDEX}/mode",
   "/cpus": "cpus",
   "/disk": "disk",
   "/env": "env",
   "/executor": "executor",
-  "/healthChecks({INDEX})/command/value":
-    "healthChecks.{INDEX}.command",
-  "/healthChecks({INDEX})/path":
-    "healthChecks.{INDEX}.path",
-  "/healthChecks({INDEX})/intervalSeconds":
-    "healthChecks.{INDEX}.intervalSeconds",
-  "/healthChecks({INDEX})/port":
-    "healthChecks.{INDEX}.port",
-  "/healthChecks({INDEX})/portIndex":
-    "healthChecks.{INDEX}.portIndex",
-  "/healthChecks({INDEX})/timeoutSeconds":
-    "healthChecks.{INDEX}.timeoutSeconds",
-  "/healthChecks({INDEX})/gracePeriodSeconds":
-    "healthChecks.{INDEX}.gracePeriodSeconds",
-  "/healthChecks({INDEX})/maxConsecutiveFailures":
-    "healthChecks.{INDEX}.maxConsecutiveFailures",
+  "/healthChecks[{INDEX}]/command/value":
+    "healthChecks/{INDEX}/command",
+  "/healthChecks[{INDEX}]/path":
+    "healthChecks/{INDEX}/path",
+  "/healthChecks[{INDEX}]/intervalSeconds":
+    "healthChecks/{INDEX}/intervalSeconds",
+  "/healthChecks[{INDEX}]/port":
+    "healthChecks/{INDEX}/port",
+  "/healthChecks[{INDEX}]/portIndex":
+    "healthChecks/{INDEX}/portIndex",
+  "/healthChecks[{INDEX}]/timeoutSeconds":
+    "healthChecks/{INDEX}/timeoutSeconds",
+  "/healthChecks[{INDEX}]/gracePeriodSeconds":
+    "healthChecks/{INDEX}/gracePeriodSeconds",
+  "/healthChecks[{INDEX}]/maxConsecutiveFailures":
+    "healthChecks/{INDEX}/maxConsecutiveFailures",
   "/instances": "instances",
   "/mem": "mem",
   "portDefinitions": "portDefinitions",
-  "portDefinitions({INDEX}).name": "portDefinitions.{INDEX}.name",
-  "portDefinitions({INDEX}).port": "portDefinitions.{INDEX}.port",
-  "portDefinitions({INDEX}).protocol": "portDefinitions.{INDEX}.protocol",
-  "container.docker.portMappings": "portDefinitions",
-  "/container/docker/portMappings({INDEX})/containerPort":
-    "portDefinitions.{INDEX}.port",
-  "/container/docker/portMappings({INDEX})/protocol":
-    "portDefinitions.{INDEX}.protocol",
-  "/container/docker/portMappings({INDEX})/hostPort": "portDefinitions",
-  "/container/docker/portMappings({INDEX})/servicePort": "portDefinitions",
+  "portDefinitions[{INDEX}]/name": "portDefinitions/{INDEX}/name",
+  "portDefinitions[{INDEX}]/port": "portDefinitions/{INDEX}/port",
+  "portDefinitions[{INDEX}]/protocol": "portDefinitions/{INDEX}/protocol",
+  "container/docker/portMappings": "portDefinitions",
+  "/container/docker/portMappings[{INDEX}]/containerPort":
+    "portDefinitions/{INDEX}/port",
+  "/container/docker/portMappings[{INDEX}]/protocol":
+    "portDefinitions/{INDEX}/protocol",
+  "/container/docker/portMappings[{INDEX}]/hostPort": "portDefinitions",
+  "/container/docker/portMappings[{INDEX}]/servicePort": "portDefinitions",
   "/labels": "labels",
   "/uris": "uris",
   "/user": "user",
-  "self": "general"
+  "/": "general"
 };
 
 /**
@@ -313,11 +313,6 @@ function rebuildModelFromFields(app, fields, fieldId) {
 
 function resolveResponseAttributePathToFieldId(attributePath) {
   var fieldId;
-
-  // Workarounds against API inconsistencies
-  // Remove if mesosphere/marathon#3339 is fixed
-  attributePath = attributePath.replace("[", "(");
-  attributePath = attributePath.replace("]", ")");
 
   // Check if attributePath contains an index like path(0)/attribute
   // Matches as defined: [0] : "(0)", [1]: "0"
