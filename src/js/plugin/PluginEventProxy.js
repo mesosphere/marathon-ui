@@ -13,7 +13,7 @@ var proxies = [];
 function registerProxy(proxy) {
   proxies.push(function () {
     proxy.store.on(proxy.storeEvent, () => {
-      PluginDispatcher.dispatch({
+      PluginDispatcher.dispatchNext({
         eventType: proxy.pluginEvent,
         data: Util.deepCopy(proxy.store[proxy.storeGetter])
       });
