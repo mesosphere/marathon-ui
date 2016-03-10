@@ -89,7 +89,7 @@ var GroupModalComponent = React.createClass({
       this.onCreateGroup();
     } else {
       let generalError = "Error creating group or invalid group name supplied";
-      if (data.message != null) {
+      if (data != null && data.message != null) {
         generalError = data.message;
       }
       if (status === 409) {

@@ -35,9 +35,16 @@ var bindOneTimeEvents = function (store, resolverEvents, handlers) {
 };
 
 var callErrorDialog = function (settings) {
-  var message = Messages[settings.statusCode] ||
-    settings.errorMessage.message ||
-    settings.errorMessage;
+  var {statusCode, errorMessage} = settings;
+  var message = "Unknown error.";
+
+  if (statusCode != null && Messages[statusCode] != null) {
+    message = Messages[statusCode];
+  } else if (errorMessage != null) {
+    message = errorMessage.message != null
+      ? errorMessage.message
+      : errorMessage;
+  }
 
   DialogActions.alert({
     message: `${settings.messagePrefix}${message}`,

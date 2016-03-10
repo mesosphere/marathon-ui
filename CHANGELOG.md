@@ -33,6 +33,7 @@
 - \#3233 - Cannot remove a constraint
 - \#3159 - Show args in configuration tab
 - \#3430 - Uncaught TypeError when creating an empty application
+- \#3457 - Ensure unknown API errors are caught
 
 ## 0.15.6 - 2016-02-23
 - \#3192 - Adapt default Mem/CPU settings
