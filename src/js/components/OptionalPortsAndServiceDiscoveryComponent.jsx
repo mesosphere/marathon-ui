@@ -233,8 +233,6 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   getPortDefinitionRows: function () {
-    return null;
-
     return (
       <PluginMountPointComponent
         placeId={PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY} />
