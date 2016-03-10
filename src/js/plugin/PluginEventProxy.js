@@ -29,31 +29,17 @@ registerProxy({
 });
 
 registerProxy({
-  pluginEvent: PluginEvents.APP_FORM_STORE_INSERT,
-  store: AppFormStore,
-  storeEvent: FormEvents.INSERT,
-  storeGetter: "fields"
-});
-
-registerProxy({
-  pluginEvent: PluginEvents.APP_FORM_STORE_UPDATE,
-  store: AppFormStore,
-  storeEvent: FormEvents.UPDATE,
-  storeGetter: "fields"
-});
-
-registerProxy({
-  pluginEvent: PluginEvents.APP_FORM_STORE_DELETE,
-  store: AppFormStore,
-  storeEvent: FormEvents.DELETE,
-  storeGetter: "fields"
-});
-
-registerProxy({
   pluginEvent: PluginEvents.APP_FORM_STORE_CHANGE,
   store: AppFormStore,
   storeEvent: FormEvents.CHANGE,
   storeGetter: "fields"
+});
+
+registerProxy({
+  pluginEvent: PluginEvents.APP_FORM_STORE_VALIDATION_ERROR,
+  store: AppFormStore,
+  storeEvent: FormEvents.FIELD_VALIDATION_ERROR,
+  storeGetter: "validationErrorIndices"
 });
 
 var PluginEventProxy = {
