@@ -215,7 +215,7 @@ describe("Create Application", function () {
           .reply(422, {
             "message": "Object is not valid",
             "details": [{
-              "path": "self",
+              "path": "/",
               "errors": ["Groups and Applications may not have the same " +
                 "identifier: /sleep"]
             }]
@@ -241,7 +241,31 @@ describe("Create Application", function () {
             .reply(422, {
               "message": "Object is not valid",
               "details": [{
-                "path": "self",
+                "path": "/",
+                "errors": []
+              }]
+            });
+
+          AppsActions.createApp({
+            id: "sleep/my-app"
+          });
+        });
+      it("processes a 422 error response without correct path",
+        function (done) {
+
+          AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+            expectAsync(function () {
+              expect(AppFormStore.responseErrors.general)
+                .to.equal("May not be changed.");
+            }, done);
+          });
+
+          nock(config.apiURL)
+            .post("/v2/apps")
+            .reply(422, {
+              "message": "May not be changed.",
+              "details": [{
+                "path": "/app(0)",
                 "errors": []
               }]
             });
