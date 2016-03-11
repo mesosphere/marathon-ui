@@ -234,8 +234,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     );
   },
 
-  getPortDefinitionRows: function (hasPlaceIdSet = false) {
-    if (hasPlaceIdSet) {
+  getPortDefinitionRows: function (hasPluginComponent = false) {
+    if (hasPluginComponent) {
       return (
         <PluginMountPointComponent
           placeId={PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY} />
@@ -257,11 +257,11 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   render: function () {
-    var hasPlaceIdSet = PluginComponentStore.hasComponentAtPlaceId(
+    var hasPluginComponent = PluginComponentStore.hasComponentAtPlaceId(
       PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY
     );
 
-    if (!hasPlaceIdSet && isTooComplexStructure(this.props.fields)) {
+    if (!hasPluginComponent && isTooComplexStructure(this.props.fields)) {
       return (
         <div>
           Looks like your ports &amp; service discovery configuration
@@ -277,7 +277,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     return (
       <div>
         <div className="duplicable-list">
-          {this.getPortDefinitionRows(hasPlaceIdSet)}
+          {this.getPortDefinitionRows(hasPluginComponent)}
         </div>
         {this.getGeneralErrorBlock(fieldsetId)}
         {this.getHelpText()}
