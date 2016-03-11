@@ -34,7 +34,7 @@ var AppConfigJSONEditorComponent = React.createClass({
       jsonWasValid = true;
     }
     catch (e) {
-      this.props.onError("Invalid JSON");
+      this.props.onError({"JSON": "Invalid JSON"});
     }
 
     if (jsonWasValid) {

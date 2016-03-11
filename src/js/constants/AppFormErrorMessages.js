@@ -67,7 +67,9 @@ const generalErrors = Util.deepFreeze({
 
 const serverResponseMappings = Util.deepFreeze({
   "error.path.missing": "Specify a path",
-  "error.minLength": "Command may not be blank"
+  "error.minLength": "Command may not be blank",
+  "error.expected.jsnumber": "A number is expected",
+  "error.expected.jsstring": "A string is expect"
 });
 
 const AppFormErrorMessages = {

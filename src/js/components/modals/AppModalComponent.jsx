@@ -94,7 +94,7 @@ var AppModalComponent = React.createClass({
       });
     } else {
       this.setState({
-        error: AppFormStore.responseErrors["general"]
+        error: AppFormStore.responseErrors
       });
     }
   },
@@ -119,13 +119,33 @@ var AppModalComponent = React.createClass({
   getGeneralErrorBlock: function () {
     var error = this.state.error;
 
+    if (this.state.jsonMode && error != null) {
+      error = Object.keys(error).map(key => {
+        return `${key}: ${error[key]}`;
+      });
+    } else if (error != null) {
+      error = error["general"];
+    }
+
     if (error == null) {
       return null;
     }
 
+    if (Util.isArray(error)) {
+      error = error.map((message, index) =>
+        <li key={index}><AutolinkComponent text={message} /></li>
+      );
+    } else {
+      error = <li><AutolinkComponent text={error} /></li>;
+    }
+
     return (
       <div className="text-danger app-error-block">
-        <AutolinkComponent text={error} />
+        <i className="icon icon-mini warning-danger" />
+        There was a problem with your configuration
+        <ul>
+          {error}
+        </ul>
       </div>
     );
   },

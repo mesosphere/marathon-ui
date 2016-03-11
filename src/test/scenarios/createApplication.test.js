@@ -136,7 +136,7 @@ describe("Create Application", function () {
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
             expect(AppFormStore.responseErrors.instances)
-              .to.equal("error.expected.jsnumber");
+              .to.equal("A number is expected");
           }, done);
         });
 
@@ -1100,7 +1100,7 @@ describe("Create Application", function () {
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
               expect(AppFormStore.responseErrors.instances)
-                .to.equal("error.expected.jsnumber");
+                .to.equal("A number is expected");
             }, done);
           });
 
