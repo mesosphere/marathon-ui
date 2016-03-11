@@ -119,7 +119,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       message = "Your Docker container will need to be configured to listen" +
         ` to ${portIdentifiers}${dynamicPortText}.`;
     } else if (type === ContainerConstants.NETWORK.BRIDGE) {
-      message = "Your Docker container will bind to the requested ports and" +
+      message = "Your Docker container network is in bridged mode." +
+        " The container will bind to the requested ports and" +
         ` they will be dynamically mapped to ${portIdentifiers} on the host.`;
     }
 
