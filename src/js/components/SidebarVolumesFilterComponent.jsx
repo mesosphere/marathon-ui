@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React from "react/addons";
 
 import AppsStore from "../stores/AppsStore";
@@ -41,6 +42,20 @@ var SidebarVolumesFilterComponent = React.createClass({
     });
   },
 
+  getVolumesBadge: function () {
+    var state = this.state;
+
+    if (state.appsVolumesCount === 0) {
+      return null;
+    }
+
+    return (
+      <span className="badge">
+        {state.appsVolumesCount.toLocaleString()}
+      </span>
+    );
+  },
+
   render: function () {
     var state = this.state;
 
@@ -49,6 +64,10 @@ var SidebarVolumesFilterComponent = React.createClass({
       id: `volumesFilter`,
       checked: this.getQueryParamValue(FilterTypes.VOLUMES)
     };
+
+    var labelClassName = classNames({
+      "text-muted": state.appsVolumesCount === 0
+    });
 
     return (
       <div>
@@ -59,11 +78,9 @@ var SidebarVolumesFilterComponent = React.createClass({
           <li className="checkbox">
             <input {...checkboxProps}
               onChange={this.handleChange} />
-            <label htmlFor={checkboxProps.id}>
+            <label htmlFor={checkboxProps.id} className={labelClassName}>
               Volumes
-              <span className="badge">
-                {state.appsVolumesCount.toLocaleString()}
-              </span>
+              {this.getVolumesBadge()}
             </label>
           </li>
         </ul>
