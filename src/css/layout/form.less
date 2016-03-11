@@ -20,6 +20,12 @@
       background-color: fade(@form-control-inverse-border-color-focus,10%);
       border-color: @form-control-inverse-border-color-focus;
     }
+
+    &[disabled] {
+      background-color: fade(@form-control-inverse-border-color, 20%);
+      border-color: fade(@form-control-inverse-border-color, 40%);
+      color: @ghost;
+    }
   }
 }
 
@@ -96,13 +102,13 @@
     top: 0;
     display: inline;
     height: auto;
-    margin-top: 0.1em;
+    margin-top: 0.2em;
     width: auto;
     box-shadow: none;
   }
 
   label {
-    padding: 0 0 0 24px;
+    padding: 0 0 0 18px;
   }
 }
 
@@ -135,4 +141,8 @@
       color: darken(@text-color-danger-light,30);
     }
   }
+}
+
+.form-group {
+  margin-bottom: @base-spacing-unit*2;
 }

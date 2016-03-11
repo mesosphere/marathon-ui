@@ -195,7 +195,7 @@ var AppModalComponent = React.createClass({
       "json-mode": state.jsonMode
     });
     var cancelButton = (
-      <button className="btn btn-default btn-inverse"
+      <button className="btn btn-link"
           type="button"
           onClick={this.destroy}>
         Cancel

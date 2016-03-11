@@ -140,7 +140,7 @@ var HealthChecksComponent = React.createClass({
             </div>
           </div>
           <div className="row">
-            <div className="col-sm-3">
+            <div className="col-sm-4">
               <FormGroupComponent
                   errorMessage={
                     getErrorMessage(`${fieldsetId}.${i}.gracePeriodSeconds`)
@@ -153,7 +153,7 @@ var HealthChecksComponent = React.createClass({
                   {...numberInputAttributes} />
               </FormGroupComponent>
             </div>
-            <div className="col-sm-3">
+            <div className="col-sm-2">
               <FormGroupComponent
                   errorMessage={
                     getErrorMessage(`${fieldsetId}.${i}.intervalSeconds`)

@@ -7,8 +7,30 @@
   border-radius: @modal-border-radius;
   color: @modal-dialog-text-color;
 
+  a {
+    color: @modal-link-color;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+
   dd {
     color: inherit;
+  }
+
+  h4 {
+    border-bottom: 1px solid @wild-sand;
+    font-size: 16px;
+    margin-top: @base-spacing-unit*2;
+    padding-bottom: 5px;
+  }
+
+  .help-block {
+    color: @loblolly;
   }
 
   .modal-header {
@@ -130,7 +152,7 @@
     color: currentColor;
     right: -3px;
     font-size: 1.3em;
-    bottom: 1em;
+    bottom: 1.3em;
   }
   .duplicable-list {
     .duplicable-row:nth-child(n+2) {
