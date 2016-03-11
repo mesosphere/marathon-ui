@@ -170,7 +170,7 @@ var AppModalComponent = React.createClass({
   },
 
   onJSONToggleChange: function (event) {
-    this.setState({jsonMode:event.target.checked});
+    this.setState({jsonMode: event.target.checked});
   },
 
   render: function () {
