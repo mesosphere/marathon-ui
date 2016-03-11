@@ -200,7 +200,7 @@ var AppActionsHandlerMixin = {
           model.instances > instances
         ) {
           this.handleScaleDownVolumeApp(instances);
-          return null;
+          return;
         }
 
         this.addScaleAppListener();
@@ -292,8 +292,8 @@ var AppActionsHandlerMixin = {
 
     DialogStore.handleUserResponse(dialogId, () => {
       if (model.container != null && model.container.volumes != null) {
-        this.handleScaleDownVolumeApp(instances);
-        return null;
+        this.handleScaleDownVolumeApp(0);
+        return;
       }
 
       this.addScaleAppListener();
