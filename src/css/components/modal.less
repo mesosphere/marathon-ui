@@ -241,19 +241,15 @@
 
   &.warning {
     .modal-header {
-      color: @modal-dialog-warning-color
-    }
+      color: @modal-dialog-warning-color;
 
-    .modal-content::before{
-      background-color: @modal-dialog-warning-color;
+      &::before {
+        background-color: @modal-dialog-warning-color;
+      }
     }
 
     .modal-footer {
       justify-content: center;
-
-      .btn-default:hover {
-        border-color: @modal-dialog-warning-color;
-      }
 
       .btn-success {
         background-color: @modal-dialog-warning-color;
@@ -277,10 +273,14 @@
 
   &.danger {
     .modal-header {
-      color: @modal-dialog-danger-color
+      color: @modal-dialog-danger-color;
+
+      &::before {
+        background-color: @modal-dialog-danger-color;
+      }
     }
 
-    .modal-content::before, .modal-footer .btn-success {
+    .modal-footer .btn-success {
       background-color: @modal-dialog-danger-color;
       border-color: @modal-dialog-danger-color;
 

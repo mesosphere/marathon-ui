@@ -217,7 +217,7 @@ var AppActionsHandlerMixin = {
       actionButtonLabel: "Continue Scaling",
       message: (
         <div>
-          <div>Scaling down will cause any existing local volumes to
+          <div>Scaling down ${appId} will cause any existing local volumes to
             be detached from destroyed instances. <a href="about:blank"
                 target="_blank"
                 className="modal-body-link">
@@ -230,7 +230,7 @@ var AppActionsHandlerMixin = {
         </div>
       ),
       severity: DialogSeverity.WARNING,
-      title: `Caution: ${appId} is a stateful application`
+      title: "Scale Stateful Application"
     });
 
     DialogStore.handleUserResponse(dialogId, () => {
