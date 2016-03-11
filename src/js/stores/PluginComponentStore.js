@@ -12,6 +12,10 @@ var components = [];
 var PluginComponentStore = Util.extendObject(EventEmitter.prototype, {
   get components() {
     return components;
+  },
+
+  hasComponentAtPlaceId: function (placeId) {
+    return components.some(component => component.placeId === placeId);
   }
 });
 

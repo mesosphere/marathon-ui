@@ -7,6 +7,9 @@ import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import FormActions from "../actions/FormActions";
 import FormGroupComponent from "../components/FormGroupComponent";
 import PortInputAttributes from "../constants/PortInputAttributes";
+import PluginComponentStore from "../stores/PluginComponentStore";
+import PluginMountPointComponent from "../components/PluginMountPointComponent";
+import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 
 import Util from "../helpers/Util";
 
@@ -43,6 +46,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       port: null,
       protocol: ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP,
       name: null,
+      labels: null,
       isRandomPort: true
     }
   },
@@ -230,8 +234,15 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     );
   },
 
-  getPortDefinitionRows: function () {
-    var rows = this.state.rows[fieldsetId];
+  getPortDefinitionRows: function (hasPluginComponent = false) {
+    if (hasPluginComponent) {
+      return (
+        <PluginMountPointComponent
+          placeId={PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY} />
+      );
+    }
+
+    let rows = this.state.rows[fieldsetId];
 
     if (rows == null) {
       return null;
@@ -246,7 +257,11 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   render: function () {
-    if (isTooComplexStructure(this.props.fields)) {
+    var hasPluginComponent = PluginComponentStore.hasComponentAtPlaceId(
+      PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY
+    );
+
+    if (!hasPluginComponent && isTooComplexStructure(this.props.fields)) {
       return (
         <div>
           Looks like your ports &amp; service discovery configuration
@@ -262,7 +277,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     return (
       <div>
         <div className="duplicable-list">
-          {this.getPortDefinitionRows()}
+          {this.getPortDefinitionRows(hasPluginComponent)}
         </div>
         {this.getGeneralErrorBlock(fieldsetId)}
         {this.getHelpText()}

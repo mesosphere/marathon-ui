@@ -8,7 +8,10 @@ var CollapsiblePanelComponent = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     isOpen: React.PropTypes.bool,
-    title: React.PropTypes.string.isRequired,
+    title: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.node
+    ]).isRequired,
     togglePanel: React.PropTypes.func
   },
 

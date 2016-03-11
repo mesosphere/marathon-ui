@@ -1,10 +1,10 @@
 import AppDispatcher from "../AppDispatcher";
-import FormsEvents from "../events/FormEvents";
+import FormEvents from "../events/FormEvents";
 
 var FormActions = {
   insert: function (fieldId, value, index = null) {
     AppDispatcher.dispatch({
-      actionType: FormsEvents.INSERT,
+      actionType: FormEvents.INSERT,
       fieldId: fieldId,
       value: value,
       index: index
@@ -12,7 +12,7 @@ var FormActions = {
   },
   update: function (fieldId, value, index = null) {
     AppDispatcher.dispatch({
-      actionType: FormsEvents.UPDATE,
+      actionType: FormEvents.UPDATE,
       fieldId: fieldId,
       value: value,
       index: index
@@ -20,7 +20,7 @@ var FormActions = {
   },
   delete: function (fieldId, value, index = null) {
     AppDispatcher.dispatch({
-      actionType: FormsEvents.DELETE,
+      actionType: FormEvents.DELETE,
       fieldId: fieldId,
       value: value,
       index: index

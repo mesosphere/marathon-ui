@@ -156,6 +156,10 @@ var AppModalComponent = React.createClass({
   },
 
   handleAppConfigChange: function (app) {
+    if (app == null) {
+      return;
+    }
+
     // At present we assume that the supplied app config is valid.
     // We may wish to pass invalid (eg incomplete) configs in the future.
     this.setState({
@@ -166,7 +170,13 @@ var AppModalComponent = React.createClass({
   },
 
   handleAppConfigError: function (error) {
-    this.setState({error: error, appIsValid: false});
+    if (error != null ||
+        Object.keys(AppFormStore.validationErrorIndices).length) {
+      this.setState({
+        error: error,
+        appIsValid: false
+      });
+    }
   },
 
   onJSONToggleChange: function (event) {

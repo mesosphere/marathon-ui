@@ -526,6 +526,7 @@ var AppFormStore = Util.extendObject(EventEmitter.prototype, {
     if (!checkAllFieldsForValidity(storeData.fields)) {
       AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
     }
+    AppFormStore.emit(FormEvents.CHANGE);
   }
 });
 
@@ -548,8 +549,12 @@ function executeAction(action, setFieldFunction) {
   if (!errorOccurred) {
     rebuildModelFromFields(storeData.app, storeData.fields, fieldId);
     AppFormStore.emit(FormEvents.CHANGE, fieldId);
+
+    AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
   } else {
     AppFormStore.emit(FormEvents.FIELD_VALIDATION_ERROR);
+
+    AppFormStore.emit(FormEvents.CHANGE, fieldId);
   }
 }
 
