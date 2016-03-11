@@ -52,13 +52,42 @@
     .json-editor {
       height: 100%;
       .tooltip-container {
-        position: absolute;
         z-index: 1;
         right: @base-spacing-unit*0.5;
         top: @base-spacing-unit*0.5;
+        position: absolute;
       }
       .icon.help {
         background-image: url("img/icons/icon-help.svg");
+      }
+    }
+    .tooltip-container {
+      .right, .left {
+        .content{
+          top: -@base-spacing-unit*1.5;
+          bottom: auto;
+          transform: translateX(0);
+          left: @base-spacing-unit*3;
+          padding: @base-spacing-unit;
+          border-radius: 3px;
+          &:before {
+            border-top-color: transparent;
+            border-right-color: @bunker;
+            position: absolute;
+            top: @base-spacing-unit / 2;
+            left: -@base-spacing-unit;
+          }
+        }
+      }
+      .left .content{
+        transform: translateX(calc(~"-100% -"@base-spacing-unit*4));
+        &:before {
+          border-top-color: transparent;
+          border-right-color: transparent;
+          border-left-color: @bunker;
+          top: @base-spacing-unit / 2;
+          left: calc(~"100% +"@base-spacing-unit);
+        }
       }
     }
 
