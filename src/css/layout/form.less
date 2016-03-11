@@ -22,7 +22,9 @@
     }
 
     &[disabled] {
-      color: @form-control-inverse-border-color;
+      background-color: fade(@form-control-inverse-border-color, 20%);
+      border-color: fade(@form-control-inverse-border-color, 40%);
+      color: @ghost;
     }
   }
 }
