@@ -20,6 +20,7 @@
 - \#3305 - Redesign Create/Edit modal and add JSON editor toggle
 - \#3431 - Disable the create application button until valid data was
   provided
+- \#3470 - Ports: strip deprecated ports when editing via JSON
 
 ### Fixed
 - \#3133 - Interrupted scaling operations can leave the health bar in an
