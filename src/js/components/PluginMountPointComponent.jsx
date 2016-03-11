@@ -7,12 +7,14 @@ var PluginMountPointComponent = React.createClass({
 
   propTypes: {
     className: React.PropTypes.string,
-    placeId: React.PropTypes.string.isRequired
+    placeId: React.PropTypes.string.isRequired,
+    style: React.PropTypes.string
   },
 
   getDefaultProps: function () {
     return {
-      className: null
+      className: null,
+      style: null
     };
   },
 
@@ -58,7 +60,11 @@ var PluginMountPointComponent = React.createClass({
   },
 
   render: function () {
-    return <div className={this.props.className}>{this.state.mountPoint}</div>;
+    return (
+      <div className={this.props.className} style={this.props.style}>
+        {this.state.mountPoint}
+      </div>
+    );
   }
 });
 

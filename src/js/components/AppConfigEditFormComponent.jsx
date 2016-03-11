@@ -171,7 +171,7 @@ var AppConfigEditFormComponent = React.createClass({
   getPortsPanelTitle: function () {
     return (
       <span>
-        Ports<PluginMountPointComponent className="inline-block"
+        Ports<PluginMountPointComponent style={{"display": "inline-block"}}
           placeId={PluginMountPoints.APP_EDIT_FORM_PORTS_PANEL_TITLE} />
       </span>
     );
