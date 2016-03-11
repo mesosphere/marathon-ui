@@ -46,7 +46,7 @@ var AppConfigJSONEditorComponent = React.createClass({
     // without this check, we would just show 'null' when creating a new app
     var app = this.props.app == null
       ? AppConfigDefaultValues
-      : this.props.app;
+      : Object.assign({}, AppConfigDefaultValues, this.props.app);
     return JSON.stringify(app, null, 2);
   },
 
