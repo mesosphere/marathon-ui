@@ -77,7 +77,7 @@ var Marathon = React.createClass({
 
     if (modalQuery === "new-app") {
       let groupId = params.groupId != null
-        ? decodeURIComponent(params.groupId)
+        ? `${decodeURIComponent(params.groupId)}/`
         : null;
       modal = this.getNewAppModal(groupId);
     } else if (modalQuery === "about") {
