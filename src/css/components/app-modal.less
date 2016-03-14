@@ -51,25 +51,29 @@
 
     .json-editor {
       height: 100%;
+
       .tooltip-container {
         z-index: 1;
         right: @base-spacing-unit*0.5;
         top: @base-spacing-unit*0.5;
         position: absolute;
       }
+
       .icon.help {
         background-image: url("img/icons/icon-help.svg");
       }
     }
+
     .tooltip-container {
       .right, .left {
-        .content{
+        .content {
           top: -@base-spacing-unit*1.5;
           bottom: auto;
           transform: translateX(0);
           left: @base-spacing-unit*3;
           padding: @base-spacing-unit;
           border-radius: 3px;
+
           &:before {
             border-top-color: transparent;
             border-right-color: @bunker;
@@ -79,8 +83,10 @@
           }
         }
       }
-      .left .content{
+
+      .left .content {
         transform: translateX(calc(~"-100% -"@base-spacing-unit*4));
+
         &:before {
           border-top-color: transparent;
           border-right-color: transparent;
