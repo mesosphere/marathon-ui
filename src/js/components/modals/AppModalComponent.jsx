@@ -32,12 +32,10 @@ var AppModalComponent = React.createClass({
   },
 
   getInitialState: function () {
-    var app = this.props.app;
-
     // We don't want to trigger changes in the app until the submit button
     // is clicked, therefore it is held in the modal state rather than props
     return {
-      app: app,
+      app: this.props.app,
       appIsValid: false,
       error: null,
       force: false,
@@ -107,7 +105,7 @@ var AppModalComponent = React.createClass({
     if (this.state.appIsValid) {
       const app = this.state.app;
 
-      if (this.props.app != null) {
+      if (this.props.editMode) {
         let appDiff = AppVersionStore.getAppConfigDiff(app.id, app);
         AppsActions.applySettingsOnApp(app.id, appDiff, true, this.state.force);
       } else {
@@ -169,10 +167,7 @@ var AppModalComponent = React.createClass({
 
   handleModeToggle: function (event) {
     event.preventDefault();
-    if (event.metaKey || event.ctrlKey ||
-        event.currentTarget.className.split(" ").includes("json-link")) {
-      this.setState({jsonMode: !this.state.jsonMode});
-    }
+    this.setState({jsonMode: !this.state.jsonMode});
   },
 
   handleAppConfigChange: function (app) {
@@ -245,7 +240,7 @@ var AppModalComponent = React.createClass({
             <input id="json-toggle" type="checkbox" name="checkbox"
               className="toggle" onChange={this.onJSONToggleChange} />
             <label htmlFor="json-toggle">JSON Mode</label>
-            <h2 className="modal-title" onClick={this.handleModeToggle}>
+            <h2 className="modal-title">
               {modalTitle}
             </h2>
           </div>
