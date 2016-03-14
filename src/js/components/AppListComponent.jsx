@@ -254,7 +254,9 @@ var AppListComponent = React.createClass({
         return;
       }
       filterCounts.appsStatusesCount[item.status]++;
-      if (item.container != null && item.container.volumes != null) {
+      if (item.container != null &&
+        item.container.volumes.filter(item => item.persistent != null)
+          .length > 0) {
         filterCounts.appsVolumesCount++;
       }
       item.health.forEach(health => {
@@ -310,7 +312,8 @@ var AppListComponent = React.createClass({
           return false;
         }
 
-        return true;
+        return item.container.volumes.filter(item => item.persistent != null)
+          .length > 0;
       });
     }
 
@@ -328,7 +331,9 @@ var AppListComponent = React.createClass({
       // Update filter counts
       if (!item.isGroup) {
         filterCounts.appsStatusesCount[item.status]++;
-        if (item.container != null && item.container.volumes != null) {
+        if (item.container != null &&
+          item.container.volumes.filter(item => item.persistent != null)
+            .length > 0) {
           filterCounts.appsVolumesCount++;
         }
         item.health.forEach(health => {
