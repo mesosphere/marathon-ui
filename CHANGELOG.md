@@ -1,4 +1,4 @@
-## Unversioned
+## 0.16.0 - 2016-03-14
 ### Added
 - \#3017 - Move application Search Bar to the Header
 - \#3082 - Make URLs in form validation error messages clickable
