@@ -3,7 +3,10 @@ import "brace/mode/json";
 import "brace/theme/monokai";
 import React from "react/addons";
 
+import TooltipComponent from "../components/TooltipComponent";
+
 import {AppConfigDefaultValues} from "../constants/AppConfigDefaults";
+import ExternalLinks from "../constants/ExternalLinks";
 
 var AppConfigJSONEditorComponent = React.createClass({
   displayName: "AppConfigJSONEditorComponent",
@@ -51,17 +54,33 @@ var AppConfigJSONEditorComponent = React.createClass({
   },
 
   render: function () {
+    var tooltipMessage = (
+      <span>
+        This is the JSON editor
+        docs: <a href={ExternalLinks.JSON_EDITOR} target="_blank">Read more</a>.
+      </span>
+    );
+
+    var toolTip = (
+      <TooltipComponent className="left"
+          message={tooltipMessage}>
+        <i className="icon icon-xs help" />
+      </TooltipComponent>
+    );
     return (
-      <AceEditor
-        editorProps={{$blockScrolling: true}}
-        height="100%"
-        mode="json"
-        onChange={this.handleUpdate}
-        showGutter={true}
-        showPrintMargin={false}
-        theme="monokai"
-        value={this.getPrettyPrintedDefinition()}
-        width="100%" />
+      <div className="json-editor">
+       {toolTip}
+        <AceEditor
+          editorProps={{$blockScrolling: true}}
+          height="100%"
+          mode="json"
+          onChange={this.handleUpdate}
+          showGutter={true}
+          showPrintMargin={false}
+          theme="monokai"
+          value={this.getPrettyPrintedDefinition()}
+          width="100%" />
+      </div>
     );
   }
 

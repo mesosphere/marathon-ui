@@ -64,7 +64,8 @@ var LocalVolumesComponent = React.createClass({
     var containerPathLabel = (
       <span>
         Container Path
-        <TooltipComponent message={containerPathTooltipMessage}>
+        <TooltipComponent className="right"
+            message={containerPathTooltipMessage}>
           <i className="icon icon-xs help" />
         </TooltipComponent>
       </span>
@@ -133,7 +134,8 @@ var LocalVolumesComponent = React.createClass({
       <div>
         <h4 className="subtitle">
           Persistent Local Volumes
-          <TooltipComponent message={localVolumesTooltipMessage}>
+          <TooltipComponent className="right"
+              message={localVolumesTooltipMessage}>
             <i className="icon icon-xs help" />
           </TooltipComponent>
         </h4>
