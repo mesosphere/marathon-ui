@@ -159,7 +159,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
     var fieldTooltipMessage = (
       <span>
-        Enter the port you want to assign to your VIP. <a href={ExternalLinks.PORTS} target="_blank">Read more</a>.
+        Enter the port you want to assign to your
+        VIP. <a href={ExternalLinks.PORTS} target="_blank">Read more</a>.
       </span>
     );
 
@@ -282,8 +283,12 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     if (!hasPluginComponent && isTooComplexStructure(this.props.fields)) {
       return (
         <div>
-          Switch to <a className="json-link clickable" onClick={this.props.handleModeToggle}>JSON mode</a>
-            to make advanced port and service discovery configuration changes.
+          Switch to <a
+              className="json-link clickable"
+              onClick={this.props.handleModeToggle}>
+            JSON mode
+          </a> to make advanced port and service discovery configuration
+          changes.
         </div>
       );
     }
