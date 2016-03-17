@@ -55,8 +55,8 @@ var LocalVolumesComponent = React.createClass({
     var containerPathTooltipMessage = (
       <span>
         The path to the directory where your application will
-        read and write data. The path must be non-nested,
-        e.g. `/var/lib/mysql`.
+        read and write data. The path must be non-nested and cannot contain slashes, e.g. `data`,
+        but not  `../../../etc/opt` or `/user/data/`.
         <a href={ExternalLinks.CONTAINER_PATH} target="_blank">Read more</a>.
       </span>
     );
