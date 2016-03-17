@@ -3,8 +3,8 @@ const ExternalLinks = {
     "marathon-ui.html#application-status-reference",
   DOCS_HEALTH: "https://mesosphere.github.io/marathon/docs/" +
     "marathon-ui.html#application-health-reference",
-  LOCAL_VOLUMES: "about:blank",
-  CONTAINER_PATH: "about:blank",
+  LOCAL_VOLUMES: "https://mesosphere.github.io/marathon/docs/persistent-volumes.html",
+  CONTAINER_PATH: "http://mesosphere.github.io/marathon/docs/persistent-volumes.html",
   PORTS: "https://mesosphere.github.io/marathon/docs/ports.html",
   JSON_EDITOR: "about:blank"
 };
