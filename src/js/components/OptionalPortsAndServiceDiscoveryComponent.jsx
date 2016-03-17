@@ -114,11 +114,11 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       .join(", ")
       .replace(/(.*), (.*)$/, "$1 and $2");
 
-    var message = "Your application will need to be configured to listen to" +
+    var message = "Configure your application to listen to" +
       ` ${portIdentifiers}${dynamicPortText}.`;
 
     if (type === ContainerConstants.NETWORK.HOST) {
-      message = "Your Docker container will need to be configured to listen" +
+      message = "Configure your Docker container to listen" +
         ` to ${portIdentifiers}${dynamicPortText}.`;
     } else if (type === ContainerConstants.NETWORK.BRIDGE) {
       message = "Your Docker container will bind to the requested ports and" +
@@ -159,9 +159,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
     var fieldTooltipMessage = (
       <span>
-        Port configuration for applications in Marathon can be confusing,
-        to Learn more visit the
-        docs: <a href={ExternalLinks.PORTS} target="_blank">Read more</a>.
+        Enter the port you want to assign to your VIP. <a href={ExternalLinks.PORTS} target="_blank">Read more</a>.
       </span>
     );
 
@@ -284,12 +282,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     if (!hasPluginComponent && isTooComplexStructure(this.props.fields)) {
       return (
         <div>
-          Looks like your ports &amp; service discovery configuration
-          is a little bit too sophisticated for our form to handle.
-          Please switch
-          to <a className="json-link clickable"
-            onClick={this.props.handleModeToggle}>JSON mode</a> if
-          you want to view or modify.
+          Switch to <a className="json-link clickable" onClick={this.props.handleModeToggle}>JSON mode</a>
+            to make advanced port and service discovery configuration changes.
         </div>
       );
     }
