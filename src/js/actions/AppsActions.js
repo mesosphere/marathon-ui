@@ -51,7 +51,11 @@ var AppsActions = {
     }
 
     if (newAppAttributes.container != null &&
-      newAppAttributes.container.volumes != null) {
+        newAppAttributes.container.volumes != null &&
+        newAppAttributes.container.volumes.some(
+          volume => volume.persistent != null
+        )
+    ) {
       newAppAttributes.residency = {
         relaunchEscalationTimeoutSeconds: 10,
         taskLostBehavior: "WAIT_FOREVER"
