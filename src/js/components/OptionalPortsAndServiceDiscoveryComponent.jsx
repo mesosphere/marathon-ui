@@ -33,10 +33,10 @@ function determinePortDefinitionsType(fields) {
 function isTooComplexStructure(fields) {
   return fields.portDefinitions != null &&
       fields.portDefinitions.some(portDefinition => {
-        var definition = Object.assign({}, portDefinition);
-        if (definition.labels != null) {
-          delete definition.labels["VIP_0"];
-          return !!Object.keys(definition.labels).length;
+        if (portDefinition.labels != null) {
+          let labels = Object.assign({}, portDefinition.labels);
+          delete labels["VIP_0"];
+          return !!Object.keys(labels).length;
         }
         return false;
       }
