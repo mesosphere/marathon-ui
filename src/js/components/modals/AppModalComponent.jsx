@@ -92,6 +92,7 @@ var AppModalComponent = React.createClass({
       });
     } else {
       this.setState({
+        appIsValid: false,
         error: AppFormStore.responseErrors
       });
     }
