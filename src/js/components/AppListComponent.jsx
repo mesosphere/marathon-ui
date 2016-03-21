@@ -410,7 +410,18 @@ var AppListComponent = React.createClass({
       );
     }
 
-    var appListItems = items.map(app => {
+    var appListItems = items.reduce((apps, item) => {
+      var {id} = item;
+      if (apps[id] == null) {
+        apps[id] = {};
+      }
+      Object.assign(apps[id], item);
+      return apps;
+    }, {});
+
+    appListItems = Object.keys(appListItems).map(key => {
+      return appListItems[key];
+    }).map((app) => {
       return (
         <AppListItemComponent key={app.id}
           model={app}
@@ -418,7 +429,7 @@ var AppListComponent = React.createClass({
           sortKey={sortKey}
           viewType={appListViewType}/>
       );
-    }).value();
+    });
 
     AppsActions.emitFilterCounts(filterCounts);
 
