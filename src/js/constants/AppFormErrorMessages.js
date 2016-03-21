@@ -27,7 +27,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
     "Container Path must be a valid path",
     "Container Path and Size must be set"
   ],
-  cpus: ["CPUs must be a number greater or equal to 0.01"],
+  cpus: ["CPUs must be a number greater than or equal to 0.01"],
   disk: ["Disk Space must be a non-negative number"],
   dockerImage: ["Image cannot contain whitespaces"],
   dockerParameters: ["Key cannot be blank"],
@@ -46,10 +46,10 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   ],
   instances: ["Instances must be a non-negative number"],
   labels: ["Key cannot be blank"],
-  mem: ["Memory must be a number greater or equal to 32"],
+  mem: ["Memory must be a number greater than or equal to 32"],
   portDefinitions: [
     "Port must be a valid port",
-    "Protocol must be of type 'tcp' or 'udp'"
+    "Protocol must be either 'tcp' or 'udp'"
   ],
 });
 
@@ -69,7 +69,7 @@ const serverResponseMappings = Util.deepFreeze({
   "error.path.missing": "Specify a path",
   "error.minLength": "Command may not be blank",
   "error.expected.jsnumber": "A number is expected",
-  "error.expected.jsstring": "A string is expect"
+  "error.expected.jsstring": "A string is expected"
 });
 
 const AppFormErrorMessages = {
