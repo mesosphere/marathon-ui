@@ -114,8 +114,10 @@ var AppConfigEditFormComponent = React.createClass({
   onFormChange: function (fieldId) {
     var responseErrorMessages = this.state.responseErrorMessages;
 
-    if (responseErrorMessages != null &&
-        responseErrorMessages[fieldId] != null) {
+    // At present we assume that the supplied filed value as well as the general
+    // config is valid.
+    if (responseErrorMessages != null) {
+      delete responseErrorMessages["general"];
       delete responseErrorMessages[fieldId];
     }
 

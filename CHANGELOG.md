@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- \#3494 - Create application button stays disabled
+
 ## 0.16.0 - 2016-03-14
 ### Added
 - \#3017 - Move application Search Bar to the Header
