@@ -24,8 +24,6 @@ import OptionalSettingsComponent
   from "../components/OptionalSettingsComponent";
 import OptionalVolumesComponent
   from "../components/OptionalVolumesComponent";
-import PluginMountPointComponent from "../components/PluginMountPointComponent";
-import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 import SectionComponent from "../components/SectionComponent";
 
 var AppConfigEditFormComponent = React.createClass({
@@ -173,8 +171,7 @@ var AppConfigEditFormComponent = React.createClass({
   getPortsPanelTitle: function () {
     return (
       <span>
-        Ports<PluginMountPointComponent style={{"display": "inline-block"}}
-          placeId={PluginMountPoints.APP_EDIT_FORM_PORTS_PANEL_TITLE} />
+        Ports &amp; Service Discovery
       </span>
     );
   },

@@ -32,9 +32,14 @@ function determinePortDefinitionsType(fields) {
 
 function isTooComplexStructure(fields) {
   return fields.portDefinitions != null &&
-      fields.portDefinitions.some(portDefinition =>
-        portDefinition.labels != null &&
-      !!Object.keys(portDefinition.labels).length
+      fields.portDefinitions.some(portDefinition => {
+        var definition = Object.assign({}, portDefinition);
+        if (definition.labels != null) {
+          delete definition.labels["VIP_0"];
+          return !!Object.keys(definition.labels).length;
+        }
+        return false;
+      }
     );
 }
 
@@ -49,6 +54,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       protocol: ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP,
       name: null,
       labels: null,
+      vip: null,
       isRandomPort: true
     }
   },
@@ -140,7 +146,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     return (
       <FormGroupComponent className={classSet}
           fieldId={`${fieldsetId}.${i}.isRandomPort`}
-          label="Assign a random port"
+          label="Random port"
           value={value}>
         <input ref={`isRandomPort${i}`} type="checkbox" />
       </FormGroupComponent>
@@ -189,7 +195,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     });
 
     return (
-      <div className="col-sm-4">
+      <div className="col-sm-3">
         <FormGroupComponent className={portFieldClassSet}
             fieldId={`${fieldsetId}.${i}.port`}
             label={fieldLabel}
@@ -234,12 +240,20 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
               </select>
             </FormGroupComponent>
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-2">
             <FormGroupComponent
                 fieldId={`${fieldsetId}.${i}.name`}
                 label="Name"
                 value={row.name}>
               <input ref={`name${i}`} />
+            </FormGroupComponent>
+          </div>
+          <div className="col-sm-5">
+            <FormGroupComponent
+                fieldId={`${fieldsetId}.${i}.vip`}
+                label="VIP"
+                value={row.vip}>
+              <input ref={`vip${i}`} />
             </FormGroupComponent>
             <DuplicableRowControls
               disableRemoveButton={disableRemoveButton}
