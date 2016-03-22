@@ -367,6 +367,7 @@ var AppListComponent = React.createClass({
   },
 
   getAppListItems: function () {
+    console.time("list");
     var appListViewType = AppListViewTypes.GROUPED_LIST;
     var props = this.props;
     var state = this.state;
@@ -420,8 +421,7 @@ var AppListComponent = React.createClass({
     }, {});
 
     appListItems = Object.keys(appListItems).map(key => {
-      return appListItems[key];
-    }).map((app) => {
+      var app = appListItems[key];
       return (
         <AppListItemComponent key={app.id}
           model={app}
@@ -433,6 +433,7 @@ var AppListComponent = React.createClass({
 
     AppsActions.emitFilterCounts(filterCounts);
 
+    console.timeEnd("list");
     return appListItems;
   },
 
