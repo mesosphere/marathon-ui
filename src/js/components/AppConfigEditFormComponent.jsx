@@ -31,6 +31,7 @@ var AppConfigEditFormComponent = React.createClass({
 
   propTypes: {
     app: React.PropTypes.object,
+    features: React.PropTypes.array,
     handleModeToggle: React.PropTypes.func.isRequired,
     onChange: React.PropTypes.func.isRequired,
     onError: React.PropTypes.func.isRequired
@@ -38,7 +39,8 @@ var AppConfigEditFormComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
-      app: null
+      app: null,
+      features: []
     };
   },
 
@@ -158,6 +160,12 @@ var AppConfigEditFormComponent = React.createClass({
     });
   },
 
+  hasVIP: function () {
+    var features = this.props.features;
+
+    return Util.isArray(features) && features.includes("vips");
+  },
+
   onMenuChange: function (menuItemValue) {
     this.setState({
       activeSection: menuItemValue
@@ -169,10 +177,14 @@ var AppConfigEditFormComponent = React.createClass({
   },
 
   getPortsPanelTitle: function () {
+    var title = "Ports";
+
+    if (this.hasVIP()) {
+      title = "Ports & Service Discovery";
+    }
+
     return (
-      <span>
-        Ports &amp; Service Discovery
-      </span>
+      <span>{title}</span>
     );
   },
 
@@ -322,7 +334,8 @@ var AppConfigEditFormComponent = React.createClass({
               errorIndices={state.errorIndices}
               fields={state.fields}
               getErrorMessage={this.getErrorMessage}
-              handleModeToggle={this.props.handleModeToggle} />
+              handleModeToggle={this.props.handleModeToggle}
+              hasVIP={this.hasVIP()} />
           </SectionComponent>
           <SectionComponent sectionId="env">
             <OptionalEnvironmentComponent
