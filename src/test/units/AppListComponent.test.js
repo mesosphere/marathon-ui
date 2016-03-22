@@ -38,6 +38,14 @@ describe("AppListComponent", function () {
         cpus: 1
       },
       {
+        id: "/group-alpha",
+        isGroup: true
+      },
+      {
+        id: "/group-alpha/group-beta",
+        isGroup: true
+      },
+      {
         id: "/group-alpha/app-1",
         instances: 1,
         mem: 16,
@@ -56,6 +64,10 @@ describe("AppListComponent", function () {
         cpus: 1
       },
       {
+        id: "/apps",
+        isGroup: true
+      },
+      {
         id: "/apps/sleep",
         instances: 1,
         mem: 16,
@@ -68,10 +80,42 @@ describe("AppListComponent", function () {
         cpus: 1
       },
       {
+        id: "/fuzzy",
+        isGroup: true
+      },
+      {
+        id: "/fuzzy/apps",
+        isGroup: true
+      },
+      {
         id: "/fuzzy/apps/app",
         instances: 1,
         mem: 16,
         cpus: 1
+      },
+      {
+        id: "/group-with-long-name",
+        isGroup: true
+      },
+      {
+        id: "/group-with-long-name/group-with-long-name",
+        isGroup: true
+      },
+      {
+        id: "/group-with-long-name/group-with-long-name/" +
+        "group-with-long-name",
+        isGroup: true
+      },
+      {
+        id: "/group-with-long-name/group-with-long-name/" +
+        "group-with-long-name/group-with-long-name",
+        isGroup: true
+      },
+      {
+        id: "/group-with-long-name/group-with-long-name/" +
+        "group-with-long-name/group-with-long-name/" +
+        "group-with-long-name",
+        isGroup: true
       },
       {
         id: "/group-with-long-name/group-with-long-name/" +
