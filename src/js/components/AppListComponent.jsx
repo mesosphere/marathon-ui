@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import lazy from "lazy.js";
 import {Link} from "react-router";
 import React from "react/addons";
 import {score} from "fuzzaldrin";
@@ -367,8 +366,6 @@ var AppListComponent = React.createClass({
   },
 
   getAppListItems: function () {
-    var timerName = "Get Application List";
-    console.time(timerName);
     var appListViewType = AppListViewTypes.GROUPED_LIST;
     var props = this.props;
     var state = this.state;
@@ -432,7 +429,6 @@ var AppListComponent = React.createClass({
 
     AppsActions.emitFilterCounts(filterCounts);
 
-    console.timeEnd(timerName);
     return appListItems;
   },
 
