@@ -245,6 +245,7 @@ var AppModalComponent = React.createClass({
 
     var appConfigProps = {
       app: state.app,
+      features: state.info.features,
       onChange: this.handleAppConfigChange,
       onError: this.handleAppConfigError,
       handleModeToggle: this.handleModeToggle
