@@ -367,7 +367,8 @@ var AppListComponent = React.createClass({
   },
 
   getAppListItems: function () {
-    console.time("list");
+    var timerName = "Get Application List";
+    console.time(timerName);
     var appListViewType = AppListViewTypes.GROUPED_LIST;
     var props = this.props;
     var state = this.state;
@@ -380,7 +381,16 @@ var AppListComponent = React.createClass({
       appsVolumesCount: 0
     };
 
-    var items = lazy(state.apps.concat(this.getGroupsFromApps(state.apps)));
+    var items = lazy(Object.values(state.apps.concat(this.getGroupsFromApps(state.apps)).reduce((apps, item) => {
+      var {id} = item;
+      if (apps[id] == null) {
+        apps[id] = {};
+      }
+      Object.assign(apps[id], item);
+      return apps;
+    }, {})));
+
+    // var items = lazy(state.apps.concat(this.getGroupsFromApps(state.apps)));
 
     if (this.hasFilters()) {
       // Global search view
@@ -411,17 +421,16 @@ var AppListComponent = React.createClass({
       );
     }
 
-    var appListItems = items.reduce((apps, item) => {
-      var {id} = item;
-      if (apps[id] == null) {
-        apps[id] = {};
-      }
-      Object.assign(apps[id], item);
-      return apps;
-    }, {});
+    // var appListItems = items.reduce((apps, item) => {
+    //   var {id} = item;
+    //   if (apps[id] == null) {
+    //     apps[id] = {};
+    //   }
+    //   Object.assign(apps[id], item);
+    //   return apps;
+    // }, {});
 
-    appListItems = Object.keys(appListItems).map(key => {
-      var app = appListItems[key];
+    var appListItems = items.map(app => {
       return (
         <AppListItemComponent key={app.id}
           model={app}
@@ -429,11 +438,11 @@ var AppListComponent = React.createClass({
           sortKey={sortKey}
           viewType={appListViewType}/>
       );
-    });
+    }).value();
 
     AppsActions.emitFilterCounts(filterCounts);
 
-    console.timeEnd("list");
+    console.timeEnd(timerName);
     return appListItems;
   },
 
