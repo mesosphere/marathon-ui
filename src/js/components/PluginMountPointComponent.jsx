@@ -8,7 +8,7 @@ var PluginMountPointComponent = React.createClass({
   propTypes: {
     className: React.PropTypes.string,
     placeId: React.PropTypes.string.isRequired,
-    style: React.PropTypes.string
+    style: React.PropTypes.object
   },
 
   getDefaultProps: function () {
