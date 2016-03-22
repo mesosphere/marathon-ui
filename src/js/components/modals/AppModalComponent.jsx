@@ -12,6 +12,9 @@ import AppFormStore from "../../stores/AppFormStore";
 import AutolinkComponent from "../AutolinkComponent";
 import AppsStore from "../../stores/AppsStore";
 import AppVersionStore from "../../stores/AppVersionsStore";
+import InfoActions from "../../actions/InfoActions";
+import InfoEvents from "../../events/InfoEvents";
+import InfoStore from "../../stores/InfoStore";
 import ModalComponent from "../../components/ModalComponent";
 
 var AppModalComponent = React.createClass({
@@ -39,6 +42,7 @@ var AppModalComponent = React.createClass({
       appIsValid: false,
       error: null,
       force: false,
+      info: InfoStore.info,
       jsonMode: false
     };
   },
@@ -55,6 +59,12 @@ var AppModalComponent = React.createClass({
     AppsStore.on(AppsEvents.APPLY_APP, this.onCreateApp);
     AppsStore.on(AppsEvents.APPLY_APP_ERROR, this.onApplyAppError);
     Mousetrap.bind(["command+enter", "ctrl+enter"], () => this.handleSubmit());
+
+    if (!this.hasInfoObject()) {
+      InfoStore.on(InfoEvents.CHANGE, this.onInfoChange);
+      InfoStore.on(InfoEvents.REQUEST_ERROR, this.onInfoChange);
+      InfoActions.requestInfo();
+    }
   },
 
   componentWillUnmount: function () {
@@ -67,6 +77,12 @@ var AppModalComponent = React.createClass({
     AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR,
       this.onApplyAppError);
     Mousetrap.unbind(["command+enter", "ctrl+enter"]);
+    this.removeInfoListeners();
+  },
+
+  removeInfoListeners: function () {
+    InfoStore.removeListener(InfoEvents.CHANGE, this.onInfoChange);
+    InfoStore.removeListener(InfoEvents.REQUEST_ERROR, this.onInfoChange);
   },
 
   onApplyAppError: function (error, isEditing, status) {
@@ -98,6 +114,16 @@ var AppModalComponent = React.createClass({
     }
   },
 
+  onInfoChange: function () {
+    this.removeInfoListeners();
+
+    if (!this.hasInfoObject()) {
+      this.setState({
+        info: InfoStore.info
+      });
+    }
+  },
+
   handleSubmit: function (event) {
     if (event) {
       event.preventDefault();
@@ -113,6 +139,10 @@ var AppModalComponent = React.createClass({
         AppsActions.createApp(app);
       }
     }
+  },
+
+  hasInfoObject: function () {
+    return !!Object.keys(this.state.info).length;
   },
 
   getGeneralErrorBlock: function () {
@@ -202,6 +232,10 @@ var AppModalComponent = React.createClass({
   },
 
   render: function () {
+    if (!this.hasInfoObject()) {
+      return null;
+    }
+
     var props = this.props;
     var state = this.state;
 
