@@ -40,6 +40,7 @@
 - \#3430 - Uncaught TypeError when creating an empty application
 - \#3457 - Ensure unknown API errors are caught
 - \#3440 - Append trailing slash when creating an app within a group
+- \#3542 - Ports validation error text should be red
 
 ## 0.15.6 - 2016-02-23
 - \#3192 - Adapt default Mem/CPU settings
