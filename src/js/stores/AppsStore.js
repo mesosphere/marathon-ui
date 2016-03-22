@@ -6,6 +6,7 @@ import appScheme from "../stores/schemes/appScheme";
 import AppTypes from "../constants/AppTypes";
 import ContainerConstants from "../constants/ContainerConstants";
 import AppStatus from "../constants/AppStatus";
+import groupScheme from "../stores/schemes/groupScheme";
 import HealthStatus from "../constants/HealthStatus";
 import LocalVolumesConstants from "../constants/LocalVolumesConstants";
 import TasksEvents from "../events/TasksEvents";
@@ -147,29 +148,47 @@ function processApp(app) {
   return app;
 }
 
-function processEmptyGroup(group) {
-  return Object.assign(processApp({id: group.id}), {
-    isGroup: true,
-    status: null
+function addData(parent, child) {
+  Object.keys(parent).forEach(key => {
+    if (key === "health") {
+      parent[key].forEach((value, index) => {
+        value.quantity += child[key][index].quantity;
+      });
+      return;
+    }
+    parent[key] += child[key];
   });
 }
 
 // TODO: refactor to adhere to /groups endpoint structures.
 // https://github.com/mesosphere/marathon/issues/3383
-function processAppsAndEmptyGroups(group, apps = []) {
-  if (group.apps != null && group.apps.length > 0) {
-    group.apps.forEach(app => {
-      apps.push(processApp(app));
-    });
-  } else if (group.id !== "/") {
-    apps.push(processEmptyGroup(group));
+function processAppsAndGroups(group, root = true) {
+  var apps = [];
+  var data = Util.deepCopy(groupScheme);
+  if (group.groups != null) {
+    apps = apps.concat(group.groups.reduce((groups, group) => {
+      var groupData = processAppsAndGroups(group, false);
+      addData(data, groupData.data);
+      return groups.concat(groupData.apps);
+    }, []));
   }
-
-  if (group.groups != null && group.groups.length > 0) {
-    group.groups.forEach(group => processAppsAndEmptyGroups(group, apps));
+  if (group.apps != null) {
+    apps = apps.concat(group.apps.map(app => {
+      app =  processApp(app);
+      addData(data, app);
+      return app;
+    }));
   }
-
-  return apps;
+  if (root) {
+    return apps;
+  }
+  data.id = group.id;
+  data.isGroup = true;
+  apps.push(data);
+  return {
+    apps: apps,
+    data: data
+  };
 }
 
 function applyAppDelayStatus(app, queue) {
@@ -295,7 +314,7 @@ QueueStore.on(QueueEvents.CHANGE, function () {
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
-      storeData.apps = processAppsAndEmptyGroups(action.data.body);
+      storeData.apps = processAppsAndGroups(action.data.body);
       applyAppDelayStatusOnAllApps(storeData.apps, QueueStore.queue);
       AppsStore.emit(AppsEvents.CHANGE);
       break;

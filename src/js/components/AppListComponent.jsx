@@ -23,73 +23,11 @@ import QueryParamsMixin from "../mixins/QueryParamsMixin";
 import Util from "../helpers/Util";
 import SortUtil from "../helpers/SortUtil";
 
-function getGroupStatus(groupStatus, appStatus) {
-  if (appStatus === AppStatus.DEPLOYING ||
-      appStatus === AppStatus.DELAYED ||
-      appStatus === AppStatus.WAITING) {
-    if (appStatus > groupStatus) {
-      return appStatus;
-    }
-  }
-
-  return groupStatus;
-}
-
-function getGroupHealth(groupHealth, appHealth) {
-  if (groupHealth == null) {
-    groupHealth = [];
-  }
-
-  if (appHealth == null) {
-    return groupHealth;
-  }
-
-  return appHealth.map(appHealthState => {
-    var groupHealthState =
-      groupHealth.find(healthState => {
-        return healthState.state === appHealthState.state;
-      });
-
-    if (groupHealthState == null) {
-      return Object.assign({}, appHealthState);
-    }
-
-    groupHealthState.quantity += appHealthState.quantity;
-
-    return groupHealthState;
-  });
-}
-
 function getInitialFilterCounts(object) {
   return Object.values(object).reduce(function (memo, name) {
     memo[name] = 0;
     return memo;
   }, {});
-}
-
-function initGroupNode(groupId, app) {
-  return {
-    health: getGroupHealth(null, app.health),
-    healthWeight: app.healthWeight,
-    id: groupId,
-    instances: app.instances,
-    isGroup: true,
-    status: getGroupStatus(null, app.status),
-    tasksRunning: app.tasksRunning,
-    totalCpus: app.totalCpus,
-    totalMem: app.totalMem
-  };
-}
-
-function updateGroupNode(group, app) {
-  group.health = getGroupHealth(group.health, app.health);
-  group.healthWeight += app.healthWeight;
-  group.instances += app.instances;
-  group.status = getGroupStatus(group.status, app.status);
-  group.tasksRunning += app.tasksRunning;
-  group.totalCpus += app.totalCpus;
-  group.totalMem += app.totalMem;
-  return group;
 }
 
 var AppListComponent = React.createClass({
@@ -187,40 +125,6 @@ var AppListComponent = React.createClass({
         (Util.isArray(filterValue) && filterValue.length > 0) ||
         (Util.isString(filterValue) && filterValue !== "");
     });
-  },
-
-  getGroupsFromApps: function (apps) {
-    var groups = [];
-
-    apps.filter(app => !app.isGroup)
-      .forEach(app => {
-        var pathParts = app.id.split("/");
-
-        // Remove app name
-        pathParts.pop();
-
-        // Create groups
-        pathParts.forEach((pathPart, index, pathParts) => {
-          // Ignore the first part as all app/group ids that begin with a slash
-          if (index === 0) {
-            return;
-          }
-
-          let groupId = pathParts.slice(0, index + 1).join("/");
-          let group = groups.find(item => {
-            return item.id === groupId;
-          });
-
-          if (group == null) {
-            group = initGroupNode(groupId, app);
-            groups.push(group);
-          } else {
-            updateGroupNode(group, app);
-          }
-        });
-      });
-
-    return groups;
   },
 
   filterItems: function (items, filterCounts) {
@@ -379,7 +283,7 @@ var AppListComponent = React.createClass({
       appsVolumesCount: 0
     };
 
-    var items = lazy(state.apps.concat(this.getGroupsFromApps(state.apps)));
+    var items = lazy(state.apps);
 
     if (this.hasFilters()) {
       // Global search view
