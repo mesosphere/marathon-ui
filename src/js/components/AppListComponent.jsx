@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import lazy from "lazy.js";
 import {Link} from "react-router";
 import React from "react/addons";
 import {score} from "fuzzaldrin";
@@ -379,7 +378,15 @@ var AppListComponent = React.createClass({
       appsVolumesCount: 0
     };
 
-    var items = lazy(state.apps.concat(this.getGroupsFromApps(state.apps)));
+    var items = state.apps.reduce((apps, item) => {
+      apps[item.id] = item;
+      return apps;
+    }, {});
+    this.getGroupsFromApps(state.apps).forEach(item => {
+      Object.assign(items[item.id] || {}, item);
+    });
+
+    items = Object.keys(items).map(key => items[key]);
 
     if (this.hasFilters()) {
       // Global search view
@@ -418,7 +425,7 @@ var AppListComponent = React.createClass({
           sortKey={sortKey}
           viewType={appListViewType}/>
       );
-    }).value();
+    });
 
     AppsActions.emitFilterCounts(filterCounts);
 
