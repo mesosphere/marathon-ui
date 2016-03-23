@@ -1,10 +1,11 @@
-## Unversioned
+## 1.0.0 - 2016-03-23
 ### Fixed
 - \#3494 - Create application button stays disabled
 - \#3459 - UI docker volumes validation issue
-- \#3518 - residency added even if no volumes are requested
+- \#3518 - Residency added even if no volumes are requested
 - \#3557 - Ports validation errors
 - \#3482 - Empty groups produce duplicate key in App List
+- \#3542 - Ports validation error text should be red
 
 ## 0.16.0 - 2016-03-14
 ### Added
@@ -44,7 +45,6 @@
 - \#3430 - Uncaught TypeError when creating an empty application
 - \#3457 - Ensure unknown API errors are caught
 - \#3440 - Append trailing slash when creating an app within a group
-- \#3542 - Ports validation error text should be red
 
 ## 0.15.6 - 2016-02-23
 - \#3192 - Adapt default Mem/CPU settings
