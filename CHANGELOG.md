@@ -1,6 +1,8 @@
 ## Unversioned
 ### Fixed
 - \#3494 - Create application button stays disabled
+- \#3459 - UI docker volumes validation issue
+- \#3518 - residency added even if no volumes are requested
 
 ## 0.16.0 - 2016-03-14
 ### Added
