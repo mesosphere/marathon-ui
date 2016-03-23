@@ -148,46 +148,52 @@ function processApp(app) {
   return app;
 }
 
-function addData(parent, child) {
+function calculateTotalStats(parent, child) {
   Object.keys(parent).forEach(key => {
     if (key === "health") {
       parent[key].forEach((value, index) => {
-        value.quantity += child[key][index].quantity;
+        if (child[key] != null && child[key][index] != null) {
+          value.quantity += child[key][index].quantity;
+        }
       });
       return;
     }
-    parent[key] += child[key];
+    if (Util.isNumber(parent[key])) {
+      parent[key] += child[key];
+    }
   });
 }
 
-// TODO: refactor to adhere to /groups endpoint structures.
-// https://github.com/mesosphere/marathon/issues/3383
-function processAppsAndGroups(group, root = true) {
-  var apps = [];
-  var data = Util.deepCopy(groupScheme);
+// TODO: Refactor this method as a part of the issue
+// https://github.com/mesosphere/marathon#3565
+function generateFlatList(group, root = true) {
+  var items = [];
+  var GroupData = Object.assign(
+    {},
+    Util.deepCopy(groupScheme),
+    {id: group.id, isGroup: true}
+  );
   if (group.groups != null) {
-    apps = apps.concat(group.groups.reduce((groups, group) => {
-      var groupData = processAppsAndGroups(group, false);
-      addData(data, groupData.data);
-      return groups.concat(groupData.apps);
+    items = items.concat(group.groups.reduce((groups, group) => {
+      var childGroupData = generateFlatList(group, false);
+      calculateTotalStats(GroupData, childGroupData.groupData);
+      return groups.concat(childGroupData.items);
     }, []));
   }
   if (group.apps != null) {
-    apps = apps.concat(group.apps.map(app => {
+    items = items.concat(group.apps.map(app => {
       app =  processApp(app);
-      addData(data, app);
+      calculateTotalStats(GroupData, app);
       return app;
     }));
   }
   if (root) {
-    return apps;
+    return items;
   }
-  data.id = group.id;
-  data.isGroup = true;
-  apps.push(data);
+  items.push(GroupData);
   return {
-    apps: apps,
-    data: data
+    items: items,
+    groupData: GroupData
   };
 }
 
@@ -314,7 +320,7 @@ QueueStore.on(QueueEvents.CHANGE, function () {
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case AppsEvents.REQUEST_APPS:
-      storeData.apps = processAppsAndGroups(action.data.body);
+      storeData.apps = generateFlatList(action.data.body);
       applyAppDelayStatusOnAllApps(storeData.apps, QueueStore.queue);
       AppsStore.emit(AppsEvents.CHANGE);
       break;

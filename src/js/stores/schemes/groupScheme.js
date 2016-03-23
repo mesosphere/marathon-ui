@@ -17,7 +17,9 @@ const groupScheme = {
   tasksStaged: 0,
   tasksRunning: 0,
   tasksHealthy: 0,
-  tasksUnhealthy: 0
+  tasksUnhealthy: 0,
+  isGroup: true,
+  id: null
 };
 
 export default Util.deepFreeze(groupScheme);
