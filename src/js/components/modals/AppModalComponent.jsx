@@ -243,9 +243,13 @@ var AppModalComponent = React.createClass({
       ? "Edit Application"
       : "New Application";
 
+    var features = state.info["marathon_config"] != null
+      ? state.info["marathon_config"].features
+      : null;
+
     var appConfigProps = {
       app: state.app,
-      features: state.info.features,
+      features: features,
       onChange: this.handleAppConfigChange,
       onError: this.handleAppConfigError,
       handleModeToggle: this.handleModeToggle
