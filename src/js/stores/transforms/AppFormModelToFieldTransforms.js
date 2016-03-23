@@ -83,6 +83,9 @@ const AppFormModelToFieldTransforms = {
   portDefinitions: portDefinition => {
     return portDefinition
       .map((row, i) => {
+        if (row.name != null) {
+          row.name = row.name === "" ? null : row.name;
+        }
         if (row.containerPort != null) {
           row.port = row.containerPort;
         }
