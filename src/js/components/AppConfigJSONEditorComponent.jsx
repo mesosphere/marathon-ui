@@ -56,8 +56,8 @@ var AppConfigJSONEditorComponent = React.createClass({
   render: function () {
     var tooltipMessage = (
       <span>
-        This is the JSON editor
-        docs: <a href={ExternalLinks.JSON_EDITOR} target="_blank">Read more</a>.
+        Use the JSON editor to enter Marathon Application definitions manually.
+        <a href={ExternalLinks.JSON_EDITOR} target="_blank">Read more here</a>.
       </span>
     );
 
