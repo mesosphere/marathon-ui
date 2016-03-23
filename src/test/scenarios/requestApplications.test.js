@@ -44,8 +44,8 @@ describe("request applications and groups", function () {
   });
 
   it("calculate total resources", function () {
-    expect(AppsStore.apps[0].totalMem).to.equal(500);
-    expect(AppsStore.apps[0].totalCpus).to.equal(20);
+    expect(AppsStore.apps[1].totalMem).to.equal(500);
+    expect(AppsStore.apps[1].totalCpus).to.equal(20);
   });
 
   it("handles failure gracefully", function (done) {
@@ -325,13 +325,13 @@ describe("request applications and groups", function () {
     });
 
     it("handles emtpy groups", function () {
-      var emptyGroup = AppsStore.apps[1];
+      var emptyGroup = AppsStore.apps[0];
       expect(emptyGroup.id).to.eql("/empty-group");
       expect(emptyGroup.isGroup).to.be.true;
     });
 
     it("handles nested applications", function () {
-      var nestedApp = AppsStore.apps[2];
+      var nestedApp = AppsStore.apps[1];
       expect(nestedApp.id).to.eql("/non-empty-group/app-2");
     });
   });

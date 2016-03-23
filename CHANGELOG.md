@@ -4,6 +4,7 @@
 - \#3459 - UI docker volumes validation issue
 - \#3518 - residency added even if no volumes are requested
 - \#3557 - Ports validation errors
+- \#3482 - Empty groups produce duplicate key in App List
 
 ## 0.16.0 - 2016-03-14
 ### Added
