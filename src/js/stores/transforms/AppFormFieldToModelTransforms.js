@@ -140,8 +140,8 @@ const AppFormFieldToModelTransforms = {
       .map(portDefinition => {
         var definition = Object.assign({}, portDefinition);
         definition.port = parseInt(definition.port, 10);
-        if (definition.name != null) {
-          definition.name = definition.name === "" ? null : definition.name;
+        if (definition.name === "") {
+          definition.name = null;
         }
         if (definition.port == null ||
             isNaN(definition.port) ||
