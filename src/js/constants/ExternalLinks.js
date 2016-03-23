@@ -8,7 +8,7 @@ const ExternalLinks = {
   CONTAINER_PATH:
     "http://mesosphere.github.io/marathon/docs/persistent-volumes.html",
   PORTS: "https://mesosphere.github.io/marathon/docs/ports.html",
-  JSON_EDITOR: "about:blank"
+  JSON_EDITOR: "https://mesosphere.github.io/marathon/docs/rest-api.html"
 };
 
 export default Object.freeze(ExternalLinks);
