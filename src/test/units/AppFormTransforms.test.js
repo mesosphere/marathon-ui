@@ -678,11 +678,6 @@ describe("App Form Model To Field Transform", function () {
 
     });
 
-    it("ports array to string", function () {
-      expect(AppFormTransforms.ModelToField.ports([12233, 12244, 12255]))
-        .to.equal("12233, 12244, 12255");
-    });
-
     it("uris string to an array of uris", function () {
       expect(AppFormTransforms.ModelToField
           .uris(["http://test.de/", "http://test.com"]))
