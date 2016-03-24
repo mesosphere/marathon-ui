@@ -150,6 +150,14 @@ const AppFormFieldToModelTransforms = {
         }
         delete definition.consecutiveKey;
         delete definition.isRandomPort;
+        if (definition.vip != null) {
+          if (definition.vip !== "") {
+            let labels = definition.labels || {};
+            labels["VIP_0"] = definition.vip;
+            definition.labels = labels;
+          }
+          delete definition.vip;
+        }
         return definition;
       })
       .filter(portDefinition => {

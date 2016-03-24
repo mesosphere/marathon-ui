@@ -86,8 +86,13 @@ const AppFormModelToFieldTransforms = {
         if (row.containerPort != null) {
           row.port = row.containerPort;
         }
+        if (row.labels != null && row.labels["VIP_0"] != null) {
+          row.vip = row.labels["VIP_0"];
+          delete row.labels["VIP_0"];
+        }
         row.isRandomPort = false;
         row.consecutiveKey = i;
+
         return row;
       });
   },

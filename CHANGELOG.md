@@ -1,3 +1,7 @@
+## Unversioned
+### Added
+- VIP labels in port definitions
+
 ## 1.0.0 - 2016-03-23
 ### Fixed
 - \#3494 - Create application button stays disabled

@@ -24,8 +24,6 @@ import OptionalSettingsComponent
   from "../components/OptionalSettingsComponent";
 import OptionalVolumesComponent
   from "../components/OptionalVolumesComponent";
-import PluginMountPointComponent from "../components/PluginMountPointComponent";
-import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 import SectionComponent from "../components/SectionComponent";
 
 var AppConfigEditFormComponent = React.createClass({
@@ -33,6 +31,7 @@ var AppConfigEditFormComponent = React.createClass({
 
   propTypes: {
     app: React.PropTypes.object,
+    features: React.PropTypes.array,
     handleModeToggle: React.PropTypes.func.isRequired,
     onChange: React.PropTypes.func.isRequired,
     onError: React.PropTypes.func.isRequired
@@ -40,7 +39,8 @@ var AppConfigEditFormComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
-      app: null
+      app: null,
+      features: []
     };
   },
 
@@ -160,6 +160,12 @@ var AppConfigEditFormComponent = React.createClass({
     });
   },
 
+  hasVIP: function () {
+    var features = this.props.features;
+
+    return Util.isArray(features) && features.includes("vips");
+  },
+
   onMenuChange: function (menuItemValue) {
     this.setState({
       activeSection: menuItemValue
@@ -171,11 +177,14 @@ var AppConfigEditFormComponent = React.createClass({
   },
 
   getPortsPanelTitle: function () {
+    var title = "Ports";
+
+    if (this.hasVIP()) {
+      title = "Ports & Service Discovery";
+    }
+
     return (
-      <span>
-        Ports<PluginMountPointComponent style={{"display": "inline-block"}}
-          placeId={PluginMountPoints.APP_EDIT_FORM_PORTS_PANEL_TITLE} />
-      </span>
+      <span>{title}</span>
     );
   },
 
@@ -325,7 +334,8 @@ var AppConfigEditFormComponent = React.createClass({
               errorIndices={state.errorIndices}
               fields={state.fields}
               getErrorMessage={this.getErrorMessage}
-              handleModeToggle={this.props.handleModeToggle} />
+              handleModeToggle={this.props.handleModeToggle}
+              hasVIP={this.hasVIP()} />
           </SectionComponent>
           <SectionComponent sectionId="env">
             <OptionalEnvironmentComponent

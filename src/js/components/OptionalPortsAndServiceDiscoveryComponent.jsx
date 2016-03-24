@@ -30,11 +30,22 @@ function determinePortDefinitionsType(fields) {
   return ContainerConstants.TYPE.MESOS;
 }
 
-function isTooComplexStructure(fields) {
+function isTooComplexStructure(fields, hasVIP = false) {
   return fields.portDefinitions != null &&
-      fields.portDefinitions.some(portDefinition =>
-        portDefinition.labels != null &&
-      !!Object.keys(portDefinition.labels).length
+      fields.portDefinitions.some(portDefinition => {
+        if (!hasVIP && portDefinition.vip != null) {
+          return true;
+        }
+
+        if (portDefinition.labels != null) {
+          let labels = Object.assign({}, portDefinition.labels);
+          if (hasVIP) {
+            delete labels["VIP_0"];
+          }
+          return !!Object.keys(labels).length;
+        }
+        return false;
+      }
     );
 }
 
@@ -49,6 +60,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       protocol: ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP,
       name: null,
       labels: null,
+      vip: null,
       isRandomPort: true
     }
   },
@@ -56,7 +68,14 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   propTypes: {
     fields: React.PropTypes.object.isRequired,
     getErrorMessage: React.PropTypes.func.isRequired,
-    handleModeToggle: React.PropTypes.func.isRequired
+    handleModeToggle: React.PropTypes.func.isRequired,
+    hasVIP: React.PropTypes.bool
+  },
+
+  getDefaultProps: function () {
+    return {
+      hasVIP: false
+    };
   },
 
   handleAddRow: function (fieldId, position, event) {
@@ -140,7 +159,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     return (
       <FormGroupComponent className={classSet}
           fieldId={`${fieldsetId}.${i}.isRandomPort`}
-          label="Assign a random port"
+          label="Random port"
           value={value}>
         <input ref={`isRandomPort${i}`} type="checkbox" />
       </FormGroupComponent>
@@ -148,7 +167,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   getPortInputField: function (row, i) {
-    var type = determinePortDefinitionsType(this.props.fields);
+    var props = this.props;
+    var type = determinePortDefinitionsType(props.fields);
     var isBridgeNetwork = type === ContainerConstants.NETWORK.BRIDGE;
 
     var fieldLabel = isBridgeNetwork
@@ -188,8 +208,12 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       "hidden": !!randomPortField
     });
 
+    var className = props.hasVIP
+      ? "col-sm-3"
+      : "col-sm-4";
+
     return (
-      <div className="col-sm-4">
+      <div className={className}>
         <FormGroupComponent className={portFieldClassSet}
             fieldId={`${fieldsetId}.${i}.port`}
             label={fieldLabel}
@@ -202,14 +226,51 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     );
   },
 
+  getVIPField: function (row, i, disableRemoveButton) {
+    if (!this.props.hasVIP) {
+      return null;
+    }
+
+    return (
+      <div className="col-sm-5">
+        <FormGroupComponent
+            fieldId={`${fieldsetId}.${i}.vip`}
+            label="VIP"
+            value={row.vip}>
+          <input ref={`vip${i}`} />
+        </FormGroupComponent>
+        <DuplicableRowControls
+          disableRemoveButton={disableRemoveButton}
+          handleAddRow={this.handleAddRow.bind(null, fieldsetId, i + 1)}
+          handleRemoveRow=
+            {this.handleRemoveRow.bind(null, fieldsetId, i)} />
+      </div>
+    );
+  },
+
   getPortDefinitionRow: function (row, i, disableRemoveButton = false) {
+    var props = this.props;
     var error = this.getError(fieldsetId, row.consecutiveKey);
-    var getErrorMessage = this.props.getErrorMessage;
+    var getErrorMessage = props.getErrorMessage;
 
     var rowClassSet = classNames({
       "has-error": !!error,
       "duplicable-row": true
     });
+
+    var nameFieldButtons = (
+      <DuplicableRowControls
+        disableRemoveButton={disableRemoveButton}
+        handleAddRow={this.handleAddRow.bind(null, fieldsetId, i + 1)}
+        handleRemoveRow={this.handleRemoveRow.bind(null, fieldsetId, i)} />
+    );
+
+    var nameFieldClassName = "col-sm-6";
+
+    if (props.hasVIP) {
+      nameFieldButtons = null;
+      nameFieldClassName = "col-sm-2";
+    }
 
     return (
       <div key={row.consecutiveKey+i} className={rowClassSet}>
@@ -234,19 +295,16 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
               </select>
             </FormGroupComponent>
           </div>
-          <div className="col-sm-6">
+          <div className={nameFieldClassName}>
             <FormGroupComponent
                 fieldId={`${fieldsetId}.${i}.name`}
                 label="Name"
                 value={row.name}>
               <input ref={`name${i}`} />
             </FormGroupComponent>
-            <DuplicableRowControls
-              disableRemoveButton={disableRemoveButton}
-              handleAddRow={this.handleAddRow.bind(null, fieldsetId, i + 1)}
-              handleRemoveRow=
-                {this.handleRemoveRow.bind(null, fieldsetId, i)} />
+            {nameFieldButtons}
           </div>
+          {this.getVIPField(row, i, disableRemoveButton)}
         </fieldset>
         {error}
       </div>
@@ -276,11 +334,14 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   render: function () {
+    var props = this.props;
+
     var hasPluginComponent = PluginComponentStore.hasComponentAtPlaceId(
       PluginMountPoints.OPTIONAL_PORTS_AND_SERVICE_DISCOVERY
     );
 
-    if (!hasPluginComponent && isTooComplexStructure(this.props.fields)) {
+    if (!hasPluginComponent &&
+        isTooComplexStructure(props.fields, props.hasVIP)) {
       return (
         <div>
           Switch to <a
