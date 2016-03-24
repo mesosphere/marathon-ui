@@ -10,6 +10,9 @@ import AppVersionsActions from "../../js/actions/AppVersionsActions";
 import AppVersionsEvents from "../../js/events/AppVersionsEvents";
 import AppVersionsStore from "../../js/stores/AppVersionsStore";
 
+var server = config.localTestserverURI;
+config.apiURL = "http://" + server.address + ":" + server.port + "/";
+
 describe("request specific application version", function () {
 
   it("updates the AppVersionsStore on success", function (done) {
@@ -64,8 +67,7 @@ describe("request specific application version", function () {
           );
           expect(config).to.deep.equal({
             id: "/app-id",
-            cmd: "some --cmd",
-            ports: [12345]
+            cmd: "some --cmd"
           });
         }, done);
       });
@@ -92,7 +94,6 @@ describe("request specific application version", function () {
           expect(config).to.deep.equal({
             id: "/app-id",
             cmd: "some --cmd",
-            ports: [12345],
             labels: {testing: "123"}
           });
         }, done);

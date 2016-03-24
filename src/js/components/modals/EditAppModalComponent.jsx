@@ -67,12 +67,6 @@ var EditAppModalComponent = React.createClass({
       AppVersionsStore.getAppConfigVersion(props.appId, props.appVersion)
     );
 
-    // This strips out the depricated ports field,
-    // if portDefinitions are set
-    if (app.portDefinitions != null && app.ports != null) {
-      delete app.ports;
-    }
-
     this.setState({
       app: app
     });

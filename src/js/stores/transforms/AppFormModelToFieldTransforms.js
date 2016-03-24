@@ -78,8 +78,6 @@ const AppFormModelToFieldTransforms = {
         return row;
       });
   },
-  ports: (ports) => ports
-    .join(", "),
   portDefinitions: portDefinition => {
     return portDefinition
       .map((row, i) => {

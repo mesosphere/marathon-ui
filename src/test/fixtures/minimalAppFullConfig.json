@@ -13,9 +13,12 @@
   "uris": [],
   "fetch": [],
   "storeUrls": [],
-  "ports": [
-    12345
-  ],
+  "portDefinitions": [{
+    "labels": {},
+    "port": 0,
+    "protocol": "tcp"
+  }],
+  "ports": [0],
   "requirePorts": false,
   "backoffSeconds": 1,
   "backoffFactor": 1.15,
