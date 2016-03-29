@@ -81,7 +81,7 @@
       "from": "ansi-regex@>=2.0.0 <3.0.0"
     },
     "ansi-styles": {
-      "version": "2.2.0",
+      "version": "2.2.1",
       "from": "ansi-styles@>=2.1.0 <3.0.0"
     },
     "ansicolors": {
