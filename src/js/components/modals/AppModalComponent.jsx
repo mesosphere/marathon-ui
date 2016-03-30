@@ -152,14 +152,10 @@ var AppModalComponent = React.createClass({
       return null;
     }
 
-    if (this.state.jsonMode && !Util.isString(error)) {
+    if (Util.isObject(error)) {
       error = Object.keys(error).map(key => {
         return `${key}: ${error[key]}`;
       });
-    }
-
-    if (!this.state.jsonMode && Util.isObject(error)) {
-      error = AppFormErrorMessages.getGeneralMessage("general");
     }
 
     if (Util.isArray(error)) {
