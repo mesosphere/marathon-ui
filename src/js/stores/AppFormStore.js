@@ -252,7 +252,7 @@ function updateErrorIndices(fieldId, value, errorIndices) {
   var errorIndex = getValidationErrorIndex(fieldId, value);
   if (errorIndex > -1) {
     if (value.consecutiveKey != null) {
-      Util.initKeyValue(errorIndices, fieldId, []);
+      Util.initKeyValue(errorIndices, fieldId, {});
       errorIndices[fieldId][value.consecutiveKey] = errorIndex;
     } else {
       errorIndices[fieldId] = errorIndex;

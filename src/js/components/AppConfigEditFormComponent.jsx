@@ -141,7 +141,7 @@ var AppConfigEditFormComponent = React.createClass({
   getErrorMessage: function (fieldId) {
     var state = this.state;
     var errorIndex = state.errorIndices[fieldId];
-    if (errorIndex != null && !Util.isArray(errorIndex)) {
+    if (errorIndex != null && !Util.isObject(errorIndex)) {
       return AppFormErrorMessages.getFieldMessage(fieldId, errorIndex);
     }
     if (state.responseErrorMessages[fieldId] != null) {
