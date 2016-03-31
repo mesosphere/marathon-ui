@@ -117,19 +117,23 @@ const AppFormValidators = {
   },
 
   healthChecksGracePeriod: (obj) => {
-    return !!obj.gracePeriodSeconds.toString().match(/^[0-9]+$/);
+    return obj.gracePeriodSeconds &&
+      !!obj.gracePeriodSeconds.toString().match(/^[0-9]+$/);
   },
 
   healthChecksInterval: (obj) => {
-    return !!obj.intervalSeconds.toString().match(/^[0-9]+$/);
+    return obj.intervalSeconds &&
+      !!obj.intervalSeconds.toString().match(/^[0-9]+$/);
   },
 
   healthChecksTimeout: (obj) => {
-    return !!obj.timeoutSeconds.toString().match(/^[0-9]+$/);
+    return obj.timeoutSeconds &&
+      !!obj.timeoutSeconds.toString().match(/^[0-9]+$/);
   },
 
   healthChecksMaxConsecutiveFailures: (obj) => {
-    return !!obj.maxConsecutiveFailures.toString().match(/^[0-9]+$/);
+    return obj.maxConsecutiveFailures &&
+      !!obj.maxConsecutiveFailures.toString().match(/^[0-9]+$/);
   },
 
   instances: (value) => !Util.isStringAndEmpty(value) &&

@@ -17,17 +17,15 @@ import Util from "../helpers/Util";
 
 const fieldsetId = "portDefinitions";
 
-function determinePortDefinitionsType(fields) {
+function isBridgeNetworkMode(fields) {
   if (fields.dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
-    return ContainerConstants.NETWORK.BRIDGE;
+    return true;
   }
+  return false;
+}
 
-  if ((fields.dockerImage != null && fields.dockerImage !== "") ||
-      fields.dockerNetwork === ContainerConstants.NETWORK.HOST) {
-    return ContainerConstants.NETWORK.HOST;
-  }
-
-  return ContainerConstants.TYPE.MESOS;
+function hasDockerImage(fields) {
+  return fields.dockerImage != null && fields.dockerImage !== "";
 }
 
 function isTooComplexStructure(fields, hasVIP = false) {
@@ -82,19 +80,14 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     event.target.blur();
     event.preventDefault();
 
-    var type = determinePortDefinitionsType(this.props.fields);
-    var isBridgeNetwork = type === ContainerConstants.NETWORK.BRIDGE;
-
-    var scheme = Util.extendObject(this.duplicableRowsScheme[fieldId], {
+    var row = Util.extendObject(this.duplicableRowsScheme[fieldId], {
       consecutiveKey: Util.getNewConsecutiveKey()
     });
 
-    if (isBridgeNetwork) {
-      scheme.isRandomPort = false;
-    }
+    row.isRandomPort = !isBridgeNetworkMode(this.props.fields);
 
     FormActions.insert(fieldId,
-      scheme,
+      row,
       position
     );
   },
@@ -125,53 +118,31 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       ? ` which will be ${partialRandomText}assigned dynamically`
       : "";
 
-    var type = determinePortDefinitionsType(this.props.fields);
-
     var portIdentifiers = Array(rows.length)
       .fill()
       .map((_, i) => "$PORT" + i)
       .join(", ")
       .replace(/(.*), (.*)$/, "$1 and $2");
 
-    var message = "Configure your application to listen to" +
+    var helpText = "Configure your application to listen to" +
       ` ${portIdentifiers}${dynamicPortText}.`;
 
-    if (type === ContainerConstants.NETWORK.HOST) {
-      message = "Configure your Docker container to listen" +
-        ` to ${portIdentifiers}${dynamicPortText}.`;
-    } else if (type === ContainerConstants.NETWORK.BRIDGE) {
-      message = "Your Docker container will bind to the requested ports and" +
+    if (!isBridgeNetworkMode(this.props.fields)) {
+      helpText = "Your Docker container will bind to the requested ports and" +
         ` they will be dynamically mapped to ${portIdentifiers} on the host.`;
+    } else if (hasDockerImage(this.props.fields)) {
+      helpText = "Configure your Docker container to listen" +
+        ` to ${portIdentifiers}${dynamicPortText}.`;
     }
 
-    return <div>{message}</div>;
-  },
-
-  getRandomPortCheckbox: function (row, i, hidden = false) {
-    var classSet = classNames({
-      "hidden": hidden,
-    }, "checkbox-form-group port-input-field");
-
-    var value = hidden
-      ? false
-      : row.isRandomPort;
-
-    return (
-      <FormGroupComponent className={classSet}
-          fieldId={`${fieldsetId}.${i}.isRandomPort`}
-          label="Random port"
-          value={value}>
-        <input ref={`isRandomPort${i}`} type="checkbox" />
-      </FormGroupComponent>
-    );
+    return <div>{helpText}</div>;
   },
 
   getPortInputField: function (row, i) {
     var props = this.props;
-    var type = determinePortDefinitionsType(props.fields);
-    var isBridgeNetwork = type === ContainerConstants.NETWORK.BRIDGE;
+    var isBridgeNetwork = isBridgeNetworkMode(props.fields);
 
-    var fieldLabel = isBridgeNetwork
+    var fieldLabelText = isBridgeNetwork
       ? "Container Port"
       : "Port";
 
@@ -184,9 +155,9 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       </span>
     );
 
-    fieldLabel = (
+    var fieldLabel = (
       <span>
-        {fieldLabel}
+        {fieldLabelText}
         <TooltipComponent className="right"
             message={fieldTooltipMessage}>
           <i className="icon icon-xs help" />
@@ -194,7 +165,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       </span>
     );
 
-    if (!isBridgeNetwork && row.isRandomPort) {
+    if (!isBridgeNetwork) {
       randomPortField = (
         <FormGroupComponent
             label={fieldLabel}
@@ -221,7 +192,6 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
           <input ref={`port${i}`} {...PortInputAttributes} />
         </FormGroupComponent>
         {randomPortField}
-        {this.getRandomPortCheckbox(row, i, isBridgeNetwork)}
       </div>
     );
   },
