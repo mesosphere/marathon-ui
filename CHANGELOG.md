@@ -1,4 +1,13 @@
 ## Unversioned
+### Fixed
+- \#3552 - Editing an App: Switching between JSON and normal Editor
+  produces a broken UX
+
+### Changed
+- \#3426 - Improve ports validation
+- \#3559 - Create Modal: always show Port Index for host ports
+- \#3424 - Maintain "assign random port" settings after JSON mode switch
+
 ### Added
 - VIP labels in port definitions
 
