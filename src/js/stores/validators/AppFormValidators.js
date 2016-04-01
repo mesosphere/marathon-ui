@@ -117,19 +117,23 @@ const AppFormValidators = {
   },
 
   healthChecksGracePeriod: (obj) => {
-    return !!obj.gracePeriodSeconds.toString().match(/^[0-9]+$/);
+    return obj.gracePeriodSeconds != null &&
+      !!obj.gracePeriodSeconds.toString().match(/^[0-9]+$/);
   },
 
   healthChecksInterval: (obj) => {
-    return !!obj.intervalSeconds.toString().match(/^[0-9]+$/);
+    return obj.intervalSeconds != null &&
+      !!obj.intervalSeconds.toString().match(/^[0-9]+$/);
   },
 
   healthChecksTimeout: (obj) => {
-    return !!obj.timeoutSeconds.toString().match(/^[0-9]+$/);
+    return obj.timeoutSeconds != null &&
+      !!obj.timeoutSeconds.toString().match(/^[0-9]+$/);
   },
 
   healthChecksMaxConsecutiveFailures: (obj) => {
-    return !!obj.maxConsecutiveFailures.toString().match(/^[0-9]+$/);
+    return obj.maxConsecutiveFailures != null &&
+      !!obj.maxConsecutiveFailures.toString().match(/^[0-9]+$/);
   },
 
   instances: (value) => !Util.isStringAndEmpty(value) &&
@@ -161,6 +165,7 @@ const AppFormValidators = {
     Util.isStringAndEmpty(obj.containerPath)),
 
   portDefinitionsPortIsValid: (obj) => {
+    // TODO is this needed?
     if (obj.isRandomPort === false) {
       return obj.port != null && obj.port !== "" && isValidPort(obj.port);
     }
