@@ -71,69 +71,6 @@ describe("App Form Model Post Process", function () {
       expect(app.cmd).to.equal(null);
     });
 
-    it("transforms portDefinitions to dockerPortMapping if bridge network",
-        function () {
-      var app = {
-        container: {
-          docker: {
-            image: "group/image",
-            network: ContainerConstants.NETWORK.BRIDGE
-          }
-        },
-        portDefinitions: [
-          {
-            port: 1,
-            protocol: "tcp",
-            name: "port1"
-          },
-          {
-            port: 2,
-            protocol: "tcp",
-            name: "port2"
-          }
-        ]
-      };
-
-      AppFormModelPostProcess.container(app);
-
-      expect(app).to.deep.equal({
-        container: {
-          type: ContainerConstants.TYPE.DOCKER,
-          docker: {
-            image: "group/image",
-            network: ContainerConstants.NETWORK.BRIDGE,
-            portMappings: [
-              {
-                containerPort: 1,
-                hostPort: 0,
-                protocol: "tcp",
-                name: "port1"
-              },
-              {
-                containerPort: 2,
-                hostPort: 0,
-                protocol: "tcp",
-                name: "port2"
-              }
-            ]
-          }
-        },
-        // This won't be removed in the transformator
-        portDefinitions: [
-          {
-            port: 1,
-            protocol: "tcp",
-            name: "port1"
-          },
-          {
-            port: 2,
-            protocol: "tcp",
-            name: "port2"
-          }
-        ]
-      });
-    });
-
   });
 
   describe("health checks", function () {
