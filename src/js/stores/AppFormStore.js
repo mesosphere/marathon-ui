@@ -24,6 +24,7 @@ const duplicableRowFields = Object.freeze([
   "containerVolumes",
   "localVolumes",
   "dockerParameters",
+  "dockerPortMappings",
   "env",
   "healthChecks",
   "labels",
@@ -101,6 +102,7 @@ const resolveFieldIdToAppKeyMap = {
   dockerNetwork: "container.docker.network",
   dockerParameters: "container.docker.parameters",
   dockerPrivileged: "container.docker.privileged",
+  dockerPortMappings: "container.docker.portMappings",
   healthChecks: "healthChecks",
   instances: "instances",
   env: "env",
@@ -165,13 +167,13 @@ const responseAttributePathToFieldIdMap = {
   "/portDefinitions[{INDEX}]/name": "portDefinitions/{INDEX}/name",
   "/portDefinitions[{INDEX}]/port": "portDefinitions/{INDEX}/port",
   "/portDefinitions[{INDEX}]/protocol": "portDefinitions/{INDEX}/protocol",
-  "/container/docker/portMappings": "portDefinitions",
+  "/container/docker/portMappings": "dockerPortMappings",
   "/container/docker/portMappings[{INDEX}]/containerPort":
-    "portDefinitions/{INDEX}/port",
+    "dockerPortMappings/{INDEX}/port",
   "/container/docker/portMappings[{INDEX}]/protocol":
-    "portDefinitions/{INDEX}/protocol",
-  "/container/docker/portMappings[{INDEX}]/hostPort": "portDefinitions",
-  "/container/docker/portMappings[{INDEX}]/servicePort": "portDefinitions",
+    "dockerPortMappings/{INDEX}/protocol",
+  "/container/docker/portMappings[{INDEX}]/hostPort": "dockerPortMappings",
+  "/container/docker/portMappings[{INDEX}]/servicePort": "dockerPortMappings",
   "/labels": "labels",
   "/uris": "uris",
   "/user": "user",
@@ -188,7 +190,7 @@ const resolveAppKeyToFieldIdMap = {
   "container.docker.forcePullImage": ["dockerForcePullImage"],
   "container.docker.image": ["dockerImage"],
   "container.docker.network": ["dockerNetwork"],
-  "container.docker.portMappings": ["portDefinitions"],
+  "container.docker.portMappings": ["dockerPortMappings"],
   "container.docker.parameters": ["dockerParameters"],
   "container.docker.privileged": ["dockerPrivileged"],
   "container.volumes": [
@@ -334,14 +336,6 @@ function populateFieldsFromModel(app, fields) {
   // The env/labels-object should be treated as an object itself,
   // so it's excluded.
   var paths = Util.detectObjectPaths(app, null, ["env", "labels"]);
-
-  var dockerNetwork =
-    objectPath.get(app, "container.docker.network");
-
-  if (dockerNetwork != null &&
-      dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
-    paths = paths.filter(appKey => appKey !== "portDefinitions");
-  }
 
   paths.forEach(appKey => {
     var fieldIdArray = resolveAppKeyToFieldIdMap[appKey];

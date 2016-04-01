@@ -28,6 +28,7 @@ var ContainerSettingsComponent = React.createClass({
   propTypes: {
     fields: React.PropTypes.object.isRequired,
     getErrorMessage: React.PropTypes.func.isRequired,
+    openPorts: React.PropTypes.func,
     openVolumes: React.PropTypes.func
   },
 
@@ -177,6 +178,12 @@ var ContainerSettingsComponent = React.createClass({
           volumes <a onClick={this.props.openVolumes}>
             in the Volumes section
           </a>.
+        </div>
+        <div>
+          You can configure your Docker
+          ports <a onClick={this.props.openPorts}>
+          in the Ports section
+        </a>.
         </div>
       </div>
     );

@@ -18,6 +18,33 @@ function ensureObjectScheme(row, scheme) {
   }, null);
 }
 
+function transformPortDefintionRows(portDefinitionRows, portField) {
+  return portDefinitionRows.map(portDefinitionRow => {
+    var definition = Object.assign({}, portDefinitionRow);
+    if (definition.name === "") {
+      definition.name = null;
+    }
+    definition[portField] = parseInt(definition[portField], 10);
+    if (definition[portField] == null || isNaN(definition[portField])) {
+      definition[portField] = 0;
+    }
+    if (definition.vip != null) {
+      if (definition.vip !== "") {
+        let labels = definition.labels || {};
+        labels["VIP_0"] = definition.vip;
+        definition.labels = labels;
+      }
+    }
+    delete definition.consecutiveKey;
+    delete definition.vip;
+    return definition;
+  })
+  .filter(portDefinition => {
+    var containerPort = Number(portDefinition[portField]);
+    return !isNaN(containerPort) && containerPort >= 0;
+  });
+}
+
 const AppFormFieldToModelTransforms = {
   acceptedResourceRoles: (roles) => {
     if (roles == null) {
@@ -75,6 +102,9 @@ const AppFormFieldToModelTransforms = {
         !Util.isStringAndEmpty(row.key.toString().trim());
     })
     .value(),
+  dockerPortMappings: portMappings => {
+    return transformPortDefintionRows(portMappings, "containerPort");
+  },
   dockerPrivileged: (isChecked) => !!isChecked,
   env: (rows) => {
     return rows.reduce((memo, row) => {
@@ -136,34 +166,7 @@ const AppFormFieldToModelTransforms = {
   },
   mem: (value) => parseFloat(value),
   portDefinitions: portDefinitions => {
-    return portDefinitions
-      .map(portDefinition => {
-        var definition = Object.assign({}, portDefinition);
-        definition.port = parseInt(definition.port, 10);
-        if (definition.name === "") {
-          definition.name = null;
-        }
-        if (definition.port == null ||
-            isNaN(definition.port) ||
-            definition.isRandomPort) {
-          definition.port = 0;
-        }
-        delete definition.consecutiveKey;
-        delete definition.isRandomPort;
-        if (definition.vip != null) {
-          if (definition.vip !== "") {
-            let labels = definition.labels || {};
-            labels["VIP_0"] = definition.vip;
-            definition.labels = labels;
-          }
-          delete definition.vip;
-        }
-        return definition;
-      })
-      .filter(portDefinition => {
-        var port = Number(portDefinition.port);
-        return !isNaN(port) && port >= 0;
-      });
+    return transformPortDefintionRows(portDefinitions, "port");
   },
   uris: (uris) => lazy(uris.split(","))
     .map((uri) => uri.trim())

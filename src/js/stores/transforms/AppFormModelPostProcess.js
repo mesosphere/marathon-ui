@@ -33,9 +33,9 @@ const AppFormModelPostProcess = {
       return;
     }
 
-    if ((container.docker == null || container.docker.image == null ||
-        container.docker.image === "") &&
-        container.volumes != null) {
+    if (container.docker == null &&
+        container.volumes != null &&
+        container.volumes.length > 0) {
       delete container.docker;
       container.volumes = container.volumes.filter(row => {
         return row.hostPath == null;
@@ -45,21 +45,6 @@ const AppFormModelPostProcess = {
     container.type = container.docker != null
       ? ContainerConstants.TYPE.DOCKER
       : ContainerConstants.TYPE.MESOS;
-
-    if (container.type === ContainerConstants.TYPE.DOCKER &&
-        container.docker.network === ContainerConstants.NETWORK.BRIDGE &&
-        app.portDefinitions != null) {
-      container.docker.portMappings =
-        app.portDefinitions.map(portDefinition => {
-          var definition = Object.assign({}, portDefinition);
-          definition.containerPort = definition.port;
-          delete definition.port;
-          if (definition.hostPort == null) {
-            definition.hostPort = 0;
-          }
-          return definition;
-        });
-    }
 
     let isEmpty = (Util.isArray(container.volumes) &&
         container.volumes.length === 0 ||
