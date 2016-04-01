@@ -24,6 +24,13 @@ var DuplicableRowsMixin = {
   },
 
   componentWillReceiveProps: function (nextProps) {
+    Object.keys(this.duplicableRowsScheme).forEach(key => {
+      if (!nextProps.fields.hasOwnProperty(key)) {
+        throw new Error(`Please ensure ${key} is defined in
+          AppFormStore#duplicableRowFields.`);
+      }
+    });
+
     this.setState({
       rows: this.getPopulatedRows(nextProps.fields)
     }, this.enforceMinRows);
