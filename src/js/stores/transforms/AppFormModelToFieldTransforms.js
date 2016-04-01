@@ -2,6 +2,18 @@ import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
 import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
 import Util from "../../helpers/Util";
 
+function transformPortDefinitionRows (portDefinitionRows, portField) {
+  return portDefinitionRows.map((row, i) => {
+    row[portField] = row[portField];
+    row.consecutiveKey = i;
+    if (row.labels != null && row.labels["VIP_0"] != null) {
+      row.vip = row.labels["VIP_0"];
+      delete row.labels["VIP_0"];
+    }
+    return row;
+  });
+}
+
 const AppFormModelToFieldTransforms = {
   acceptedResourceRoles: (acceptedResourceRoles) => {
     return acceptedResourceRoles != null
@@ -12,6 +24,9 @@ const AppFormModelToFieldTransforms = {
     return constraints
       .map((constraint) => constraint.join(":"))
       .join(", ");
+  },
+  dockerPortMappings: portMappings => {
+    return transformPortDefinitionRows(portMappings, "containerPort");
   },
   dockerParameters: (parameters) => {
     return parameters
@@ -79,20 +94,7 @@ const AppFormModelToFieldTransforms = {
       });
   },
   portDefinitions: portDefinition => {
-    return portDefinition
-      .map((row, i) => {
-        if (row.containerPort != null) {
-          row.port = row.containerPort;
-        }
-        if (row.labels != null && row.labels["VIP_0"] != null) {
-          row.vip = row.labels["VIP_0"];
-          delete row.labels["VIP_0"];
-        }
-        row.isRandomPort = false;
-        row.consecutiveKey = i;
-
-        return row;
-      });
+    return transformPortDefinitionRows(portDefinition, "port");
   },
   uris: (uris) => uris
     .join(", "),

@@ -12,17 +12,17 @@ import ExternalLinks from "../constants/ExternalLinks";
 
 import Util from "../helpers/Util";
 
-const fieldsetId = "portDefinitions";
+const fieldsetId = "dockerPortMappings";
 
 function isTooComplexStructure(fields, hasVIP = false) {
-  return fields.portDefinitions != null &&
-      fields.portDefinitions.some(portDefinition => {
-        if (!hasVIP && portDefinition.vip != null) {
+  return fields.dockerPortMappings != null &&
+      fields.dockerPortMappings.some(portMapping => {
+        if (!hasVIP && portMapping.vip != null) {
           return true;
         }
 
-        if (portDefinition.labels != null) {
-          let labels = Object.assign({}, portDefinition.labels);
+        if (portMapping.labels != null) {
+          let labels = Object.assign({}, portMapping.labels);
           if (hasVIP) {
             delete labels["VIP_0"];
           }
@@ -33,14 +33,14 @@ function isTooComplexStructure(fields, hasVIP = false) {
     );
 }
 
-var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
-  displayName: "OptionalPortsAndServiceDiscoveryComponent",
+var OptionalDockerPortMappingsComponent = React.createClass({
+  displayName: "OptionalDockerPortMappingsComponent",
 
   mixins: [DuplicableRowsMixin],
 
   duplicableRowsScheme: {
-    portDefinitions: {
-      port: null,
+    dockerPortMappings: {
+      containerPort: null,
       protocol: ContainerConstants.PORTMAPPINGS.PROTOCOL.TCP,
       name: null,
       labels: null,
@@ -49,7 +49,6 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   },
 
   propTypes: {
-    containerType: React.PropTypes.string.isRequired,
     fields: React.PropTypes.object.isRequired,
     getErrorMessage: React.PropTypes.func.isRequired,
     handleModeToggle: React.PropTypes.func.isRequired,
@@ -58,7 +57,6 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
   getDefaultProps: function () {
     return {
-      containerType: ContainerConstants.TYPE.MESOS,
       hasVIP: false
     };
   },
@@ -90,7 +88,6 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
   getHelpText: function () {
     var rows = this.state.rows[fieldsetId];
-    var props = this.props;
 
     if (rows == null) {
       return null;
@@ -102,13 +99,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       .join(", ")
       .replace(/(.*), (.*)$/, "$1 and $2");
 
-    var message = "Configure your application to listen to" +
-      ` ${portIdentifiers} which will be assigned dynamically.`;
-
-    if (props.containerType === ContainerConstants.TYPE.DOCKER) {
-      message = "Configure your Docker container to listen to" +
-        ` ${portIdentifiers} which will be assigned dynamically.`;
-    }
+    var message = `Your Docker container will bind to the requested ports and
+      they will be dynamically mapped to ${portIdentifiers} on the host.`;
 
     return (
       <div>
@@ -131,7 +123,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
 
     var fieldLabel = (
       <span>
-        Port
+        Container Port
         <TooltipComponent className="right"
             message={fieldTooltipMessage}>
           <i className="icon icon-xs help" />
@@ -139,31 +131,18 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       </span>
     );
 
-    var randomPortField = (
-      <FormGroupComponent
-          label={fieldLabel}
-          value={"$PORT" + i}>
-        <input disabled={true} />
-      </FormGroupComponent>
-    );
-
-    let portFieldClassSet = classNames({
-      "hidden": true
-    });
-
     var className = props.hasVIP
       ? "col-sm-3"
       : "col-sm-4";
 
     return (
       <div className={className}>
-        <FormGroupComponent className={portFieldClassSet}
-            fieldId={`${fieldsetId}.${i}.port`}
+        <FormGroupComponent
+            fieldId={`${fieldsetId}.${i}.containerPort`}
             label={fieldLabel}
-            value={row.port}>
-          <input ref={`port${i}`} {...PortInputAttributes} />
+            value={row.containerPort}>
+          <input ref={`containerPort${i}`} {...PortInputAttributes} />
         </FormGroupComponent>
-        {randomPortField}
       </div>
     );
   },
@@ -190,7 +169,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     );
   },
 
-  getPortDefinitionRow: function (row, i, disableRemoveButton = false) {
+  getPortMappingRow: function (row, i, disableRemoveButton = false) {
     var props = this.props;
     var error = this.getError(fieldsetId, row.consecutiveKey);
     var getErrorMessage = props.getErrorMessage;
@@ -253,20 +232,8 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     );
   },
 
-  getSwitchToJSONModeLink: function () {
-    return (
-      <p>
-        For more advanced port configuration options, including service ports,
-        use <a className="json-link clickable"
-            onClick={this.props.handleModeToggle}>
-          JSON mode
-        </a>.
-      </p>
-    );
-  },
-
-  getPortDefinitionRows: function () {
-    var rows = this.state.rows[fieldsetId];
+  getPortMappingRows: function () {
+    let rows = this.state.rows[fieldsetId];
 
     if (rows == null) {
       return null;
@@ -276,13 +243,24 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
       ["protocol"]);
 
     return rows.map((row, i) => {
-      return this.getPortDefinitionRow(row, i, disableRemoveButton);
+      return this.getPortMappingRow(row, i, disableRemoveButton);
     });
+  },
+
+  getSwitchToJSONModeLink: function () {
+    return (
+      <p>
+        For more advanced port configuration options, including service ports,
+        use <a className="json-link clickable"
+        onClick={this.props.handleModeToggle}>
+        JSON mode
+      </a>.
+      </p>
+    );
   },
 
   render: function () {
     var props = this.props;
-
     if (isTooComplexStructure(props.fields, props.hasVIP)) {
       return this.getSwitchToJSONModeLink();
     }
@@ -290,7 +268,7 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
     return (
       <div>
         <div className="duplicable-list">
-          {this.getPortDefinitionRows()}
+          {this.getPortMappingRows()}
         </div>
         {this.getGeneralErrorBlock(fieldsetId)}
         {this.getHelpText()}
@@ -299,4 +277,4 @@ var OptionalPortsAndServiceDiscoveryComponent = React.createClass({
   }
 });
 
-export default OptionalPortsAndServiceDiscoveryComponent;
+export default OptionalDockerPortMappingsComponent;

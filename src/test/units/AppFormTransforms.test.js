@@ -133,6 +133,134 @@ describe("App Form Field to Model Transform", function () {
       ])).to.deep.equal([]);
     });
 
+    describe("dockerPortMappings", function () {
+      it("to the equivalent container.docker.portMappings", function () {
+        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+          {
+            consecutiveKey: 1,
+            containerPort: 0,
+            protocol: "tcp",
+            name: "testport",
+            vip: null
+          }
+        ])).to.deep.equal([
+          {
+            containerPort: 0,
+            protocol: "tcp",
+            name: "testport"
+          }
+        ]);
+      });
+
+      it("preserving labels", function () {
+        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+          {
+            consecutiveKey: 1,
+            containerPort: 8000,
+            protocol: "tcp",
+            labels: {"testlabel": "testvalue"},
+            name: "testport",
+            vip: null
+          }
+        ])).to.deep.equal([
+          {
+            containerPort: 8000,
+            protocol: "tcp",
+            labels: {"testlabel": "testvalue"},
+            name: "testport"
+          }
+        ]);
+      });
+
+      it("preserving unknown keys", function () {
+        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+          {
+            containerPort: 8080,
+            label: {},
+            consecutiveKey: 1
+          }
+        ])).to.deep.equal([
+          {
+            containerPort: 8080,
+            label: {}
+          }
+        ]);
+      });
+
+      it("setting the right default value for port", function () {
+        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+          {
+            consecutiveKey: 2,
+            protocol: "tcp"
+          }
+        ])).to.deep.equal([
+          {
+            containerPort: 0,
+            protocol: "tcp"
+          }
+        ]);
+
+        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+          {
+            consecutiveKey: 3,
+            protocol: "tcp",
+            containerPort: null
+          }
+        ])).to.deep.equal([
+          {
+            containerPort: 0,
+            protocol: "tcp"
+          }
+        ]);
+      });
+
+      it("setting the right default value for name", function () {
+        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+          {
+            consecutiveKey: 2,
+            name: "",
+            protocol: "tcp"
+          }
+        ])).to.deep.equal([
+          {
+            name: null,
+            containerPort: 0,
+            protocol: "tcp"
+          }
+        ]);
+      });
+
+      it("to a cleaned array of multiple objects", function () {
+        expect(AppFormTransforms.FieldToModel.dockerPortMappings([
+          {
+            consecutiveKey: 1,
+            containerPort: 0,
+            protocol: "tcp",
+            name: "testport",
+            label: {}
+          },
+          {
+            consecutiveKey: 2,
+            containerPort: 0,
+            protocol: "udp",
+            name: "testport2"
+          }
+        ])).to.deep.equal([
+          {
+            containerPort: 0,
+            protocol: "tcp",
+            name: "testport",
+            label: {}
+          },
+          {
+            containerPort: 0,
+            protocol: "udp",
+            name: "testport2"
+          }
+        ]);
+      });
+    });
+
     it("dockerPrivileged is checked", function () {
       expect(AppFormTransforms.FieldToModel.dockerPrivileged(true))
         .to.be.true;
@@ -215,15 +343,15 @@ describe("App Form Field to Model Transform", function () {
         .to.deep.equal([]);
     });
 
-    describe("portDefinitions", function () {
-      it("tansforms to cleaned array of one object", function () {
+    describe("portDefinitions rows", function () {
+      it("to the equivalent portDefinitions on the model", function () {
         expect(AppFormTransforms.FieldToModel.portDefinitions([
           {
             consecutiveKey: 1,
-            isRandomPort: false,
             port: 8000,
             protocol: "tcp",
-            name: "testport"
+            name: "testport",
+            vip: null
           }
         ])).to.deep.equal([
           {
@@ -234,7 +362,27 @@ describe("App Form Field to Model Transform", function () {
         ]);
       });
 
-      it("preserves unknown keys", function () {
+      it("preserving labels", function () {
+        expect(AppFormTransforms.FieldToModel.portDefinitions([
+          {
+            consecutiveKey: 1,
+            port: 8000,
+            protocol: "tcp",
+            labels: {"testlabel": "testvalue"},
+            name: "testport",
+            vip: null
+          }
+        ])).to.deep.equal([
+          {
+            port: 8000,
+            protocol: "tcp",
+            labels: {"testlabel": "testvalue"},
+            name: "testport"
+          }
+        ]);
+      });
+
+      it("preserving unknown keys", function () {
         expect(AppFormTransforms.FieldToModel.portDefinitions([
           {
             port: 8080,
@@ -249,13 +397,24 @@ describe("App Form Field to Model Transform", function () {
         ]);
       });
 
-      it("set 0 port if isRandomPort true", function () {
+      it("setting the right default value for port", function () {
         expect(AppFormTransforms.FieldToModel.portDefinitions([
           {
             consecutiveKey: 2,
-            isRandomPort: true,
-            port: 8000,
             protocol: "tcp"
+          }
+        ])).to.deep.equal([
+          {
+            port: 0,
+            protocol: "tcp"
+          }
+        ]);
+
+        expect(AppFormTransforms.FieldToModel.portDefinitions([
+          {
+            consecutiveKey: 3,
+            protocol: "tcp",
+            port: null
           }
         ])).to.deep.equal([
           {
@@ -265,41 +424,40 @@ describe("App Form Field to Model Transform", function () {
         ]);
       });
 
-      it("set 0 port if no port is given", function () {
+      it("setting the right default value for name", function () {
         expect(AppFormTransforms.FieldToModel.portDefinitions([
           {
             consecutiveKey: 2,
-            isRandomPort: false,
+            name: "",
             protocol: "tcp"
           }
         ])).to.deep.equal([
           {
+            name: null,
             port: 0,
             protocol: "tcp"
           }
         ]);
       });
 
-      it("transforms to cleaned array of multiple objects", function () {
+      it("to a cleaned array of multiple objects", function () {
         expect(AppFormTransforms.FieldToModel.portDefinitions([
           {
             consecutiveKey: 1,
-            isRandomPort: false,
-            port: 8000,
+            port: 0,
             protocol: "tcp",
             name: "testport",
             label: {}
           },
           {
             consecutiveKey: 2,
-            isRandomPort: true,
-            port: 8001,
+            port: 0,
             protocol: "udp",
             name: "testport2"
           }
         ])).to.deep.equal([
           {
-            port: 8000,
+            port: 0,
             protocol: "tcp",
             name: "testport",
             label: {}
@@ -337,7 +495,7 @@ describe("App Form Model To Field Transform", function () {
     });
 
     describe("portDefinitions", function () {
-      it("to array with consecutiveKey and isRandomPort", function () {
+      it("to array with consecutiveKey", function () {
         expect(AppFormTransforms.ModelToField.portDefinitions([
           {
             port: 1,
@@ -355,19 +513,16 @@ describe("App Form Model To Field Transform", function () {
         ])).to.deep.equal([
           {
             consecutiveKey: 0,
-            isRandomPort: false,
             port: 1,
             protocol: "tcp"
           },
           {
             consecutiveKey: 1,
-            isRandomPort: false,
             port: 2,
             protocol: "udp"
           },
           {
             consecutiveKey: 2,
-            isRandomPort: false,
             port: 3,
             servicePort: 3,
             protocol: "tcp"
@@ -388,7 +543,6 @@ describe("App Form Model To Field Transform", function () {
         ])).to.deep.equal([
           {
             consecutiveKey: 0,
-            isRandomPort: false,
             port: 1,
             hostPort: 8,
             servicePort: 5,
@@ -399,22 +553,6 @@ describe("App Form Model To Field Transform", function () {
         ]);
       });
 
-      it("copies containerPort to port", function () {
-        expect(AppFormTransforms.ModelToField.portDefinitions([
-          {
-            containerPort: 1,
-            protocol: "tcp"
-          }
-        ])).to.deep.equal([
-          {
-            consecutiveKey: 0,
-            isRandomPort: false,
-            containerPort: 1,
-            port: 1,
-            protocol: "tcp"
-          }
-        ]);
-      });
     });
 
     it("dockerParameters to array with consecutiveKey", function () {
@@ -425,6 +563,67 @@ describe("App Form Model To Field Transform", function () {
         {key: "key1", value: "value1", consecutiveKey: 0},
         {key: "key2", value: "value2", consecutiveKey: 1}
       ]);
+    });
+
+    describe("dockerPortMappings", function () {
+      it("to array with consecutiveKey", function () {
+        expect(AppFormTransforms.ModelToField.dockerPortMappings([
+          {
+            containerPort: 1,
+            protocol: "tcp"
+          },
+          {
+            containerPort: 2,
+            protocol: "udp"
+          },
+          {
+            containerPort: 3,
+            servicePort: 3,
+            protocol: "tcp"
+          }
+        ])).to.deep.equal([
+          {
+            consecutiveKey: 0,
+            containerPort: 1,
+            protocol: "tcp"
+          },
+          {
+            consecutiveKey: 1,
+            containerPort: 2,
+            protocol: "udp"
+          },
+          {
+            consecutiveKey: 2,
+            containerPort: 3,
+            servicePort: 3,
+            protocol: "tcp"
+          }
+        ]);
+      });
+
+      it("preserves unknown keys", function () {
+        expect(AppFormTransforms.ModelToField.dockerPortMappings([
+          {
+            containerPort: 1,
+            hostPort: 8,
+            servicePort: 5,
+            protocol: "tcp",
+            name: "testport",
+            label: {}
+          }
+        ])).to.deep.equal([
+          {
+            consecutiveKey: 0,
+            containerPort: 1,
+            hostPort: 8,
+            servicePort: 5,
+            protocol: "tcp",
+            name: "testport",
+            label: {}
+          }
+        ]);
+      });
+
     });
 
     it("containerVolumes to array with consecutiveKey", function () {

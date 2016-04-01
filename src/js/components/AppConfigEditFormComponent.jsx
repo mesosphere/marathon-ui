@@ -6,6 +6,7 @@ import AppsEvents from "../events/AppsEvents";
 import AppFormErrorMessages from "../constants/AppFormErrorMessages";
 import AppFormStore from "../stores/AppFormStore";
 import AppsStore from "../stores/AppsStore";
+import ContainerConstants from "../constants/ContainerConstants";
 import ContainerSettingsComponent
   from "../components/ContainerSettingsComponent";
 import ContentComponent from "../components/ContentComponent";
@@ -15,6 +16,8 @@ import FormGroupComponent from "../components/FormGroupComponent";
 import HealthChecksComponent from "../components/HealthChecksComponent";
 import MenuComponent from "../components/MenuComponent";
 import MenuItemComponent from "../components/MenuItemComponent";
+import OptionalDockerPortMappingsComponent
+  from "../components/OptionalDockerPortMappingsComponent";
 import OptionalEnvironmentComponent
   from "../components/OptionalEnviromentComponent";
 import OptionalLabelsComponent from "../components/OptionalLabelsComponent";
@@ -176,6 +179,39 @@ var AppConfigEditFormComponent = React.createClass({
     this.onMenuChange("volumes");
   },
 
+  setViewPorts: function () {
+    this.onMenuChange("ports");
+  },
+
+  getOptionalPortsComponent: function () {
+    var state = this.state;
+
+    if (state.fields.dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
+      return (
+        <OptionalDockerPortMappingsComponent
+          errorIndices={state.errorIndices}
+          fields={state.fields}
+          getErrorMessage={this.getErrorMessage}
+          handleModeToggle={this.props.handleModeToggle}
+          hasVIP={this.hasVIP()} />
+      );
+    }
+
+    const type = state.fields.dockerNetwork === ContainerConstants.NETWORK.HOST
+      ? ContainerConstants.TYPE.DOCKER
+      : ContainerConstants.TYPE.MESOS;
+
+    return (
+      <OptionalPortsAndServiceDiscoveryComponent
+        containerType={type}
+        errorIndices={state.errorIndices}
+        fields={state.fields}
+        getErrorMessage={this.getErrorMessage}
+        handleModeToggle={this.props.handleModeToggle}
+        hasVIP={this.hasVIP()} />
+    );
+  },
+
   getPortsPanelTitle: function () {
     var title = "Ports";
 
@@ -327,15 +363,11 @@ var AppConfigEditFormComponent = React.createClass({
               errorIndices={state.errorIndices}
               fields={state.fields}
               getErrorMessage={this.getErrorMessage}
+              openPorts={this.setViewPorts}
               openVolumes={this.setViewVolumes}/>
           </SectionComponent>
           <SectionComponent sectionId="ports">
-            <OptionalPortsAndServiceDiscoveryComponent
-              errorIndices={state.errorIndices}
-              fields={state.fields}
-              getErrorMessage={this.getErrorMessage}
-              handleModeToggle={this.props.handleModeToggle}
-              hasVIP={this.hasVIP()} />
+            {this.getOptionalPortsComponent()}
           </SectionComponent>
           <SectionComponent sectionId="env">
             <OptionalEnvironmentComponent

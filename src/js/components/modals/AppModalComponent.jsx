@@ -152,14 +152,10 @@ var AppModalComponent = React.createClass({
       return null;
     }
 
-    if (this.state.jsonMode && !Util.isString(error)) {
+    if (Util.isObject(error)) {
       error = Object.keys(error).map(key => {
         return `${key}: ${error[key]}`;
       });
-    }
-
-    if (!this.state.jsonMode && Util.isObject(error)) {
-      error = AppFormErrorMessages.getGeneralMessage("general");
     }
 
     if (Util.isArray(error)) {
@@ -280,6 +276,7 @@ var AppModalComponent = React.createClass({
             style={{display: "none"}} />
           <div className="modal-header">
             <input id="json-toggle" type="checkbox" name="checkbox"
+              checked={state.jsonMode}
               className="toggle" onChange={this.onJSONToggleChange} />
             <label htmlFor="json-toggle">JSON Mode</label>
             <h2 className="modal-title">
