@@ -276,6 +276,7 @@ var AppModalComponent = React.createClass({
             style={{display: "none"}} />
           <div className="modal-header">
             <input id="json-toggle" type="checkbox" name="checkbox"
+              checked={state.jsonMode}
               className="toggle" onChange={this.onJSONToggleChange} />
             <label htmlFor="json-toggle">JSON Mode</label>
             <h2 className="modal-title">
