@@ -58,6 +58,13 @@ const AppFormModelPostProcess = {
       if (Util.isStringAndEmpty(app.cmd)) {
         app.cmd = null;
       }
+
+      if (app.container != null &&
+          app.container.type === ContainerConstants.TYPE.DOCKER &&
+          app.container.docker.network == null) {
+        Util.objectPathSet(app, "container.docker.network",
+          ContainerConstants.NETWORK.HOST);
+      }
     }
   },
   fetch: (app) => {

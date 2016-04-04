@@ -3,7 +3,9 @@
 - \#3552 - Editing an App: Switching between JSON and normal Editor
   produces a broken UX
 - \#3564 - Add link to Docker section for Ports
-- 
+- \#3519 - The default Docker network should be host
+- \#3587 - Not specifying "network" config causes mesos to thrash
+
 ### Changed
 - \#3426 - Improve ports validation
 - \#3559 - Create Modal: always show Port Index for host ports
