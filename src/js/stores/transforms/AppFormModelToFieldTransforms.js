@@ -2,7 +2,7 @@ import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
 import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
 import Util from "../../helpers/Util";
 
-function transformPortDefinitionRows (portDefinitionRows, portField) {
+function transformPortDefinitionRows(portDefinitionRows, portField) {
   return portDefinitionRows.map((row, i) => {
     row[portField] = row[portField];
     row.consecutiveKey = i;
