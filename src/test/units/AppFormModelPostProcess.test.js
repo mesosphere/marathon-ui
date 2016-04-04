@@ -71,6 +71,39 @@ describe("App Form Model Post Process", function () {
       expect(app.cmd).to.equal(null);
     });
 
+    it("sets network mode to HOST when not specified", function () {
+      var app = {
+        container: {
+          docker: {
+            image: "group/image"
+          },
+          type: "DOCKER"
+        }
+      };
+      var app2 = Object.assign({}, app);
+      AppFormModelPostProcess.container(app2);
+
+      expect(app2.container.docker.network)
+        .to.equal(ContainerConstants.NETWORK.HOST);
+    });
+
+    it("sets network mode to HOST when nothing is selected", function () {
+      var app = {
+        container: {
+          docker: {
+            image: "group/image",
+            network: ContainerConstants.NETWORK.BRIDGE
+          },
+          type: "DOCKER"
+        }
+      };
+      var app2 = Object.assign({}, app);
+      AppFormModelPostProcess.container(app2);
+
+      expect(app2.container.docker.network)
+        .to.equal(ContainerConstants.NETWORK.BRIDGE);
+    });
+
   });
 
   describe("health checks", function () {
