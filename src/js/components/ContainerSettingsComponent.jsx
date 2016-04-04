@@ -137,7 +137,6 @@ var ContainerSettingsComponent = React.createClass({
                 value={props.fields[fieldIds.dockerNetwork]}
                 onChange={this.handleSingleFieldUpdate}>
               <select defaultValue="">
-                <option value="">Select</option>
                 <option value={ContainerConstants.NETWORK.HOST}>
                   Host
                 </option>
