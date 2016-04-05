@@ -399,6 +399,7 @@ var AppListComponent = React.createClass({
             title="No Applications Created"
             message={message}>
           <Link className="btn btn-lg btn-success"
+              activeClassName=""
               to={path}
               query={newAppModalQuery}>
             Create Application

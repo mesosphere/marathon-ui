@@ -10,6 +10,7 @@
 - \#3426 - Improve ports validation
 - \#3559 - Create Modal: always show Port Index for host ports
 - \#3424 - Maintain "assign random port" settings after JSON mode switch
+- \#3554 - Remove unncessary active class
 
 ### Added
 - VIP labels in port definitions
