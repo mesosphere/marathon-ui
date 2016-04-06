@@ -27,6 +27,10 @@ const applicationFieldValidationErrors = Util.deepFreeze({
     "Container Path must be a valid path",
     "Container Path and Size must be set"
   ],
+  networkVolumes: [
+    "Volume Name must be a valid name",
+    "Container Path must be a valid path"
+  ],
   cpus: ["CPUs must be a number greater than or equal to 0.01"],
   disk: ["Disk Space must be a non-negative number"],
   dockerImage: ["Image cannot contain whitespaces"],
