@@ -5,7 +5,7 @@ const deploymentScheme = {
   currentStep: null,
   currentActions: [],
   id: null,
-  steps: {},
+  steps: [],
   totalSteps: null,
   version: null
 };
