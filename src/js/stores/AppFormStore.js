@@ -23,6 +23,7 @@ const storeData = {
 const duplicableRowFields = Object.freeze([
   "containerVolumes",
   "localVolumes",
+  "networkVolumes",
   "dockerParameters",
   "dockerPortMappings",
   "env",
@@ -99,6 +100,7 @@ const resolveFieldIdToAppKeyMap = {
   constraints: "constraints",
   containerVolumes: "container.volumes",
   localVolumes: "container.volumes",
+  networkVolumes: "container.volumes",
   cpus: "cpus",
   disk: "disk",
   dockerForcePullImage: "container.docker.forcePullImage",
@@ -199,7 +201,8 @@ const resolveAppKeyToFieldIdMap = {
   "container.docker.privileged": ["dockerPrivileged"],
   "container.volumes": [
     "containerVolumes",
-    "localVolumes"
+    "localVolumes",
+    "networkVolumes"
   ]
 };
 

@@ -53,6 +53,16 @@ const AppFormModelToFieldTransforms = {
         return row;
       });
   },
+  networkVolumes: (volumes) => {
+    return volumes
+      .filter(row => row.external != null)
+      .map((row, i) => {
+        row.networkName = row.external.name;
+        row.consecutiveKey = i;
+        delete row.external;
+        return row;
+      });
+  },
   env: (rows) => {
     return Object.keys(rows)
       .map((rowKey, i) => {

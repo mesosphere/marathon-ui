@@ -93,6 +93,24 @@ const AppFormFieldToModelTransforms = {
       });
     return rows;
   },
+  networkVolumes: rows => {
+    rows = rows.filter(row => {
+      return ["containerPath", "networkName"].every(key => {
+        return row[key] != null && row[key] !== "";
+      });
+    })
+      .map(row => {
+        return {
+          containerPath: row.containerPath,
+          external: {
+            name: row.networkName,
+            driver: "rexray"
+          },
+          mode: "RW"
+        };
+      });
+    return rows;
+  },
   dockerForcePullImage: (isChecked) => !!isChecked,
   dockerParameters: (rows) => lazy(rows)
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))
