@@ -57,6 +57,10 @@ const validationRules = {
     AppFormValidators.localVolumesPath,
     AppFormValidators.localVolumesIsNotEmpty
   ],
+  "networkVolumes": [
+    AppFormValidators.networkVolumesName,
+    AppFormValidators.networkVolumesPath
+  ],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
   "dockerImage": [AppFormValidators.dockerImageNoWhitespaces],
