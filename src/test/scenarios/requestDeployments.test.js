@@ -60,4 +60,39 @@ describe("request deployments", function () {
 
     DeploymentActions.requestDeployments();
   });
+
+  describe("during a scheduler upgrade", function () {
+
+    beforeEach(function (done) {
+      var groupsResponse = {
+        id: "/",
+        groups: [],
+        apps: [Object.assign({}, appScheme, {
+          id: "/app1",
+          labels: {
+            "DCOS_MIGRATION_API_PATH": "/v1/plan",
+            "DCOS_MIGRATION_API_VERSION": "v1"
+          }
+        })]
+      };
+
+      nock(config.apiURL)
+        .get("/v2/groups")
+        .once()
+        .query(true)
+        .reply(200, groupsResponse);
+
+      DeploymentStore.once(DeploymentEvents.CHANGE, done);
+      AppsActions.requestApps();
+    });
+
+    it("detects a deployment waiting for user decision", function () {
+      var deployments = DeploymentStore.deployments;
+      expect(deployments).to.have.length(3);
+
+      var actions = deployments[1].currentActions;
+      expect(actions).to.have.length(1);
+      expect(actions[0].isWaitingForUserDecision).to.be.true;
+    });
+  });
 });
