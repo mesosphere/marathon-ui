@@ -5,9 +5,14 @@ import expectAsync from "./../helpers/expectAsync";
 
 import config from "../../js/config/config";
 
+import appScheme from "../../js/stores/schemes/appScheme";
 import DeploymentActions from "../../js/actions/DeploymentActions";
 import DeploymentEvents from "../../js/events/DeploymentEvents";
 import DeploymentStore from "../../js/stores/DeploymentStore";
+import AppsActions from "../../js/actions/AppsActions";
+
+var server = config.localTestserverURI;
+config.apiURL = "http://" + server.address + ":" + server.port + "/";
 
 describe("request deployments", function () {
 
@@ -15,8 +20,25 @@ describe("request deployments", function () {
     var nockResponse = [{
       id: "deployment-1",
       affectedApps: ["app1", "app2"],
-      currentActions: ["ScaleApplication"]
-    }, {}, {}];
+      currentActions: [{action: "ScaleApplication"}]
+    }, {
+      id: "deployment-2",
+      affectedApps: ["/app1"],
+      currentActions: [{
+        action: "ScaleApplication",
+        app: "/app1",
+        readinessCheckResults: [{
+          lastResponse: {
+            body: "{\"errors\":[],\"phases\":[{\"blocks\":[{\"has_decision_point\":true,\"id\":\"block1\",\"message\":\"block1\",\"name\":\"block1\",\"status\":\"Waiting\"},{\"has_decision_point\":true,\"id\":\"block2\",\"message\":\"block2\",\"name\":\"block2\",\"status\":\"Pending\"},{\"has_decision_point\":true,\"id\":\"block3\",\"message\":\"block3\",\"name\":\"block3\",\"status\":\"Pending\"}],\"id\":\"phase\",\"name\":\"phase\",\"status\":\"Waiting\"},{\"blocks\":[{\"has_decision_point\":false,\"id\":\"block4\",\"message\":\"block4\",\"name\":\"block4\",\"status\":\"Pending\"},{\"has_decision_point\":false,\"id\":\"block5\",\"message\":\"block5\",\"name\":\"block5\",\"status\":\"Pending\"},{\"has_decision_point\":true,\"id\":\"block99\",\"message\":\"block99\",\"name\":\"block99\",\"status\":\"Pending\"}],\"id\":\"phase1\",\"name\":\"phase1\",\"status\":\"Pending\"}],\"status\":\"Waiting\"}",
+            contentType: "application/json",
+            status: 500
+          },
+          name: "myReadyCheck",
+          ready: false,
+          taskId: "foo.00b77cf0-f71f-11e5-9ea2-e24449f9e499"
+        }]
+      }]
+    }, {}];
 
     nock(config.apiURL)
       .get("/v2/deployments")
@@ -28,8 +50,8 @@ describe("request deployments", function () {
 
   it("updates the DeploymentStore on success", function () {
     expect(DeploymentStore.deployments).to.have.length(3);
-    expect(DeploymentStore.deployments[1].currentActions).to.be.empty;
-    expect(DeploymentStore.deployments[1].currentActionsString).to.equal("");
+    expect(DeploymentStore.deployments[2].currentActions).to.be.empty;
+    expect(DeploymentStore.deployments[2].currentActionsString).to.equal("");
   });
 
   it("handles failure gracefully", function (done) {

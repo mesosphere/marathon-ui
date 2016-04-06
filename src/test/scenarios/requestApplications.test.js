@@ -342,7 +342,7 @@ describe("on single app request", function () {
   it("updates the AppsStore on success", function (done) {
     nock(config.apiURL)
       .get("/v2/apps//single-app")
-      .query({embed: "app.taskStats"})
+      .query(true)
       .reply(200, {
         "app": {
           "id": "/single-app"
@@ -362,7 +362,7 @@ describe("on single app request", function () {
   it("has the correct app status (running)", function (done) {
     nock(config.apiURL)
       .get("/v2/apps//single-app")
-      .query({embed: "app.taskStats"})
+      .query(true)
       .reply(200, {
         "app": {
           "id": "/single-app",
@@ -383,7 +383,7 @@ describe("on single app request", function () {
   it("has the correct app status (deploying)", function (done) {
     nock(config.apiURL)
       .get("/v2/apps//single-app")
-      .query({embed: "app.taskStats"})
+      .query(true)
       .reply(200, {
         "app": {
           "id": "/single-app",
@@ -403,7 +403,7 @@ describe("on single app request", function () {
   it("has the correct app status (suspended)", function (done) {
     nock(config.apiURL)
       .get("/v2/apps//single-app")
-      .query({embed: "app.taskStats"})
+      .query(true)
       .reply(200, {
         "app": {
           "id": "/single-app"

@@ -155,7 +155,7 @@ describe("TaskDetailComponent", function () {
 
       nock(config.apiURL)
         .get("/v2/apps//app-1")
-        .query({embed: "app.taskStats"})
+        .query(true)
         .reply(200, nockResponse);
 
       AppsStore.once(AppsEvents.CHANGE, () => {

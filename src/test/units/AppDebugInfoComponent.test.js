@@ -60,7 +60,7 @@ describe("App debug info component", function () {
 
       nock(config.apiURL)
         .get("/v2/apps//python")
-        .query({embed: "app.taskStats"})
+        .query(true)
         .reply(200, {
           app: app
         });
@@ -104,7 +104,7 @@ describe("App debug info component", function () {
 
       nock(config.apiURL)
         .get("/v2/apps//python")
-        .query({embed: "app.taskStats"})
+        .query(true)
         .reply(200, {
           app: app
         });
@@ -132,7 +132,7 @@ describe("App debug info component", function () {
 
       nock(config.apiURL)
         .get("/v2/apps//python")
-        .query({embed: "app.taskStats"})
+        .query(true)
         .reply(200, {
           app: app
         });
@@ -163,7 +163,7 @@ describe("App debug info component", function () {
 
       nock(config.apiURL)
         .get("/v2/apps//app-1")
-        .query({embed: "app.taskStats"})
+        .query(true)
         .reply(200, {
           app: app
         });
