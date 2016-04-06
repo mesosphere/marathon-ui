@@ -54,7 +54,7 @@ describe("AppPageComponent", function () {
 
     nock(config.apiURL)
       .get("/v2/apps//test-app-1")
-      .query({embed: "app.taskStats"})
+      .query(true)
       .reply(200, {
         app: app
       });

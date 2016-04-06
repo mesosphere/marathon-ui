@@ -61,6 +61,26 @@ var DeploymentActions = {
         });
       });
   },
+  continueMigration: function (service, path, appId) {
+    this.request({
+      method: "POST",
+      url: `${config.apiURL}services/${service}/${path}/continue`
+    })
+      .success(function (response) {
+        AppDispatcher.dispatch({
+          actionType: DeploymentEvents.CONTINUE_MIGRATION_SUCCESS,
+          data: response,
+          appId: appId
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: DeploymentEvents.CONTINUE_MIGRATION_ERROR,
+          data: error,
+          appId: appId
+        });
+      });
+  },
   request: ajaxWrapper
 };
 

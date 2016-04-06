@@ -8,7 +8,8 @@ import AppsEvents from "../events/AppsEvents";
 var AppsActions = {
   requestApps: function () {
     const embed = "embed=group.groups&embed=group.apps&" +
-      "embed=group.apps.deployments&embed=group.apps.counts";
+      "embed=group.apps.deployments&embed=group.apps.counts&" +
+      "embed=group.apps.readiness";
     this.request({
       url: `${config.apiURL}v2/groups?${embed}`
     })
@@ -27,7 +28,8 @@ var AppsActions = {
   },
   requestApp: function (appId) {
     this.request({
-      url: `${config.apiURL}v2/apps/${appId}?embed=app.taskStats`
+      url: `${config.apiURL}v2/apps/${appId}?embed=app.taskStats&` +
+      `embed=app.readiness`
     })
       .success(function (app) {
         AppDispatcher.dispatch({

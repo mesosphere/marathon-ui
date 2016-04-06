@@ -15,7 +15,7 @@ describe("revert (rollback) deployment", function () {
     var nockResponse = [{
       id: "deployment-1",
       affectedApps: ["app1", "app2"],
-      currentActions: ["ScaleApplication"]
+      currentActions: [{action: "ScaleApplication"}]
     }, {}, {}];
 
     nock(config.apiURL)

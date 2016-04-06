@@ -68,4 +68,32 @@ describe("Deployment component", function () {
     expect(buttons.first().text()).to.equal("Stop");
     expect(buttons.at(1).text()).to.equal("Rollback");
   });
+
+  describe("during a scheduler upgrade", function () {
+    var model = {
+      id: "123",
+      version: "v1",
+      affectedApps: [],
+      currentActions: [{
+        app: "app1",
+        action: "action1",
+        isWaitingForUserAction: true
+      }],
+      currentStep: 2,
+      totalSteps: 2
+    };
+
+    before(function () {
+      this.component = shallow(<DeploymentComponent model={model} />);
+    });
+
+    it("renders the continue button correctly", function () {
+      var button = this.component
+        .find("td")
+        .at(2)
+        .find("button");
+
+      expect(button.text()).to.equal("Continue");
+    });
+  });
 });

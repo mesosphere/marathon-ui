@@ -15,6 +15,7 @@
 
 ### Added
 - VIP labels in port definitions
+-\#3670 - Add support for scheduler upgrades and readinessChecks
 
 ## 1.0.0 - 2016-03-23
 ### Fixed
