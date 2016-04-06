@@ -2,7 +2,10 @@ import classNames from "classnames";
 import {Link} from "react-router";
 import React from "react/addons";
 
+import AppsStore from "../stores/AppsStore";
+import DeploymentStore from "../stores/DeploymentStore";
 import DeploymentActions from "../actions/DeploymentActions";
+import DeploymentEvents from "../events/DeploymentEvents";
 import DialogActions from "../actions/DialogActions";
 import DialogStore from "../stores/DialogStore";
 import DialogSeverity from "../constants/DialogSeverity";
@@ -16,8 +19,73 @@ var DeploymentComponent = React.createClass({
 
   getInitialState: function () {
     return {
-      loading: false
+      loading: false,
+      continueButtonsLoadingState: {}
     };
+  },
+
+  componentWillMount: function () {
+    DeploymentStore.on(DeploymentEvents.CONTINUE_MIGRATION_SUCCESS,
+      this.onContinueMigrationSuccess);
+    DeploymentStore.on(DeploymentEvents.CONTINUE_MIGRATION_ERROR,
+      this.onContinueMigrationError);
+  },
+
+  componentWillUnmount: function () {
+    DeploymentStore.removeListener(DeploymentEvents.CONTINUE_MIGRATION_SUCCESS,
+      this.onContinueMigrationSuccess);
+    DeploymentStore.removeListener(DeploymentEvents.CONTINUE_MIGRATION_ERROR,
+      this.onContinueMigrationError);
+  },
+
+  getContinueButton: function (action) {
+    if (action.isWaitingForUserDecision === true) {
+      let continueButtonClasses = classNames("btn btn-xs btn-success", {
+        disabled: !!this.state.continueButtonsLoadingState[action.app]
+      });
+      return (
+        <button onClick={this.handleContinueMigration.bind(this, action.app)}
+          className={continueButtonClasses}>
+          Continue
+        </button>
+      );
+    }
+
+    return null;
+  },
+
+  handleContinueMigration: function (appId, event) {
+    event.preventDefault();
+    var app = AppsStore.getCurrentApp(appId);
+    var labels = app.labels;
+    var service = null;
+    var path = null;
+
+    if (labels != null) {
+      service = labels["DCOS_PACKAGE_FRAMEWORK_NAME"];
+      path = labels["DCOS_MIGRATION_API_PATH"];
+    }
+
+    if (service == null || service === "" ||
+        path == null || path === "") {
+      DialogActions.alert({
+        title: `Error: missing labels`,
+        message: `The application ${appId} lacks the required labels ` +
+        `"DCOS_PACKAGE_FRAMEWORK_NAME" and "DCOS_MIGRATION_API_PATH".`,
+        severity: DialogSeverity.DANGER
+      });
+      return;
+    }
+
+    let continueButtonsLoadingState = Object.assign({},
+      this.state.continueButtonsLoadingState);
+    continueButtonsLoadingState[appId] = true;
+
+    this.setState({
+      continueButtonsLoadingState
+    }, function () {
+      DeploymentActions.continueMigration(service, path, app.id);
+    });
   },
 
   handleRevertDeployment: function () {
@@ -81,6 +149,35 @@ var DeploymentComponent = React.createClass({
     }
   },
 
+  onContinueMigrationSuccess: function (response, appId) {
+    var continueButtonsLoadingState = Object.assign({},
+      this.state.continueButtonsLoadingState);
+    continueButtonsLoadingState[appId] = false;
+    this.setState({
+      continueButtonsLoadingState
+    }, function () {
+      DialogActions.alert({
+        title: "Continue Migration",
+        message: `Received command continue successfully for ${appId}`
+      });
+    });
+  },
+
+  onContinueMigrationError: function (error, status, appId) {
+    var continueButtonsLoadingState = Object.assign({},
+      this.state.continueButtonsLoadingState);
+    continueButtonsLoadingState[appId] = false;
+    this.setState({
+      continueButtonsLoadingState
+    }, function () {
+      DialogActions.alert({
+        title: `${status} Error`,
+        message: `There was an error sending the continue action for ${appId}`,
+        severity: DialogSeverity.DANGER
+      });
+    });
+  },
+
   render: function () {
     var model = this.props.model;
 
@@ -98,7 +195,7 @@ var DeploymentComponent = React.createClass({
           {model.id}
         </td>
         <td>
-          <ul className="list-unstyled">
+          <ul className="list-unstyled actions">
             {model.currentActions.map(function (action) {
               let appId = encodeURIComponent(action.app);
               return (
@@ -110,9 +207,14 @@ var DeploymentComponent = React.createClass({
           </ul>
         </td>
         <td>
-          <ul className="list-unstyled">
-            {model.currentActions.map(function (action) {
-              return <li key={action.app}>{action.action}</li>;
+          <ul className="list-unstyled actions">
+            {model.currentActions.map(action => {
+              return (
+                <li key={action.app}>
+                  <span>{action.action}</span>
+                  {this.getContinueButton(action)}
+                </li>
+              );
             })}
           </ul>
         </td>

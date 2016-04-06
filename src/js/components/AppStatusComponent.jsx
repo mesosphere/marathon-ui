@@ -13,7 +13,8 @@ var statusClassNameMapping = {
   [AppStatus.DEPLOYING]: "deploying",
   [AppStatus.SUSPENDED]: "suspended",
   [AppStatus.DELAYED]: "delayed",
-  [AppStatus.WAITING]: "waiting"
+  [AppStatus.WAITING]: "waiting",
+  [AppStatus.WAITING_FOR_DECISION]: "waiting-for-action"
 };
 
 var AppStatusComponent = React.createClass({

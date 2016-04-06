@@ -6,7 +6,9 @@ const AppStatus = {
   // App tasks execution is delayed due to an error
   DELAYED: 3,
   // App is waiting for a resource offer
-  WAITING: 4
+  WAITING: 4,
+  // App is waiting for user decision during migration
+  WAITING_FOR_DECISION: 5,
 };
 
 export default Object.freeze(AppStatus);
