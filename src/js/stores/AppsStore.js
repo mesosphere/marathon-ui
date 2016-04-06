@@ -120,20 +120,55 @@ function getAppType(app) {
 function calculateTotalResources(app) {
   app.totalMem = app.mem * app.instances;
   app.totalCpus = parseFloat((app.cpus * app.instances).toPrecision(4));
-  return app;
+}
+
+function setHasMigrationApiSupport(app) {
+  app.hasMigrationApiSupport = false;
+
+  if (app.labels != null &&
+      app.labels["DCOS_MIGRATION_API_PATH"] != null &&
+      app.labels["DCOS_MIGRATION_API_VERSION"] === "v1") {
+    app.hasMigrationApiSupport = true;
+  }
+}
+
+function setAppStatus(app) {
+  app.status = AppStatus.RUNNING;
+
+  if (app.deployments.length > 0) {
+    const results = app.readinessCheckResults;
+    app.status = AppStatus.DEPLOYING;
+
+    // Detect if at least one migration plan is waiting on user decision
+    if (app.hasMigrationApiSupport && results != null && results.length > 0) {
+      const isWaitingForDecision = results.some(result => {
+        if (result.lastResponse != null && result.lastResponse.body != null) {
+          try {
+            const {status} = JSON.parse(result.lastResponse.body);
+            if (status != null && status === "Waiting") {
+              return true;
+            }
+          } catch (e) { Util.noop(); }
+
+          return false;
+        }
+      });
+
+      if (isWaitingForDecision === true) {
+        app.status = AppStatus.WAITING_FOR_DECISION;
+      }
+    }
+  } else if (app.instances === 0 && app.tasksRunning === 0) {
+    app.status = AppStatus.SUSPENDED;
+  }
 }
 
 function processApp(app) {
   app = Util.extendObject(appScheme, app);
+  calculateTotalResources(app);
+  setHasMigrationApiSupport(app);
+  setAppStatus(app);
 
-  app = calculateTotalResources(app);
-
-  app.status = AppStatus.RUNNING;
-  if (app.deployments.length > 0) {
-    app.status = AppStatus.DEPLOYING;
-  } else if (app.instances === 0 && app.tasksRunning === 0) {
-    app.status = AppStatus.SUSPENDED;
-  }
   app.type = getAppType(app);
   app.health = getAppHealth(app);
   app.healthWeight = getAppHealthWeight(app.health);

@@ -233,7 +233,7 @@ var Marathon = React.createClass({
     if (state.activeAppId != null) {
       AppsActions.requestApp(state.activeAppId);
       QueueActions.requestQueue();
-    } else if (state.activeTabId === tabs[0].id) {
+    } else {
       AppsActions.requestApps();
       QueueActions.requestQueue();
     }
