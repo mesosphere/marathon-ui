@@ -45,6 +45,9 @@ var AppVolumesListComponent = React.createClass({
     if (volume.persistent != null || volume["size"] != null) {
       return VolumesConstants.TYPES.LOCAL;
     }
+    if (volume.external != null) {
+      return VolumesConstants.TYPES.NETWORK;
+    }
     return null;
   },
 

@@ -1,7 +1,8 @@
 const VolumesConstants = {
   TYPES: {
     DOCKER: "DOCKER",
-    LOCAL: "LOCAL"
+    LOCAL: "LOCAL",
+    NETWORK: "NETWORK"
   },
   STATUS: {
     ATTACHED: "Attached",
