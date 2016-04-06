@@ -8,5 +8,5 @@ export const statusNameMapping = Util.deepFreeze({
   [AppStatus.SUSPENDED]: "Suspended",
   [AppStatus.DELAYED]: "Delayed",
   [AppStatus.WAITING]: "Waiting",
-  [AppStatus.WAITING_FOR_DECISION]: "Waiting for user action..."
+  [AppStatus.WAITING_FOR_USER_ACTION]: "Waiting for user action..."
 });

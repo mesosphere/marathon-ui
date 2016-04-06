@@ -18,7 +18,7 @@ function processDeployments(deployments) {
 
     deployment.affectedAppsString = deployment.affectedApps.join(", ");
     deployment.currentActionsString = deployment.currentActions.join(", ");
-    setIsWaitingForUserDecision(deployment);
+    detectIsWaitingForUserAction(deployment);
 
     return deployment;
   });
@@ -28,26 +28,31 @@ function removeDeployment(deployments, deploymentId) {
   return deployments.filter(deployment => deployment.id !== deploymentId);
 }
 
-function setIsWaitingForUserDecision(deployment) {
+function detectIsWaitingForUserAction(deployment) {
   deployment.currentActions.forEach(action => {
     const results = action.readinessCheckResults;
-    action.isWaitingForUserDecision = false;
+    action.isWaitingForUserAction = false;
 
     // Detect if the migration API is supported by the app and at least
     // one migration phase is waiting for user decision
     if (results != null && results.length > 0) {
-      action.isWaitingForUserDecision = results.some(result => {
+      action.isWaitingForUserAction = results.some(result => {
         if (result.lastResponse == null || result.lastResponse.body == null) {
           return false;
         }
 
+        let status;
+
         try {
-          const {status} = JSON.parse(result.lastResponse.body);
-          if (status != null && status === "Waiting") {
-            const app = AppsStore.getCurrentApp(action.app);
-            return !!app.hasMigrationApiSupport;
-          }
-        } catch (e) { Util.noop(); }
+          status = JSON.parse(result.lastResponse.body).status;
+        } catch (e) {
+          return false;
+        }
+
+        if (status != null && status === "Waiting") {
+          const app = AppsStore.getCurrentApp(action.app);
+          return !!app.hasMigrationApiSupport;
+        }
 
         return false;
       });
@@ -63,7 +68,7 @@ var DeploymentStore = Util.extendObject(EventEmitter.prototype, {
 
 AppsStore.on(AppsEvents.CHANGE, function () {
   storeData.deployments.forEach(deployment => {
-    setIsWaitingForUserDecision(deployment);
+    detectIsWaitingForUserAction(deployment);
   });
 
   DeploymentStore.emit(DeploymentEvents.CHANGE);

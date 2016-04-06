@@ -29,7 +29,7 @@ describe("request deployments", function () {
         app: "/app1",
         readinessCheckResults: [{
           lastResponse: {
-            body: "{\"errors\":[],\"phases\":[{\"blocks\":[{\"has_decision_point\":true,\"id\":\"block1\",\"message\":\"block1\",\"name\":\"block1\",\"status\":\"Waiting\"},{\"has_decision_point\":true,\"id\":\"block2\",\"message\":\"block2\",\"name\":\"block2\",\"status\":\"Pending\"},{\"has_decision_point\":true,\"id\":\"block3\",\"message\":\"block3\",\"name\":\"block3\",\"status\":\"Pending\"}],\"id\":\"phase\",\"name\":\"phase\",\"status\":\"Waiting\"},{\"blocks\":[{\"has_decision_point\":false,\"id\":\"block4\",\"message\":\"block4\",\"name\":\"block4\",\"status\":\"Pending\"},{\"has_decision_point\":false,\"id\":\"block5\",\"message\":\"block5\",\"name\":\"block5\",\"status\":\"Pending\"},{\"has_decision_point\":true,\"id\":\"block99\",\"message\":\"block99\",\"name\":\"block99\",\"status\":\"Pending\"}],\"id\":\"phase1\",\"name\":\"phase1\",\"status\":\"Pending\"}],\"status\":\"Waiting\"}",
+            body: "{\"status\":\"Waiting\"}",
             contentType: "application/json",
             status: 500
           },
@@ -114,7 +114,7 @@ describe("request deployments", function () {
 
       var actions = deployments[1].currentActions;
       expect(actions).to.have.length(1);
-      expect(actions[0].isWaitingForUserDecision).to.be.true;
+      expect(actions[0].isWaitingForUserAction).to.be.true;
     });
   });
 });

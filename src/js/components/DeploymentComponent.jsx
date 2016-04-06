@@ -39,41 +39,43 @@ var DeploymentComponent = React.createClass({
   },
 
   getContinueButton: function (action) {
-    if (action.isWaitingForUserDecision === true) {
-      let continueButtonClasses = classNames("btn btn-xs btn-success", {
-        disabled: !!this.state.continueButtonsLoadingState[action.app]
-      });
-      return (
-        <button onClick={this.handleContinueMigration.bind(this, action.app)}
-          className={continueButtonClasses}>
-          Continue
-        </button>
-      );
+    if (!action.isWaitingForUserAction) {
+      return null;
     }
 
-    return null;
+    let continueButtonClasses = classNames("btn btn-xs btn-success", {
+      disabled: !!this.state.continueButtonsLoadingState[action.app]
+    });
+
+    return (
+      <button onClick={this.handleContinueMigration.bind(this, action.app)}
+          className={continueButtonClasses}>
+        Continue
+      </button>
+    );
   },
 
   handleContinueMigration: function (appId, event) {
     event.preventDefault();
     var app = AppsStore.getCurrentApp(appId);
     var labels = app.labels;
-    var service = null;
-    var path = null;
+    var dcosServiceName;
+    var dcosMigrationApiPath;
 
     if (labels != null) {
-      service = labels["DCOS_PACKAGE_FRAMEWORK_NAME"];
-      path = labels["DCOS_MIGRATION_API_PATH"];
+      dcosServiceName = labels["DCOS_PACKAGE_FRAMEWORK_NAME"];
+      dcosMigrationApiPath = labels["DCOS_MIGRATION_API_PATH"];
     }
 
-    if (service == null || service === "" ||
-        path == null || path === "") {
+    if (dcosServiceName == null || dcosServiceName === "" ||
+        dcosMigrationApiPath == null || dcosMigrationApiPath === "") {
       DialogActions.alert({
         title: `Error: missing labels`,
         message: `The application ${appId} lacks the required labels ` +
         `"DCOS_PACKAGE_FRAMEWORK_NAME" and "DCOS_MIGRATION_API_PATH".`,
         severity: DialogSeverity.DANGER
       });
+
       return;
     }
 
@@ -84,7 +86,8 @@ var DeploymentComponent = React.createClass({
     this.setState({
       continueButtonsLoadingState
     }, function () {
-      DeploymentActions.continueMigration(service, path, app.id);
+      DeploymentActions.continueMigration(dcosServiceName,
+        dcosMigrationApiPath, app.id);
     });
   },
 
@@ -153,6 +156,7 @@ var DeploymentComponent = React.createClass({
     var continueButtonsLoadingState = Object.assign({},
       this.state.continueButtonsLoadingState);
     continueButtonsLoadingState[appId] = false;
+
     this.setState({
       continueButtonsLoadingState
     }, function () {
@@ -167,6 +171,7 @@ var DeploymentComponent = React.createClass({
     var continueButtonsLoadingState = Object.assign({},
       this.state.continueButtonsLoadingState);
     continueButtonsLoadingState[appId] = false;
+
     this.setState({
       continueButtonsLoadingState
     }, function () {
@@ -195,7 +200,7 @@ var DeploymentComponent = React.createClass({
           {model.id}
         </td>
         <td>
-          <ul className="list-unstyled actions">
+          <ul className="list-unstyled user-actions">
             {model.currentActions.map(function (action) {
               let appId = encodeURIComponent(action.app);
               return (
@@ -207,7 +212,7 @@ var DeploymentComponent = React.createClass({
           </ul>
         </td>
         <td>
-          <ul className="list-unstyled actions">
+          <ul className="list-unstyled user-actions">
             {model.currentActions.map(action => {
               return (
                 <li key={action.app}>

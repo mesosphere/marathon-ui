@@ -77,7 +77,7 @@ describe("Deployment component", function () {
       currentActions: [{
         app: "app1",
         action: "action1",
-        isWaitingForUserDecision: true
+        isWaitingForUserAction: true
       }],
       currentStep: 2,
       totalSteps: 2

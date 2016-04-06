@@ -122,17 +122,13 @@ function calculateTotalResources(app) {
   app.totalCpus = parseFloat((app.cpus * app.instances).toPrecision(4));
 }
 
-function setHasMigrationApiSupport(app) {
-  app.hasMigrationApiSupport = false;
-
-  if (app.labels != null &&
-      app.labels["DCOS_MIGRATION_API_PATH"] != null &&
-      app.labels["DCOS_MIGRATION_API_VERSION"] === "v1") {
-    app.hasMigrationApiSupport = true;
-  }
+function detectMigrationApiSupport(app) {
+  app.hasMigrationApiSupport = app.labels != null &&
+    app.labels["DCOS_MIGRATION_API_PATH"] != null &&
+    app.labels["DCOS_MIGRATION_API_VERSION"] === "v1";
 }
 
-function setAppStatus(app) {
+function detectAppStatus(app) {
   app.status = AppStatus.RUNNING;
 
   if (app.deployments.length > 0) {
@@ -141,21 +137,22 @@ function setAppStatus(app) {
 
     // Detect if at least one migration plan is waiting on user decision
     if (app.hasMigrationApiSupport && results != null && results.length > 0) {
-      const isWaitingForDecision = results.some(result => {
+      const isWaitingForUserAction = results.some(result => {
         if (result.lastResponse != null && result.lastResponse.body != null) {
-          try {
-            const {status} = JSON.parse(result.lastResponse.body);
-            if (status != null && status === "Waiting") {
-              return true;
-            }
-          } catch (e) { Util.noop(); }
+          let status;
 
-          return false;
+          try {
+            status = JSON.parse(result.lastResponse.body).status;
+          } catch (e) {
+            return false;
+          }
+
+          return status != null && status === "Waiting";
         }
       });
 
-      if (isWaitingForDecision === true) {
-        app.status = AppStatus.WAITING_FOR_DECISION;
+      if (isWaitingForUserAction === true) {
+        app.status = AppStatus.WAITING_FOR_USER_ACTION;
       }
     }
   } else if (app.instances === 0 && app.tasksRunning === 0) {
@@ -166,8 +163,8 @@ function setAppStatus(app) {
 function processApp(app) {
   app = Util.extendObject(appScheme, app);
   calculateTotalResources(app);
-  setHasMigrationApiSupport(app);
-  setAppStatus(app);
+  detectMigrationApiSupport(app);
+  detectAppStatus(app);
 
   app.type = getAppType(app);
   app.health = getAppHealth(app);
