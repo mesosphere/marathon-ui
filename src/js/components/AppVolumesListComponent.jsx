@@ -89,7 +89,7 @@ var AppVolumesListComponent = React.createClass({
       "dropup": !state.sortDescending
     });
 
-    if (this.props.volumes == null) {
+    if (this.props.volumes == null || this.props.volumes.length === 0) {
       return null;
     }
 
