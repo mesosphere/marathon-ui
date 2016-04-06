@@ -1,4 +1,4 @@
-const LocalVolumesConstants = {
+const VolumesConstants = {
   TYPES: {
     DOCKER: "DOCKER",
     LOCAL: "LOCAL"
@@ -9,4 +9,4 @@ const LocalVolumesConstants = {
   }
 };
 
-export default Object.freeze(LocalVolumesConstants);
+export default Object.freeze(VolumesConstants);

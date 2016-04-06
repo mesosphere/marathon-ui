@@ -3,7 +3,7 @@ import React from "react/addons";
 
 import AppVolumesListItemComponent
   from "../components/AppVolumesListItemComponent";
-import LocalVolumesConstants from "../constants/LocalVolumesConstants";
+import VolumesConstants from "../constants/VolumesConstants";
 import Util from "../helpers/Util";
 
 var AppVolumesListComponent = React.createClass({
@@ -40,10 +40,10 @@ var AppVolumesListComponent = React.createClass({
 
   getVolumeType: function (volume) {
     if (volume.hostPath != null) {
-      return LocalVolumesConstants.TYPES.DOCKER;
+      return VolumesConstants.TYPES.DOCKER;
     }
     if (volume.persistent != null || volume["size"] != null) {
-      return LocalVolumesConstants.TYPES.LOCAL;
+      return VolumesConstants.TYPES.LOCAL;
     }
     return null;
   },
@@ -63,7 +63,7 @@ var AppVolumesListComponent = React.createClass({
     return volumes
       .map((volume) => {
         volume.type = this.getVolumeType(volume);
-        if (volume.type === LocalVolumesConstants.TYPES.LOCAL &&
+        if (volume.type === VolumesConstants.TYPES.LOCAL &&
             volume.size == null) {
           volume.size = volume.persistent.size ;
           delete volume.persistent;
