@@ -5,6 +5,7 @@
 - \#3564 - Add link to Docker section for Ports
 - \#3519 - The default Docker network should be host
 - \#3587 - Not specifying "network" config causes mesos to thrash
+- \#3652 - Error paths are mapped incorrectly
 
 ### Changed
 - \#3426 - Improve ports validation
