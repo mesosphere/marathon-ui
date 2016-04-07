@@ -128,11 +128,12 @@ function processApp(app) {
 
   app = calculateTotalResources(app);
 
-  app.status = AppStatus.RUNNING;
   if (app.deployments.length > 0) {
     app.status = AppStatus.DEPLOYING;
   } else if (app.instances === 0 && app.tasksRunning === 0) {
     app.status = AppStatus.SUSPENDED;
+  } else if (app.tasksRunning > 0) {
+    app.status = AppStatus.RUNNING;
   }
   app.type = getAppType(app);
   app.health = getAppHealth(app);
