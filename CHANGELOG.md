@@ -1,4 +1,4 @@
-## Unversioned
+## 1.0.1 - 2016-04-07
 ### Fixed
 - \#3552 - Editing an App: Switching between JSON and normal Editor
   produces a broken UX
