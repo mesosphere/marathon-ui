@@ -19,6 +19,14 @@ var AppVolumesListItemComponent = React.createClass({
   render: function () {
     var {volume, sortKey} = this.props;
 
+    var name = null;
+    if (volume.persistenceId != null) {
+      name = volume.persistenceId;
+    }
+    if (volume.external != null&& volume.external.name != null) {
+      name = volume.external.name;
+    }
+
     var statusClassSet = classNames({
       "cell-highlighted": sortKey === "status",
       "volume-attached": volume.status != null &&
@@ -36,7 +44,7 @@ var AppVolumesListItemComponent = React.createClass({
       <tr>
         <td className={this.getHighlight("id")}>
           <Link to="volumeView" params={params}>
-            {volume.persistenceId || volume.external.name}
+            {name}
           </Link>
         </td>
         <td className={this.getHighlight("host")}>
