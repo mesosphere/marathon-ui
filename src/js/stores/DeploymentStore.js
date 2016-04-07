@@ -99,18 +99,6 @@ AppDispatcher.register(function (action) {
         action.data.status
       );
       break;
-    case DeploymentEvents.STOP:
-      storeData.deployments =
-        removeDeployment(storeData.deployments, action.deploymentId);
-      DeploymentStore.emit(DeploymentEvents.CHANGE);
-      break;
-    case DeploymentEvents.STOP_ERROR:
-      DeploymentStore.emit(
-        DeploymentEvents.STOP_ERROR,
-        action.data.body,
-        action.data.status
-      );
-      break;
     case DeploymentEvents.CONTINUE_MIGRATION_SUCCESS:
       DeploymentStore.emit(DeploymentEvents.CONTINUE_MIGRATION_SUCCESS,
         action.data.body,

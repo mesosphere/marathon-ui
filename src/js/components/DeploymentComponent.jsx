@@ -109,37 +109,12 @@ var DeploymentComponent = React.createClass({
     }.bind(this));
   },
 
-  handleStopDeployment: function () {
-    var model = this.props.model;
-
-    const dialogId = DialogActions.confirm({
-      actionButtonLabel:"Stop Deployment",
-      message: `Are you sure you want to stop? This will stop the deployment of
-        ${model.affectedAppsString} immediately and leave the applications in
-        their current state.`,
-      severity: DialogSeverity.WARNING,
-      title: "Stop Deployment"
-    });
-
-    DialogStore.handleUserResponse(dialogId, function () {
-      this.setState({loading: true});
-      DeploymentActions.stopDeployment(model.id);
-    }.bind(this));
-  },
-
   getButtons: function () {
     if (this.state.loading) {
       return (<div className="loading-bar" />);
     } else {
       return (
         <ul className="list-inline">
-          <li>
-            <button
-                onClick={this.handleStopDeployment}
-                className="btn btn-xs btn-default">
-              Stop
-            </button>
-          </li>
           <li>
             <button
                 onClick={this.handleRevertDeployment}

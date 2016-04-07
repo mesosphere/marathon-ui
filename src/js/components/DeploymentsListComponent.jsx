@@ -32,7 +32,6 @@ var DeploymentListComponent = React.createClass({
     DeploymentStore.on(DeploymentEvents.CHANGE, this.onDeploymentsChange);
     DeploymentStore.on(DeploymentEvents.REQUEST_ERROR, this.onRequestError);
     DeploymentStore.on(DeploymentEvents.REVERT_ERROR, this.onRevertError);
-    DeploymentStore.on(DeploymentEvents.STOP_ERROR, this.onStopError);
   },
 
   componentWillUnmount: function () {
@@ -42,8 +41,6 @@ var DeploymentListComponent = React.createClass({
       this.onRequestError);
     DeploymentStore.removeListener(DeploymentEvents.REVERT_ERROR,
       this.onRevertError);
-    DeploymentStore.removeListener(DeploymentEvents.STOP_ERROR,
-      this.onStopError);
   },
 
   onDeploymentsChange: function () {
@@ -73,12 +70,6 @@ var DeploymentListComponent = React.createClass({
   onRevertError: function (error) {
     this.setState({
       errorMessage: "Can't revert deployment: " + error.message
-    });
-  },
-
-  onStopError: function (error) {
-    this.setState({
-      errorMessage: "Can't stop deployment: " + error.message
     });
   },
 
