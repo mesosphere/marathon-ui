@@ -56,10 +56,10 @@ describe("BreadcrumbComponent", function () {
 
     // routes must be URIEncoded
     expect(linkTargets).to.deep.equal([
-                                        "%2Fgroup-a%2F",
-                                        "%2Fgroup-a%2Fgroup-b%2F",
-                                        "%2Fgroup-a%2Fgroup-b%2Fgroup-c%2F"
-                                      ]);
+      "%2Fgroup-a",
+      "%2Fgroup-a%2Fgroup-b",
+      "%2Fgroup-a%2Fgroup-b%2Fgroup-c"
+    ]);
   });
 
   it("shows the application, if supplied", function () {
