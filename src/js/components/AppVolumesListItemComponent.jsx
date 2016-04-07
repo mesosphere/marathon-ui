@@ -29,14 +29,14 @@ var AppVolumesListItemComponent = React.createClass({
 
     var params = {
       appId: encodeURIComponent(volume.appId),
-      volumeId: encodeURIComponent(volume.persistenceId)
+      volumeId: encodeURIComponent(volume.persistenceId || volume.external.name)
     };
 
     return (
       <tr>
         <td className={this.getHighlight("id")}>
           <Link to="volumeView" params={params}>
-            {volume.persistenceId}
+            {volume.persistenceId || volume.external.name}
           </Link>
         </td>
         <td className={this.getHighlight("host")}>

@@ -302,7 +302,8 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
       return null;
     }
 
-    return volumes.find((volume) => volume.persistenceId === volumeId);
+    return volumes.find((volume) => volume.persistenceId === volumeId ||
+      volume.external.name === volumeId);
   },
 
   getVolumes: function (appId) {
@@ -313,7 +314,22 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
       return null;
     }
 
-    return tasks
+    var networkVolumes = [];
+
+    if (app.container != null && app.container.volumes != null) {
+      networkVolumes = app.container.volumes.filter(
+        volume => volume.external != null
+      ).map(
+        volume => {
+          volume.appId = appId;
+          volume.id = volume.external.name;
+          volume.status = VolumesConstants.STATUS.ATTACHED;
+          return volume;
+        }
+      );
+    }
+
+    return networkVolumes.concat(tasks
       // Get the first volume from a task with the same id as provided
       // by the router. This should be unique.
       .reduce((memo, task) => {
@@ -338,7 +354,7 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
               : VolumesConstants.STATUS.ATTACHED;
             return volume;
           }));
-      }, []);
+      }, []));
   }
 });
 

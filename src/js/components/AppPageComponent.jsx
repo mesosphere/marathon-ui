@@ -304,7 +304,7 @@ var AppPageComponent = React.createClass({
     var {appId, volumeId} = this.state;
     var volume = AppsStore.getVolumeById(appId, volumeId);
 
-    if (volume == null) {
+    if (volume == null || volumeId == null) {
       return null;
     }
 
