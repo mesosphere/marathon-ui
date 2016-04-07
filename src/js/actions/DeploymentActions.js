@@ -64,6 +64,7 @@ var DeploymentActions = {
   continueMigration: function (service, path, appId) {
     this.request({
       method: "POST",
+      headers: {},
       url: `/service/${service}/${path.replace(/^\//, "")}/continue`
     })
       .success(function (response) {
