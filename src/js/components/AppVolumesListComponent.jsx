@@ -43,10 +43,10 @@ var AppVolumesListComponent = React.createClass({
       return VolumesConstants.TYPES.DOCKER;
     }
     if (volume.persistent != null || volume["size"] != null) {
-      return VolumesConstants.TYPES.LOCAL;
+      return VolumesConstants.TYPES.PERSISTENT;
     }
     if (volume.external != null) {
-      return VolumesConstants.TYPES.NETWORK;
+      return VolumesConstants.TYPES.EXTERNAL;
     }
     return null;
   },
@@ -66,7 +66,7 @@ var AppVolumesListComponent = React.createClass({
     return volumes
       .map((volume) => {
         volume.type = this.getVolumeType(volume);
-        if (volume.type === VolumesConstants.TYPES.LOCAL &&
+        if (volume.type === VolumesConstants.TYPES.PERSISTENT &&
             volume.size == null) {
           volume.size = volume.persistent.size ;
           delete volume.persistent;
