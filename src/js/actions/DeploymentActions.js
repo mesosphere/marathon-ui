@@ -64,7 +64,7 @@ var DeploymentActions = {
   continueMigration: function (service, path, appId) {
     this.request({
       method: "POST",
-      url: `${config.apiURL}services/${service}/${path}/continue`
+      url: `${config.apiURL}service/${service}/${path}/continue`
     })
       .success(function (response) {
         AppDispatcher.dispatch({

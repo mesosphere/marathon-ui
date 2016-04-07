@@ -22,7 +22,7 @@ describe("scheduler migrations", function () {
     };
 
     nock(config.apiURL)
-      .post("/services/my-framework/v1/plan/continue")
+      .post("/service/my-framework/v1/plan/continue")
       .reply(200, nockResponse);
 
     DeploymentStore.once(DeploymentEvents.CONTINUE_MIGRATION_SUCCESS,
@@ -38,7 +38,7 @@ describe("scheduler migrations", function () {
 
   it("handles failure gracefully", function (done) {
     nock(config.apiURL)
-      .post("/services/not-found-framework/v1/plan/continue")
+      .post("/service/not-found-framework/v1/plan/continue")
       .reply(404);
 
     DeploymentStore.once(DeploymentEvents.CONTINUE_MIGRATION_ERROR,
