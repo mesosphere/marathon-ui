@@ -164,6 +164,11 @@ const AppFormValidators = {
     (Util.isStringAndEmpty(obj.persistentSize) &&
     Util.isStringAndEmpty(obj.containerPath)),
 
+  externalVolumesName: (obj) => Util.isStringAndEmpty(obj.externalName) ||
+    !!obj.externalName.toString().match(/^[a-zA-Z\.]+$/),
+
+  externalVolumesPath: (obj) => isValidPath(obj.containerPath),
+
   portDefinitionsPortIsValid: (obj) => {
     // TODO is this needed?
     if (obj.isRandomPort === false) {

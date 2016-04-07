@@ -701,6 +701,82 @@ describe("App Form Validators", function () {
         });
       });
     });
+    describe("External volumes", function () {
+
+      describe("path", function () {
+        it("should allow an empty value", function () {
+          var volume = {
+            externalName: ""
+          };
+          expect(this.validatior.externalVolumesName(volume)).to.be.true;
+        });
+
+        it("should not be a not contain a space", function () {
+          var volume = {
+            externalName: "ab c"
+          };
+          expect(this.validatior.externalVolumesName(volume)).to.be.false;
+        });
+
+        it("should be a string value", function () {
+          var volume = {
+            externalName: "abc"
+          };
+          expect(this.validatior.externalVolumesName(volume)).to.be.true;
+        });
+
+        it("should not contain a slash string value", function () {
+          var volume = {
+            externalName: "ab/c"
+          };
+          expect(this.validatior.externalVolumesName(volume)).to.be.false;
+        });
+
+        it("should not begin with a slash string value", function () {
+          var volume = {
+            externalName: "/abc"
+          };
+          expect(this.validatior.externalVolumesName(volume)).to.be.false;
+        });
+      });
+
+      describe("path", function () {
+        it("should allow an empty value", function () {
+          var volume = {
+            containerPath: ""
+          };
+          expect(this.validatior.localVolumesPath(volume)).to.be.true;
+        });
+
+        it("should not be a not contain a space", function () {
+          var volume = {
+            containerPath: "ab c"
+          };
+          expect(this.validatior.externalVolumesPath(volume)).to.be.false;
+        });
+
+        it("should be a string value", function () {
+          var volume = {
+            containerPath: "abc"
+          };
+          expect(this.validatior.externalVolumesPath(volume)).to.be.true;
+        });
+
+        it("may contain a slash string value", function () {
+          var volume = {
+            containerPath: "ab/c"
+          };
+          expect(this.validatior.externalVolumesPath(volume)).to.be.true;
+        });
+
+        it("may begin with a slash string value", function () {
+          var volume = {
+            containerPath: "/abc"
+          };
+          expect(this.validatior.externalVolumesPath(volume)).to.be.true;
+        });
+      });
+    });
 
   });
 

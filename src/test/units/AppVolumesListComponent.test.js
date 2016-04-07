@@ -28,6 +28,16 @@ describe("AppVolumesListComponent", () => {
       hostPath: "Hpath",
       mode: "XX",
       status: "detached"
+    },
+    {
+      appId: "stu",
+      external: {
+        name: "volume"
+      },
+      type: "EXTERNAL",
+      containerPath: "/tmp/path",
+      mode: "XX",
+      status: "detached"
     }
   ];
   var component = shallow(
@@ -60,9 +70,16 @@ describe("AppVolumesListComponent", () => {
         volume={volumes[1]}
         sortKey="id" />)).to.be.true;
   });
+  it("contains the right EXTERNAL volume list item", () => {
+    expect(component.contains(
+      <AppVolumesListItemComponent
+        key={2}
+        volume={volumes[2]}
+        sortKey="id" />)).to.be.true;
+  });
 
-  it("Should contain 2 volumes", () => {
-    expect(component.find(AppVolumesListItemComponent)).to.have.length(2);
+  it("Should contain 3 volumes", () => {
+    expect(component.find(AppVolumesListItemComponent)).to.have.length(3);
   });
 
   describe("changes sort state", () => {
@@ -90,6 +107,7 @@ describe("AppVolumesListComponent", () => {
       <AppVolumesListComponent
         volumes={volumes} />
     );
+
     sortKeys.forEach((sortKey, index) => {
       it(`Sorting by ${sortKey}`, () => {
         component.setState({

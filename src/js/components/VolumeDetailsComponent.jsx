@@ -2,9 +2,74 @@ import React from "react/addons";
 
 export default React.createClass({
   displayName: "VolumeDetailsComponent",
+
   propTypes: {
     volume: React.PropTypes.object
   },
+
+  getTask: function (volume) {
+    var link = null;
+    if (volume.taskId == null) {
+      return null;
+    }
+    if(volume.taskURI != null) {
+      link = (
+        <dd>
+          <a href={volume.taskURI}>{volume.taskId}</a>
+        </dd>
+      );
+    } else {
+      link = (
+        <dd>
+          {volume.taskId}
+        </dd>);
+    }
+
+    return (
+      <div>
+        <dt>Task Id</dt>
+        {link}
+      </div>
+    );
+  },
+
+  getSize: function (volume) {
+    var size;
+
+    if (volume.persistent && volume.persistent.size) {
+      size = volume.persistent.size;
+    }
+
+    if (volume.external && volume.external.size) {
+      size = volume.persistent.size;
+    }
+
+    if (size == null) {
+      return null;
+    }
+
+    return (
+      <div>
+        <dt>Size (MiB)</dt>
+        <dd>{size}</dd>
+      </div>
+    );
+  },
+
+  getHost: function (volume) {
+    if (volume.host == null) {
+      return null;
+    }
+    return (
+      <div>
+        <dt>Host</dt>
+        <dd>
+          {volume.host}
+        </dd>
+      </div>
+    );
+  },
+
   render: function () {
     const {volume} = this.props;
     if (volume == null) {
@@ -17,20 +82,13 @@ export default React.createClass({
         <dd>{volume.containerPath}</dd>
         <dt>Mode</dt>
         <dd>{volume.mode}</dd>
-        <dt>Size (MiB)</dt>
-        <dd>{volume.persistent.size}</dd>
+        {this.getSize(volume)}
         <dt>Application</dt>
         <dd>
           <a href={volume.appURI}>{volume.appId}</a>
         </dd>
-        <dt>Task Id</dt>
-        <dd>
-          <a href={volume.taskURI}>{volume.taskId}</a>
-        </dd>
-        <dt>Host</dt>
-        <dd>
-          {volume.host}
-        </dd>
+        {this.getTask(volume)}
+        {this.getHost(volume)}
       </dl>
     );
   }

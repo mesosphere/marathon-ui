@@ -93,6 +93,28 @@ const AppFormFieldToModelTransforms = {
       });
     return rows;
   },
+  externalVolumes: rows => {
+    rows = rows
+      .filter(row => {
+        return ["containerPath", "externalName"].every(key => {
+          return row[key] != null && row[key] !== "";
+        });
+      })
+      .map(row => {
+        return {
+          containerPath: row.containerPath,
+          external: {
+            name: row.externalName,
+            provider: "dvdi",
+            options: {
+              "dvdi/driver": "rexray"
+            }
+          },
+          mode: "RW"
+        };
+      });
+    return rows;
+  },
   dockerForcePullImage: (isChecked) => !!isChecked,
   dockerParameters: (rows) => lazy(rows)
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))

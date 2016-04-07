@@ -8,7 +8,7 @@ import ContainerConstants from "../constants/ContainerConstants";
 import AppStatus from "../constants/AppStatus";
 import groupScheme from "../stores/schemes/groupScheme";
 import HealthStatus from "../constants/HealthStatus";
-import LocalVolumesConstants from "../constants/LocalVolumesConstants";
+import VolumesConstants from "../constants/VolumesConstants";
 import TasksEvents from "../events/TasksEvents";
 import TaskStatus from "../constants/TaskStatus";
 import QueueStore from "./QueueStore";
@@ -302,7 +302,8 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
       return null;
     }
 
-    return volumes.find((volume) => volume.persistenceId === volumeId);
+    return volumes.find((volume) => volume.persistenceId === volumeId ||
+      volume.external && volume.external.name === volumeId);
   },
 
   getVolumes: function (appId) {
@@ -313,7 +314,20 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
       return null;
     }
 
-    return tasks
+    var externalVolumes = [];
+
+    if (app.container != null && app.container.volumes != null) {
+      externalVolumes = app.container.volumes
+        .filter(volume => volume.external != null)
+        .map(volume => {
+          volume.appId = appId;
+          volume.id = volume.external.name;
+          volume.status = VolumesConstants.STATUS.ATTACHED;
+          return volume;
+        });
+    }
+
+    return externalVolumes.concat(tasks
       // Get the first volume from a task with the same id as provided
       // by the router. This should be unique.
       .reduce((memo, task) => {
@@ -334,11 +348,11 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
             volume.taskId = task.id;
             volume.host = task.host;
             volume.status = task.status == null
-              ? LocalVolumesConstants.STATUS.DETACHED
-              : LocalVolumesConstants.STATUS.ATTACHED;
+              ? VolumesConstants.STATUS.DETACHED
+              : VolumesConstants.STATUS.ATTACHED;
             return volume;
           }));
-      }, []);
+      }, []));
   }
 });
 
