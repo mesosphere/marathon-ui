@@ -9,6 +9,7 @@
 - \#3655 - Apps with no volumes reported as stateful
 - \#3369 - Constraint validation message
 - \#3671 - Scrolling issue with create modal
+- \#3092 - Delayed applications can appear to be running
 
 ### Changed
 - \#3426 - Improve ports validation
