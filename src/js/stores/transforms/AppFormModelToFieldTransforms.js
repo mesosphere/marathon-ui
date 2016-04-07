@@ -53,7 +53,7 @@ const AppFormModelToFieldTransforms = {
         return row;
       });
   },
-  externalVolumes: (volumes) => {
+  externalVolumes: volumes => {
     return volumes
       .filter(row => row.external != null)
       .map((row, i) => {

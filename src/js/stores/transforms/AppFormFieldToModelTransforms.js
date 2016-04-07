@@ -94,11 +94,12 @@ const AppFormFieldToModelTransforms = {
     return rows;
   },
   externalVolumes: rows => {
-    rows = rows.filter(row => {
-      return ["containerPath", "externalName"].every(key => {
-        return row[key] != null && row[key] !== "";
-      });
-    })
+    rows = rows
+      .filter(row => {
+        return ["containerPath", "externalName"].every(key => {
+          return row[key] != null && row[key] !== "";
+        });
+      })
       .map(row => {
         return {
           containerPath: row.containerPath,

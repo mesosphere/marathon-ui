@@ -303,7 +303,7 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
     }
 
     return volumes.find((volume) => volume.persistenceId === volumeId ||
-      volume.external.name === volumeId);
+      volume.external && volume.external.name === volumeId);
   },
 
   getVolumes: function (appId) {
@@ -317,16 +317,14 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
     var externalVolumes = [];
 
     if (app.container != null && app.container.volumes != null) {
-      externalVolumes = app.container.volumes.filter(
-        volume => volume.external != null
-      ).map(
-        volume => {
+      externalVolumes = app.container.volumes
+        .filter(volume => volume.external != null)
+        .map(volume => {
           volume.appId = appId;
           volume.id = volume.external.name;
           volume.status = VolumesConstants.STATUS.ATTACHED;
           return volume;
-        }
-      );
+        });
     }
 
     return externalVolumes.concat(tasks

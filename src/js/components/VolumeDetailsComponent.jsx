@@ -2,28 +2,52 @@ import React from "react/addons";
 
 export default React.createClass({
   displayName: "VolumeDetailsComponent",
+
   propTypes: {
     volume: React.PropTypes.object
   },
+
   getTask: function (volume) {
+    var link = null;
     if (volume.taskId == null) {
       return null;
     }
-    return (
-      <div>
-        <dt>Task Id</dt>
+    if(volume.taskURI != null) {
+      link = (
         <dd>
           <a href={volume.taskURI}>{volume.taskId}</a>
         </dd>
+      );
+    } else {
+      link = (
+        <dd>
+          {volume.taskId}
+        </dd>);
+    }
+
+    return (
+      <div>
+        <dt>Task Id</dt>
+        {link}
       </div>
     );
   },
+
   getSize: function (volume) {
-    var size = volume.persistent && volume.persistent.size ||
-      volume.external && volume.external.size;
+    var size;
+
+    if (volume.persistent && volume.persistent.size) {
+      size = volume.persistent.size;
+    }
+
+    if (volume.external && volume.external.size) {
+      size = volume.persistent.size;
+    }
+
     if (size == null) {
       return null;
     }
+
     return (
       <div>
         <dt>Size (MiB)</dt>
@@ -31,6 +55,7 @@ export default React.createClass({
       </div>
     );
   },
+
   getHost: function (volume) {
     if (volume.host == null) {
       return null;
@@ -44,6 +69,7 @@ export default React.createClass({
       </div>
     );
   },
+
   render: function () {
     const {volume} = this.props;
     if (volume == null) {

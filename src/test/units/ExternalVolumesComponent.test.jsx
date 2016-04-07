@@ -28,7 +28,7 @@ describe("External Volumes Component", function () {
 
     it("should have the right title", () => {
       expect(component.find("h4").first().props().children[0])
-        .to.equal("Network Volumes");
+        .to.equal("External Volumes");
     });
   });
 
