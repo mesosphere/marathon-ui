@@ -63,6 +63,17 @@ var AppsActions = {
         taskLostBehavior: "WAIT_FOREVER"
       };
     }
+    if (newAppAttributes.container != null &&
+        newAppAttributes.container.volumes != null &&
+        newAppAttributes.container.volumes.some(
+          volume => volume.external != null
+        )
+    ) {
+      newAppAttributes.upgradeStrategy = {
+        maximumOverCapacity: 0,
+        minimumHealthCapacity: 0
+      };
+    }
     this.request({
       method: "POST",
       data: newAppAttributes,
