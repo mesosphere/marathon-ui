@@ -30,6 +30,7 @@
 
     .modal-body {
       height: calc(~"80vh" - (@modal-header-height+@modal-footer-height));
+      overflow-x: hidden;
       padding: 0;
     }
 
@@ -53,9 +54,9 @@
       height: 100%;
 
       .tooltip-container {
-        z-index: 1;
-        right: @base-spacing-unit*0.5;
-        top: @base-spacing-unit*0.5;
+        z-index: 2;
+        right: @base-spacing-unit*2;
+        top: @base-spacing-unit*2;
         position: absolute;
       }
 
@@ -65,6 +66,7 @@
     }
 
     .tooltip-container {
+
       .right, .left {
         .content {
           top: -@base-spacing-unit*1.5;
@@ -84,15 +86,19 @@
         }
       }
 
-      .left .content {
-        transform: translateX(calc(~"-100% -"@base-spacing-unit*4));
+      .left {
+        transform: translateX(-@base-spacing-unit*5);
 
-        &:before {
-          border-top-color: transparent;
-          border-right-color: transparent;
-          border-left-color: @bunker;
-          top: @base-spacing-unit / 2;
-          left: calc(~"100% +"@base-spacing-unit);
+        .content {
+          transform: translateX(-100%);
+
+          &:before {
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-left-color: @bunker;
+            top: @base-spacing-unit / 2;
+            left: calc(~"100% +" @base-spacing-unit);
+          }
         }
       }
     }
