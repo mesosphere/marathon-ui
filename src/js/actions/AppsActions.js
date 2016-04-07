@@ -63,6 +63,7 @@ var AppsActions = {
         taskLostBehavior: "WAIT_FOREVER"
       };
     }
+
     if (newAppAttributes.container != null &&
         newAppAttributes.container.volumes != null &&
         newAppAttributes.container.volumes.some(
@@ -74,6 +75,7 @@ var AppsActions = {
         minimumHealthCapacity: 0
       };
     }
+
     this.request({
       method: "POST",
       data: newAppAttributes,
