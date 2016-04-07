@@ -164,7 +164,7 @@ var BreadcrumbComponent = React.createClass({
 
     var pathParts = groupId.split("/").slice(0, -1);
     return pathParts.map((name, i) => {
-      var id = pathParts.slice(0, i + 1).join("/") + "/";
+      var id = pathParts.slice(0, i + 1).join("/");
       return (
         <li key={id}>
           <Link to="group"
