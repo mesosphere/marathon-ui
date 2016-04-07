@@ -12,6 +12,7 @@
 - \#3671 - Scrolling issue with create modal
 - \#3663 - Apps created from inside a group have a double forward-slash in
   their ID
+- \#3659 - JSON editor help button does not work in IE11
 
 ### Changed
 - \#3426 - Improve ports validation
