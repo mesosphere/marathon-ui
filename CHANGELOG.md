@@ -6,6 +6,7 @@
 - \#3519 - The default Docker network should be host
 - \#3587 - Not specifying "network" config causes mesos to thrash
 - \#3652 - Error paths are mapped incorrectly
+- \#3092 - Delayed applications can appear to be running
 
 ### Changed
 - \#3426 - Improve ports validation
