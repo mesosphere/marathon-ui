@@ -129,8 +129,6 @@ function detectMigrationApiSupport(app) {
 }
 
 function detectAppStatus(app) {
-  app.status = AppStatus.RUNNING;
-
   if (app.deployments.length > 0) {
     const results = app.readinessCheckResults;
     app.status = AppStatus.DEPLOYING;
@@ -157,6 +155,8 @@ function detectAppStatus(app) {
     }
   } else if (app.instances === 0 && app.tasksRunning === 0) {
     app.status = AppStatus.SUSPENDED;
+  } else if (app.tasksRunning > 0) {
+    app.status = AppStatus.RUNNING;
   }
 }
 
