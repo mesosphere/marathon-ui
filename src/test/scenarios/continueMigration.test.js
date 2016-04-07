@@ -1,46 +1,46 @@
 import {expect} from "chai";
-import nock from "nock";
-import _ from "underscore";
 import expectAsync from "./../helpers/expectAsync";
+import ajaxWrapperStub from "./../stubs/ajaxWrapperStub";
 
-import config from "../../js/config/config";
-
-import appScheme from "../../js/stores/schemes/appScheme";
+import ajaxWrapper from "../../js/helpers/ajaxWrapper";
 import DeploymentActions from "../../js/actions/DeploymentActions";
 import DeploymentEvents from "../../js/events/DeploymentEvents";
 import DeploymentStore from "../../js/stores/DeploymentStore";
-import AppsActions from "../../js/actions/AppsActions";
 
-var server = config.localTestserverURI;
-config.apiURL = "http://" + server.address + ":" + server.port + "/";
+describe("continueMigration", function () {
 
-describe("scheduler migrations", function () {
+  before(function () {
+    DeploymentActions.request = ajaxWrapperStub(
+      function (url, resolve, reject) {
+        switch (url) {
+          case "service/my-framework/v1/plan/continue":
+            resolve({status:200, body:{result: "Received cmd: continue"}});
+            break;
+
+          default:
+            reject({status:404, body: "error"});
+            break;
+        }
+      });
+  });
+
+  after(function () {
+    DeploymentActions.request = ajaxWrapper;
+  });
 
   it("sends continue to a migration waiting for user decision", function () {
-    var nockResponse = {
-      "result": "Received cmd: continue"
-    };
-
-    nock(config.apiURL)
-      .post("/service/my-framework/v1/plan/continue")
-      .reply(200, nockResponse);
-
     DeploymentStore.once(DeploymentEvents.CONTINUE_MIGRATION_SUCCESS,
-        function (response, appId) {
-      expectAsync(function () {
-        expect(appId).to.equal("/app-1");
-        expect(response.result).to.equal("Received cmd: continue");
-      }, done);
-    });
+      function (response, appId) {
+        expectAsync(function () {
+          expect(appId).to.equal("/app-1");
+          expect(response.result).to.equal("Received cmd: continue");
+        }, done);
+      });
 
-    DeploymentActions.continueMigration("my-framework", "v1/plan", "/app-1");
+    DeploymentActions.continueMigration("my-framework", "/v1/plan", "/app-1");
   });
 
   it("handles failure gracefully", function (done) {
-    nock(config.apiURL)
-      .post("/service/not-found-framework/v1/plan/continue")
-      .reply(404);
-
     DeploymentStore.once(DeploymentEvents.CONTINUE_MIGRATION_ERROR,
       function (error, statusCode, appId) {
         expectAsync(function () {
@@ -50,7 +50,7 @@ describe("scheduler migrations", function () {
       });
 
     DeploymentActions.continueMigration("not-found-framework",
-      "v1/plan", "/app-1");
+      "/v1/plan", "/app-1");
   });
 
 });
