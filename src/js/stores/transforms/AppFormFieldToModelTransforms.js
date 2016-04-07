@@ -104,7 +104,10 @@ const AppFormFieldToModelTransforms = {
           containerPath: row.containerPath,
           external: {
             name: row.networkName,
-            driver: "rexray"
+            provider: "dvdi",
+            options: {
+              "dvdi/driver": "rexray"
+            }
           },
           mode: "RW"
         };
