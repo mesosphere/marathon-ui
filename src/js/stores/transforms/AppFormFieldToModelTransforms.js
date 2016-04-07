@@ -93,9 +93,9 @@ const AppFormFieldToModelTransforms = {
       });
     return rows;
   },
-  networkVolumes: rows => {
+  externalVolumes: rows => {
     rows = rows.filter(row => {
-      return ["containerPath", "networkName"].every(key => {
+      return ["containerPath", "externalName"].every(key => {
         return row[key] != null && row[key] !== "";
       });
     })
@@ -103,7 +103,7 @@ const AppFormFieldToModelTransforms = {
         return {
           containerPath: row.containerPath,
           external: {
-            name: row.networkName,
+            name: row.externalName,
             provider: "dvdi",
             options: {
               "dvdi/driver": "rexray"

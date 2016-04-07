@@ -23,7 +23,7 @@ const storeData = {
 const duplicableRowFields = Object.freeze([
   "containerVolumes",
   "localVolumes",
-  "networkVolumes",
+  "externalVolumes",
   "dockerParameters",
   "dockerPortMappings",
   "env",
@@ -58,9 +58,9 @@ const validationRules = {
     AppFormValidators.localVolumesPath,
     AppFormValidators.localVolumesIsNotEmpty
   ],
-  "networkVolumes": [
-    AppFormValidators.networkVolumesName,
-    AppFormValidators.networkVolumesPath
+  "externalVolumes": [
+    AppFormValidators.externalVolumesName,
+    AppFormValidators.externalVolumesPath
   ],
   "cpus": [AppFormValidators.cpus],
   "disk": [AppFormValidators.disk],
@@ -100,7 +100,7 @@ const resolveFieldIdToAppKeyMap = {
   constraints: "constraints",
   containerVolumes: "container.volumes",
   localVolumes: "container.volumes",
-  networkVolumes: "container.volumes",
+  externalVolumes: "container.volumes",
   cpus: "cpus",
   disk: "disk",
   dockerForcePullImage: "container.docker.forcePullImage",
@@ -202,7 +202,7 @@ const resolveAppKeyToFieldIdMap = {
   "container.volumes": [
     "containerVolumes",
     "localVolumes",
-    "networkVolumes"
+    "externalVolumes"
   ]
 };
 

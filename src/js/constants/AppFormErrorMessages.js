@@ -27,7 +27,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
     "Container Path must be a valid path",
     "Container Path and Size must be set"
   ],
-  networkVolumes: [
+  externalVolumes: [
     "Volume Name must be a valid name",
     "Container Path must be a valid path"
   ],

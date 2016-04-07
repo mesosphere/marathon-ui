@@ -701,41 +701,42 @@ describe("App Form Validators", function () {
         });
       });
     });
-    describe("Network volumes", function () {
+    describe("External volumes", function () {
+
       describe("path", function () {
         it("should allow an empty value", function () {
           var volume = {
-            networkName: ""
+            externalName: ""
           };
-          expect(this.validatior.networkVolumesName(volume)).to.be.true;
+          expect(this.validatior.externalVolumesName(volume)).to.be.true;
         });
 
         it("should not be a not contain a space", function () {
           var volume = {
-            networkName: "ab c"
+            externalName: "ab c"
           };
-          expect(this.validatior.networkVolumesName(volume)).to.be.false;
+          expect(this.validatior.externalVolumesName(volume)).to.be.false;
         });
 
         it("should be a string value", function () {
           var volume = {
-            networkName: "abc"
+            externalName: "abc"
           };
-          expect(this.validatior.networkVolumesName(volume)).to.be.true;
+          expect(this.validatior.externalVolumesName(volume)).to.be.true;
         });
 
         it("should not contain a slash string value", function () {
           var volume = {
-            networkName: "ab/c"
+            externalName: "ab/c"
           };
-          expect(this.validatior.networkVolumesName(volume)).to.be.false;
+          expect(this.validatior.externalVolumesName(volume)).to.be.false;
         });
 
         it("should not begin with a slash string value", function () {
           var volume = {
-            networkName: "/abc"
+            externalName: "/abc"
           };
-          expect(this.validatior.networkVolumesName(volume)).to.be.false;
+          expect(this.validatior.externalVolumesName(volume)).to.be.false;
         });
       });
       describe("path", function () {
@@ -750,28 +751,28 @@ describe("App Form Validators", function () {
           var volume = {
             containerPath: "ab c"
           };
-          expect(this.validatior.networkVolumesPath(volume)).to.be.false;
+          expect(this.validatior.externalVolumesPath(volume)).to.be.false;
         });
 
         it("should be a string value", function () {
           var volume = {
             containerPath: "abc"
           };
-          expect(this.validatior.networkVolumesPath(volume)).to.be.true;
+          expect(this.validatior.externalVolumesPath(volume)).to.be.true;
         });
 
         it("may contain a slash string value", function () {
           var volume = {
             containerPath: "ab/c"
           };
-          expect(this.validatior.networkVolumesPath(volume)).to.be.true;
+          expect(this.validatior.externalVolumesPath(volume)).to.be.true;
         });
 
         it("may begin with a slash string value", function () {
           var volume = {
             containerPath: "/abc"
           };
-          expect(this.validatior.networkVolumesPath(volume)).to.be.true;
+          expect(this.validatior.externalVolumesPath(volume)).to.be.true;
         });
       });
     });

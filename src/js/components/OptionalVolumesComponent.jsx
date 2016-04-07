@@ -4,8 +4,8 @@ import ContainerVolumesComponent
   from "../components/ContainerVolumesComponent";
 import LocalVolumesComponent
   from "../components/LocalVolumesComponent";
-import NetworkVolumesComponent
-  from "../components/NetworkVolumesComponent";
+import ExternalVolumesComponent
+  from "../components/ExternalVolumesComponent";
 
 var OptionalVolumesComponent = React.createClass({
   displayName: "OptionalVolumesComponent",
@@ -23,7 +23,7 @@ var OptionalVolumesComponent = React.createClass({
           errorIndices={this.props.errorIndices}
           getErrorMessage={this.props.getErrorMessage}
           fields={this.props.fields} />
-        <NetworkVolumesComponent
+        <ExternalVolumesComponent
           errorIndices={this.props.errorIndices}
           getErrorMessage={this.props.getErrorMessage}
           fields={this.props.fields} />

@@ -2,15 +2,15 @@ import {expect} from "chai";
 import {render, shallow} from "enzyme";
 
 import React from "react/addons";
-import NetworkVolumesComponent
-  from "../../js/components/NetworkVolumesComponent.jsx";
+import ExternalVolumesComponent
+  from "../../js/components/ExternalVolumesComponent.jsx";
 
-describe("Network Volumes Component", function () {
+describe("External Volumes Component", function () {
   describe("(no volume)", () => {
     var component = shallow(
-      <NetworkVolumesComponent errorIndices={{}}
-                               fields={{"networkVolumes": null}}
-                               getErrorMessage={()=>{}}/>
+      <ExternalVolumesComponent errorIndices={{}}
+        fields={{"externalVolumes": null}}
+        getErrorMessage={()=>{}}/>
     );
 
     it("should display a button", () => {
@@ -31,21 +31,22 @@ describe("Network Volumes Component", function () {
         .to.equal("Network Volumes");
     });
   });
+
   describe("(one volume)", () => {
     var component = render(
-      <NetworkVolumesComponent
+      <ExternalVolumesComponent
         errorIndices={{}}
-        fields={{"networkVolumes": [{
+        fields={{"externalVolumes": [{
           consecutiveKey: "0",
           containerPath: "/tmp/home",
-          networkName: "name-test"
+          externalName: "name-test"
         }]}}
         getErrorMessage={()=>{}} />
     );
 
     it("should have the right Volume Name", () => {
       expect(component.find("input").get(0).attribs.id)
-        .to.equal("networkVolumes.external.name.0");
+        .to.equal("externalVolumes.external.name.0");
     });
 
     it("should have the right size value", () => {
@@ -55,7 +56,7 @@ describe("Network Volumes Component", function () {
 
     it("should have the right path id", () => {
       expect(component.find("input").get(1).attribs.id)
-        .to.equal("networkVolumes.containerPath.0");
+        .to.equal("externalVolumes.containerPath.0");
     });
 
     it("should have the right path value", () => {

@@ -7,7 +7,7 @@ const ExternalLinks = {
     "https://mesosphere.github.io/marathon/docs/persistent-volumes.html",
   CONTAINER_PATH:
     "http://mesosphere.github.io/marathon/docs/persistent-volumes.html",
-  NETWORK_VOLUMES:
+  EXTERNAL_VOLUMES:
     "http://mesosphere.github.io/marathon/docs/external-volumes.html",
   PORTS: "https://mesosphere.github.io/marathon/docs/ports.html",
   JSON_EDITOR: "https://mesosphere.github.io/marathon/docs/generated/" +

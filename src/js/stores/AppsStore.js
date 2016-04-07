@@ -314,10 +314,10 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
       return null;
     }
 
-    var networkVolumes = [];
+    var externalVolumes = [];
 
     if (app.container != null && app.container.volumes != null) {
-      networkVolumes = app.container.volumes.filter(
+      externalVolumes = app.container.volumes.filter(
         volume => volume.external != null
       ).map(
         volume => {
@@ -329,7 +329,7 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
       );
     }
 
-    return networkVolumes.concat(tasks
+    return externalVolumes.concat(tasks
       // Get the first volume from a task with the same id as provided
       // by the router. This should be unique.
       .reduce((memo, task) => {

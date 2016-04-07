@@ -34,7 +34,7 @@ describe("AppVolumesListComponent", () => {
       external: {
         name: "volume"
       },
-      type: "NETWORK",
+      type: "EXTERNAL",
       containerPath: "/tmp/path",
       mode: "XX",
       status: "detached"
@@ -70,7 +70,7 @@ describe("AppVolumesListComponent", () => {
         volume={volumes[1]}
         sortKey="id" />)).to.be.true;
   });
-  it("contains the right NETWORK volume list item", () => {
+  it("contains the right EXTERNAL volume list item", () => {
     expect(component.contains(
       <AppVolumesListItemComponent
         key={2}
@@ -107,6 +107,7 @@ describe("AppVolumesListComponent", () => {
       <AppVolumesListComponent
         volumes={volumes} />
     );
+
     sortKeys.forEach((sortKey, index) => {
       it(`Sorting by ${sortKey}`, () => {
         component.setState({
