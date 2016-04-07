@@ -10,6 +10,8 @@
 - \#3655 - Apps with no volumes reported as stateful
 - \#3369 - Constraint validation message
 - \#3671 - Scrolling issue with create modal
+- \#3663 - Apps created from inside a group have a double forward-slash in
+  their ID
 
 ### Changed
 - \#3426 - Improve ports validation
