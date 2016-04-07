@@ -1,3 +1,7 @@
+## Unversioned
+### Added
+- \#3670 - Add support for scheduler upgrades and readinessChecks
+
 ## 1.0.1 - 2016-04-07
 ### Fixed
 - \#3552 - Editing an App: Switching between JSON and normal Editor
@@ -22,7 +26,6 @@
 
 ### Added
 - VIP labels in port definitions
--\#3670 - Add support for scheduler upgrades and readinessChecks
 
 ## 1.0.0 - 2016-03-23
 ### Fixed
