@@ -42,25 +42,6 @@ var DeploymentActions = {
         });
       });
   },
-  stopDeployment: function (deploymentID) {
-    this.request({
-      method: "DELETE",
-      url: `${config.apiURL}v2/deployments/${deploymentID}?force=true`
-    })
-      .success(function (deployment) {
-        AppDispatcher.dispatch({
-          actionType: DeploymentEvents.STOP,
-          data: deployment,
-          deploymentId: deploymentID
-        });
-      })
-      .error(function (error) {
-        AppDispatcher.dispatch({
-          actionType: DeploymentEvents.STOP_ERROR,
-          data: error
-        });
-      });
-  },
   continueMigration: function (service, path, appId) {
     this.request({
       method: "POST",

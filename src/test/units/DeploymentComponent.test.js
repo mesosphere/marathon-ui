@@ -62,11 +62,10 @@ describe("Deployment component", function () {
     expect(this.component.find("td").at(3).text()).to.equal("1 / 2");
   });
 
-  it("renders the Stop and Rollback buttons", function () {
+  it("renders the Rollback buttons", function () {
     var buttons = this.component.find(".deployment-buttons").find(".btn");
-    expect(buttons.length).to.equal(2);
-    expect(buttons.first().text()).to.equal("Stop");
-    expect(buttons.at(1).text()).to.equal("Rollback");
+    expect(buttons.length).to.equal(1);
+    expect(buttons.at(0).text()).to.equal("Rollback");
   });
 
   describe("during a scheduler upgrade", function () {
