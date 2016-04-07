@@ -78,7 +78,7 @@ var NetworkVolumesComponent = React.createClass({
             onChange={this.handleChange.bind(null, i)}>
           <div className="col-sm-4">
             <FormGroupComponent
-                fieldId={`networkVolumes.persistent.name.${i}`}
+                fieldId={`networkVolumes.external.name.${i}`}
                 label="Volume Name"
                 value={row.networkName}>
               <input ref={`networkName${i}`}/>
@@ -107,7 +107,7 @@ var NetworkVolumesComponent = React.createClass({
     if (rows == null) {
       return (
         <button type="button">
-          Add a persistent local volume
+          Add a network volume
         </button>
       );
     }
