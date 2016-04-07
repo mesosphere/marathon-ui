@@ -126,7 +126,7 @@ var NetworkVolumesComponent = React.createClass({
       <span>
         Local volumes retain data if an
         application terminates.
-        <a href={ExternalLinks.LOCAL_VOLUMES} target="_blank">Read more</a>.
+        <a href={ExternalLinks.NETWORK_VOLUMES} target="_blank">Read more</a>.
       </span>
     );
 
