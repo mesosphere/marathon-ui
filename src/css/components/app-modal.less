@@ -65,6 +65,7 @@
     }
 
     .tooltip-container {
+
       .right, .left {
         .content {
           top: -@base-spacing-unit*1.5;
@@ -84,15 +85,19 @@
         }
       }
 
-      .left .content {
-        transform: translateX(calc(~"-100% -"@base-spacing-unit*4));
+      .left {
+        transform: translateX(-@base-spacing-unit*5);
 
-        &:before {
-          border-top-color: transparent;
-          border-right-color: transparent;
-          border-left-color: @bunker;
-          top: @base-spacing-unit / 2;
-          left: calc(~"100% +"@base-spacing-unit);
+        .content {
+          transform: translateX(-100%);
+
+          &:before {
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-left-color: @bunker;
+            top: @base-spacing-unit / 2;
+            left: calc(~"100% +" @base-spacing-unit);
+          }
         }
       }
     }
