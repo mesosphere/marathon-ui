@@ -8,6 +8,7 @@
 - \#3652 - Error paths are mapped incorrectly
 - \#3092 - Delayed applications can appear to be running
 - \#3655 - Apps with no volumes reported as stateful
+- \#3369 - Constraint validation message
 
 ### Changed
 - \#3426 - Improve ports validation
