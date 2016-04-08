@@ -12,7 +12,7 @@ export default React.createClass({
     if (volume.taskId == null) {
       return null;
     }
-    if(volume.taskURI != null) {
+    if (volume.taskURI != null) {
       link = (
         <dd>
           <a href={volume.taskURI}>{volume.taskId}</a>
