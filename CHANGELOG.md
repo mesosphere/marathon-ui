@@ -1,4 +1,4 @@
-## Unversioned
+## 1.1.0 - 2016-04-08
 ### Added
 - \#3670 - Add support for scheduler upgrades and readinessChecks
 - Add support for external persistent volumes
