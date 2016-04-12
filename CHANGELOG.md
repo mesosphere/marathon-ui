@@ -1,4 +1,8 @@
 ## Unversioned
+### Fixed
+- \#3719 - Tooltip message for external volumes is wrong
+- \#3724 - Don't assume external volumes status as attached by default
+
 ### Changed
 - \#3693 - Remove unwanted sidebar filter for scheduler upgrades
 
