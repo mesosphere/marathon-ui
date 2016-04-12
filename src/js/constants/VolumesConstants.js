@@ -6,7 +6,8 @@ const VolumesConstants = {
   },
   STATUS: {
     ATTACHED: "Attached",
-    DETACHED: "Detached"
+    DETACHED: "Detached",
+    UNAVAILABLE: "Unavailable"
   }
 };
 
