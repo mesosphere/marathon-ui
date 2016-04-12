@@ -8,6 +8,7 @@ import FilterTypes from "../constants/FilterTypes";
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
 import {statusNameMapping} from "../constants/LabelMapping";
+import {statusFilters} from "../constants/LabelMapping";
 
 var SidebarStatusFilterComponent = React.createClass({
   displayName: "SidebarStatusFilterComponent",
@@ -78,7 +79,7 @@ var SidebarStatusFilterComponent = React.createClass({
         .split(",")
         .filter((statusKey) => {
           let status = statusKey.toString();
-          let existingStatus = Object.keys(statusNameMapping).indexOf(status);
+          let existingStatus = Object.keys(statusFilters).indexOf(status);
           return existingStatus !== -1;
         });
     }
@@ -107,7 +108,7 @@ var SidebarStatusFilterComponent = React.createClass({
   getStatusNodes: function () {
     var state = this.state;
 
-    return Object.keys(statusNameMapping).map((key, i) => {
+    return Object.keys(statusFilters).map((key, i) => {
       var optionText = statusNameMapping[key];
 
       var checkboxProps = {

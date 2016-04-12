@@ -10,3 +10,11 @@ export const statusNameMapping = Util.deepFreeze({
   [AppStatus.WAITING]: "Waiting",
   [AppStatus.WAITING_FOR_USER_ACTION]: "Waiting for user action..."
 });
+
+export const statusFilters = Object.freeze([
+  AppStatus.RUNNING,
+  AppStatus.DEPLOYING,
+  AppStatus.SUSPENDED,
+  AppStatus.DELAYED,
+  AppStatus.WAITING
+]);
