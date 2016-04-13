@@ -13,7 +13,23 @@ var OptionalVolumesComponent = React.createClass({
   propTypes: {
     errorIndices: React.PropTypes.object.isRequired,
     fields: React.PropTypes.object.isRequired,
-    getErrorMessage: React.PropTypes.func.isRequired
+    getErrorMessage: React.PropTypes.func.isRequired,
+    hasExternalVolumes: React.PropTypes.bool.isRequired
+  },
+
+  getExternalVolumesNode: function () {
+    var props = this.props;
+
+    if (!props.hasExternalVolumes) {
+      return null;
+    }
+
+    return (
+      <ExternalVolumesComponent
+        errorIndices={props.errorIndices}
+        getErrorMessage={props.getErrorMessage}
+        fields={props.fields} />
+    );
   },
 
   render: function () {
@@ -23,10 +39,7 @@ var OptionalVolumesComponent = React.createClass({
           errorIndices={this.props.errorIndices}
           getErrorMessage={this.props.getErrorMessage}
           fields={this.props.fields} />
-        <ExternalVolumesComponent
-          errorIndices={this.props.errorIndices}
-          getErrorMessage={this.props.getErrorMessage}
-          fields={this.props.fields} />
+        {this.getExternalVolumesNode()}
         <ContainerVolumesComponent
           errorIndices={this.props.errorIndices}
           getErrorMessage={this.props.getErrorMessage}

@@ -1,6 +1,7 @@
 ## Unversioned
 ### Changed
 - \#3693 - Remove unwanted sidebar filter for scheduler upgrades
+- Introduce support for External Volumes based on feature flag
 
 ## 1.1.0 - 2016-04-08
 ### Added

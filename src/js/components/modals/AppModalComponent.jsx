@@ -61,28 +61,19 @@ var AppModalComponent = React.createClass({
     Mousetrap.bind(["command+enter", "ctrl+enter"], () => this.handleSubmit());
 
     if (!this.hasInfoObject()) {
-      InfoStore.on(InfoEvents.CHANGE, this.onInfoChange);
-      InfoStore.on(InfoEvents.REQUEST_ERROR, this.onInfoChange);
+      InfoStore.once(InfoEvents.CHANGE, this.onInfoChange);
       InfoActions.requestInfo();
     }
   },
 
   componentWillUnmount: function () {
-    AppsStore.removeListener(AppsEvents.CREATE_APP,
-      this.onCreateApp);
+    AppsStore.removeListener(AppsEvents.CREATE_APP, this.onCreateApp);
     AppsStore.removeListener(AppsEvents.CREATE_APP_ERROR,
       this.onCreateAppError);
-    AppsStore.removeListener(AppsEvents.APPLY_APP,
-      this.onCreateApp);
-    AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR,
-      this.onApplyAppError);
-    Mousetrap.unbind(["command+enter", "ctrl+enter"]);
-    this.removeInfoListeners();
-  },
-
-  removeInfoListeners: function () {
+    AppsStore.removeListener(AppsEvents.APPLY_APP, this.onCreateApp);
+    AppsStore.removeListener(AppsEvents.APPLY_APP_ERROR, this.onApplyAppError);
     InfoStore.removeListener(InfoEvents.CHANGE, this.onInfoChange);
-    InfoStore.removeListener(InfoEvents.REQUEST_ERROR, this.onInfoChange);
+    Mousetrap.unbind(["command+enter", "ctrl+enter"]);
   },
 
   onApplyAppError: function (error, isEditing, status) {
@@ -115,13 +106,9 @@ var AppModalComponent = React.createClass({
   },
 
   onInfoChange: function () {
-    this.removeInfoListeners();
-
-    if (!this.hasInfoObject()) {
-      this.setState({
-        info: InfoStore.info
-      });
-    }
+    this.setState({
+      info: InfoStore.info
+    });
   },
 
   handleSubmit: function (event) {
