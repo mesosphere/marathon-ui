@@ -45,7 +45,7 @@ var TaskViewComponent = React.createClass({
     AppsActions.requestApp(this.props.appId);
   },
 
-  handleKillSelectedTasks: function (scaleTask) {
+  handleKillSelectedTasks: function (scaleTask = false, wipeTasks = false) {
     var props = this.props;
     var selectedTaskIds = Object.keys(this.state.selectedTasks);
 
@@ -56,7 +56,7 @@ var TaskViewComponent = React.createClass({
     }).compact().value();
 
     if (!scaleTask) {
-      TasksActions.deleteTasks(props.appId, taskIds);
+      TasksActions.deleteTasks(props.appId, taskIds, wipeTasks);
     } else {
       TasksActions.deleteTasksAndScale(props.appId, taskIds);
     }
@@ -123,9 +123,36 @@ var TaskViewComponent = React.createClass({
               onClick={this.handleKillSelectedTasks.bind(this, true)}>
             Kill &amp; Scale
           </button>
+          {this.getKillAndWipeButton()}
         </div>
       );
     }
+  },
+
+  getKillAndWipeButton: function () {
+    var hasStatefulTasks = Object.keys(this.state.selectedTasks)
+      .reduce((memo, taskId) => {
+        var task = this.props.tasks.find(task => task.id === taskId);
+        if (task != null &&
+            task.localVolumes != null
+            && task.localVolumes.length > 0) {
+          memo = true;
+        }
+
+        return memo;
+      }, false);
+
+    if (!hasStatefulTasks) {
+      return null;
+    }
+
+    return (
+      <button
+        className="btn btn-sm btn-info"
+        onClick={this.handleKillSelectedTasks.bind(this, false, true)}>
+        Kill &amp; Wipe
+      </button>
+    );
   },
 
   getPagedNav: function () {
