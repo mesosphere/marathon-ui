@@ -1,4 +1,7 @@
 ## Unversioned
+### Added
+- \#3658 - Allow Kill & Wipe for resident tasks
+
 ### Fixed
 - \#3719 - Tooltip message for external volumes is wrong
 - \#3724 - Don't assume external volumes status as attached by default

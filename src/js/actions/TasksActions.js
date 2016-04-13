@@ -6,13 +6,19 @@ import AppDispatcher from "../AppDispatcher";
 import TasksEvents from "../events/TasksEvents";
 
 var TasksActions = {
-  deleteTasks: function (appId, taskIds = []) {
+  deleteTasks: function (appId, taskIds = [], wipeTasks = false) {
+    var url = `${config.apiURL}v2/tasks/delete`;
+
+    if (wipeTasks) {
+      url+= "?wipe=true";
+    }
+
     this.request({
       method: "POST",
       data: {
         "ids": taskIds
       },
-      url: `${config.apiURL}v2/tasks/delete`
+      url: url
     })
       .success(function () {
         AppDispatcher.dispatch({
