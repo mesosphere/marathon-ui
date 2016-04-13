@@ -65,6 +65,8 @@ function setTaskStatus(task) {
   } else if (task.stagedAt != null) {
     task.status = TaskStatus.STAGED;
     task.updatedAt = task.stagedAt;
+  } else if (task.localVolumes != null && task.localVolumes.length > 0) {
+    task.status = TaskStatus.SUSPENDED;
   }
 }
 

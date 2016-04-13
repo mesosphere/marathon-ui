@@ -7,6 +7,9 @@
 - \#3693 - Remove unwanted sidebar filter for scheduler upgrades
 - Introduce support for External Volumes based on feature flag
 
+### Fixed
+- \#3657 - Suspended resident tasks should have a different status
+
 ## 1.1.0 - 2016-04-08
 ### Added
 - \#3670 - Add support for scheduler upgrades and readinessChecks

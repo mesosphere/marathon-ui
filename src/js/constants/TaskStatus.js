@@ -1,6 +1,7 @@
 const TaskStatus = {
   STAGED: "Staged",
-  STARTED: "Started"
+  STARTED: "Started",
+  SUSPENDED: "Suspended"
 };
 
 export default Object.freeze(TaskStatus);
