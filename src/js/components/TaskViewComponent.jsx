@@ -45,7 +45,7 @@ var TaskViewComponent = React.createClass({
     AppsActions.requestApp(this.props.appId);
   },
 
-  handleKillSelectedTasks: function (scaleTask = false, wipeTasks = false) {
+  handleKillSelectedTasks: function (scaleTask, wipeTasks) {
     var props = this.props;
     var selectedTaskIds = Object.keys(this.state.selectedTasks);
 
@@ -115,12 +115,12 @@ var TaskViewComponent = React.createClass({
         <div className="btn-group">
           <button
               className="btn btn-sm btn-info"
-              onClick={this.handleKillSelectedTasks.bind(this, false)}>
+              onClick={this.handleKillSelectedTasks.bind(this, false, false)}>
             Kill
           </button>
           <button
               className="btn btn-sm btn-info"
-              onClick={this.handleKillSelectedTasks.bind(this, true)}>
+              onClick={this.handleKillSelectedTasks.bind(this, true, false)}>
             Kill &amp; Scale
           </button>
           {this.getKillAndWipeButton()}
