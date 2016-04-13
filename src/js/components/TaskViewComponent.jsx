@@ -2,6 +2,10 @@ import lazy from "lazy.js";
 import React from "react/addons";
 
 import AppsActions from "../actions/AppsActions";
+import DialogActions from "../actions/DialogActions";
+import DialogStore from "../stores/DialogStore";
+import DialogSeverity from "../constants/DialogSeverity";
+import ExternalLinks from "../constants/ExternalLinks";
 import PagedNavComponent from "../components/PagedNavComponent";
 import TasksActions from "../actions/TasksActions";
 import TaskListComponent from "../components/TaskListComponent";
@@ -55,11 +59,42 @@ var TaskViewComponent = React.createClass({
         : null;
     }).compact().value();
 
-    if (!scaleTask) {
-      TasksActions.deleteTasks(props.appId, taskIds, wipeTasks);
-    } else {
+    if (scaleTask) {
       TasksActions.deleteTasksAndScale(props.appId, taskIds);
+      this.setState({selectedTasks: {}});
+      return;
     }
+
+    if (wipeTasks) {
+      const dialogId = DialogActions.confirm({
+        actionButtonLabel: "Kill and Wipe",
+        message: (
+          <div>
+            <p>This will kill all selected tasks and wipe the respective
+              local volumes. <a href={ExternalLinks.LOCAL_VOLUMES}
+                target="_blank"
+                className="modal-body-link">
+                Read more about persistent local volumes.
+              </a>
+            </p>
+            <p>
+              Are you sure you want to continue?
+            </p>
+          </div>
+        ),
+        severity: DialogSeverity.WARNING,
+        title: "Kill and Wipe Local Volumes"
+      });
+
+      DialogStore.handleUserResponse(dialogId, () => {
+        TasksActions.deleteTasks(props.appId, taskIds, true);
+        this.setState({selectedTasks: {}});
+      });
+
+      return;
+    }
+
+    TasksActions.deleteTasks(props.appId, taskIds, false);
     this.setState({selectedTasks: {}});
   },
 
