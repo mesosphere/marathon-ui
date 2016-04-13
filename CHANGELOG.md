@@ -5,13 +5,11 @@
 ### Fixed
 - \#3719 - Tooltip message for external volumes is wrong
 - \#3724 - Don't assume external volumes status as attached by default
+- \#3657 - Suspended resident tasks should have a different status
 
 ### Changed
 - \#3693 - Remove unwanted sidebar filter for scheduler upgrades
 - Introduce support for External Volumes based on feature flag
-
-### Fixed
-- \#3657 - Suspended resident tasks should have a different status
 
 ## 1.1.0 - 2016-04-08
 ### Added
