@@ -163,10 +163,18 @@ var AppConfigEditFormComponent = React.createClass({
     });
   },
 
-  hasVIP: function () {
+  hasFeature: function (feature) {
     var features = this.props.features;
 
-    return Util.isArray(features) && features.includes("vips");
+    return Util.isArray(features) && features.includes(feature);
+  },
+
+  hasVIP: function () {
+    return this.hasFeature("vips");
+  },
+
+  hasExternalVolumes: function () {
+    return this.hasFeature("external_volumes");
   },
 
   onMenuChange: function (menuItemValue) {
@@ -391,7 +399,8 @@ var AppConfigEditFormComponent = React.createClass({
             <OptionalVolumesComponent
               errorIndices={state.errorIndices}
               getErrorMessage={this.getErrorMessage}
-              fields={state.fields} />
+              fields={state.fields}
+              hasExternalVolumes={this.hasExternalVolumes()} />
           </SectionComponent>
           <SectionComponent sectionId="optional">
             <OptionalSettingsComponent
