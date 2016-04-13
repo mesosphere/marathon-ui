@@ -349,7 +349,8 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
             volume.appId = appId;
             volume.taskId = task.id;
             volume.host = task.host;
-            volume.status = task.status == null
+            volume.status = task.status == null ||
+                task.status === TaskStatus.SUSPENDED
               ? VolumesConstants.STATUS.DETACHED
               : VolumesConstants.STATUS.ATTACHED;
             return volume;
