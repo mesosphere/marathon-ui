@@ -13,6 +13,7 @@ import Messages from "../constants/Messages";
 import QueueActions from "../actions/QueueActions";
 import QueueEvents from "../events/QueueEvents";
 import QueueStore from "../stores/QueueStore";
+import ExternalLinks from "../constants/ExternalLinks";
 
 var bindOneTimeEvents = function (store, resolverEvents, handlers) {
   var eventHandlers = [];
@@ -218,7 +219,8 @@ var AppActionsHandlerMixin = {
       message: (
         <div>
           <div>Scaling down ${appId} will cause any existing local volumes to
-            be detached from destroyed instances. <a href="about:blank"
+            be detached from destroyed instances. <a
+                href={ExternalLinks.LOCAL_VOLUMES}
                 target="_blank"
                 className="modal-body-link">
               Read more about persistent local volumes.
