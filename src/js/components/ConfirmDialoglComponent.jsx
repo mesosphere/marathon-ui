@@ -11,7 +11,10 @@ var ConfirmDialogComponent = React.createClass({
   propTypes: {
     data: React.PropTypes.shape({
       actionButtonLabel: React.PropTypes.string.isRequired,
-      message: React.PropTypes.string.isRequired,
+      message: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.node
+      ]).isRequired,
       severity: React.PropTypes.string.isRequired,
       title: React.PropTypes.string.isRequired
     }).isRequired,
