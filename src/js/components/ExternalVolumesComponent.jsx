@@ -124,8 +124,8 @@ var ExternalVolumesComponent = React.createClass({
   render: function () {
     var externalVolumesTooltipMessage = (
       <span>
-        Local volumes retain data if an
-        application terminates.
+        External persistent storage functionality is considered beta,
+        so use this feature at your own risk.
         <a href={ExternalLinks.EXTERNAL_VOLUMES} target="_blank">Read more</a>.
       </span>
     );

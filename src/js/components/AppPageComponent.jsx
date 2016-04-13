@@ -343,11 +343,8 @@ var AppPageComponent = React.createClass({
     var volumes = AppsStore.getVolumes(model.id);
 
     var tabs = state.tabs.filter(tab =>
-      tab.text !== "Volumes" || (
-        model.container != null &&
-        model.container.volumes != null &&
-        model.container.volumes.length > 0
-      ));
+      !(tab.text === "Volumes" && volumes.length === 0)
+    );
 
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"

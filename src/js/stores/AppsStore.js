@@ -322,7 +322,7 @@ var AppsStore = Util.extendObject(EventEmitter.prototype, {
         .map(volume => {
           volume.appId = appId;
           volume.id = volume.external.name;
-          volume.status = VolumesConstants.STATUS.ATTACHED;
+          volume.status = VolumesConstants.STATUS.UNAVAILABLE;
           return volume;
         });
     }
