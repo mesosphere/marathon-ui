@@ -226,6 +226,38 @@ describe("Create Application", function () {
         });
       });
 
+      it("processes a 422 multiple error response correctly",
+          function (done) {
+
+        nock(config.apiURL)
+          .post("/v2/apps")
+          .reply(422, {
+            "message": "Object is not valid",
+            "details": [{
+              "path": "/",
+              "errors": ["Groups and Applications may not have the same " +
+                "identifier: /sleep"]
+            }, {
+              "path": "/",
+              "errors": ["This is a second unmapped error"]
+            }]
+          });
+
+        AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
+          expectAsync(function () {
+            expect(AppFormStore.responseErrors.general)
+              .to.deep.equal(["Groups and Applications may not have the same " +
+                  "identifier: /sleep",
+                  "This is a second unmapped error"
+                ]);
+          }, done);
+        });
+
+        AppsActions.createApp({
+          id: "sleep/my-app"
+        });
+      });
+
       it("processes a 422 error response with no error details correctly",
         function (done) {
 
