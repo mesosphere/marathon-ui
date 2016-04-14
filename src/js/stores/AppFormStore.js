@@ -395,6 +395,9 @@ function processResponseErrors(responseErrors, response, statusCode) {
 
   } else if (statusCode === 422 && response != null &&
       Util.isArray(response.details)) {
+
+    responseErrors.general = [];
+
     response.details.forEach(detail => {
       var attributePath = "general";
 
@@ -419,8 +422,14 @@ function processResponseErrors(responseErrors, response, statusCode) {
         error = response.message;
       }
 
-      responseErrors[fieldId] =
+      let serverResponseMessage =
         AppFormErrorMessages.lookupServerResponseMessage(error);
+
+      if (fieldId === "general") {
+        responseErrors.general.push(serverResponseMessage);
+      } else {
+        responseErrors[fieldId] = serverResponseMessage;
+      }
     });
 
   } else if (statusCode === 409 && responseHasDeployments) {
