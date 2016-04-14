@@ -1,4 +1,4 @@
-## Unversioned
+## 1.1.2 - 2016-04-14
 ### Fixed
 - \#3763 - Enable multiple general errors from server response
 
