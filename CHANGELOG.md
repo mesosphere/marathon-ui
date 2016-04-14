@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- \#3763 - Enable multiple general errors from server response
+
 ## 1.1.1 - 2016-04-13
 ### Added
 - \#3658 - Allow Kill & Wipe for resident tasks
