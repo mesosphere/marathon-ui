@@ -204,7 +204,7 @@ describe("Create Application", function () {
 
         AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
           expectAsync(function () {
-            expect(AppFormStore.responseErrors.general)
+            expect(AppFormStore.responseErrors.general[0])
               .to.equal("Groups and Applications may not have the same " +
                 "identifier: /sleep");
           }, done);
@@ -231,7 +231,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general)
+              expect(AppFormStore.responseErrors.general[0])
                 .to.equal("Object is not valid");
             }, done);
           });
@@ -255,7 +255,7 @@ describe("Create Application", function () {
 
           AppsStore.once(AppsEvents.CREATE_APP_ERROR, function () {
             expectAsync(function () {
-              expect(AppFormStore.responseErrors.general)
+              expect(AppFormStore.responseErrors.general[0])
                 .to.equal("May not be changed.");
             }, done);
           });
