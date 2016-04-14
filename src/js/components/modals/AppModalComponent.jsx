@@ -141,12 +141,19 @@ var AppModalComponent = React.createClass({
 
     if (Util.isObject(error)) {
       error = Object.keys(error).map(key => {
-        return `${key}: ${error[key]}`;
+        var errorMsg = error[key];
+        if (Util.isArray(errorMsg)) {
+          return errorMsg.map(message => {
+            return `${key}: ${message}`;
+          });
+        }
+        return `${key}: ${errorMsg}`;
       });
     }
 
     if (Util.isArray(error)) {
-      error = error.map((message, index) =>
+      var flattenedErrors = [].concat.apply([], error);
+      error = flattenedErrors.map((message, index) =>
         <li key={index}><AutolinkComponent text={message} /></li>
       );
     } else {
