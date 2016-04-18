@@ -33,7 +33,9 @@ const AppFormModelPostProcess = {
       return;
     }
 
-    if (container.docker == null &&
+    if ((container.docker == null ||
+        container.docker.image == null ||
+        container.docker.image === "") &&
         container.volumes != null &&
         container.volumes.length > 0) {
       delete container.docker;

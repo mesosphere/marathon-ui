@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- \#3790 - Remove Docker on submit if no image is provided
+
 ## 1.1.2 - 2016-04-14
 ### Fixed
 - \#3763 - Enable multiple general errors from server response
