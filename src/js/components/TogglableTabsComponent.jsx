@@ -23,6 +23,10 @@ export default React.createClass({
   render: function () {
     var childNodes = React.Children.map(this.props.children,
       function (child) {
+        if (child == null) {
+          return null;
+        }
+
         return React.cloneElement(child, {
           isActive: (child.props.id === this.props.activeTabId)
         });
