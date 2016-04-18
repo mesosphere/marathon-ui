@@ -9,6 +9,8 @@ const ExternalLinks = {
     "http://mesosphere.github.io/marathon/docs/persistent-volumes.html",
   EXTERNAL_VOLUMES:
     "http://mesosphere.github.io/marathon/docs/external-volumes.html",
+  REXRAY_DOCS: "https://rexray.readthedocs.org/en/v0.3.2/user-guide/config/" +
+    "#data-directories",
   PORTS: "https://mesosphere.github.io/marathon/docs/ports.html",
   JSON_EDITOR: "https://mesosphere.github.io/marathon/docs/generated/" +
     "api.html#v2_apps_post"
