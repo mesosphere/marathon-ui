@@ -2,6 +2,7 @@
 ### Fixed
 - \#3790 - Remove Docker on submit if no image is provided
 - \#3774 - External volume container tooltip needs update
+- \#3773 - Volume detail lacks "Volumes" in breadcrumb
 
 ## 1.1.2 - 2016-04-14
 ### Fixed

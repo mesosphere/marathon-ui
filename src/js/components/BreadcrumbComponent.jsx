@@ -216,24 +216,36 @@ var BreadcrumbComponent = React.createClass({
   },
 
   getVolumeLink: function () {
-    var appId = this.props.appId;
-    var volumeId = this.props.volumeId;
+    var props = this.props;
+    var {appId, volumeId} = props;
+
     if (volumeId == null || appId == null) {
       return null;
     }
 
-    var params = {
+    var volumeParams = {
       appId: encodeURIComponent(appId),
       volumeId: encodeURIComponent(volumeId)
     };
 
-    return (
-      <li>
-        <Link to="volumeView" params={params}>
+    var taskParams = {
+      appId: encodeURIComponent(appId),
+      view: "volumes"
+    };
+
+    return [(
+      <li key="volumes">
+        <Link to="appView" params={taskParams}>
+          Volumes
+        </Link>
+      </li>
+      ),(
+      <li key={volumeParams.appId}>
+        <Link to="volumeView" params={volumeParams}>
           {volumeId}
         </Link>
       </li>
-    );
+    )];
   },
 
   render: function () {
