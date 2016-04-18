@@ -54,6 +54,13 @@ var callErrorDialog = function (settings) {
   });
 };
 
+var isStatefulApp = function (app) {
+  return app.container != null &&
+    app.container.volumes != null &&
+    app.container.volumes
+      .some(volume => volume.persistent != null || volume.external != null);
+};
+
 var AppActionsHandlerMixin = {
   componentWillMount: function () {
     if (this.props.model == null) {
@@ -197,9 +204,7 @@ var AppActionsHandlerMixin = {
       if (instancesString != null && instancesString !== "") {
         let instances = parseInt(instancesString, 10);
 
-        if (model.container != null && model.container.volumes != null &&
-          model.instances > instances
-        ) {
+        if (isStatefulApp(model) && model.instances > instances) {
           this.handleScaleDownVolumeApp(instances);
           return;
         }
@@ -293,9 +298,7 @@ var AppActionsHandlerMixin = {
     });
 
     DialogStore.handleUserResponse(dialogId, () => {
-      if (model.container != null &&
-          model.container.volumes != null &&
-          model.container.volumes.length > 0) {
+      if (isStatefulApp(model) && model.instances > instances) {
         this.handleScaleDownVolumeApp(0);
         return;
       }
