@@ -6,6 +6,8 @@
 - \#3772 - Filter badge for External volumes is hidden until checked
 - \#3771 - Volume tab should not be showing in task detail view
 - \#3770 - External Volumes validation
+- \#3794 - Applications with Docker volumes are mistakenly treated as stateful
+  applications
 
 ## 1.1.2 - 2016-04-14
 ### Fixed
