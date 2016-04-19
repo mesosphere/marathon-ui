@@ -223,7 +223,7 @@ var AppActionsHandlerMixin = {
       actionButtonLabel: "Continue Scaling",
       message: (
         <div>
-          <div>Scaling down ${appId} will cause any existing local volumes to
+          <div>Scaling down {appId} will cause any existing local volumes to
             be detached from destroyed instances. <a
                 href={ExternalLinks.LOCAL_VOLUMES}
                 target="_blank"
