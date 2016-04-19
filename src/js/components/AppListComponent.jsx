@@ -239,7 +239,8 @@ var AppListComponent = React.createClass({
       if (!item.isGroup) {
         filterCounts.appsStatusesCount[item.status]++;
         if (item.container != null &&
-          item.container.volumes.filter(item => item.persistent != null)
+          item.container.volumes
+            .filter(item => item.persistent != null || item.external != null)
             .length > 0) {
           filterCounts.appsVolumesCount++;
         }

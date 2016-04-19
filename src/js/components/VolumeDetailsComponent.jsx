@@ -1,4 +1,5 @@
 import React from "react/addons";
+import {Link} from "react-router";
 
 export default React.createClass({
   displayName: "VolumeDetailsComponent",
@@ -9,13 +10,22 @@ export default React.createClass({
 
   getTask: function (volume) {
     var link = null;
+
     if (volume.taskId == null) {
       return null;
     }
-    if (volume.taskURI != null) {
+
+    if (volume.taskId != null && volume.appId != null) {
+      const params = {
+        appId: encodeURIComponent(volume.appId),
+        view: encodeURIComponent(volume.taskId)
+      };
+
       link = (
         <dd>
-          <a href={volume.taskURI}>{volume.taskId}</a>
+          <Link to="appView" params={params}>
+            {volume.taskId}
+          </Link>
         </dd>
       );
     } else {
@@ -85,7 +95,9 @@ export default React.createClass({
         {this.getSize(volume)}
         <dt>Application</dt>
         <dd>
-          <a href={volume.appURI}>{volume.appId}</a>
+          <Link to="app" params={{appId: encodeURIComponent(volume.appId)}}>
+            {volume.appId}
+          </Link>
         </dd>
         {this.getTask(volume)}
         {this.getHost(volume)}

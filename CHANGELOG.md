@@ -1,6 +1,11 @@
 ## Unversioned
 ### Fixed
 - \#3790 - Remove Docker on submit if no image is provided
+- \#3774 - External volume container tooltip needs update
+- \#3773 - Volume detail lacks "Volumes" in breadcrumb
+- \#3772 - Filter badge for External volumes is hidden until checked
+- \#3771 - Volume tab should not be showing in task detail view
+- \#3770 - External Volumes validation
 
 ## 1.1.2 - 2016-04-14
 ### Fixed

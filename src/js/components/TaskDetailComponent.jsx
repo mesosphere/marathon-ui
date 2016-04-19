@@ -277,6 +277,18 @@ var TaskDetailComponent = React.createClass({
       volumes = volumes.filter(volume => volume.taskId === task.id);
     }
 
+    var volumesTab = (
+      <TabPaneComponent
+        id={tabs[1].id}>
+        {this.getVolumes(volumes)}
+      </TabPaneComponent>
+    );
+
+    if (volumes == null || volumes.length === 0) {
+      tabs = tabs.slice(0, 1);
+      volumesTab = null;
+    }
+
     return (
       <TogglableTabsComponent className="page-body page-body-no-top"
           activeTabId={activeTabId}
@@ -285,10 +297,7 @@ var TaskDetailComponent = React.createClass({
             id={tabs[0].id}>
             <TaskFileListComponent task={task} />
         </TabPaneComponent>
-        <TabPaneComponent
-            id={tabs[1].id}>
-          {this.getVolumes(volumes)}
-        </TabPaneComponent>
+        {volumesTab}
       </TogglableTabsComponent>
     );
   },

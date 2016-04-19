@@ -326,13 +326,6 @@ var AppPageComponent = React.createClass({
       return null;
     }
 
-    volume.taskURI = "#apps/" +
-      encodeURIComponent(this.appId) +
-      "/" + encodeURIComponent(volume.taskId);
-
-    volume.appURI = "#apps/" +
-      encodeURIComponent(this.state.appId);
-
     return (<VolumeDetailsComponent volume={volume} />);
   },
 

@@ -54,11 +54,11 @@ var ExternalVolumesComponent = React.createClass({
 
     var containerPathTooltipMessage = (
       <span>
-        The path to the directory where your application will
-        read and write data. The path must be non-nested and
-        cannot contain slashes, e.g. `data`, but not
-        `../../../etc/opt` or `/user/data/`.
-        <a href={ExternalLinks.CONTAINER_PATH} target="_blank">Read more</a>.
+        Specifies where the volume is mounted inside the container.
+        See the
+          <a href={ExternalLinks.REXRAY_DOCS} target="_blank">
+            REX-Ray documentation
+          </a> on data directories for more information.
       </span>
     );
 

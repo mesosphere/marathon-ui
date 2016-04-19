@@ -165,7 +165,7 @@ const AppFormValidators = {
     Util.isStringAndEmpty(obj.containerPath)),
 
   externalVolumesName: (obj) => Util.isStringAndEmpty(obj.externalName) ||
-    !!obj.externalName.toString().match(/^[a-zA-Z\.]+$/),
+    !!obj.externalName.toString().match(/^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?$/),
 
   externalVolumesPath: (obj) => isValidPath(obj.containerPath),
 
