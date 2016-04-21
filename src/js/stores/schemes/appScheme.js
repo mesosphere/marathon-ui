@@ -1,7 +1,6 @@
 import Util from "../../helpers/Util";
 
 import AppTypes from "../../constants/AppTypes";
-import AppStatus from "../../constants/AppStatus";
 
 const appScheme = {
   cmd: null,
@@ -20,7 +19,7 @@ const appScheme = {
   instances: 0,
   labels: {},
   lastTaskFailure: null,
-  status: AppStatus.SUSPENDED,
+  status: null,
   mem: null,
   disk: null,
   portDefinitions: [],

@@ -8,6 +8,7 @@
 - \#3770 - External Volumes validation
 - \#3794 - Applications with Docker volumes are mistakenly treated as stateful
   applications
+- \#3793 Wrong application status
 
 ## 1.1.2 - 2016-04-14
 ### Fixed

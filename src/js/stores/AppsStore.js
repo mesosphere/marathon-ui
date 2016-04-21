@@ -239,21 +239,14 @@ function applyAppDelayStatus(app, queue) {
   });
 
   if (queueEntry) {
-    let status;
+    let status = queueEntry.delay.overdue
+      ? AppStatus.WAITING
+      : AppStatus.DELAYED;
 
-    if (queueEntry.delay.overdue === false
-        && queueEntry.delay.timeLeftSeconds > 0) {
-      status = AppStatus.DELAYED;
-    } else if (queueEntry.delay.overdue === true) {
-      status = AppStatus.WAITING;
+    if (app.status !== status) {
+      hasChanges = true;
     }
-
-    if (status) {
-      if (app.status !== status) {
-        hasChanges = true;
-      }
-      app.status = status;
-    }
+    app.status = status;
   }
 
   return hasChanges;
