@@ -241,8 +241,7 @@ function applyAppDelayStatus(app, queue) {
   if (queueEntry) {
     let status;
 
-    if (queueEntry.delay.overdue === false
-        && queueEntry.delay.timeLeftSeconds > 0) {
+    if (queueEntry.delay.overdue === false) {
       status = AppStatus.DELAYED;
     } else if (queueEntry.delay.overdue === true) {
       status = AppStatus.WAITING;
