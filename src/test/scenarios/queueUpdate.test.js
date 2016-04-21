@@ -43,7 +43,7 @@ describe("queue update", function () {
           },
           "delay": {
             "overdue": false,
-            "timeLeftSeconds": 784
+            "timeLeftSeconds": 0
           }
         }
       ]
@@ -101,7 +101,7 @@ describe("queue update", function () {
         "queue": [
           {
             "app": {
-              "id": "/app-1",
+              "id": "/another-app",
               "maxLaunchDelaySeconds": 3600
             },
             "delay": {
