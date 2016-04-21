@@ -7,6 +7,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   appId: [
     "ID must not be empty",
     "Path must not contain whitespace",
+    "Path must not contain multiple forward slashes",
     "Path contains invalid characters " +
       "(allowed: lowercase letters, digits, hyphens, \".\", \"..\")",
     "Path is not well-formed"
