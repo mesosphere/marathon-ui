@@ -10,6 +10,9 @@
   applications
 - \#3793 Wrong application status
 
+### Changed
+- \#3660 - Multiple forward slashes allowed in app ID
+
 ## 1.1.2 - 2016-04-14
 ### Fixed
 - \#3763 - Enable multiple general errors from server response

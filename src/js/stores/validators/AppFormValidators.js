@@ -26,6 +26,8 @@ const AppFormValidators = {
 
   appIdNoWhitespaces: (str) => str.match(/ /g) == null,
 
+  appIdNoMultipleSlashes: (str) => str.match(/\/{2,}/g) == null,
+
   appIdValidChars: (str) => str.match(/[^a-z0-9\-\.\/]/g) == null,
 
   appIdWellFormedPath: (str) => {

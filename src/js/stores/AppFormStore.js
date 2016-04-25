@@ -43,6 +43,7 @@ const validationRules = {
   "appId": [
     AppFormValidators.appIdNotEmpty,
     AppFormValidators.appIdNoWhitespaces,
+    AppFormValidators.appIdNoMultipleSlashes,
     AppFormValidators.appIdValidChars,
     AppFormValidators.appIdWellFormedPath
   ],

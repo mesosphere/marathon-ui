@@ -30,6 +30,16 @@ describe("App Form Validators", function () {
           .to.be.false;
       });
 
+      it("has no multiple forward slashes", function () {
+        expect(this.validatior.appIdNoMultipleSlashes("/hello/world"))
+          .to.be.true;
+      });
+
+      it("has multiple forward slashes", function () {
+        expect(this.validatior.appIdNoMultipleSlashes("/hello//world////"))
+          .to.be.false;
+      });
+
       it("has no illegal characters", function () {
         expect(this.validatior.appIdValidChars("./app-1.b")).to.be.true;
       });
