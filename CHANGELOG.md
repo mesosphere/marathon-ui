@@ -1,4 +1,4 @@
-## Unversioned
+## 1.1.3 - 2016-04-26
 ### Fixed
 - \#3790 - Remove Docker on submit if no image is provided
 - \#3774 - External volume container tooltip needs update
