@@ -8,7 +8,7 @@
 - \#3770 - External Volumes validation
 - \#3794 - Applications with Docker volumes are mistakenly treated as stateful
   applications
-- \#3793 Wrong application status
+- \#3793 - Wrong application status
 
 ### Changed
 - \#3660 - Multiple forward slashes allowed in app ID
