@@ -1,4 +1,4 @@
-## Unversioned
+## 1.1.3 - 2016-04-26
 ### Fixed
 - \#3790 - Remove Docker on submit if no image is provided
 - \#3774 - External volume container tooltip needs update
@@ -8,7 +8,7 @@
 - \#3770 - External Volumes validation
 - \#3794 - Applications with Docker volumes are mistakenly treated as stateful
   applications
-- \#3793 Wrong application status
+- \#3793 - Wrong application status
 
 ### Changed
 - \#3660 - Multiple forward slashes allowed in app ID
