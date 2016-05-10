@@ -62,6 +62,8 @@ var AppDebugInfoComponent = React.createClass({
       );
     }
 
+    lastTaskFailure.id = lastTaskFailure.id || lastTaskFailure.taskId;
+
     const timestamp = lastTaskFailure.timestamp;
     const timeStampText = new Date(timestamp) > new Date()
       ? "Just now"
@@ -86,7 +88,7 @@ var AppDebugInfoComponent = React.createClass({
         <dd>
           <span>{version}</span> ({new Moment(version).fromNow()})
         </dd>
-        <dt>Mesos Details</dt>
+        <dt>Mesos details</dt>
         <dd><TaskMesosUrlComponent task={lastTaskFailure}/></dd>
       </dl>
     );
