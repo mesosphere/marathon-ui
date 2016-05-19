@@ -5,8 +5,10 @@ import AppsStore from "../stores/AppsStore";
 import AppsActions from "../actions/AppsActions";
 import AppsEvents from "../events/AppsEvents";
 import AppTaskStatsListComponent from "../components/AppTaskStatsListComponent";
+import QueueActions from "../actions/QueueActions";
 import TaskMesosUrlComponent from "../components/TaskMesosUrlComponent";
 import UnspecifiedNodeComponent from "../components/UnspecifiedNodeComponent";
+import RejectionStatsComponent from "../components/RejectionStatsComponent";
 
 function invalidateValue(value, suffix) {
   if (value == null || value === "") {
@@ -28,6 +30,7 @@ var AppDebugInfoComponent = React.createClass({
   },
 
   getInitialState: function () {
+    QueueActions.getOfferStats(this.props.appId);
     return {
       app: AppsStore.getCurrentApp(this.props.appId)
     };
@@ -43,6 +46,7 @@ var AppDebugInfoComponent = React.createClass({
 
   handleRefresh: function () {
     AppsActions.requestApp(this.props.appId);
+    QueueActions.getOfferStats(this.props.appId);
   },
 
   onAppsChange: function () {
@@ -147,6 +151,7 @@ var AppDebugInfoComponent = React.createClass({
           onClick={this.handleRefresh}>
           ↻ Refresh
         </button>
+        <RejectionStatsComponent appId={this.props.appId} />
         <div className="panel-group flush-top">
           <div className="panel panel-header panel-inverse">
             <div className="panel-heading">

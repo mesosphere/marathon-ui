@@ -147,7 +147,7 @@ describe("App debug info component", function () {
         expectAsync(() => {
           this.component = shallow(<AppDebugInfoComponent appId="/python" />);
           var message =
-            this.component.children().at(2).find(".panel-body").text();
+            this.component.children().at(3).find(".panel-body").text();
           expect(message).to.equal("This app does not have failed tasks");
         }, done);
       });
@@ -189,7 +189,7 @@ describe("App debug info component", function () {
     it("scale or restart field has no recent operation", function () {
       var message = this.component
         .children()
-        .at(1)
+        .at(2)
         .find(".panel-body")
         .find("dd")
         .at(0)
@@ -200,7 +200,7 @@ describe("App debug info component", function () {
     it("last configuration change has correct date", function () {
       var message = this.component
         .children()
-        .at(1)
+        .at(2)
         .find(".panel-body")
         .find("dd")
         .at(1)

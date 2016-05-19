@@ -42,6 +42,23 @@ var QueueActions = {
         });
       });
   },
+  getOfferStats: function (appId) {
+    this.request({
+      url: `${config.apiURL}v2/queue/${appId}/stats`
+    })
+      .success(function (data) {
+        AppDispatcher.dispatch({
+          actionType: QueueEvents.OFFER_STATS,
+          data: data.body
+        });
+      })
+      .error(function (error) {
+        AppDispatcher.dispatch({
+          actionType: QueueEvents.OFFER_STATS_ERROR,
+          data: error
+        });
+      });
+  },
   request: ajaxWrapper
 };
 
