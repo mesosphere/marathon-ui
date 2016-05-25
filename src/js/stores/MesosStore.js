@@ -150,7 +150,9 @@ function getExecutorDirectoryFromState(frameworkId, taskId, state) {
 
   if (framework.executors != null) {
     executor = framework.executors.find(matchExecutor);
-  } else if (framework.completed_executors != null) {
+  }
+
+  if (framework.completed_executors != null && executor == null) {
     executor = framework.completed_executors.find(matchExecutor);
   }
 
