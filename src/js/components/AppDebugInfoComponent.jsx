@@ -6,6 +6,7 @@ import AppsActions from "../actions/AppsActions";
 import AppsEvents from "../events/AppsEvents";
 import AppTaskStatsListComponent from "../components/AppTaskStatsListComponent";
 import TaskMesosUrlComponent from "../components/TaskMesosUrlComponent";
+import TaskFileDownloadComponent from "../components/TaskFileDownloadComponent";
 import UnspecifiedNodeComponent from "../components/UnspecifiedNodeComponent";
 
 function invalidateValue(value, suffix) {
@@ -89,7 +90,10 @@ var AppDebugInfoComponent = React.createClass({
           <span>{version}</span> ({new Moment(version).fromNow()})
         </dd>
         <dt>Mesos details</dt>
-        <dd><TaskMesosUrlComponent task={lastTaskFailure}/></dd>
+        <dd><TaskMesosUrlComponent task={lastTaskFailure}/>
+          <TaskFileDownloadComponent task={lastTaskFailure} fileName="stderr" />
+          <TaskFileDownloadComponent task={lastTaskFailure} fileName="stdout" />
+        </dd>
       </dl>
     );
   },
