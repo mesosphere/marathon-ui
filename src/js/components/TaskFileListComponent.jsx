@@ -114,7 +114,7 @@ var TaskFileListComponent = React.createClass({
       return lazy(files)
         .sortBy(app => app[sortKey], state.sortDescending)
         .map(file => {
-          var lastModifiedDate = new Date(file.mtime);
+          var lastModifiedDate = new Date(file.mtime * 1000);
           var lastModifiedIsoString = lastModifiedDate.toISOString();
           return (
             <tr key={file.path}>
