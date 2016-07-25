@@ -79,7 +79,7 @@ describe("App debug info component", function () {
           var host = nodes.at(3).text().trim();
           var timestamp = nodes.at(4).find("span").text().trim();
           var version = nodes.at(5).find("span").text().trim();
-          var details = nodes.at(6).find("a").props().href;
+          var details = nodes.at(6).find("a").at(0).props().href;
 
           expect(taskId)
             .to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
