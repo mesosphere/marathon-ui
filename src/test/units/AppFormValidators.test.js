@@ -135,7 +135,7 @@ describe("App Form Validators", function () {
 
       it("list of valid constraints", function () {
         let constraints =
-          "hostname:UNIQUE, atomic:LIKE:man, rackid:CLUSTER:rack-1, dc:max_per:2";
+          "hostname:UNIQUE, atomic:LIKE:man, rackid:CLUSTER:rack-1, dc:MAX_PER:2";
         expect(this.validatior.constraints(constraints)).to.be.true;
         constraints =
           "rackid:GROUP_BY, atomic:UNLIKE:man";
