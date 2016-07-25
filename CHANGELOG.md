@@ -1,3 +1,14 @@
+## Unversioned
+### Added
+- Support MAX_PER constraint
+- Show stderr and stdout links on debug tab under Mesos details
+
+### Fixed
+- \#4114 - Marathon UI displays invalid date in
+  "Working directory" - "Last Modified"
+- \#3447 - Mesos details link is broken for exited tasks
+- Fix broken 'apply' button
+
 ## 1.1.3 - 2016-04-26
 ### Fixed
 - \#3790 - Remove Docker on submit if no image is provided
