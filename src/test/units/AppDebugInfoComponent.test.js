@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {shallow} from "enzyme";
+import {shallow, mount} from "enzyme";
 import nock from "nock";
 
 import config from "../../js/config/config";
@@ -20,18 +20,18 @@ import expectAsync from "./../helpers/expectAsync";
 describe("App debug info component", function () {
 
   describe("Last task failure", function () {
+    var info = {
+      "version": "1.2.3",
+      "frameworkId": "framework1",
+      "leader": "leader1.dcos.io",
+      "marathon_config": {
+        "marathon_field_1": "mf1",
+        "mesos_master_url": "http://master.dcos.io:5050",
+        "mesos_leader_ui_url" : "http://leader1.dcos.io:5050"
+      }
+    };
 
     before(function (done) {
-      var info = {
-        "version": "1.2.3",
-        "frameworkId": "framework1",
-        "leader": "leader1.dcos.io",
-        "marathon_config": {
-          "marathon_field_1": "mf1",
-          "mesos_master_url": "http://leader1.dcos.io:5050"
-        }
-      };
-
       nock(config.apiURL)
         .get("/v2/info")
         .reply(200, info);
@@ -45,17 +45,20 @@ describe("App debug info component", function () {
     });
 
     it("should show failed task", function (done) {
+      var task = {
+        appId: "/python",
+        host: "slave1.dcos.io",
+        message: "Slave slave1.dcos.io removed",
+        state: "TASK_LOST",
+        taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
+        slaveId: "slaveABC",
+        timestamp: "2015-08-05T09:08:56.349Z",
+        version: "2015-07-06T12:37:28.774Z"
+      };
+
       var app = Util.extendObject(appScheme, {
         id: "/python",
-        lastTaskFailure: {
-          appId: "/python",
-          host: "slave1.dcos.io",
-          message: "Slave slave1.dcos.io removed",
-          state: "TASK_LOST",
-          taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
-          timestamp: "2015-08-05T09:08:56.349Z",
-          version: "2015-07-06T12:37:28.774Z"
-        }
+        lastTaskFailure: task
       });
 
       nock(config.apiURL)
@@ -67,7 +70,7 @@ describe("App debug info component", function () {
 
       AppsStore.once(AppsEvents.CHANGE, () => {
         expectAsync(() => {
-          this.component = shallow(<AppDebugInfoComponent appId="/python" />);
+          this.component = mount(<AppDebugInfoComponent appId="/python" />);
           var nodes = this.component.find("dd");
 
           var taskId = nodes.at(0).text().trim();
@@ -76,6 +79,7 @@ describe("App debug info component", function () {
           var host = nodes.at(3).text().trim();
           var timestamp = nodes.at(4).find("span").text().trim();
           var version = nodes.at(5).find("span").text().trim();
+          var details = nodes.at(6).find("a").props().href;
 
           expect(taskId)
             .to.equal("python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7");
@@ -84,6 +88,8 @@ describe("App debug info component", function () {
           expect(host).to.equal("slave1.dcos.io");
           expect(timestamp).to.equal("2015-08-05T09:08:56.349Z");
           expect(version).to.equal("2015-07-06T12:37:28.774Z");
+          expect(details).to.equal(info.marathon_config.mesos_leader_ui_url + "/#/slaves/" +
+            task.slaveId + "/frameworks/framework1/executors/" + task.taskId);
         }, done);
       });
 
