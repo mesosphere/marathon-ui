@@ -38,7 +38,7 @@ describe("TaskFileListComponent", function () {
         files: [{
           gid: "staff",
           mode: "-rw-r--r--",
-          mtime: 1449573729,
+          mtime: 1000,
           nlink: 1,
           path: "/file/path/filename",
           size: 506,
@@ -118,9 +118,9 @@ describe("TaskFileListComponent", function () {
     var firstTableRow = this.component.find("tbody").find("tr").first();
     var mtimeCell = firstTableRow.find("td").at(6);
     expect(mtimeCell.text())
-      .to.equal(new Date(1449573729).toLocaleString());
+      .to.equal(new Date(1000 * 1000).toLocaleString());
     expect(mtimeCell.find("time").props().dateTime)
-      .to.equal("1970-01-17T18:39:33.729Z");
+      .to.equal("1970-01-01T00:16:40.000Z");
   });
 
 });
