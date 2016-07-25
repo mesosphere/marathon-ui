@@ -12,7 +12,7 @@ Before you submit your issue search the archive, maybe your question was already
 
 1. Install Mesos and Marathon (follow the [tutorial here](https://mesosphere.github.io/marathon/docs/))
 2. Setup a CORS proxy on your machine to proxy the UI requests to your running Marathon instance (e.g. via [Corsproxy](https://www.npmjs.com/package/corsproxy))
-3. Install [Node 5](https://nodejs.org/en/blog/release/v5.0.0/) and [NPM](https://npmjs.org/)
+3. Install [Node 5.4.1](https://nodejs.org/en/blog/release/v5.4.1/) and [NPM](https://npmjs.org/)
 
 4. Install dev dependencies
 

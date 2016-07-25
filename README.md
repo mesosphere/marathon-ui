@@ -34,7 +34,7 @@ ___
 There are a few things you need, before you can start working. Please make sure
 you've installed and properly configured the following software:
 
-* [Node 5](https://nodejs.org/en/blog/release/v5.0.0/) including
+* [Node 5.4.1](https://nodejs.org/en/blog/release/v5.4.1/) including
   [NPM](https://npmjs.org/)
 * Mesos and Marathon (follow the
 	[tutorial here](https://mesosphere.github.io/marathon/docs/))
@@ -74,7 +74,7 @@ you've installed and properly configured the following software:
 Please make sure you've installed and properly configured the following
 software:
 
-* [Node 5](https://nodejs.org/en/blog/release/v5.0.0/) including
+* [Node 5.4.1](https://nodejs.org/en/blog/release/v5.4.1/) including
   [NPM](https://npmjs.org/)
 * [Docker 1.9](https://www.docker.com/)
 
