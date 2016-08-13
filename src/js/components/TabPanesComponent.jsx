@@ -28,15 +28,17 @@ var TabPanesComponent = React.createClass({
   },
 
   render: function () {
+    var renderedNavTabComponents = tabs.map(tab => {
+      return (
+          <TabPaneComponent id={tab.id}>
+            {React.createElement(tab.component)}
+          </TabPaneComponent>
+      );
+    });
     return (
       <TogglableTabsComponent activeTabId={this.getTabId()}
           className="container-fluid content">
-        <TabPaneComponent id={tabs[0].id}>
-          {React.createElement(tabs[0].component)}
-        </TabPaneComponent>
-        <TabPaneComponent id={tabs[1].id}>
-          {React.createElement(tabs[1].component)}
-        </TabPaneComponent>
+          {renderedNavTabComponents}
       </TogglableTabsComponent>
     );
   }
