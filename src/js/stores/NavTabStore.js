@@ -1,4 +1,7 @@
+import {EventEmitter} from "events";
 import React from "react/addons";
+import Util from "../helpers/Util";
+
 import DeploymentsListComponent
   from "../components/DeploymentsListComponent";
 import AppsAndGroupsListComponent
@@ -17,4 +20,10 @@ var tabs = [
   }
 ];
 
-export default tabs;
+var NavTabStore = Util.extendObject(EventEmitter.prototype, {
+  getTabs: function () {
+    return tabs;
+  }
+});
+
+export default NavTabStore;

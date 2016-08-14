@@ -2,7 +2,7 @@ import React from "react/addons";
 
 import TabPaneComponent from "../components/TabPaneComponent";
 import TogglableTabsComponent from "../components/TogglableTabsComponent";
-import tabs from "../constants/tabs";
+import NavTabStore from "../stores/NavTabStore";
 
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
@@ -18,7 +18,7 @@ var TabPanesComponent = React.createClass({
   getTabId: function () {
     var path = this.getCurrentPathname();
 
-    var hasTab = tabs.find(tab => tab.id === path);
+    var hasTab = NavTabStore.getTabs().find(tab => tab.id === path);
 
     if (hasTab) {
       return path;
@@ -28,7 +28,7 @@ var TabPanesComponent = React.createClass({
   },
 
   render: function () {
-    var renderedNavTabComponents = tabs.map(tab => {
+    var renderedNavTabComponents = NavTabStore.getTabs().map(tab => {
       return (
           <TabPaneComponent id={tab.id}>
             {React.createElement(tab.component)}
