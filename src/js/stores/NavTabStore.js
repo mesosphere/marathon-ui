@@ -1,6 +1,8 @@
 import {EventEmitter} from "events";
 import React from "react/addons";
+import PluginDispatcher from "../plugin/shared/PluginDispatcher";
 import Util from "../helpers/Util";
+import NavTabEvents from "../events/NavTabEvents";
 
 import DeploymentsListComponent
   from "../components/DeploymentsListComponent";
@@ -20,9 +22,20 @@ var tabs = [
   }
 ];
 
+function appendTab(tab) {
+  tabs.push(tab);
+}
+
 var NavTabStore = Util.extendObject(EventEmitter.prototype, {
   getTabs: function () {
     return tabs;
+  }
+});
+
+PluginDispatcher.register(event => {
+  if (event.eventType === NavTabEvents.APPEND_NAVTAB) {
+    event.data.map(appendTab);
+    NavTabStore.emit(NavTabEvents.CHANGE);
   }
 });
 

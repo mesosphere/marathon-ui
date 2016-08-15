@@ -30,7 +30,7 @@ var TabPanesComponent = React.createClass({
   render: function () {
     var renderedNavTabComponents = NavTabStore.getTabs().map(tab => {
       return (
-          <TabPaneComponent id={tab.id}>
+          <TabPaneComponent id={tab.id} key={tab.id}>
             {React.createElement(tab.component)}
           </TabPaneComponent>
       );
