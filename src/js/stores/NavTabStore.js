@@ -3,6 +3,7 @@ import React from "react/addons";
 import PluginDispatcher from "../plugin/shared/PluginDispatcher";
 import Util from "../helpers/Util";
 import NavTabEvents from "../events/NavTabEvents";
+import PluginEvents from "../plugin/shared/PluginEvents";
 
 import DeploymentsListComponent
   from "../components/DeploymentsListComponent";
@@ -33,7 +34,7 @@ var NavTabStore = Util.extendObject(EventEmitter.prototype, {
 });
 
 PluginDispatcher.register(event => {
-  if (event.eventType === NavTabEvents.APPEND_NAVTAB) {
+  if (event.eventType === PluginEvents.APPEND_NAVTAB) {
     event.data.map(appendTab);
     NavTabStore.emit(NavTabEvents.CHANGE);
   }

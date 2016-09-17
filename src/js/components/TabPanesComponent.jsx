@@ -3,6 +3,7 @@ import React from "react/addons";
 import TabPaneComponent from "../components/TabPaneComponent";
 import TogglableTabsComponent from "../components/TogglableTabsComponent";
 import NavTabStore from "../stores/NavTabStore";
+import NavTabEvents from "../events/NavTabEvents";
 
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
 
@@ -13,6 +14,22 @@ var TabPanesComponent = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.func
+  },
+
+  getInitialState: function () {
+    return {
+      tabs: NavTabStore.getTabs()
+    };
+  },
+
+  componentWillMount: function () {
+    NavTabStore.on(NavTabEvents.CHANGE, this.onNavTabChange);
+  },
+
+  onNavTabChange: function () {
+    this.setState({
+      tabs: NavTabStore.getTabs()
+    });
   },
 
   getTabId: function () {
@@ -28,7 +45,7 @@ var TabPanesComponent = React.createClass({
   },
 
   render: function () {
-    var renderedNavTabComponents = NavTabStore.getTabs().map(tab => {
+    var renderedNavTabComponents = this.state.tabs.map(tab => {
       return (
           <TabPaneComponent id={tab.id} key={tab.id}>
             {React.createElement(tab.component)}

@@ -1,6 +1,5 @@
 const NavTabEvents = {
-  CHANGE: "NAV_TAB_EVENTS_CHANGE",
-  APPEND_NAVTAB: "NAV_TAB_EVENTS_APPEND_NAVTAB"
+  CHANGE: "NAV_TAB_EVENTS_CHANGE"
 };
 
 export default Object.freeze(NavTabEvents);

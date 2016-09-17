@@ -1,6 +1,7 @@
 import {expect} from "chai";
 
 import NavTabStore from "../../js/stores/NavTabStore";
+import PluginEvents from "../../js/plugin/shared/PluginEvents";
 import NavTabEvents from "../../js/events/NavTabEvents";
 import PluginDispatcher from "../../js/plugin/shared/PluginDispatcher";
 
@@ -8,7 +9,7 @@ describe("NavTabStore", function () {
 
   before(function (done) {
     PluginDispatcher.dispatch({
-      eventType: NavTabEvents.APPEND_NAVTAB,
+      eventType: PluginEvents.APPEND_NAVTAB,
       data: [
         {
           id: "/mesos",
@@ -41,7 +42,7 @@ describe("NavTabStore", function () {
 
     NavTabStore.on(NavTabEvents.CHANGE, onChange);
     PluginDispatcher.dispatch({
-      eventType: NavTabEvents.APPEND_NAVTAB,
+      eventType: PluginEvents.APPEND_NAVTAB,
       data: []
     });
     NavTabStore.removeListener(NavTabEvents.CHANGE, onChange);
