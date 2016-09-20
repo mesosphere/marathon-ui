@@ -3,6 +3,10 @@ import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
 import Util from "../../helpers/Util";
 
 function transformPortDefinitionRows(portDefinitionRows, portField) {
+  if (portDefinitionRows == null) {
+    return [];
+  }
+
   return portDefinitionRows.map((row, i) => {
     row[portField] = row[portField];
     row.consecutiveKey = i;
