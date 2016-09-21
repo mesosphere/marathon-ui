@@ -8,6 +8,7 @@
   "Working directory" - "Last Modified"
 - \#3447 - Mesos details link is broken for exited tasks
 - Fix broken 'apply' button
+- \#4340 - Can't modify configuration in UI
 
 ## 1.1.3 - 2016-04-26
 ### Fixed
