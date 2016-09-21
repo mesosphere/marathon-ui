@@ -62,13 +62,17 @@ var AppPageControlsComponent = React.createClass({
       "disabled": props.model.instances < 1
     });
 
+    var restartAppClassSet = classNames(
+      "btn btn-lg btn-default ", suspendAppClassSet
+    );
+
     return (
       <div className="header-btn">
         <button className="btn btn-lg btn-success"
             onClick={this.handleScaleApp}>
           Scale Application
         </button>
-        <button className="btn btn-lg btn-default"
+        <button className={restartAppClassSet}
             onClick={this.handleRestartApp}>
           Restart
         </button>
