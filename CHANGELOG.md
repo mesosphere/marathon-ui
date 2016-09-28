@@ -1,4 +1,4 @@
-## Unversioned
+## 1.1.4 - 2016-09-28
 ### Added
 - Support MAX_PER constraint
 - Show stderr and stdout links on debug tab under Mesos details
