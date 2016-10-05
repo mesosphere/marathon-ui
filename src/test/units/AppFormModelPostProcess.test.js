@@ -87,7 +87,7 @@ describe("App Form Model Post Process", function () {
         .to.equal(ContainerConstants.NETWORK.HOST);
     });
 
-    it("sets network mode to HOST when nothing is selected", function () {
+    it("sets network mode to BRIDGE", function () {
       var app = {
         container: {
           docker: {
