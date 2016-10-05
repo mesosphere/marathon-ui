@@ -194,7 +194,8 @@ var AppConfigEditFormComponent = React.createClass({
   getOptionalPortsComponent: function () {
     var state = this.state;
 
-    if (state.fields.dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
+    if (state.fields.dockerNetwork === ContainerConstants.NETWORK.BRIDGE ||
+      state.fields.dockerNetwork === ContainerConstants.NETWORK.USER) {
       return (
         <OptionalDockerPortMappingsComponent
           errorIndices={state.errorIndices}

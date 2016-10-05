@@ -104,6 +104,22 @@ describe("App Form Model Post Process", function () {
         .to.equal(ContainerConstants.NETWORK.BRIDGE);
     });
 
+    it("sets network mode to USER", function () {
+      var app = {
+        container: {
+          docker: {
+            image: "group/image",
+            network: ContainerConstants.NETWORK.USER
+          },
+          type: "DOCKER"
+        }
+      };
+      var app2 = Object.assign({}, app);
+      AppFormModelPostProcess.container(app2);
+
+      expect(app2.container.docker.network)
+        .to.equal(ContainerConstants.NETWORK.USER);
+    });
   });
 
   describe("health checks", function () {

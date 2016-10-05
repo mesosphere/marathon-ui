@@ -798,7 +798,8 @@ describe("Create Application", function () {
           });
 
           describe("the network field", function () {
-            it("updates correctly", function (done) {
+
+            it("updates to BRIDGE", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {
                 expectAsync(function () {
                   expect(AppFormStore.fields.dockerNetwork)
@@ -807,6 +808,17 @@ describe("Create Application", function () {
               });
 
               FormActions.update("dockerNetwork", "BRIDGE");
+            });
+
+            it("updates to USER", function (done) {
+              AppFormStore.once(FormEvents.CHANGE, function () {
+                expectAsync(function () {
+                  expect(AppFormStore.fields.dockerNetwork)
+                    .to.equal("USER");
+                }, done);
+              });
+
+              FormActions.update("dockerNetwork", "USER");
             });
           });
 

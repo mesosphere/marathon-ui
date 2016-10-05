@@ -501,7 +501,8 @@ var AppFormStore = Util.extendObject(EventEmitter.prototype, {
       objectPath.get(app, "container.docker.network");
 
     if (dockerNetwork != null &&
-        dockerNetwork === ContainerConstants.NETWORK.BRIDGE) {
+      (dockerNetwork === ContainerConstants.NETWORK.BRIDGE ||
+      dockerNetwork === ContainerConstants.NETWORK.USER)) {
       delete app.portDefinitions;
     } else if (objectPath.get(app, "container.docker.portMappings") != null) {
       delete app.container.docker.portMappings;
