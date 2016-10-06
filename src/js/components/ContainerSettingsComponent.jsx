@@ -143,6 +143,9 @@ var ContainerSettingsComponent = React.createClass({
                 <option value={ContainerConstants.NETWORK.BRIDGE}>
                   Bridged
                 </option>
+                <option value={ContainerConstants.NETWORK.USER}>
+                  User
+                </option>
               </select>
             </FormGroupComponent>
           </div>

@@ -79,12 +79,10 @@ var DuplicableRowsMixin = {
   },
 
   getDuplicableRowValues: function (fieldId, i) {
-    var findDOMNode = React.findDOMNode;
-    var refs = this.refs;
+    const findDOMNode = React.findDOMNode;
+    const refs = this.refs;
 
-    const row = {
-      consecutiveKey: this.state.rows[fieldId][i].consecutiveKey
-    };
+    const row = Util.deepCopy(this.state.rows[fieldId][i]);
 
     return Object.keys(this.duplicableRowsScheme[fieldId])
       .reduce(function (memo, key) {
