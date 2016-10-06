@@ -1,3 +1,7 @@
+## 1.1.5 - 2016-10-06
+### Fixed
+- DCOS-10184: Fix service port handling
+
 ## 1.1.4 - 2016-09-28
 ### Added
 - Support MAX_PER constraint
