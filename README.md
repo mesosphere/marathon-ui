@@ -25,7 +25,8 @@ https://mesosphere.github.io/marathon/docs/marathon-ui.html.
 1. 🤖 Set up Mesos and Marathon following this
   [tutorial](https://mesosphere.github.io/marathon/docs/) and install a CORS
   proxy on your machine.
-2. 🐳 Use the handy docker-based setup
+2. 🐳 Use the handy docker-based setup - *Please be aware that it's currently 
+     not possible to launch Docker containers  with this setup.*
 
 ___
 
