@@ -44,5 +44,3 @@ export default class PluginHelper {
   }
 
 }
-
-export default PluginHelper;
