@@ -3,6 +3,27 @@
 
 ![Marathon UI](https://raw.githubusercontent.com/mesosphere/marathon-ui/master/marathon-ui.png "Marathon UI")
 
+## Project Status
+
+The message below was posted on the [marathon-framework google groups|https://groups.google.com/forum/#!msg/marathon-framework/c6qUW8c0_3A/05dh0FjJBgAJ] site:
+
+Dear Marathon Community,
+
+We'd like to give you an update on the current state of Marathon UI and invite you to discuss the future development.
+
+As you may have noticed, we haven't invested much lately in further advancing the Marathon UI, as we've devoted most of our time to develop a new seamless integrated Services (Marathon) UI for DC/OS. The new UI includes the functionality of the old UI, and:
+
+* The new Service Detail View includes completed and failed tasks. We've also integrated the Mesos Task details and added a new log view for easier debugging.
+* We've improved the Deployments View, providing more information for better deployment management.
+* The new Service UI uses the same components and styling as the DC/OS UI to deliver a seamless user experience.
+ 
+Because of our focus on integrating the experience of using Marathon and DC/OS, we aren’t planning on updating the old UI further. We will, however, continue to review PRs and fix critical bugs on the old Marathon UI for the next few months. We know a lot of users depend on the old stand-alone UI, and we are hoping that one of these dedicated users will take charge of the repo in which the old UI lives. If you would like to take on this responsibility, or have anyone to nominate, please get in touch with us! You can email me personally, or find me in the shared DC/OS Slack channel (http://chat.dcos.io).  
+
+Please let us know if you have suggestions about the old UI, or thoughts on the new one. Your feedback is much appreciated!
+
+Orlando
+Mesosphere
+
 ## The web user interface for Mesosphere's Marathon
 
 The UI is bundled with the [Marathon](https://github.com/mesosphere/marathon)
