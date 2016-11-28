@@ -5,7 +5,7 @@
 
 ## Project Status
 
-The message below was posted on the [marathon-framework google groups|https://groups.google.com/forum/#!msg/marathon-framework/c6qUW8c0_3A/05dh0FjJBgAJ] site:
+The message below was posted on the [marathon-framework google groups](https://groups.google.com/forum/#!msg/marathon-framework/c6qUW8c0_3A/05dh0FjJBgAJ) site:
 
 Dear Marathon Community,
 
