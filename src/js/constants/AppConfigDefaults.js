@@ -48,6 +48,7 @@ export const AllAppConfigDefaultValues = Util.deepFreeze(
       "port": 0,
       "protocol": "tcp"
     }],
-    readinessChecks: []
+    readinessChecks: [],
+    user: null
   })
 );

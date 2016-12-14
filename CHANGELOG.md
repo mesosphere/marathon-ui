@@ -1,6 +1,7 @@
 ## Unversioned
 ### Fixed
 - \#4569: npm run serve error
+- \#4679: Updating "user" in configuration in web gui has no effect
 
 ## 1.1.5 - 2016-10-06
 ### Fixed
