@@ -1,3 +1,7 @@
+## Unversioned
+### Fixed
+- MARATHON-1339: Handling secrets in environment variables
+
 ## 1.1.6 - 2016-12-14
 ### Fixed
 - \#4569: npm run serve error
