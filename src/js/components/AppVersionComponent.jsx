@@ -8,6 +8,7 @@ import AppsActions from "../actions/AppsActions";
 import AppsEvents from "../events/AppsEvents";
 import AppsStore from "../stores/AppsStore";
 import AppVersionStore from "../stores/AppVersionsStore";
+import SecretsUtil from "../helpers/SecretsUtil";
 import UnspecifiedNodeComponent from "../components/UnspecifiedNodeComponent";
 
 function invalidateValue(value, suffix) {
@@ -186,7 +187,11 @@ var AppVersionComponent = React.createClass({
       ? <UnspecifiedNodeComponent />
       // Print environment variables as key value pairs like "key=value"
       : Object.keys(appVersion.env).sort().map(function (k) {
-        return <dd key={k}>{k + "=" + appVersion.env[k]}</dd>;
+        return (<dd key={k}>{k + "=" +
+          SecretsUtil.environmentVariableValueWithSecret(
+            appVersion.env[k], appVersion
+          )}
+        </dd>);
       });
 
     var executorNode = (appVersion.executor == null ||

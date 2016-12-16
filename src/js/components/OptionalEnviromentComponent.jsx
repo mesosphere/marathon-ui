@@ -3,6 +3,7 @@ import React from "react/addons";
 
 import DuplicableRowControls from "../components/DuplicableRowControls";
 import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
+import SecretsUtil from "../helpers/SecretsUtil";
 import FormGroupComponent from "../components/FormGroupComponent";
 
 var OptionalEnvironmentComponent = React.createClass({
@@ -15,6 +16,10 @@ var OptionalEnvironmentComponent = React.createClass({
       key: "",
       value: ""
     }
+  },
+
+  propTypes: {
+    fields: React.PropTypes.object
   },
 
   handleAddRow: function (position, event) {
@@ -33,6 +38,32 @@ var OptionalEnvironmentComponent = React.createClass({
 
   handleChange: function (position) {
     this.updateRow("env", position);
+  },
+
+  getLabelValue: function (row, i) {
+    if (typeof row.value === "object") {
+      return (
+        <FormGroupComponent
+            fieldId={`env.value.${i}`}
+            label="Value"
+            value={SecretsUtil.environmentVariableValueWithSecret(
+              row.value, this.props.fields
+            )}>
+          <input
+            disabled={true}
+            ref={`value${i}`} />
+        </FormGroupComponent>
+      );
+    }
+
+    return (
+      <FormGroupComponent
+          fieldId={`env.value.${i}`}
+          label="Value"
+          value={row.value}>
+        <input ref={`value${i}`} />
+      </FormGroupComponent>
+    );
   },
 
   getEnviromentRow: function (row, i, disableRemoveButton = false) {
@@ -56,12 +87,7 @@ var OptionalEnvironmentComponent = React.createClass({
             </FormGroupComponent>
           </div>
           <div className="col-sm-6">
-            <FormGroupComponent
-                fieldId={`env.value.${i}`}
-                label="Value"
-                value={row.value}>
-              <input ref={`value${i}`} />
-            </FormGroupComponent>
+            {this.getLabelValue(row, i)}
             <DuplicableRowControls
               disableRemoveButton={disableRemoveButton}
               handleAddRow={this.handleAddRow.bind(null, i + 1)}
