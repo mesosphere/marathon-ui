@@ -50,6 +50,7 @@ export const AllAppConfigDefaultValues = Util.deepFreeze(
     }],
     readinessChecks: [],
     user: null,
-    taskKillGracePeriodSeconds: null
+    taskKillGracePeriodSeconds: null,
+    secrets: {}
   })
 );
