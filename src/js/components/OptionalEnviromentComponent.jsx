@@ -46,7 +46,7 @@ var OptionalEnvironmentComponent = React.createClass({
         <FormGroupComponent
             fieldId={`env.value.${i}`}
             label="Value"
-            value={SecretsUtil.environmentVariableValueWithSecret(
+            value={SecretsUtil.getSecretReferenceOfEnvValue(
               row.value, this.props.fields
             )}>
           <input

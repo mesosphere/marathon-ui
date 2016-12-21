@@ -188,7 +188,7 @@ var AppVersionComponent = React.createClass({
       // Print environment variables as key value pairs like "key=value"
       : Object.keys(appVersion.env).sort().map(function (k) {
         return (<dd key={k}>{k + "=" +
-          SecretsUtil.environmentVariableValueWithSecret(
+          SecretsUtil.getSecretReferenceOfEnvValue(
             appVersion.env[k], appVersion
           )}
         </dd>);
