@@ -4,7 +4,7 @@ zookeeper:
   ports:
     - "2181:2181"
 mesos-master:
-  image: mesosphere/mesos-master:1.0.11.0.1-2.0.93.ubuntu1404
+  image: mesosphere/mesos-master:1.1.0-2.0.107.ubuntu1404
   hostname: mesos-master
   entrypoint: [ "mesos-master" ]
   ports:
@@ -24,7 +24,7 @@ mesos-master:
   volumes:
     - ./resources/mesos-config:/mesos-config
 mesos-slave:
-  image: mesosphere/mesos-slave:1.0.11.0.1-2.0.93.ubuntu1404
+  image: mesosphere/mesos-slave:1.1.0-2.0.107.ubuntu1404
   entrypoint:
     - mesos-slave
   privileged: true
