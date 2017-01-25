@@ -41,7 +41,16 @@ var AppVersionsStore = Util.extendObject(EventEmitter.prototype, {
 
   getAppVersions: function (appId) {
     if (appId === storeData.currentAppId) {
-      return this.availableAppVersions;
+      return this.availableAppVersions
+        .sort(function (a, b) {
+          if (a < b) {
+            return 1;
+          }
+          if (a > b) {
+            return -1;
+          }
+          return 0;
+        });
     }
     return [];
   },
