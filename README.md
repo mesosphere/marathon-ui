@@ -96,17 +96,9 @@ you've installed and properly configured the following software:
 Please make sure you've installed and properly configured the following
 software:
 
-* [Node 5.4.1](https://nodejs.org/en/blog/release/v5.4.1/) including
-  [NPM](https://npmjs.org/)
-* [Docker 1.9](https://www.docker.com/)
+* [Docker 1.13](https://www.docker.com/)
 
-
-##### 🐳 1. Install all dependencies
-
-        npm install
-        npm install -g gulp
-
-##### 🐳 2. Configure your hosts
+##### 🐳 1. Configure your hosts
 
 If you're not using something like
 [dnsdock](https://github.com/tonistiigi/dnsdock) or
@@ -124,18 +116,9 @@ machine ip and add those lines to your `etc/hosts` configuration.*
 ##### 🐳 4. Start your environment
 
 The following command will download, configure and start a basic Zookeeper,
-Mesos and Marathon setup for you. It will also serve the Marathon UI.
+Mesos and Marathon setup for you. It will also build and serve the Marathon UI.
 
        docker-compose up
-
-##### 🐳 5. Build your very own Marathon UI
-
-Running the following command will build the Marathon UI and watch for file
-changes to rerun the build.
-
-       npm run serve
-
-Open http://marathon.docker:8080 to enjoy your fresh build.
 
 #### Contributing to this project
 
