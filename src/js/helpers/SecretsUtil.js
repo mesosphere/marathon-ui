@@ -20,9 +20,9 @@ var SecretsUtil = {
         allFields.secrets[secret].source);
 
     if (!secretSource) {
-      placeholder = 'Invalid Secret Reference';
+      placeholder = "Invalid Secret Reference";
       if (!secret) {
-        placeholder = 'Invalid Value';
+        placeholder = "Invalid Value";
       }
     } else {
       placeholder = `Secret "${secretSource}"`;
