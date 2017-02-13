@@ -166,7 +166,7 @@ var AppPageComponent = React.createClass({
 
     if (state.view === "configuration") {
       AppVersionsActions.requestAppVersions(state.appId);
-      AppVersionsActions.requestAppVersion(state.appId, state.app.version);
+      AppVersionsActions.requestAppVersion(state.appId, app.version);
     }
   },
 
