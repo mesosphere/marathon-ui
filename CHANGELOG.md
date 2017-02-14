@@ -1,4 +1,4 @@
-## Unversioned
+## 1.1.7 - 2017-02-14
 ### Fixed
 - MARATHON-1339: Handling secrets in environment variables
 - Fix app version order
