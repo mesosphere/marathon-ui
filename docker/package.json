@@ -1,0 +1,50 @@
+{
+  "name": "corsproxy",
+  "description": "standalone CORS proxy",
+  "main": "./index.js",
+  "author": {
+    "name": "Gregor Martynus",
+    "email": "gregor@martynus.net"
+  },
+  "dependencies": {
+    "ejs": "^2.3.3",
+    "good": "^6.3.0",
+    "good-console": "^5.0.3",
+    "h2o2": "^4.0.1",
+    "hapi": "^9.0.2",
+    "hapi-cors-headers": "^1.0.0",
+    "http-proxy": "~1.11",
+    "inert": "^3.0.1",
+    "vision": "^3.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
+    "colors": "^1.1.2",
+    "mocha": "^2.2.5",
+    "request": "^2.60.0",
+    "sauce-connect-launcher": "^0.12.0",
+    "semantic-release": "^4.0.3",
+    "standard": "^5.1.0",
+    "sv-selenium": "^0.2.6",
+    "wd": "^0.3.12"
+  },
+  "bin": {
+    "corsproxy": "./bin/corsproxy"
+  },
+  "scripts": {
+    "install_selenium_and_chromedriver": "install_chromedriver && install_selenium",
+    "kill_selenium": "kill_selenium",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "start": "./bin/corsproxy",
+    "start_app": "./bin/start-app",
+    "start_selenium_with_chromedriver": "start_selenium_with_chromedriver",
+    "test": "standard && ./bin/test-background",
+    "test:mocha": "mocha test/test-*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gr2m/CORS-Proxy"
+  },
+  "license": "MIT"
+}
