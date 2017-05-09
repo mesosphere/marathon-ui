@@ -67,7 +67,8 @@ describe("request specific application version", function () {
           );
           expect(config).to.deep.equal({
             id: "/app-id",
-            cmd: "some --cmd"
+            cmd: "some --cmd",
+            networks: []
           });
         }, done);
       });
@@ -94,7 +95,8 @@ describe("request specific application version", function () {
           expect(config).to.deep.equal({
             id: "/app-id",
             cmd: "some --cmd",
-            labels: {testing: "123"}
+            labels: {testing: "123"},
+            networks: []
           });
         }, done);
       });
