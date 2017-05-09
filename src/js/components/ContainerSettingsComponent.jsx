@@ -29,6 +29,7 @@ var ContainerSettingsComponent = React.createClass({
   propTypes: {
     fields: React.PropTypes.object.isRequired,
     getErrorMessage: React.PropTypes.func.isRequired,
+    handleModeToggle: React.PropTypes.func.isRequired,
     openPorts: React.PropTypes.func,
     openVolumes: React.PropTypes.func
   },
@@ -125,7 +126,13 @@ var ContainerSettingsComponent = React.createClass({
         <span>
           Network
           <TooltipComponent className="right"
-              message="Not availble when multiple networks are defined. Use JSON Mode.">
+              message={
+                <span>
+                  Not availble when multiple networks are defined.
+                  <a className="json-link clickable"
+                    onClick={this.props.handleModeToggle}>Use JSON Mode</a>
+                </span>
+              }>
             <i className="icon icon-xs help" />
           </TooltipComponent>
         </span>
