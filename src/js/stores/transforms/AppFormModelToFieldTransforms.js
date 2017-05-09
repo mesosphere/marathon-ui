@@ -1,3 +1,4 @@
+import ContainerConstants from "../../constants/ContainerConstants";
 import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
 import HealthCheckPortTypes from "../../constants/HealthCheckPortTypes";
 import Util from "../../helpers/Util";
@@ -28,6 +29,16 @@ const AppFormModelToFieldTransforms = {
     return constraints
       .map((constraint) => constraint.join(":"))
       .join(", ");
+  },
+  dockerNetwork: networks =>  {
+    if (!Array.isArray(networks) || networks.length === 0) {
+      return ContainerConstants.NETWORK.HOST;
+    }
+    if (networks.length > 1) {
+      return ContainerConstants.NETWORK.MANY;
+    }
+
+    return networks[0].mode;
   },
   dockerPortMappings: portMappings => {
     return transformPortDefinitionRows(portMappings, "containerPort");

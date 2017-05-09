@@ -1,3 +1,4 @@
+import ContainerConstants from "../../constants/ContainerConstants";
 import HealthCheckProtocols from "../../constants/HealthCheckProtocols";
 
 import dockerRowSchemes from "../schemes/dockerRowSchemes";
@@ -116,6 +117,19 @@ const AppFormFieldToModelTransforms = {
     return rows;
   },
   dockerForcePullImage: (isChecked) => !!isChecked,
+  dockerNetwork: (network) => {
+    if (network == null) {
+      return [];
+    }
+
+    const networkDefinition = {mode: network};
+
+    if (network === ContainerConstants.NETWORK.USER) {
+      networkDefinition.name = "dcos";
+    }
+
+    return [networkDefinition];
+  },
   dockerParameters: (rows) => lazy(rows)
     .map((row) => ensureObjectScheme(row, dockerRowSchemes.dockerParameters))
     .compact()

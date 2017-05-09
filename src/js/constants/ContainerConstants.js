@@ -2,9 +2,10 @@ import Util from "../helpers/Util";
 
 const ContainerConstants = {
   NETWORK: {
-    BRIDGE: "BRIDGE",
-    USER: "USER",
-    HOST: "HOST"
+    BRIDGE: "container/bridge",
+    USER: "container",
+    HOST: "host",
+    MANY: null
   },
   PORTMAPPINGS: {
     PROTOCOL: {
