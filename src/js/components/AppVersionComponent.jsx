@@ -220,6 +220,10 @@ var AppVersionComponent = React.createClass({
       ? <UnspecifiedNodeComponent />
       : getHighlightNode(appVersion.portDefinitions);
 
+    var networksNode = (appVersion.networks == null)
+      ? <UnspecifiedNodeComponent />
+      : getHighlightNode(appVersion.networks);
+
     var urisNode = (appVersion.uris == null || appVersion.uris.length === 0)
       ? <UnspecifiedNodeComponent />
       : appVersion.uris.map(function (uri, i) {
@@ -274,6 +278,8 @@ var AppVersionComponent = React.createClass({
           {invalidateValue(appVersion.mem, "MiB")}
           <dt>Disk Space</dt>
           {invalidateValue(appVersion.disk, "MiB")}
+          <dt>Networks</dt>
+          {networksNode}
           <dt>Port Definitions</dt>
           {portDefinitionsNode}
           <dt>Backoff Factor</dt>

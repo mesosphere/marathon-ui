@@ -21,6 +21,7 @@ const appScheme = {
   lastTaskFailure: null,
   status: null,
   mem: null,
+  networks: [],
   disk: null,
   portDefinitions: [],
   uris: [],
