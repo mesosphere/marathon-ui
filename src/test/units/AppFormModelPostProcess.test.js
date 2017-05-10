@@ -83,8 +83,8 @@ describe("App Form Model Post Process", function () {
       var app2 = Object.assign({}, app);
       AppFormModelPostProcess.container(app2);
 
-      expect(app2.container.docker.network)
-        .to.equal(ContainerConstants.NETWORK.HOST);
+      expect(app2.networks)
+        .to.deep.equal([{mode: ContainerConstants.NETWORK.HOST}]);
     });
 
     it("sets network mode to BRIDGE", function () {

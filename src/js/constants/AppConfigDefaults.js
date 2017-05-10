@@ -51,6 +51,9 @@ export const AllAppConfigDefaultValues = Util.deepFreeze(
     readinessChecks: [],
     user: null,
     taskKillGracePeriodSeconds: null,
-    secrets: {}
+    secrets: {},
+    networks: [
+      {mode: "host"}
+    ]
   })
 );

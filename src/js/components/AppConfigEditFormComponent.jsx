@@ -194,8 +194,17 @@ var AppConfigEditFormComponent = React.createClass({
   getOptionalPortsComponent: function () {
     var state = this.state;
 
-    if (state.fields.dockerNetwork === ContainerConstants.NETWORK.BRIDGE ||
-      state.fields.dockerNetwork === ContainerConstants.NETWORK.USER) {
+    if (state.fields.dockerNetwork === ContainerConstants.NETWORK.MANY) {
+      return (
+          <p>
+            For more advanced port configuration options, including service
+            ports, use <a className="json-link clickable"
+            onClick={this.props.handleModeToggle}>JSON mode</a>.
+          </p>
+        );
+
+    } else if (state.fields.dockerNetwork === ContainerConstants.NETWORK.BRIDGE
+      || state.fields.dockerNetwork === ContainerConstants.NETWORK.USER) {
       return (
         <OptionalDockerPortMappingsComponent
           errorIndices={state.errorIndices}
@@ -372,6 +381,7 @@ var AppConfigEditFormComponent = React.createClass({
               errorIndices={state.errorIndices}
               fields={state.fields}
               getErrorMessage={this.getErrorMessage}
+              handleModeToggle={this.props.handleModeToggle}
               openPorts={this.setViewPorts}
               openVolumes={this.setViewVolumes}/>
           </SectionComponent>

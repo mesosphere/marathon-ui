@@ -106,10 +106,10 @@ const resolveFieldIdToAppKeyMap = {
   disk: "disk",
   dockerForcePullImage: "container.docker.forcePullImage",
   dockerImage: "container.docker.image",
-  dockerNetwork: "container.docker.network",
+  dockerNetwork: "networks",
   dockerParameters: "container.docker.parameters",
   dockerPrivileged: "container.docker.privileged",
-  dockerPortMappings: "container.docker.portMappings",
+  dockerPortMappings: "container.portMappings",
   healthChecks: "healthChecks",
   instances: "instances",
   env: "env",
@@ -135,7 +135,7 @@ const responseAttributePathToFieldIdMap = {
   "/constraints": "constraints",
   "/constraints({INDEX})": "constraints",
   "/container/docker/forcePullImage": "dockerForcePullImage",
-  "/container/docker/image": "dockerImage",
+  "/networks": "dockerImage",
   "/container/docker/network": "dockerNetwork",
   "/container/docker/privileged": "dockerPrivileged",
   "/container/docker/parameters({INDEX})/key":
@@ -174,13 +174,13 @@ const responseAttributePathToFieldIdMap = {
   "/portDefinitions({INDEX})/name": "portDefinitions/{INDEX}/name",
   "/portDefinitions({INDEX})/port": "portDefinitions/{INDEX}/port",
   "/portDefinitions({INDEX})/protocol": "portDefinitions/{INDEX}/protocol",
-  "/container/docker/portMappings": "dockerPortMappings",
-  "/container/docker/portMappings({INDEX})/containerPort":
+  "/container/portMappings": "dockerPortMappings",
+  "/container/portMappings({INDEX})/containerPort":
     "dockerPortMappings/{INDEX}/port",
-  "/container/docker/portMappings({INDEX})/protocol":
+  "/container/portMappings({INDEX})/protocol":
     "dockerPortMappings/{INDEX}/protocol",
-  "/container/docker/portMappings({INDEX})/hostPort": "dockerPortMappings",
-  "/container/docker/portMappings({INDEX})/servicePort": "dockerPortMappings",
+  "/container/portMappings({INDEX})/hostPort": "dockerPortMappings",
+  "/container/portMappings({INDEX})/servicePort": "dockerPortMappings",
   "/labels": "labels",
   "/uris": "uris",
   "/user": "user",
@@ -194,12 +194,12 @@ const responseAttributePathToFieldIdMap = {
  */
 const resolveAppKeyToFieldIdMap = {
   "id": ["appId"],
+  "networks": ["dockerNetwork"],
   "container.docker.forcePullImage": ["dockerForcePullImage"],
   "container.docker.image": ["dockerImage"],
-  "container.docker.network": ["dockerNetwork"],
-  "container.docker.portMappings": ["dockerPortMappings"],
   "container.docker.parameters": ["dockerParameters"],
   "container.docker.privileged": ["dockerPrivileged"],
+  "container.portMappings": ["dockerPortMappings"],
   "container.volumes": [
     "containerVolumes",
     "localVolumes",
@@ -497,15 +497,20 @@ var AppFormStore = Util.extendObject(EventEmitter.prototype, {
       }
     });
 
-    var dockerNetwork =
-      objectPath.get(app, "container.docker.network");
+    var dockerNetwork = ContainerConstants.NETWORK.MANY;
+    var networks = app.networks || [];
+    if (networks.length) {
+      if (networks.length === 1) {
+        dockerNetwork = networks[0].mode;
+      }
+    }
 
     if (dockerNetwork != null &&
       (dockerNetwork === ContainerConstants.NETWORK.BRIDGE ||
       dockerNetwork === ContainerConstants.NETWORK.USER)) {
       delete app.portDefinitions;
-    } else if (objectPath.get(app, "container.docker.portMappings") != null) {
-      delete app.container.docker.portMappings;
+    } else if (objectPath.get(app, "container.portMappings") != null) {
+      delete app.container.portMappings;
     }
 
     return app;

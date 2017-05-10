@@ -7,6 +7,7 @@ import DuplicableRowsMixin from "../mixins/DuplicableRowsMixin";
 import dockerRowSchemes from "../stores/schemes/dockerRowSchemes";
 import FormActions from "../actions/FormActions";
 import FormGroupComponent from "../components/FormGroupComponent";
+import TooltipComponent from "./TooltipComponent.jsx";
 
 var ContainerSettingsComponent = React.createClass({
   displayName: "ContainerSettingsComponent",
@@ -28,6 +29,7 @@ var ContainerSettingsComponent = React.createClass({
   propTypes: {
     fields: React.PropTypes.object.isRequired,
     getErrorMessage: React.PropTypes.func.isRequired,
+    handleModeToggle: React.PropTypes.func.isRequired,
     openPorts: React.PropTypes.func,
     openVolumes: React.PropTypes.func
   },
@@ -112,6 +114,54 @@ var ContainerSettingsComponent = React.createClass({
     });
   },
 
+  getNetworkGroupComponent: function () {
+    var props = this.props;
+    var fieldIds = ContainerSettingsComponent.fieldIds;
+    var dockerNetwork = props.fields[fieldIds.dockerNetwork];
+    var label = "Network";
+    var disabled = false;
+
+    if (dockerNetwork === ContainerConstants.NETWORK.MANY) {
+      label = (
+        <span>
+          Network
+          <TooltipComponent className="right"
+              message={
+                <span>
+                  Not availble when multiple networks are defined.
+                  <a className="json-link clickable"
+                    onClick={this.props.handleModeToggle}>Use JSON Mode</a>
+                </span>
+              }>
+            <i className="icon icon-xs help" />
+          </TooltipComponent>
+        </span>
+      );
+      disabled = true;
+    }
+
+    return (
+      <FormGroupComponent
+          errorMessage={props.getErrorMessage(fieldIds.dockerNetwork)}
+          fieldId={fieldIds.dockerNetwork}
+          label={label}
+          value={dockerNetwork}
+          onChange={this.handleSingleFieldUpdate}>
+        <select defaultValue="" disabled={disabled}>
+          <option value={ContainerConstants.NETWORK.HOST}>
+            Host
+          </option>
+          <option value={ContainerConstants.NETWORK.BRIDGE}>
+            Bridged
+          </option>
+          <option value={ContainerConstants.NETWORK.USER}>
+            User
+          </option>
+        </select>
+      </FormGroupComponent>
+    );
+  },
+
   render: function () {
     var props = this.props;
     var fieldIds = ContainerSettingsComponent.fieldIds;
@@ -130,24 +180,7 @@ var ContainerSettingsComponent = React.createClass({
             </FormGroupComponent>
           </div>
           <div className="col-sm-6">
-            <FormGroupComponent
-                errorMessage={props.getErrorMessage(fieldIds.dockerNetwork)}
-                fieldId={fieldIds.dockerNetwork}
-                label="Network"
-                value={props.fields[fieldIds.dockerNetwork]}
-                onChange={this.handleSingleFieldUpdate}>
-              <select defaultValue="">
-                <option value={ContainerConstants.NETWORK.HOST}>
-                  Host
-                </option>
-                <option value={ContainerConstants.NETWORK.BRIDGE}>
-                  Bridged
-                </option>
-                <option value={ContainerConstants.NETWORK.USER}>
-                  User
-                </option>
-              </select>
-            </FormGroupComponent>
+            {this.getNetworkGroupComponent()}
           </div>
         </div>
         <div className="row">
