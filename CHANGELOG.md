@@ -1,7 +1,3 @@
-## 1.2.0 - 2017-05-11
-### Fixed
-- Fix Network handling and support networks in Marathon 1.5.0
-
 ## 1.1.7 - 2017-02-14
 ### Fixed
 - MARATHON-1339: Handling secrets in environment variables
