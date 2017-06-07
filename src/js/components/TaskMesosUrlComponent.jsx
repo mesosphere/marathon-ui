@@ -4,6 +4,8 @@ import InfoActions from "../actions/InfoActions";
 import InfoEvents from "../events/InfoEvents";
 import InfoStore from "../stores/InfoStore";
 
+import ExecutorUtil from "../helpers/ExecutorUtil";
+
 var TaskMesosUrlComponent = React.createClass({
   displayName: "TaskMesosUrlComponent",
   propTypes: {
@@ -52,7 +54,7 @@ var TaskMesosUrlComponent = React.createClass({
           "/frameworks/",
           frameworkId,
           "/executors/",
-          task.id
+          ExecutorUtil.calculateExecutorId(task)
         ].join("");
       }
     }

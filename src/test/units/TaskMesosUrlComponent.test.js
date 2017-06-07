@@ -62,4 +62,42 @@ describe("TaskMesosUrlComponent", function () {
         "5050-16758-S1/frameworks/framework1/executors/task-123"
       );
     });
+
+    it("has the correct mesos task url when using custom executor",
+      function () {
+
+        var taskWithExecutor = {
+          appId: "/app-1",
+          id: "task-123",
+          executor: "custom",
+          slaveId: "20150720-125149-3839899402-5050-16758-S1"
+        }
+
+        this.component.setProps({task: taskWithExecutor});
+
+        var url = this.component.props().href;
+        expect(url).to.equal(
+          "http://leader1.dcos.io:5050/#/slaves/20150720-125149-3839899402-" +
+          "5050-16758-S1/frameworks/framework1/executors/marathon-task-123"
+        );
+      });
+
+      it("has the correct mesos task url when using command executor",
+        function () {
+
+          var taskWithExecutor = {
+            appId: "/app-1",
+            id: "task-123",
+            executor: "//cmd",
+            slaveId: "20150720-125149-3839899402-5050-16758-S1"
+          }
+
+          this.component.setProps({task: taskWithExecutor});
+
+          var url = this.component.props().href;
+          expect(url).to.equal(
+            "http://leader1.dcos.io:5050/#/slaves/20150720-125149-3839899402-" +
+            "5050-16758-S1/frameworks/framework1/executors/task-123"
+          );
+        });
 });
