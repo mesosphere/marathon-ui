@@ -100,20 +100,22 @@ const AppFormValidators = {
   },
 
   healthChecksPathNotEmpty: (obj) => {
-    return obj.protocol !== HealthCheckProtocols.HTTP ||
+    return [
+      HealthCheckProtocols.HTTP,
+      HealthCheckProtocols.MESOS_HTTP,
+      HealthCheckProtocols.MESOS_HTTPS
+    ].indexOf(obj.protocol) === -1 ||
       !Util.isStringAndEmpty(obj.path);
   },
 
   healthChecksPortIndex: (obj) => {
-    return obj.protocol !== HealthCheckProtocols.HTTP &&
-      obj.protocol !== HealthCheckProtocols.TCP ||
+    return obj.protocol === HealthCheckProtocols.COMMAND ||
       obj.portType !== HealthCheckPortTypes.PORT_INDEX ||
       !!obj.portIndex.toString().match(/^[0-9]+$/);
   },
 
   healthChecksPort: (obj) => {
-    return obj.protocol !== HealthCheckProtocols.HTTP &&
-      obj.protocol !== HealthCheckProtocols.TCP ||
+    return obj.protocol === HealthCheckProtocols.COMMAND ||
       obj.portType !== HealthCheckPortTypes.PORT_NUMBER ||
       isValidPort(obj.port);
   },
