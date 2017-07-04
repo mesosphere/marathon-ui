@@ -79,7 +79,11 @@ const AppFormModelPostProcess = {
 
     let hc = healthChecks[0];
 
-    let isEmpty = hc.protocol === HealthCheckProtocols.HTTP &&
+    let isEmpty = [
+      HealthCheckProtocols.HTTP,
+      HealthCheckProtocols.MESOS_HTTP,
+      HealthCheckProtocols.MESOS_HTTPS
+    ].indexOf(hc.protocol) !== -1 &&
       hc.path == null || Util.isStringAndEmpty(healthChecks.path) &&
       ["portIndex",
       "port",

@@ -68,7 +68,11 @@ var HealthChecksComponent = React.createClass({
 
     var pathClassSet = classNames({
       "row": true,
-      "hidden": row.protocol !== HealthCheckProtocols.HTTP
+      "hidden": [
+        HealthCheckProtocols.HTTP,
+        HealthCheckProtocols.MESOS_HTTP,
+        HealthCheckProtocols.MESOS_HTTPS
+      ].indexOf(row.protocol) === -1
     });
 
     var portIndexClassSet = classNames({
@@ -104,9 +108,24 @@ var HealthChecksComponent = React.createClass({
                   label="Protocol"
                   value={row.protocol}>
                 <select defaultValue={row.protocol} ref={`protocol${i}`}>
-                  <option value={HealthCheckProtocols.COMMAND}>COMMAND</option>
-                  <option value={HealthCheckProtocols.HTTP}>HTTP</option>
-                  <option value={HealthCheckProtocols.TCP}>TCP</option>
+                  <option value={HealthCheckProtocols.COMMAND}>
+                    COMMAND
+                  </option>
+                  <option value={HealthCheckProtocols.HTTP}>
+                    HTTP
+                  </option>
+                  <option value={HealthCheckProtocols.MESOS_HTTP}>
+                    Mesos HTTP
+                  </option>
+                  <option value={HealthCheckProtocols.MESOS_HTTPS}>
+                    Mesos HTTPS
+                  </option>
+                  <option value={HealthCheckProtocols.TCP}>
+                    TCP
+                  </option>
+                  <option value={HealthCheckProtocols.MESOS_TCP}>
+                    Mesos TCP
+                  </option>
                 </select>
               </FormGroupComponent>
             </div>

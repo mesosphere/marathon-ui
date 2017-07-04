@@ -164,10 +164,17 @@ const AppFormFieldToModelTransforms = {
           value: row.command
         };
 
-      } else if (row.protocol === HealthCheckProtocols.HTTP) {
+      } else if ([
+        HealthCheckProtocols.HTTP,
+        HealthCheckProtocols.MESOS_HTTP,
+        HealthCheckProtocols.MESOS_HTTPS
+      ].indexOf(row.protocol) !== -1) {
         delete row.command;
         delete row.ignoreHttp1xx;
-      } else if (row.protocol === HealthCheckProtocols.TCP) {
+      } else if ([
+        HealthCheckProtocols.TCP,
+        HealthCheckProtocols.MESOS_TCP
+      ].indexOf(row.protocol) !== -1) {
         delete row.command;
         delete row.path;
         delete row.ignoreHttp1xx;
