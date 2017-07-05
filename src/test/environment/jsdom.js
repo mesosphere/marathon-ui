@@ -10,3 +10,4 @@ global.document = jsdom.jsdom(html, {
 });
 global.window = document.defaultView;
 global.navigator = window.navigator;
+global.runtimeConfig = {};

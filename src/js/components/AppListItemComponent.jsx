@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import React from "react/addons";
 import OnClickOutsideMixin from "react-onclickoutside";
+import config from "../config/config";
 
 import AppActionsHandlerMixin from "../mixins/AppActionsHandlerMixin";
 import AppHealthBarWithTooltipComponent
@@ -186,6 +187,18 @@ var AppListItemComponent = React.createClass({
     );
   },
 
+  getAppDescription: function () {
+    var props = this.props;
+    var model = props.model;
+    if (model.labels === undefined)
+      return null;
+    return (
+      <span className="description">
+        {model.labels["_ui_description"]}
+      </span>
+    );
+  },
+
   getAppName: function () {
     var props = this.props;
     var model = props.model;
@@ -208,6 +221,7 @@ var AppListItemComponent = React.createClass({
             {appName}
           </span>
           {this.getLabels()}
+          {this.getAppDescription()}
           <span className="group-id" onClick={this.handleBreadcrumbClick}>
             <span className="lead-in">in</span>
             <BreadcrumbComponent groupId={groupId} />
@@ -226,6 +240,21 @@ var AppListItemComponent = React.createClass({
           title={model.id} ref="nameCell">
         <span className="name" ref="nameNode">{relativeAppName}</span>
         {this.getLabels()}
+        {this.getAppDescription()}
+      </td>
+    );
+  },
+
+  getAppLink: function () {
+    if (config.appReverseProxy === "")
+      return null;
+    let appName = PathUtil.getAppName(this.props.model.id);
+    let appLink = config.appReverseProxy.replace("%APP%", appName);
+    return (
+      <td className="text-right link-cell">
+          <span>
+            <a href={appLink} target="_blank">Go</a>
+          </span>
       </td>
     );
   },
@@ -384,6 +413,7 @@ var AppListItemComponent = React.createClass({
           {this.getIcon()}
         </td>
         {this.getAppName()}
+        {this.getAppLink()}
         <td className={cpuClassSet}>
           {parseFloat(model.totalCpus).toFixed(1)}
         </td>

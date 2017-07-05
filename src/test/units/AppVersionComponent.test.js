@@ -54,7 +54,7 @@ describe("AppVersionComponent", function () {
         "maximumOverCapacity": 1.0
       },
       "labels": {},
-      "acceptedResourceRoles": [],
+      "acceptedResourceRoles": null,
       "version": "2015-06-29T12:57:02.269Z"
     };
 

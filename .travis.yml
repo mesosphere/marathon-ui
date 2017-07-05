@@ -1,11 +1,20 @@
 language: node_js
 before_install:
-  - npm cache clear
-  - npm install -g gulp
+- npm cache clear
 node_js:
-  - "5.4.1"
+- 5.4.1
 script: npm run dist
 after_success: npm run cover:report
 notifications:
   slack:
     secure: apUObVUa/OhaTEvoYw3oM1ZTTT0LtYolofJYqnWiBOusc6qgMlK2rfk5kod7vDn33cSKwGhFcyVrrFCn2qxuvYUWCpK4Yo6Hj7KIjoqMi9yHLHXAAWIfAFNMlCdaUGjlHLWn757rBkbuQUDVH8HmB6Vc3J3sybTbiFmMDP1cEVo=
+before_deploy:
+- cp scripts/launch.sh dist/
+- cd dist
+- zip -r marathon-ui-${TRAVIS_TAG}.zip .
+deploy:
+  provider: releases
+  skip_cleanup: true
+  file: marathon-ui-${TRAVIS_TAG}.zip
+  on:
+    tags: true

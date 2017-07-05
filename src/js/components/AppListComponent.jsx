@@ -19,6 +19,7 @@ import AppsActions from "../actions/AppsActions";
 import AppsStore from "../stores/AppsStore";
 import AppsEvents from "../events/AppsEvents";
 import QueryParamsMixin from "../mixins/QueryParamsMixin";
+import config from "../config/config";
 
 import Util from "../helpers/Util";
 import SortUtil from "../helpers/SortUtil";
@@ -516,6 +517,11 @@ var AppListComponent = React.createClass({
           <colgroup>
             <col className="icon-col" />
             <col className="name-col" />
+            <col className="link-col"
+                 style={{
+                   display: config.appReverseProxy === "" ? "none": "block"
+                 }}
+            />
             <col className="cpu-col" />
             <col className="ram-col" />
             <col className="status-col" />
@@ -529,6 +535,14 @@ var AppListComponent = React.createClass({
                 <span onClick={this.sortBy.bind(null, "id")}
                     className={headerClassSet}>
                   Name {this.getCaret("id")}
+                </span>
+              </th>
+              <th className="text-left link-cell"
+                  style={{
+                    display: config.appReverseProxy === "" ? "none": "block"
+                  }}>
+                <span className={headerClassSet}>
+                  Link
                 </span>
               </th>
               <th className={cpuClassSet}>
