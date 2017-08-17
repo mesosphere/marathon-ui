@@ -1,6 +1,7 @@
 import React from "react/addons";
 
 import config from "../config/config";
+import ajaxWrapper from "../helpers/ajaxWrapper";
 
 import URLUtil from "../helpers/URLUtil";
 import PluginDispatcher from "./shared/PluginDispatcher";
@@ -45,7 +46,9 @@ const PluginLoader = {
           PluginMountPoints: PluginMountPoints,
           pluginId: pluginId,
           React: React,
-          UIVersion: config.version
+          UIVersion: config.version,
+          ajaxWrapper: ajaxWrapper,
+          config: config
         });
 
         let dispatchToken = PluginDispatcher.register(function (event) {
