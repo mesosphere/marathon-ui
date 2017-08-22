@@ -46,9 +46,8 @@ const PluginLoader = {
           PluginMountPoints: PluginMountPoints,
           pluginId: pluginId,
           React: React,
-          UIVersion: config.version,
           ajaxWrapper: ajaxWrapper,
-          config: config
+          config: Object.freeze(config)
         });
 
         let dispatchToken = PluginDispatcher.register(function (event) {
