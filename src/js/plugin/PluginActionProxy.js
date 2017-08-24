@@ -35,7 +35,7 @@ var PluginActionProxy = {
     PluginDispatcher.register(function (action) {
       proxies.forEach(proxy => {
         if (proxy.pluginActionType === action.actionType) {
-          proxy.actionFunction(...action.data);
+          proxy.actionFunction(action.data);
         }
       });
     });
