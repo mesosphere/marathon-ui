@@ -1,28 +1,27 @@
 import MarathonService from "../services/MarathonService";
-
-var service = new MarathonService();
+import Utils from "../utils";
 
 export default class MarathonActions {
 
-  getDeployments() {
-    return service.request({
+  static getDeployments() {
+    return MarathonService.request({
       resource: "/v2/deployments"
     });
   }
 
-  getGroup(group) {
-    /* ${group} already has the leading '/' */
-    return service.request({
-      resource: `/v2/groups${group}`
+  static getGroup(group) {
+    let groupName = Utils.addLeadingSlashIfNedded(group);
+    return MarathonService.request({
+      resource: `/v2/groups${groupName}`
     });
   }
 
-  getGroups() {
+  static getGroups() {
     return this.getGroup("/");
   }
 
-  getApp(appId) {
-    return service.request({
+  static getApp(appId) {
+    return MarathonService.request({
       resource: `/v2/apps${appId}`
     });
   }

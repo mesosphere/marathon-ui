@@ -1,19 +1,20 @@
 
 import config from "../../../config/config";
 import ajaxWrapper from "../../../helpers/ajaxWrapper";
+import Utils from "../utils";
 
 export default class MarathonService {
 
-  request(opts = {}) {
+  static request(opts = {}) {
     let method = "GET";
+    let resource = Utils.addLeadingSlashIfNedded(opts.resource);
 
     if (opts.method) {
       method = opts.method;
     }
 
     return ajaxWrapper({
-      /* ${opts.resource} must include the leading '/' */
-      url: `${config.apiURL}${opts.resource}`,
+      url: `${config.apiURL}${resource}`,
       method: method,
       data: opts.data
     });

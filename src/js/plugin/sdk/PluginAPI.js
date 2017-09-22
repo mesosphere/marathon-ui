@@ -6,8 +6,8 @@ const version = "0.0.1";
 
 var PluginAPI = {
   version: version,
-  MarathonService: new MarathonService(),
-  MarathonActions: new MarathonActions()
+  MarathonService: MarathonService,
+  MarathonActions: MarathonActions
 };
 
 export default Object.freeze(PluginAPI);
