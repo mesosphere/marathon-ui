@@ -11,6 +11,8 @@ import PluginActions from "./shared/PluginActions";
 import PluginHelper from "./shared/PluginHelper";
 import PluginDispatcherProxy from "./PluginDispatcherProxy";
 
+import PluginAPI from "./sdk/PluginAPI";
+
 const PLUGIN_STARTUP_TIMEOUT = 10000; // in ms
 
 const PluginLoader = {
@@ -47,7 +49,8 @@ const PluginLoader = {
           pluginId: pluginId,
           React: React,
           ajaxWrapper: ajaxWrapper,
-          config: Object.freeze(config)
+          config: Object.freeze(config),
+          PluginAPI: PluginAPI
         });
 
         let dispatchToken = PluginDispatcher.register(function (event) {
