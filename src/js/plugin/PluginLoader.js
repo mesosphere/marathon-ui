@@ -48,7 +48,6 @@ const PluginLoader = {
           PluginMountPoints: PluginMountPoints,
           pluginId: pluginId,
           React: React,
-          ajaxWrapper: ajaxWrapper,
           config: Object.freeze(config),
           PluginAPI: PluginAPI
         });
