@@ -2,6 +2,8 @@
 .DS_Store
 *.iml
 .idea/*
+*.sw[o|p]
+~*
 
 # npm
 node_modules/

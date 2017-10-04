@@ -7,7 +7,7 @@ import NavTabsComponent from "../../js/components/NavTabsComponent";
 import DeploymentEvents from "../../js/events/DeploymentEvents";
 import DeploymentStore from "../../js/stores/DeploymentStore";
 
-import tabs from "../../js/constants/tabs";
+import NavTabStore from "../../js/stores/NavTabStore";
 
 describe("Deployments navigation badge", function () {
 
@@ -19,7 +19,7 @@ describe("Deployments navigation badge", function () {
 
     var props = {
       activeTabId: "/deployments",
-      tabs: tabs
+      tabs: NavTabStore.getTabs()
     };
 
     DeploymentStore.once(DeploymentEvents.CHANGE, () => {

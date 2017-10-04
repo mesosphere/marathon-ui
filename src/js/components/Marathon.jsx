@@ -27,7 +27,7 @@ import PluginStore from "../stores/PluginStore";
 import PluginEvents from "../events/PluginEvents";
 import PluginMountPoints from "../plugin/shared/PluginMountPoints";
 
-import tabs from "../constants/tabs";
+import NavTabStore from "../stores/NavTabStore";
 
 var Marathon = React.createClass({
   displayName: "Marathon",
@@ -105,10 +105,10 @@ var Marathon = React.createClass({
     }
 
     var activeTabId = !this.context.router.isActive("404")
-      ? tabs[0].id
+      ? NavTabStore.getTabs()[0].id
       : null;
 
-    if (tabs.find(function (tab) {
+    if (NavTabStore.getTabs().find(function (tab) {
       return tab.id === path;
     })) {
       activeTabId = path;
@@ -298,7 +298,7 @@ var Marathon = React.createClass({
             </div>
             <NavTabsComponent activeTabId={state.activeTabId}
               className="navbar-nav nav-tabs-unbordered"
-              tabs={tabs} />
+              tabs={NavTabStore.getTabs()} />
             <div className="nav navbar-nav navbar-right">
               <AppListFilterComponent />
               <HelpMenuComponent />
