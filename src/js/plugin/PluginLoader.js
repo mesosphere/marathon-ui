@@ -1,7 +1,6 @@
 import React from "react/addons";
 
 import config from "../config/config";
-import ajaxWrapper from "../helpers/ajaxWrapper";
 
 import URLUtil from "../helpers/URLUtil";
 import PluginDispatcher from "./shared/PluginDispatcher";
