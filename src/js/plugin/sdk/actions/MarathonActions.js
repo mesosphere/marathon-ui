@@ -1,5 +1,4 @@
 import MarathonService from "../services/MarathonService";
-import Utils from "../utils";
 
 export default class MarathonActions {
 
@@ -10,7 +9,7 @@ export default class MarathonActions {
   }
 
   static getGroup(group) {
-    let groupName = Utils.addLeadingSlashIfNedded(group);
+    let groupName = group.replace(/\/?(.*)/,"/$1");
     return MarathonService.request({
       resource: `/v2/groups${groupName}`
     });
