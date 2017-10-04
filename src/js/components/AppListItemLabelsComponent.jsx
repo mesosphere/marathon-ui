@@ -59,7 +59,7 @@ var AppListItemLabelsComponent = React.createClass({
     let dropdownNodes = [];
 
     Object.keys(labels).sort().forEach(function (key, i) {
-      if (key == null || Util.isStringAndEmpty(key)) {
+      if (key == null || Util.isStringAndEmpty(key) || key.startsWith("_ui_")) {
         return null;
       }
 

@@ -2,6 +2,8 @@ import classNames from "classnames";
 import objectPath from "object-path";
 import React from "react/addons";
 import Moment from "moment";
+import config from "../config/config";
+
 
 import AppsStore from "../stores/AppsStore";
 import HealthStatus from "../constants/HealthStatus";
@@ -46,7 +48,7 @@ var TaskListItemComponent = React.createClass({
     if (ports != null && ports.length === 1) {
       return (
         <a className="text-muted"
-            href={`//${task.host}:${ports[0]}`}
+            href={`${config.slavesScheme}://${task.host}:${ports[0]}`}
             target="_blank">
           {`${task.host}:${ports[0]}`}
         </a>
@@ -58,7 +60,7 @@ var TaskListItemComponent = React.createClass({
         return (
           <a key={`${task.host}:${port}`}
               className="text-muted"
-              href={`//${task.host}:${port}`}
+              href={`${config.slavesScheme}://${task.host}:${port}`}
               target="_blank">
             {port}
           </a>
@@ -100,7 +102,8 @@ var TaskListItemComponent = React.createClass({
           let port = serviceDiscoveryPorts[0].number;
           return (
             <a key={`${ipAddress}:${port}`}
-                className="text-muted" href={`//${ipAddress}:${port}`}>
+               className="text-muted"
+               href={`${config.slavesScheme}://${ipAddress}:${port}`}>
               {`${ipAddress}:${port}`}
             </a>
           );
@@ -109,7 +112,8 @@ var TaskListItemComponent = React.createClass({
         let portNodes = serviceDiscoveryPorts.map((port) => {
           return (
             <a key={`${ipAddress}:${port.number}`}
-                className="text-muted" href={`//${ipAddress}:${port.number}`}>
+                className="text-muted"
+                href={`${config.slavesScheme}://${ipAddress}:${port.number}`}>
               {port.number}
             </a>
           );

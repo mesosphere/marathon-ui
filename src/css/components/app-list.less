@@ -15,6 +15,10 @@
       width: auto;
     }
 
+    &.link-col {
+      width: @base-spacing-unit*7;
+    }
+
     &.ram-col {
       width: @base-spacing-unit*12;
     }
@@ -88,6 +92,10 @@
       padding-left: @base-spacing-unit*2;
     }
 
+    &.link-cell {
+      text-align: center;
+    }
+
     &.name-cell {
       color: inherit;
 
@@ -96,7 +104,7 @@
         padding-bottom: @base-spacing-unit*0.75;
       }
 
-      .name, .group-id {
+      .name, .group-id, .description {
         display: inline-block;
         line-height: inherit;
         max-width: 100%;
@@ -104,6 +112,12 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+
+      .description {
+        display: block;
+        font-size: 12px;
+      }
+
 
       .group-id {
         color: @text-color-muted;

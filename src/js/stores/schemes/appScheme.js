@@ -5,7 +5,7 @@ import AppTypes from "../../constants/AppTypes";
 const appScheme = {
   cmd: null,
   constraints: [],
-  acceptedResourceRoles: [],
+  acceptedResourceRoles: null,
   container: null,
   cpus: null,
   dependencies: [],
