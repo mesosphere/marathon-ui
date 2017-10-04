@@ -64,6 +64,7 @@ var AppDebugInfoComponent = React.createClass({
     }
 
     lastTaskFailure.id = lastTaskFailure.id || lastTaskFailure.taskId;
+    lastTaskFailure.executor = this.state.app.executor;
 
     const timestamp = lastTaskFailure.timestamp;
     const timeStampText = new Date(timestamp) > new Date()

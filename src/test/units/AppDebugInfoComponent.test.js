@@ -96,6 +96,41 @@ describe("App debug info component", function () {
       AppsActions.requestApp("/python");
     });
 
+    it("should show failed task with custom executor", function (done) {
+      var task = {
+        appId: "/python",
+        taskId: "python.83c0a69b-256a-11e5-aaed-fa163eaaa6b7",
+        slaveId: "slaveABC",
+      };
+
+      var app = Util.extendObject(appScheme, {
+        id: "/python",
+        executor: "custom",
+        lastTaskFailure: task
+      });
+
+      nock(config.apiURL)
+        .get("/v2/apps//python")
+        .query(true)
+        .reply(200, {
+          app: app
+        });
+
+      AppsStore.once(AppsEvents.CHANGE, () => {
+        expectAsync(() => {
+          this.component = mount(<AppDebugInfoComponent appId="/python" />);
+          var nodes = this.component.find("dd");
+
+          var details = nodes.at(6).find("a").at(0).props().href;
+
+          expect(details).to.equal(info.marathon_config.mesos_leader_ui_url + "/#/slaves/" +
+            task.slaveId + "/frameworks/framework1/executors/marathon-" + task.taskId);
+        }, done);
+      });
+
+      AppsActions.requestApp("/python");
+    });
+
     it("should show unspecified field on empty values", function (done) {
       var app = Util.extendObject(appScheme, {
         id: "/python",

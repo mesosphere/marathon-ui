@@ -6,6 +6,8 @@ import MesosEvents from "../events/MesosEvents";
 import MesosStore from "../stores/MesosStore";
 import TooltipComponent from "../components/TooltipComponent";
 
+import ExecutorUtil from "../helpers/ExecutorUtil";
+
 var TaskFileDownloadComponent = React.createClass({
   displayName: "TaskFileDownloadComponent",
 
@@ -99,7 +101,8 @@ var TaskFileDownloadComponent = React.createClass({
 
       this.setState({
         fileIsRequestedByUser: true
-      }, () => MesosActions.requestTaskFiles(task.slaveId, task.id));
+      }, () => MesosActions.requestTaskFiles(task.slaveId,
+                                      ExecutorUtil.calculateExecutorId(task)));
     }
   },
 

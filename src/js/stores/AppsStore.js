@@ -175,6 +175,7 @@ function processApp(app) {
   app.tasks = app.tasks.map(function (task) {
     task.id =  task.id || task.taskId;
     task.healthStatus = getTaskHealth(task);
+    task.executor = app.executor;
     setTaskStatus(task);
     return task;
   });
