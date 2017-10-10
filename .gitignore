@@ -2,6 +2,7 @@
 .DS_Store
 *.iml
 .idea/*
+*.swp
 
 # npm
 node_modules/

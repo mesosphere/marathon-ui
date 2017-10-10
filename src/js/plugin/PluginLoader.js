@@ -10,6 +10,9 @@ import PluginActions from "./shared/PluginActions";
 import PluginHelper from "./shared/PluginHelper";
 import PluginDispatcherProxy from "./PluginDispatcherProxy";
 
+import MarathonService from "./sdk/services/MarathonService";
+import MarathonActions from "./sdk/actions/MarathonActions";
+
 const PLUGIN_STARTUP_TIMEOUT = 10000; // in ms
 
 const PluginLoader = {
@@ -45,7 +48,9 @@ const PluginLoader = {
           PluginMountPoints: PluginMountPoints,
           pluginId: pluginId,
           React: React,
-          UIVersion: config.version
+          config: Object.freeze(config),
+          MarathonService: MarathonService,
+          MarathonActions: MarathonActions,
         });
 
         let dispatchToken = PluginDispatcher.register(function (event) {
