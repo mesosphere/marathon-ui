@@ -366,7 +366,7 @@ AppDispatcher.register(function (action) {
       addDataToMap(data.id, storeData.taskFileMap, data.files.map(file => {
         var encodedPath = encodeURIComponent(file.path);
         file.host = data.host;
-        file.name = /[^/]+\/?$/.exec(file.path)[0];
+        file.name = /[^\/\\]+[\/\\]{0,2}$/.exec(file.path)[0];
         file.downloadURI = `${data.host}${downloadRoute}?path=${encodedPath}`;
         return file;
       }));
