@@ -1,3 +1,10 @@
+## 1.3.0 - 2017-10-16
+### Added
+- Handle custom executor Mesos links
+- Add support for Mesos health checks
+- Introduce `MarathonService` and `MarathonActions` to enable feature-rich plugins
+- Adjust `MesosStore` to support Windows paths
+
 ## 1.2.0 - 2017-05-11
 ### Fixed
 - Fix Network handling and support networks in Marathon 1.5.0
