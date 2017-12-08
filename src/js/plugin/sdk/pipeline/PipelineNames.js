@@ -1,0 +1,3 @@
+
+export const PRE_AJAX_REQUEST = "PRE_AJAX_REQUEST";
+

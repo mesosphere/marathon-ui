@@ -1,7 +1,10 @@
 import fetch from "isomorphic-fetch";
 import Util from "./Util";
+import PipelineStore from "../plugin/sdk/pipeline/PipelineStore";
+import * as PipelineNames from "../plugin/sdk/pipeline/PipelineNames";
 
 var uniqueCalls = [];
+const pipeline = PipelineStore;
 
 function removeCall(options) {
   uniqueCalls.splice(uniqueCalls.indexOf(options.url), 1);
@@ -47,6 +50,10 @@ var ajaxWrapper = function (opts = {}) {
       });
     }
 
+    options = pipeline.applyPipeline(
+                  PipelineNames.PRE_AJAX_REQUEST,
+                  options
+              );
     return fetch(options.url, fetchOptions);
   };
 
