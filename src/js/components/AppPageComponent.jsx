@@ -352,6 +352,7 @@ var AppPageComponent = React.createClass({
             fetchState={state.fetchState}
             getTaskHealthMessage={this.getTaskHealthMessage}
             hasHealth={Object.keys(model.healthChecks).length > 0}
+            labels={model.labels}
             tasks={model.tasks} />
         </TabPaneComponent>
         <TabPaneComponent

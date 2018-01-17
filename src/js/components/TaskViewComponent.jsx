@@ -18,6 +18,7 @@ var TaskViewComponent = React.createClass({
     fetchState: React.PropTypes.number.isRequired,
     getTaskHealthMessage: React.PropTypes.func.isRequired,
     hasHealth: React.PropTypes.bool,
+    labels: React.PropTypes.object.isRequired,
     tasks: React.PropTypes.array.isRequired
   },
 
@@ -228,6 +229,7 @@ var TaskViewComponent = React.createClass({
           hasHealth={this.props.hasHealth}
           onTaskToggle={this.onTaskToggle}
           itemsPerPage={this.state.itemsPerPage}
+          labels={this.props.labels}
           selectedTasks={this.state.selectedTasks}
           tasks={this.props.tasks}
           toggleAllTasks={this.toggleAllTasks} />
