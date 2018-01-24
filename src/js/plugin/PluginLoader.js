@@ -12,6 +12,8 @@ import PluginDispatcherProxy from "./PluginDispatcherProxy";
 
 import MarathonService from "./sdk/services/MarathonService";
 import MarathonActions from "./sdk/actions/MarathonActions";
+import PipelineStore from "./sdk/pipeline/PipelineStore";
+import * as PipelineNames from "./sdk/pipeline/PipelineNames";
 
 const PLUGIN_STARTUP_TIMEOUT = 10000; // in ms
 
@@ -51,6 +53,8 @@ const PluginLoader = {
           config: Object.freeze(config),
           MarathonService: MarathonService,
           MarathonActions: MarathonActions,
+          PipelineStore: PipelineStore,
+          PipelineNames: PipelineNames,
         });
 
         let dispatchToken = PluginDispatcher.register(function (event) {
