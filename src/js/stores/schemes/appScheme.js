@@ -24,7 +24,7 @@ const appScheme = {
   networks: [],
   disk: null,
   portDefinitions: [],
-  uris: [],
+  fetch: [],
   user: null,
   tasks: [],
   tasksRunning: 0,
