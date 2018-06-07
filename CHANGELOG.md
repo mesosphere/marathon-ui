@@ -1,36 +1,59 @@
-## 1.3.0 - 2017-10-16
+## 1.3.1 - 2010-06-07
+
 ### Added
+
+- Implementing filter pipelines and exporting to plugins
+
+### Fixed
+
+- Fix URIs not displayed in the configuration of applications
+
+## 1.3.0 - 2017-10-16
+
+### Added
+
 - Handle custom executor Mesos links
 - Add support for Mesos health checks
 - Introduce `MarathonService` and `MarathonActions` to enable feature-rich plugins
 - Adjust `MesosStore` to support Windows paths
 
 ## 1.2.0 - 2017-05-11
+
 ### Fixed
+
 - Fix Network handling and support networks in Marathon 1.5.0
 
 ## 1.1.7 - 2017-02-14
+
 ### Fixed
+
 - MARATHON-1339: Handling secrets in environment variables
 - Fix app version order
 - Fix "initial" app version request
 
 ## 1.1.6 - 2016-12-14
+
 ### Fixed
+
 - \#4569: npm run serve error
 - \#4679: Updating "user" in configuration in web gui has no effect
 - \#4338: Adding "taskKillGracePeriodSeconds" to known properties
 
 ## 1.1.5 - 2016-10-06
+
 ### Fixed
+
 - DCOS-10184: Fix service port handling
 
 ## 1.1.4 - 2016-09-28
+
 ### Added
+
 - Support MAX_PER constraint
 - Show stderr and stdout links on debug tab under Mesos details
 
 ### Fixed
+
 - \#4114 - Marathon UI displays invalid date in
   "Working directory" - "Last Modified"
 - \#3447 - Mesos details link is broken for exited tasks
@@ -38,7 +61,9 @@
 - \#4340 - Can't modify configuration in UI
 
 ## 1.1.3 - 2016-04-26
+
 ### Fixed
+
 - \#3790 - Remove Docker on submit if no image is provided
 - \#3774 - External volume container tooltip needs update
 - \#3773 - Volume detail lacks "Volumes" in breadcrumb
@@ -50,32 +75,43 @@
 - \#3793 - Wrong application status
 
 ### Changed
+
 - \#3660 - Multiple forward slashes allowed in app ID
 
 ## 1.1.2 - 2016-04-14
+
 ### Fixed
+
 - \#3763 - Enable multiple general errors from server response
 
 ## 1.1.1 - 2016-04-13
+
 ### Added
+
 - \#3658 - Allow Kill & Wipe for resident tasks
 
 ### Fixed
+
 - \#3719 - Tooltip message for external volumes is wrong
 - \#3724 - Don't assume external volumes status as attached by default
 - \#3657 - Suspended resident tasks should have a different status
 
 ### Changed
+
 - \#3693 - Remove unwanted sidebar filter for scheduler upgrades
 - Introduce support for External Volumes based on feature flag
 
 ## 1.1.0 - 2016-04-08
+
 ### Added
+
 - \#3670 - Add support for scheduler upgrades and readinessChecks
 - Add support for external persistent volumes
 
 ## 1.0.1 - 2016-04-07
+
 ### Fixed
+
 - \#3552 - Editing an App: Switching between JSON and normal Editor
   produces a broken UX
 - \#3564 - Add link to Docker section for Ports
@@ -91,6 +127,7 @@
 - \#3659 - JSON editor help button does not work in IE11
 
 ### Changed
+
 - \#3426 - Improve ports validation
 - \#3559 - Create Modal: always show Port Index for host ports
 - \#3424 - Maintain "assign random port" settings after JSON mode switch
@@ -98,10 +135,13 @@
 - \#3692 - Remove the Deployment Stop Button in the UI
 
 ### Added
+
 - VIP labels in port definitions
 
 ## 1.0.0 - 2016-03-23
+
 ### Fixed
+
 - \#3494 - Create application button stays disabled
 - \#3459 - UI docker volumes validation issue
 - \#3518 - Residency added even if no volumes are requested
@@ -110,7 +150,9 @@
 - \#3542 - Ports validation error text should be red
 
 ## 0.16.0 - 2016-03-14
+
 ### Added
+
 - \#3017 - Move application Search Bar to the Header
 - \#3082 - Make URLs in form validation error messages clickable
 - \#3076 - Highlight sorted columns in the UI
@@ -118,10 +160,11 @@
 - \#3155 - Add support for Local Volumes in Create/Edit modal
 - \#3157 - Filter apps by attached volumes
 - \#3127 - Show groups as part of search results
-- \#966  - Allow creating empty groups
+- \#966 - Allow creating empty groups
 - \#3240 - Add volumes tab to application page
 
 ### Changed
+
 - \#3078 - Always show download button for logs
 - \#3077 - Future timestamps
 - \#3124 - Improve usability of labels filter dropdown
@@ -134,6 +177,7 @@
 - \#3470 - Ports: strip deprecated ports when editing via JSON
 
 ### Fixed
+
 - \#3133 - Interrupted scaling operations can leave the health bar in an
   incorrect state
 - \#3093 - Don't display "Create an Application" together with "Loading error"
@@ -149,31 +193,42 @@
 - \#3440 - Append trailing slash when creating an app within a group
 
 ## 0.15.6 - 2016-02-23
+
 - \#3192 - Adapt default Mem/CPU settings
 
 ## 0.15.5 - 2016-02-15
+
 ### Fixed
+
 - \#3242 - Treat "value" attribute in server-side validation errors as general
   error
 
 ## 0.15.4 - 2016-02-08
+
 ### Fixed
+
 - \#3160 - Show server-side validation errors for invalid constraints
 - \#3164 - Show server-side validation errors for invalid object
-- \#3214 -  App creation modal ports field default value does not reflect
+- \#3214 - App creation modal ports field default value does not reflect
   service default value
 - \#3218 - Regression: group name no longer pre-filled in app modal
 
 ## 0.15.3 - 2016-02-03
+
 ### Fixed
+
 - \#3149 - The application definition should be always post processed
 
 ## 0.15.2 - 2016-01-28
+
 ### Fixed
+
 - \#3054 - Avoid manipulating `fetch` values directly; keep using `uris` field
 
 ## 0.15.1 - 2016-01-22
+
 ### Fixed
+
 - \#3605 - Prevent ctrl-c keyboard shortcut from showing the Create modal dialog
 - \#3054 - Empty - non set- application attributes are accidentaly submited
   by the UI
@@ -182,7 +237,9 @@
   overcapacity
 
 ## 0.15.0 - 2016-01-20
+
 ### Added
+
 - \#2814 - Add contextual dropdown menu to Application List items
 - \#2733 - Allow configuration of "port" instead of "portIndex" for HTTP/TCP
   health checks
@@ -192,6 +249,7 @@
 - \#2944 - Allow users to scale a group
 
 ### Changed
+
 - \#2651 - Improve ui scale error messages
 - \#2832 - Convert all confirm dialogs to have meaningful action button labels
 - \#2844 - Show error icon for failing Mesos logs
@@ -202,20 +260,27 @@
 - \#3018 - Better search result ranking and fuzzy matching
 
 ### Fixed
+
 - \#2892 - Version in task detail component shouldn't be localised
 - \#2893 - App page component should display the right number of tasks
 - \#2949 - AjaxWrapper does't handle TypeError correctly
 
 ## 0.14.3 - 2016-01-26
+
 ### Fixed
+
 - \#2973 - Prevent breaking task info table if IP address is not present
 
 ## 0.14.2 - 2016-01-14
+
 ### Fixed
+
 - \#2972 - Add more inline task information
 
 ## 0.14.1 - 2015-12-17
+
 ### Added
+
 - \#2772 - URI fields should be links
 - \#2775 - Syntax highlighting for JSON fragments in configuration
 - \#2809 - Health filter in sidebar
@@ -223,16 +288,20 @@
 - \#2721 - Provide log download links for easier task debugging
 
 ### Changed
+
 - \#2764 - Make health status bar wider
 
 ### Fixed
+
 - \#2755 - Memory leak in Marathon UI
 - \#2845 - Misleading error feedback in app creation modal on port conflict
 - \#2812 - Cannot change configuration of Marathon app after deployment
 - \#2821 - Tooltip content update issue
 
 ## 0.14.0 - 2015-12-07
+
 ### Added
+
 - Prefill ID field with group structure in app creation modal
 - Show an animated loading bar on app deployment status
 - A detailed breakdown of the health status of each instance is shown on the
@@ -251,6 +320,7 @@
 - \#2771 - Open task links in a new tab
 
 ### Changed
+
 - Adjust the task list column order
 - Use colored labels instead of dots for task health
 - \#2646 - Consolidate Actions Menu in App Details View
@@ -264,39 +334,52 @@
 - \#2715 - Deployment loading bar should have new style
 
 ### Fixed
+
 - \#2720 - Disabled button has wrong colour
 - \#2647 - Application cmd override causes application to restart repeatedly
 
 ## 0.13.6 - 2015-11-25
+
 ### Fixed
+
 - \#2719 - Show correct button label when creating inside group
 
 ### Changed
+
 - \#2684 - Running instances are confusing
 
 ## 0.13.5 - 2015-11-24
+
 ### Fixed
+
 - \#2699 - App list health bar update/render issue
 
 ## 0.13.4 - 2015-11-18
+
 ### Fixed
+
 - \#2687 - Show error dialog on kill task error
 - \#2626 - Status icons are rendered blotted
 - \#2627 - Tasks health column shows different health status
 - \#2634 - UI does not update/show the status correctly
 - \#1780 - When app is locked by deployment, deleting tasks via the UI does
-nothing
+  nothing
 - \#2615 - Keep input focus position when updating the Filter bar
 
 ## 0.13.3 - 2015-11-10
+
 ### Changed
+
 - Introduced a maximum width for labels in the app list.
 
 ### Fixed
+
 - \#2593 - Very long labels expand horizontal scrollbar in app list
 
 ## 0.13.2 - 2015-11-09
+
 ### Fixed
+
 - \#2565 - Change app icon title from "Basic" to "Application"
 - \#2568 - UI: App state incorrectly shown
 - \#2574 - Label Filter: Filter Label Box is not cleared
@@ -304,15 +387,18 @@ nothing
 - \#2586 - Sorting by Status shifts heading text
 
 ## 0.13.1 - 2015-11-04
+
 It was necessary to increase the version number in order to resolve some issues
 with our release infrastructure. No other changes were made since 0.13.0.
 
 ## 0.13.0 - 2015-11-04
+
 ### Added
+
 - A filter sidebar is introduced with the ability to combine filters
   or clear them.
-  * Filter by application status
-  * Filter by labels
+  - Filter by application status
+  - Filter by labels
 - The application list now handles groups
 - Groups are shown at the top of the application list
 - App names are now shown in the app page and app list instead of app IDs
@@ -326,6 +412,7 @@ with our release infrastructure. No other changes were made since 0.13.0.
 - \#2500 - Add a link to API-Doc in the UI
 
 ### Changed
+
 This version introduces major changes to the layout. In particular, the
 application list has been redesigned.
 
@@ -341,16 +428,19 @@ application list has been redesigned.
   in full
 
 ### Fixed
+
 - \#2421 - Error: Invalid calling object (Win 8 IE10, Win 7 IE11)
 - \#2422 - Handle apps error response attribute on HTTP 422
 - \#2459 - Framework Id not visible in the UI
 
 ## 0.12.0 - 2015-10-02
+
 ### Added
+
 - \#2244 - Ability to scale an application forcefully if there is a deployment
   running
 - \#1055 - Add app labels to UI
-  * Ability of modifing the app labels in the application modal form.
+  - Ability of modifing the app labels in the application modal form.
 - \#2283 - Expose the application labels field in the configuration tab
 - \#2284 - Expose the application dependencies field in the configuration tab
 - \#2263 - UI doesn't expose roles
@@ -363,16 +453,18 @@ application list has been redesigned.
 - \#2298 - Implement consistent behaviour on 409 (Conflict) to force deployments
 
 ### Changed
+
 - \#2105 - Refactor the application create/edit modal data handling
-  * Separate the data-layer from the view-layer
-  * Add form to model transformers
-  * Add model to form transformers
-  * Add proper per-field validation
-  * Add support for server-side validation errors on individual fields
+  - Separate the data-layer from the view-layer
+  - Add form to model transformers
+  - Add model to form transformers
+  - Add proper per-field validation
+  - Add support for server-side validation errors on individual fields
 - \#2248 - Docker: port mappings do not make sense when host network is used
 - \#2223 - Display life time duration as other durations in UI
 
 ### Fixed
+
 - \#2157 - Row is off-centre if upper row is empty in lists
 - \#2266 - Link "Mesos details" is broken
 - \#1985 - Docker container settings dialog needs better error handling
@@ -381,37 +473,43 @@ application list has been redesigned.
 - \#2216 - Do not show (x) in keyword search input until user begins typing
 
 ## 0.11.2 - 2015-10-12
+
 ### Fixed
+
 - \#2338 - Parameters in the Docker container settings are not taken into
   account
 - \#2398 - Blank docker image is created in app modal
 - \#2402 - Runtime privilege checkbox does not work
 
 ## 0.11.1 - 2015-09-28
+
 ### Fixed
+
 - \#2252 - Wrong task number in Debug Tab
 
 ## 0.11.0 - 2015-09-02
+
 ### Added
+
 - \#1204 - Please add a search bar to the applications overview to filter the
   list of applications
 - \#1137 - Add tooltip on hover to progress bars
-  * A tooltip that displays the individual health statuses is now shown when
+  - A tooltip that displays the individual health statuses is now shown when
     the mouse is over the progress bars in the apps overview page.
 - \#1864 - Add a link to the app detail page from the deployments tab
 - \#1756 - Create a "Not found page"
 - \#878 - Jump to Mesos sandbox from UI
-  * You can go directly to the Mesos tasks sandbox from the tasks detail page.
+  - You can go directly to the Mesos tasks sandbox from the tasks detail page.
 - \#968 - Expose a way to identify "fragile" marathon apps in the web UI
-  * If there is a lastTaskFailure this information will be shown in a tab
+  - If there is a lastTaskFailure this information will be shown in a tab
     called "Last task failure" on the app page.
 - \#1937 - Display version string also in local time
 - \#1058 - Add sorting to the health column in the app list
 - \#1993 - Show Marathon UI version in about modal
-  * The Marathon UI version will be shown on mouse hovering
+  - The Marathon UI version will be shown on mouse hovering
     above the API version field. Second way is pressing "g v" on the keyboard.
 - \#808 - Make app configuration fields editable
-  * A selected application version can now be edited
+  - A selected application version can now be edited
     by pressing on the "Edit these settings"-button.
 - \#124 - Expose environment variables in app modal dialog
 - \#2010 - Show task life time and states in debug tab
@@ -419,12 +517,13 @@ application list has been redesigned.
 - \#2133 - Display health checks settings in the application configuration tab
 
 ### Changed
+
 - \#124 - Expose all /v2 App attributes in UI
-  * The optional settings inside the new application modal dialog are now
+  - The optional settings inside the new application modal dialog are now
     grouped together
-  * It is now possible to specify Docker container settings
+  - It is now possible to specify Docker container settings
 - \#1673 - Prerequisites to deploy a webjar via TeamCity
-  * In a production environment, the API will be requested by ../v2/ instead of
+  - In a production environment, the API will be requested by ../v2/ instead of
     ./v2/, because the UI is now served in an "/ui/"-path via Marathon.
     Also the dist-folder isn't needed in the repository anymore, the files will
     be generated on-the-fly.
@@ -434,8 +533,9 @@ application list has been redesigned.
 - \#2116 - Adjust refresh button style
 
 ### Fixed
+
 - \#548 - UI showing empty list after scaling when on page > 1
-  * The task list shows the last available page
+  - The task list shows the last available page
     if tasks count decreases after scaling.
 - \#1872 - Kill & Scale should be available for more than one task
 - \#1960 - Task detail error message doesn't show up on non existent task
@@ -445,31 +545,37 @@ application list has been redesigned.
 - \#2030 - Shortcut for app creation no longer works
 - \#2062 - Resetting app delay can block all network requests in Firefox
 - \#2123 - Health check information isn't shown on task in task list
-           and task detail
+  and task detail
 
 ## 0.10.0 - 2015-07-10
+
 ### Added
+
 - \#1754 - UI: Allow administratively zeroing / resetting the taskLaunchDelay
-  * The App list now displays two additional possible statuses: "Delayed" and
+  - The App list now displays two additional possible statuses: "Delayed" and
     "Waiting". The "Delayed" status also displays a tooltip showing
     the remaining time until the next launch attempt.
-  * The App page now allows the user to reset the task launch delay for a
+  - The App page now allows the user to reset the task launch delay for a
     "Delayed" app, thus forcing a new immediate launch attempt.
 
 ### Changed
+
 - The Backbone router was replaced by the react-router in order to remove the
   jQuery and Backbone dependency completely.
   Routes have changed to include a leading slash, e.g.:
-  ```#apps``` is now reachable under ```#/apps```.
+  `#apps` is now reachable under `#/apps`.
   Modal dialogs are now part of the URL via query strings,
-  e.g. ```#/apps?modal=about```, so the underlying page is not lost on refresh.
+  e.g. `#/apps?modal=about`, so the underlying page is not lost on refresh.
 
 ### Removed
+
 - The static name field in the about/info modal got removed. It's reflected by
   the framework name field.
 
 ## 0.9.1 - 2015-07-03
+
 ### Changed
+
 - The Broccoli build system was replaced by the Gulp build system
 - Complete replacement of the Backbone models with a Flux structure.
   The components retrieve their data from stores via events on place.
@@ -477,13 +583,17 @@ application list has been redesigned.
   Ajax-wrapper.
 
 ### Fixed
+
 - \#1660 - Allow app creation with 0 instances
 - \#1236 - Disfunctional refresh button in app configuration
 
 ## 0.9.0 - 2015-06-17
+
 ### Changed
+
 - Marathon UI lives now in it's own Git repository
 - Update to React 0.13
 
 ### Added
+
 - Testing via Mocha
