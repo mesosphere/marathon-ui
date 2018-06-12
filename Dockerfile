@@ -4,12 +4,12 @@ MAINTAINER Orlando Hohmeier <orlando@mesosphere.io>
 
 WORKDIR /opt/marathon-ui
 
-ADD . /opt/marathon-ui/
+COPY ./entrypoint.sh /opt/marathon-ui/entrypoint.sh
+RUN npm install -g gulp
 
 USER root
 
-VOLUME "/opt/marathon-ui/tests"
-VOLUME "/opt/marathon-ui/dist"
+VOLUME "/opt/marathon-ui"
 
-ENTRYPOINT ["npm"]
-CMD ["run", "serve"]
+# Define entrypoint
+ENTRYPOINT [ "/bin/bash", "/opt/marathon-ui/entrypoint.sh" ]

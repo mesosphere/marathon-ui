@@ -68,23 +68,25 @@ services:
       - ./resources/marathon-plugins:/plugins
       - ./resources/marathon.plugin-conf.json:/plugin-conf.json
       - ./resources/marathon.secret:/marathon.secret
-  marathon-ui:
+  toolchain:
+    build:
+        context: .
+    expose:
+      - "4200"
+    volumes:
+      - .:/opt/marathon-ui
+  proxy:
     image: nginx:latest
     hostname: marathon-ui
     ports:
-     - "8080:8080"
+      - "8080:8080"
     links:
       - marathon-service
+      - toolchain
     environment:
       - DNSDOCK_ALIAS=marathon.docker
     volumes:
       - ./resources/marathon-ui.nginx.conf:/etc/nginx/nginx.conf
-      -  dist:/usr/share/nginx/html
-  develop-environment:
-    build:
-        context: .
-    volumes:
-      - ./src:/opt/marathon-ui/src
-      - dist:/opt/marathon-ui/dist
+      -  ./dist:/usr/share/nginx/html
 volumes:
   dist: {}
