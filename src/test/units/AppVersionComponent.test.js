@@ -29,6 +29,7 @@ describe("AppVersionComponent", function () {
       "cpus": 0.1,
       "mem": 16.0,
       "disk": 0.0,
+      "gpus": 0,
       "executor": "",
       "constraints": [],
       "uris": [],
@@ -139,37 +140,37 @@ describe("AppVersionComponent", function () {
   });
 
   it("has correct backoff factor", function () {
-    var children = this.rows.at(35).props().children;
+    var children = this.rows.at(37).props().children;
     expect(children[0]).to.equal(1.15);
   });
 
   it("has correct backoff", function () {
-    var children = this.rows.at(37).props().children;
+    var children = this.rows.at(39).props().children;
     expect(children[0]).to.equal(1);
     expect(children[2]).to.equal("seconds");
   });
 
   it("has correct max launch delay", function () {
-    var children = this.rows.at(39).props().children;
+    var children = this.rows.at(41).props().children;
     expect(children[0]).to.equal(3600);
     expect(children[2]).to.equal("seconds");
   });
 
   it("has correct URIs", function () {
-    expect(this.rows.at(41).text().trim()).to.equal("Unspecified");
+    expect(this.rows.at(43).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct User", function () {
-    expect(this.rows.at(43).props().children[0]).to.equal("testuser");
+    expect(this.rows.at(45).props().children[0]).to.equal("testuser");
   });
 
   it("has correct args", function () {
-    expect(this.rows.at(45).text()).to.equal("arg1");
-    expect(this.rows.at(46).text()).to.equal("arg2");
+    expect(this.rows.at(47).text()).to.equal("arg1");
+    expect(this.rows.at(48).text()).to.equal("arg2");
   });
 
   it("has correct version", function () {
-    expect(this.rows.at(48).props().children[0])
+    expect(this.rows.at(50).props().children[0])
       .to.equal("2015-06-29T12:57:02.269Z");
   });
 
@@ -200,7 +201,7 @@ describe("AppVersionComponent", function () {
     this.component = mount(<AppVersionComponent appVersion={this.model} />);
     this.table = this.component.find("dl.dl-horizontal");
     this.rows = this.table.children();
-    expect(this.rows.at(41).text().trim()).to.equal("http://localhost/test");
+    expect(this.rows.at(43).text().trim()).to.equal("http://localhost/test");
   });
 
   it("has multiple uris", function () {
@@ -218,7 +219,7 @@ describe("AppVersionComponent", function () {
     this.component = mount(<AppVersionComponent appVersion={this.model} />);
     this.table = this.component.find("dl.dl-horizontal");
     this.rows = this.table.children();
-    expect(this.rows.at(41).text().trim()).to.equal("http://localhost/test");
-    expect(this.rows.at(42).text().trim()).to.equal("http://localhost/test2");
+    expect(this.rows.at(43).text().trim()).to.equal("http://localhost/test");
+    expect(this.rows.at(44).text().trim()).to.equal("http://localhost/test2");
   });
 });
