@@ -18,6 +18,7 @@ var ContainerSettingsComponent = React.createClass({
 
   statics: {
     fieldIds: Object.freeze({
+      containerType: "containerType",
       dockerForcePullImage: "dockerForcePullImage",
       dockerImage: "dockerImage",
       dockerNetwork: "dockerNetwork",
@@ -162,6 +163,31 @@ var ContainerSettingsComponent = React.createClass({
     );
   },
 
+  getContainerTypeGroupComponent: function () {
+    var props = this.props;
+    var fieldIds = ContainerSettingsComponent.fieldIds;
+    var containerType = props.fields[fieldIds.containerType];
+    var label = "Containerizer";
+
+    return (
+      <FormGroupComponent
+          errorMessage={props.getErrorMessage(fieldIds.containerType)}
+          fieldId={fieldIds.containerType}
+          label={label}
+          value={containerType}
+          onChange={this.handleSingleFieldUpdate}>
+        <select defaultValue="">
+          <option value={ContainerConstants.TYPE.DOCKER}>
+            Docker
+          </option>
+          <option value={ContainerConstants.TYPE.MESOS}>
+            Mesos
+          </option>
+        </select>
+      </FormGroupComponent>
+    );
+  },
+
   render: function () {
     var props = this.props;
     var fieldIds = ContainerSettingsComponent.fieldIds;
@@ -204,6 +230,11 @@ var ContainerSettingsComponent = React.createClass({
                 onChange={this.handleSingleFieldUpdate}>
               <input type="checkbox" />
             </FormGroupComponent>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-6">
+            {this.getContainerTypeGroupComponent()}
           </div>
         </div>
         <h4>Parameters</h4>
