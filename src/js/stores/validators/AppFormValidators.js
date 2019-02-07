@@ -151,6 +151,9 @@ const AppFormValidators = {
   mem: (value) => !Util.isStringAndEmpty(value) &&
     !!value.toString().match(/^[0-9\.]+$/) && parseInt(value) >= 32,
 
+  gpus: (value) => !Util.isStringAndEmpty(value) &&
+    !!value.toString().match(/^[0-9]+$/),
+
   ports: (ports) => Util.isStringAndEmpty(ports) ||
     ports.split(",")
       .every((port) => port.toString().trim().match(/^[0-9]+$/)),

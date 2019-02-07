@@ -8,6 +8,7 @@
   "cpus": 1,
   "mem": 128,
   "disk": 0,
+  "gpus": 0,
   "executor": "",
   "constraints": [],
   "uris": [],

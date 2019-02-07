@@ -52,6 +52,7 @@ const applicationFieldValidationErrors = Util.deepFreeze({
   instances: ["Instances must be a non-negative number"],
   labels: ["Key cannot be blank"],
   mem: ["Memory must be a number greater than or equal to 32"],
+  gpus: ["GPUs must be a non-negative integer"],
   portDefinitions: [
     "Port must be a valid port",
     "Protocol must be either 'tcp' or 'udp'"

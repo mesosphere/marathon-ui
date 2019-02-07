@@ -251,6 +251,7 @@ var AppConfigEditFormComponent = React.createClass({
         cpus: "cpus",
         mem: "mem",
         disk: "disk",
+        gpus: "gpus",
         instances: "instances",
         cmd: "cmd"
       })
@@ -356,6 +357,15 @@ var AppConfigEditFormComponent = React.createClass({
                   value={state.fields.disk}
                   onChange={this.handleFieldUpdate}>
                   <input min="0" step="any" type="number"/>
+                </FormGroupComponent>
+              </div>
+              <div className="col-sm-3">
+                <FormGroupComponent fieldId="gpus"
+                                    label="GPUs (Device)"
+                                    errorMessage={this.getErrorMessage("gpus")}
+                                    value={state.fields.gpus}
+                                    onChange={this.handleFieldUpdate}>
+                  <input min="0" step="1" type="number"/>
                 </FormGroupComponent>
               </div>
               <div className="col-sm-3">
