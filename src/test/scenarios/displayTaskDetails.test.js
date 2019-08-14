@@ -70,7 +70,7 @@ describe("TaskDetailComponent", function () {
     var version = this.component
       .find(".task-details")
       .children()
-      .at(14)
+      .at(16)
       .find("time")
       .props()
       .dateTime;
