@@ -253,6 +253,7 @@ var AppConfigEditFormComponent = React.createClass({
         disk: "disk",
         gpus: "gpus",
         instances: "instances",
+        role: "role",
         cmd: "cmd"
       })
     });
@@ -374,6 +375,14 @@ var AppConfigEditFormComponent = React.createClass({
                   value={state.fields.instances}
                   onChange={this.handleFieldUpdate}>
                   <input min="0" step="1" type="number"/>
+                </FormGroupComponent>
+              </div>
+              <div className="col-sm-3">
+                <FormGroupComponent fieldId="role" label="Role"
+                                    errorMessage={this.getErrorMessage("role")}
+                                    value={state.fields.role}
+                                    onChange={this.handleFieldUpdate}>
+                  <input ref="role"/>
                 </FormGroupComponent>
               </div>
             </div>

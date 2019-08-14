@@ -3,6 +3,7 @@ import Util from "../helpers/Util";
 // Default values for the config form editor
 export const AppConfigFormDefaultValues = Util.deepFreeze({
   id: "",
+  role: "",
   cmd: "",
   cpus: 1,
   mem: 128,
@@ -14,6 +15,7 @@ export const AppConfigFormDefaultValues = Util.deepFreeze({
 // Default values for an 'empty' app config, or the JSON editor
 export const AppConfigDefaultValues = Util.deepFreeze({
   id: null,
+  role: null,
   cmd: null,
   cpus: 1,
   mem: 128,

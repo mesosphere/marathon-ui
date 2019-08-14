@@ -261,6 +261,8 @@ var AppVersionComponent = React.createClass({
           {dependenciesNode}
           <dt>Labels</dt>
           {labelsNode}
+          <dt>Allocation Role</dt>
+          {invalidateValue(appVersion.role)}
           <dt>Resource Roles</dt>
           {acceptedResourceRoles}
           <dt>Container</dt>
