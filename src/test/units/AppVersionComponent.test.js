@@ -10,6 +10,7 @@ describe("AppVersionComponent", function () {
   beforeEach(function () {
     this.model = {
       "id": "/sleep10",
+      "role": "*",
       "cmd": "sleep 10",
       "args": ["arg1", "arg2"],
       "user": "testuser",
@@ -89,88 +90,92 @@ describe("AppVersionComponent", function () {
     expect(this.rows.at(9).text().trim()).to.equal("Unspecified");
   });
 
-  it("has correct accepted resource roles", function () {
-    expect(this.rows.at(11).text().trim()).to.equal("Unspecified");
+  it("has correct role", function () {
+    expect(this.rows.at(11).text().trim()).to.equal("*");
   });
 
-  it("has correct container", function () {
+  it("has correct accepted resource roles", function () {
     expect(this.rows.at(13).text().trim()).to.equal("Unspecified");
   });
 
+  it("has correct container", function () {
+    expect(this.rows.at(15).text().trim()).to.equal("Unspecified");
+  });
+
   it("has correct cpus", function () {
-    expect(this.rows.at(15).text().trim()).to.equal("0.1");
+    expect(this.rows.at(17).text().trim()).to.equal("0.1");
   });
 
   it("has correct environment", function () {
-    expect(this.rows.at(17).text().trim()).to.equal("Unspecified");
-  });
-
-  it("has correct executor", function () {
     expect(this.rows.at(19).text().trim()).to.equal("Unspecified");
   });
 
+  it("has correct executor", function () {
+    expect(this.rows.at(21).text().trim()).to.equal("Unspecified");
+  });
+
   it("has correct health checks", function () {
-    var healthChecks = this.rows.at(21).text().trim();
+    var healthChecks = this.rows.at(23).text().trim();
     expect(healthChecks).to.equal(
       JSON.stringify(this.model.healthChecks, null, 2)
     );
   });
 
   it("has correct number of instances", function () {
-    expect(this.rows.at(23).text().trim()).to.equal("14");
+    expect(this.rows.at(25).text().trim()).to.equal("14");
   });
 
   it("has correct ip address", function () {
-    var ipAddress = this.rows.at(25).text().trim();
+    var ipAddress = this.rows.at(27).text().trim();
     expect(ipAddress).to.equal(
       JSON.stringify(this.model.ipAddress, null, 2)
     );
   });
 
   it("has correct amount of memory", function () {
-    var children = this.rows.at(27).props().children;
+    var children = this.rows.at(29).props().children;
     expect(children[0]).to.equal(16.0);
     expect(children[2]).to.equal("MiB");
   });
 
   it("has correct amount of disk space", function () {
-    var children = this.rows.at(29).props().children;
+    var children = this.rows.at(31).props().children;
     expect(children[0]).to.equal(0.0);
     expect(children[2]).to.equal("MiB");
   });
 
   it("has correct backoff factor", function () {
-    var children = this.rows.at(37).props().children;
+    var children = this.rows.at(39).props().children;
     expect(children[0]).to.equal(1.15);
   });
 
   it("has correct backoff", function () {
-    var children = this.rows.at(39).props().children;
+    var children = this.rows.at(41).props().children;
     expect(children[0]).to.equal(1);
     expect(children[2]).to.equal("seconds");
   });
 
   it("has correct max launch delay", function () {
-    var children = this.rows.at(41).props().children;
+    var children = this.rows.at(43).props().children;
     expect(children[0]).to.equal(3600);
     expect(children[2]).to.equal("seconds");
   });
 
   it("has correct URIs", function () {
-    expect(this.rows.at(43).text().trim()).to.equal("Unspecified");
+    expect(this.rows.at(45).text().trim()).to.equal("Unspecified");
   });
 
   it("has correct User", function () {
-    expect(this.rows.at(45).props().children[0]).to.equal("testuser");
+    expect(this.rows.at(47).props().children[0]).to.equal("testuser");
   });
 
   it("has correct args", function () {
-    expect(this.rows.at(47).text()).to.equal("arg1");
-    expect(this.rows.at(48).text()).to.equal("arg2");
+    expect(this.rows.at(49).text()).to.equal("arg1");
+    expect(this.rows.at(50).text()).to.equal("arg2");
   });
 
   it("has correct version", function () {
-    expect(this.rows.at(50).props().children[0])
+    expect(this.rows.at(52).props().children[0])
       .to.equal("2015-06-29T12:57:02.269Z");
   });
 
@@ -183,11 +188,11 @@ describe("AppVersionComponent", function () {
     this.component = mount(<AppVersionComponent appVersion={this.model} />);
     this.table = this.component.find("dl.dl-horizontal");
     this.rows = this.table.children();
-    expect(this.rows.at(17).props().children)
-      .to.equal("a=A");
-    expect(this.rows.at(18).props().children)
-      .to.equal("b=B");
     expect(this.rows.at(19).props().children)
+      .to.equal("a=A");
+    expect(this.rows.at(20).props().children)
+      .to.equal("b=B");
+    expect(this.rows.at(21).props().children)
       .to.equal("c=C");
   });
 
@@ -201,7 +206,7 @@ describe("AppVersionComponent", function () {
     this.component = mount(<AppVersionComponent appVersion={this.model} />);
     this.table = this.component.find("dl.dl-horizontal");
     this.rows = this.table.children();
-    expect(this.rows.at(43).text().trim()).to.equal("http://localhost/test");
+    expect(this.rows.at(45).text().trim()).to.equal("http://localhost/test");
   });
 
   it("has multiple uris", function () {
@@ -219,7 +224,7 @@ describe("AppVersionComponent", function () {
     this.component = mount(<AppVersionComponent appVersion={this.model} />);
     this.table = this.component.find("dl.dl-horizontal");
     this.rows = this.table.children();
-    expect(this.rows.at(43).text().trim()).to.equal("http://localhost/test");
-    expect(this.rows.at(44).text().trim()).to.equal("http://localhost/test2");
+    expect(this.rows.at(45).text().trim()).to.equal("http://localhost/test");
+    expect(this.rows.at(46).text().trim()).to.equal("http://localhost/test2");
   });
 });

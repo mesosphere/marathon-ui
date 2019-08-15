@@ -47,6 +47,9 @@ const validationRules = {
     AppFormValidators.appIdValidChars,
     AppFormValidators.appIdWellFormedPath
   ],
+  "role": [
+    AppFormValidators.roleNotEmpty
+  ],
   "constraints": [AppFormValidators.constraints],
   "containerVolumes": [
     AppFormValidators.containerVolumesContainerPathIsValid,
@@ -97,6 +100,7 @@ const validationRules = {
  */
 const resolveFieldIdToAppKeyMap = {
   appId: "id",
+  role: "role",
   acceptedResourceRoles: "acceptedResourceRoles",
   cmd: "cmd",
   constraints: "constraints",
@@ -132,6 +136,7 @@ const responseAttributePathToFieldIdMap = {
   "id": "appId",
   "apps": "appId",
   "/id": "appId",
+  "/role": "role",
   "/acceptedResourceRoles": "acceptedResourceRoles",
   "/cmd": "cmd",
   "/constraints": "constraints",

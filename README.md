@@ -63,6 +63,14 @@ you've installed and properly configured the following software:
 * Set up a CORS proxy on your machine to proxy the UI requests to your running
   Marathon instance (e.g. via Corsproxy)
 
+##### NVM
+As the required NPM version is pretty old, it's a good idea to use nvm to install
+the specific version:
+      
+      brew install nvm
+      nvm install v5.4.1
+      nvm use v5.4.1
+
 ##### 🤖 1. Install all dependencies
 
         npm install
@@ -88,7 +96,23 @@ you've installed and properly configured the following software:
 
  for a `browsersync` live-reload server.
 
-
+##### 4. CORS Proxy
+  If you're running a local marathon, CORS will prevent the browser from accessing
+  it. There's a simple CORS proxy that forwards requests to the different local ports,
+  circumventing that issue:
+  
+  ```
+  npm install -g corsproxy
+  ```
+  
+  Adjust your dev config to use URLs like these:
+  ```
+    apiURL: "http://localhost:1337/localhost:8080/"
+    rootUrl: "http://localhost:1337/localhost:4200/"
+  ```
+  
+  Then you can reach the local running ui under the root URL.
+  
 ---
 
 ##### 🐳 Prerequisites

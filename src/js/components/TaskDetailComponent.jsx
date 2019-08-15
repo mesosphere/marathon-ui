@@ -151,6 +151,15 @@ var TaskDetailComponent = React.createClass({
     return <dd>{task.status}</dd>;
   },
 
+  getRole: function () {
+    var props = this.props;
+    var task = props.task;
+    if (task == null || task.role == null) {
+      return <dd className="text-muted">Unknown</dd>;
+    }
+    return <dd>{task.role}</dd>;
+  },
+
   getVersion: function () {
     var props = this.props;
     var task = props.task;
@@ -229,6 +238,8 @@ var TaskDetailComponent = React.createClass({
           {this.getServiceDiscovery()}
           <dt>Status</dt>
           {this.getStatus()}
+          <dt>Role</dt>
+          {this.getRole()}
           {timeFields}
           <dt>Version</dt>
           {this.getVersion()}

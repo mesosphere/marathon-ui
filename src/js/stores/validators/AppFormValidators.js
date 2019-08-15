@@ -22,6 +22,8 @@ function isValidPath(value) {
 }
 
 const AppFormValidators = {
+  roleNotEmpty: (str) => !Util.isStringAndEmpty(str),
+
   appIdNotEmpty: (str) => !Util.isStringAndEmpty(str),
 
   appIdNoWhitespaces: (str) => str.match(/ /g) == null,
