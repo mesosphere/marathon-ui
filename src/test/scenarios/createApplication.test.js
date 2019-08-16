@@ -822,6 +822,31 @@ describe("Create Application", function () {
             });
           });
 
+          describe("the containerType field", function () {
+
+            it("updates to MESOS", function (done) {
+              AppFormStore.once(FormEvents.CHANGE, function () {
+                expectAsync(function () {
+                  expect(AppFormStore.fields.containerType)
+                    .to.equal("MESOS");
+                }, done);
+              });
+
+              FormActions.update("containerType", "MESOS");
+            });
+
+            it("updates to DOCKER", function (done) {
+              AppFormStore.once(FormEvents.CHANGE, function () {
+                expectAsync(function () {
+                  expect(AppFormStore.fields.containerType)
+                    .to.equal("DOCKER");
+                }, done);
+              });
+
+              FormActions.update("containerType", "DOCKER");
+            });
+          });
+
           describe("the privileges field", function () {
             it("updates correctly", function (done) {
               AppFormStore.once(FormEvents.CHANGE, function () {

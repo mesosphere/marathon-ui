@@ -44,9 +44,11 @@ const AppFormModelPostProcess = {
       });
     }
 
-    container.type = container.docker != null
-      ? ContainerConstants.TYPE.DOCKER
-      : ContainerConstants.TYPE.MESOS;
+    if (container.type == null) {
+      container.type = container.docker != null
+        ? ContainerConstants.TYPE.DOCKER
+        : ContainerConstants.TYPE.MESOS;
+    }
 
     let isEmpty = (Util.isArray(container.volumes) &&
         container.volumes.length === 0 ||
