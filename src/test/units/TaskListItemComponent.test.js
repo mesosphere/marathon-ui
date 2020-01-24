@@ -11,7 +11,7 @@ describe("Task List Item component", function () {
       appId: "/app-1",
       id: "task-123",
       host: "host-1",
-      ports: [1, 2, 3],
+      ports: [8081, 8082, 8083],
       status: "status-0",
       updatedAt: "2015-06-29T14:11:58.709Z",
       version: "2015-06-29T13:54:24.171Z"
@@ -20,6 +20,7 @@ describe("Task List Item component", function () {
     this.component = shallow(
       <TaskListItemComponent appId={"/app-1"}
                              hasHealth={true}
+                             labels={{}}
                              taskHealthMessage="Healthy"
                              isActive={false}
                              onToggle={()=>{}}
@@ -36,6 +37,76 @@ describe("Task List Item component", function () {
       .text()
     ).to.equal("task-123");
   });
+
+  describe("task url are correct", function() {
+    function getNthPortLink(component, n) {
+      return component.find("td")
+        .at(1).children()
+        .at(2).children()
+        .at(2 + n).children().first().props().href
+    }
+
+    it("has a HTTP task url when app does not have scheme label", function() {
+      expect(getNthPortLink(this.component, 0)).to.equal("//host-1:8081");
+      expect(getNthPortLink(this.component, 1)).to.equal("//host-1:8082");
+      expect(getNthPortLink(this.component, 2)).to.equal("//host-1:8083");
+    });
+
+    it("has only https schemes", function() {
+      var model = {
+        appId: "/app-1",
+        id: "task-123",
+        host: "host-1",
+        ports: [8081, 8082, 8083],
+        status: "status-0",
+        updatedAt: "2015-06-29T14:11:58.709Z",
+        version: "2015-06-29T13:54:24.171Z"
+      };
+
+      this.component = shallow(
+        <TaskListItemComponent appId={"/app-1"}
+                               hasHealth={true}
+                               taskHealthMessage="Healthy"
+                               isActive={false}
+                               labels={{
+                                 "MARATHON_SCHEME_PORT": "https"
+                                }}
+                               onToggle={()=>{}}
+                               task={model} />
+      );
+      expect(getNthPortLink(this.component, 0)).to.equal("https://host-1:8081");
+      expect(getNthPortLink(this.component, 1)).to.equal("https://host-1:8082");
+      expect(getNthPortLink(this.component, 2)).to.equal("https://host-1:8083");
+    })
+
+    it("has different schemes depending on the port", function() {
+      var model = {
+        appId: "/app-1",
+        id: "task-123",
+        host: "host-1",
+        ports: [8081, 8082, 8083],
+        status: "status-0",
+        updatedAt: "2015-06-29T14:11:58.709Z",
+        version: "2015-06-29T13:54:24.171Z"
+      };
+
+      this.component = shallow(
+        <TaskListItemComponent appId={"/app-1"}
+                               hasHealth={true}
+                               taskHealthMessage="Healthy"
+                               isActive={false}
+                               labels={{
+                                 "MARATHON_SCHEME_PORT0": "https",
+                                 "MARATHON_SCHEME_PORT2": "http"
+                                }}
+                               onToggle={()=>{}}
+                               task={model} />
+      );
+      expect(getNthPortLink(this.component, 0)).to.equal("https://host-1:8081");
+      expect(getNthPortLink(this.component, 1)).to.equal("//host-1:8082");
+      expect(getNthPortLink(this.component, 2)).to.equal("http://host-1:8083");
+    })
+  })
 
   it("has correct health message", function () {
     expect(this.component.find("td").at(2).text()).to.equal("Healthy");

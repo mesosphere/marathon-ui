@@ -17,6 +17,7 @@ var TaskListComponent = React.createClass({
     getTaskHealthMessage: React.PropTypes.func.isRequired,
     hasHealth: React.PropTypes.bool,
     itemsPerPage: React.PropTypes.number.isRequired,
+    labels: React.PropTypes.object.isRequired,
     onTaskToggle: React.PropTypes.func.isRequired,
     selectedTasks: React.PropTypes.object.isRequired,
     tasks: React.PropTypes.array.isRequired,
@@ -70,6 +71,7 @@ var TaskListComponent = React.createClass({
             onToggle={props.onTaskToggle}
             sortKey={sortKey}
             task={task}
+            labels={props.labels}
             taskHealthMessage={props.getTaskHealthMessage(task.id)} />
         );
       })
