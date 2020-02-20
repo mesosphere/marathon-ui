@@ -202,7 +202,7 @@ var TaskListItemComponent = React.createClass({
     }
 
     var idClassSet = classNames({
-      "cell-highlighted": sortKey === "id"
+      "cell-highlighted": sortKey === "host"
     });
 
     var versionClassSet = classNames("text-right", {
