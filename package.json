@@ -21,7 +21,7 @@
     "classnames": "^2.1.2",
     "flux": "^2.0.3",
     "fuzzaldrin": "^2.1.0",
-    "highlight.js": "^9.0.0",
+    "highlight.js": "^10.4.1",
     "isomorphic-fetch": "^2.2.0",
     "lazy.js": "^0.4.0",
     "moment": "^2.9.0",
