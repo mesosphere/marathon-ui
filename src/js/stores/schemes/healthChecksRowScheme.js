@@ -7,7 +7,6 @@ const healthChecksRowScheme = {
   protocol: HealthCheckProtocols.HTTP,
   command: null,
   path: null,
-  port: 0,
   portIndex: 0,
   portType: HealthCheckPortTypes.PORT_INDEX,
   gracePeriodSeconds: 300,
