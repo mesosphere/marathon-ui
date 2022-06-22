@@ -65,7 +65,7 @@
     "ionicons": "^2.0.1",
     "istanbul": "^1.0.0-alpha.2",
     "istanbul-coveralls": "^1.0.3",
-    "jsdom": "^6.5.1",
+    "jsdom": "^16.5.0",
     "json-loader": "^0.5.2",
     "mocha": "^2.3.4",
     "mocha-teamcity-reporter": "0.0.4",
